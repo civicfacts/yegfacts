@@ -11,6 +11,8 @@
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "check": "astro check",
+    "validate": "tsx scripts/validate.ts",
+    "test": "vitest run",
     "astro": "astro"
   },
   "dependencies": {
@@ -23,8 +25,12 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.5",
     "@types/node": "^26.4.0",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
     "pagefind": "^1.5.2",
-    "typescript": "^5.9.0"
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.0",
+    "vitest": "^4.1.11"
   },
   "allowScripts": {
     "esbuild": true,

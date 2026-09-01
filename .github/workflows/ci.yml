@@ -1,0 +1,42 @@
+name: CI
+
+# Spec §4: every PR — content or code — runs validation AND the full Astro
+# build. An MDX error, a duplicate route or a broken import is a content
+# failure too, so a green validator alone is not enough to merge.
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      # Cross-file content rules (spec §8): evidence IDs resolve, claim/story
+      # backlinks agree, public archives hash to what the registry says.
+      - name: Validate content
+        run: npm run validate
+
+      # The synthesis matrix: exhaustive over all 20 verdict multisets and
+      # permutation-invariant over all 64 ordered triples (spec §5, §8).
+      - name: Unit tests
+        run: npm test
+
+      - name: Build site
+        run: npm run build

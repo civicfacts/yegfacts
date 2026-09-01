@@ -3,50 +3,34 @@ import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 /**
- * Controlled vocabularies (design spec §3).
+ * Controlled vocabularies (design spec §3) live in `src/lib/vocabulary.ts` so
+ * that the plain-Node pipeline scripts, which cannot import `astro:content`,
+ * read the same definitions. They are re-exported here because that is where
+ * the site code already imports them from.
  *
- * These are the rules Zod can decide by looking at a single file. Cross-file
- * rules — a claim's `story` existing, evidence IDs resolving, claim topics
- * being a subset of the story's — belong to `scripts/validate.ts`.
+ * The schemas below are the rules Zod can decide by looking at a single file.
+ * Cross-file rules — a claim's `story` existing, evidence IDs resolving, claim
+ * topics being a subset of the story's — belong to `scripts/validate.ts`.
  */
-export const TOPIC_SLUGS = [
-  'transportation',
-  'housing-development',
-  'city-finances',
-  'growth-planning',
-  'climate-environment',
-  'downtown',
-] as const;
+import {
+  CANONICAL_FINDINGS,
+  CHANGELOG_TYPES,
+  COMMITMENT_STATUSES,
+  CONFIDENCE_LEVELS,
+  REVIEWER_VERDICTS,
+  STORY_STATUSES,
+  TOPIC_SLUGS,
+} from './lib/vocabulary';
 
-/** What a model may output. Reviewers never output Mixed (spec §3). */
-export const REVIEWER_VERDICTS = [
-  'Supported',
-  'Partially supported',
-  'Not established',
-  'Contradicted',
-] as const;
-
-/** What synthesis may produce: the reviewer verdicts plus Mixed. */
-export const CANONICAL_FINDINGS = [...REVIEWER_VERDICTS, 'Mixed'] as const;
-
-export const CONFIDENCE_LEVELS = ['High', 'Moderate', 'Low'] as const;
-
-export const STORY_STATUSES = ['draft', 'pending-review', 'published'] as const;
-
-export const CHANGELOG_TYPES = [
-  'published',
-  'updated',
-  'correction',
-  'verdict-change',
-  'verified',
-] as const;
-
-export const COMMITMENT_STATUSES = [
-  'Recorded',
-  'Not yet assessable',
-  'Assessable',
-  'Assessed',
-] as const;
+export {
+  CANONICAL_FINDINGS,
+  CHANGELOG_TYPES,
+  COMMITMENT_STATUSES,
+  CONFIDENCE_LEVELS,
+  REVIEWER_VERDICTS,
+  STORY_STATUSES,
+  TOPIC_SLUGS,
+};
 
 const topicSlug = z.enum(TOPIC_SLUGS);
 

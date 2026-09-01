@@ -3,6 +3,9 @@ dist/
 .astro/
 .wrangler/
 evidence/private/
+# Fetched bytes before rights are classified. Ingest routes them to
+# evidence/files/ (public) or evidence/private/; nothing stays here.
+evidence/staging/
 .DS_Store
 npm-debug.log*
 .env
