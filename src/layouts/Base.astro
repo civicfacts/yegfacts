@@ -35,6 +35,12 @@ const ogImage = new URL('/og.png', Astro.site ?? SITE.url).href;
  * between the home page and a story.
  */
 const hasToc = sections.length > 0;
+
+// Cloudflare builds every branch. Only the branch that is actually main is
+// the published site; every other branch — including an empty branch name,
+// which is what a non-Pages build sees — is a preview and gets flagged so it
+// never gets indexed or mistaken for the real thing.
+const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY_BRANCH !== 'main';
 ---
 
 <html lang="en">
@@ -54,6 +60,7 @@ const hasToc = sections.length > 0;
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta name="twitter:card" content="summary_large_image" />
+    {isPreview && <meta name="robots" content="noindex, nofollow" />}
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -69,6 +76,19 @@ const hasToc = sections.length > 0;
     >
       Skip to content
     </a>
+    {
+      isPreview && (
+        <div
+          class="border-b border-[#7a2f22] bg-paper px-4 py-2 text-center text-[0.75rem] font-semibold text-[#7a2f22]"
+          data-pagefind-ignore
+        >
+          Preview build from branch {import.meta.env.DEPLOY_BRANCH} — not the published site.{' '}
+          <a href="https://yegfacts.ca" class="link">
+            yegfacts.ca
+          </a>
+        </div>
+      )
+    }
     <Header />
 
     <div

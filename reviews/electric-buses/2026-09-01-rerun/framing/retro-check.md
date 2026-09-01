@@ -2,7 +2,7 @@
 
 Verdict: REVISE
 
-*Source note: the specified `2026-09-01-rerun/brief.md` does not exist. This review uses the frozen [2026-08-31 brief](/Users/iabdulin/Sites/yegfacts/reviews/electric-buses/2026-08-31/brief.md), whose Claim 1 wording is reproduced in the rerun package. Recheck this report if the intended brief differs.*
+*Source note: the specified `2026-09-01-rerun/brief.md` does not exist. This review uses the frozen [2026-08-31 brief](reviews/electric-buses/2026-08-31/brief.md), whose Claim 1 wording is reproduced in the rerun package. Recheck this report if the intended brief differs.*
 
 ## 1. Provenance
 

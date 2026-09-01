@@ -45,5 +45,17 @@ jobs:
       - name: Unit tests
         run: npm test
 
+      # Astro's own type checker; a content or component change that breaks
+      # the ImportMetaEnv contract or a prop type should fail here, not surface
+      # as a runtime error on the deployed page.
+      - name: Type check
+        run: npx astro check
+
       - name: Build site
         run: npm run build
+
+      # Scans the built dist/ output, so it has to run after the build: catches
+      # in-page duplication (the same fact or quote appearing twice on one
+      # page) that only shows up in the rendered HTML.
+      - name: In-page duplication audit
+        run: npm run audit:duplication
