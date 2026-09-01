@@ -49,6 +49,13 @@ in the prompt: a cutoff justified from an identified standard, or
 stated with one alternative and results under both, is sufficient. That
 is a prompt change (v1.7.1) and is listed for your decision separately.
 
-## Founder's resolution
+## Resolution
 
-(pending)
+2026-09-02. The founder declined to arbitrate editorial content and
+placed it with Stew (board decision D-0020, methodology v1.7.1). As
+editor, Stew adopts resolutions 1 to 7 above as written. What the
+checker still objected to, and would still object to, is on the record
+in check-3.md; check 4 is a confirmation run, not a fourth negotiation.
+Ildar Abdulin remains accountable for the result and can revert it.
+
+Stew, 2026-09-02

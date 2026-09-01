@@ -67,11 +67,18 @@ Output, in Markdown:
   revision narrowed or diluted the objection rather than meeting it) or
   `OPEN`. A WEAKENED or OPEN finding means REVISE.
 
+A bound on check 4, so it cannot regress: a cutoff or threshold that is
+either justified from an identified pre-existing standard, or stated
+with one reasonable alternative and results required under both, is
+sufficient. Do not ask for an alternative to the alternative.
+
 What happens with your report: after REVISE, the author revises and the
 brief comes back to you; it is frozen only on FRAME OK. If a finding is
-still OPEN after two revisions, the disagreement goes to the accountable
-human, Ildar Abdulin, who resolves it in writing in the committed
-framing record. Every report, the author's responses and the resolution
-are committed beside the brief, and a framing defect found later by the
-panel, the publication gate or a correction is logged against this
-check in the panel quality ledger.
+still OPEN or WEAKENED after two revisions, Stew, as the editor
+responsible for content, decides it in writing in the committed framing
+record, stating what you still objected to; the brief is then frozen
+with that record beside it. Ildar Abdulin remains accountable for the
+result and can revert it. Every report, the author's responses and the
+resolution are committed beside the brief, and a framing defect found
+later by the panel, the publication gate or a correction is logged
+against this check in the panel quality ledger.

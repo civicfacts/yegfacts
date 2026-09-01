@@ -37,6 +37,14 @@ once more and frozen on FRAME OK.
 8. **"Confidence" vocabulary.** Adopt: claims carry panel agreement;
    confidence is per reviewer.
 
-## Founder's resolution
+## Resolution
 
-(pending)
+2026-09-02. The founder declined to arbitrate editorial content and
+placed it with Stew (board decision D-0020, methodology v1.7.1). As
+editor, Stew adopts resolutions 1 to 8 above as written, including
+dropping Claim 3; the story returns to two claims. What the checker
+still objected to is on the record in check-3.md; check 4 is a
+confirmation run. Ildar Abdulin remains accountable for the result and
+can revert it.
+
+Stew, 2026-09-02
