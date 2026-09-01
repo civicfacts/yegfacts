@@ -20,12 +20,11 @@ const REPO_ROOT = process.cwd();
  *      are committed at the §5 stage-7 gate and do not exist in the repo before
  *      it.
  *
- * Layers 1 and 2 are one block per claim rather than a table plus a separate
- * stack of disclosures. They used to be separate, and separate meant a story's
- * claim question was rendered five times on one page — once in a phone-only
- * list, once in a tablet-and-up table, and once in each of three disclosure
- * summaries. One block per claim, responsive by grid rather than by two copies
- * of the same data, states it once.
+ * Layer 1 is ONE two-dimensional matrix for the whole story — claims down,
+ * seats across, the panel finding as the last column (founder decision,
+ * 2026-09-01). Layer 2 is a single "Reviewer notes" disclosure per claim whose
+ * summary does NOT restate the verdicts the matrix already shows; attribution
+ * lives inside the expanded content. Each fact renders exactly once.
  *
  * The panel-agreement gloss is deliberately absent here. It is printed beside
  * the first claim carrying that value in "Claims checked" above, which is where
@@ -44,6 +43,9 @@ interface Props {
 const { story, claims } = Astro.props;
 
 const reviewed = claims.filter((claim) => claim.data.review !== undefined);
+
+/** Seat column order, taken from the first reviewed claim and held steady. */
+const models = reviewed[0]?.data.review?.reviewers.map((reviewer) => reviewer.model) ?? [];
 
 /** Subtle semantic tone per verdict — the word still carries the meaning. */
 const verdictTone: Record<string, string> = {
@@ -95,73 +97,85 @@ const runArtifacts = runs.map((run) => ({
         No panel run has been published for this story yet.
       </p>
     ) : (
-      <div class="mt-6 space-y-9">
-        {reviewed.map((claim) => (
-          <article class="border-t border-rule-strong pt-4">
-            {/* data-crossref: names its destination, which is what a back-link is for. */}
-            <h3 class="text-[0.9375rem] font-semibold tracking-[-0.012em]" data-crossref>
-              <a href={`#${claim.data.id}`} class="text-navy underline">
-                {claim.data.question}
-              </a>
-            </h3>
-
-            {/* Layer 1 — what each seat returned, and what the rule produced. */}
-            <dl class="mt-3 grid gap-x-5 gap-y-2 text-sm sm:grid-cols-4">
-              {claim.data.review?.reviewers.map((reviewer) => (
-                <div class="flex items-baseline justify-between gap-3 border-b border-rule pb-1.5 sm:block sm:border-0 sm:pb-0">
-                  <dt class="text-xs text-muted">{reviewer.model}</dt>
-                  <dd class="text-right sm:mt-1 sm:text-left">
+      <>
+        {/* Layer 1 — ONE matrix: claims down, seats across, panel finding last. */}
+        <div class="mt-5 overflow-x-auto">
+          <table class="w-full border-collapse text-sm">
+            <thead>
+              <tr class="border-b border-rule-strong text-left">
+                <th class="py-2 pr-4 font-semibold text-muted">Claim</th>
+                {models.map((model) => (
+                  <th class="py-2 pr-4 font-semibold text-muted">{model}</th>
+                ))}
+                <th class="py-2 font-semibold text-forest">Panel finding</th>
+              </tr>
+            </thead>
+            <tbody>
+              {reviewed.map((claim) => (
+                <tr class="border-b border-rule align-top">
+                  <td class="max-w-[16rem] py-2.5 pr-4" data-crossref>
+                    <a href={`#${claim.data.id}`} class="text-navy underline">
+                      {claim.data.question}
+                    </a>
+                  </td>
+                  {claim.data.review?.reviewers.map((reviewer) => (
+                    <td class="py-2.5 pr-4 whitespace-nowrap">
+                      <span
+                        class="mr-1.5 inline-block h-2 w-2 rounded-full align-middle"
+                        style={`background:${verdictTone[reviewer.verdict] ?? 'var(--color-muted)'}`}
+                        aria-hidden="true"
+                      />
+                      <span class="font-medium">{reviewer.verdict}</span>
+                      <span class="block pl-3.5 text-xs text-muted">{reviewer.confidence}</span>
+                    </td>
+                  ))}
+                  <td class="py-2.5 whitespace-nowrap font-semibold">
                     <span
                       class="mr-1.5 inline-block h-2 w-2 rounded-full align-middle"
-                      style={`background:${verdictTone[reviewer.verdict] ?? 'var(--color-muted)'}`}
+                      style={`background:${verdictTone[claim.data.finding] ?? 'var(--color-muted)'}`}
                       aria-hidden="true"
                     />
-                    <span class="font-medium">{reviewer.verdict}</span>
-                    <span class="block text-xs text-muted sm:pl-3.5">{reviewer.confidence}</span>
-                  </dd>
-                </div>
+                    {claim.data.finding}
+                    <span class="block pl-3.5 text-xs font-normal text-muted">
+                      {claim.data.panel_agreement} panel
+                    </span>
+                  </td>
+                </tr>
               ))}
-              <div class="flex items-baseline justify-between gap-3 sm:block">
-                <dt class="text-xs font-semibold text-forest">Panel finding</dt>
-                <dd class="text-right font-semibold sm:mt-1 sm:text-left">
-                  <span
-                    class="mr-1.5 inline-block h-2 w-2 rounded-full align-middle"
-                    style={`background:${verdictTone[claim.data.finding] ?? 'var(--color-muted)'}`}
-                    aria-hidden="true"
-                  />
-                  {claim.data.finding}
-                  <span class="block text-xs font-normal text-muted sm:pl-3.5">
-                    {claim.data.panel_agreement} panel
-                  </span>
-                </dd>
-              </div>
-            </dl>
+            </tbody>
+          </table>
+        </div>
 
-            {/* Layer 2 — each seat expandable to what it found. */}
-            <div class="mt-4 space-y-2">
-              {claim.data.review?.reviewers.map((reviewer) => (
-                <details class="border border-rule px-3.5 py-2.5">
-                  <summary class="cursor-pointer list-none text-sm">
-                    <span class="font-semibold text-forest">{reviewer.model}</span>
-                    <span class="text-muted"> — {reviewer.verdict}</span>
-                  </summary>
-                  <ul class="mt-2.5 space-y-1.5 border-t border-rule pt-2.5 text-sm text-ink">
-                    {reviewer.key_findings.map((finding) => (
-                      <li class="border-l-2 border-rule pl-3">{finding}</li>
-                    ))}
-                  </ul>
-                  {reviewer.changed_between_rounds && (
-                    <p class="mt-2.5 text-sm text-muted">
-                      <span class="font-semibold">Changed after cross-review:</span>{' '}
-                      {reviewer.changed_between_rounds}
-                    </p>
-                  )}
-                </details>
-              ))}
-            </div>
-          </article>
-        ))}
-      </div>
+        {/* Layer 2 — one disclosure per claim; the summary adds nothing the
+            matrix already says, and attribution lives inside. */}
+        <div class="mt-5 space-y-2">
+          {reviewed.map((claim) => (
+            <details class="border border-rule px-3.5 py-2.5">
+              <summary class="cursor-pointer list-none text-sm text-muted" data-crossref>
+                Reviewer notes — <span class="text-ink">{claim.data.question}</span>
+              </summary>
+              <div class="mt-2.5 space-y-3 border-t border-rule pt-2.5">
+                {claim.data.review?.reviewers.map((reviewer) => (
+                  <div>
+                    <p class="text-xs font-semibold text-forest">{reviewer.model}</p>
+                    <ul class="mt-1 space-y-1.5 text-sm text-ink">
+                      {reviewer.key_findings.map((finding) => (
+                        <li class="border-l-2 border-rule pl-3">{finding}</li>
+                      ))}
+                    </ul>
+                    {reviewer.changed_between_rounds && (
+                      <p class="mt-1.5 text-sm text-muted">
+                        <span class="font-semibold">After cross-review:</span>{' '}
+                        {reviewer.changed_between_rounds}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </details>
+          ))}
+        </div>
+      </>
     )
   }
 
