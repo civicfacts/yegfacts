@@ -95,3 +95,20 @@ export function claimTopics(claim: Claim, story: Story | undefined): readonly st
 export function claimAnchor(claim: Claim): string {
   return claim.data.id;
 }
+
+/**
+ * Every claim of every published story, paired with the story it belongs to.
+ *
+ * The order is the record's own order: newest verified story first, then the
+ * claims in the order that story lists them. Pages that show claims rather than
+ * stories — the home page's recent rows, the full claim index — read this one
+ * function, so what "newest" means cannot drift between them.
+ */
+export async function publishedClaims(): Promise<Array<{ claim: Claim; story: Story }>> {
+  const stories = await publishedStories();
+  const rows: Array<{ claim: Claim; story: Story }> = [];
+  for (const story of stories) {
+    for (const claim of await claimsForStory(story)) rows.push({ claim, story });
+  }
+  return rows;
+}

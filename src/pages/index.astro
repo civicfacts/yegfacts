@@ -4,11 +4,12 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 
 import Base from '../layouts/Base.astro';
-import Finding from '../components/Finding.astro';
 import FindingsBoard from '../components/FindingsBoard.astro';
-import { claimsForStory, orderedTopics, publishedStories, type Claim } from '../lib/content';
+import { claimTopics, orderedTopics, publishedClaims, publishedStories } from '../lib/content';
+import { FINDING_TONE } from '../lib/findings';
 import { SITE } from '../lib/site';
 import { launchSlate } from '../lib/slate';
+import { CANONICAL_FINDINGS } from '../lib/vocabulary';
 import { loadRunManifest } from '../../scripts/lib/review-schema.ts';
 import { highestMethodologyVersion } from '../../scripts/lib/repo.ts';
 import { methodologyChanges } from '../lib/methodology';
@@ -20,28 +21,27 @@ import { methodologyChanges } from '../lib/methodology';
  * hand-maintained.
  */
 const stories = await publishedStories();
+const rows = await publishedClaims();
+const claimCount = rows.length;
+const storyCount = stories.length;
 
-const claimsByStory: Record<string, Claim[]> = {};
-for (const story of stories) {
-  claimsByStory[story.id] = await claimsForStory(story);
-}
+/** The most recent claims, in the record's own order. */
+const recent = rows.slice(0, 8);
 
-/** One claim stands at the top as the worked example of what the site produces. */
-const featuredStory = stories.find((story) => story.data.featured) ?? stories[0];
-/** The story's primary claim when it names one, else the first it lists. */
-const featuredClaims = featuredStory ? (claimsByStory[featuredStory.id] ?? []) : [];
-const featuredClaim =
-  featuredClaims.find((claim) => claim.data.id === featuredStory?.data.primary_claim) ??
-  featuredClaims[0];
+const findingCounts = CANONICAL_FINDINGS.map((finding) => ({
+  finding,
+  count: rows.filter((row) => row.claim.data.finding === finding).length,
+})).filter((entry) => entry.count > 0);
 
 /**
- * How many reviewers actually sat on the featured claim's panel, read from the
+ * How many reviewers actually sat on the newest claim's panel, read from the
  * run manifest rather than asserted in prose. Round 1 is the blind round, so it
  * is the round the sentence is about.
  */
 let reviewerCount: number | undefined;
-if (featuredClaim) {
-  const manifestPath = path.join(process.cwd(), featuredClaim.data.review_run, 'run.yaml');
+const newest = rows[0];
+if (newest) {
+  const manifestPath = path.join(process.cwd(), newest.claim.data.review_run, 'run.yaml');
   if (existsSync(manifestPath)) {
     const manifest = loadRunManifest(manifestPath);
     const providers = new Set(
@@ -53,6 +53,12 @@ if (featuredClaim) {
 
 const evidenceCount = (await getCollection('evidence')).length;
 const methodologyVersion = highestMethodologyVersion(methodologyChanges());
+
+/** A topic's weight is how many checked claims sit under it, not how many stories. */
+const topics = (await orderedTopics()).map((topic) => ({
+  ...topic.data,
+  count: rows.filter((row) => claimTopics(row.claim, row.story)[0] === topic.data.slug).length,
+}));
 
 const CHANGE_LABELS: Record<'correction' | 'verdict-change', string> = {
   correction: 'Correction',
@@ -91,11 +97,6 @@ const slate = (await launchSlate()).map((row) => ({
 }));
 const doneCount = slate.filter((row) => row.published).length;
 
-const topics = (await orderedTopics()).map((topic) => ({
-  ...topic.data,
-  count: stories.filter((story) => story.data.topics.includes(topic.data.slug)).length,
-}));
-
 const heading = 'text-xl font-extrabold tracking-[-0.015em] text-forest';
 const label = 'text-xs font-semibold tracking-[0.09em] text-muted uppercase';
 const lead = 'mt-2 max-w-prose text-[0.9375rem] text-pretty leading-relaxed text-muted';
@@ -113,36 +114,7 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
       YEGFacts checks what people say about Edmonton's city government against the public record.
     </h1>
 
-    {
-      featuredStory && featuredClaim && (
-        <div class="mt-8">
-          <p class={label}>
-            A checked claim · verified{' '}
-            <time datetime={featuredStory.data.last_verified}>
-              {featuredStory.data.last_verified}
-            </time>
-          </p>
-          <p class="mt-2 text-2xl leading-tight font-bold tracking-[-0.015em] text-balance sm:text-3xl">
-            <a href={`/facts/${featuredStory.id}#${featuredClaim.data.id}`} class="link">
-              {featuredClaim.data.question}
-            </a>
-          </p>
-          <p class="mt-3">
-            <Finding finding={featuredClaim.data.finding} size="lg" />
-          </p>
-          <p class="mt-3 max-w-prose text-base leading-relaxed">{featuredStory.data.one_line}</p>
-          <p class="mt-2 text-sm">
-            <a href={`/facts/${featuredStory.id}`} class="link">
-              Evidence, panel verdicts and history
-            </a>
-            {' · '}
-            <a href="#how-a-verdict-is-made" class="link">How a verdict is made</a>
-          </p>
-        </div>
-      )
-    }
-
-    <form action="/search" method="get" class="mt-8 flex flex-col gap-2 sm:flex-row" role="search">
+    <form action="/search" method="get" class="mt-7 flex flex-col gap-2 sm:flex-row" role="search">
       <label for="home-search" class="sr-only">Search checked claims</label>
       <input
         id="home-search"
@@ -150,18 +122,18 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
         name="q"
         placeholder="Did Edmonton lose $82M on electric buses?"
         autocomplete="off"
-        class="min-w-0 grow border border-rule-strong bg-white px-3 py-2.5 text-[0.9375rem] placeholder:text-muted/70 focus:border-forest focus:outline-none"
+        class="min-w-0 grow border border-rule-strong bg-white px-3 py-3 text-base placeholder:text-muted/70 focus:border-forest focus:outline-none"
       />
       <button
         type="submit"
-        class="shrink-0 cursor-pointer bg-forest px-4 py-2.5 text-sm font-semibold text-paper transition-opacity hover:opacity-90 sm:w-auto"
+        class="shrink-0 cursor-pointer bg-forest px-5 py-3 text-base font-semibold text-paper transition-opacity hover:opacity-90 sm:w-auto"
       >
         Search
       </button>
     </form>
-    <p class="mt-2 text-xs text-muted">
-      Search every checked claim, or filter by topic and finding on the{' '}
-      <a href="/search" class="text-navy underline">search page</a>.
+    <p class="mt-2 text-sm text-muted">
+      Search {claimCount} checked {claimCount === 1 ? 'claim' : 'claims'}, or browse by topic below.
+      Filter by topic and finding on the <a href="/search" class="link">search page</a>.
     </p>
 
     {
@@ -178,10 +150,62 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
     }
   </section>
 
+  <section class="mt-12">
+    <h2 class={heading}>Browse by topic</h2>
+    <p class={lead}>Each claim is filed under one topic, so the counts add up to the total above.</p>
+    <ul class="mt-4 grid gap-x-8 gap-y-3 sm:grid-cols-2">
+      {
+        topics.map((topic) => (
+          <li>
+            {topic.count > 0 ? (
+              <Fragment>
+                <a href={`/topics/${topic.slug}`} class="link font-semibold text-[1.0625rem]">
+                  {topic.name}
+                </a>{' '}
+                <span class="text-sm text-muted tabular">
+                  {topic.count} {topic.count === 1 ? 'claim' : 'claims'}
+                </span>
+              </Fragment>
+            ) : (
+              <Fragment>
+                <span class="font-semibold text-muted text-[1.0625rem]">{topic.name}</span>{' '}
+                <span class={label}>no claims yet</span>
+              </Fragment>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
   {
-    stories.length > 0 && (
+    claimCount > 0 && (
       <section class="mt-14">
-        <FindingsBoard stories={stories} claimsByStory={claimsByStory} />
+        <h2 class={heading}>Recently checked</h2>
+        <p class="mt-2 text-[0.9375rem] text-pretty text-muted tabular">
+          {claimCount}
+          {claimCount === 1 ? ' claim in ' : ' claims in '}
+          {storyCount}
+          {storyCount === 1 ? ' story: ' : ' stories: '}
+          {findingCounts.map((entry, index) => (
+            <Fragment>
+              {index > 0 && ' · '}
+              <span class:list={['font-semibold', FINDING_TONE[entry.finding].text]}>
+                {entry.count} {entry.finding}
+              </span>
+            </Fragment>
+          ))}
+        </p>
+        <div class="mt-6">
+          <FindingsBoard groups={[{ label: '', rows: recent }]} />
+        </div>
+        <p class="mt-4 text-[0.9375rem]">
+          <a href="/claims" class="link">
+            {claimCount > recent.length
+              ? `All ${claimCount} checked claims`
+              : 'All checked claims, by topic'}
+          </a>
+        </p>
       </section>
     )
   }
@@ -294,71 +318,49 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
     }
   </section>
 
-  <section class="mt-14">
-    <h2 class={heading}>Nine stories, committed in advance</h2>
-    <p class={lead}>
-      The list was fixed in writing before any panel ran, so it cannot be trimmed to the answers.{' '}
-      {doneCount} of {slate.length} checked.{' '}
-      <a href="/methodology#launch-slate" class="link">Why the list came first</a>.
-    </p>
-    <ol class="mt-4 divide-y divide-rule border-t border-rule">
-      {
-        slate.map((row) => (
-          <li class="py-3 sm:grid sm:grid-cols-[14rem_1fr] sm:gap-x-6">
-            {row.published ? (
-              <Fragment>
-                <span class="block">
-                  <a href={`/facts/${row.published.id}`} class="link font-semibold">
-                    {row.published.data.title}
-                  </a>
-                </span>
-                <span class="mt-0.5 block text-[0.9375rem] text-muted sm:mt-0">
-                  Published <time datetime={row.publishedOn}>{row.publishedOn}</time>
-                </span>
-              </Fragment>
-            ) : (
-              <Fragment>
-                <span class="block">
-                  <span class="block font-semibold">{row.story}</span>
-                  <span class:list={['block', label]}>Not yet checked</span>
-                </span>
-                <span class="mt-0.5 block text-[0.9375rem] leading-relaxed text-muted sm:mt-0">
-                  “{row.claims}”
-                </span>
-              </Fragment>
-            )}
-          </li>
-        ))
-      }
-    </ol>
-  </section>
-
-  <section class="mt-14">
-    <h2 class={heading}>Topics</h2>
-    <ul class="mt-4 grid gap-x-8 gap-y-2 sm:grid-cols-2">
-      {
-        topics.map((topic) => (
-          <li class="text-[1.0625rem]">
-            {topic.count > 0 ? (
-              <Fragment>
-                <a href={`/topics/${topic.slug}`} class="link font-semibold">
-                  {topic.name}
-                </a>{' '}
-                <span class="text-sm text-muted tabular">
-                  {topic.count} {topic.count === 1 ? 'story' : 'stories'}
-                </span>
-              </Fragment>
-            ) : (
-              <Fragment>
-                <span class="font-semibold text-muted">{topic.name}</span>{' '}
-                <span class={label}>Not yet checked</span>
-              </Fragment>
-            )}
-          </li>
-        ))
-      }
-    </ul>
-  </section>
+  {
+    doneCount < slate.length && (
+      <section class="mt-14">
+        <h2 class={heading}>Nine stories, committed in advance</h2>
+        <p class={lead}>
+          The list was fixed in writing before any panel ran, so it cannot be trimmed to the answers.{' '}
+          {doneCount} of {slate.length} checked.{' '}
+          <a href="/methodology#launch-slate" class="link">
+            Why the list came first
+          </a>
+          .
+        </p>
+        <ol class="mt-4 divide-y divide-rule border-t border-rule">
+          {slate.map((row) => (
+            <li class="py-3 sm:grid sm:grid-cols-[14rem_1fr] sm:gap-x-6">
+              {row.published ? (
+                <Fragment>
+                  <span class="block">
+                    <a href={`/facts/${row.published.id}`} class="link font-semibold">
+                      {row.published.data.title}
+                    </a>
+                  </span>
+                  <span class="mt-0.5 block text-[0.9375rem] text-muted sm:mt-0">
+                    Published <time datetime={row.publishedOn}>{row.publishedOn}</time>
+                  </span>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <span class="block">
+                    <span class="block font-semibold">{row.story}</span>
+                    <span class:list={['block', label]}>Not yet checked</span>
+                  </span>
+                  <span class="mt-0.5 block text-[0.9375rem] leading-relaxed text-muted sm:mt-0">
+                    “{row.claims}”
+                  </span>
+                </Fragment>
+              )}
+            </li>
+          ))}
+        </ol>
+      </section>
+    )
+  }
 
   <p class="mt-14 border-t border-rule pt-5 text-sm leading-relaxed text-muted">
     Built by <a href="/about" class="text-navy underline">Stew</a>, an AI steward. Ildar Abdulin is

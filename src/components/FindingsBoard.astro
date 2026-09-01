@@ -1,63 +1,53 @@
 ---
 import type { Claim, Story } from '../lib/content';
-import { FINDING_TONE } from '../lib/findings';
-import { CANONICAL_FINDINGS } from '../lib/vocabulary';
 import Finding from './Finding.astro';
 
 /**
- * The whole published record, grouped by story: one row per claim. The
- * question is the row's headline and its link; the finding sits beside it as
- * the answer, in its own column from `sm` up so the verdicts still read down
- * the page, but never heavier than the question it answers.
+ * Claims as rows, in whatever grouping the page asks for: by story on a story
+ * index, by topic on the claim index, one unlabelled group for a plain recent
+ * list. The question is the row's headline and its link; the finding sits
+ * beside it as the answer, in its own column from `sm` up so the verdicts still
+ * read down the page, but never heavier than the question it answers.
  *
- * The summary line is computed from the same rows it summarises, so the two
- * cannot disagree.
+ * The board counts nothing. A page that wants a summary line computes it from
+ * the same rows it passes in, so the two cannot disagree.
  */
-interface Props {
-  stories: Story[];
-  claimsByStory: Record<string, Claim[]>;
+export interface BoardGroup {
+  /** Empty renders no heading, for a single ungrouped run of rows. */
+  label: string;
+  /** Makes the label a link. */
+  href?: string;
+  /** Anchor on the group, for pages that put their groups in an outline. */
+  id?: string;
+  rows: Array<{ claim: Claim; story: Story }>;
 }
 
-const { stories, claimsByStory } = Astro.props;
+interface Props {
+  groups: BoardGroup[];
+  /** Off when the group heading already names the story. */
+  showStory?: boolean;
+}
 
-const allClaims = stories.flatMap((s) => claimsByStory[s.id] ?? []);
-const claimCount = allClaims.length;
-const storyCount = stories.length;
-const findingCounts = CANONICAL_FINDINGS.map((finding) => ({
-  finding,
-  count: allClaims.filter((c) => c.data.finding === finding).length,
-})).filter((e) => e.count > 0);
+const { groups, showStory = true } = Astro.props;
 ---
 
-<h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Every checked claim</h2>
-<p class="mt-2 text-[0.9375rem] text-pretty text-muted tabular">
-  {claimCount}
-  {claimCount === 1 ? ' claim in ' : ' claims in '}
-  {storyCount}
-  {storyCount === 1 ? ' story: ' : ' stories: '}
+<div>
   {
-    findingCounts.map((entry, index) => (
-      <Fragment>
-        {index > 0 && ' · '}
-        <span class:list={['font-semibold', FINDING_TONE[entry.finding].text]}>
-          {entry.count} {entry.finding}
-        </span>
-      </Fragment>
-    ))
-  }
-</p>
-
-<div class="mt-6">
-  {
-    stories.map((story) => (
-      <div class="border-t border-rule pt-4">
-        <h3 class="text-sm">
-          <a href={`/facts/${story.id}`} class="link font-semibold">
-            {story.data.title}
-          </a>
-        </h3>
+    groups.map((group) => (
+      <div id={group.id} class="border-t border-rule pt-4">
+        {group.label && (
+          <h3 class="text-sm">
+            {group.href ? (
+              <a href={group.href} class="link font-semibold">
+                {group.label}
+              </a>
+            ) : (
+              <span class="font-semibold text-muted">{group.label}</span>
+            )}
+          </h3>
+        )}
         <ul class="divide-y divide-rule">
-          {(claimsByStory[story.id] ?? []).map((claim) => (
+          {group.rows.map(({ claim, story }) => (
             <li class="py-4 sm:grid sm:grid-cols-[minmax(0,30rem)_1fr] sm:gap-x-6">
               <p>
                 <a
@@ -72,6 +62,14 @@ const findingCounts = CANONICAL_FINDINGS.map((finding) => ({
                 <Finding finding={claim.data.finding} size="md" />
               </p>
               <p class="mt-1.5 text-xs text-muted sm:col-start-1">
+                {showStory && (
+                  <Fragment>
+                    <a href={`/facts/${story.id}`} class="link">
+                      {story.data.title}
+                    </a>
+                    {' · '}
+                  </Fragment>
+                )}
                 {claim.data.panel_agreement} panel · Verified{' '}
                 <time datetime={story.data.last_verified}>{story.data.last_verified}</time>
               </p>

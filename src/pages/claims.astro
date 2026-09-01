@@ -1,0 +1,76 @@
+---
+import Base from '../layouts/Base.astro';
+import FindingsBoard, { type BoardGroup } from '../components/FindingsBoard.astro';
+import { claimTopics, orderedTopics, publishedClaims, publishedStories } from '../lib/content';
+import { FINDING_TONE } from '../lib/findings';
+import { toc } from '../lib/toc';
+import { CANONICAL_FINDINGS } from '../lib/vocabulary';
+
+/**
+ * The whole published record on one page, grouped by topic. The home page shows
+ * the newest few and points here; this is where a reader who wants all of it
+ * lands. Every row comes from `publishedClaims()`, so this page and the home
+ * page cannot disagree about what has been checked.
+ */
+const rows = await publishedClaims();
+const storyCount = (await publishedStories()).length;
+const claimCount = rows.length;
+
+const findingCounts = CANONICAL_FINDINGS.map((finding) => ({
+  finding,
+  count: rows.filter((row) => row.claim.data.finding === finding).length,
+})).filter((entry) => entry.count > 0);
+
+/**
+ * A claim files under its first topic. Claims carry more than one topic often
+ * enough that listing each of them under all of theirs would show the same row
+ * three times, and a reader counting rows would get the wrong total.
+ */
+const groups = (await orderedTopics())
+  .map((topic) => ({
+    label: topic.data.name,
+    href: `/topics/${topic.data.slug}`,
+    id: topic.data.slug,
+    rows: rows.filter((row) => claimTopics(row.claim, row.story)[0] === topic.data.slug),
+  }))
+  .filter((group) => group.rows.length > 0) satisfies BoardGroup[];
+
+const sections = toc(groups.map((group) => ({ id: group.id, label: group.label })));
+---
+
+<Base
+  title="Every checked claim"
+  description="Every claim YEGFacts has checked, grouped by topic, with its finding."
+  sections={sections}
+>
+  <header class="border-b border-rule pb-6">
+    <h1 class="text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
+      Every checked claim
+    </h1>
+    <p class="mt-3 max-w-prose text-base leading-relaxed text-muted">
+      Every claim, grouped by topic. A story is one page; its claims are the questions checked on
+      it. A claim with more than one topic is filed under its first.
+    </p>
+  </header>
+
+  <p class="mt-8 text-[0.9375rem] text-pretty text-muted tabular">
+    {claimCount}
+    {claimCount === 1 ? ' claim in ' : ' claims in '}
+    {storyCount}
+    {storyCount === 1 ? ' story: ' : ' stories: '}
+    {
+      findingCounts.map((entry, index) => (
+        <Fragment>
+          {index > 0 && ' · '}
+          <span class:list={['font-semibold', FINDING_TONE[entry.finding].text]}>
+            {entry.count} {entry.finding}
+          </span>
+        </Fragment>
+      ))
+    }
+  </p>
+
+  <div class="mt-6">
+    <FindingsBoard groups={groups} />
+  </div>
+</Base>
