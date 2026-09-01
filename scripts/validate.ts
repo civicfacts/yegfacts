@@ -22,9 +22,15 @@
  *   path needing a methodology entry — are not implemented here; see the TODO
  *   at the bottom of this file.
  *
- * Exit code is 1 if any rule failed, 0 otherwise.
+ * One rule is deliberately advisory. A published run's `combined-evidence.json`
+ * MUST carry `fetch_status` on every item — that is a hard failure — but an
+ * unverifiable item that a `key_fact` cites only prints a `warn:` line, because
+ * matching citations to combined-evidence items is approximate and the gate
+ * audit, not this script, is where that judgement belongs.
+ *
+ * Exit code is 1 if any rule failed, 0 otherwise; warnings never set it.
  */
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import {
   asDateString,
@@ -58,6 +64,17 @@ const problems: Problem[] = [];
 
 function fail(file: string, message: string): void {
   problems.push({ file: relative(file), message });
+}
+
+/**
+ * Printed, but does not set the exit code. Reserved for findings that need a
+ * human judgement the validator cannot make on its own — see
+ * `checkCombinedEvidence`.
+ */
+const warnings: Problem[] = [];
+
+function warn(file: string, message: string): void {
+  warnings.push({ file: relative(file), message });
 }
 
 // ---------------------------------------------------------------------------
@@ -538,6 +555,75 @@ function checkEvidence(): void {
   }
 }
 
+const FETCH_STATUSES = ['ok', 'failed', 'content-mismatch', 'not-attempted'];
+
+/**
+ * A published story's combined evidence must be annotated (methodology v1.2).
+ *
+ * Hard rule: every item in `combined-evidence.json` carries a `fetch_status`
+ * drawn from the known set. A missing field is a failure, because an
+ * unannotated artifact is precisely the state v1.2 exists to end — a citation
+ * nobody can tell apart from a verified one. Run
+ * `npx tsx scripts/annotate-evidence.ts <run-dir>` to produce it.
+ *
+ * Warn only: an item whose bytes could not be verified (`failed` or
+ * `content-mismatch`) that a published `key_fact` nonetheless cites. That check
+ * is an approximation — key_facts cite registry IDs, so an item that never made
+ * it into the registry cannot be matched to one — so it prints for the gate
+ * audit to judge rather than blocking the build on a guess.
+ */
+function checkCombinedEvidence(): void {
+  /** Published run directory → the registry IDs its key_facts cite. */
+  const citedByRun = new Map<string, Set<string>>();
+  for (const { data } of claims) {
+    if (storyBySlug.get(String(data.story ?? ''))?.data.status !== 'published') continue;
+    const reviewRun = typeof data.review_run === 'string' ? data.review_run : '';
+    if (reviewRun === '') continue;
+    const cited = citedByRun.get(reviewRun) ?? new Set<string>();
+    for (const fact of Array.isArray(data.key_facts) ? (data.key_facts as Record_[]) : []) {
+      for (const source of stringArray(fact?.sources)) cited.add(source);
+    }
+    citedByRun.set(reviewRun, cited);
+  }
+
+  for (const [reviewRun, cited] of citedByRun) {
+    const file = repoPath(reviewRun, 'combined-evidence.json');
+    if (!existsSync(file)) {
+      fail(repoPath(reviewRun), 'combined-evidence.json is required for a published run');
+      continue;
+    }
+    let items: Record_[];
+    try {
+      const parsed = JSON.parse(readFileSync(file, 'utf8')) as { items?: unknown };
+      items = Array.isArray(parsed.items) ? (parsed.items as Record_[]) : [];
+    } catch (error) {
+      fail(file, `unreadable JSON: ${(error as Error).message}`);
+      continue;
+    }
+
+    for (const [index, item] of items.entries()) {
+      const status = item?.fetch_status;
+      if (typeof status !== 'string' || !FETCH_STATUSES.includes(status)) {
+        fail(
+          file,
+          `items[${index}].fetch_status: "${String(status)}" must be one of ` +
+            `${FETCH_STATUSES.join(', ')} — run scripts/annotate-evidence.ts`,
+        );
+        continue;
+      }
+      if (status === 'ok' || status === 'not-attempted') continue;
+      const id = typeof item.evidence_id === 'string' ? item.evidence_id : 'unregistered';
+      if (cited.has(id)) {
+        warn(
+          file,
+          `items[${index}] (${id}) is fetch_status "${status}" but a published key_fact cites it: ` +
+            String(item.normalized_url ?? ''),
+        );
+      }
+    }
+  }
+}
+
 /**
  * Any committed panel output must conform to the published schema (spec §8).
  * Runs over whatever is present; before the stage-7 gate that is normally
@@ -585,6 +671,13 @@ checkClaims();
 checkCommitments();
 checkEvidence();
 checkReviewRuns();
+checkCombinedEvidence();
+
+if (warnings.length > 0) {
+  for (const warning of warnings) {
+    console.warn(`warn: ${warning.file}: ${warning.message}`);
+  }
+}
 
 if (problems.length > 0) {
   const byFile = new Map<string, string[]>();

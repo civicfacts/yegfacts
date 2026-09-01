@@ -11,7 +11,15 @@
       "required": ["provider", "model_self_reported"],
       "properties": {
         "provider": { "enum": ["anthropic", "openai", "google"] },
-        "model_self_reported": { "type": "string" }
+        "model_self_reported": { "type": "string" },
+        "runner_model": {
+          "type": "string",
+          "description": "Written by scripts/panel/run-reviewer.sh after validation, from its own pinned command. Reviewers must not set this: a model does not attest its own identity."
+        },
+        "runner_seat": {
+          "type": "string",
+          "description": "Canonical panel-seat display name, written by the runner. Reviewers must not set this."
+        }
       }
     },
     "story": { "type": "string" },

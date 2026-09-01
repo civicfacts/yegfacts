@@ -57,14 +57,17 @@ case "$ROUND" in 1|2) ;; *) echo "round must be 1 or 2, got '$ROUND'" >&2; exit 
 case "$PROVIDER_ARG" in
   claude|anthropic)
     SLOT="claude"; CLI="claude"; MODEL_ID="claude-fable-5"
+    PROVIDER_CANONICAL="anthropic"; SEAT="Claude Fable 5"
     CMD=(claude -p --model claude-fable-5)
     ;;
   codex|gpt|openai)
     SLOT="gpt"; CLI="codex"; MODEL_ID="gpt-5.6-sol"
+    PROVIDER_CANONICAL="openai"; SEAT="GPT-5.6 Sol"
     CMD=(codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check)
     ;;
   agy|gemini|google)
     SLOT="gemini"; CLI="agy"; MODEL_ID="gemini-3.1-pro"
+    PROVIDER_CANONICAL="google"; SEAT="Gemini 3.1 Pro"
     CMD=(agy -p --effort high)
     ;;
   *)
@@ -248,6 +251,34 @@ for attempt in 1 2; do
 done
 
 FINISHED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+# ---------------------------------------------------------------------------
+# Post-validation: stamp the runner's own identity onto the saved review
+# (methodology v1.2).
+#
+# Models never attest their own identity for display. A model's self-report is
+# a claim by the thing being identified, and it drifts — the same seat has
+# called itself "gpt-5" and "gpt-5.6-sol" across runs. So `model_self_reported`
+# is KEPT exactly as written, as part of the raw record, but `provider` and the
+# new `runner_model` / `runner_seat` fields are written from THIS script's
+# pinned command, which is the only place that knows what was actually invoked.
+# Everything the site displays as panel identity comes from here and from
+# run.yaml, never from the reviewer's own JSON.
+# ---------------------------------------------------------------------------
+if [ "$STATUS" = "ok" ]; then
+  node -e '
+    const fs = require("node:fs");
+    const [file, provider, model, seat] = process.argv.slice(1);
+    const review = JSON.parse(fs.readFileSync(file, "utf8"));
+    review.reviewer = {
+      ...review.reviewer,
+      provider,
+      runner_model: model,
+      runner_seat: seat,
+    };
+    fs.writeFileSync(file, JSON.stringify(review, null, 2) + "\n");
+  ' "$OUT_FILE" "$PROVIDER_CANONICAL" "$MODEL_ID" "$SEAT"
+fi
 
 npx tsx "$REPO_ROOT/scripts/panel/record-run.ts" \
   --manifest "$MANIFEST" \

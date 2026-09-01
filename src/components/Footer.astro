@@ -1,6 +1,14 @@
 ---
 import { SITE } from '../lib/site';
 
+/**
+ * The commit this build came from, injected by `astro.config.mjs`. A reader can
+ * click it and land on the exact tree that produced the page they are reading —
+ * which is the only way "the audit trail is version-controlled" is checkable
+ * from the deployed site rather than taken on trust.
+ */
+const commitSha = import.meta.env.COMMIT_SHA ?? 'dev';
+
 const columns = [
   {
     heading: 'The site',
@@ -68,6 +76,24 @@ const columns = [
     <p class="mt-9 border-t border-rule pt-5 text-xs leading-relaxed text-muted">
       Operated by {SITE.operator}. Non-partisan civic evidence for Edmonton — every finding shows
       its evidence, its model reviews, and its revision history.
+      {
+        commitSha !== 'dev' ? (
+          <>
+            {' '}
+            Deployed from{' '}
+            <a
+              href={`${SITE.repo}/commit/${commitSha}`}
+              rel="noopener"
+              class="tabular underline transition-colors hover:text-forest"
+            >
+              {commitSha}
+            </a>
+            .
+          </>
+        ) : (
+          <> Deployed from <span class="tabular">dev</span>.</>
+        )
+      }
     </p>
   </div>
 </footer>

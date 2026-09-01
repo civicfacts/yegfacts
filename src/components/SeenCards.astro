@@ -2,84 +2,48 @@
 import type { CollectionEntry } from 'astro:content';
 
 /**
- * "Claims we're seeing" — public posts rendered as platform-native cards
- * (spec §3). Names, usernames and profile images are stripped in presentation;
- * `attribution` survives only for public officials and organizations. Cards are
- * labelled as examples, never as "most common".
+ * "Common forms of the claim" — the arguments actually in circulation, written
+ * out as composite paraphrases (methodology v1.2).
+ *
+ * These are NOT captured posts. Nothing here is quoted from a real account, so
+ * the component renders no platform chrome, no avatar, no handle and no link to
+ * an "original": there is no original. Platform-native styling was dropped
+ * because a fact-checking site rendering fabricated-quote-shaped cards is the
+ * exact artifact that circulates as a screenshot with its disclaimer stripped
+ * off. The "Paraphrase — not a real post" label therefore sits INSIDE each card,
+ * where a screenshot has to take it along.
+ *
+ * `platform` and `context` may stay in a story's frontmatter as authoring
+ * provenance; neither is rendered.
  */
 interface Props {
   seen: CollectionEntry<'stories'>['data']['seen'];
 }
 
 const { seen } = Astro.props;
-
-const chrome = {
-  facebook: {
-    name: 'Facebook',
-    frame: 'bg-white border-[#dfe3e8]',
-    handle: 'text-[#385898]',
-    meta: 'Comment',
-  },
-  reddit: {
-    name: 'Reddit',
-    frame: 'bg-white border-[#e2dfd9]',
-    handle: 'text-[#7a5230]',
-    meta: 'Comment',
-  },
-  x: {
-    name: 'X',
-    frame: 'bg-white border-[#dcdfe2]',
-    handle: 'text-ink',
-    meta: 'Post',
-  },
-} as const;
 ---
 
 {
   seen.length > 0 && (
     <section id="claims-we-are-seeing" class="mt-14">
-      <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Claims we’re seeing</h2>
-      <p class="mt-1.5 text-sm text-muted">
-        Composite examples of how this is being argued in public — paraphrased wording, illustrative
-        platform styling — not captured posts, and not a measure of how common each version
-        is. Names, usernames and profile pictures are removed here; the original posts remain
-        public.
+      <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
+        Common forms of the claim
+      </h2>
+      <p class="mt-1.5 max-w-prose text-sm leading-relaxed text-muted">
+        Composite paraphrases of arguments in circulation about this story, written by us to show
+        the shapes the claim takes. They are not captured posts, not quotations of any person, and
+        not a measure of how common each version is.
       </p>
 
       <ul class="mt-5 grid gap-3.5 sm:grid-cols-2">
-        {seen.map((card) => {
-          const skin = chrome[card.platform];
-          return (
-            <li class:list={['border p-3.5 text-[0.9375rem] leading-snug', skin.frame]}>
-              <div class="flex items-center gap-2.5">
-                <span
-                  aria-hidden="true"
-                  class="h-7 w-7 shrink-0 rounded-full bg-[#e6e2da]"
-                />
-                <span class="min-w-0">
-                  <span class:list={['block truncate text-sm font-semibold', skin.handle]}>
-                    {card.attribution ?? 'Name removed'}
-                  </span>
-                  <span class="block text-[0.6875rem] text-muted">
-                    {skin.name} {skin.meta.toLowerCase()}
-                    {card.context ? ` · ${card.context}` : ''}
-                  </span>
-                </span>
-              </div>
-
-              <p class="mt-2.5 text-ink">{card.text}</p>
-
-              <p class="mt-2.5 flex items-center gap-2 text-[0.6875rem] text-muted">
-                <span>{card.paraphrased ? 'Paraphrased' : 'Quoted exactly'}</span>
-                {card.source_url && (
-                  <a href={card.source_url} rel="noopener nofollow" class="underline">
-                    original
-                  </a>
-                )}
-              </p>
-            </li>
-          );
-        })}
+        {seen.map((card) => (
+          <li class="border-l-2 border-gold bg-wash px-4 py-3.5">
+            <p class="text-[0.625rem] font-semibold tracking-[0.11em] text-muted uppercase">
+              Paraphrase — not a real post
+            </p>
+            <p class="mt-2 text-[0.9375rem] leading-relaxed text-ink">{card.text}</p>
+          </li>
+        ))}
       </ul>
     </section>
   )

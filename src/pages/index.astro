@@ -68,6 +68,15 @@ const storyById = new Map(stories.map((story) => [story.id, story]));
       recentlyVerified.length > 0 ? (
         <div class="mt-4">
           <StoryList stories={recentlyVerified} claimsByStory={claimsByStory} />
+          <p class="mt-5 border-l-2 border-gold pl-3.5 text-sm leading-relaxed text-muted">
+            These are the first four of a pre-committed nine-story slate — the stories and the
+            claims inside them were fixed in writing before any panel ran, so the set cannot be
+            trimmed to the answers it produced. See{' '}
+            <a href="/methodology#launch-slate" class="text-navy underline">
+              the launch slate
+            </a>{' '}
+            for the five still to come.
+          </p>
         </div>
       ) : (
         <p class="mt-4 border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed text-muted">

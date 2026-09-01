@@ -70,6 +70,28 @@ tested, and for each comparator state: why it is relevant, how it differs
 from Edmonton, what can be inferred, what cannot. Do not cherry-pick
 success stories; search for contradicting cases too.
 
+## If the brief itself is the problem
+
+The brief is frozen before you run, which stops the framing being moved
+after the answers arrive — it does not stop the framing being wrong in the
+first place. A loaded definition, the wrong denominator, or an as-of date
+chosen to close the window at a convenient point can predetermine a
+verdict, and answering the question as posed would hand that framing a
+three-model endorsement.
+
+So: if a claim's operationalization materially changes what the honest
+answer is, say so. Record the concern in that claim's
+`interpretation_notes` — what the brief defines, why it distorts, and what
+framing you would use instead — and include the exact string
+
+    MATERIAL FRAMING CONCERN
+
+in those notes. Synthesis halts on that string: the brief is revised and
+round 1 is rerun rather than a verdict being computed over a question
+nobody should have asked. Use it for framing that changes the answer, not
+for wording you would have phrased differently — still answer the claim as
+posed alongside the concern.
+
 ## Honesty requirements
 
 - Every evidence item needs a real, working source URL you actually

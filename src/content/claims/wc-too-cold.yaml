@@ -72,20 +72,20 @@ comparisons:
 review:
   agreement: Unanimous
   reviewers:
-    - model: claude-fable-5
+    - model: Claude Fable 5
       verdict: Contradicted
       confidence: High
       key_findings:
         - "The claim is about climate as an absolute constraint, and a subarctic city region measuring one winter trip in ten by bicycle contradicts it directly."
         - "Contradicting climate determinism does not prove a single alternative cause; the evidence does not establish that infrastructure is the binding constraint either."
       changed_between_rounds: "Kept Contradicted at High confidence, but moved the decisive Oulu figure off media accounts onto the City of Oulu's own 2021 travel survey, citing about 10% rather than 10–12%, and softened its round-1 framing that maintenance rather than temperature drives the difference to infrastructure, maintenance and urban form together — after adopting the Helsinki finding that priority-maintenance access was not significant once urban form was controlled."
-    - model: gpt-5.6-sol
+    - model: GPT-5.6 Sol
       verdict: Contradicted
       confidence: Moderate
       key_findings:
         - "The primary Oulu travel survey is direct counter-evidence to the absolute proposition; the Québec and U.S. evidence strengthens it."
         - "Confidence stays Moderate: Oulu is an imperfect and unusually successful comparator, and Edmonton has no current winter all-trips mode-share measure or standardized climate comparison."
-    - model: gemini-3.1-pro
+    - model: Gemini 3.1 Pro
       verdict: Contradicted
       confidence: High
       key_findings:

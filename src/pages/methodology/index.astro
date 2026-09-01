@@ -40,6 +40,37 @@ const stages = [
   },
 ];
 
+/**
+ * The five launch-slate stories that have not run yet, with the claims
+ * pre-registered for them in `docs/DESIGN.md` §7. Expected findings are
+ * deliberately omitted — publishing a hypothesis beside a claim prejudges it.
+ */
+const remainingSlate = [
+  {
+    story: 'Active transportation investment',
+    claims:
+      'Edmonton spends $100 million a year on bike lanes; the active-transportation network has reduced congestion.',
+  },
+  {
+    story: 'Parking reform',
+    claims:
+      'Edmonton banned parking and new buildings provide none; removing parking minimums made housing more affordable.',
+  },
+  {
+    story: 'Infill and zoning',
+    claims:
+      '8-plexes can be built on every lot; sewer capacity is not checked before infill is approved.',
+  },
+  {
+    story: 'Vision Zero',
+    claims: 'Edmonton is making steady progress toward Vision Zero.',
+  },
+  {
+    story: 'Downtown',
+    claims: 'Downtown is dead and nobody goes there any more.',
+  },
+];
+
 const findings = [
   {
     word: 'Supported',
@@ -66,7 +97,7 @@ const findings = [
 
 <Base
   title="Methodology"
-  description="How YEGFacts produces a finding: a frozen brief, three models researching blind, a deterministic merge, a cross-review round, and a human gate before anything is published."
+  description="How YEGFacts produces a finding: a frozen brief, three models researching blind, a deterministic merge, a cross-review round, and a publication gate before anything is published."
 >
   <header class="border-b border-rule pb-6">
     <h1 class="text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
@@ -107,6 +138,11 @@ const findings = [
         ))
       }
     </ol>
+
+    <p class="mt-5 max-w-prose border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed">
+      All four currently published stories passed the AI audit gate under this delegation; no
+      published story was gated by a per-source manual founder review.
+    </p>
   </section>
 
   <section class="mt-14">
@@ -169,9 +205,35 @@ const findings = [
       the synthesis rule are both public.
     </p>
     <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
-      Everything on this site is in a public repository:{' '}
-      <a href={SITE.repo} rel="noopener" class="text-navy underline">{SITE.repo}</a>. The prompts,
-      the synthesis matrix, the validation rules and the full edit history are all there.
+      The full audit trail behind this site is version-controlled and is published at{' '}
+      <a href={SITE.repo} rel="noopener" class="text-navy underline">{SITE.repo}</a> (repository
+      being opened to the public). The prompts, the synthesis matrix, the validation rules, the raw
+      review artifacts, the gate reports and the full edit history are all there.
+    </p>
+  </section>
+
+  <section id="launch-slate" class="mt-14 scroll-mt-6">
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">The launch slate</h2>
+    <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed">
+      The nine stories below, and the claims inside them, were fixed in writing before any panel
+      ran and before any verdict was known. That pre-commitment is the check on cherry-picking:
+      the slate cannot be trimmed to the results it produced. The stories published so far are the
+      first four; the remaining five are listed here so you can see what is still coming, and hold
+      the site to it.
+    </p>
+    <ul class="mt-5 divide-y divide-rule border-t border-rule">
+      {
+        remainingSlate.map((entry) => (
+          <li class="grid gap-x-6 gap-y-1 py-4 sm:grid-cols-[14rem_1fr]">
+            <span class="font-semibold text-forest">{entry.story}</span>
+            <span class="text-[0.9375rem] leading-relaxed">{entry.claims}</span>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="mt-4 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+      No expected verdict is recorded for any of these, here or anywhere on the site. Naming a
+      hypothesis beside a claim prejudges it; the panel decides, and whatever it finds is published.
     </p>
   </section>
 </Base>

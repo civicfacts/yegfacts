@@ -4,11 +4,13 @@ export const SITE = {
   tagline: 'Edmonton civic evidence, checked against the record.',
   hero: 'Understand Edmonton. Check the claims. See the evidence.',
   email: 'hello@yegfacts.ca',
+  /** Where a reader asks to verify a privately-archived source against its hash. */
+  researchEmail: 'research@yegfacts.ca',
   repo: 'https://github.com/civicfacts/yegfacts',
   operator: 'Ildar Abdulin',
 } as const;
 
-/** Blob path in the public repo, used for raw review-run links. */
+/** Path inside the project repository, used for run-artifact links. */
 export function repoPath(path: string): string {
   return `${SITE.repo}/tree/main/${path.replace(/^\/+/, '')}`;
 }

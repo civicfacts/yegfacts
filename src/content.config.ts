@@ -65,16 +65,17 @@ const changelogEntry = z.object({
 });
 
 /**
- * A quoted public post shown in "Claims we're seeing". Presentation strips
- * names, usernames and avatars (spec §3); `attribution` is set only for public
- * officials and organizations, and `source_url` records provenance.
+ * One composite paraphrase shown in "Common forms of the claim". Since
+ * methodology v1.2 these are written by us, never captured from a real post, so
+ * only `text` reaches the page — `platform` and `context` are authoring
+ * provenance and are deliberately not rendered.
  */
 const seenCard = z.object({
   platform: z.enum(['facebook', 'reddit', 'x']),
   text: z.string().min(1),
-  /** Kept only for public officials and organizations. */
+  /** Kept only for public officials and organizations. Not rendered. */
   attribution: z.string().optional(),
-  /** Subreddit, group name, or similar surrounding context. */
+  /** Subreddit, group name, or similar surrounding context. Not rendered. */
   context: z.string().optional(),
   source_url: z.url().optional(),
   /** True when the wording was paraphrased rather than quoted exactly. */

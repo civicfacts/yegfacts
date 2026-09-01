@@ -5,8 +5,9 @@ publishes, how a verdict is produced, and what CI guarantees about the
 repository. It is written so the repo is self-describing — you should be able
 to audit a published finding without asking anyone anything.
 
-Status: v1, 2026-08-31. Changes to the method itself are recorded in
-`methodology/changelog.yaml` and rendered at `/methodology/changes`.
+Status: v1, 2026-08-31; reconciled with methodology v1.2 on 2026-09-01. Changes
+to the method itself are recorded in `methodology/changelog.yaml` and rendered
+at `/methodology/changes`.
 
 ## 1. What this is
 
@@ -17,7 +18,16 @@ and research, and publishes findings with full evidence trails.
 AI does the research labour. Authority does not come from the models — it comes
 from a public, auditable method: a frozen brief, three independent reviewers, a
 deterministic merge, a cross-review round, a published synthesis rule, and a
-human who verifies every cited source before anything is published.
+publication gate that checks every cited source against its archived bytes
+before anything is published. Since methodology v1.1 that gate is performed by a
+dedicated AI audit pair under a standing delegation from the founder, who
+remains accountable for everything published and can revert any publication.
+The gate reports are committed with the run, so the check is inspectable rather
+than asserted.
+
+The full audit trail — content, evidence registry, prompts, scripts, review
+artifacts and edit history — is version-controlled and is published at
+github.com/civicfacts/yegfacts (repository being opened to the public).
 
 The goal for v1 is a civic tool, not a platform: success is Edmontonians citing
 it in real arguments and a journalist using it.
@@ -25,8 +35,8 @@ it in real arguments and a journalist using it.
 Operator disclosure: YEGFacts is run by Ildar Abdulin, with an interests note
 on the About page. Contributions through the support page fund research and
 operating costs; contributors get no editorial influence, and every verdict
-shows its evidence, model reviews and revision history, so an override would be
-visible in public.
+shows its evidence, model reviews and revision history, so published changes are
+inspectable in the version-controlled history.
 
 ## 2. Content model
 
@@ -43,7 +53,8 @@ EVIDENCE        shared source graph
 **Stories** (`src/content/stories/<slug>.mdx`, served at `/facts/<slug>`) are
 one coherent civic issue each: e-bus procurement, infill and zoning, winter
 cycling. The story page carries the reading experience — one-line summary,
-short answer, TL;DR, the claims people are actually making, what actually
+short answer, TL;DR, composite paraphrases of the forms the claim takes in
+public, what actually
 happened, the checked claims, related City commitments, evidence, the AI
 review, and article history.
 
@@ -153,11 +164,17 @@ stopped.
    models check the draft against the evidence: every sentence traceable, no
    smuggled claims. All published arithmetic lives in
    `scripts/calcs/<story-slug>.ts`, never done ad hoc in prose.
-7. **Human gate.** The founder verifies every source cited by the final claims —
-   not a sample — reviews the raw run JSON before it is committed, edits the
-   prose, and merges. No publish path skips this. A story may be deployed in
-   `pending-review` status with a visible banner before the gate; `published`
-   requires it.
+7. **Publication gate.** A dedicated audit — separate from the models that
+   produced the draft — verifies every statement of fact in the final claims
+   against the archived bytes of its cited sources, not a sample and not the
+   live web, and release-checks the raw review artifacts for personal
+   information and anything else unsuitable for public release. Both reports
+   are committed with the run under `gate/`. Since methodology v1.1 the gate is
+   performed by an AI audit pair under a standing delegation from the founder,
+   who remains accountable for everything published and can revert any
+   publication; the founder edits the prose and merges. No publish path skips
+   the gate. A story may be deployed in `pending-review` status with a visible
+   banner before it; `published` requires it.
 
 Pinned reviewer commands (v1, 2026-08-31; `scripts/panel/run-reviewer.sh`):
 
@@ -259,17 +276,21 @@ only when all nine stories (fourteen claims) across six topic hubs have
 `status: published`, and the verdict spread visibly cuts in multiple political
 directions. Stories in `pending-review` never count toward that bar.
 
-| Story | Topics |
-|---|---|
-| Electric buses | transportation, city-finances, climate-environment |
-| Climate targets | climate-environment |
-| 15-minute districts | growth-planning |
-| Active transportation investment | transportation, city-finances |
-| Parking reform | housing-development, transportation |
-| Winter cycling | transportation |
-| Infill & zoning | housing-development, growth-planning |
-| Vision Zero | transportation |
-| Downtown | downtown, city-finances |
+Claims are pre-registered here, before any panel runs. Expected findings are
+deliberately not recorded in this table or anywhere on the public site: naming a
+hypothesis next to a claim prejudges it.
+
+| Story | Topics | Pre-registered claims |
+|---|---|---|
+| Electric buses | transportation, city-finances, climate-environment | Procurement failed as contracted; Edmonton lost $82M; the failure proves e-buses do not work in cold cities |
+| Climate targets | climate-environment | The City is on track for its climate targets |
+| 15-minute districts | growth-planning | District plans restrict where residents can travel |
+| Active transportation investment | transportation, city-finances | Edmonton spends $100M a year on bike lanes; the active-transportation network has reduced congestion |
+| Parking reform | housing-development, transportation | Edmonton banned parking / new buildings provide none; removing parking minimums made housing more affordable |
+| Winter cycling | transportation | Edmonton is too cold for cycling to work as transportation |
+| Infill & zoning | housing-development, growth-planning | 8-plexes can be built on every lot; sewer capacity is not checked before infill approval |
+| Vision Zero | transportation | Edmonton is making steady progress toward Vision Zero |
+| Downtown | downtown, city-finances | Downtown is dead and nobody goes there any more |
 
 Production order is electric buses first, as the end-to-end gate on the whole
 workflow, then winter cycling as the gate on comparative evidence and

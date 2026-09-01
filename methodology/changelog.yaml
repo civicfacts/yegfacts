@@ -1,6 +1,26 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.2"
+  date: "2026-09-01"
+  scope: artifact-hygiene-and-honesty
+  note: >
+    Changes from the first methodology/trust panel review (three models
+    reviewing the process, not the stories; full reports in
+    methodology/reviews/2026-09-01-panel/). (1) Evidence items in
+    combined-evidence artifacts now carry an explicit fetch status and
+    registry id — unverifiable citations are flagged, never silent.
+    (2) Panel identity is rendered from the run manifest, never from a
+    model's self-report. (3) Raw artifacts known to contain errors get an
+    errata.md beside them; the record is annotated, never edited.
+    (4) Reviewer prompt now instructs reviewers to flag material framing
+    problems in the brief; a material framing flag halts synthesis until
+    the brief is revised and round 1 rerun. (5) Site copy reconciled with
+    the v1.1 delegated gate everywhere; gate audit reports and the frozen
+    brief are linked from each story's AI-review section. (6) "Claims
+    we're seeing" drops social-platform styling; composite paraphrases
+    are visually labeled as paraphrases. Research, merge, cross-review,
+    and synthesis rules are unchanged.
 - version: "1.1"
   date: "2026-09-01"
   scope: publication-gate

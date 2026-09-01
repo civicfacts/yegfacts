@@ -1,14 +1,28 @@
 ---
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 import type { Claim, Story } from '../lib/content';
 import { repoPath } from '../lib/site';
+
+/**
+ * Repo root. `process.cwd()` rather than a path derived from `import.meta.url`,
+ * because the build bundles this component into a chunk elsewhere on disk —
+ * and cwd is already what Astro itself resolves `root` from.
+ */
+const REPO_ROOT = process.cwd();
 
 /**
  * AI review, three disclosure layers (spec §6):
  *   1. compact panel overview — per-claim reviewer verdicts and agreement;
  *   2. each model expandable to key findings and what changed between rounds;
- *   3. a link to the raw committed run JSON — rendered ONLY for `published`
- *      stories, because the raw rounds are committed at the §5 stage-7 release
- *      check and do not exist in the repo before it.
+ *   3. links to the committed run artifacts — rendered ONLY for `published`
+ *      stories, because the raw rounds, the frozen brief and the gate reports
+ *      are committed at the §5 stage-7 gate and do not exist in the repo before
+ *      it.
+ *
+ * Panel identity is display-canonical (methodology v1.2): the `model` strings in
+ * claim YAML are the seat names taken from the run manifest, never a model's
+ * self-report, so they are rendered verbatim.
  */
 interface Props {
   story: Story;
@@ -22,10 +36,6 @@ const reviewed = claims.filter((claim) => claim.data.review !== undefined);
 /** Model column order is taken from the first reviewed claim and held steady. */
 const models = reviewed[0]?.data.review?.reviewers.map((reviewer) => reviewer.model) ?? [];
 
-/** Short display name for matrix headers; the full id stays in layer 2. */
-const shortModel = (model: string) =>
-  model.replace(/\s*\(.*\)$/, '').replace(/^claude-fable-5$/, 'Claude Fable 5').replace(/^gpt-5$/, 'GPT-5');
-
 /** Subtle semantic tone per verdict — the word still carries the meaning. */
 const verdictTone: Record<string, string> = {
   Supported: 'var(--color-forest)',
@@ -36,7 +46,27 @@ const verdictTone: Record<string, string> = {
 };
 
 const runs = [...new Set(reviewed.map((claim) => claim.data.review_run))];
-const showRaw = story.data.status === 'published' && runs.length > 0;
+const published = story.data.status === 'published';
+const showRaw = published && runs.length > 0;
+
+/**
+ * The audit trail for one run: the brief that was frozen before round 1, both
+ * gate reports, and an errata file where one exists. Built at build time from
+ * the repo, so a link never points at a file that is not committed.
+ */
+const runArtifacts = runs.map((run) => ({
+  run,
+  files: (
+    [
+      ['Frozen brief', 'brief.md'],
+      ['Gate audit: source verification', 'gate/source-verification.md'],
+      ['Gate audit: release check', 'gate/release-check.md'],
+      ['Errata', 'errata.md'],
+    ] as const
+  )
+    .filter(([, file]) => existsSync(path.join(REPO_ROOT, run, file)))
+    .map(([label, file]) => ({ label, href: repoPath(`${run}/${file}`) })),
+}));
 ---
 
 <section id="ai-review" class="mt-14">
@@ -45,7 +75,8 @@ const showRaw = story.data.status === 'published' && runs.length > 0;
     Three models research each claim independently, then cross-review each other’s findings. The
     canonical finding is computed from their verdicts by a published, deterministic rule — the
     models never vote and never decide. Authority comes from the{' '}
-    <a href="/methodology" class="text-navy underline">methodology</a>, not from the models.
+    <a href="/methodology" class="text-navy underline">methodology</a>, not from the models. Panel
+    identity is read from the run manifest, not from what a model said it was.
   </p>
 
   {
@@ -55,16 +86,55 @@ const showRaw = story.data.status === 'published' && runs.length > 0;
       </p>
     ) : (
       <>
-        {/* Layer 1 — panel overview */}
-        <div class="mt-5 overflow-x-auto">
-          <table class="w-full min-w-[34rem] border-collapse text-sm">
+        {/* Layer 1a — stacked panel overview, phones only */}
+        <ul class="mt-5 space-y-4 md:hidden">
+          {reviewed.map((claim) => (
+            <li class="border border-rule px-3.5 py-3">
+              <a href={`#${claim.data.id}`} class="text-sm font-semibold text-navy underline">
+                {claim.data.question}
+              </a>
+              <dl class="mt-3 space-y-2 border-t border-rule pt-2.5 text-sm">
+                {claim.data.review?.reviewers.map((reviewer) => (
+                  <div class="flex items-baseline justify-between gap-3">
+                    <dt class="text-muted">{reviewer.model}</dt>
+                    <dd class="text-right">
+                      <span
+                        class="mr-1.5 inline-block h-2 w-2 rounded-full align-middle"
+                        style={`background:${verdictTone[reviewer.verdict] ?? 'var(--color-muted)'}`}
+                        aria-hidden="true"
+                      />
+                      <span class="font-medium">{reviewer.verdict}</span>
+                      <span class="block text-xs text-muted">{reviewer.confidence}</span>
+                    </dd>
+                  </div>
+                ))}
+                <div class="flex items-baseline justify-between gap-3 border-t border-rule pt-2.5">
+                  <dt class="font-semibold text-forest">Panel finding</dt>
+                  <dd class="text-right font-semibold">
+                    <span
+                      class="mr-1.5 inline-block h-2 w-2 rounded-full align-middle"
+                      style={`background:${verdictTone[claim.data.finding] ?? 'var(--color-muted)'}`}
+                      aria-hidden="true"
+                    />
+                    {claim.data.finding}
+                    <span class="block text-xs font-normal text-muted">
+                      {claim.data.review?.agreement} panel
+                    </span>
+                  </dd>
+                </div>
+              </dl>
+            </li>
+          ))}
+        </ul>
+
+        {/* Layer 1b — the same overview as a table, tablet and up */}
+        <div class="mt-5 hidden overflow-x-auto md:block">
+          <table class="w-full border-collapse text-sm">
             <thead>
               <tr class="border-b border-rule-strong text-left">
                 <th class="py-2 pr-4 font-semibold text-muted">Claim</th>
                 {models.map((model) => (
-                  <th class="py-2 pr-4 font-semibold text-muted" title={model}>
-                    {shortModel(model)}
-                  </th>
+                  <th class="py-2 pr-4 font-semibold text-muted">{model}</th>
                 ))}
                 <th class="py-2 font-semibold text-muted">Panel finding</th>
               </tr>
@@ -130,24 +200,35 @@ const showRaw = story.data.status === 'published' && runs.length > 0;
           )}
         </div>
 
-        {/* Layer 3 — raw run JSON, published stories only */}
-        <p class="mt-5 text-sm text-muted">
-          {showRaw ? (
-            <>
-              Raw review runs:{' '}
-              {runs.map((run, index) => (
-                <>
-                  {index > 0 && ', '}
-                  <a href={repoPath(run)} rel="noopener" class="text-navy underline">
-                    {run}
-                  </a>
-                </>
-              ))}
-            </>
-          ) : (
-            'Raw run JSON is published with the story, after the founder release check.'
-          )}
-        </p>
+        {/* Layer 3 — the committed run artifacts, published stories only */}
+        {showRaw ? (
+          <div class="mt-5 text-sm text-muted">
+            {runArtifacts.map(({ run, files }) => (
+              <p class="mt-2">
+                <a href={repoPath(run)} rel="noopener" class="text-navy underline">
+                  {run}
+                </a>
+                {files.length > 0 && ' — '}
+                {files.map((file, index) => (
+                  <>
+                    {index > 0 && ' · '}
+                    <a href={file.href} rel="noopener" class="text-navy underline">
+                      {file.label}
+                    </a>
+                  </>
+                ))}
+              </p>
+            ))}
+            <p class="mt-2">
+              The run directory holds the raw round-1 and round-2 JSON from every reviewer, the
+              merged evidence and the synthesis output.
+            </p>
+          </div>
+        ) : (
+          <p class="mt-5 text-sm text-muted">
+            Raw run JSON is published with the story, after the publication gate’s release check.
+          </p>
+        )}
       </>
     )
   }

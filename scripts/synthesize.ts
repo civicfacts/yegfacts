@@ -13,6 +13,10 @@
  * `round1-only`, because a finding synthesised before cross-review is a weaker
  * artifact and must not be silently indistinguishable from one that went the
  * full distance.
+ *
+ * A run halts here, nonzero and unsynthesised, when any reviewer flagged
+ * `MATERIAL FRAMING CONCERN` against the brief (methodology v1.2). See
+ * `framingConcerns` below.
  */
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -69,6 +73,32 @@ function loadRound(runDir: string, round: 1 | 2): LoadedRound[] {
     loaded.push({ provider: path.basename(file, '.json'), review: result.review });
   }
   return loaded;
+}
+
+/**
+ * The halt marker a reviewer writes into `interpretation_notes` when a claim's
+ * operationalization in the brief materially changes what the honest answer is
+ * (methodology v1.2; `prompts/reviewer.md`).
+ */
+const FRAMING_HALT_MARKER = 'MATERIAL FRAMING CONCERN';
+
+/**
+ * A flagged brief is not a disagreement to be synthesised — it says the question
+ * itself is loaded, and computing a canonical finding over it would launder a
+ * bad framing into a three-model verdict. So this halts the run rather than
+ * degrading it: the brief is revised and round 1 rerun.
+ */
+function framingConcerns(rounds: LoadedRound[], round: number): string[] {
+  const hits: string[] = [];
+  for (const { provider, review } of rounds) {
+    for (const claim of review.claims) {
+      const notes = claim.interpretation_notes;
+      if (notes?.includes(FRAMING_HALT_MARKER)) {
+        hits.push(`round ${round} · ${provider} · claim "${claim.id}": ${notes.replace(/\s+/g, ' ').trim()}`);
+      }
+    }
+  }
+  return hits;
 }
 
 function claimIds(rounds: LoadedRound[]): string[] {
@@ -138,6 +168,15 @@ export function synthesizeRun(runDir: string): Synthesis {
   const round2 = loadRound(runDir, 2);
   const final = round2.length > 0 ? round2 : round1;
   const basis: Synthesis['basis'] = round2.length > 0 ? 'round2' : 'round1-only';
+
+  const concerns = [...framingConcerns(round1, 1), ...framingConcerns(round2, 2)];
+  if (concerns.length > 0) {
+    throw new Error(
+      `halted: a reviewer flagged ${FRAMING_HALT_MARKER} against the brief for ` +
+        `${relative(runDir)}. Revise the brief and rerun round 1; do not synthesise over a ` +
+        `framing a reviewer says predetermines the answer.\n  - ${concerns.join('\n  - ')}`,
+    );
+  }
 
   if (final.length === 0) throw new Error(`no review JSON found under ${relative(runDir)}`);
   if (final.length !== 3) {
