@@ -1,4 +1,6 @@
 ---
+import { getCollection } from 'astro:content';
+
 interface Props {
   topics: readonly string[];
   class?: string;
@@ -6,19 +8,19 @@ interface Props {
 
 const { topics, class: className = '' } = Astro.props;
 
-const label = (slug: string) => slug.replace(/-/g, ' ');
+/* The tag shows the topic's name, not its slug. The Pagefind filter value stays
+   the slug so the search page's filters match the hub URLs. */
+const names = new Map<string, string>(
+  (await getCollection('topics')).map((topic) => [topic.data.slug, topic.data.name]),
+);
 ---
 
 <ul class:list={['flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted', className]}>
   {
     topics.map((slug) => (
       <li>
-        <a
-          href={`/topics/${slug}`}
-          class="link"
-          data-pagefind-filter={`topic:${slug}`}
-        >
-          {label(slug)}
+        <a href={`/topics/${slug}`} class="link" data-pagefind-filter={`topic:${slug}`}>
+          {names.get(slug) ?? slug}
         </a>
       </li>
     ))

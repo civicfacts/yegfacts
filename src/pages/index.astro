@@ -5,7 +5,13 @@ import path from 'node:path';
 
 import Base from '../layouts/Base.astro';
 import FindingsBoard from '../components/FindingsBoard.astro';
-import { claimTopics, orderedTopics, publishedClaims, publishedStories } from '../lib/content';
+import {
+  claimTopics,
+  orderedTopics,
+  publicStories,
+  publishedClaims,
+  publishedStories,
+} from '../lib/content';
 import { FINDING_TONE } from '../lib/findings';
 import { SITE } from '../lib/site';
 import { launchSlate } from '../lib/slate';
@@ -24,6 +30,8 @@ const stories = await publishedStories();
 const rows = await publishedClaims();
 const claimCount = rows.length;
 const storyCount = stories.length;
+/** The /stories link counts what /stories lists, which includes a story still in review. */
+const publicStoryCount = (await publicStories()).length;
 
 /** The most recent claims, in the record's own order. */
 const recent = rows.slice(0, 8);
@@ -132,7 +140,8 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
       </button>
     </form>
     <p class="mt-2 text-sm text-muted">
-      Search {claimCount} checked {claimCount === 1 ? 'claim' : 'claims'}, or browse by topic below.
+      Search {claimCount} checked {claimCount === 1 ? 'claim' : 'claims'}, browse by topic below, or
+      read all <a href="/stories" class="link">{publicStoryCount} {publicStoryCount === 1 ? 'story' : 'stories'}</a>.
       Filter by topic and finding on the <a href="/search" class="link">search page</a>.
     </p>
 
@@ -200,11 +209,7 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
           <FindingsBoard groups={[{ label: '', rows: recent }]} />
         </div>
         <p class="mt-4 text-[0.9375rem]">
-          <a href="/claims" class="link">
-            {claimCount > recent.length
-              ? `All ${claimCount} checked claims`
-              : 'All checked claims, by topic'}
-          </a>
+          <a href="/search#every-claim" class="link">Every checked claim, by topic</a>
         </p>
       </section>
     )

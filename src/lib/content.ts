@@ -18,10 +18,12 @@ export function isPublic(story: Story): boolean {
   return story.data.status !== 'draft';
 }
 
-/** Every story that may be shown to the public, newest verification first. */
+/** Every story that may be shown to the public, newest verification first, ties by id. */
 export async function publicStories(): Promise<Story[]> {
   const stories = await getCollection('stories', isPublic);
-  return stories.sort((a, b) => b.data.last_verified.localeCompare(a.data.last_verified));
+  return stories.sort(
+    (a, b) => b.data.last_verified.localeCompare(a.data.last_verified) || a.id.localeCompare(b.id),
+  );
 }
 
 /**
