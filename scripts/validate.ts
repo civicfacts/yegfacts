@@ -332,11 +332,14 @@ function checkClaims(): void {
       if (typeof fact?.text !== 'string' || fact.text.trim() === '') {
         fail(file, `key_facts[${index}].text is required`);
       }
-      const source = fact?.source;
-      if (typeof source !== 'string' || source.trim() === '') {
-        fail(file, `key_facts[${index}] has no source evidence ID`);
-      } else if (!evidenceIds.has(source)) {
-        fail(file, `key_facts[${index}].source: "${source}" is not in the registry`);
+      const sources = Array.isArray(fact?.sources) ? (fact.sources as unknown[]) : [];
+      if (sources.length === 0) {
+        fail(file, `key_facts[${index}] has no source evidence IDs`);
+      }
+      for (const source of sources) {
+        if (typeof source !== 'string' || !evidenceIds.has(source)) {
+          fail(file, `key_facts[${index}].sources: "${String(source)}" is not in the registry`);
+        }
       }
     }
     for (const [index, comparison] of (

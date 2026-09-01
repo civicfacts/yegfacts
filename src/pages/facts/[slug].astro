@@ -184,9 +184,14 @@ const heading = 'mt-14 text-xl font-extrabold tracking-[-0.015em] text-forest';
                     {claim.data.key_facts.map((fact) => (
                       <li class="border-l-2 border-rule pl-3.5 text-[0.9375rem] leading-relaxed">
                         {fact.text}{' '}
-                        <a href={`/evidence/${fact.source}`} class="text-navy underline">
-                          {fact.source}
-                        </a>
+                        {fact.sources.map((source, index) => (
+                          <>
+                            {index > 0 && ', '}
+                            <a href={`/evidence/${source}`} class="text-navy underline">
+                              {source}
+                            </a>
+                          </>
+                        ))}
                       </li>
                     ))}
                   </ul>

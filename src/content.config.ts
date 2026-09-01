@@ -160,7 +160,7 @@ const claims = defineCollection({
       .array(
         z.object({
           text: z.string().min(1),
-          source: evidenceId,
+          sources: z.array(evidenceId).min(1),
         }),
       )
       .default([]),

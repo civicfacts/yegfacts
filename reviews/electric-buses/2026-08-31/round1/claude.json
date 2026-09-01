@@ -1,0 +1,400 @@
+{
+  "reviewer": {
+    "provider": "anthropic",
+    "model_self_reported": "claude-fable-5"
+  },
+  "story": "electric-buses",
+  "round": 1,
+  "claims": [
+    {
+      "id": "ebus-procurement-failure",
+      "proposition_evaluated": "Edmonton's Proterra battery-electric buses substantially failed to deliver the performance the City contracted for, across range, reliability, durability, and vendor support.",
+      "interpretation_notes": "I treated the City's 2024 proof of claim as evidence of the City's formal assessment, not as proof of the underlying facts, per the brief. I looked separately for independent corroboration (union statements, comparable-fleet measurements of the same manufacturer, and undisputed bankruptcy-court events).",
+      "verdict": "Supported",
+      "confidence": "Moderate",
+      "evidence_basis": "mostly-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "In a proof of claim filed 2024-02-02 in Proterra's Chapter 11 case, Edmonton stated the buses were contracted to deliver 328 km range in normal conditions and 268 km in extreme cold, but averaged about 165 km in winter and at best 250 km in warm weather, and that fewer than 28 of 60 buses were operational at any given time.",
+          "source_title": "Edmonton Seeks $82 Million in Damages Over EV Bus Failures Amid Manufacturer Proterra's Bankruptcy",
+          "source_url": "https://www.theepochtimes.com/world/edmonton-seeks-82-million-in-damages-over-ev-bus-failures-amid-manufacturer-proterras-bankruptcy-5587063",
+          "source_publisher": "The Epoch Times",
+          "source_date": "2024-02-14",
+          "source_type": "media",
+          "establishes": "The City's formal legal position on contracted vs actual performance, with specific figures. Establishes what the City alleged, not that the allegations are true.",
+          "quote": "On average, the bus range has been approximately 165 kilometres in the winter and, at best, 250 kilometres in warmer weather.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "City court filings state the buses failed to meet contract specifications for range, battery life, reliability and durability, that more than half the 60-bus fleet was out of service roughly three years after the 2020 rollout, that breakdowns had cost the city about US$1.3 million, and that the city spent over $200,000 on battery blankets. The city also holds an unsecured claim of more than US$8 million in deferred revenue (prepaid extended warranty/services).",
+          "source_title": "Edmonton's fleet of electric buses failing amid manufacturer's bankruptcy proceedings",
+          "source_url": "https://www.cbc.ca/news/canada/edmonton/edmonton-buses-proterra-1.7035186",
+          "source_publisher": "CBC News",
+          "source_date": "2023-11-24",
+          "source_type": "media",
+          "establishes": "Reported contents of court documents and city statements about performance shortfalls and out-of-service counts.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Amalgamated Transit Union Local 569 representatives, independently of the City's legal strategy, described numerous mechanical issues, battery problems and missing parts, with more than half of the 60 buses needing replacement parts; Councillor Andrew Knack said the buses cost over $1 million each and were 'not producing what everyone expected.'",
+          "source_title": "Edmonton's electric bus fleet plagued with issues as manufacturer struggles",
+          "source_url": "https://globalnews.ca/news/10112257/edmontons-electric-bus-fleet-proterra-issues",
+          "source_publisher": "Global News",
+          "source_date": "2023-11-23",
+          "source_type": "media",
+          "establishes": "Union and councillor accounts of reliability problems, corroborating the City's legal position from a separate vantage point.",
+          "quote": "That's a huge cost we have invested and it's not producing what everyone expected when we first bought those buses.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Toronto's independent head-to-head evaluation of the same manufacturer measured Proterra in-service winter range at 153 km (2020) and 161 km (2021) in Toronto's milder winter, with Proterra energy consumption the most temperature-sensitive of the three vendors, MDBF at 25,000 km (below the 30,000 km target and trending negatively), and recurring composite-body cracks requiring repair campaigns.",
+          "source_title": "Final Report on TTC's eBus Head-to-Head Evaluation",
+          "source_url": "https://cdn.ttc.ca/-/media/Project/TTC/DevProto/Documents/Home/Public-Meetings/Board/2022/April-14/Reports/10_TTCs_Green_Bus_Program_Final_Results_of_TTCs_Head_to_Head_eBus_Evalua.pdf?rev=38416aa6e8f3466b9e66ffa46adf2626&hash=D22151C0BD927C565CA1A5866F4E5E4A",
+          "source_publisher": "Toronto Transit Commission",
+          "source_date": "2022-04-14",
+          "source_type": "analytical-report",
+          "establishes": "Independent measured corroboration that Proterra buses of this generation delivered roughly 155-165 km winter range and below-target reliability, closely matching Edmonton's alleged 165 km winter figure.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Vendor support collapsed as a matter of court record: Proterra filed for Chapter 11 on 2023-08-07, moved to reject Edmonton's contract, and Edmonton's contract was removed from the list transferring to Phoenix Motor one day before the January 2024 sale hearing, leaving the city unable to source parts through the vendor.",
+          "source_title": "City of Edmonton's claim against electric bus manufacturer balloons to $82M",
+          "source_url": "https://www.cbc.ca/news/canada/edmonton/city-of-edmonton-proterra-claim-1.7112611",
+          "source_publisher": "CBC News",
+          "source_date": "2024-02",
+          "source_type": "media",
+          "establishes": "Reported bankruptcy-docket events showing post-sale support and warranty coverage ended; this part does not depend on the truth of the City's performance allegations.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Edmonton publicly announced the buses with a range of about 350 km per charge on ETS routes when the first 40 entered service in 2020, so even the city's best-case observed 250 km falls well short of its own published expectation.",
+          "source_title": "Electric buses in Edmonton, 40 Proterra vehicles in delivery within 2020",
+          "source_url": "https://www.sustainable-bus.com/news/edmonton-electric-buses-proterra-ets-abb/",
+          "source_publisher": "Sustainable Bus",
+          "source_date": "2020-07-24",
+          "source_type": "media",
+          "establishes": "The performance expectation the City published at launch (approximately 350 km range), the baseline the brief allows shortfalls to be measured against.",
+          "strength": "moderate"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The buses did deliver service: they entered service August 2020, all 60 were delivered by 2022, and the City's own current webpage still lists 60 electric buses in the ETS fleet operating from two garages, with no statement that the fleet has been written off or retired.",
+          "source_title": "Hydrogen and Electric Buses",
+          "source_url": "https://www.edmonton.ca/projects_plans/transit/electric-buses",
+          "source_publisher": "City of Edmonton",
+          "source_date": "consulted 2026-08-31",
+          "source_type": "city-webpage",
+          "establishes": "That the City still counts all 60 buses in its fleet; it does not establish how many are actually available for service.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "In the TTC's 2022 evaluation, Proterra fleet availability was 95% (up 33 points) at final report despite the below-target MDBF, and the TTC wrote that 'the service and technical support from Proterra has been excellent' pre-bankruptcy. This cuts against the idea that the product was uniformly undeliverable before the bankruptcy, and suggests part of Edmonton's availability collapse is a parts-supply consequence of the 2023 bankruptcy rather than purely intrinsic vehicle failure.",
+          "source_title": "Final Report on TTC's eBus Head-to-Head Evaluation",
+          "source_url": "https://cdn.ttc.ca/-/media/Project/TTC/DevProto/Documents/Home/Public-Meetings/Board/2022/April-14/Reports/10_TTCs_Green_Bus_Program_Final_Results_of_TTCs_Head_to_Head_eBus_Evalua.pdf?rev=38416aa6e8f3466b9e66ffa46adf2626&hash=D22151C0BD927C565CA1A5866F4E5E4A",
+          "source_publisher": "Toronto Transit Commission",
+          "source_date": "2022-04-14",
+          "source_type": "analytical-report",
+          "establishes": "That a comparable operator kept Proterra availability high pre-bankruptcy, complicating a pure product-failure narrative.",
+          "quote": "Overall, the service and technical support from Proterra has been excellent, but the ongoing challenges with body crack repairs have hurt the fleet's availability performance.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Proterra's transit business was sold to Phoenix Motor in January 2024, and Phoenix stated it planned to restock spare parts and negotiate with suppliers, meaning a parts channel for the buses was expected to reopen after the worst of the shortage.",
+          "source_title": "City of Edmonton's claim against electric bus manufacturer balloons to $82M",
+          "source_url": "https://www.cbc.ca/news/canada/edmonton/city-of-edmonton-proterra-claim-1.7112611",
+          "source_publisher": "CBC News",
+          "source_date": "2024-02",
+          "source_type": "media",
+          "establishes": "That the parts-supply situation was not necessarily permanent; does not establish that Edmonton's availability actually recovered.",
+          "strength": "weak"
+        }
+      ],
+      "limitations": [
+        "The Edmonton-specific performance figures (165 km winter range, fewer than 28 of 60 operational) trace to the City's own proof of claim, which is an untested allegation in an adversarial proceeding; no independent audit of Edmonton's fleet performance is public.",
+        "I could not find public data on Edmonton e-bus availability for 2024-2026, so I cannot say whether the fleet recovered after Phoenix restarted parts supply.",
+        "CBC article pages returned HTTP 403 to my fetcher; I relied on their content as returned in search results and on corroborating outlets. The URLs are real and current."
+      ],
+      "unknowns": [
+        "Current (2025-2026) availability and winter performance of the Edmonton fleet.",
+        "The exact contracted specifications (the contract itself is not public; the 328 km / 268 km figures come from the City's characterization of it).",
+        "How much of the availability collapse is attributable to intrinsic vehicle defects versus the bankruptcy-driven parts cutoff."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Edmonton's actual proof of claim and supporting exhibits in the Proterra Chapter 11 docket (claims register hosted by Verita Global for case, District of Delaware).",
+          "likely_holder": "US Bankruptcy Court, District of Delaware / Verita Global claims agent; City of Edmonton legal services",
+          "importance": "critical"
+        },
+        {
+          "description": "ETS fleet availability and maintenance data for the e-bus fleet, 2020-2026, ideally from a council report or city auditor review.",
+          "likely_holder": "City of Edmonton / Edmonton Transit Service; Office of the City Auditor",
+          "importance": "high"
+        }
+      ],
+      "calculations_needed": [
+        "Winter range shortfall vs contracted extreme-cold guarantee: 165 km vs 268 km = 38.4% shortfall (city-alleged figures, Feb 2024).",
+        "Winter range shortfall vs contracted normal-conditions figure: 165 km vs 328 km = 49.7%; vs publicly announced ~350 km (2020) = ~52.9%.",
+        "Availability: fewer than 28 of 60 = under 47% operational (city proof of claim, Feb 2024); trace any other availability percentage to a dated source before use."
+      ],
+      "what_would_change_my_verdict": [
+        "City or auditor data showing the fleet returned to normal availability and acceptable range after parts supply resumed in 2024-2025 would move me to Partially supported.",
+        "The contract itself showing materially different (lower) range and reliability guarantees than the City's characterization would weaken the shortfall case.",
+        "Court findings or a settlement rejecting the City's allegations would force a rework."
+      ],
+      "suggested_one_line": "Documented range and reliability shortfalls plus the vendor's bankruptcy support the failure claim, though the Edmonton-specific numbers come mostly from the City's own legal filings.",
+      "suggested_short_answer": "Largely yes. Edmonton says the buses were contracted for 268-328 km of range but averaged about 165 km in winter, and that fewer than half were operational at once; Toronto's independent trial of the same manufacturer measured almost identical winter range and below-target reliability, and Proterra's 2023 bankruptcy cut off parts and warranty support. But the sharpest Edmonton figures are the City's own untested legal allegations, and part of the availability collapse came from the bankruptcy rather than the vehicles themselves."
+    },
+    {
+      "id": "ebus-82m-loss",
+      "proposition_evaluated": "The e-bus procurement has cost the public approximately $82 million on a net basis (outlays minus recoveries minus value delivered), as of 2026-08-31.",
+      "interpretation_notes": "Per the brief, I first established the identity of the $82M figure in primary-adjacent records before treating it as a loss.",
+      "verdict": "Not established",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "The $82 million figure is real and Edmonton-specific: the City filed a proof of claim on 2024-02-02 in Proterra's Chapter 11 case seeking more than $82 million for breach of contract and negligence, up from an earlier US$1.3 million damages estimate plus a US$8 million deferred-revenue claim.",
+          "source_title": "City of Edmonton's claim against electric bus manufacturer balloons to $82M",
+          "source_url": "https://www.cbc.ca/news/canada/edmonton/city-of-edmonton-proterra-claim-1.7112611",
+          "source_publisher": "CBC News",
+          "source_date": "2024-02",
+          "source_type": "media",
+          "establishes": "The existence and legal identity of the $82M figure: it is a claim amount the City asserted in bankruptcy court, i.e., alleged damages.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Real, non-trivial public costs are documented: buses reported at over $1 million each for a 60-bus fleet, roughly US$1.3 million in breakdown-related costs, over $200,000 for battery blankets, and more than US$8 million in prepaid services likely unrecoverable as an unsecured claim.",
+          "source_title": "Edmonton's electric bus fleet plagued with issues as manufacturer struggles",
+          "source_url": "https://globalnews.ca/news/10112257/edmontons-electric-bus-fleet-proterra-issues",
+          "source_publisher": "Global News",
+          "source_date": "2023-11-23",
+          "source_type": "media",
+          "establishes": "That the procurement involved large public outlays and some documented incremental costs; not a net-loss total.",
+          "strength": "moderate"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The $82M is a proof of claim, not an audited loss. It includes negligence damages and was filed to preserve the City's position in a bankruptcy where, as an unsecured creditor, the city was expected to recover 'pennies on the dollar.' A claim amount is what a party alleges it is owed, drafted to be maximal.",
+          "source_title": "Edmonton Seeks $82 Million in Damages Over EV Bus Failures Amid Manufacturer Proterra's Bankruptcy",
+          "source_url": "https://www.theepochtimes.com/world/edmonton-seeks-82-million-in-damages-over-ev-bus-failures-amid-manufacturer-proterras-bankruptcy-5587063",
+          "source_publisher": "The Epoch Times",
+          "source_date": "2024-02-14",
+          "source_type": "media",
+          "establishes": "The figure's identity as alleged damages (reported by this outlet as US$82 million), not a measured net public cost.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Value was delivered and residual value exists: the buses entered service in August 2020, all 60 were delivered by 2022, and the City still lists 60 electric buses in its fleet in 2026. The claim-as-loss framing counts none of the service provided or remaining asset value.",
+          "source_title": "Hydrogen and Electric Buses",
+          "source_url": "https://www.edmonton.ca/projects_plans/transit/electric-buses",
+          "source_publisher": "City of Edmonton",
+          "source_date": "consulted 2026-08-31",
+          "source_type": "city-webpage",
+          "establishes": "That the fleet remains a City asset in service, inconsistent with treating the full claim amount as money gone.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Proterra's plan of reorganization went effective 2024-03-13 after selling its Powered business (~US$210 million) and Transit business (~US$10 million); whether and how much Edmonton recovered on its unsecured claim is not in the public record I could locate, so the net figure cannot be computed from public sources.",
+          "source_title": "Proterra Emerges From Chapter 11",
+          "source_url": "https://www.paulweiss.com/practices/transactional/restructuring/news/proterra-emerges-from-chapter-11?id=50671",
+          "source_publisher": "Paul, Weiss",
+          "source_date": "2024-03",
+          "source_type": "legal-audited",
+          "establishes": "That the bankruptcy resolved and distributions were determined by the plan; establishes the recovery question is answerable in principle but not answered publicly.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "Currency ambiguity: CBC reported 'more than $82 million' without a stated currency while The Epoch Times reported US$82 million; the claim was filed in a US court. I could not access the proof of claim itself to settle this. Social-media versions treat it as CAD.",
+        "I could not verify total contract price paid to Proterra from a primary source; the widely cited context is roughly $43 million CAD in announced funding for the first 40 buses and media reporting of over $1 million per bus."
+      ],
+      "unknowns": [
+        "The actual amount, if any, Edmonton recovered under the Chapter 11 plan on its unsecured claims.",
+        "Total audited cost of the program (purchase, charging infrastructure attributable to these buses, incremental maintenance) versus budget.",
+        "Kilometres of service the e-bus fleet actually delivered, needed for any honest net-cost accounting."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Edmonton's proof of claim document, which would state the currency and itemize the $82M between incurred costs, deferred revenue, and projected/consequential damages.",
+          "likely_holder": "Verita Global (Proterra claims agent) / US Bankruptcy Court, District of Delaware",
+          "importance": "critical"
+        },
+        {
+          "description": "City of Edmonton annual financial statements or a council report disclosing any bankruptcy distribution received and any write-down of the e-bus assets.",
+          "likely_holder": "City of Edmonton financial services; Office of the City Auditor",
+          "importance": "critical"
+        },
+        {
+          "description": "Total contract value paid to Proterra across the three 20-bus lots (2019-2021), with payer mix across federal, provincial, and municipal funding.",
+          "likely_holder": "City of Edmonton procurement records (FOIP)",
+          "importance": "high"
+        }
+      ],
+      "calculations_needed": [
+        "State the claim in both currencies once the proof of claim confirms which it uses; do not silently convert (US$82M was roughly CAD $110M at Feb 2024 rates, which would make the CAD-loss reading even more wrong, or the claim may itself be CAD-denominated).",
+        "Net-cost skeleton for the article: outlays (bus contract + attributable charging infrastructure + non-routine repairs) minus recoveries (bankruptcy distribution, if any) minus value delivered (service km, residual fleet value): every cell currently unpopulated by public records.",
+        "Payer mix for the first 40 buses (reported as federal, provincial GreenTRIP, and city shares of ~$43M CAD) needs primary-source confirmation before use."
+      ],
+      "what_would_change_my_verdict": [
+        "The proof of claim plus city financial statements showing the $82M consists almost entirely of cash already spent with negligible recovery and negligible residual fleet value would move me toward Partially supported.",
+        "An auditor or council report computing an actual net loss near $82M would move me to Supported.",
+        "Evidence of a substantial settlement or distribution to Edmonton would push the true net loss further below $82M and harden Not established toward Contradicted for the specific figure."
+      ],
+      "suggested_one_line": "The $82 million is what Edmonton asked for in Proterra's bankruptcy, an untested damages claim (reported by one outlet as US dollars), not an audited net loss to taxpayers.",
+      "suggested_short_answer": "Not as stated. The $82M figure comes from a proof of claim Edmonton filed in Proterra's US bankruptcy in February 2024 seeking damages for breach of contract and negligence. That is the City's maximal legal ask, not a measured loss: it ignores six years of service the buses provided, the fleet the City still owns, and any bankruptcy recovery. Real public costs are documented, including roughly US$8M in likely-unrecoverable prepaid services, but no public record establishes a net loss of $82 million."
+    },
+    {
+      "id": "ebus-cold-cities",
+      "proposition_evaluated": "Edmonton's experience demonstrates that battery-electric buses are unsuitable for cold-climate cities in general.",
+      "interpretation_notes": "The claim is a generalization from one manufacturer's product in one period to a technology category. I tested whether the cross-city evidence shows a category failure or a vendor-specific one, and separately whether cold-weather range loss (real everywhere) amounts to unsuitability.",
+      "verdict": "Contradicted",
+      "confidence": "Moderate",
+      "evidence_basis": "mostly-comparative",
+      "supporting_evidence": [
+        {
+          "finding": "Cold-weather range loss is real and large for the category: TTC in-service data showed winter range reductions for all three manufacturers (Proterra 213 km summer to 153 km winter; BYD 274 to 198; New Flyer 234 to 203 in their worst years), driven by electric heating loads.",
+          "source_title": "Final Report on TTC's eBus Head-to-Head Evaluation",
+          "source_url": "https://cdn.ttc.ca/-/media/Project/TTC/DevProto/Documents/Home/Public-Meetings/Board/2022/April-14/Reports/10_TTCs_Green_Bus_Program_Final_Results_of_TTCs_Head_to_Head_eBus_Evalua.pdf?rev=38416aa6e8f3466b9e66ffa46adf2626&hash=D22151C0BD927C565CA1A5866F4E5E4A",
+          "source_publisher": "Toronto Transit Commission",
+          "source_date": "2022-04-14",
+          "source_type": "analytical-report",
+          "establishes": "That winter materially cuts battery-electric bus range for every vendor; supports the kernel of truth inside the claim without establishing unsuitability.",
+          "strength": "strong"
+        },
+        {
+          "finding": "St. Albert, in the same metro area, had a bad experience with a different manufacturer (BYD, 7 buses from 2017-2018): winter averages around 110 km against a 233 km summer estimate, premature battery degradation, and a lifespan cut to 12 years.",
+          "source_title": "St. Albert's electric buses not lasting as long as expected",
+          "source_url": "https://www.stalbertgazette.com/local-news/st-alberts-electric-buses-not-lasting-as-long-as-expected-8015437",
+          "source_publisher": "St. Albert Gazette",
+          "source_date": "2023-12",
+          "source_type": "media",
+          "establishes": "That Edmonton's neighbour also underperformed with a second manufacturer, so cold-prairie difficulties are not unique to Proterra.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Even Toronto has partly retreated: by mid-2025 the 60-bus pilot fleet was at 45-50% availability, second-generation e-buses had a 241 km dispatch range against 531 km for hybrids (incompatible with a third of weekday blocks), and the TTC announced orders for up to 200 hybrids starting 2027, hedging its earlier all-electric commitment.",
+          "source_title": "The Troubled State of TTC Green Buses",
+          "source_url": "https://stevemunro.ca/2025/07/16/the-troubled-state-of-ttc-green-buses/",
+          "source_publisher": "Steve Munro (transit analyst)",
+          "source_date": "2025-07-16",
+          "source_type": "analytical-report",
+          "establishes": "That battery-electric fleets in a cold Canadian city still face serious range and availability constraints in 2025; tempers any 'fully solved' counter-narrative.",
+          "strength": "moderate"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "Toronto's controlled three-vendor comparison directly refutes the generalization: New Flyer's battery-electric buses achieved a 70,000 km mean distance between failures (target 30,000 km) and 95% fleet availability, matching the hybrid benchmark, and were the least temperature-sensitive; New Flyer was the only vendor to meet or exceed all TTC targets. Outcomes split by manufacturer, not by climate.",
+          "source_title": "Final Report on TTC's eBus Head-to-Head Evaluation",
+          "source_url": "https://cdn.ttc.ca/-/media/Project/TTC/DevProto/Documents/Home/Public-Meetings/Board/2022/April-14/Reports/10_TTCs_Green_Bus_Program_Final_Results_of_TTCs_Head_to_Head_eBus_Evalua.pdf?rev=38416aa6e8f3466b9e66ffa46adf2626&hash=D22151C0BD927C565CA1A5866F4E5E4A",
+          "source_publisher": "Toronto Transit Commission",
+          "source_date": "2022-04-14",
+          "source_type": "analytical-report",
+          "establishes": "That a battery-electric bus met a cold-climate operator's reliability and availability targets while Proterra and BYD did not: the variable is the vendor, which Edmonton's single-vendor experience cannot test.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Winnipeg, with winters as cold as Edmonton's, ran a four-bus New Flyer battery-electric demonstration from 2014-2018 that operators judged successful through harsh prairie winters, and subsequently ordered 16 zero-emission buses in 2023 as the start of a larger transition.",
+          "source_title": "Winnipeg partnership builds successful clean-energy buses",
+          "source_url": "https://www.c2es.org/content/winnipeg-partnership-builds-successful-clean-energy-buses/",
+          "source_publisher": "Center for Climate and Energy Solutions",
+          "source_date": "circa 2018",
+          "source_type": "analytical-report",
+          "establishes": "A prairie-winter city operating battery-electric buses acceptably and choosing to expand; a direct counterexample to categorical unsuitability.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Winnipeg Transit converted the pilot into procurement: a 2023 order for 16 New Flyer battery-electric and fuel-cell buses framed as the start of a transition of about 100 zero-emission buses.",
+          "source_title": "Winnipeg starts massive zero-emission transit transition with order for 16 New Flyer buses",
+          "source_url": "https://www.newflyer.com/2023/01/winnipeg-starts-massive-zero-emission-transit-transition-with-order-for-16-new-flyer-buses/",
+          "source_publisher": "New Flyer (NFI Group)",
+          "source_date": "2023-01",
+          "source_type": "advocacy",
+          "establishes": "The manufacturer's account of a cold-city operator expanding battery-electric purchases; vendor press release, so lead-quality only, but the order itself is corroborated by trade press.",
+          "strength": "weak"
+        },
+        {
+          "finding": "The Proterra-specific pattern extends beyond Edmonton regardless of climate: Banff's Roam transit filed its own claim against Proterra over its electric buses, and Proterra customers across North America were stranded for parts during the bankruptcy, pointing to a vendor and supply-chain failure rather than a climate failure.",
+          "source_title": "Roam transit files claim against Proterra electric buses",
+          "source_url": "https://www.rmoutlook.com/banff/roam-transit-files-claim-against-proterra-electric-buses-8447415",
+          "source_publisher": "Rocky Mountain Outlook",
+          "source_date": "2024",
+          "source_type": "media",
+          "establishes": "That other Proterra customers pursued claims, consistent with manufacturer-specific failure; I could not retrieve the full article, so I use only what the headline establishes.",
+          "strength": "weak"
+        }
+      ],
+      "comparisons": [
+        {
+          "jurisdiction": "Toronto (TTC)",
+          "why_relevant": "Only North American operator to run Proterra head-to-head against two other battery-electric manufacturers under one methodology in a cold Canadian city, including the same period as Edmonton's deployment.",
+          "differences": [
+            "Toronto winters are markedly milder than Edmonton's (fewer extreme-cold days), so Edmonton's winter range would likely be somewhat worse for every vendor.",
+            "TTC pilot was 60 buses across three vendors with dedicated evaluation resources; Edmonton bought 60 from one vendor as a service fleet.",
+            "Different duty cycles and route speeds."
+          ],
+          "supports": "That Proterra's winter range (153-161 km measured) and reliability were poor while a competing battery-electric product met all targets in the same climate, so Edmonton's outcome tracks the vendor, not the technology category.",
+          "does_not_establish": "That New Flyer buses would have hit their Toronto numbers in Edmonton's colder extremes, or that current-generation buses solve the range gap (TTC's own 2025 data shows they have not fully).",
+          "transferability": "high"
+        },
+        {
+          "jurisdiction": "Winnipeg",
+          "why_relevant": "Prairie city with winters equivalent to or colder than Edmonton's; ran a battery-electric pilot from 2014-2018 and is now procuring zero-emission buses at scale.",
+          "differences": [
+            "Pilot was only four buses on a favourable shuttle-style route with on-route charging, far short of fleet-scale proof.",
+            "New Flyer is headquartered in Winnipeg, so local support was unusually strong.",
+            "Hydro electricity prices favour Winnipeg's operating economics."
+          ],
+          "supports": "That battery-electric buses can operate through prairie winters well enough that the operator chose to expand, contradicting categorical unsuitability.",
+          "does_not_establish": "Fleet-scale, all-route viability in a prairie winter; the expansion order is too recent for outcome data.",
+          "transferability": "moderate"
+        },
+        {
+          "jurisdiction": "St. Albert",
+          "why_relevant": "Same metro area and climate as Edmonton, different manufacturer (BYD), earlier adoption (2017-2018), so it tests whether Edmonton's problems were Proterra-specific.",
+          "differences": [
+            "Seven buses versus sixty; different (Chinese) manufacturer and battery chemistry; commuter-style routes.",
+            "St. Albert's buses stayed in service, with reduced lifespan expectations, rather than being grounded en masse."
+          ],
+          "supports": "That severe winter range loss and battery degradation hit a second manufacturer in the same climate, which keeps the categorical claim alive in weakened form.",
+          "does_not_establish": "Category unsuitability: St. Albert's experience is degraded economics and lifespan, not inoperability, and both local datapoints are from vendors that also underperformed in Toronto's milder climate.",
+          "transferability": "high"
+        }
+      ],
+      "limitations": [
+        "No cold-climate city has yet published fleet-scale (100+ bus) multi-winter success data; the strongest positive evidence is pilot-scale (Winnipeg) or sub-fleet-scale (TTC's 25 New Flyers).",
+        "TTC's 2025 hybrid re-order shows that even the best 2022 performer faces range economics that constrain scheduling, so 'suitable' depends on how much operational compromise a city accepts.",
+        "I did not locate Quebec City/Montreal or Nordic (e.g., Oslo, Tampere) deployment outcome data within this review; Nordic evidence would strengthen or weaken the verdict and should be added in round 2."
+      ],
+      "unknowns": [
+        "Whether current-generation batteries and heat pumps have closed enough of the winter range gap to make full-fleet electrification workable at Edmonton's temperatures.",
+        "Lifecycle cost per km of battery-electric versus diesel/hybrid in a cold city, which is the real 'suitability' question for budgets.",
+        "Performance of Edmonton's single hydrogen bus and other alternatives is out of scope but shapes the policy comparison the public will draw."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Winter performance data from Nordic-country battery-electric fleets (Oslo, Helsinki region, northern Sweden), which operate at scale in comparable cold.",
+          "likely_holder": "Ruter (Oslo), HSL (Helsinki), transit research bodies (VTT, UITP)",
+          "importance": "high"
+        },
+        {
+          "description": "Edmonton's own post-2024 e-bus winter performance once parts supply resumed, to separate vendor-collapse effects from climate effects.",
+          "likely_holder": "City of Edmonton / ETS",
+          "importance": "high"
+        }
+      ],
+      "calculations_needed": [
+        "Winter range reduction percentages by vendor from TTC Table 4 (Proterra: 213 to 153 km = 28% seasonal loss in 2020; New Flyer: 234 to 203 km = 13% loss in 2021) to show the vendor spread in temperature sensitivity."
+      ],
+      "what_would_change_my_verdict": [
+        "Evidence that New Flyer or other vendors' buses also failed materially in cities as cold as Edmonton (not just milder Toronto) would move me toward Not established.",
+        "Documented fleet-scale failures in Nordic cold-climate deployments would move me further.",
+        "Conversely, published multi-winter success at fleet scale in a prairie or Nordic city would raise my confidence in Contradicted to High."
+      ],
+      "suggested_one_line": "Edmonton's experience shows one manufacturer failed in a cold city; head-to-head trials show other electric buses met cold-climate targets, so the generalization does not hold, though winter range loss is real for all of them.",
+      "suggested_short_answer": "No. Edmonton ran one manufacturer's buses, and that manufacturer (Proterra) also posted the worst winter range and reliability in Toronto's three-way trial, where New Flyer's electric buses met every target with 95% availability. Winnipeg, just as cold, judged its electric bus pilot a success and is buying more. Winter genuinely cuts range, by roughly 15-30% depending on the bus, and even Toronto is hedging back toward hybrids at scale, so cold-city electrification is harder than promised. But 'Edmonton proves electric buses can't work in cold cities' gets the lesson wrong: Edmonton mostly proves you shouldn't bet a whole fleet on one vendor."
+    }
+  ]
+}
