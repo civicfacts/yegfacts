@@ -1,0 +1,53 @@
+id: ebus-cold-cities
+question: Does Edmonton's experience prove that battery-electric buses don't work in cold-climate cities?
+story: electric-buses
+finding: Contradicted
+evidence_basis: Edmonton + comparable cities
+confidence: High
+methodology_version: "1.0"
+review_run: reviews/electric-buses/2026-08-31
+evidence: [YF-EV-0004, YF-EV-0006, YF-EV-0007, YF-EV-0008]
+key_facts:
+  - text: "Toronto tested 60 buses from three manufacturers head-to-head. Winter range loss was real for all three, but outcomes diverged sharply by manufacturer — New Flyer reached a 70,000 km mean distance between failures against a 30,000 km target, with 95% fleet availability."
+    source: YF-EV-0006
+  - text: "A later TTC program update reported battery-electric propulsion accounted for less than 4% of recorded defects and identified no fundamental technology barrier."
+    source: YF-EV-0007
+  - text: "Winnipeg — with winters comparable to Edmonton's — ran its own cold-climate technical evaluation and proceeded with zero-emission bus procurement."
+    source: YF-EV-0008
+  - text: "Edmonton's own problems were concentrated in one manufacturer whose company went bankrupt, cutting off parts and warranty support — a vendor failure, not a category-wide result."
+    source: YF-EV-0004
+aliases:
+  - electric-buses-dont-work-in-winter
+  - evs-cant-handle-cold
+limitations:
+  - "Cold-weather range reduction is real and large across all manufacturers (roughly 26-30% higher energy demand); the contradicted proposition is 'unsuitable for cold cities,' not 'unaffected by cold.'"
+  - "Toronto's winters are milder than Edmonton's; transferability of exact figures is moderate."
+unknowns:
+  - "Whether any battery-electric fleet has yet matched diesel lifecycle costs in a city as cold as Edmonton."
+comparisons:
+  - city: Toronto
+    note: "Controlled three-manufacturer comparison in one system: same conditions, sharply different outcomes — evidence that manufacturer and support, not propulsion, drove the differences. Toronto's own later struggles (second-generation dispatch ranges, availability dips) also caution against overclaiming success."
+    transferability: "Moderate for exact figures (milder winter); high for the manufacturer-variation point."
+    source: YF-EV-0006
+  - city: Winnipeg
+    note: "A prairie city as cold as Edmonton evaluated zero-emission options in detail and proceeded to procurement; its modelling put long-range depot-charged buses at about 75% coverage of conventional runs under maximum heating demand."
+    transferability: "High for climate; procurement scale still small."
+    source: YF-EV-0008
+review:
+  agreement: Unanimous
+  reviewers:
+    - model: claude-fable-5
+      verdict: Contradicted
+      confidence: High
+      key_findings:
+        - "One manufacturer's failure in one city, during that manufacturer's bankruptcy, cannot carry a category-wide generalization that measured multi-manufacturer data contradicts."
+    - model: gpt-5 (gpt-5.6-sol)
+      verdict: Contradicted
+      confidence: High
+      key_findings:
+        - "Same-market contrast: St. Albert's different-manufacturer struggles and Toronto's manufacturer spread show implementation variance, not uniform category failure."
+    - model: Gemini 3.1 Pro
+      verdict: Contradicted
+      confidence: High
+      key_findings:
+        - "Cold degrades range for every manufacturer, but degraded is not unusable; several cold-climate systems operate battery-electric fleets in regular service."
