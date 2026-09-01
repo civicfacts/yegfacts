@@ -1,0 +1,98 @@
+{
+  "reviewer": {
+    "provider": "google",
+    "model_self_reported": "Gemini 3.1 Pro (High)",
+    "runner_model": "gemini-3.1-pro",
+    "runner_seat": "Gemini 3.1 Pro",
+    "runner_effort": "high"
+  },
+  "story": "infill-prices",
+  "round": 1,
+  "claims": [
+    {
+      "id": "ip-teardown-price-gap",
+      "proposition_evaluated": "Among separately saleable replacement dwellings on Edmonton lots where one existing dwelling was demolished for infill, more than 50 percent have a higher first arm's-length sale price than the demolished dwelling's last arm's-length sale price, in constant dollars. Count every separately saleable replacement dwelling once. Report lot-level shares under the 'every replacement' and 'at least one replacement' rules as declared sensitivities. Report alongside the verdict the median replacement-to-demolished price ratio and the distribution of that ratio.",
+      "interpretation_notes": "The public record does not contain a lot-to-lot joined dataset of prior arm's-length sale prices and replacement arm's-length sale prices. Without this, the 50 percent threshold cannot be tested on the required denominator.",
+      "verdict": "Not established",
+      "confidence": "High",
+      "evidence_basis": "modelled-uncertain",
+      "supporting_evidence": [],
+      "challenging_evidence": [],
+      "comparisons": [],
+      "limitations": [
+        "Publicly available datasets from the City of Edmonton (Open Data) include property assessments and building/demolition permits, but do not provide historical arm's-length sale prices linked lot-by-lot.",
+        "Real estate board data on arm's-length sale prices is proprietary and not published in bulk."
+      ],
+      "unknowns": [
+        "The actual arm's-length sale prices of demolished dwellings.",
+        "The actual first arm's-length sale prices of the separately saleable replacement dwellings."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A dataset joining residential demolition permits with both the last arm's-length sale price of the demolished dwelling and the first arm's-length sale price of the replacement dwelling(s).",
+          "likely_holder": "REALTORS Association of Edmonton (RAE) or a municipal open-data initiative partnering with Land Titles.",
+          "importance": "critical"
+        }
+      ],
+      "calculations_needed": [
+        "Match demolition permits to new building permits/completed dwellings by parcel identifier.",
+        "Retrieve last sale price before demolition and first sale price after completion.",
+        "Adjust prior sale price to constant dollars using the Edmonton CMA CPI.",
+        "Calculate the median replacement-to-demolished price ratio and the lot-level sensitivities."
+      ],
+      "what_would_change_my_verdict": [
+        "Publication of a comprehensive analytical report or dataset that links demolition and replacement arm's-length sale prices lot-by-lot for Edmonton."
+      ],
+      "suggested_one_line": "The public record does not contain the linked sale-price data needed to test whether most infill replacements sell for more than the demolished house did.",
+      "suggested_short_answer": "We cannot establish if most replacement infill homes sell for more than the demolished dwellings. The required data—historical arm's-length sale prices linked lot-by-lot to new replacement sale prices—is proprietary and not available in public municipal datasets.",
+      "suggested_tldr": [
+        "The claim compares the sale price of a torn-down house with the sale price of its replacements.",
+        "Testing this requires joining historical sale prices with new sale prices on the same lot.",
+        "This data is held by real estate boards and is not publicly available for bulk analysis.",
+        "Therefore, the claim cannot be tested using public evidence."
+      ]
+    },
+    {
+      "id": "ip-infill-affordable",
+      "proposition_evaluated": "Among separately saleable replacement dwellings in the matched set, more than 50 percent would require shelter costs exceeding 30 percent of before-tax income for a hypothetical household earning the declared City median income, under the 25-year amortization and the other primary assumptions below.",
+      "interpretation_notes": "Because the replacement arm's-length sale prices cannot be established lot-by-lot (see Claim 1), the shelter-cost-to-income test cannot be performed for the matched set. The upper and lower bounds encompass the 50 percent threshold.",
+      "verdict": "Not established",
+      "confidence": "High",
+      "evidence_basis": "modelled-uncertain",
+      "supporting_evidence": [],
+      "challenging_evidence": [],
+      "comparisons": [],
+      "limitations": [
+        "The shelter-cost calculation relies on the first arm's-length sale price of each replacement dwelling.",
+        "Without the matched set of replacement dwellings and their sale prices, the 30-percent affordability test cannot be calculated on the denominator."
+      ],
+      "unknowns": [
+        "The first arm's-length sale prices of the separately saleable replacement dwellings in the matched set."
+      ],
+      "missing_evidence": [
+        {
+          "description": "The first arm's-length sale prices of the separately saleable replacement dwellings on lots where a demolition occurred.",
+          "likely_holder": "REALTORS Association of Edmonton (RAE) or Land Titles.",
+          "importance": "critical"
+        }
+      ],
+      "calculations_needed": [
+        "Determine the first arm's-length sale price of each replacement dwelling.",
+        "Calculate the down payment, mortgage principal, and interest using the BoC 5-year rate and 25-year amortization.",
+        "Add property taxes, utilities, and condominium fees.",
+        "Compare total monthly shelter costs to 30 percent of the Statistics Canada median monthly before-tax household income for Edmonton."
+      ],
+      "what_would_change_my_verdict": [
+        "Access to the replacement arm's-length sale prices for the matched set of demolition lots, enabling the shelter-cost calculation."
+      ],
+      "suggested_one_line": "The affordability of replacement infill cannot be tested without public access to their actual sale prices.",
+      "suggested_short_answer": "We cannot test whether most new infill homes exceed the 30-percent affordability threshold. Calculating the mortgage and shelter costs requires the actual sale prices of the new homes, which are not publicly available as a linked dataset.",
+      "suggested_tldr": [
+        "The claim asserts that replacement infill housing is not affordable for a median-income household.",
+        "Testing this requires calculating the monthly shelter costs (mortgage, taxes, utilities) based on the new home's sale price.",
+        "Because the actual sale prices of the replacement homes in the matched set are not publicly available, this calculation cannot be performed.",
+        "Therefore, the affordability threshold cannot be tested on the required group of homes."
+      ]
+    }
+  ]
+}
