@@ -1,0 +1,24 @@
+---
+/**
+ * Community emissions against the line the City drew for itself.
+ *
+ * Figures and the gap both come from `scripts/calcs/climate-targets.ts`; the
+ * component computes nothing, including the "3.0 million tonnes over" in the
+ * caption.
+ */
+import { figures, results } from '../../../scripts/calcs/climate-targets';
+import BarChart from './BarChart.astro';
+
+const bars = [
+  { label: '2024 emissions, measured', value: figures.inventory2024Mt },
+  { label: '2024 trajectory value', value: figures.trajectory2024Mt, quiet: true },
+  { label: '2025 target', value: figures.target2025Mt, quiet: true },
+].map((bar) => ({ ...bar, display: `${bar.value} Mt` }));
+---
+
+<BarChart
+  title="Community emissions against the City's own trajectory"
+  bars={bars}
+  caption={`Million tonnes CO2e. The 2024 inventory came in ${results.gapAboveTrajectory2024Mt} million tonnes — ${results.pctAboveTrajectory2024} per cent — above the trajectory value the City had set for that year. Grey bars are targets, the dark bar the measurement.`}
+  sources={['YF-EV-0020', 'YF-EV-0022', 'YF-EV-0024']}
+/>

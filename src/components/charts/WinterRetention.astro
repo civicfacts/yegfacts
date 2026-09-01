@@ -1,0 +1,27 @@
+---
+/**
+ * The other side of the same story: winter thins cycling out everywhere it has
+ * been measured, including in Canada's strongest cycling city.
+ *
+ * Kept as a separate chart from the commute shares deliberately. The two are on
+ * incompatible denominators — cyclists retained versus share of all commutes —
+ * and the claim's own limitations say they cannot be ranked against each other,
+ * so putting them in one frame would assert a comparison the evidence refuses.
+ */
+import { winterCyclistRetentionPct } from '../../../scripts/calcs/winter-cycling';
+import BarChart from './BarChart.astro';
+
+const bars = Object.entries(winterCyclistRetentionPct).map(([city, retention]) => ({
+  label: city,
+  value: retention,
+  display: `${retention}%`,
+  quiet: city !== 'Montréal',
+}));
+---
+
+<BarChart
+  title="Winter cyclist retention in four Québec cities, 2020–2021"
+  bars={bars}
+  caption="The share of each city's cyclists who kept riding through winter. A different denominator from the commute chart above, and the two cannot be ranked against each other."
+  sources={['YF-EV-0030']}
+/>

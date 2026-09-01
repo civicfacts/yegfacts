@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import { PANEL_AGREEMENT_GLOSS } from '../../lib/findings';
 import { SITE, repoPath } from '../../lib/site';
 import { PANEL_AGREEMENT_LEVELS } from '../../lib/vocabulary';
+import { toc } from '../../lib/toc';
 
 const stages = [
   {
@@ -105,9 +106,19 @@ const findings = [
     body: 'Reserved for a materially split panel. Reviewers cannot output Mixed; only synthesis produces it, and only when the three reviewers genuinely divide. Where you see Mixed, the disagreement is shown rather than smoothed over.',
   },
 ];
+const sections = toc([
+  { id: 'stages', label: 'Seven stages' },
+  { id: 'vocabulary', label: 'The words we use' },
+  { id: 'synthesis', label: 'Panel agreement' },
+  { id: 'stories', label: 'What stories carry' },
+  { id: 'limits', label: 'Limits we set' },
+  { id: 'panel-quality', label: 'Panel quality record' },
+  { id: 'launch-slate', label: 'The launch slate' },
+]);
 ---
 
 <Base
+  sections={sections}
   title="Methodology"
   description="How YEGFacts produces a finding: a frozen brief, three models researching blind, a deterministic merge, a cross-review round, and a publication gate before anything is published."
 >
@@ -128,7 +139,7 @@ const findings = [
     </p>
   </header>
 
-  <section class="mt-11">
+  <section id="stages" class="mt-11">
     <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
       Seven stages, per story
     </h2>
@@ -157,7 +168,7 @@ const findings = [
     </p>
   </section>
 
-  <section class="mt-14">
+  <section id="vocabulary" class="mt-14">
     <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">The words we use</h2>
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
       No TRUE/FALSE. No scores out of ten. A finding is a sentence in a controlled vocabulary, and
@@ -222,7 +233,7 @@ const findings = [
     </p>
   </section>
 
-  <section class="mt-14">
+  <section id="stories" class="mt-14">
     <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">What stories carry</h2>
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed">
       A story has no verdict of its own. Verdicts belong to claims — the atomic, testable
@@ -239,7 +250,7 @@ const findings = [
     </p>
   </section>
 
-  <section class="mt-14">
+  <section id="limits" class="mt-14">
     <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Limits we set on ourselves</h2>
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed">
       Version 1 of YEGFacts publishes no allegations about named individuals. The claims we check

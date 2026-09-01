@@ -1,0 +1,51 @@
+---
+import { SITE, issueUrl, mailto } from '../lib/site';
+
+/**
+ * "Something wrong on this page?" — the single correction route, carried beside
+ * the table of contents on every content page.
+ *
+ * It is single deliberately. Before this existed the same invitation appeared
+ * two and three times on one story: a challenge block at the foot of the
+ * article, a corrections paragraph, and the footer. A reader who wants to
+ * report an error needs one obvious place to do it, not three that compete.
+ *
+ * The issue title carries the page path, so an issue arriving from a reader
+ * already says which page it is about without the reader having to.
+ */
+interface Props {
+  /** Path of the page being reported on, e.g. `/facts/electric-buses`. */
+  path: string;
+  /** Human title of the page, used in the mail subject. */
+  title: string;
+}
+
+const { path, title } = Astro.props;
+
+const pageUrl = new URL(path, Astro.site ?? SITE.url).href;
+
+const issue = issueUrl(
+  `Correction: ${path}`,
+  `Page: ${pageUrl}\n\nWhat is wrong:\n\nEvidence (links):\n`,
+);
+
+const email = mailto(`Correction: ${title}`, `Page: ${pageUrl}\n\nWhat is wrong:\n`);
+---
+
+<div class="border-t border-rule pt-4">
+  <p class="text-[0.8125rem] font-semibold text-forest">Something wrong on this page?</p>
+  <ul class="mt-2 space-y-1 text-[0.8125rem]">
+    <li>
+      <a href={issue} rel="noopener" class="text-navy underline underline-offset-2">
+        Open a GitHub issue
+      </a>
+    </li>
+    <li>
+      <a href={email} class="text-navy underline underline-offset-2">{SITE.email}</a>
+    </li>
+  </ul>
+  <p class="mt-2.5 text-xs leading-relaxed text-muted">
+    <a href="/about#corrections" class="underline underline-offset-2">Corrections are published</a>,
+    never quietly edited.
+  </p>
+</div>

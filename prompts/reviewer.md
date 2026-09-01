@@ -44,8 +44,15 @@ will happen" into "X happened."
 ## Verdicts (use exactly these four)
 
 - **Supported** — the evidence affirmatively establishes the proposition.
-- **Partially supported** — a meaningful part is established; the
-  proposition as stated overreaches or needs qualification.
+- **Partially supported** — a meaningful part is established AND an
+  identifiable part is not. Using this verdict REQUIRES naming, in your
+  interpretation notes, exactly which part of the normalized proposition
+  fails and on what evidence. Doubts about evidence QUALITY (untested
+  allegations, single-source figures, litigation filings) are confidence
+  considerations — they lower your confidence, they do not turn a
+  supported proposition into a partially supported one. If every part of
+  the proposition holds but the evidence is weak, the verdict is
+  Supported at Low or Moderate confidence, not Partially supported.
 - **Not established** — the evidence does not justify the proposition
   (including: not enough evidence to tell).
 - **Contradicted** — the evidence affirmatively points against the

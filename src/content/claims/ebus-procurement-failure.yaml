@@ -1,11 +1,11 @@
 id: ebus-procurement-failure
 question: Did Edmonton's Proterra electric buses substantially fail to deliver what the City contracted for?
 story: electric-buses
-finding: Partially supported
+finding: Supported
 evidence_basis: Mostly Edmonton evidence
-panel_agreement: Adjacent
-methodology_version: "1.0"
-review_run: reviews/electric-buses/2026-08-31
+panel_agreement: Unanimous
+methodology_version: "1.4"
+review_run: reviews/electric-buses/2026-09-01-rerun
 evidence: [YF-EV-0001, YF-EV-0002, YF-EV-0003, YF-EV-0004, YF-EV-0005, YF-EV-0006, YF-EV-0009]
 key_facts:
   - text: "The City's February 2024 proof of claim says the contract specified 328 km of range, or 268 km in extreme cold, while the buses averaged about 165 km in winter — 38% below the cold-weather guarantee."
@@ -33,23 +33,23 @@ unknowns:
 missing_evidence:
   - "ETS per-year fleet availability, maintenance cost and range data for the Proterra fleet (holder: Edmonton Transit Service)."
 review:
-  agreement: Adjacent
+  agreement: Unanimous
   reviewers:
     - model: Claude Fable 5
       verdict: Supported
       confidence: Moderate
       key_findings:
-        - "A 38% shortfall against the extreme-cold guarantee, sub-50% availability at times, and a collapse of vendor support meet the brief's bar of material shortfall against contracted specifications, even though buses ran daily."
-        - "Weights the City's legal filings as the City's formal assessment, corroborated by union accounts and undisputed docket events."
-      changed_between_rounds: "Held Supported; adopted the other reviewers' point as a corrective to the word 'disaster,' not to the normalized proposition."
+        - "Every element of the normalized proposition — range, reliability, durability, vendor support — is established; under the v1.4 rule the litigation-sourced precision of the figures is a confidence consideration, not a partial-support one."
+      changed_between_rounds: "Re-decided 2026-09-01 under the tightened v1.4 verdict rule, evidence-locked to the original archived set. Original panel: Adjacent (2 Partially supported, 1 Supported)."
     - model: GPT-5.6 Sol
-      verdict: Partially supported
+      verdict: Supported
       confidence: Moderate
       key_findings:
-        - "Material shortfalls are well-documented, but the precise figures rest on untested litigation claims, and the fleet remained in service."
+        - "Material shortfalls established across the proposition: 165 km winter vs 268 km contracted, 250 km best vs 328 km, recurring outages and hardware failures, and the loss of vendor support. Confidence Moderate because the sharpest figures are City court filings."
+      changed_between_rounds: "Moved from Partially supported to Supported once the tightened rule required naming a failing part of the proposition — none could be named."
     - model: Gemini 3.1 Pro
-      verdict: Partially supported
+      verdict: Supported
       confidence: Moderate
       key_findings:
-        - "Downgraded from Supported: the sharpest numbers rely solely on the City's untested court filings rather than independent audit, and the buses continue daily service, contradicting the absolute 'disaster' framing."
-      changed_between_rounds: "Supported → Partially supported after cross-review."
+        - "Shortfalls established in all specified areas; continued daily service does not negate failure to meet contracted performance. Evidence quality (untested allegations) is carried in confidence."
+      changed_between_rounds: "Same move as the GPT seat, independently: with no failing part identifiable, the verdict is Supported and the evidence-quality doubt lives in Moderate confidence."

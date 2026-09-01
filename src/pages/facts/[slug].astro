@@ -8,7 +8,8 @@ import PendingBanner from '../../components/PendingBanner.astro';
 import SeenCards from '../../components/SeenCards.astro';
 import TopicTags from '../../components/TopicTags.astro';
 import { FINDING_GLOSS, PANEL_AGREEMENT_GLOSS } from '../../lib/findings';
-import { SITE, issueUrl, mailto } from '../../lib/site';
+import { SITE } from '../../lib/site';
+import { toc } from '../../lib/toc';
 import {
   claimTopics,
   claimsForStory,
@@ -51,9 +52,20 @@ const { Content } = await render(story);
 const evidence: Evidence[] = await evidenceForStory(claims, commitments);
 const pageUrl = new URL(`/facts/${story.id}`, Astro.site ?? SITE.url).href;
 
-const comparisons = claims.flatMap((claim) =>
-  claim.data.comparisons.map((comparison) => ({ claim, comparison })),
-);
+/**
+ * Comparable cities, grouped under the claim they were offered for.
+ *
+ * They used to be one flat list with each card carrying a back-link naming its
+ * claim, which on a single-claim story printed the same twenty-word question
+ * five times running. Grouped, the question is stated once per group — and on a
+ * story with only one claim, not at all, because there is nothing to
+ * disambiguate.
+ */
+const comparisonGroups = claims
+  .filter((claim) => claim.data.comparisons.length > 0)
+  .map((claim) => ({ claim, comparisons: claim.data.comparisons }));
+
+const comparisons = comparisonGroups.flatMap((group) => group.comparisons);
 const unknowns = claims.flatMap((claim) =>
   claim.data.unknowns.map((text) => ({ claim, text })),
 );
@@ -70,9 +82,59 @@ const missing = claims.flatMap((claim) =>
 const methodologyVersions = [...new Set(claims.map((claim) => claim.data.methodology_version))];
 
 const heading = 'mt-14 text-xl font-extrabold tracking-[-0.015em] text-forest';
+
+/**
+ * Each fixed gloss is printed the first time its value appears on the page and
+ * not again.
+ *
+ * The wording is invariant by design — one sentence per finding (methodology
+ * v1.2) and one per agreement value (v1.3), so it cannot be tuned per claim to
+ * lean an interpretation. That is exactly why repeating it under a second claim
+ * with the same value adds nothing: a reader who has met "Unanimous" once on
+ * this page has already read what it means, and on a three-claim story the same
+ * sentence was landing three and four times.
+ */
+const glossed = (() => {
+  const finding = new Set<string>();
+  const agreement = new Set<string>();
+  return claims.map((claim) => {
+    const row = {
+      claim,
+      findingGloss: finding.has(claim.data.finding)
+        ? undefined
+        : FINDING_GLOSS[claim.data.finding],
+      agreementGloss: agreement.has(claim.data.panel_agreement)
+        ? undefined
+        : PANEL_AGREEMENT_GLOSS[claim.data.panel_agreement],
+    };
+    finding.add(claim.data.finding);
+    agreement.add(claim.data.panel_agreement);
+    return row;
+  });
+})();
+
+/**
+ * The outline, in render order. Every entry is conditioned on the same thing
+ * its section is, so the rail can never link to a section this story does not
+ * have.
+ */
+const sections = toc([
+  story.data.short_answer ? { id: 'short-answer', label: 'Short answer' } : false,
+  story.data.tldr.length > 0 && { id: 'tldr', label: 'TL;DR' },
+  story.data.seen.length > 0 && { id: 'claims-we-are-seeing', label: 'Common forms' },
+  { id: 'what-happened', label: 'What actually happened' },
+  { id: 'claims-checked', label: 'Claims checked' },
+  commitments.length > 0 && { id: 'commitments', label: 'What the City promised' },
+  { id: 'evidence', label: 'Edmonton evidence' },
+  comparisons.length > 0 && { id: 'comparisons', label: 'Comparable cities' },
+  unknowns.length > 0 && { id: 'unknown', label: 'What remains unknown' },
+  missing.length > 0 && { id: 'missing-evidence', label: 'Missing evidence' },
+  { id: 'ai-review', label: 'AI review' },
+  { id: 'history', label: 'Article history' },
+]);
 ---
 
-<Base title={story.data.title} description={story.data.one_line}>
+<Base title={story.data.title} description={story.data.one_line} sections={sections}>
   {story.data.status === 'pending-review' && <PendingBanner />}
 
   <article>
@@ -168,7 +230,7 @@ const heading = 'mt-14 text-xl font-extrabold tracking-[-0.015em] text-forest';
           </p>
         ) : (
           <div class="mt-4 space-y-8">
-            {claims.map((claim) => (
+            {glossed.map(({ claim, findingGloss, agreementGloss }) => (
               <div id={claim.data.id} class="scroll-mt-6 border-t border-rule-strong pt-5">
                 <h3 class="text-lg font-semibold tracking-[-0.012em]">
                   {claim.data.question}
@@ -185,9 +247,9 @@ const heading = 'mt-14 text-xl font-extrabold tracking-[-0.015em] text-forest';
                   </dt>
                   <dd>
                     <Finding finding={claim.data.finding} size="lg" />
-                    <p class="mt-1 text-sm leading-relaxed text-muted">
-                      {FINDING_GLOSS[claim.data.finding]}
-                    </p>
+                    {findingGloss && (
+                      <p class="mt-1 text-sm leading-relaxed text-muted">{findingGloss}</p>
+                    )}
                   </dd>
 
                   <dt class="text-xs font-semibold tracking-[0.08em] text-muted uppercase">
@@ -200,9 +262,9 @@ const heading = 'mt-14 text-xl font-extrabold tracking-[-0.015em] text-forest';
                   </dt>
                   <dd>
                     <span class="text-[0.9375rem]">{claim.data.panel_agreement}</span>
-                    <p class="mt-1 text-sm leading-relaxed text-muted">
-                      {PANEL_AGREEMENT_GLOSS[claim.data.panel_agreement]}
-                    </p>
+                    {agreementGloss && (
+                      <p class="mt-1 text-sm leading-relaxed text-muted">{agreementGloss}</p>
+                    )}
                   </dd>
                 </dl>
 
@@ -294,7 +356,7 @@ const heading = 'mt-14 text-xl font-extrabold tracking-[-0.015em] text-forest';
                 <a href={`/evidence/${entry.data.id}`} class="font-semibold hover:text-forest">
                   {entry.data.title}
                 </a>
-                <p class="mt-1 text-xs text-muted">
+                <p class="mt-1 text-xs text-muted" data-record>
                   {entry.data.publisher} · retrieved{' '}
                   <time datetime={entry.data.retrieved_on}>{entry.data.retrieved_on}</time> ·{' '}
                   {entry.data.id}
@@ -311,23 +373,31 @@ const heading = 'mt-14 text-xl font-extrabold tracking-[-0.015em] text-forest';
       comparisons.length > 0 && (
         <section id="comparisons">
           <h2 class={heading}>Comparable cities</h2>
-          <ul class="mt-4 divide-y divide-rule border-t border-rule">
-            {comparisons.map(({ claim, comparison }) => (
-              <li class="py-4">
-                <p class="font-semibold">{comparison.city}</p>
-                <p class="mt-1 text-[0.9375rem] leading-relaxed">{comparison.note}</p>
-                <p class="mt-1.5 text-sm text-muted">
-                  <span class="font-semibold">Transfers to Edmonton?</span>{' '}
-                  {comparison.transferability}
-                </p>
-                <p class="mt-1 text-xs text-muted">
-                  <a href={`#${claim.data.id}`} class="underline">
-                    {claim.data.question}
+          {comparisonGroups.map((group) => (
+            <div class="mt-4">
+              {comparisonGroups.length > 1 && (
+                /* data-crossref: the group heading names the claim it belongs to. */
+                <p class="text-xs text-muted" data-crossref>
+                  On{' '}
+                  <a href={`#${group.claim.data.id}`} class="underline">
+                    {group.claim.data.question}
                   </a>
                 </p>
-              </li>
-            ))}
-          </ul>
+              )}
+              <ul class="mt-2 divide-y divide-rule border-t border-rule">
+                {group.comparisons.map((comparison) => (
+                  <li class="py-4">
+                    <p class="font-semibold">{comparison.city}</p>
+                    <p class="mt-1 text-[0.9375rem] leading-relaxed">{comparison.note}</p>
+                    <p class="mt-1.5 text-sm text-muted">
+                      <span class="font-semibold">Transfers to Edmonton?</span>{' '}
+                      {comparison.transferability}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </section>
       )
     }
@@ -391,51 +461,15 @@ const heading = 'mt-14 text-xl font-extrabold tracking-[-0.015em] text-forest';
         )
       }
       <p class="mt-3 text-xs text-muted">
-        Every change to this page is in the public git history at{' '}
-        <a href={`${SITE.repo}/commits/main/src/content/stories/${story.id}.mdx`} rel="noopener" class="text-navy underline">
-          this file’s commit history
-        </a>{' '}
-       .
-      </p>
-    </section>
-
-    {/* CTAs */}
-    <section id="challenge" class="mt-14 border-t-2 border-rule-strong pt-6" data-pagefind-ignore>
-      <h2 class="text-lg font-extrabold tracking-[-0.015em] text-forest">
-        Think we got something wrong?
-      </h2>
-      <p class="mt-1.5 text-sm leading-relaxed text-muted">
-        Point at the evidence. Corrections are published with a dated entry in the article history
-        above.
-      </p>
-      <div class="mt-4 flex flex-wrap gap-3 text-sm">
+        Every revision is in the{' '}
         <a
-          href={issueUrl(
-            `Challenge: ${story.data.title}`,
-            `Page: ${pageUrl}\n\nWhich claim:\n\nWhat you think is wrong:\n\nEvidence (links):\n`,
-          )}
+          href={`${SITE.repo}/commits/main/src/content/stories/${story.id}.mdx`}
           rel="noopener"
-          class="border border-rule px-3 py-1.5 transition-colors hover:border-forest hover:text-forest"
+          class="text-navy underline"
         >
-          Challenge this conclusion
-        </a>
-        <a
-          href={mailto(
-            `Evidence for: ${story.data.title}`,
-            `Page: ${pageUrl}\n\nWhat you have:\n`,
-          )}
-          class="border border-rule px-3 py-1.5 transition-colors hover:border-forest hover:text-forest"
-        >
-          Send us evidence
-        </a>
-        <a
-          href={issueUrl('Suggest a topic', 'What should YEGFacts check, and why?\n')}
-          rel="noopener"
-          class="border border-rule px-3 py-1.5 transition-colors hover:border-forest hover:text-forest"
-        >
-          Suggest a topic
-        </a>
-      </div>
+          public commit history of this file
+        </a>.
+      </p>
     </section>
   </article>
 </Base>

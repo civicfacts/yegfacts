@@ -1,0 +1,135 @@
+---
+/**
+ * A horizontal bar chart, drawn as inline SVG with no library.
+ *
+ * The rule the charts on this site follow: a chart may only draw numbers that
+ * already exist somewhere auditable — an export of the story's calc module, or
+ * a `key_fact` whose sources the caption cites. No component does arithmetic,
+ * because arithmetic that is not in `scripts/calcs/` is not tested and not
+ * inspectable (spec §4, stage 6).
+ *
+ * Bars are laid out at a fixed pixel size inside a scrolling container rather
+ * than scaled to the column. A scaled SVG shrinks its type with it, and a chart
+ * whose value labels are unreadable on a phone is worse than a list.
+ */
+export interface Bar {
+  label: string;
+  /** Drives the bar length; never printed, so it carries no unit. */
+  value: number;
+  /** What is printed at the end of the bar. Required, so a bar always states its unit. */
+  display: string;
+  /** Draws the bar in the quiet tone — context a comparison is made against. */
+  quiet?: boolean;
+}
+
+interface Props {
+  /** What the chart shows. Rendered as the figure's heading. */
+  title: string;
+  bars: Bar[];
+  /**
+   * Where the numbers come from, in words. The evidence IDs are appended as
+   * links, so this should not repeat them.
+   */
+  caption: string;
+  /** Evidence IDs the charted numbers rest on. */
+  sources: string[];
+  /** Scale maximum. Defaults to the largest bar, so a bar always fills the row. */
+  max?: number;
+}
+
+const { title, bars, caption, sources, max } = Astro.props;
+
+const WIDTH = 520;
+const LABEL_WIDTH = 172;
+const VALUE_WIDTH = 76;
+const ROW_HEIGHT = 26;
+const BAR_HEIGHT = 13;
+const TRACK_X = LABEL_WIDTH + 8;
+const TRACK_WIDTH = WIDTH - TRACK_X - VALUE_WIDTH;
+
+const height = bars.length * ROW_HEIGHT + 4;
+const scale = max ?? Math.max(...bars.map((bar) => bar.value));
+
+const rows = bars.map((bar, index) => ({
+  ...bar,
+  y: index * ROW_HEIGHT + 2,
+  width: Math.max(1, Math.round((bar.value / scale) * TRACK_WIDTH)),
+}));
+
+/**
+ * The whole chart is one image to assistive technology, and its label carries
+ * every value — a bar chart read as a pile of loose text nodes conveys nothing.
+ */
+const description = `${title}. ${rows.map((row) => `${row.label}: ${row.display}`).join('. ')}.`;
+---
+
+<figure class="my-7 border-t border-rule pt-4">
+  <figcaption class="text-[0.6875rem] font-semibold tracking-[0.09em] text-muted uppercase">
+    {title}
+  </figcaption>
+
+  <div class="mt-3 overflow-x-auto">
+    <svg
+      width={WIDTH}
+      height={height}
+      viewBox={`0 0 ${WIDTH} ${height}`}
+      role="img"
+      aria-label={description}
+      class="block"
+    >
+      <line
+        x1={TRACK_X - 4}
+        y1="0"
+        x2={TRACK_X - 4}
+        y2={height}
+        stroke="var(--color-rule)"
+        stroke-width="1"></line>
+      {
+        rows.map((row) => (
+          <>
+            <text
+              x={LABEL_WIDTH}
+              y={row.y + BAR_HEIGHT - 2}
+              text-anchor="end"
+              font-size="12"
+              fill="var(--color-muted)"
+            >
+              {row.label}
+            </text>
+            <rect
+              x={TRACK_X}
+              y={row.y}
+              width={row.width}
+              height={BAR_HEIGHT}
+              fill={row.quiet ? 'var(--color-rule-strong)' : 'var(--color-forest)'}
+            />
+            <text
+              x={TRACK_X + row.width + 8}
+              y={row.y + BAR_HEIGHT - 2}
+              font-size="12"
+              font-weight="600"
+              fill="var(--color-ink)"
+              style="font-variant-numeric: tabular-nums"
+            >
+              {row.display}
+            </text>
+          </>
+        ))
+      }
+    </svg>
+  </div>
+
+  <p class="mt-2.5 text-xs leading-relaxed text-muted">
+    {caption}{' '}
+    {
+      sources.map((id, index) => (
+        <>
+          {index > 0 && ', '}
+          <a href={`/evidence/${id}`} class="text-navy underline">
+            {id}
+          </a>
+        </>
+      ))
+    }
+  </p>
+</figure>

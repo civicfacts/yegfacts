@@ -1,0 +1,27 @@
+---
+/**
+ * The electric-buses range story in one picture: what was announced, what was
+ * contracted, and what the buses did.
+ *
+ * Every figure is read from `scripts/calcs/electric-buses.ts` rather than typed
+ * here, so the chart cannot drift from the arithmetic the story publishes.
+ */
+import { figures } from '../../../scripts/calcs/electric-buses';
+import BarChart from './BarChart.astro';
+
+const bars = [
+  { label: 'Announced at launch, 2020', value: figures.announcedRangeKm, quiet: true },
+  { label: 'Contracted, normal conditions', value: figures.contractRangeNormalKm, quiet: true },
+  { label: 'Contracted, extreme cold', value: figures.contractRangeColdKm, quiet: true },
+  { label: 'Observed, best warm weather', value: figures.observedWarmBestKm },
+  { label: 'Observed, winter average', value: figures.observedWinterAvgKm },
+].map((bar) => ({ ...bar, display: `${bar.value} km` }));
+---
+
+<BarChart
+  title="Range per charge: promised against observed"
+  bars={bars}
+  max={figures.announcedRangeKm}
+  caption="Announced range from the 2020 launch announcement; contracted and observed ranges as stated in the City's own bankruptcy filings. Grey bars are figures the City was promised or contracted for, dark bars what it reported measuring."
+  sources={['YF-EV-0012', 'YF-EV-0003']}
+/>

@@ -1,5 +1,5 @@
 ---
-import { SITE } from '../lib/site';
+import { SITE, issueUrl } from '../lib/site';
 
 /**
  * The commit this build came from, injected by `astro.config.mjs`. A reader can
@@ -8,6 +8,13 @@ import { SITE } from '../lib/site';
  * from the deployed site rather than taken on trust.
  */
 const commitSha = import.meta.env.COMMIT_SHA ?? 'dev';
+
+/** Matches the colophon to a page that carries an "On this page" rail. */
+interface Props {
+  wide?: boolean;
+}
+
+const { wide = false } = Astro.props;
 
 const columns = [
   {
@@ -32,7 +39,7 @@ const columns = [
 ---
 
 <footer class="mt-20 border-t border-rule" data-pagefind-ignore>
-  <div class="mx-auto max-w-3xl px-5 py-10">
+  <div class:list={['mx-auto max-w-3xl px-5 py-10', wide && 'lg:max-w-[66rem]']}>
     <div class="grid gap-8 sm:grid-cols-3">
       {
         columns.map((column) => (
@@ -67,6 +74,19 @@ const columns = [
               class="text-ink transition-colors hover:text-forest"
             >
               Source on GitHub
+            </a>
+          </li>
+          <li>
+            {/*
+              Lives here rather than at the foot of every story: it is an
+              invitation to the site, not a response to the page you are on.
+            */}
+            <a
+              href={issueUrl('Suggest a topic', 'What should YEGFacts check, and why?\n')}
+              rel="noopener"
+              class="text-ink transition-colors hover:text-forest"
+            >
+              Suggest a topic
             </a>
           </li>
         </ul>

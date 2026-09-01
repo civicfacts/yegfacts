@@ -1,0 +1,25 @@
+---
+/**
+ * The negative control on climate determinism: one cold city against four warm
+ * ones, on a single commute denominator.
+ *
+ * Figures come from `scripts/calcs/winter-cycling.ts`, which a test holds to the
+ * `key_fact` citing the same source.
+ */
+import { bicycleCommuteSharePct } from '../../../scripts/calcs/winter-cycling';
+import BarChart from './BarChart.astro';
+
+const bars = Object.entries(bicycleCommuteSharePct).map(([city, share]) => ({
+  label: city,
+  value: share,
+  display: `${share}%`,
+  quiet: city !== 'Minneapolis',
+}));
+---
+
+<BarChart
+  title="Bicycle commute share: cold Minneapolis against four warm-winter cities"
+  bars={bars}
+  caption="Share of workers commuting by bicycle, 2008–2012 — an annual commuting measure rather than a winter one, and nothing in the source identifies what produced the spread."
+  sources={['YF-EV-0029']}
+/>

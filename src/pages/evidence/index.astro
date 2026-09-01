@@ -30,7 +30,7 @@ const evidence = (await getCollection('evidence')).sort((a, b) =>
             <a href={`/evidence/${entry.data.id}`} class="font-semibold hover:text-forest">
               {entry.data.title}
             </a>
-            <p class="mt-1 text-xs text-muted">
+            <p class="mt-1 text-xs text-muted" data-record>
               <span class="tabular">{entry.data.id}</span> · {entry.data.publisher} · retrieved{' '}
               <time datetime={entry.data.retrieved_on}>{entry.data.retrieved_on}</time> ·{' '}
               {entry.data.archive.visibility === 'public' ? 'mirrored' : 'retained privately'}

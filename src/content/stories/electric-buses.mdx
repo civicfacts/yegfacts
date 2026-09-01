@@ -16,10 +16,10 @@ short_answer: >-
   work in cold cities."
 tldr:
   - "The buses materially underperformed the contract: roughly 165 km average winter range against a 268 km extreme-cold guarantee — a 38% shortfall — per the City's court filings."
-  - "More than half the 60-bus fleet was at times out of service, and Proterra's bankruptcy left its warranty coverage unlikely to be honoured and disrupted parts supply."
+  - "More than half the 60-bus fleet was at times out of service, per the City's court filings, and Proterra's bankruptcy made its warranty coverage unlikely to be honoured and cut off reliable parts supply."
   - "The $82 million figure is a bankruptcy proof of claim filed in February 2024, not a measured loss; what Edmonton actually recovers is still not public."
   - "The City paid US$58.76 million for the buses, with more than C$43 million in joint federal, provincial and municipal funding announced for the original project."
-  - "Toronto's head-to-head test of three manufacturers found winter range losses across the board — 13% to 28% depending on the manufacturer — but 95% availability for some fleets, so cold-city failure is not a property of the technology."
+  - "Toronto's head-to-head test of three manufacturers found winter range losses across the board — 13% to 30% depending on the manufacturer — but 95% availability for some fleets, so cold-city failure is not a property of the technology."
 topics: [transportation, city-finances, climate-environment]
 claims: [ebus-procurement-failure, ebus-82m-loss, ebus-cold-cities]
 commitments: [ebus-range-expectation]
@@ -43,6 +43,9 @@ last_verified: "2026-09-01"
 review_by: "2027-02-28"
 changelog:
   - date: "2026-09-01"
+    type: verdict-change
+    note: "The procurement-failure claim moved from Partially supported (Adjacent panel) to Supported (Unanimous, Moderate confidence) after a re-decision under the methodology v1.4 verdict rule: evidence-quality doubts now affect confidence, not the finding, and no reviewer could name a part of the proposition that fails. Evidence set unchanged; re-run artifacts in reviews/electric-buses/2026-09-01-rerun/."
+  - date: "2026-09-01"
     type: correction
     note: "The 350 km commitment's measurable form wrongly added 'including Edmonton winter conditions' — the launch announcement did not specify winter range. Corrected; the alleged contractual cold-weather specification is tracked in the claims. Source date for the launch article corrected to 2020-07-24."
   - date: "2026-09-01"
@@ -51,10 +54,11 @@ changelog:
 ---
 
 import Term from '../../components/Term.astro';
+import EbusRange from '../../components/charts/EbusRange.astro';
 
 Edmonton made its battery-electric bet in the late 2010s. In 2018, the federal,
-provincial and municipal governments announced more than C$43 million in
-joint funding for the first tranche. The City ordered 40 buses from <Term t="Proterra">Proterra</Term>, a U.S. electric-bus manufacturer,
+provincial and municipal governments announced joint funding of more than
+C$43 million for the first tranche. The City ordered 40 buses from <Term t="Proterra">Proterra</Term>, a U.S. electric-bus manufacturer,
 later expanded the order to 60, and
 publicly announced them with up to 350 km of range on ETS routes when the
 first entered service in August 2020.
@@ -68,24 +72,31 @@ and without a reliable parts channel for a fleet it had paid US$58,761,600
 for.
 
 In October 2023 the City went to the bankruptcy court with an itemized
-filing: it alleged substantially shorter range than contracted, and itemized
-C$1,352,655.58 in repair labour, parts, battery blankets and an outstanding
-receivable to that point.
+filing: it alleged substantially shorter range than contracted, and put its
+actual costs to that point at C$1,352,655.58 — repair labour, parts, battery
+blankets and an outstanding receivable.
 The specific numbers came in February 2024, when the City filed a
 <Term t="proof of claim">proof of claim</Term> seeking more than $82 million for breach of contract and negligence:
 the buses were contracted to deliver 328 km of range in normal conditions
-and 268 km in extreme cold, but averaged about 165 km in winter — 38% below
-the cold-weather guarantee — and at best about 250 km in warmer weather,
+and 268 km in extreme cold, but managed roughly 165 km on average in winter —
+38% short of the cold-weather guarantee — and at best about 250 km in warmer
+weather,
 short of even the 350 km the City had announced at launch. That proof of
 claim matches the "$82 million" number that circulates on social media.
 
-Later developments bear directly on the money question. Proterra's transit
-business was sold to
-Phoenix Motor in January 2024, which said it planned to restock spare parts.
-Proterra's reorganization plan took effect in March 2024. As of a May 2026
-claims-register entry, Edmonton's claim sits as <Term t="general unsecured">general unsecured</Term>, with no
-allowed or paid amount shown publicly. The City's own project page still
-lists all 60 electric buses in the ETS fleet, operating from two garages.
+<EbusRange />
+
+Later developments bear directly on the money question.
+
+- **January 2024** — Proterra's transit business was sold to Phoenix Motor,
+  which said it planned to restock spare parts.
+- **March 2024** — Proterra's reorganization plan took effect.
+- **May 2026** — the claims register still lists Edmonton's claim as
+  <Term t="general unsecured">general unsecured</Term>; no allowed or paid
+  amount has been published.
+
+The City's own project page still lists all 60 electric buses in the ETS
+fleet, operating from two garages.
 
 The three claims this story checks — that the buses
 failed, that Edmonton lost $82 million, and that this proves electric buses

@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import { publicStories, type Commitment } from '../lib/content';
 import { COMMITMENT_STATUSES } from '../content.config';
+import { toc } from '../lib/toc';
 
 /**
  * The generated view across all stories (spec §3). A commitment attached to a
@@ -20,9 +21,15 @@ const ladder = COMMITMENT_STATUSES.map((status) => ({
   status,
   entries: commitments.filter((commitment: Commitment) => commitment.data.status === status),
 })).filter((group) => group.entries.length > 0);
+
+/** One outline entry per rung of the ladder that actually has commitments on it. */
+const anchor = (status: string) => status.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+const sections = toc(ladder.map((group) => ({ id: anchor(group.status), label: group.status })));
 ---
 
 <Base
+  sections={sections}
   title="Commitments"
   description="What the City of Edmonton said it would deliver, when it becomes assessable, and what happened when it was assessed."
 >
@@ -42,7 +49,7 @@ const ladder = COMMITMENT_STATUSES.map((status) => ({
     ladder.length > 0 ? (
       <div class="mt-9 space-y-10">
         {ladder.map((group) => (
-          <section>
+          <section id={anchor(group.status)}>
             <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
               {group.status}
             </h2>

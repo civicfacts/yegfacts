@@ -1,12 +1,19 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { methodologyChanges } from '../../lib/methodology';
+import { toc } from '../../lib/toc';
 
 /** Renders `methodology/changelog.yaml`; an absent file renders as no history. */
 const entries = methodologyChanges();
+
+/** One outline entry per version. Dots are avoided in ids, not in labels. */
+const anchor = (version: string) => `v${version.replace(/\./g, '-')}`;
+
+const sections = toc(entries.map((entry) => ({ id: anchor(entry.version), label: `v${entry.version}` })));
 ---
 
 <Base
+  sections={sections}
   title="Methodology changes"
   description="Every change to the YEGFacts prompts, merge and synthesis rules, verdict vocabulary, validation rules, or panel composition."
 >
@@ -29,7 +36,7 @@ const entries = methodologyChanges();
     entries.length > 0 ? (
       <ol class="mt-9 divide-y divide-rule border-t border-rule">
         {entries.map((entry) => (
-          <li class="py-5">
+          <li id={anchor(entry.version)} class="py-5">
             <div class="flex flex-wrap items-baseline gap-x-3">
               <h2 class="text-lg font-semibold tracking-[-0.012em] text-forest tabular">
                 v{entry.version}

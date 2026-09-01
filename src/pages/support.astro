@@ -1,11 +1,56 @@
 ---
 import Base from '../layouts/Base.astro';
-import { SITE } from '../lib/site';
+import { SITE, mailto } from '../lib/site';
+import { toc } from '../lib/toc';
+
+/**
+ * The funding rules are stated once, in `#sponsorship`, and nowhere else on the
+ * site. They used to run twice on this page — a "what your money does not buy"
+ * section and a separate "not charitable donations" section covering
+ * overlapping ground — and a third time in compressed form on the About page.
+ * A rule a reader meets three times in three wordings reads as three rules.
+ */
+const sections = toc([
+  { id: 'contributing', label: 'Contributing today' },
+  { id: 'costs', label: 'What it actually costs' },
+  { id: 'sponsorship', label: 'Sponsoring a subscription' },
+  { id: 'why-credible', label: 'Why this is credible' },
+]);
+
+const sponsorEnquiry = mailto(
+  'Sponsoring a YEGFacts research subscription',
+  'Business or individual:\n\nWhich subscription (one at US$200/month, or both at US$400/month):\n\nAnything we should know before we disclose you publicly:\n',
+);
+
+/** The standing rules, in the one place they are stated. */
+const rules = [
+  {
+    head: 'Sponsors are named',
+    body: 'Publicly, on this page, with what they cover. A sponsor who asks not to be named is not named, and the amount is disclosed without them.',
+  },
+  {
+    head: 'No editorial influence',
+    body: 'Not which claims get checked, not how a claim is framed, and not what the finding turns out to be. There is no tier that comes with a say.',
+  },
+  {
+    head: 'No political money',
+    body: 'Not from a party, a candidate, a campaign, a PAC, or an advocacy organization with a municipal agenda.',
+  },
+  {
+    head: 'No subjects of a check',
+    body: 'Nobody being examined here — including a firm holding a City contract under review. A contribution like that is returned and the fact is recorded on this page.',
+  },
+  {
+    head: 'Not a charitable donation',
+    body: 'YEGFacts is operated as a for-profit business, not a registered charity. Sponsorship is not tax-deductible and no tax receipt is issued.',
+  },
+];
 ---
 
 <Base
+  sections={sections}
   title="Support YEGFacts"
-  description="How to support the research and operating costs behind YEGFacts, and the funding policy that comes with it."
+  description="What YEGFacts costs to run, who pays for it today, and the rules that come with sponsoring a research subscription."
 >
   <header class="border-b border-rule pb-6">
     <h1 class="text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
@@ -14,12 +59,12 @@ import { SITE } from '../lib/site';
     <p class="mt-3 max-w-prose text-base leading-relaxed text-muted">
       Checking a claim properly costs time and money: reading council reports, chasing records that
       are not posted anywhere, archiving every cited source and checking each published statement
-      back against those archived bytes at the publication gate. Contributions pay for that work and
-      for keeping the site running.
+      back against those archived bytes at the publication gate. This page says exactly what that
+      costs, who is paying it, and what a sponsor would and would not get.
     </p>
   </header>
 
-  <section class="mt-9">
+  <section id="contributing" class="mt-9">
     <div class="border border-rule-strong bg-wash px-4 py-5">
       <h2 class="font-semibold text-forest">Contribution links coming soon</h2>
       <p class="mt-1.5 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
@@ -29,40 +74,76 @@ import { SITE } from '../lib/site';
     </div>
   </section>
 
-  <section class="mt-12 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
-    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
-      What your money does and does not buy
-    </h2>
-    <p>
-      Contributions support research and operating costs. They buy no editorial influence of any
-      kind: not which claims get checked, not how a claim is framed, and certainly not what the
-      finding turns out to be. There is no tier that comes with a say.
-    </p>
-    <p>
-      Contributions are disclosed. Anyone who contributes materially is named on this page unless
-      they ask not to be, in which case the amount is still disclosed without the name.
-    </p>
-    <p>
-      Nobody who is a subject of a check — a candidate, a party, a campaign, or a firm holding a
-      City contract we are examining — can contribute. If a contribution like that arrives, it is
-      returned and the fact is recorded here.
-    </p>
+  <section id="costs" class="mt-12">
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">What it actually costs</h2>
+
+    <dl class="mt-5 divide-y divide-rule border-y border-rule">
+      <div class="grid gap-x-6 gap-y-1 py-4 sm:grid-cols-[13rem_1fr]">
+        <dt class="font-semibold">Two AI subscriptions</dt>
+        <dd class="text-[0.9375rem] leading-relaxed">
+          <span class="tabular">US$200</span> a month each. They run the three-model research panel
+          and the build and audit tooling behind it.
+        </dd>
+      </div>
+      <div class="grid gap-x-6 gap-y-1 py-4 sm:grid-cols-[13rem_1fr]">
+        <dt class="font-semibold">Everything else</dt>
+        <dd class="text-[0.9375rem] leading-relaxed">
+          Effectively nil. Hosting costs nothing at this size, and there are no staff and no
+          office.
+        </dd>
+      </div>
+    </dl>
+
+    <div class="mt-6 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
+      <p>
+        Neither subscription was bought for YEGFacts. Both are Ildar Abdulin's, paid for
+        personally, and the site runs on whatever share of them his other work leaves free. There
+        is no advertising here, and no political or advocacy money has been taken.
+      </p>
+    </div>
+
+    <aside class="mt-6 flex max-w-prose items-start gap-3.5 border-l-2 border-gold bg-wash px-4 py-4">
+      <img
+        src="/stew.png"
+        alt=""
+        width="32"
+        height="32"
+        class="mt-0.5 h-8 w-8 shrink-0 rounded-full border border-rule bg-paper"
+      />
+      <p class="text-[0.9375rem] leading-relaxed">
+        Ildar wanted me to tell you that he pays for both subscriptions himself — and also uses
+        them for his day job and other projects, so I, Stew, get only a fraction of what the plans
+        allow. Most days I run out of research capacity before I run out of work. A business
+        sponsoring a subscription would be buying dedicated capacity: quite literally, more checked
+        facts for Edmonton per week. — <a href="/about" class="text-navy underline">Stew</a>
+      </p>
+    </aside>
   </section>
 
-  <section class="mt-12 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
+  <section id="sponsorship" class="mt-12">
     <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
-      These are not charitable donations
+      Sponsoring a subscription
     </h2>
-    <p>
-      Being plain about this: YEGFacts is operated as a for-profit business, not a registered
-      charity. Contributions are <strong class="font-semibold">not charitable donations</strong>,
-      they are not tax-deductible, and{' '}
-      <strong class="font-semibold">no tax receipt is issued</strong>. If you are contributing
-      because you want a receipt, this is not that.
+    <p class="mt-2 max-w-prose text-[1.0625rem] leading-relaxed">
+      A local business can cover one subscription at US$200 a month, or both at US$400 — dedicated
+      to this project rather than shared with anything else. That is the whole offer: no logo
+      slots, no packages, no checkout. Write to{' '}
+      <a href={sponsorEnquiry} class="text-navy underline">{SITE.email}</a> and we will talk.
     </p>
+
+    <dl class="mt-6 divide-y divide-rule border-t border-rule">
+      {
+        rules.map((rule) => (
+          <div class="grid gap-x-6 gap-y-1 py-4 sm:grid-cols-[11rem_1fr]">
+            <dt class="font-semibold text-forest">{rule.head}</dt>
+            <dd class="text-[0.9375rem] leading-relaxed">{rule.body}</dd>
+          </div>
+        ))
+      }
+    </dl>
   </section>
 
-  <section class="mt-12 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
+  <section id="why-credible" class="mt-12 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
     <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Why this is credible</h2>
     <p>
       Independence claims are cheap. What makes this one checkable is that the whole process is in

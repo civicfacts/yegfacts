@@ -1,6 +1,6 @@
 ---
 title: "Winter cycling in Edmonton"
-one_line: "Winter measurably thins cycling out everywhere it has been counted — but a subarctic Finnish region still made one winter trip in ten by bicycle, and Edmonton's own counters logged more than 90,000 trips in a single December, so cold alone does not decide whether cycling works. What Edmonton itself would reach is a separate question: no reviewer found a winter mode-share measurement for it."
+one_line: "Winter measurably thins cycling out in every city where the panel found winter counts — but a subarctic Finnish region still made one winter trip in ten by bicycle, and Edmonton's own counters logged more than 90,000 trips in a single December, so cold alone does not decide whether cycling works. What Edmonton itself would reach is a separate question: no reviewer found a winter mode-share measurement for it."
 short_answer: >-
   The objection says the climate settles it: too cold, so bike lanes are a
   four-month amenity at best. The evidence points the other way. Finland's
@@ -8,10 +8,10 @@ short_answer: >-
   measured 18% of all trips in the region
   made by bicycle, and one trip in ten even in winter — in a subarctic,
   snowy region, on 930 km of cycle lanes the city says it maintains
-  year-round. Closer to home, Calgary counted four times as many daily
-  winter bicycle trips on its centre-city corridors after protected tracks
-  went in, and Edmonton's own counters recorded more than 90,000 bike trips
-  in December 2023. On a common commute denominator, cold Minneapolis
+  year-round. Closer to home, daily winter bicycle trips on Calgary's
+  centre-city corridors ran four times higher after protected tracks went in,
+  and Edmonton's own counters recorded more than 90,000 bike trips in
+  December 2023. On a common commute denominator, cold Minneapolis
   outrode warm Houston, Phoenix, Dallas and San Antonio by a wide margin, so
   mild winters plainly do not produce cycling by themselves. What the
   evidence does not show is that winter is costless — a Québec study puts
@@ -21,10 +21,10 @@ short_answer: >-
   it makes it unworkable.
 tldr:
   - "Finland's 2021 national travel survey (expanded Oulu-region sample) measured one trip in ten made by bicycle in winter in the Oulu region, and 18% of all trips over the year — direct counter-evidence to climate being an absolute barrier."
-  - "Edmonton already has measured winter riding: the City reports more than 90,000 bike trips counted in December 2023, up 143 per cent on the previous December, and estimates one in four Edmonton cyclists ride year-round."
-  - "Cold alone does not decide: on one common commute denominator, 4.1% of Minneapolis workers bike-commuted in 2008–2012, against 0.4% in Houston, 0.7% in Phoenix, 0.2% in San Antonio and 0.1% in Dallas."
-  - "Calgary — the nearest large winter-city peer — counted four times as many daily winter bicycle trips on its centre-city corridors comparing January 2015 with January 2016, before and after protected tracks."
-  - "The claim gets one thing right: winter shrinks cycling everywhere it has been measured. A Québec study reports Montréal retaining 13.6% of its cyclists through winter, and 4.35% in Saguenay."
+  - "Edmonton already has measured winter riding: more than 90,000 bicycle trips were counted at City counters in December 2023, 143 per cent above the December before, and the City puts year-round riders at one in four of its cyclists."
+  - "Cold alone does not decide: on one common commute denominator, 4.1% of Minneapolis workers bike-commuted in 2008–2012, well above the share recorded in warm-winter Houston, Phoenix, San Antonio or Dallas."
+  - "Calgary — the nearest large winter-city peer — measured daily winter bicycle trips on its centre-city corridors at four times their January 2015 level in January 2016, after protected tracks went in."
+  - "The claim gets one thing right: winter shrinks cycling in each of the cities measured here. A Québec study reports Montréal retaining 13.6% of its cyclists through winter, and 4.35% in Saguenay."
   - "The open question is Edmonton's own winter share of trips. No reviewer found a survey that measures it, and feasibility elsewhere is not a forecast for here."
 topics: [transportation]
 claims: [wc-too-cold]
@@ -53,10 +53,12 @@ changelog:
 ---
 
 import Term from '../../components/Term.astro';
+import BikeCommuteShare from '../../components/charts/BikeCommuteShare.astro';
+import WinterRetention from '../../components/charts/WinterRetention.astro';
 
 Every Edmonton bike-lane debate reaches the same objection, and it is not an
-unreasonable one to raise. Nobody bikes at -30, the argument goes. We're a
-winter city; bike lanes are for four months a year.
+unreasonable one to raise: nobody bikes at -30, so why build for it here? The
+forms that argument takes in circulation are set out further down this page.
 
 Two different questions hide inside that. Can cycling work as transportation
 in a climate like this one? And how much cycling does Edmonton currently get?
@@ -81,61 +83,67 @@ actually clear within a day of the snow stopping.
 Measurement of what riders then do is thinner. No reviewer located a recent
 Edmonton household travel survey that would give a winter <Term t="mode share">mode share</Term> — a
 bicycle share of all trips, on a defined winter denominator. What exists is
-counter data. The City reports that more than 90,000 bike trips were counted
-in December 2023, an increase of 143 per cent over the previous December, and
-estimates that one in four Edmonton cyclists ride year-round. Counters record
-trips past a sensor, not individual people, and the City publishes no note on
-how many counters were running in each of those Decembers — so the size of
-that jump is softer than the fact that tens of thousands of winter trips were
-counted at all.
+counter data. The City reports more than 90,000 bicycle trips counted in
+December 2023, up 143 per cent on the December before, and estimates that a
+quarter of Edmonton cyclists ride through the year. Counters record trips past
+a sensor, not individual people, and the City publishes no note on how many
+counters were running in each of the two Decembers it compares — so the size
+of that jump is softer than the fact that tens of thousands of winter trips
+were counted at all.
 
 The decisive evidence comes from Finland. The 2021 national travel survey run
 by Traficom — for which the Oulu region commissioned an expanded sample,
 answered by more than 2,500 of its residents — found 18% of all
 trips there made by bicycle — the highest share in Finland — and reported
-that cycling in the region is year-round: even in winter, residents cycled on
-average one trip in ten. That is a subarctic, snowy region posting a
-double-digit winter share on an all-trips denominator, which is what the
-proposition under review says cannot happen. Oulu reports its result
-alongside 930 km of cycle lanes and 165 km of "Super" class lanes it says are
-kept in great condition 24 hours a day. All three reviewers warned against
-reading that share as a target Edmonton could adopt, and the reasons they
-gave are their own characterizations of Oulu rather than measurements from
-the sources: a network built up over decades, a smaller and more compact
-region, shorter trips. What is not in dispute is the gap all three flagged —
-no source supplied a standardized comparison of Edmonton and Oulu on
-snowfall, snow-cover days, freeze-thaw events or days below -30°C.
+cycling in the region as a year-round activity: in winter, residents still
+averaged one trip in ten by bicycle. That is a subarctic, snowy region posting
+a double-digit winter share on an all-trips denominator, which is what the
+proposition under review says cannot happen. Oulu reports the network behind
+it as 930 km of cycle lanes — plus 165 km of "Super" class lanes that it says
+are kept in great condition around the clock. Every reviewer cautioned against
+treating that share as a number Edmonton could adopt, and the reasons they
+gave — decades of network building, a smaller and more compact region, shorter
+journeys — are their characterizations of Oulu rather than measurements from
+the cited sources. What none of them disputed is the gap all three flagged: no
+source supplied a standardized Edmonton–Oulu comparison on snowfall, days of
+snow cover, freeze-thaw events, or days colder than -30°C.
 
 Two other pieces cut against the idea that cold alone decides. Calgary — the
 nearest large winter city to Edmonton, sharing prairie urban form — evaluated its centre
-city cycle-track pilot and found, on average, four times as many daily winter
-bicycle trips comparing January 2015, before the tracks, with January 2016,
-after them, with over 160,000 bicycle trips counted on the pilot network
-between November 2015 and the end of March 2016. And on a single common
-journey-to-work denominator, the U.S. Census Bureau recorded a 4.1% bicycle
-commute share in Minneapolis for 2008–2012, against 0.4% in Houston, 0.7% in
-Phoenix, 0.2% in San Antonio and 0.1% in Dallas. Mild winters did not, by
-themselves, produce cycling in those cities.
+city cycle-track pilot and found daily winter bicycle trips running, on
+average, four times higher in January 2016, after the tracks went in, than in
+January 2015 before them; between November 2015 and the end of March 2016 it
+counted over 160,000 bicycle trips on the pilot network. And on a single
+common journey-to-work denominator, the U.S. Census Bureau put Minneapolis at
+a 4.1% bicycle commute share for 2008–2012, well clear of warm-winter Houston,
+Phoenix, San Antonio and Dallas. Mild winters did not, by themselves, produce
+cycling in those cities.
+
+<BikeCommuteShare />
 
 None of which makes winter free. The same panel put the counter-cases on the
 record. A peer-reviewed Québec study reports Montréal — Canada's strongest
 cycling city — retaining 13.6% of its cyclists through the 2020–2021 winter,
-with 9.09% in Sherbrooke, 6.96% in Gatineau and 4.35% in Saguenay: cold
-Canadian cities where winter cycling stayed marginal. And a longitudinal
-study of 384 adults in the Helsinki metropolitan area found that residential
-density predicted who kept riding — travel-related urban form only approached
-significance — while network length and priority winter maintenance did not
-contribute significantly once those were accounted for. That last result is uncomfortable for both sides of the
-argument. It undercuts "the cold makes it impossible" — and it equally
-undercuts "just plow the lanes." One reviewer drew the obvious hypothesis
-out: *if* Edmonton's urban form is more dispersed and its trips longer than
-Oulu's, that could cap what Edmonton reaches whatever the plows do. Nothing
-in the evidence measures Edmonton's form or its trip lengths, so that stays a
-hypothesis rather than a finding.
+and three smaller Québec cities retaining less again: cold Canadian places
+where winter cycling stayed marginal.
+
+<WinterRetention />
+
+Helsinki supplies the most uncomfortable finding of
+the set. Following 384 adults in that metropolitan area over time, researchers
+found residential density predicted who kept riding — travel-related urban
+form only approached significance — while the length of the network and
+priority winter maintenance made no significant contribution once those were
+accounted for. That cuts against both sides of the argument. It undercuts "the
+cold makes it impossible" — and it equally undercuts "just plow the lanes."
+One reviewer drew the obvious hypothesis out: *if* Edmonton's built form is
+more dispersed than Oulu's and its trips longer, that could cap what the city
+reaches whatever the plows do. Nothing in the evidence measures Edmonton's
+form or its trip lengths, so that stays a hypothesis rather than a finding.
 
 So the claim as circulated is contradicted: the record affirmatively points
 against cold being the binding constraint, while also showing that cold and
-snow suppress cycling everywhere it has been measured. What it does not
+snow suppress cycling in every jurisdiction the panel found measurements for. What it does not
 settle — and what none of the three reviewers claimed to settle — is the
 number Edmontonians would actually get. No reviewer found that measured for
 Edmonton.

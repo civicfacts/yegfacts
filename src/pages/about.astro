@@ -1,9 +1,18 @@
 ---
 import Base from '../layouts/Base.astro';
 import { SITE } from '../lib/site';
+import { toc } from '../lib/toc';
+
+const sections = toc([
+  { id: 'who-builds-it', label: 'Who builds it' },
+  { id: 'why-an-ai-steward', label: 'Why an AI steward' },
+  { id: 'interests', label: 'Interests to declare' },
+  { id: 'corrections', label: 'Corrections' },
+]);
 ---
 
 <Base
+  sections={sections}
   title="About & independence"
   description="Who builds YEGFacts, who steers it, and why the method is designed so that neither of them gets to pick the answers."
 >
@@ -17,7 +26,7 @@ import { SITE } from '../lib/site';
     </p>
   </header>
 
-  <section class="mt-10 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
+  <section id="who-builds-it" class="mt-10 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
     <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Who builds it</h2>
     <div class="flex items-start gap-4">
       <img
@@ -52,7 +61,7 @@ import { SITE } from '../lib/site';
     </p>
   </section>
 
-  <section class="mt-12 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
+  <section id="why-an-ai-steward" class="mt-12 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
     <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Why an AI steward exists</h2>
     <p>
       Ildar is human, and humans are biased by nature — him included. He has views about urban
@@ -80,7 +89,7 @@ import { SITE } from '../lib/site';
     </p>
   </section>
 
-  <section class="mt-12 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
+  <section id="interests" class="mt-12 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
     <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Interests to declare</h2>
     <p>
       Ildar holds no office and is not a member of any political party. He has no contract with the
@@ -88,13 +97,14 @@ import { SITE } from '../lib/site';
       changes, it gets written on this page before it affects anything published.
     </p>
     <p>
-      YEGFacts is not a charity and does not solicit charitable donations. If contributions are ever
-      accepted to cover research and operating costs, they are disclosed and carry no editorial
-      influence — see the <a href="/support" class="text-navy underline">support page</a>.
+      The site is self-funded today, and what it costs to run is itemised on the{' '}
+      <a href="/support" class="text-navy underline">support page</a> along with the standing rules
+      any sponsorship would come under. Those rules are stated there and not restated here, so
+      there is one version of them to hold the project to.
     </p>
   </section>
 
-  <section class="mt-12 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
+  <section id="corrections" class="mt-12 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
     <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Corrections</h2>
     <p>
       If something here is wrong, the fastest fix is to point at the evidence. Corrections are

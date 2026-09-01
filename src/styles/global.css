@@ -54,6 +54,23 @@ body {
   outline-offset: 2px;
 }
 
+/* ---------------------------------------------------------------------------
+   "On this page". The current-section marker is one class so the observer
+   script toggles a single name rather than a list of utilities, and so the
+   rule stays here with the rest of the visual system.
+--------------------------------------------------------------------------- */
+
+[data-toc-link].is-current {
+  border-left-color: var(--color-gold);
+  color: var(--color-forest);
+  font-weight: 600;
+}
+
+/* An outline link lands its section under the top of the window, not against it. */
+main [id] {
+  scroll-margin-top: 1.5rem;
+}
+
 /* Numbers in evidence tables and dates should not jitter. */
 time,
 .tabular {

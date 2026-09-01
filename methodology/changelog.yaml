@@ -1,6 +1,22 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.4"
+  date: "2026-09-01"
+  scope: verdict-semantics-and-freshness
+  note: >
+    Two changes from the external review's P0 findings. (1) "Partially
+    supported" now structurally requires naming which part of the
+    normalized proposition fails; evidence-quality doubts (untested
+    allegations, litigation figures) affect confidence, never the
+    finding. The one published claim decided under the looser reading
+    (e-bus procurement failure) is re-run against its archived evidence
+    under the tightened rule; any change ships as a logged
+    verdict-change. (2) The publication gate gains a third audit:
+    freshness & completeness (prompts/freshness-audit.md) — an
+    independent re-search for newer or stronger sources and material
+    events between evidence gathering and publication, run before every
+    publication and retroactively on the four published stories.
 - version: "1.3"
   date: "2026-09-01"
   scope: synthesis-basis-and-vocabulary
