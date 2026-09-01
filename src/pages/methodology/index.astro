@@ -35,8 +35,8 @@ const stages = [
   },
   {
     n: '7',
-    name: 'Human gate',
-    body: 'Ildar Abdulin verifies every source cited by the final claims — every one, not a sample — reads the raw model output before it is committed, edits the prose, and merges. Nothing reaches published status without this. A story may be deployed earlier in pending-review status; it is bannered as such and is not a finding.',
+    name: 'Publication gate',
+    body: 'Before publication, a dedicated audit — separate from the models that produced the draft — verifies every statement of fact against the archived bytes of its cited sources (not the live web), and scans the raw review output for personal information and other material unsuitable for public release. Both audit reports are committed alongside the run. Since v1.1 this gate is performed by AI auditors under a standing delegation from Ildar Abdulin, who remains accountable for everything published and can revert any decision. A story may be deployed earlier in pending-review status; it is bannered as such and is not a finding.',
   },
 ];
 
@@ -76,7 +76,8 @@ const findings = [
       AI does the research labour here. It does not carry the authority. Authority comes from a
       public, auditable process: what was asked, which sources answered it, what three independent
       models each concluded, how those conclusions were combined by a rule written in advance, and
-      what a named human checked before it was published.
+      what the publication audit checked — against archived source bytes — before it was
+      published. A named human, Ildar Abdulin, remains accountable for all of it.
     </p>
     <p class="mt-3">
       <a href="/methodology/changes" class="text-navy underline">Methodology changes</a>
