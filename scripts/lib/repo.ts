@@ -90,11 +90,23 @@ export function loadMethodologyChangelog(): MethodologyEntry[] {
   return entries;
 }
 
+/** Highest version in the changelog, whatever order the file is written in. */
+export function highestMethodologyVersion(entries: MethodologyEntry[]): string {
+  const versions = entries
+    .map((entry) => String(entry.version ?? ''))
+    .filter(Boolean)
+    .map((version) => {
+      const [major = 0, minor = 0] = version.split('.').map(Number);
+      return { version, major, minor };
+    });
+  if (versions.length === 0) throw new Error('methodology/changelog.yaml has no entries');
+  return versions.reduce((highest, candidate) =>
+    (candidate.major - highest.major || candidate.minor - highest.minor) > 0 ? candidate : highest,
+  ).version;
+}
+
 export function currentMethodologyVersion(): string {
-  const entries = loadMethodologyChangelog();
-  const last = entries.at(-1);
-  if (!last?.version) throw new Error('methodology/changelog.yaml has no entries');
-  return String(last.version);
+  return highestMethodologyVersion(loadMethodologyChangelog());
 }
 
 export function isIsoDate(value: unknown): value is string {

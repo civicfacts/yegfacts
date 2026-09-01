@@ -19,6 +19,10 @@
         "runner_seat": {
           "type": "string",
           "description": "Canonical panel-seat display name, written by the runner. Reviewers must not set this."
+        },
+        "runner_effort": {
+          "type": "string",
+          "description": "Reasoning effort pinned by the runner's command (methodology v1.6). Reviewers must not set this: a model does not attest its own run parameters."
         }
       }
     },

@@ -1,6 +1,42 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.6"
+  date: "2026-09-01"
+  scope: reviewer-effort-pinning
+  summary: >
+    Pinned the reasoning-effort setting for every panel seat and started
+    recording it in run manifests.
+  highlights:
+    - The Claude command now carries --effort high; the GPT and Gemini commands already pinned it.
+    - Every seat runs at its vendor's "high" setting, the highest level the three CLIs share.
+    - "Claude and Codex offer settings above high. They are not used: in the founder's experience they cost significantly more and run longer without a matching gain, and no benchmark of that trade-off exists here."
+    - The runner writes the effort into each review file and the run manifest, and the site displays it from the manifest.
+    - Runs before v1.6 show "not recorded" for effort; the Claude seat's effort came from an unpublished local default and is not backfilled.
+    - The run manifest now also records each seat's display name, so the site no longer reconstructs it from the provider field.
+    - "Tooling correction: the manifest stamper read the wrong end of the changelog and wrote methodology_version 1.0 on runs made under later versions. Fixed and tested; earlier manifests are left as written."
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+  note: >
+    Models are released often — Fable 5.1 shipped the day of this entry — and
+    the reasoning-effort setting changes what a model returns as much as the
+    model version does. Leaving it unpinned made the published command
+    incomplete for one seat: prior Claude runs inherited an unpublished local
+    default rather than a setting on the record. Effort is now pinned in the
+    command, stamped onto each review file by the runner, and recorded per run
+    in run.yaml. Every seat is pinned to "high" for two reasons: it is the
+    highest level all three CLIs share (the Gemini CLI stops there), and while
+    Claude and Codex offer settings above it, the founder does not use them for
+    the panel — in his experience they cost significantly more and run longer
+    without a matching gain. That is a judgement call, not a measurement; no
+    benchmark of the trade-off exists here. Two smaller corrections ride along:
+    the manifest now names each seat directly, and the script that stamps the
+    methodology version onto manifests was reading the oldest changelog entry
+    instead of the newest, so runs made under v1.1 through v1.5 are labelled
+    "1.0" in their manifests. The stamper is fixed; the earlier labels stay as
+    written, because a manifest is a record of what ran, including its
+    mistakes.
 - version: "1.5"
   date: "2026-09-01"
   scope: reviewer-model-refresh

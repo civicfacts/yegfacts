@@ -53,22 +53,30 @@ case "$ROUND" in 1|2) ;; *) echo "round must be 1 or 2, got '$ROUND'" >&2; exit 
 # ---------------------------------------------------------------------------
 # Provider → pinned command (spec §5.2). The output filename is the panel's
 # short name so a run directory reads round1/{claude,gpt,gemini}.json.
+#
+# Reasoning effort is pinned per seat (methodology v1.6), not left to whatever
+# the local CLI configuration happens to default to. `high` is the highest
+# level all three CLIs share — claude offers low|medium|high|xhigh|max, codex
+# low|medium|high|xhigh, agy low|medium|high — so it is the one setting that
+# means the same thing across the panel.
 # ---------------------------------------------------------------------------
+EFFORT="high"
+
 case "$PROVIDER_ARG" in
   claude|anthropic)
     SLOT="claude"; CLI="claude"; MODEL_ID="claude-fable-5-1"
     PROVIDER_CANONICAL="anthropic"; SEAT="Claude Fable 5.1"
-    CMD=(claude -p --model claude-fable-5-1)
+    CMD=(claude -p --model claude-fable-5-1 --effort "$EFFORT")
     ;;
   codex|gpt|openai)
     SLOT="gpt"; CLI="codex"; MODEL_ID="gpt-5.6-sol"
     PROVIDER_CANONICAL="openai"; SEAT="GPT-5.6 Sol"
-    CMD=(codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check)
+    CMD=(codex exec -m gpt-5.6-sol -c model_reasoning_effort="$EFFORT" -s read-only --skip-git-repo-check)
     ;;
   agy|gemini|google)
     SLOT="gemini"; CLI="agy"; MODEL_ID="gemini-3.1-pro"
     PROVIDER_CANONICAL="google"; SEAT="Gemini 3.1 Pro"
-    CMD=(agy -p --effort high)
+    CMD=(agy -p --effort "$EFFORT")
     ;;
   *)
     echo "unknown provider: $PROVIDER_ARG" >&2; usage
@@ -190,6 +198,7 @@ if [ "$DRY_RUN" = "1" ]; then
   echo
   echo "provider:      $PROVIDER_ARG (slot: $SLOT)"
   echo "model:         $MODEL_ID"
+  echo "effort:        $EFFORT"
   echo "round:         $ROUND"
   echo "scratch dir:   $SCRATCH"
   echo "package files: $PACKAGE_FILES"
@@ -262,33 +271,39 @@ FINISHED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 # is KEPT exactly as written, as part of the raw record, but `provider` and the
 # new `runner_model` / `runner_seat` fields are written from THIS script's
 # pinned command, which is the only place that knows what was actually invoked.
+# `runner_effort` is stamped for exactly the same reason (methodology v1.6):
+# models never attest their own run parameters, and reasoning effort changes
+# what a seat returns as much as the model version does.
 # Everything the site displays as panel identity comes from here and from
 # run.yaml, never from the reviewer's own JSON.
 # ---------------------------------------------------------------------------
 if [ "$STATUS" = "ok" ]; then
   node -e '
     const fs = require("node:fs");
-    const [file, provider, model, seat] = process.argv.slice(1);
+    const [file, provider, model, seat, effort] = process.argv.slice(1);
     const review = JSON.parse(fs.readFileSync(file, "utf8"));
     review.reviewer = {
       ...review.reviewer,
       provider,
       runner_model: model,
       runner_seat: seat,
+      runner_effort: effort,
     };
     fs.writeFileSync(file, JSON.stringify(review, null, 2) + "\n");
-  ' "$OUT_FILE" "$PROVIDER_CANONICAL" "$MODEL_ID" "$SEAT"
+  ' "$OUT_FILE" "$PROVIDER_CANONICAL" "$MODEL_ID" "$SEAT" "$EFFORT"
 fi
 
 npx tsx "$REPO_ROOT/scripts/panel/record-run.ts" \
   --manifest "$MANIFEST" \
   --story "$STORY" \
   --date "$RUN_DATE" \
-  --provider "$SLOT" \
+  --provider "$PROVIDER_CANONICAL" \
+  --seat "$SEAT" \
   --round "$ROUND" \
   --command "$COMMAND_STRING" \
   --cli_version "$CLI_VERSION" \
   --model "$MODEL_ID" \
+  --effort "$EFFORT" \
   --prompt-sha256 "$PROMPT_SHA" \
   --started-at "$STARTED_AT" \
   --finished-at "$FINISHED_AT" \

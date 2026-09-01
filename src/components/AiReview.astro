@@ -1,7 +1,9 @@
 ---
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { loadRunManifest } from '../../scripts/lib/review-schema.ts';
 import type { Claim, Story } from '../lib/content';
+import { effortSentence } from '../lib/runs';
 import { repoPath } from '../lib/site';
 
 /**
@@ -78,6 +80,19 @@ const runArtifacts = runs.map((run) => ({
     .filter(([, file]) => existsSync(path.join(REPO_ROOT, run, file)))
     .map(([label, file]) => ({ label, href: repoPath(`${run}/${file}`) })),
 }));
+
+/**
+ * Reasoning effort per seat, read from the run manifests (methodology v1.6):
+ * what is displayed is what `run.yaml` recorded, never a default assumed on the
+ * run's behalf. This is NOT the "High" in the matrix above, which is a
+ * reviewer's confidence in its own verdict.
+ */
+const effort = effortSentence(
+  runs.flatMap((run) => {
+    const file = path.join(REPO_ROOT, run, 'run.yaml');
+    return existsSync(file) ? loadRunManifest(file).runs : [];
+  }),
+);
 ---
 
 <section id="ai-review" class="mt-14">
@@ -203,6 +218,7 @@ const runArtifacts = runs.map((run) => ({
             That directory also holds the raw round-one and round-two JSON from every reviewer, the
             merged evidence and the synthesis output.
           </p>
+          <p class="mt-2">{effort}</p>
         </div>
       ) : (
         <p class="mt-6 border-t border-rule pt-4 text-sm text-muted">

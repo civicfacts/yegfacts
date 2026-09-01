@@ -114,6 +114,9 @@ export type RunManifest = {
     command: string;
     cli_version: string;
     model_id: string;
+    /** Both absent on manifests written before methodology v1.6; never defaulted. */
+    seat?: string;
+    reasoning_effort?: string;
     prompt_sha256: string;
     methodology_version: string;
     started_at: string;

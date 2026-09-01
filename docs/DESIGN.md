@@ -202,18 +202,24 @@ stopped.
    the gate. A story may be deployed in `pending-review` status with a visible
    banner before it; `published` requires it.
 
-Pinned reviewer commands (methodology v1.5, 2026-09-01; `scripts/panel/run-reviewer.sh`):
+Pinned reviewer commands (methodology v1.6, 2026-09-01; `scripts/panel/run-reviewer.sh`):
 
 | Panel seat | Command |
 |---|---|
-| Claude Fable 5.1 | `claude -p --model claude-fable-5-1` |
+| Claude Fable 5.1 | `claude -p --model claude-fable-5-1 --effort high` |
 | GPT-5.6 Sol | `codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check` |
 | Gemini 3.1 Pro | `agy -p --effort high` |
 
+Every seat runs at its vendor's `high` reasoning setting — the highest level the
+three CLIs share, since `agy` stops there — and the runner records it in
+`run.yaml`. Claude and Codex offer settings above `high` (`xhigh`, `max`). They
+are not used: in the founder's experience they cost significantly more and run
+longer without a matching gain, and no benchmark of that trade-off exists here.
+
 Bit-exact reproduction of a subscription-CLI model is not possible. Each run
 therefore writes a `run.yaml` manifest recording the resolved CLI version, model
-ID, prompt hash, methodology version and timestamps — so the method is
-rerunnable and what ran is on the record.
+ID, seat name, reasoning effort, prompt hash, methodology version and timestamps — so the
+method is rerunnable and what ran is on the record.
 
 ## 5. The synthesis matrix
 
