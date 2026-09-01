@@ -2,43 +2,81 @@ story: electric-buses
 date: "2026-08-31"
 methodology_version: "1.0"
 brief: brief.md
-prompt_files: [prompts/reviewer.md, prompts/review-schema.json]
-round1:
-  gemini:
-    provider: google
-    model_self_reported: "Gemini 3.1 Pro"
-    cli: "agy (Antigravity CLI)"
-    cli_version: "1.1.23"
-    command: 'agy --effort high --sandbox --print-timeout 45m -p "$(cat package2.md)"'
-    isolation: "scratch dir outside repo; sandbox flag; web read/search tools allowed via permissions.allow"
-    attempts: 4
-    attempt_notes: >
-      Attempts 1-3 failed on CLI flag parsing (-p consumed --effort) and
-      headless tool-permission denials (command, read_url); fixed by
-      passing prompt as -p value, adding a no-terminal instruction to the
-      package, and allowing read_url(*)/search(*) in agy settings. No
-      model output was produced in failed attempts.
-    package_note: "package2.md = package.md + explicit no-terminal-access instruction"
-    status: ok
-  claude:
-    provider: anthropic
-    model_self_reported: "claude-fable-5"
+notes: >
+  First production run, orchestrated manually before scripts/panel existed.
+  Gemini round 1 took 4 attempts (CLI flag parsing and headless tool-permission
+  denials; no model output in failed attempts). One Gemini round-1 citation was
+  found to be hallucinated at evidence staging and excluded from the registry.
+runs:
+  - round: 1
+    provider: "anthropic"
+    model_id: "claude-fable-5"
     cli: "claude (Claude Code CLI)"
     cli_version: "2.1.252"
-    command: 'claude -p --model claude-fable-5 --allowedTools "WebSearch,WebFetch" < package.md > out.json'
-    isolation: "scratch dir outside repo; only WebSearch/WebFetch tools allowed"
-    attempts: 1
-    status: ok
-  gpt:
-    provider: openai
-    model_self_reported: "gpt-5"
-    model_requested: "gpt-5.6-sol"
+    command: "claude -p --model claude-fable-5 --allowedTools \"WebSearch,WebFetch\" < package.md"
+    prompt_sha256: "3f7a3c31aee6cbfbc3dbc2df24a06661541aaf64d47d428ff15e811668831b98"
+    methodology_version: "1.0"
+    started_at: "2026-09-01T06:11:24Z"
+    finished_at: "2026-09-01T06:11:24Z"
+    timestamps_note: "finished_at from output file mtime; started_at not separately recorded in this first manual run"
+    isolation: "scratch dir outside repo; web tools only"
+  - round: 1
+    provider: "openai"
+    model_id: "gpt-5.6-sol (self-reported gpt-5)"
     cli: "codex (Codex CLI)"
     cli_version: "0.151.0"
-    command: 'codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -c tools.web_search=true -s read-only --skip-git-repo-check - < package.md'
-    isolation: "scratch dir outside repo; read-only sandbox; web search enabled"
-    attempts: 1
-    status: ok
-    note: "model self-reports generic 'gpt-5'; command pinned gpt-5.6-sol"
-round2:
-  all_three: {status: ok, commands: same-as-round1, package: "cross-review.md + fetch report + all round1 JSONs + combined evidence + brief"}
+    command: "codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -c tools.web_search=true -s read-only --skip-git-repo-check - < package.md"
+    prompt_sha256: "3f7a3c31aee6cbfbc3dbc2df24a06661541aaf64d47d428ff15e811668831b98"
+    methodology_version: "1.0"
+    started_at: "2026-09-01T06:11:24Z"
+    finished_at: "2026-09-01T06:11:24Z"
+    timestamps_note: "finished_at from output file mtime; started_at not separately recorded in this first manual run"
+    isolation: "scratch dir outside repo; web tools only"
+  - round: 1
+    provider: "google"
+    model_id: "Gemini 3.1 Pro"
+    cli: "agy (Antigravity CLI)"
+    cli_version: "1.1.23"
+    command: "agy --effort high --sandbox --print-timeout 45m -p \"$(cat package2.md)\""
+    prompt_sha256: "3f7a3c31aee6cbfbc3dbc2df24a06661541aaf64d47d428ff15e811668831b98"
+    methodology_version: "1.0"
+    started_at: "2026-09-01T06:11:24Z"
+    finished_at: "2026-09-01T06:11:24Z"
+    timestamps_note: "finished_at from output file mtime; started_at not separately recorded in this first manual run"
+    isolation: "scratch dir outside repo; web tools only"
+  - round: 2
+    provider: "anthropic"
+    model_id: "claude-fable-5"
+    cli: "claude (Claude Code CLI)"
+    cli_version: "2.1.252"
+    command: "claude -p --model claude-fable-5 --allowedTools \"WebSearch,WebFetch\" < package.md"
+    prompt_sha256: "337f45de49a23e565c65b8d9108e322b6767e9bf15e5c3f86cd75c7114826ccb"
+    methodology_version: "1.0"
+    started_at: "2026-09-01T06:11:24Z"
+    finished_at: "2026-09-01T06:11:24Z"
+    timestamps_note: "finished_at from output file mtime; started_at not separately recorded in this first manual run"
+    isolation: "scratch dir outside repo; web tools only"
+  - round: 2
+    provider: "openai"
+    model_id: "gpt-5.6-sol (self-reported gpt-5)"
+    cli: "codex (Codex CLI)"
+    cli_version: "0.151.0"
+    command: "codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -c tools.web_search=true -s read-only --skip-git-repo-check - < package.md"
+    prompt_sha256: "337f45de49a23e565c65b8d9108e322b6767e9bf15e5c3f86cd75c7114826ccb"
+    methodology_version: "1.0"
+    started_at: "2026-09-01T06:11:24Z"
+    finished_at: "2026-09-01T06:11:24Z"
+    timestamps_note: "finished_at from output file mtime; started_at not separately recorded in this first manual run"
+    isolation: "scratch dir outside repo; web tools only"
+  - round: 2
+    provider: "google"
+    model_id: "Gemini 3.1 Pro"
+    cli: "agy (Antigravity CLI)"
+    cli_version: "1.1.23"
+    command: "agy --effort high --sandbox --print-timeout 45m -p \"$(cat package2.md)\""
+    prompt_sha256: "337f45de49a23e565c65b8d9108e322b6767e9bf15e5c3f86cd75c7114826ccb"
+    methodology_version: "1.0"
+    started_at: "2026-09-01T06:11:24Z"
+    finished_at: "2026-09-01T06:11:24Z"
+    timestamps_note: "finished_at from output file mtime; started_at not separately recorded in this first manual run"
+    isolation: "scratch dir outside repo; web tools only"
