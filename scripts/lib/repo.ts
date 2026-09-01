@@ -79,6 +79,9 @@ export type MethodologyEntry = {
   date: string;
   scope?: string;
   note?: string;
+  summary?: string;
+  highlights?: string[];
+  links?: Array<{ label?: string; href?: string }>;
 };
 
 export function loadMethodologyChangelog(): MethodologyEntry[] {

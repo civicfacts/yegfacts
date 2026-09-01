@@ -211,6 +211,31 @@ function checkMethodologyChangelog(): void {
       seen.add(version);
       checkIsoDate(file, `entry ${version} date`, entry?.date);
       if (!entry?.note) fail(file, `entry ${version} needs a note`);
+      if (typeof entry?.summary !== 'string' || entry.summary.trim() === '') {
+        fail(file, `entry ${version} needs a reader-facing summary`);
+      }
+      if (
+        !Array.isArray(entry?.highlights) ||
+        entry.highlights.length === 0 ||
+        entry.highlights.some((highlight) => typeof highlight !== 'string' || highlight.trim() === '')
+      ) {
+        fail(file, `entry ${version} needs a non-empty highlights list`);
+      }
+      if (!Array.isArray(entry?.links) || entry.links.length === 0) {
+        fail(file, `entry ${version} needs at least one reader-facing link`);
+      }
+      for (const [index, link] of (entry.links ?? []).entries()) {
+        if (
+          typeof link !== 'object' ||
+          link === null ||
+          typeof link.label !== 'string' ||
+          link.label.trim() === '' ||
+          typeof link.href !== 'string' ||
+          link.href.trim() === ''
+        ) {
+          fail(file, `entry ${version} link ${index + 1} needs a label and href`);
+        }
+      }
     }
     methodologyVersions = seen;
   } catch (error) {

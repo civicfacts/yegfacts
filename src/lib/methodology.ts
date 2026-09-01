@@ -5,7 +5,15 @@ export interface MethodologyChange {
   date: string;
   scope?: string;
   note: string;
+  summary?: string;
+  highlights: string[];
+  links: MethodologyChangeLink[];
   changes: string[];
+}
+
+export interface MethodologyChangeLink {
+  label: string;
+  href: string;
 }
 
 /**
@@ -39,6 +47,16 @@ export function methodologyChanges(): MethodologyChange[] {
       date: text(entry.date),
       scope: entry.scope === undefined ? undefined : text(entry.scope),
       note: text(entry.note ?? entry.summary),
+      summary: entry.summary === undefined ? undefined : text(entry.summary),
+      highlights: Array.isArray(entry.highlights) ? entry.highlights.map(text).filter(Boolean) : [],
+      links: Array.isArray(entry.links)
+        ? entry.links.flatMap((link) => {
+            if (typeof link !== 'object' || link === null) return [];
+            const label = text(link.label);
+            const href = text(link.href);
+            return label !== '' && href !== '' ? [{ label, href }] : [];
+          })
+        : [],
       changes: Array.isArray(entry.changes) ? entry.changes.map(text) : [],
     }))
     .filter((entry) => entry.version !== '')

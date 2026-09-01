@@ -4,6 +4,20 @@
 - version: "1.4"
   date: "2026-09-01"
   scope: verdict-semantics-and-freshness
+  summary: >
+    Tightened the rule for "Partially supported" findings and added a
+    freshness check before publication.
+  highlights:
+    - A Partially supported finding must name the part of the normalized proposition that fails. Evidence-quality doubts affect confidence, not the finding.
+    - The e-bus procurement claim was re-run against archived evidence under the tightened rule.
+    - Freshness and completeness are now a third publication-gate audit, including a retroactive pass on the four published stories.
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: The words we use
+      href: /methodology#vocabulary
+    - label: Electric buses finding
+      href: /facts/electric-buses
   note: >
     Two changes from the external review's P0 findings. (1) "Partially
     supported" now structurally requires naming which part of the
@@ -20,6 +34,18 @@
 - version: "1.3"
   date: "2026-09-01"
   scope: synthesis-basis-and-vocabulary
+  summary: >
+    Moved synthesis to independent round-one verdicts, replaced canonical
+    confidence with panel agreement, and opened a quality record.
+  highlights:
+    - The synthesis matrix now uses locked round-one verdicts; round two remains an error-documentation channel.
+    - Panel agreement (Unanimous, Adjacent, Split) replaces canonical confidence; per-reviewer confidence remains in AI review.
+    - The cautious synthesis rule and its reason are now published, and the panel quality record is open.
+  links:
+    - label: The synthesis matrix
+      href: /methodology#synthesis
+    - label: Panel quality record
+      href: /methodology#panel-quality
   note: >
     Four decisions from the 2026-09-01 methodology panel, resolved with
     written second and third opinions (dispositions in
@@ -58,6 +84,19 @@
 - version: "1.2"
   date: "2026-09-01"
   scope: artifact-hygiene-and-honesty
+  summary: >
+    Made evidence and review artifacts more explicit, and aligned the public
+    site with the delegated publication gate.
+  highlights:
+    - Evidence items now show fetch status and registry ID, so unverifiable citations are visible.
+    - Panel identity comes from the run manifest; known artifact errors get adjacent errata files.
+    - Reviewers now flag framing problems, and story pages link to the brief and gate reports.
+    - Composite paraphrases are labelled as paraphrases.
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: Electric buses finding
+      href: /facts/electric-buses
   note: >
     Changes from the first methodology/trust panel review (three models
     reviewing the process, not the stories; full reports in
@@ -78,6 +117,18 @@
 - version: "1.1"
   date: "2026-09-01"
   scope: publication-gate
+  summary: >
+    Delegated the final publication audit to a separate AI audit pair while
+    keeping founder accountability.
+  highlights:
+    - A source-verification audit checks every published statement against archived source bytes.
+    - A privacy and copyright release check covers raw review artifacts.
+    - Both reports are committed with the run; the founder remains accountable for everything published.
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: Who builds it
+      href: /about#who-builds-it
   note: >
     Publication gate delegated: the founder's per-story manual review is
     replaced by a dedicated AI audit pair — source verification of every
@@ -90,6 +141,18 @@
 - version: "1.0"
   date: "2026-08-31"
   scope: initial
+  summary: >
+    Established the first public methodology: three independent reviewers,
+    deterministic synthesis, and a human publication gate.
+  highlights:
+    - Three reviewers work independently in blind round one.
+    - A deterministic merge and multiset synthesis matrix produce canonical findings.
+    - A cross-review round documents errors, drafting gets a two-model faithfulness check, and a human publication gate closes the process.
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: The words we use
+      href: /methodology#vocabulary
   note: >
     Initial methodology: three-reviewer panel (Claude Fable 5, GPT-5.6 Sol,
     Gemini 3.1 Pro via CLI), blind round 1, deterministic merge,

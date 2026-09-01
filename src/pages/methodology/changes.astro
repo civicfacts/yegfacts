@@ -9,6 +9,10 @@ const entries = methodologyChanges();
 /** One outline entry per version. Dots are avoided in ids, not in labels. */
 const anchor = (version: string) => `v${version.replace(/\./g, '-')}`;
 
+/** Turn the stored scope slug into a label people can scan. */
+const scopeLabel = (scope: string) =>
+  scope.replaceAll('-', ' ').replace(/^./, (character) => character.toUpperCase());
+
 const sections = toc(entries.map((entry) => ({ id: anchor(entry.version), label: `v${entry.version}` })));
 ---
 
@@ -25,10 +29,9 @@ const sections = toc(entries.map((entry) => ({ id: anchor(entry.version), label:
       Methodology changes
     </h1>
     <p class="mt-3 max-w-prose text-base leading-relaxed text-muted">
-      Changing how findings are produced is itself a public act. Any change to the prompts, the
-      merge or synthesis rules, the verdict vocabulary, the validation rules, or which models sit on
-      the panel bumps a methodology version and lands here. Every claim records the version that
-      produced it, so an old verdict can be flagged for re-review when the method moves under it.
+      This is the public record of changes to how findings are produced. Each version has a quick
+      summary, the main changes, links for context, and the complete change note. Every claim
+      records the version that produced it.
     </p>
   </header>
 
@@ -36,28 +39,81 @@ const sections = toc(entries.map((entry) => ({ id: anchor(entry.version), label:
     entries.length > 0 ? (
       <ol class="mt-9 divide-y divide-rule border-t border-rule">
         {entries.map((entry) => (
-          <li id={anchor(entry.version)} class="py-5">
-            <div class="flex flex-wrap items-baseline gap-x-3">
-              <h2 class="text-lg font-semibold tracking-[-0.012em] text-forest tabular">
-                v{entry.version}
-              </h2>
-              <time datetime={entry.date} class="text-sm text-muted">
-                {entry.date}
-              </time>
-              {entry.scope && (
-                <span class="text-[0.6875rem] tracking-[0.08em] text-gold uppercase">
-                  {entry.scope}
-                </span>
+          <li id={anchor(entry.version)} class="py-7">
+            <article>
+              <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <h2 class="text-lg font-semibold tracking-[-0.012em] text-forest tabular">
+                  v{entry.version}
+                </h2>
+                <time datetime={entry.date} class="text-sm text-muted">
+                  {entry.date}
+                </time>
+                {entry.scope && (
+                  <span class="text-xs font-semibold tracking-[0.04em] text-gold">
+                    {scopeLabel(entry.scope)}
+                  </span>
+                )}
+              </div>
+
+              {entry.summary ? (
+                <p class="mt-3 max-w-prose text-base leading-relaxed text-ink">{entry.summary}</p>
+              ) : (
+                <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed whitespace-pre-line">
+                  {entry.note}
+                </p>
               )}
-            </div>
-            <p class="mt-2 text-[0.9375rem] leading-relaxed whitespace-pre-line">{entry.note}</p>
-            {entry.changes.length > 0 && (
-              <ul class="mt-2 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs text-muted">
-                {entry.changes.map((path) => (
-                  <li>{path}</li>
-                ))}
-              </ul>
-            )}
+
+              {entry.highlights.length > 0 && (
+                <section class="mt-5 max-w-prose" aria-labelledby={`${anchor(entry.version)}-changes`}>
+                  <h3
+                    id={`${anchor(entry.version)}-changes`}
+                    class="text-xs font-semibold tracking-[0.09em] text-muted uppercase"
+                  >
+                    What changed
+                  </h3>
+                  <ul class="mt-2 list-disc space-y-1.5 pl-5 text-[0.9375rem] leading-relaxed">
+                    {entry.highlights.map((highlight) => (
+                      <li class="pl-1">{highlight}</li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+
+              {entry.links.length > 0 && (
+                <nav
+                  class="mt-5 max-w-prose"
+                  aria-label={`Read next for methodology v${entry.version}`}
+                >
+                  <h3 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
+                    Read next
+                  </h3>
+                  <ul class="mt-2 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+                    {entry.links.map((link) => (
+                      <li>
+                        <a
+                          href={link.href}
+                          rel={link.href.startsWith('http') ? 'noopener' : undefined}
+                          class="text-navy underline underline-offset-2 transition-colors hover:text-forest"
+                        >
+                          {link.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              )}
+
+              {entry.note && entry.summary && (
+                <details class="mt-5 max-w-prose border-t border-rule pt-3">
+                  <summary class="cursor-pointer text-sm font-semibold text-forest">
+                    Full change note
+                  </summary>
+                  <p class="mt-3 text-[0.9375rem] leading-relaxed whitespace-pre-line text-muted">
+                    {entry.note}
+                  </p>
+                </details>
+              )}
+            </article>
           </li>
         ))}
       </ol>

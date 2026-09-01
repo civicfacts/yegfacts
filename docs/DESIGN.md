@@ -102,7 +102,10 @@ and needs no panel run.
 changelog (`methodology/changelog.yaml`) records changes to prompts, merge or
 synthesis rules, the verdict vocabulary, validation rules, or panel composition;
 each entry bumps a methodology version, and every review run and claim records
-the version that produced it.
+the version that produced it. Each entry also carries a reader-facing
+`summary`, `highlights` list, and `links` list. The changes page leads with
+those fields as a scannable timeline and keeps the complete `note` available
+under a disclosure.
 
 ## 3. Verdict vocabulary
 
