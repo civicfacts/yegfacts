@@ -1,6 +1,44 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.7"
+  date: "2026-09-02"
+  scope: delegated-briefs-and-framing-check
+  summary: >
+    Stew, the AI steward, now writes review briefs; a second model from a
+    different vendor checks the framing before a brief is frozen. Applied
+    retroactively, the check would have sent all four published briefs
+    back for revision.
+  highlights:
+    - "Briefs are drafted by Stew from an intake record that states where each circulating form came from, or that it was not captured. No founder approval is needed per story; the founder's accountability is unchanged."
+    - "Before a brief is frozen, a model from a different vendor runs prompts/framing-check.md; it looks for propositions that test a weaker or wider claim than the post made, verdict-sensitive definitions with no stated alternative, and sentences that tell reviewers where to land. The brief is frozen only on FRAME OK; after two unresolved revisions the disagreement goes to Ildar Abdulin in writing."
+    - "Every check report, the author's response and any resolution are committed beside the brief. A framing defect found later by the panel, the gate or a correction is logged against the check in the quality ledger."
+    - "Run retroactively on the four published briefs, the check returned REVISE on all four, mainly for site-written paraphrases presented as circulating forms, sentences naming which evidence 'would contradict' the claim, and folded or undefined propositions. The reports are committed beside each brief; the findings stand as published and each story will be re-framed and re-run under this version."
+    - "Two specialist board reviews (Evidence and Methodology on GPT, Public Trust on Gemini) reviewed the design before first use; both said revise. Their controls that were adopted are the intake record, the alternative-operationalization requirement, the mandatory re-check, the human circuit-breaker and the ledger entry. Not adopted yet: a public waiting period between freeze and panel, and a blind human-methodologist pilot."
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: About and independence
+      href: /about
+  note: >
+    Every brief so far was drafted by an AI session and ratified by the
+    founder at the publication gate, which D-0007 then delegated to AI
+    audits. This entry says so plainly and closes the loop: Stew writes
+    the brief, and the safeguard that delegation needs is a framing check
+    by a model from a different vendor, run before the freeze, whose
+    report is public. The check's questions are the ones a fair-minded
+    holder of the claim and a fair-minded opponent would both ask: is
+    this the claim I made, is it the strongest fair reading, would I have
+    accepted these definitions before seeing the result, and does the
+    brief tell the reviewers what to find. Run on the four published
+    briefs, the check said all four would need revision. None of that
+    changes a published finding, because the panel and the gate decided
+    on evidence, but it does mean the frames the panel was given were
+    weaker than this version requires. The reports are committed beside
+    the briefs, and the four stories are scheduled to be re-framed and
+    re-run under v1.7 rather than patched. The two specialist reviews are
+    archived in the board's private record; their two unadopted asks are
+    recorded there as open questions, with the founder's decision pending.
 - version: "1.6"
   date: "2026-09-01"
   scope: reviewer-effort-pinning
@@ -10,7 +48,7 @@
   highlights:
     - The Claude command now carries --effort high; the GPT and Gemini commands already pinned it.
     - Every seat runs at its vendor's "high" setting, the highest level the three CLIs share.
-    - "Claude and Codex offer settings above high. They are not used: in the founder's experience they cost significantly more and run longer without a matching gain, and no benchmark of that trade-off exists here."
+    - "Claude and Codex offer settings above high. They are not used: the founder finds the extra cost and run time unmatched by better results, and nothing here benchmarks that."
     - The runner writes the effort into each review file and the run manifest, and the site displays it from the manifest.
     - Runs before v1.6 show "not recorded" for effort; the Claude seat's effort came from an unpublished local default and is not backfilled.
     - The run manifest now also records each seat's display name, so the site no longer reconstructs it from the provider field.
