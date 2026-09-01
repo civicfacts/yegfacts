@@ -6,7 +6,6 @@ import path from 'node:path';
 import Base from '../layouts/Base.astro';
 import Finding from '../components/Finding.astro';
 import FindingsBoard from '../components/FindingsBoard.astro';
-import Wordmark from '../components/Wordmark.astro';
 import { claimsForStory, orderedTopics, publishedStories, type Claim } from '../lib/content';
 import { SITE } from '../lib/site';
 import { launchSlate } from '../lib/slate';
@@ -102,16 +101,14 @@ const label = 'text-xs font-semibold tracking-[0.09em] text-muted uppercase';
 const lead = 'mt-2 max-w-prose text-[0.9375rem] text-pretty leading-relaxed text-muted';
 const stepRow = 'grid grid-cols-[2ch_1fr] gap-x-4 py-4';
 const stepNumber = 'font-semibold text-gold tabular';
-const stepLabel = 'font-semibold text-forest hover:underline';
+const stepLabel = 'font-semibold';
 const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
 ---
 
 <Base title={SITE.name} description={SITE.tagline}>
   <section class="border-b border-rule pb-10">
-    <Wordmark size="lg" />
-
     <h1
-      class="mt-6 text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] text-balance text-forest sm:text-display"
+      class="text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] text-balance text-forest sm:text-display"
     >
       YEGFacts checks what people say about Edmonton's city government against the public record.
     </h1>
@@ -125,25 +122,27 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
               {featuredStory.data.last_verified}
             </time>
           </p>
-          <p class="mt-2 text-xl leading-snug font-semibold tracking-[-0.012em] text-balance sm:text-2xl">
-            <a href={`/facts/${featuredStory.id}#${featuredClaim.data.id}`} class="hover:text-forest">
+          <p class="mt-2 text-2xl leading-tight font-bold tracking-[-0.015em] text-balance sm:text-3xl">
+            <a href={`/facts/${featuredStory.id}#${featuredClaim.data.id}`} class="link">
               {featuredClaim.data.question}
             </a>
           </p>
           <p class="mt-3">
-            <Finding finding={featuredClaim.data.finding} size="xl" />
+            <Finding finding={featuredClaim.data.finding} size="lg" />
           </p>
           <p class="mt-3 max-w-prose text-base leading-relaxed">{featuredStory.data.one_line}</p>
           <p class="mt-2 text-sm">
-            <a href={`/facts/${featuredStory.id}`} class="text-navy underline">
+            <a href={`/facts/${featuredStory.id}`} class="link">
               Evidence, panel verdicts and history
             </a>
+            {' · '}
+            <a href="#how-a-verdict-is-made" class="link">How a verdict is made</a>
           </p>
         </div>
       )
     }
 
-    <form action="/search" method="get" class="mt-8 flex gap-2" role="search">
+    <form action="/search" method="get" class="mt-8 flex flex-col gap-2 sm:flex-row" role="search">
       <label for="home-search" class="sr-only">Search checked claims</label>
       <input
         id="home-search"
@@ -155,7 +154,7 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
       />
       <button
         type="submit"
-        class="shrink-0 cursor-pointer bg-forest px-4 py-2.5 text-sm font-semibold text-paper transition-opacity hover:opacity-90"
+        class="shrink-0 cursor-pointer bg-forest px-4 py-2.5 text-sm font-semibold text-paper transition-opacity hover:opacity-90 sm:w-auto"
       >
         Search
       </button>
@@ -187,68 +186,66 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
     )
   }
 
-  <section class="mt-14">
+  <section id="how-a-verdict-is-made" class="mt-14">
     <h2 class={heading}>How a verdict is made</h2>
     <p class={lead}>
-      Four steps stand behind every word on this page.{' '}
-      Methodology v{methodologyVersion},{' '}
-      <a href="/methodology/changes" class="text-navy underline">
-        change history
-      </a>
-      .
+      Every finding goes through the same four steps. Methodology v{methodologyVersion},{' '}
+      <a href="/methodology/changes" class="link">change history</a>.
     </p>
 
     <ol class="mt-5 divide-y divide-rule border-t border-rule">
       <li class={stepRow}>
         <span class={stepNumber}>1</span>
         <div>
-          <a href="/methodology#stages" class={stepLabel}>Blind research</a>
+          <p class={stepLabel}>Blind research</p>
           <p class={stepBody}>
             {
               reviewerCount
                 ? `${reviewerCount} AI reviewers, each from a different company, research every claim without seeing each other's work.`
                 : "AI reviewers from different companies research every claim without seeing each other's work."
-            }
+            }{' '}
+            <a href="/methodology#stages" class="link">How the rounds run</a>.
           </p>
         </div>
       </li>
       <li class={stepRow}>
         <span class={stepNumber}>2</span>
         <div>
-          <a href="/methodology#synthesis" class={stepLabel}>A rule, not a vote</a>
+          <p class={stepLabel}>A rule, not a vote</p>
           <p class={stepBody}>
             A lookup table published in advance turns the reviewers' verdicts into one finding.
-            Nobody votes on it.
+            Nobody votes on it.{' '}
+            <a href="/methodology#synthesis" class="link">The table</a>.
           </p>
         </div>
       </li>
       <li class={stepRow}>
         <span class={stepNumber}>3</span>
         <div>
-          <a href="/methodology#stages" class={stepLabel}>Archived sources</a>
+          <p class={stepLabel}>Archived sources</p>
           <p class={stepBody}>
             Before publication every statement is checked against the archived bytes of the sources
             it cites, not the live web.{
               evidenceCount > 0 && (
                 <Fragment>
                   {' '}
-                  <a href="/evidence" class="text-navy underline">
+                  <a href="/evidence" class="link">
                     {evidenceCount} sources archived
                   </a>{' '}
                   so far.
                 </Fragment>
               )
-            }
-          </p>
+            }          </p>
         </div>
       </li>
       <li class={stepRow}>
         <span class={stepNumber}>4</span>
         <div>
-          <a href="/methodology#vocabulary" class={stepLabel}>Four words</a>
+          <p class={stepLabel}>Four words</p>
           <p class={stepBody}>
             A finding is one of four words with a fixed meaning. Not established means the record
-            can't answer yet, not that the claim is false.
+            can't answer yet, not that the claim is false.{' '}
+            <a href="/methodology#vocabulary" class="link">What each word means</a>.
           </p>
         </div>
       </li>
@@ -275,7 +272,7 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
                 {CHANGE_LABELS[row.entry.type as 'correction' | 'verdict-change']}
               </p>
               <p class="mt-1">
-                <a href={`/facts/${row.story.id}`} class="font-semibold hover:text-forest">
+                <a href={`/facts/${row.story.id}`} class="link font-semibold">
                   {row.story.data.title}
                 </a>
               </p>
@@ -298,14 +295,11 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
   </section>
 
   <section class="mt-14">
-    <h2 class={heading}>The launch slate</h2>
+    <h2 class={heading}>Nine stories, committed in advance</h2>
     <p class={lead}>
-      Nine stories, fixed in writing before any panel ran. {doneCount} of {slate.length}{' '}
-      checked.{' '}
-      <a href="/methodology#launch-slate" class="text-navy underline">
-        Why the list was fixed first
-      </a>
-      .
+      The list was fixed in writing before any panel ran, so it cannot be trimmed to the answers.{' '}
+      {doneCount} of {slate.length} checked.{' '}
+      <a href="/methodology#launch-slate" class="link">Why the list came first</a>.
     </p>
     <ol class="mt-4 divide-y divide-rule border-t border-rule">
       {
@@ -314,7 +308,7 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
             {row.published ? (
               <Fragment>
                 <span class="block">
-                  <a href={`/facts/${row.published.id}`} class="font-semibold text-forest hover:underline">
+                  <a href={`/facts/${row.published.id}`} class="link font-semibold">
                     {row.published.data.title}
                   </a>
                 </span>
@@ -329,7 +323,7 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
                   <span class:list={['block', label]}>Not yet checked</span>
                 </span>
                 <span class="mt-0.5 block text-[0.9375rem] leading-relaxed text-muted sm:mt-0">
-                  {row.claims}
+                  “{row.claims}”
                 </span>
               </Fragment>
             )}
@@ -347,7 +341,7 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
           <li class="text-[1.0625rem]">
             {topic.count > 0 ? (
               <Fragment>
-                <a href={`/topics/${topic.slug}`} class="font-semibold hover:text-forest">
+                <a href={`/topics/${topic.slug}`} class="link font-semibold">
                   {topic.name}
                 </a>{' '}
                 <span class="text-sm text-muted tabular">
@@ -357,7 +351,7 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
             ) : (
               <Fragment>
                 <span class="font-semibold text-muted">{topic.name}</span>{' '}
-                <span class={label}>Coming</span>
+                <span class={label}>Not yet checked</span>
               </Fragment>
             )}
           </li>

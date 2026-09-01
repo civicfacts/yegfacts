@@ -5,9 +5,10 @@ import { CANONICAL_FINDINGS } from '../lib/vocabulary';
 import Finding from './Finding.astro';
 
 /**
- * The whole published record, grouped by story: one row per claim, the finding
- * word in its own column so the answers read down the page as a column of
- * words rather than as a list of headlines.
+ * The whole published record, grouped by story: one row per claim. The
+ * question is the row's headline and its link; the finding sits beside it as
+ * the answer, in its own column from `sm` up so the verdicts still read down
+ * the page, but never heavier than the question it answers.
  *
  * The summary line is computed from the same rows it summarises, so the two
  * cannot disagree.
@@ -50,27 +51,30 @@ const findingCounts = CANONICAL_FINDINGS.map((finding) => ({
   {
     stories.map((story) => (
       <div class="border-t border-rule pt-4">
-        <h3 class="text-sm font-semibold text-muted">
-          <a href={`/facts/${story.id}`} class="hover:text-forest">
+        <h3 class="text-sm">
+          <a href={`/facts/${story.id}`} class="link font-semibold">
             {story.data.title}
           </a>
         </h3>
         <ul class="divide-y divide-rule">
           {(claimsByStory[story.id] ?? []).map((claim) => (
-            <li class="py-4 sm:grid sm:grid-cols-[11rem_1fr] sm:gap-x-6">
-              <Finding finding={claim.data.finding} size="lg" />
-              <div class="mt-1.5 sm:mt-0">
+            <li class="py-4 sm:grid sm:grid-cols-[minmax(0,30rem)_1fr] sm:gap-x-6">
+              <p>
                 <a
                   href={`/facts/${story.id}#${claim.data.id}`}
-                  class="text-[1.0625rem] leading-snug font-medium text-ink hover:text-forest"
+                  class="link text-lg leading-snug font-bold"
                 >
                   {claim.data.question}
                 </a>
-                <p class="mt-1 text-xs text-muted">
-                  {claim.data.panel_agreement} panel · Verified{' '}
-                  <time datetime={story.data.last_verified}>{story.data.last_verified}</time>
-                </p>
-              </div>
+              </p>
+              {/* Answer directly under the question on phones; beside it from sm up. */}
+              <p class="mt-1 sm:col-start-2 sm:row-span-2 sm:row-start-1 sm:mt-0">
+                <Finding finding={claim.data.finding} size="md" />
+              </p>
+              <p class="mt-1.5 text-xs text-muted sm:col-start-1">
+                {claim.data.panel_agreement} panel · Verified{' '}
+                <time datetime={story.data.last_verified}>{story.data.last_verified}</time>
+              </p>
             </li>
           ))}
         </ul>

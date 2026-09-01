@@ -7,13 +7,14 @@ import { FINDING_TONE } from '../lib/findings';
  */
 interface Props {
   finding: string;
-  size?: 'sm' | 'lg' | 'xl';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
 const { finding, size = 'sm' } = Astro.props;
 
 const sizes = {
   sm: 'text-sm',
+  md: 'text-base',
   lg: 'text-lg',
   xl: 'text-xl sm:text-2xl',
 } as const;

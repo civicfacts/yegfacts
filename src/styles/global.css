@@ -181,3 +181,21 @@ time,
   padding: 0.1em 0.3em;
   border-radius: 2px;
 }
+
+/* ---------------------------------------------------------------------------
+   Links outside prose. The same treatment `.prose a` gets, so a reader learns
+   one signal for "this is clickable" and headings that are not links never
+   borrow it.
+--------------------------------------------------------------------------- */
+
+.link {
+  color: var(--color-navy);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: #123b5d4d;
+  text-underline-offset: 0.18em;
+}
+
+.link:hover {
+  text-decoration-color: var(--color-navy);
+}
