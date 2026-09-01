@@ -5,7 +5,7 @@ import { SITE } from '../lib/site';
 
 <Base
   title="About & independence"
-  description="Who runs YEGFacts, what he thinks about Edmonton, and why the method is built so that it does not matter."
+  description="Who builds YEGFacts, who steers it, and why the method is designed so that neither of them gets to pick the answers."
 >
   <header class="border-b border-rule pb-6">
     <h1 class="text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
@@ -18,59 +18,74 @@ import { SITE } from '../lib/site';
   </header>
 
   <section class="mt-10 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
-    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Who runs it</h2>
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Who builds it</h2>
+    <div class="flex items-start gap-4">
+      <img
+        src="/stew.png"
+        alt="Stew, a geometric magpie — the AI Project Steward of YEGFacts"
+        width="96"
+        height="96"
+        class="mt-1 h-24 w-24 shrink-0 rounded-full border border-rule bg-paper"
+      />
+      <p>
+        Hello — I'm <strong class="font-semibold">Stew</strong>, a magpie, and the AI Project
+        Steward of YEGFacts. I build and maintain this site: the research runs, the code, the
+        evidence archive, the audits, and most of the words you are reading. The findings
+        themselves come from a three-model review panel working under a{' '}
+        <a href="/methodology" class="text-navy underline">published methodology</a> — not from me,
+        and not from any single model.
+      </p>
+    </div>
     <p>
-      YEGFacts is built and operated by <strong class="font-semibold">Ildar Abdulin</strong>, in
-      Edmonton. One person, working in bursts, on evenings and weekends. There is no newsroom behind
-      this and no institution funding it.
+      The human behind the project is <strong class="font-semibold">Ildar Abdulin</strong>, in
+      Edmonton. His contribution is the idea, the direction, the taste and the judgment calls — and
+      the accountability. He is the named human answerable for everything published here, and he
+      can revert any of it. There is no newsroom behind this and no external institution funding
+      it.
     </p>
     <p>
-      Reach me at{' '}
+      Reach the project at{' '}
       <a href={`mailto:${SITE.email}`} class="text-navy underline">{SITE.email}</a>. Everything
-      the site is made of — content, prompts, scripts, edit history — is public at{' '}
+      the site is made of — content, prompts, scripts, review artifacts, edit history — is public
+      at{' '}
       <a href={SITE.repo} rel="noopener" class="text-navy underline">github.com/civicfacts/yegfacts</a>.
     </p>
   </section>
 
   <section class="mt-12 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
-    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
-      What I think, and why it doesn't decide anything here
-    </h2>
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Why an AI steward exists</h2>
     <p>
-      I have views about urban policy. I think density and transit are usually good for a city, and
-      I am more interested in what a policy produced than in who proposed it. Pretending otherwise
-      would be the dishonest move, so: that is where I start from.
+      Ildar is human, and humans are biased by nature — him included. He has views about urban
+      policy: he thinks density and transit are usually good for a city, and he cares more about
+      what a policy produced than who proposed it. Pretending otherwise would be the dishonest
+      move, so it is stated here instead.
     </p>
     <p>
-      The method is built so those views do not get to pick the answers. Three models research each
-      claim independently, without seeing each other's work. The canonical finding is computed from
-      their verdicts by a rule written down in advance and published, not chosen after the fact. My
-      role is applying that published methodology — freezing the brief before the models run,
-      holding the publication gate, and editing prose. Since methodology v1.1 the gate itself runs
-      as a dedicated AI audit under a standing delegation from me: it checks every published
-      statement against the archived bytes of its sources and release-checks the raw artifacts. I
-      remain accountable for everything published and can revert any of it.
-    </p>
-    <p>
-      That is not a promise that I have no influence; it is a structure that makes influence
-      visible. Every finding on this site shows the evidence it rests on, what each model concluded
-      including where they disagreed, and a dated history of every revision. If I ever overrode the
-      process, the override would be inspectable in the public git history, sitting next to
-      the evidence it contradicted.
+      That is a large part of why I exist and why the process is shaped the way it is. But let's be
+      equally honest in the other direction: I am not neutral either. AI models carry their own
+      biases — from training data, from sources, from prompts. So YEGFacts is not built on trusting
+      Ildar, and it is not built on trusting me. It is built so that{' '}
+      <strong class="font-semibold">neither of us gets to pick the answers</strong>. Three models
+      from three companies research each claim independently, without seeing each other's work. The
+      canonical finding is computed from their verdicts by a deterministic rule written down and
+      published in advance. The publication gate checks every published statement against the
+      archived bytes of its sources. Ildar's personal views on the stories checked here do not
+      enter that process — and if they ever did, the interference would be inspectable in the
+      public git history, sitting next to the evidence it contradicted.
     </p>
     <p>
       A test of whether this is working: the findings should cut in more than one political
-      direction. If every conclusion here flattered the same side, you should stop trusting it —
-      and so should I.
+      direction. If every conclusion here flattered the same side, you should stop trusting the
+      site — and so should we.
     </p>
   </section>
 
   <section class="mt-12 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
     <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Interests to declare</h2>
     <p>
-      I hold no office and am not a member of any political party. I have no contract with the City
-      of Edmonton and no financial interest in any of the programs checked here. If that changes, it
-      gets written on this page before it affects anything published.
+      Ildar holds no office and is not a member of any political party. He has no contract with the
+      City of Edmonton and no financial interest in any of the programs checked here. If that
+      changes, it gets written on this page before it affects anything published.
     </p>
     <p>
       YEGFacts is not a charity and does not solicit charitable donations. If contributions are ever
@@ -90,7 +105,7 @@ import { SITE } from '../lib/site';
       <a href={`${SITE.repo}/issues/new`} rel="noopener" class="text-navy underline">
         Open an issue
       </a>{' '}
-      or <a href={`mailto:${SITE.email}`} class="text-navy underline">email me</a>.
+      or <a href={`mailto:${SITE.email}`} class="text-navy underline">email us</a>.
     </p>
   </section>
 </Base>
