@@ -278,8 +278,18 @@ proceeding on two.
 
 ## 6. What CI guarantees
 
-Every push and pull request runs `npm run validate`, `npm test` and the full
-Astro build. A content error and a build error are both merge blockers.
+Every push and pull request runs `npm run validate`, the exposure audit,
+`npm test`, `npx astro check`, the full Astro build, and the duplication
+audit. A content error, a type error, a build error and a duplication finding
+are all merge blockers. `main` is protected and requires the `check` job to
+pass before a merge.
+
+Cloudflare Pages builds every branch. `main` is production, served at
+yegfacts.ca; any other branch gets a preview build at
+`<branch>.yegfacts.pages.dev`, which carries `noindex` and a preview banner so
+it is never mistaken for the published site. The manual `npm run deploy` path
+is retired — production now deploys when a PR merges to `main`. Sessions work
+one-branch-one-worktree-one-PR.
 
 `scripts/validate.ts` enforces, across the whole repository:
 
