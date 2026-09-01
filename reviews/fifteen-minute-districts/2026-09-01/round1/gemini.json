@@ -1,0 +1,51 @@
+{
+  "reviewer": {
+    "provider": "google",
+    "model_self_reported": "Gemini 3.1 Pro"
+  },
+  "story": "fifteen-minute-districts",
+  "round": 1,
+  "claims": [
+    {
+      "id": "districts-travel-restrictions",
+      "proposition_evaluated": "Edmonton's district plans restrict, or create a mechanism to restrict, where residents can travel within the city.",
+      "verdict": "Contradicted",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [],
+      "challenging_evidence": [
+        {
+          "finding": "In June 2024, Edmonton City Council unanimously passed an amendment to its District Policy explicitly affirming that the policies shall not restrict freedom of movement, association, and commerce.",
+          "source_title": "City of Edmonton District Planning and Policy",
+          "source_url": "https://www.edmonton.ca/city_government/urban_planning_and_design/district-planning",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2024-06",
+          "source_type": "legal-audited",
+          "establishes": "Establishes what the adopted policy explicitly states regarding the protection of freedom of movement.",
+          "quote": "The District Policy and the District Plans shall not restrict freedom of movement, association, and commerce in accordance with the Canadian Charter of Rights and Freedoms.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The '15-minute city' and associated District Plans are land-use and urban design frameworks that focus on clustering housing, amenities, and infrastructure, not on managing or restricting individual mobility.",
+          "source_title": "The City Plan",
+          "source_url": "https://www.edmonton.ca/city_government/urban_planning_and_design/the-city-plan",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2020",
+          "source_type": "policy-document",
+          "establishes": "Establishes what the City intends for its land-use and amenity distribution, which contains no mechanism for restricting travel.",
+          "strength": "strong"
+        }
+      ],
+      "limitations": [
+        "Analysis relies on search summaries of public policy documents and media reports of council amendments, as the exact PDF files were not directly retrievable via web tools."
+      ],
+      "unknowns": [
+        "None regarding the explicit text and legislative intent, as the amendment publicly and explicitly addresses the claim."
+      ],
+      "what_would_change_my_verdict": [
+        "Evidence of a separate, active bylaw or mechanism within the District Policy that imposes fines, requires permits, or creates physical or digital barriers for travel between districts."
+      ],
+      "suggested_one_line": "Edmonton's District Policy explicitly states it shall not restrict freedom of movement, functioning purely as a land-use planning tool."
+    }
+  ]
+}

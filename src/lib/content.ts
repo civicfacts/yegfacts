@@ -57,7 +57,7 @@ export async function evidenceForStory(
   const ids = new Set<string>();
   for (const claim of claims) {
     for (const id of claim.data.evidence) ids.add(id);
-    for (const fact of claim.data.key_facts) ids.add(fact.source);
+    for (const fact of claim.data.key_facts) for (const id of fact.sources) ids.add(id);
   }
   for (const commitment of commitments) ids.add(commitment.data.source);
   const registry = await getCollection('evidence');

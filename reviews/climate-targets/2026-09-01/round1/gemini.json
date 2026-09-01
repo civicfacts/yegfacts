@@ -1,0 +1,72 @@
+{
+  "reviewer": {
+    "provider": "google",
+    "model_self_reported": "Gemini 3.1 Pro (High)"
+  },
+  "story": "climate-targets",
+  "round": 1,
+  "claims": [
+    {
+      "id": "climate-on-track",
+      "proposition_evaluated": "Edmonton is on track to meet its adopted community greenhouse-gas emissions targets.",
+      "interpretation_notes": "Interpreted 'on track' as whether the most recent community emissions data aligns with the targets and carbon budget trajectory set out by the City of Edmonton.",
+      "verdict": "Contradicted",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "The City has implemented measures and policies to curb emissions, including new zoning bylaws, building energy retrofits, and solar panel installations.",
+          "source_title": "Edmonton fails to meet climate targets 2 years after launching carbon budget",
+          "source_url": "https://www.cbc.ca/news/canada/edmonton/edmonton-fails-to-meet-climate-targets-2-years-after-launching-carbon-budget-1.7381843",
+          "source_publisher": "CBC News",
+          "source_date": "2024-11-12",
+          "source_type": "media",
+          "establishes": "The City is actively taking policy steps, which may be conflated with actually meeting numerical targets.",
+          "quote": "For example, policies promote more energy-saving buildings, installing solar panels and transitioning from diesel to hydrogen or electric buses, he said.",
+          "strength": "weak"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The 2023-2026 Carbon Budget Update Report states 2023 emissions were 16.2 Mt versus a target of 13.4 Mt, and directly concludes that targets will not be achieved on the current trajectory.",
+          "source_title": "2023-2026 Carbon Budget Update Report (via CBC News)",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=241434",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2024-11",
+          "source_type": "analytical-report",
+          "establishes": "The City's official assessment that community emissions exceed targets and are off track.",
+          "quote": "If Edmonton's current emission trajectory continues, Edmonton's GHG reduction targets will not be achieved.",
+          "strength": "strong"
+        }
+      ],
+      "limitations": [
+        "The 2023 emissions data discussed in the late 2024 carbon budget update is partially estimated.",
+        "The full, finalized community GHG inventory for 2024 and 2025 is not yet published."
+      ],
+      "unknowns": [
+        "Whether future federal or provincial policy shifts will forcibly correct the emissions trajectory.",
+        "The exact emissions gap for 2025, which depends on ongoing data collection."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Finalized, audited community GHG inventories for 2024 and 2025 (as opposed to budget updates and estimates).",
+          "likely_holder": "City of Edmonton",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "None. The City's own reporting explicitly compares actuals (16.2 Mt) to targets (13.4 Mt)."
+      ],
+      "what_would_change_my_verdict": [
+        "A subsequent official City of Edmonton community GHG inventory reporting a dramatic drop in emissions that brings the city back under its carbon budget cap."
+      ],
+      "suggested_one_line": "Edmonton is failing to meet its community greenhouse gas reduction targets, according to the City's own 2024 carbon budget update.",
+      "suggested_short_answer": "No. According to the City of Edmonton's 2023-2026 Carbon Budget Update from late 2024, community emissions in 2023 were an estimated 16.2 million tonnes, missing the target of 13.4 million tonnes. The City explicitly stated that on the current trajectory, its reduction targets will not be achieved.",
+      "suggested_tldr": [
+        "Edmonton set a community carbon budget to track progress toward becoming carbon-neutral by 2050.",
+        "A late 2024 update from the City revealed that community emissions exceeded the 2023 target by 2.8 million tonnes.",
+        "City administration acknowledges that current initiatives are insufficient and the targets will not be met on the present trajectory."
+      ]
+    }
+  ]
+}

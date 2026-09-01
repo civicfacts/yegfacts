@@ -22,7 +22,7 @@ export async function getStaticPaths() {
         .filter(
           (claim) =>
             claim.data.evidence.includes(entry.data.id) ||
-            claim.data.key_facts.some((fact) => fact.source === entry.data.id),
+            claim.data.key_facts.some((fact) => fact.sources.includes(entry.data.id)),
         )
         .map((claim) => ({ claim, story: storyById.get(claim.data.story) })),
     },

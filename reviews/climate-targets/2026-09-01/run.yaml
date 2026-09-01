@@ -1,0 +1,85 @@
+story: climate-targets
+date: "2026-09-01"
+methodology_version: "1.0"
+brief: brief.md
+notes: >
+  Run orchestrated with scripts/panel/run-reviewer.sh using the pinned v1
+  commands. Gemini's round-1 primary citation (escribemeetings DocumentId=241434)
+  failed evidence staging with HTTP 404 and was excluded from the registry; that
+  reviewer replaced its evidence base with the 2024 inventory in round 2 without
+  changing its verdict. Two round-1 citations that other reviewers could not
+  content-verify in round 2 (Spring 2026 Budget Highlights, Engaged Edmonton FAQ)
+  were verified against archived bytes at drafting.
+runs:
+  - round: 1
+    provider: "anthropic"
+    model_id: "claude-fable-5"
+    cli: "claude (Claude Code CLI)"
+    cli_version: "2.1.252"
+    command: "claude -p --model claude-fable-5 < package.md"
+    prompt_sha256: "3f7a3c31aee6cbfbc3dbc2df24a06661541aaf64d47d428ff15e811668831b98"
+    methodology_version: "1.0"
+    started_at: "2026-09-01T06:48:09Z"
+    finished_at: "2026-09-01T06:48:09Z"
+    timestamps_note: "finished_at from the round output file's mtime; started_at not separately recorded for this run"
+    isolation: "scratch dir outside repo; web tools only"
+  - round: 1
+    provider: "openai"
+    model_id: "gpt-5.6-sol (self-reported gpt-5)"
+    cli: "codex (Codex CLI)"
+    cli_version: "0.151.0"
+    command: "codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check < package.md"
+    prompt_sha256: "3f7a3c31aee6cbfbc3dbc2df24a06661541aaf64d47d428ff15e811668831b98"
+    methodology_version: "1.0"
+    started_at: "2026-09-01T06:47:00Z"
+    finished_at: "2026-09-01T06:47:00Z"
+    timestamps_note: "finished_at from the round output file's mtime; started_at not separately recorded for this run"
+    isolation: "scratch dir outside repo; web tools only"
+  - round: 1
+    provider: "google"
+    model_id: "gemini-3.1-pro (self-reported Gemini 3.1 Pro (High))"
+    cli: "agy (Antigravity CLI)"
+    cli_version: "1.1.23"
+    command: "agy -p --effort high < package.md"
+    prompt_sha256: "3f7a3c31aee6cbfbc3dbc2df24a06661541aaf64d47d428ff15e811668831b98"
+    methodology_version: "1.0"
+    started_at: "2026-09-01T06:44:12Z"
+    finished_at: "2026-09-01T06:44:12Z"
+    timestamps_note: "finished_at from the round output file's mtime; started_at not separately recorded for this run"
+    isolation: "scratch dir outside repo; web tools only"
+  - round: 2
+    provider: "anthropic"
+    model_id: "claude-fable-5"
+    cli: "claude (Claude Code CLI)"
+    cli_version: "2.1.252"
+    command: "claude -p --model claude-fable-5 < package.md"
+    prompt_sha256: "337f45de49a23e565c65b8d9108e322b6767e9bf15e5c3f86cd75c7114826ccb"
+    methodology_version: "1.0"
+    started_at: "2026-09-01T06:58:09Z"
+    finished_at: "2026-09-01T06:58:09Z"
+    timestamps_note: "finished_at from the round output file's mtime; started_at not separately recorded for this run"
+    isolation: "scratch dir outside repo; web tools only"
+  - round: 2
+    provider: "openai"
+    model_id: "gpt-5.6-sol (self-reported gpt-5)"
+    cli: "codex (Codex CLI)"
+    cli_version: "0.151.0"
+    command: "codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check < package.md"
+    prompt_sha256: "337f45de49a23e565c65b8d9108e322b6767e9bf15e5c3f86cd75c7114826ccb"
+    methodology_version: "1.0"
+    started_at: "2026-09-01T06:58:09Z"
+    finished_at: "2026-09-01T06:58:09Z"
+    timestamps_note: "finished_at from the round output file's mtime; started_at not separately recorded for this run"
+    isolation: "scratch dir outside repo; web tools only"
+  - round: 2
+    provider: "google"
+    model_id: "gemini-3.1-pro (self-reported Gemini 3.1 Pro (High))"
+    cli: "agy (Antigravity CLI)"
+    cli_version: "1.1.23"
+    command: "agy -p --effort high < package.md"
+    prompt_sha256: "337f45de49a23e565c65b8d9108e322b6767e9bf15e5c3f86cd75c7114826ccb"
+    methodology_version: "1.0"
+    started_at: "2026-09-01T06:58:21Z"
+    finished_at: "2026-09-01T06:58:21Z"
+    timestamps_note: "finished_at from the round output file's mtime; started_at not separately recorded for this run"
+    isolation: "scratch dir outside repo; web tools only"

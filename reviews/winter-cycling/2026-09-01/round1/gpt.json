@@ -1,0 +1,218 @@
+{
+  "reviewer": {
+    "provider": "openai",
+    "model_self_reported": "gpt-5.6-sol"
+  },
+  "story": "winter-cycling",
+  "round": 1,
+  "claims": [
+    {
+      "id": "wc-too-cold",
+      "proposition_evaluated": "Edmonton's winter conditions, independent of infrastructure and maintenance quality, prevent cycling from serving a non-trivial share of trips throughout the year.",
+      "interpretation_notes": "I treated a winter cycling share of 10% of all trips as plainly non-trivial. I evaluated feasibility, not whether Edmonton currently achieves that share. Counter detections are evidence of use but are not mode share, unique riders or necessarily transportation trips.",
+      "verdict": "Contradicted",
+      "confidence": "Moderate",
+      "evidence_basis": "edmonton-plus-comparators",
+      "supporting_evidence": [
+        {
+          "finding": "In a longitudinal study of 384 adults in the Helsinki metropolitan area, cycling for transportation decreased sharply in winter and many participants stopped cycling. Residential density and urban structure affected retention. Access to priority-maintained cycleways was not significant after those factors were considered.",
+          "source_title": "The built environment and seasonal variation in active transportation: A longitudinal study of adults in Helsinki",
+          "source_url": "https://acris.aalto.fi/ws/portalfiles/portal/90324267/1_s2.0_S2214140522001839_main.pdf",
+          "source_publisher": "Journal of Transport & Health",
+          "source_date": "2022",
+          "source_type": "analytical-report",
+          "establishes": "Winter materially suppresses transportation cycling even in a comparatively mature cycling environment, while urban form and trip distance also matter. It does not establish that winter eliminates cycling as a meaningful mode.",
+          "strength": "strong"
+        },
+        {
+          "finding": "A model based on 7,025 trips from Trondheim's 2022 National Travel Survey predicted reductions under below-freezing conditions of 9.6% for conventional bicycles and 24.3% for e-bikes. Under snowfall, predicted reductions were 10.4% and 30.1%, respectively.",
+          "source_title": "Environmental constraints on conventional and electric bikes: a mode choice analysis",
+          "source_url": "https://link.springer.com/article/10.1186/s12544-026-00803-7",
+          "source_publisher": "European Transport Research Review",
+          "source_date": "2026-06-22",
+          "source_type": "analytical-report",
+          "establishes": "Temperature, snowfall and darkness can reduce cycling substantially. The study expressly distinguishes temporary suppression from an entire season becoming unviable.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Edmonton assigns active pathways different winter service levels: Priority 1 within 24 hours, Priority 2 within three days and Priority 3 within 14 days. The connected Winter Priority Loop receives Priority 1 service.",
+          "source_title": "Winter Cycling",
+          "source_url": "https://www.edmonton.ca/transportation/cycling_walking/winter-bike-riding",
+          "source_publisher": "City of Edmonton",
+          "source_type": "city-webpage",
+          "establishes": "Edmonton's winter network depends on snow and ice operations, and maintenance quality is not uniform. The stated standards do not establish compliance or resulting ridership.",
+          "strength": "moderate"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "Oulu's 2021 regional travel survey found that bicycles accounted for 18% of all trips annually and about 10% of all trips in winter. More than 2,500 regional residents answered the survey.",
+          "source_title": "Oulun seudulla py\u00f6r\u00e4ill\u00e4\u00e4n l\u00e4hes joka viides matka",
+          "source_url": "https://www.ouka.fi/uutiset/oulun-seudulla-pyoraillaan-lahes-joka-viides-matka",
+          "source_publisher": "City of Oulu",
+          "source_date": "2023-02-09",
+          "source_type": "observed-data",
+          "establishes": "A cold and snowy city region can sustain a clearly non-trivial winter cycling share. This directly contradicts climate being an absolute binding constraint.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Oulu reports 930 km of cycle lanes, year-round maintenance across the network and 165 km of Oulu-Kempele Super-class routes maintained continuously.",
+          "source_title": "Cycling",
+          "source_url": "https://www.ouka.fi/en/cycling",
+          "source_publisher": "City of Oulu",
+          "source_type": "city-webpage",
+          "establishes": "Oulu pairs winter cycling with an extensive network and intensive maintenance. This supports the interpretation that infrastructure and maintenance mediate winter conditions, but the webpage alone does not establish achieved service quality.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "City-operated Edmonton counters recorded more than 90,000 bicycle passages in December 2023, 143% more than in December 2022.",
+          "source_title": "Cycling in a winter wonderland",
+          "source_url": "https://why.edmonton.ca/stories/cycling-in-a-winter-wonderland/",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2024",
+          "source_type": "city-webpage",
+          "establishes": "Edmonton has substantial measured winter bicycle activity. The figure lacks an all-trip denominator, stable-counter coverage details and trip-purpose classification, so it cannot establish an Edmonton winter mode share.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Calgary's centre-city cycle-track evaluation found four times as many average daily winter bicycle trips after installation when comparing January 2015 with January 2016. The broader 18-month pilot recorded more than 1.2 million corridor passages.",
+          "source_title": "Centre City Cycle Track Pilot Final Report",
+          "source_url": "https://www.calgary.ca/content/dam/www/transportation/tp/documents/cycling/city-centre-cycle-track/cycle-track-summary-report-nov-2016.pdf",
+          "source_publisher": "City of Calgary",
+          "source_date": "2016-12",
+          "source_type": "analytical-report",
+          "establishes": "Winter use can respond strongly to infrastructure in a cold Alberta city. The January comparison is corridor-specific, old and not a citywide mode share.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Houston reported that bicycles accounted for 0.4% of residents' commutes in both 2018 and 2020, using U.S. Census Bureau data.",
+          "source_title": "Vision Zero Annual Report 2021",
+          "source_url": "https://www.houstontx.gov/visionzero/Vision-Zero-Annual-Report-2021.pdf",
+          "source_publisher": "City of Houston",
+          "source_date": "2022",
+          "source_type": "observed-data",
+          "establishes": "A warm climate does not by itself produce meaningful cycling uptake. The denominator is resident commutes, not all trips, and Houston differs greatly from Edmonton.",
+          "strength": "moderate"
+        }
+      ],
+      "comparisons": [
+        {
+          "jurisdiction": "Oulu region, Finland",
+          "why_relevant": "It has long, snowy winters and reports a winter bicycle share using an all-trips denominator.",
+          "differences": [
+            "Oulu is much smaller than Edmonton.",
+            "Oulu reports 930 km of cycle lanes and 165 km under continuous Super-class winter maintenance.",
+            "Its urban form, cycling culture, trip lengths and winter temperature pattern differ from Edmonton.",
+            "No standardized Edmonton-Oulu comparison of snowfall, freeze-thaw days or days below severe temperature thresholds was located."
+          ],
+          "supports": "Severe winter does not inherently prevent cycling from reaching a non-trivial year-round transportation share.",
+          "does_not_establish": "It does not predict Edmonton's attainable share, prove high ridership on Edmonton's coldest days or show that infrastructure alone explains Oulu's results.",
+          "transferability": "moderate"
+        },
+        {
+          "jurisdiction": "Calgary, Alberta",
+          "why_relevant": "It is a nearby, car-oriented Prairie city with winter weather and a monitored protected cycle-track intervention.",
+          "differences": [
+            "Calgary has more frequent Chinook warming and a different freeze-thaw pattern.",
+            "The evaluation covered centre-city corridors rather than citywide trips.",
+            "The before-and-after winter comparison was limited to January 2015 and January 2016."
+          ],
+          "supports": "Protected infrastructure can increase winter bicycle counts in an Alberta winter city.",
+          "does_not_establish": "It does not establish a citywide winter mode share or isolate infrastructure from other time-varying causes.",
+          "transferability": "moderate"
+        },
+        {
+          "jurisdiction": "Helsinki metropolitan area, Finland",
+          "why_relevant": "It supplies longitudinal evidence from a cold metropolitan area rather than only a celebrated winter-cycling success case.",
+          "differences": [
+            "Helsinki is denser and more transit-oriented than Edmonton.",
+            "Its winter is generally milder but has substantial freeze-thaw and ice.",
+            "The study used a small adult sample and self-reported cycling minutes."
+          ],
+          "supports": "Winter suppresses cycling, and compact urban form and shorter trips affect winter retention.",
+          "does_not_establish": "It does not show that climate makes cycling unworkable or that maintenance has no effect.",
+          "transferability": "moderate"
+        },
+        {
+          "jurisdiction": "Trondheim, Norway",
+          "why_relevant": "Its national travel-survey model separates temperature, snowfall, darkness and topography.",
+          "differences": [
+            "Trondheim is smaller, hillier and generally milder than Edmonton.",
+            "Cycling culture, public transport and driving costs differ.",
+            "Reported percentage changes are modelled scenarios, not direct before-and-after counts."
+          ],
+          "supports": "Different winter factors have distinct effects, with snowfall, sub-zero temperature and darkness reducing cycling without eliminating it.",
+          "does_not_establish": "It cannot quantify Edmonton's winter cycling potential or maintenance response.",
+          "transferability": "low"
+        },
+        {
+          "jurisdiction": "Houston, Texas",
+          "why_relevant": "It is a warm-climate negative control with low measured bicycle commuting.",
+          "differences": [
+            "Houston has no Edmonton-like winter.",
+            "It is sprawling, car-oriented and has different infrastructure, land use and travel distances.",
+            "The measure covers commuting by employed residents rather than all trips."
+          ],
+          "supports": "Climate alone does not determine cycling uptake.",
+          "does_not_establish": "Houston provides little direct evidence about winter feasibility or the share Edmonton could attain.",
+          "transferability": "low"
+        }
+      ],
+      "limitations": [
+        "No current Edmonton household travel survey with a winter all-trips mode-share denominator was located.",
+        "Edmonton counter totals measure passages at instrumented locations. They do not measure unique riders, citywide trips or transportation purpose.",
+        "Counter coverage can change across years, so aggregate growth is unsafe without restricting comparisons to stations with complete data in both periods.",
+        "Oulu demonstrates feasibility but does not isolate maintenance, infrastructure, urban form, culture and climate through a controlled experiment.",
+        "The public evidence does not define a universal numerical threshold for a meaningful transportation mode."
+      ],
+      "unknowns": [
+        "Edmonton's current bicycle share of all trips during a consistently defined winter period.",
+        "Winter retention at Edmonton counters after controlling for station coverage, outages, route openings, temperature, snowfall and maintenance timing.",
+        "How many Edmonton winter counter passages are commuting, school, shopping or other transportation rather than recreation.",
+        "Whether Edmonton meets its stated snow-clearing standards at each route and how service quality affects counts.",
+        "How Edmonton and Oulu compare on trip-distance distributions, snow-cover days, freeze-thaw events and days below -20 C or -30 C."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A seasonally representative Edmonton household travel survey reporting bicycle trips divided by all trips, with trip purpose and distance.",
+          "likely_holder": "City of Edmonton Mobility Monitoring and Analysis",
+          "importance": "critical"
+        },
+        {
+          "description": "Quality-controlled, station-level Edmonton counter data with outage flags, route-opening dates and stable coverage for multiple winters.",
+          "likely_holder": "City of Edmonton Mobility Monitoring and Analysis",
+          "importance": "high"
+        },
+        {
+          "description": "Route-level snow-clearing timestamps, achieved surface condition and linked bicycle counts and weather observations.",
+          "likely_holder": "City of Edmonton Parks and Roads Services",
+          "importance": "high"
+        },
+        {
+          "description": "A standardized Edmonton-Oulu comparison of urban form, trip distances, climate thresholds, network continuity and winter maintenance performance.",
+          "likely_holder": "City transportation departments or an independent research team",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "For Edmonton, sum only complete counter-days at stations operating in both comparison periods. Report counter passages, number of stations, dates and missing-data rules.",
+        "Calculate winter retention for each stable Edmonton counter as winter average daily passages divided by warm-season average daily passages. Define both seasons and report them separately rather than silently aggregating.",
+        "Do not compare Edmonton's counter passages with Oulu's mode share. Obtain Edmonton all-trip survey data before making a mode-share comparison.",
+        "For climate transferability, calculate comparable 1991-2020 measures for Edmonton and Oulu: monthly mean temperature, snowfall, snow-cover days, freeze-thaw days and days below -20 C and -30 C.",
+        "If comparing maintained networks, report route kilometres in each service class, population served and the achieved service level rather than the stated target alone."
+      ],
+      "what_would_change_my_verdict": [
+        "I would move toward Supported or Partially supported if controlled multi-city evidence showed that Edmonton-level cold independently prevents a non-trivial winter share after comparable network continuity, maintenance, trip distances and urban form are accounted for.",
+        "I would reconsider if the Oulu winter-share result proved methodologically inapplicable, for example because its winter denominator or trip classification did not represent ordinary transportation.",
+        "Direct Edmonton evidence showing a non-trivial all-trip winter bicycle share under a connected and reliably maintained network would raise confidence in Contradicted to High."
+      ],
+      "suggested_one_line": "Winter sharply reduces cycling, but it does not make meaningful year-round transportation impossible: Oulu measured about 10% of all trips by bicycle in winter in 2021.",
+      "suggested_short_answer": "Edmonton's climate is a real deterrent, especially during snowfall and severe cold, but the absolute claim is contradicted. Oulu sustains about one in ten trips by bicycle in winter with a large, continuously maintained network. Edmonton also records substantial December bicycle activity, although its public counts do not establish a citywide mode share.",
+      "suggested_tldr": [
+        "Cold, snow and darkness reduce bicycle use. They do not reduce it to zero.",
+        "Oulu's 2021 travel survey measured bicycles at about 10% of all winter trips, contradicting climate as an absolute barrier.",
+        "Edmonton's current winter mode share remains unknown because public counters lack an all-trips denominator."
+      ]
+    }
+  ]
+}

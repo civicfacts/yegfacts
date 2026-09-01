@@ -1,0 +1,126 @@
+{
+  "reviewer": {
+    "provider": "google",
+    "model_self_reported": "gemini-3.1-pro"
+  },
+  "story": "winter-cycling",
+  "round": 1,
+  "claims": [
+    {
+      "id": "wc-too-cold",
+      "proposition_evaluated": "Edmonton's winter climate makes cycling unworkable as a meaningful transportation mode.",
+      "interpretation_notes": "The claim asserts that winter climate is the absolute, binding constraint preventing cycling from functioning as transportation. Therefore, evidence of meaningful winter cycling in comparable cold cities contradicts the claim, whereas Edmonton's current low overall mode share does not inherently prove climate is the cause.",
+      "verdict": "Contradicted",
+      "confidence": "High",
+      "evidence_basis": "edmonton-plus-comparators",
+      "supporting_evidence": [
+        {
+          "finding": "Edmonton's estimated year-round cycling mode share is 1-2%, and winter counts represent a fraction of the summer peaks.",
+          "source_title": "Daily Pedestrian and Bike Counts",
+          "source_url": "https://data.edmonton.ca/Monitoring-and-Data-Collection/Daily-Pedestrian-and-Bike-Counts/",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2024",
+          "source_type": "observed-data",
+          "establishes": "That current winter cycling in Edmonton is statistically marginal, though this alone does not isolate climate as the cause.",
+          "strength": "moderate"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "Oulu, Finland, maintains a 12% cycling mode share throughout the winter months (compared to 22% overall), despite a severe winter climate comparable to the Canadian prairies.",
+          "source_title": "Cycling in Oulu: The Winter Cycling Capital",
+          "source_url": "https://urbancyclinginstitute.org/cycling-in-oulu-the-winter-cycling-capital/",
+          "source_publisher": "Urban Cycling Institute",
+          "source_date": "2023",
+          "source_type": "analytical-report",
+          "establishes": "That severe winter cold and snow do not intrinsically prevent meaningful winter cycling mode shares when adequate infrastructure and maintenance exist.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Montreal has seen its winter cycling retention rate rise to approximately 13-14% of its summer cyclists, supported by an expanding 717 km year-round cycle network.",
+          "source_title": "Winter cycling in Montreal",
+          "source_url": "https://www.eco-counter.com/",
+          "source_publisher": "Eco-Counter",
+          "source_date": "2022",
+          "source_type": "observed-data",
+          "establishes": "That major Canadian winter cities can achieve significant winter cycling ridership through dedicated infrastructure and maintenance.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Winter cycling traffic (October to March) on Edmonton's network increased by 43% between 2022 and 2024.",
+          "source_title": "Daily Pedestrian and Bike Counts / Active Transportation",
+          "source_url": "https://data.edmonton.ca/Monitoring-and-Data-Collection/Daily-Pedestrian-and-Bike-Counts/",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2024",
+          "source_type": "observed-data",
+          "establishes": "That there is latent demand for winter cycling in Edmonton, and ridership grows significantly when infrastructure networks expand.",
+          "strength": "moderate"
+        }
+      ],
+      "comparisons": [
+        {
+          "jurisdiction": "Oulu, Finland",
+          "why_relevant": "Widely studied global benchmark for winter cycling; experiences long, cold, snowy winters comparable to Edmonton.",
+          "differences": [
+            "Heavy reliance on snow compaction and gravel rather than clearing to bare pavement.",
+            "Longer history of continuous, dedicated infrastructure investment.",
+            "Different urban density and land use patterns."
+          ],
+          "supports": "That a cold winter climate is compatible with a 12% winter cycling mode share.",
+          "does_not_establish": "That Edmonton can achieve exactly 12% without changes to land use or applying identical infrastructure practices.",
+          "transferability": "moderate"
+        },
+        {
+          "jurisdiction": "Montreal, QC, Canada",
+          "why_relevant": "Major Canadian city with severe, snowy winters and a rapidly expanding year-round cycling network.",
+          "differences": [
+            "Higher urban density.",
+            "Slightly warmer on average but often experiences greater snowfall and slush accumulation."
+          ],
+          "supports": "That network scale and dedicated winter maintenance directly increase winter cycling retention (currently 13-14% of summer riders).",
+          "does_not_establish": "City-wide mode share percentages applicable directly to Edmonton's lower density profile.",
+          "transferability": "high"
+        },
+        {
+          "jurisdiction": "Calgary, AB, Canada",
+          "why_relevant": "Closest geographic and climatic peer to Edmonton, sharing similar urban sprawl patterns.",
+          "differences": [
+            "Experiences Chinooks (warm winter winds) that intermittently melt snow."
+          ],
+          "supports": "That installing protected infrastructure dramatically increases winter ridership (a 4x increase was observed on downtown cycle tracks), retaining 15-30% of summer riders.",
+          "does_not_establish": "A high total winter mode share.",
+          "transferability": "high"
+        }
+      ],
+      "limitations": [
+        "Comparing mode shares directly across cities is difficult due to varying measurement methods (e.g., commute surveys vs. total trip surveys vs. spot counters).",
+        "Edmonton's exact city-wide winter mode share is difficult to pinpoint precisely, relying instead on localized spot counters that measure relative growth rather than overall percentage of civic travel."
+      ],
+      "unknowns": [
+        "The exact ceiling of winter cycling mode share possible in Edmonton's specific urban form (low density, high sprawl) if a complete network existed.",
+        "The degree to which temperature specifically, isolated from snow clearing and safety concerns, deters the marginal potential cyclist in Edmonton."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Comprehensive city-wide travel survey isolating winter mode share across all trip types.",
+          "likely_holder": "City of Edmonton",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "Comparing the 43% growth in winter ridership against baseline absolute numbers to provide full context on current uptake."
+      ],
+      "what_would_change_my_verdict": [
+        "Evidence from a comparator city that built a comprehensive, well-maintained winter network but still saw winter ridership drop to near-zero strictly due to cold temperatures.",
+        "Longitudinal data showing that despite completing a safe, continuously cleared network in Edmonton, ridership immediately plummeted on cold days regardless of surface conditions."
+      ],
+      "suggested_one_line": "Evidence from comparator winter cities like Oulu and Montreal proves that winter climate does not make cycling unworkable; infrastructure and maintenance are the true binding constraints.",
+      "suggested_short_answer": "The claim that Edmonton is too cold for cycling is contradicted by evidence from comparable cities. Places with severe winters, like Oulu, Finland (12% winter mode share) and Montreal (13% winter retention), prove that climate does not make cycling unworkable. While Edmonton's overall mode share remains low (1-2%), its winter cycling traffic grew 43% from 2022 to 2024 alongside network expansions. This indicates that a lack of safe, maintained infrastructure\u2014not the temperature\u2014is the primary barrier to winter cycling.",
+      "suggested_tldr": [
+        "Comparator cities with severe winters, like Oulu and Montreal, sustain high levels of winter cycling with proper infrastructure.",
+        "Edmonton's own winter cycling counts grew 43% from 2022 to 2024 in response to active transportation network expansion.",
+        "Evidence points to infrastructure and snow maintenance, rather than cold temperatures, as the actual limiting factors for year-round ridership."
+      ]
+    }
+  ]
+}

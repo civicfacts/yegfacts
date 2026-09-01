@@ -1,0 +1,109 @@
+{
+  "reviewer": {
+    "provider": "google",
+    "model_self_reported": "Gemini 3.1 Pro"
+  },
+  "story": "fifteen-minute-districts",
+  "round": 2,
+  "round2_notes": {
+    "evidence_i_missed": [
+      "The full consolidated text of the District Policy (Charter Bylaw 24000), which contains specific sections on mobility and financial tools, and codifies the explicit freedom-of-movement clause in Chapter 1.",
+      "The explicit wording in the overarching Edmonton City Plan (Bylaw 20000) that preserves the choice to make trips by auto while establishing 15-minute district goals.",
+      "The City Council public hearing minutes verifying the 12-0 vote on the freedom-of-movement amendment.",
+      "The Canadian Press fact check and the City's Zoning Bylaw webpage clarifying the strict land-use scope of zoning tools."
+    ],
+    "errors_in_other_reviews": [
+      "Reviewer A (Claude) categorized the widespread social media circulation of the travel restriction claim as 'weak supporting evidence.' The prevalence of a claim in public discourse is not evidentiary support for the factual truth of the proposition being evaluated.",
+      "Reviewer B (GPT) categorized the statutory nature of the District Policy (Section 1.2, guiding rezoning and subdivision) as 'weak supporting evidence' for the claim. Establishing that the instrument is strictly a land-use tool rather than an individual movement regulator contradicts the claim; it does not support it.",
+      "Reviewer B (GPT) overgeneralized standard curbside parking pricing policies (Sections 3.3.1.2 and 3.3.1.4) as 'weak supporting evidence' for a mechanism to restrict travel. Parking management affects where a person can conveniently park, but it does not restrict where a resident can travel or cross district boundaries."
+    ],
+    "verdict_changes": []
+  },
+  "claims": [
+    {
+      "id": "districts-travel-restrictions",
+      "proposition_evaluated": "Edmonton's district plans restrict, or create a mechanism to restrict, where residents can travel within the city.",
+      "interpretation_notes": "I evaluated both explicit restrictions and mechanisms that could theoretically enable them. I differentiate between land-use/infrastructure policies that influence travel choices and instruments that regulate or restrict individual movement. I have replaced my unverified URL from Round 1 with the verified primary legal and policy documents surfaced by the other reviewers.",
+      "verdict": "Contradicted",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "District Policy section 4.1.3 contemplates applying charges and fees for users through available financial mechanisms. While this is strictly directed at financing infrastructure and public amenities in growth areas, it represents the strongest textual basis for the weaker claim that broad, behavior-shaping financial powers exist within the policy.",
+          "source_title": "District Policy (Charter Bylaw 24000, as amended) - Office Consolidation April 2026",
+          "source_url": "https://webdocs.edmonton.ca/infraplan/plans_in_effect/District-Policy-Consolidation.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2024-10-02 (adopted); consolidation April 2026",
+          "source_type": "legal-audited",
+          "establishes": "The policy includes general financial tools for infrastructure funding. It does not establish travel charges, tolls, or permits for crossing district boundaries.",
+          "quote": "applying charges and fees for users through available financial mechanisms",
+          "strength": "weak"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "Chapter 1 of the adopted District Policy contains an explicit clause prohibiting restrictions on movement. This clause was added unanimously by City Council to directly address public restriction claims.",
+          "source_title": "District Policy (Charter Bylaw 24000, as amended) - Office Consolidation April 2026",
+          "source_url": "https://webdocs.edmonton.ca/infraplan/plans_in_effect/District-Policy-Consolidation.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2024-10-02 (adopted); consolidation April 2026",
+          "source_type": "legal-audited",
+          "establishes": "The adopted statutory plan explicitly disclaims any restriction on movement, association, and commerce.",
+          "quote": "The District Policy and the District Plans shall not restrict freedom of movement, association and commerce in accordance with the Canadian Charter of Rights and Freedoms.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The Edmonton City Plan frames the 15-minute district concept around adding proximity and active transportation options, explicitly stating that residents retain the choice to use automobiles for trips.",
+          "source_title": "Bylaw 20000, Edmonton City Plan",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/20000.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2020-12-07",
+          "source_type": "policy-document",
+          "establishes": "The overarching City Plan does not mandate confinement to districts and preserves auto travel choices.",
+          "quote": "Although the choice will remain to make those trips by auto",
+          "strength": "strong"
+        },
+        {
+          "finding": "The District Policy was adopted as a statutory plan under the Municipal Government Act to guide land use, mobility, and growth management (such as rezoning, subdivision, and development permits). It is not a regulatory tool applicable to individual travel behavior.",
+          "source_title": "Report UPE01245rev - Charter Bylaw 24000 - District Policy (City Council, October 2, 2024)",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=236941",
+          "source_publisher": "City of Edmonton, Urban Planning and Economy",
+          "source_date": "2024-10-02",
+          "source_type": "analytical-report",
+          "establishes": "The legal character of the policy is land-use guidance, which contains no enforcement machinery against individual movement.",
+          "quote": "To adopt the District Policy as a statutory plan under the Municipal Government Act, as amended by the City of Edmonton Charter 2018 Regulation, to provide guidance for land use, mobility and growth management.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Official Council minutes record that Council added the freedom-of-movement clause to section 1 of the District Policy by a 12-0 vote on June 26, 2024.",
+          "source_title": "City Council Public Hearing Minutes, May 28 to June 26, 2024",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=230415",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2024-06-26",
+          "source_type": "legal-audited",
+          "establishes": "The non-restriction language was a formally adopted legislative amendment, not merely an informal webpage statement.",
+          "strength": "strong"
+        }
+      ],
+      "limitations": [
+        "The review relies on the consolidated District Policy and City Plan texts; exhaustive line-by-line reading of all 15 individual District Plan maps was not performed, though their legal function is clearly defined by the Policy as land-use guidance.",
+        "While the current policies explicitly prohibit travel restrictions, they cannot legally bind a future City Council from enacting different bylaws or road pricing mechanisms if they undergo a new legislative process."
+      ],
+      "unknowns": [
+        "Whether future councils might attempt to implement separate road pricing or access control bylaws, though such actions would require entirely new legislative processes and are not contained within or enabled by the current District Plans."
+      ],
+      "what_would_change_my_verdict": [
+        "Discovery of provisions within the adopted District Plans, District Policy, or connected Zoning Bylaws that establish inter-district travel permits, travel penalties, or individual movement tracking.",
+        "A legally binding interpretation or application demonstrating that the general infrastructure financing provisions in the District Policy are being used to implement district boundary tolls, despite the explicit non-restriction clause."
+      ],
+      "suggested_one_line": "Edmonton's District Policy and Plans are land-use tools that explicitly state they shall not restrict freedom of movement, and they contain no mechanisms for travel permits, fines, or tracking.",
+      "suggested_short_answer": "Edmonton's District Policy and associated plans do not restrict travel. They are statutory planning documents designed to guide land use, zoning, and infrastructure development. The adopted District Policy explicitly states that the plans \"shall not restrict freedom of movement, association and commerce.\" The policies contain no mechanisms for district-boundary permits, inter-district travel penalties, or individual movement monitoring.",
+      "suggested_tldr": [
+        "The adopted District Policy explicitly prohibits restricting freedom of movement.",
+        "The plans are statutory tools that guide zoning, subdivision, and development decisions, not individual travel behavior.",
+        "The overarching Edmonton City Plan expressly preserves the choice for residents to travel by automobile.",
+        "There are no permits, fines, or tracking mechanisms tied to crossing district boundaries."
+      ]
+    }
+  ]
+}

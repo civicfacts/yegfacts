@@ -1,0 +1,43 @@
+{
+  "story": "climate-targets",
+  "run": "2026-09-01",
+  "methodology_version": "1.0",
+  "basis": "round2",
+  "generated_at": "2026-09-01T06:58:22.050Z",
+  "claims": [
+    {
+      "id": "climate-on-track",
+      "finding": "Contradicted",
+      "confidence": "High",
+      "agreement": "unanimous",
+      "rationale": "Unanimous.",
+      "reviewers": [
+        {
+          "provider": "claude",
+          "model_self_reported": "claude-fable-5",
+          "verdict": "Contradicted",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Position unchanged after cross-review: Contradicted, High confidence. All three reviewers independently reached Contradicted from City-published sources, but agreement is not the basis for my confidence; the basis is the Fall 2025 Carbon Budget Update (FCS03160), which I verified directly in round 1 and which reports the 2024 inventory 3.0 Mt above the City's own trajectory alongside the City's explicit statement that the 2025 target will not be met. Round 2 added two 2026-dated City corroborations from reviewer A (Spring 2026 Budget Highlights; Engaged Edmonton FAQ) that I could only partially verify, so I carry them at moderate strength; the verdict does not depend on them. Community and corporate emissions remain separated per the brief."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.1 Pro (High)",
+          "verdict": "Contradicted",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Interpreted 'on track' as whether the most recent community emissions data aligns with the targets and carbon budget trajectory set out by the City of Edmonton. In Round 2, I incorporated the 2024 inventory data sourced by other reviewers, which replaces the 2023 data I initially relied on, especially since my original primary URL failed verification."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "gpt-5",
+          "verdict": "Contradicted",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "I evaluated community-wide emissions, not emissions from City operations. Cross-review added a clearer primary source for the adopted targets and evidence of the earlier 2023 miss. Neither changes the decisive evidence: the latest inventory covers 2024, exceeds the required trajectory, and the City's newer Spring 2026 assessment expressly says Edmonton is not on track. Completed initiatives and per-capita improvement show progress but not trajectory compliance. Verdict remains Contradicted independently of the other reviewers' agreement."
+        }
+      ],
+      "disagreement_notes": []
+    }
+  ]
+}

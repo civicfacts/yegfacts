@@ -1,0 +1,127 @@
+{
+  "reviewer": {
+    "provider": "openai",
+    "model_self_reported": "gpt-5"
+  },
+  "story": "climate-targets",
+  "round": 1,
+  "claims": [
+    {
+      "id": "climate-on-track",
+      "proposition_evaluated": "Edmonton's community-wide greenhouse-gas emissions are on the trajectory required to meet the City's adopted 2025, 2030 and 2050 targets, based on the latest published community inventory or the City's latest assessment.",
+      "interpretation_notes": "I evaluated community emissions, not emissions from City operations. The latest inventory located covers 2024. I treated completed climate actions and per-capita improvement as evidence of progress, but not as proof of trajectory compliance.",
+      "verdict": "Contradicted",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "The 2024 community inventory reported total emissions nine per cent below the recalculated 2005 baseline and per-capita emissions 46 per cent below the baseline.",
+          "source_title": "City of Edmonton Financial Annual Report 2025",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/documents/financial-annual-report-2025-compressed_0.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026, covering the 2025 reporting year and 2024 GHG inventory",
+          "source_type": "observed-data",
+          "establishes": "Edmonton has reduced total and per-capita community emissions relative to 2005. It does not establish that reductions are occurring at the rate required by the adopted trajectory.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The 2023-2026 approved budgets funded projects estimated to reduce community emissions by 180,000 tCO2e over four years, and the City reported several energy-transition initiatives underway.",
+          "source_title": "Fall 2025 Carbon Budget Update, 2023-2026 Carbon Budget",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=280355",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025-11-24",
+          "source_type": "analytical-report",
+          "establishes": "The City funded and implemented measures intended to reduce emissions. The quantified reduction is a forecast, not an observed outcome, and the same report says it is insufficient to put Edmonton on track.",
+          "strength": "weak"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The latest inventory reported 2024 community emissions of 15.2 million tCO2e against a required 2024 trajectory value of no more than 12.2 million tCO2e. The City expressly assessed Edmonton as off track for every adopted emissions milestone.",
+          "source_title": "Spring 2026 Budget Highlights",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/documents/2026-budget-highlights.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "Spring 2026",
+          "source_type": "analytical-report",
+          "establishes": "The latest reported community inventory exceeded the City's trajectory by 3.0 million tCO2e, and the City's own assessment says Edmonton is not on track.",
+          "quote": "GHG emissions are not decreasing over time and are not on track to meet the 2025, 2030 and 2050 emissions targets.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The Fall 2025 update states that actual emissions remained above forecast and target values. It reports a 2025 target of no more than 10.8 million tCO2e, requiring a 29 per cent reduction from 2024, and says the trend indicates that target will not be met.",
+          "source_title": "Fall 2025 Carbon Budget Update, Attachment 1",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=280356",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025-11-24",
+          "source_type": "analytical-report",
+          "establishes": "The missed 2024 trajectory was not an isolated comparison. The City's subsequent-year assessment also found no plausible path from current initiatives to the 2025 milestone.",
+          "quote": "There are no current initiatives or actions that will allow the necessary reductions to meet the target.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City's 2026 climate-plan review says the existing targets remain aligned with best practice and will not be revised, while its FAQ acknowledges that Edmonton is unlikely to meet the 2025 target.",
+          "source_title": "Climate Implementation Priorities (2027-2030)",
+          "source_url": "https://engaged.edmonton.ca/climateactionplan",
+          "source_publisher": "City of Edmonton",
+          "source_date": "Current as of 2026-09-01",
+          "source_type": "city-webpage",
+          "establishes": "The City had not replaced the adopted targets as of September 2026 and continued to acknowledge the missed or likely missed 2025 milestone.",
+          "quote": "Will you update the City's climate targets given the City is unlikely to meet its 2025 GHG emissions reduction target?",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City forecasts that the remaining community carbon budget will be depleted in 2036, well before the 2050 target year.",
+          "source_title": "Spring 2026 Budget Highlights",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/documents/2026-budget-highlights.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "Spring 2026",
+          "source_type": "analytical-report",
+          "establishes": "The City's forecast is inconsistent with remaining within the adopted cumulative community carbon budget through 2050.",
+          "strength": "strong"
+        }
+      ],
+      "limitations": [
+        "The latest published community inventory located covers 2024, so it cannot establish measured 2025 or 2026 emissions.",
+        "The inventory is an estimate prepared under the Global Protocol for Community-Scale GHG Inventories and includes selected Scope 1, Scope 2 and Scope 3 sources rather than every consumption-related emission.",
+        "The City recalculated the 2005 baseline after receiving revised natural-gas data. Older figures, including the previously reported 2023 value of 16.2 million tCO2e, should not be combined with the revised 2024 trajectory without the restated series.",
+        "Carbon-budget forecasts quantify only initiatives for which the City has suitable measurement tools. Some initiatives may have unquantified effects.",
+        "The 2025 Financial Annual Report separately reports 2024 corporate emissions of 374,000 tCO2e gross and 350,000 tCO2e net. Corporate emissions are about two per cent of community emissions and do not answer this claim."
+      ],
+      "unknowns": [
+        "Edmonton's measured community emissions for 2025 and 2026.",
+        "The eventual measured effect of initiatives implemented or expanded after the 2024 inventory year.",
+        "Uncertainty intervals for the inventory estimates and the full restated historical series following the natural-gas-data revision.",
+        "Whether Council's consideration of the 2027-2030 implementation priorities after 2026-09-01 will materially change future actions. It cannot change the measured 2024 result."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A completed and published 2025 community GHG inventory using the revised baseline and consistent methodology.",
+          "likely_holder": "City of Edmonton Environment and Climate Resilience, with underlying data from utilities and fuel-data providers",
+          "importance": "high"
+        },
+        {
+          "description": "The technical inventory workbook documenting uncertainty, revisions and a consistently restated annual series.",
+          "likely_holder": "City of Edmonton Environment and Climate Resilience",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "Required comparison using Spring 2026 Budget Highlights, Community Carbon Budget section: 15.2 million tCO2e actual in 2024 minus the 12.2 million tCO2e 2024 trajectory equals 3.0 million tCO2e above trajectory.",
+        "Reviewer arithmetic: 3.0 divided by 12.2 equals approximately 24.6 per cent, so actual 2024 emissions were about 24.6 per cent above the reported trajectory value. No unit or currency conversion was performed.",
+        "The City separately reports that reaching its 10.8 million tCO2e 2025 milestone would require a 29 per cent reduction from 2024. This is the City's reported calculation, not independent trajectory modelling."
+      ],
+      "what_would_change_my_verdict": [
+        "A newer, methodologically consistent City inventory showing community emissions at or below the adopted trajectory, accompanied by an on-track assessment.",
+        "A correction to the 2024 inventory or trajectory that eliminates the reported 3.0 million tCO2e gap.",
+        "Council adoption of materially different targets followed by evidence that the latest measured emissions meet the resulting trajectory."
+      ],
+      "suggested_one_line": "No. Edmonton's latest community inventory put 2024 emissions at 15.2 million tCO2e, 3.0 million above the City's trajectory, and the City says it is not on track for 2025, 2030 or 2050.",
+      "suggested_short_answer": "Contradicted. Edmonton has reduced emissions from its 2005 baseline, but not fast enough to meet its adopted trajectory. The latest inventory measured 15.2 million tCO2e in 2024 against a trajectory value of no more than 12.2 million, while the City forecasts depletion of the community carbon budget in 2036.",
+      "suggested_tldr": [
+        "Latest inventory: 15.2 million tCO2e in 2024.",
+        "Required 2024 trajectory: no more than 12.2 million tCO2e.",
+        "City assessment: not on track for the 2025, 2030 or 2050 community targets."
+      ]
+    }
+  ]
+}
