@@ -1,16 +1,6 @@
 ---
 import Wordmark from './Wordmark.astro';
 
-/**
- * `wide` matches the masthead to a page that carries an "On this page" rail, so
- * the wordmark keeps the same left edge as the article below it.
- */
-interface Props {
-  wide?: boolean;
-}
-
-const { wide = false } = Astro.props;
-
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 
 /**
@@ -33,7 +23,7 @@ const links: { href: string; label: string; phoneHidden?: boolean }[] = [
     class:list={[
       'mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-x-3 gap-y-1 px-5 py-2',
       'sm:gap-x-6 sm:gap-y-3 sm:py-4',
-      wide && 'lg:max-w-[66rem]',
+      'lg:max-w-[66rem]',
     ]}
   >
     <a href="/" class="no-underline" aria-label="YEGFacts.ca home">

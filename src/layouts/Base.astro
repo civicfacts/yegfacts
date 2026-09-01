@@ -28,9 +28,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
 const ogImage = new URL('/og.png', Astro.site ?? SITE.url).href;
 
 /**
- * The rail is 13rem and only appears from `lg` up. The container widens to make
- * room for it rather than narrowing the reading column, and the footer widens
- * with it so the page keeps one left edge from masthead to colophon.
+ * One container on every page: a reading column and, from `lg` up, a 13rem
+ * rail beside it. The rail is always there — it carries the report box — and
+ * the outline appears in it only when the page has one. A page without an
+ * outline used to fall back to a narrower container, so the page width jumped
+ * between the home page and a story.
  */
 const hasToc = sections.length > 0;
 ---
@@ -67,12 +69,12 @@ const hasToc = sections.length > 0;
     >
       Skip to content
     </a>
-    <Header wide={hasToc} />
+    <Header />
 
     <div
       class:list={[
         'mx-auto w-full max-w-3xl grow px-5 py-6 sm:py-10',
-        hasToc && 'lg:grid lg:max-w-[66rem] lg:grid-cols-[minmax(0,1fr)_13rem] lg:gap-x-12',
+        'lg:grid lg:max-w-[66rem] lg:grid-cols-[minmax(0,1fr)_13rem] lg:gap-x-12',
       ]}
     >
       <main id="main" data-pagefind-body={indexable ? '' : undefined}>
@@ -100,28 +102,30 @@ const hasToc = sections.length > 0;
         <slot />
       </main>
 
-      {
-        hasToc && (
-          <aside
-            class="sticky top-8 hidden max-h-[calc(100vh-4rem)] self-start overflow-y-auto lg:block"
-            aria-label="On this page"
-            data-pagefind-ignore
-          >
-            <p class="text-[0.6875rem] font-semibold tracking-[0.11em] text-muted uppercase">
-              On this page
-            </p>
-            <nav class="mt-3">
-              <PageToc sections={sections} />
-            </nav>
-            <div class="mt-7">
-              <ReportBox path={path} title={title} />
-            </div>
-          </aside>
-        )
-      }
+      <aside
+        class="sticky top-8 hidden max-h-[calc(100vh-4rem)] self-start overflow-y-auto lg:block"
+        aria-label={hasToc ? 'On this page' : 'Report a problem'}
+        data-pagefind-ignore
+      >
+        {
+          hasToc && (
+            <>
+              <p class="text-[0.6875rem] font-semibold tracking-[0.11em] text-muted uppercase">
+                On this page
+              </p>
+              <nav class="mt-3">
+                <PageToc sections={sections} />
+              </nav>
+            </>
+          )
+        }
+        <div class:list={[hasToc && 'mt-7']}>
+          <ReportBox path={path} title={title} />
+        </div>
+      </aside>
     </div>
 
-    <Footer wide={hasToc} />
+    <Footer />
 
     <script>
       // Active-section highlight for "On this page". Both copies of the outline
