@@ -76,7 +76,10 @@ case "$PROVIDER_ARG" in
   agy|gemini|google)
     SLOT="gemini"; CLI="agy"; MODEL_ID="gemini-3.1-pro"
     PROVIDER_CANONICAL="google"; SEAT="Gemini 3.1 Pro"
-    CMD=(agy -p --effort "$EFFORT")
+    # agy takes the prompt as the argument of -p and does not read stdin;
+    # `-p --effort` made it treat "--effort" as the prompt. --sandbox and the
+    # long print timeout are what the four published runs used.
+    CMD=(agy --effort "$EFFORT" --sandbox --print-timeout 45m -p)
     ;;
   *)
     echo "unknown provider: $PROVIDER_ARG" >&2; usage
@@ -191,7 +194,11 @@ PACKAGE="$SCRATCH/package.md"
 } > "$PACKAGE"
 
 PROMPT_SHA="$(shasum -a 256 "$PACKAGE" | cut -d' ' -f1)"
-COMMAND_STRING="${CMD[*]} < package.md"
+if [ "$CLI" = "agy" ]; then
+  COMMAND_STRING="${CMD[*]} \"\$(cat package.md)\""
+else
+  COMMAND_STRING="${CMD[*]} < package.md"
+fi
 
 if [ "$DRY_RUN" = "1" ]; then
   echo "DRY RUN — no CLI executed, nothing written under reviews/"
@@ -230,8 +237,13 @@ for attempt in 1 2; do
   # Run from INSIDE the scratch dir so the CLI's working directory contains
   # only the package. A nonzero exit is not fatal on attempt 1 — a CLI can
   # fail late having already printed a usable answer.
-  ( cd "$SCRATCH" && "${CMD[@]}" < package.md ) > "$RAW" 2>"$SCRATCH/stderr.txt" || \
-    echo "[$SLOT round $ROUND] CLI exited nonzero; still checking its output" >&2
+  if [ "$CLI" = "agy" ]; then
+    ( cd "$SCRATCH" && "${CMD[@]}" "$(cat package.md)" < /dev/null ) > "$RAW" 2>"$SCRATCH/stderr.txt" || \
+      echo "[$SLOT round $ROUND] CLI exited nonzero; still checking its output" >&2
+  else
+    ( cd "$SCRATCH" && "${CMD[@]}" < package.md ) > "$RAW" 2>"$SCRATCH/stderr.txt" || \
+      echo "[$SLOT round $ROUND] CLI exited nonzero; still checking its output" >&2
+  fi
 
   if npx tsx "$REPO_ROOT/scripts/panel/extract-review.ts" "$RAW" "$OUT_FILE" > "$ERRORS"; then
     STATUS="ok"
