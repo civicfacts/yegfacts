@@ -279,10 +279,9 @@ function checkStories(): void {
       if (listedClaims.length === 0) {
         fail(file, 'a published story must check at least one claim');
       }
-      // The story page's disclosure layers (spec §6) are mandatory once public.
-      if (typeof data.short_answer !== 'string' || data.short_answer.trim() === '') {
-        fail(file, 'a published story needs a short_answer');
-      }
+      // The story page's disclosure layers (spec §6) are mandatory once
+      // public. The short-answer layer was retired 2026-09-01 (it duplicated
+      // the TL;DR): the layers are one_line → tldr → body.
       if (stringArray(data.tldr).length === 0) {
         fail(file, 'a published story needs at least one tldr bullet');
       }

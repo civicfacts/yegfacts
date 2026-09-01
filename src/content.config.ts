@@ -90,8 +90,6 @@ const stories = defineCollection({
     .object({
       title: z.string().min(1),
       one_line: z.string().min(1),
-      /** Short answer — the second disclosure layer. */
-      short_answer: z.string().optional(),
       /** TL;DR bullets — the third disclosure layer. */
       tldr: z.array(z.string().min(1)).default([]),
       topics: z.array(topicSlug).min(1),

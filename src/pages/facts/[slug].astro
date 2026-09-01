@@ -119,7 +119,6 @@ const glossed = (() => {
  * have.
  */
 const sections = toc([
-  story.data.short_answer ? { id: 'short-answer', label: 'Short answer' } : false,
   story.data.tldr.length > 0 && { id: 'tldr', label: 'TL;DR' },
   story.data.seen.length > 0 && { id: 'claims-we-are-seeing', label: 'Common forms' },
   { id: 'what-happened', label: 'What actually happened' },
@@ -168,25 +167,6 @@ const sections = toc([
         }
       </p>
     </header>
-
-    {/* Short answer */}
-    {
-      story.data.short_answer && (
-        <section id="short-answer" class="mt-10">
-          <div class="flex items-baseline justify-between gap-3">
-            <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
-              Short answer
-            </h2>
-            <CopyButton
-              text={story.data.short_answer}
-              url={`${pageUrl}#short-answer`}
-              label="Copy"
-            />
-          </div>
-          <p class="mt-2.5 text-[1.0625rem] leading-relaxed">{story.data.short_answer}</p>
-        </section>
-      )
-    }
 
     {/* TL;DR */}
     {

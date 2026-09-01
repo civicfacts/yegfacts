@@ -53,7 +53,7 @@ EVIDENCE        shared source graph
 **Stories** (`src/content/stories/<slug>.mdx`, served at `/facts/<slug>`) are
 one coherent civic issue each: e-bus procurement, infill and zoning, winter
 cycling. The story page carries the reading experience — one-line summary,
-short answer, TL;DR, composite paraphrases of the forms the claim takes in
+TL;DR, composite paraphrases of the forms the claim takes in
 public, what actually
 happened, the checked claims, related City commitments, evidence, the AI
 review, and article history.
@@ -286,7 +286,7 @@ Astro build. A content error and a build error are both merge blockers.
 - evidence records store no back-references, because "Used by" is generated;
 - all dates are ISO-8601 with `as_of` ≤ `last_verified` < `review_by`;
 - a published story carries a `published` changelog entry, at least one claim,
-  and its short answer and TL;DR;
+  and its TL;DR;
 - committed panel output conforms to `prompts/review-schema.json`, and a
   published claim's review run exists and carries its `run.yaml` manifest.
 
