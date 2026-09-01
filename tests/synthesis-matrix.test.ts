@@ -10,13 +10,16 @@ import {
   allMultisets,
   allOrderedTriples,
   matrixRow,
-  minConfidence,
   multisetKey,
   synthesize,
 } from '../scripts/synthesis-matrix.ts';
 import { validateReview } from '../scripts/lib/review-schema.ts';
-import { CANONICAL_FINDINGS, REVIEWER_VERDICTS } from '../src/lib/vocabulary.ts';
-import type { Confidence, ReviewerVerdict } from '../src/lib/vocabulary.ts';
+import {
+  CANONICAL_FINDINGS,
+  PANEL_AGREEMENT_LEVELS,
+  REVIEWER_VERDICTS,
+} from '../src/lib/vocabulary.ts';
+import type { ReviewerVerdict } from '../src/lib/vocabulary.ts';
 
 const S: ReviewerVerdict = 'Supported';
 const P: ReviewerVerdict = 'Partially supported';
@@ -46,6 +49,19 @@ describe('exhaustiveness', () => {
     }
   });
 
+  it('produces only panel-agreement values, on every row', () => {
+    for (const row of SYNTHESIS_MATRIX) {
+      expect(PANEL_AGREEMENT_LEVELS, row.verdicts.join(' + ')).toContain(row.agreement);
+    }
+  });
+
+  it('emits no canonical confidence — that dimension was removed in v1.3', () => {
+    for (const row of SYNTHESIS_MATRIX) {
+      expect(row, row.verdicts.join(' + ')).not.toHaveProperty('confidence');
+    }
+    expect(synthesize([S, S, S])).not.toHaveProperty('confidence');
+  });
+
   it('never produces Mixed from a unanimous panel', () => {
     for (const verdict of REVIEWER_VERDICTS) {
       expect(matrixRow([verdict, verdict, verdict])?.finding).toBe(verdict);
@@ -59,56 +75,70 @@ describe('permutation invariance', () => {
     expect(triples).toHaveLength(64);
     for (const triple of triples) {
       const sorted = [...triple].sort();
-      const expected = synthesize(sorted as ReviewerVerdict[], ['High', 'High', 'High']);
-      const actual = synthesize(triple, ['High', 'High', 'High']);
+      const expected = synthesize(sorted as ReviewerVerdict[]);
+      const actual = synthesize(triple);
       expect(actual, `order ${triple.join(' , ')} diverged from its multiset`).toEqual(expected);
     }
   });
 
-  it('is invariant to which model held which position, confidences included', () => {
+  it('is invariant to which model held which position', () => {
     const verdicts: ReviewerVerdict[] = [S, P, N];
-    const confidences: Confidence[] = ['High', 'Low', 'Moderate'];
-    const forward = synthesize(verdicts, confidences);
-    const reversed = synthesize([...verdicts].reverse(), [...confidences].reverse());
+    const forward = synthesize(verdicts);
+    const reversed = synthesize([...verdicts].reverse());
     expect(reversed).toEqual(forward);
   });
 
   it('refuses a panel that is not exactly three reviewers', () => {
-    expect(() => synthesize([S, P], ['High', 'High'])).toThrow(/exactly 3/);
-    expect(() => synthesize([S, P, N, N], ['High', 'High', 'High', 'High'])).toThrow(/exactly 3/);
+    expect(() => synthesize([S, P])).toThrow(/exactly 3/);
+    expect(() => synthesize([S, P, N, N])).toThrow(/exactly 3/);
   });
 });
 
-describe('unanimous rows take the most cautious confidence (spec §5.5)', () => {
-  it('SSS at High/Moderate/Low is Supported at Low', () => {
-    expect(synthesize([S, S, S], ['High', 'Moderate', 'Low'])).toMatchObject({
-      finding: 'Supported',
-      confidence: 'Low',
-      agreement: 'unanimous',
-    });
+// Methodology v1.3 replaced the canonical confidence with panel agreement over
+// the round-1 multiset. The values are computed from the multiset alone, so a
+// reviewer's own confidence can no longer move anything the site publishes as
+// canonical.
+describe('panel agreement is a property of the multiset', () => {
+  it('is Unanimous exactly when the panel returned one distinct verdict', () => {
+    for (const multiset of allMultisets()) {
+      const distinct = new Set(multiset).size;
+      const expected = distinct === 1 ? 'Unanimous' : undefined;
+      if (expected) expect(matrixRow(multiset)?.agreement, multiset.join(' + ')).toBe(expected);
+      else expect(matrixRow(multiset)?.agreement, multiset.join(' + ')).not.toBe('Unanimous');
+    }
   });
 
-  it('CCC at High/High/Moderate is Contradicted at Moderate', () => {
-    expect(synthesize([C, C, C], ['High', 'High', 'Moderate'])).toMatchObject({
-      finding: 'Contradicted',
-      confidence: 'Moderate',
-    });
+  it('is Adjacent exactly on two distinct verdicts one step apart on the axis', () => {
+    const axis: ReviewerVerdict[] = [S, P, N, C];
+    for (const multiset of allMultisets()) {
+      const distinct = [...new Set(multiset)];
+      const oneStepApart =
+        distinct.length === 2 &&
+        Math.abs(axis.indexOf(distinct[0]!) - axis.indexOf(distinct[1]!)) === 1;
+      expect(matrixRow(multiset)?.agreement === 'Adjacent', multiset.join(' + ')).toBe(
+        oneStepApart,
+      );
+    }
   });
 
-  it('NNN at High/High/High keeps High', () => {
-    expect(synthesize([N, N, N], ['High', 'High', 'High']).confidence).toBe('High');
+  it('is Split for everything else', () => {
+    expect(matrixRow([S, S, N])?.agreement).toBe('Split');
+    expect(matrixRow([S, P, N])?.agreement).toBe('Split');
+    expect(matrixRow([S, P, C])?.agreement).toBe('Split');
+    expect(matrixRow([P, C, C])?.agreement).toBe('Split');
   });
 
-  it('minConfidence picks the lowest regardless of order', () => {
-    expect(minConfidence(['High', 'Low', 'Moderate'])).toBe('Low');
-    expect(minConfidence(['Moderate', 'High'])).toBe('Moderate');
-  });
-
-  it('non-unanimous rows ignore the reviewers’ confidences and use the row’s', () => {
-    const high = synthesize([S, S, P], ['High', 'High', 'High']);
-    const low = synthesize([S, S, P], ['Low', 'Low', 'Low']);
-    expect(high.confidence).toBe('Moderate');
-    expect(low.confidence).toBe('Moderate');
+  it('never resolves below the most cautious verdict the panel actually cast', () => {
+    const axis: ReviewerVerdict[] = [S, P, N, C];
+    for (const multiset of allMultisets()) {
+      const row = matrixRow(multiset)!;
+      if (row.finding === 'Mixed') continue;
+      const mostCautious = Math.max(...multiset.map((verdict) => axis.indexOf(verdict)));
+      expect(
+        axis.indexOf(row.finding as ReviewerVerdict),
+        `${multiset.join(' + ')} resolved past the panel`,
+      ).toBeLessThanOrEqual(mostCautious);
+    }
   });
 });
 
@@ -130,11 +160,11 @@ describe('the rules the rows encode', () => {
     expect(matrixRow([N, C, C])?.finding).toBe('Contradicted');
   });
 
-  it('marks agreement unanimous / adjacent / split consistently', () => {
-    expect(matrixRow([P, P, P])?.agreement).toBe('unanimous');
-    expect(matrixRow([S, S, P])?.agreement).toBe('adjacent');
-    expect(matrixRow([S, S, N])?.agreement).toBe('split');
-    expect(matrixRow([S, P, C])?.agreement).toBe('split');
+  it('marks agreement Unanimous / Adjacent / Split consistently', () => {
+    expect(matrixRow([P, P, P])?.agreement).toBe('Unanimous');
+    expect(matrixRow([S, S, P])?.agreement).toBe('Adjacent');
+    expect(matrixRow([S, S, N])?.agreement).toBe('Split');
+    expect(matrixRow([S, P, C])?.agreement).toBe('Split');
   });
 });
 
@@ -181,8 +211,6 @@ describe('reviewer JSON containing "Mixed" is rejected', () => {
   });
 
   it('synthesize() cannot be handed a Mixed verdict', () => {
-    expect(() => synthesize(['Mixed' as ReviewerVerdict, S, S], ['High', 'High', 'High'])).toThrow(
-      /no matrix row/,
-    );
+    expect(() => synthesize(['Mixed' as ReviewerVerdict, S, S])).toThrow(/no matrix row/);
   });
 });

@@ -5,7 +5,7 @@ publishes, how a verdict is produced, and what CI guarantees about the
 repository. It is written so the repo is self-describing — you should be able
 to audit a published finding without asking anyone anything.
 
-Status: v1, 2026-08-31; reconciled with methodology v1.2 on 2026-09-01. Changes
+Status: v1, 2026-08-31; reconciled with methodology v1.3 on 2026-09-01. Changes
 to the method itself are recorded in `methodology/changelog.yaml` and rendered
 at `/methodology/changes`.
 
@@ -62,8 +62,8 @@ A story has no verdict of its own. Verdicts belong to claims. A story may hold
 a single claim; the model stays uniform either way.
 
 **Claims** (`src/content/claims/<id>.yaml`) are the atomic unit: one testable
-proposition, its finding, its evidence basis, its confidence, the evidence IDs
-it rests on, key facts each carrying a mandatory source, limitations, unknowns,
+proposition, its finding, its evidence basis, its panel agreement, the evidence
+IDs it rests on, key facts each carrying a mandatory source, limitations, unknowns,
 missing evidence, and the path of the review run that produced the verdict.
 Claims carry `aliases` — the hostile or colloquial phrasings people actually
 search — which become short root-level redirects to the claim's anchor.
@@ -121,9 +121,23 @@ Two distinct sets, deliberately.
 which exists only as the materially-split-panel outcome. A reviewer that
 outputs "Mixed" is rejected by the schema.
 
-Confidence is High, Moderate or Low, and describes how firmly the evidence
-supports the verdict. There are no TRUE/FALSE labels and no numeric scores.
-Finding and evidence basis are separate dimensions and both are shown.
+**Panel agreement** — the canonical second dimension, one of Unanimous,
+Adjacent or Split. It is computed from the round-1 multiset alone: Unanimous is
+one distinct verdict; Adjacent is two distinct verdicts one step apart on the
+S–P–N axis (or N–C, which both refuse the claim); Split is everything else.
+
+Agreement measures the panel, not the world. Each value is published with a
+fixed gloss saying so — "All three reviewers reached this verdict
+independently. Agreement, not a probability of truth."
+
+Until methodology v1.3 this dimension was a canonical **confidence** (High,
+Moderate or Low) derived from the reviewers' own confidences. The word
+overclaimed: nothing in the method computes a probability that a claim is true,
+and readers reasonably took it as one. Confidence survives where it is honest —
+per reviewer, beside the reviewer that gave it, inside the AI review.
+
+There are no TRUE/FALSE labels and no numeric scores. Finding, evidence basis
+and panel agreement are separate dimensions and all three are shown.
 
 ## 4. How a finding is produced
 
@@ -154,11 +168,20 @@ stopped.
 4. **Cross-review round.** Each model receives the combined evidence and the
    other two reviewers' findings, with one instruction: do not converge for
    consensus. Find what you missed, find their errors, issue your final
-   position. A changed verdict because of new evidence is good reviewing; a
-   changed verdict to match the majority is a failure.
+   position. This is an error-documentation round, not a second vote: since
+   methodology v1.3 it cannot move a canonical finding. Every final position is
+   recorded in `synthesis.json` as `round2_positions` and rendered, so dissent
+   and movement stay visible. A material catch here — a fabricated citation,
+   wrong evidence — triggers a fresh blind re-run of the affected claim rather
+   than a quiet correction inside the same run.
 5. **Deterministic synthesis.** A script computes the canonical finding from an
-   explicit lookup matrix over the multiset of the three reviewer verdicts
-   (§5 below). Model identity never affects the result.
+   explicit lookup matrix over the multiset of the three **round-1** reviewer
+   verdicts (§5 below). Round 1 is the only round in which the three reviewers
+   are independent; in round 2 each has read the other two, so a round-2
+   multiset is no longer three independent readings of the record. Model
+   identity never affects the result. Adopting the round-1 basis changed no
+   published finding: both multisets resolve identically on all six published
+   claims.
 6. **Drafting and faithfulness check.** Claude drafts the story and claim files
    from the merged evidence (a fixed, disclosed choice for v1). The other two
    models check the draft against the evidence: every sentence traceable, no
@@ -192,45 +215,53 @@ rerunnable and what ran is on the record.
 ## 5. The synthesis matrix
 
 Three reviewers, four verdicts, so exactly 20 unordered combinations. Every one
-is written out in `scripts/synthesis-matrix.ts`; the table is the rule.
-`S` = Supported, `P` = Partially supported, `N` = Not established,
-`C` = Contradicted.
+is written out in `scripts/synthesis-matrix.ts`; the table is the rule. The
+input is the **round-1** multiset. `S` = Supported, `P` = Partially supported,
+`N` = Not established, `C` = Contradicted.
 
-| Panel | Canonical finding | Confidence |
+| Panel | Canonical finding | Panel agreement |
 |---|---|---|
-| S S S | Supported | lowest of the three |
-| P P P | Partially supported | lowest of the three |
-| N N N | Not established | lowest of the three |
-| C C C | Contradicted | lowest of the three |
-| S S P | Partially supported | Moderate |
-| S P P | Partially supported | Moderate |
-| P P N | Partially supported | Low |
-| P N N | Not established | Moderate |
-| N N C | Not established | Moderate |
-| N C C | Contradicted | Low |
-| S S N | Partially supported | Low |
-| S N N | Not established | Low |
-| S P N | Partially supported | Low |
-| S S C | Mixed | Low |
-| S P C | Mixed | Low |
-| S N C | Mixed | Low |
-| S C C | Mixed | Low |
-| P P C | Mixed | Low |
-| P N C | Mixed | Low |
-| P C C | Mixed | Low |
+| S S S | Supported | Unanimous |
+| P P P | Partially supported | Unanimous |
+| N N N | Not established | Unanimous |
+| C C C | Contradicted | Unanimous |
+| S S P | Partially supported | Adjacent |
+| S P P | Partially supported | Adjacent |
+| P P N | Partially supported | Adjacent |
+| P N N | Not established | Adjacent |
+| N N C | Not established | Adjacent |
+| N C C | Contradicted | Adjacent |
+| S S N | Partially supported | Split |
+| S N N | Not established | Split |
+| S P N | Partially supported | Split |
+| S S C | Mixed | Split |
+| S P C | Mixed | Split |
+| S N C | Mixed | Split |
+| S C C | Mixed | Split |
+| P P C | Mixed | Split |
+| P N C | Mixed | Split |
+| P C C | Mixed | Split |
 
 Three rules produce that table:
 
-1. A unanimous panel returns its verdict, at the most cautious of the three
-   reviewers' confidences.
+1. A unanimous panel returns its verdict.
 2. A panel where Supported and Contradicted both appear is Mixed, always. One
    reviewer read the record as establishing the claim and another read it as
    establishing the opposite; that disagreement is displayed, not averaged.
 3. Otherwise the panel leans to the more cautious side of its majority.
-   Neighbouring verdicts resolve to the weaker of the pair at Moderate
-   confidence; a panel spread across non-adjacent verdicts resolves cautiously
-   at Low confidence, and a partial-support majority facing affirmative
-   counter-evidence is Mixed rather than resolved.
+   Neighbouring verdicts resolve to the weaker of the pair; a panel spread
+   across non-adjacent verdicts resolves cautiously; and a partial-support
+   majority facing affirmative counter-evidence is Mixed rather than resolved.
+   No row ever resolves past the most cautious verdict actually cast.
+
+**Why rule 3 leans cautious** (published rationale, methodology v1.3). Supported
+means the proposition as written is affirmatively established, which is a strong
+statement. A qualification identified by one reviewer does not stop existing
+because two others missed it, and for a fact-checking site overclaiming is the
+costlier error — it is the failure that destroys the thing the site exists to
+be. The objection that this hands one reviewer a veto is answered by disclosure
+rather than by averaging: the vote composition is always displayed, so a reader
+who thinks the lone qualifier was wrong can see exactly that and weigh it.
 
 Synthesis is defined for exactly three verdicts. If a reviewer fails to produce
 valid output after its retry, the run halts before synthesis rather than
@@ -261,12 +292,13 @@ Astro build. A content error and a build error are both merge blockers.
 
 `npm test` proves the synthesis matrix covers all 20 verdict multisets, that all
 64 ordered triples give the identical result as their multiset (so which model
-sat in which seat cannot change a finding), and that a reviewer JSON containing
-"Mixed" is rejected.
+sat in which seat cannot change a finding), that panel agreement is a pure
+function of the multiset and no row resolves past the panel's most cautious
+verdict, and that a reviewer JSON containing "Mixed" is rejected.
 
 Two spec rules are enforced in CI against the PR diff rather than the working
-tree: a change to a claim's finding or confidence requires a story changelog
-entry, and a change under `prompts/`, `scripts/merge*`, `scripts/synthesize*`
+tree: a change to a claim's finding or panel agreement requires a story
+changelog entry, and a change under `prompts/`, `scripts/merge*`, `scripts/synthesize*`
 or `methodology/` requires a methodology changelog entry.
 
 ## 7. Launch slate

@@ -2,16 +2,42 @@
   "story": "climate-targets",
   "run": "2026-09-01",
   "methodology_version": "1.0",
-  "basis": "round2",
-  "generated_at": "2026-09-01T06:58:22.050Z",
+  "basis": "round1",
+  "round2_documented": true,
+  "generated_at": "2026-09-01T15:29:20.213Z",
   "claims": [
     {
       "id": "climate-on-track",
       "finding": "Contradicted",
-      "confidence": "High",
-      "agreement": "unanimous",
+      "panel_agreement": "Unanimous",
       "rationale": "Unanimous.",
       "reviewers": [
+        {
+          "provider": "claude",
+          "model_self_reported": "claude-fable-5",
+          "verdict": "Contradicted",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Evaluated against the targets as adopted (the 2023-2026 Carbon Budget report FCS01478 states them explicitly). Community and corporate (City-operations) emissions were kept separate per the brief; corporate status is reported as context only. Latest published inventory found: 2024 community GHG inventory, reported in the Fall 2025 Carbon Budget Update (FCS03160, November 24, 2025). No 2025 inventory or newer City on-track assessment was found as of September 1, 2026."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.1 Pro (High)",
+          "verdict": "Contradicted",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Interpreted 'on track' as whether the most recent community emissions data aligns with the targets and carbon budget trajectory set out by the City of Edmonton."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "gpt-5",
+          "verdict": "Contradicted",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "I evaluated community emissions, not emissions from City operations. The latest inventory located covers 2024. I treated completed climate actions and per-capita improvement as evidence of progress, but not as proof of trajectory compliance."
+        }
+      ],
+      "round2_positions": [
         {
           "provider": "claude",
           "model_self_reported": "claude-fable-5",

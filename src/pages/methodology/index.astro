@@ -1,6 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { SITE } from '../../lib/site';
+import { PANEL_AGREEMENT_GLOSS } from '../../lib/findings';
+import { SITE, repoPath } from '../../lib/site';
+import { PANEL_AGREEMENT_LEVELS } from '../../lib/vocabulary';
 
 const stages = [
   {
@@ -21,12 +23,12 @@ const stages = [
   {
     n: '4',
     name: 'Cross-review round',
-    body: 'Each model now sees the combined evidence and the other two sets of findings. The instruction is the opposite of consensus-seeking: find what you missed, find their errors, and state your final position. Disagreement that survives this round is real disagreement, and it is published.',
+    body: 'Each model now sees the combined evidence and the other two sets of findings. The instruction is the opposite of consensus-seeking: find what you missed, find their errors, and state your final position. This is an error-documentation round, not a second vote — since v1.3 nothing said here can move the canonical finding, which removes the incentive to drift toward the majority. Every final position is published beside the round-one one, so a reader can see who moved and why. When this round catches something material — a fabricated citation, evidence that turns out to say something else — the answer is a fresh blind re-run of that claim, not a quiet patch inside the same run.',
   },
   {
     n: '5',
     name: 'Deterministic synthesis',
-    body: 'A script computes the canonical finding from the three reviewer verdicts using a published lookup table over every possible combination. Model identity never enters the calculation, and the property is tested. Unanimous verdicts carry through with the most cautious of the three confidences. A genuinely split panel produces Mixed, with the split shown. All published arithmetic lives in a tested script, never in prose.',
+    body: 'A script computes the canonical finding from the three locked round-one verdicts, using a published lookup table over every possible combination. Round one is the only round in which the three reviewers are independent of each other, so it is the only round that can honestly be read as three separate judgements of the record. Model identity never enters the calculation, and the property is tested. A genuinely split panel produces Mixed, with the split shown. Beside the finding the site publishes panel agreement — Unanimous, Adjacent or Split — which replaced a canonical confidence score in v1.3, because agreement is what the method actually measures and confidence implied a probability of truth that nothing here computes. All published arithmetic lives in a tested script, never in prose.',
   },
   {
     n: '6',
@@ -70,6 +72,16 @@ const remainingSlate = [
     claims: 'Downtown is dead and nobody goes there any more.',
   },
 ];
+
+/**
+ * The three panel-agreement values, in the order a reader meets them. The gloss
+ * text is imported rather than retyped so this page and every claim page cannot
+ * drift apart on what the word means.
+ */
+const agreements = PANEL_AGREEMENT_LEVELS.map((level) => ({
+  word: level,
+  body: PANEL_AGREEMENT_GLOSS[level],
+}));
 
 const findings = [
   {
@@ -150,8 +162,9 @@ const findings = [
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
       No TRUE/FALSE. No scores out of ten. A finding is a sentence in a controlled vocabulary, and
       it is reported alongside two separate things: the evidence basis (what kind of record answered
-      the question) and confidence (High, Moderate or Low). A claim can be Supported on a thin
-      basis, or Not established with high confidence that the record simply does not exist.
+      the question) and panel agreement (Unanimous, Adjacent or Split). A claim can be Supported on
+      a thin basis, or Not established by a panel that agreed unanimously that the record simply
+      does not exist.
     </p>
 
     <dl class="mt-6 divide-y divide-rule border-t border-rule">
@@ -170,6 +183,42 @@ const findings = [
       supported, Not established or Contradicted. Mixed is a synthesis outcome, not a hedge a model
       can reach for — which is why a Mixed finding always comes with the panel split that produced
       it.
+    </p>
+  </section>
+
+  <section id="synthesis" class="mt-14 scroll-mt-6">
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
+      Panel agreement, and why the merge leans cautious
+    </h2>
+    <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+      Beside every finding sits one more word, computed from the three locked round-one verdicts.
+      It describes the panel, not the world.
+    </p>
+
+    <dl class="mt-6 divide-y divide-rule border-t border-rule">
+      {
+        agreements.map((agreement) => (
+          <div class="grid gap-x-6 gap-y-1 py-4 sm:grid-cols-[11rem_1fr]">
+            <dt class="font-semibold text-forest">{agreement.word}</dt>
+            <dd class="text-[0.9375rem] leading-relaxed">{agreement.body}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <p class="mt-6 max-w-prose text-[0.9375rem] leading-relaxed">
+      Where the three do not agree, the lookup table resolves toward the more cautious side of the
+      majority — two Supported and one Partially supported publishes as Partially supported. That
+      is deliberate. Supported means the proposition as written is affirmatively established, and a
+      qualification one reviewer found does not stop existing because the other two missed it. For
+      a site whose whole job is not overstating the record, overclaiming is the costlier of the two
+      errors it could make.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      The obvious objection is that this hands a single reviewer a veto. The answer is disclosure
+      rather than averaging: the vote composition is always displayed. Every claim shows what each
+      of the three said, so a reader who thinks the lone qualifier was wrong can see precisely that
+      and weigh it — without the site publishing a stronger claim than every reviewer accepted.
     </p>
   </section>
 
@@ -209,6 +258,23 @@ const findings = [
       <a href={SITE.repo} rel="noopener" class="text-navy underline">{SITE.repo}</a>. The prompts,
       the synthesis matrix, the validation rules, the raw review artifacts, the gate reports and
       the full edit history are all there.
+    </p>
+  </section>
+
+  <section id="panel-quality" class="mt-14 scroll-mt-6">
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Panel quality record</h2>
+    <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed">
+      The models get things wrong. Collection of a per-seat record of that began on 2026-09-01 and
+      was seeded backwards from the four published runs: fabricated citations, false accusations
+      against another reviewer, unsupported figures, and the catches that turned out to be right —
+      each one adjudicated, dated, and tied to the committed artifact that proves it. It is an
+      error record, not a calibration: none of it measures the models against known truth. A
+      summary publishes when the nine-story launch slate completes, because counts over four runs
+      would be noise dressed as a statistic. The raw ledger is in the repo at{' '}
+      <a href={repoPath('methodology/quality-ledger.yaml')} rel="noopener" class="text-navy underline">
+        methodology/quality-ledger.yaml
+      </a>{' '}
+      and can be read today.
     </p>
   </section>
 

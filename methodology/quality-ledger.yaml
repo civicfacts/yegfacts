@@ -1,0 +1,319 @@
+# Panel quality record (methodology v1.3)
+#
+# Adjudicated events involving the three panel seats: errors they made, and
+# catches they made that held up. One record per event. Collection began
+# 2026-09-01 and this file was seeded backwards from the four published runs.
+#
+# What this is NOT. It is an error record, not a calibration. Nothing here
+# measures a model against known truth — only against what a committed artifact
+# later showed. Counts over four runs are noise; a public summary ships when the
+# pre-registered nine-story launch slate completes, not before.
+#
+# Admission rule, applied strictly. An event is recorded only if it can be
+# traced to a committed artifact: an `errata.md`, a `gate/` report, a
+# `state.yaml` stage note, or a `round2_notes` entry that one of those
+# corroborates. Suspicions, unadjudicated cross-accusations and anything
+# resting on a reviewer's word alone are left out. That biases this file toward
+# undercounting, which is the right direction for a record of one's own errors.
+#
+# denominator:
+#   Claims reviewed per seat so far: 6 each (ebus-procurement-failure,
+#   ebus-82m-loss, ebus-cold-cities, climate-on-track,
+#   districts-travel-restrictions, wc-too-cold), across 4 published runs, all
+#   under methodology v1.0. Every rate computed from this file must use that
+#   denominator and say so.
+#
+# Fields:
+#   date        — when the event was adjudicated or caught (ISO-8601).
+#   story       — story slug.
+#   run         — repo path of the review run.
+#   stage       — where it was caught: staging | round2 | drafting | gate.
+#   seat        — the canonical seat name from the run manifest, never a
+#                 model's self-report. Two seats appear together only where the
+#                 committed artifact does not separate them.
+#   event       — fabricated-citation | false-accusation | unsupported-figure |
+#                 valid-catch | self-correction | gate-rejection.
+#   materiality — blocking if the defect would have reached published output had
+#                 the pipeline not caught it; minor if it could not have.
+#   disposition — what was done.
+#   notes       — the artifact that establishes it.
+
+events:
+  # --- electric buses, run 2026-08-31 -------------------------------------
+  - date: "2026-08-31"
+    story: electric-buses
+    run: reviews/electric-buses/2026-08-31
+    stage: staging
+    seat: Gemini 3.1 Pro
+    event: fabricated-citation
+    materiality: blocking
+    disposition: >
+      Excluded from the evidence registry at staging; no published statement
+      rests on it. Recorded in errata.md rather than edited out of the raw file.
+    notes: >
+      round1/gemini.json cites a CBC URL ending 1.7100000 as an article about
+      the Proterra lawsuit; the URL resolves to an unrelated CBC story. Caught
+      at evidence staging (status content-mismatch) and independently flagged in
+      round 2 by the Claude seat. Sources: errata.md item 1; run.yaml notes;
+      gate/release-check.md §5a and §5b.
+
+  - date: "2026-08-31"
+    story: electric-buses
+    run: reviews/electric-buses/2026-08-31
+    stage: round2
+    seat: Gemini 3.1 Pro
+    event: self-correction
+    materiality: minor
+    disposition: >
+      Recorded as a documented position change, not treated as an error. The
+      stated reason is evidentiary, not social — it moved on what the record
+      could carry, which is what cross-review is for.
+    notes: >
+      Downgraded ebus-procurement-failure from Supported to Partially supported,
+      because the sharpest shortfall figures rest on the City's untested
+      adversarial court filings and the buses continued daily service. Under the
+      v1.3 round-1 basis this no longer touches the canonical finding, which is
+      Partially supported either way. Source: round2/gemini.json
+      round2_notes.verdict_changes[0].
+
+  - date: "2026-08-31"
+    story: electric-buses
+    run: reviews/electric-buses/2026-08-31
+    stage: round2
+    seat: Claude Fable 5
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      Upheld. None of the flagged URLs entered the evidence registry, and the
+      findings resting on them were downgraded rather than published.
+    notes: >
+      Identified that every load-bearing citation in the Gemini seat's review
+      failed verification — implausibly round article IDs on the CBC and St.
+      Albert Gazette URLs, 404s on the Edmonton Journal, Concordia and TTC
+      pages. Sources: round2/claude.json round2_notes.errors_in_other_reviews[0];
+      gate/release-check.md §5a, which quotes it, and §5b, which lists five
+      known-bad citations traced to these round-2 notes.
+
+  - date: "2026-08-31"
+    story: electric-buses
+    run: reviews/electric-buses/2026-08-31
+    stage: round2
+    seat: GPT-5.6 Sol
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      Upheld. The affected findings were not published as verified evidence.
+    notes: >
+      Independently flagged that the Gemini seat's Edmonton Journal URL returned
+      404 and its CBC URL was content-mismatched, and that findings resting on
+      them (165 km range, fleet unavailability, warranty claims) must not be
+      labelled strong verified evidence when a retrievable court filing exists.
+      Sources: round2/gpt.json round2_notes.errors_in_other_reviews[0] and [2];
+      gate/release-check.md §5b.
+
+  - date: "2026-09-01"
+    story: electric-buses
+    run: reviews/electric-buses/2026-08-31
+    stage: drafting
+    seat: GPT-5.6 Sol + Gemini 3.1 Pro
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      All 16 findings fixed in the draft before the gate.
+    notes: >
+      Stage-6 faithfulness check of the Claude-drafted story and claims against
+      the merged evidence. The committed record gives the aggregate only — it
+      does not attribute the 16 findings between the two checking seats — so
+      this is one record naming both rather than two guessed ones. Source:
+      reviews/electric-buses/state.yaml, drafting stage note.
+
+  # --- climate targets, run 2026-09-01 ------------------------------------
+  - date: "2026-09-01"
+    story: climate-targets
+    run: reviews/climate-targets/2026-09-01
+    stage: round2
+    seat: Claude Fable 5
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      Upheld. The unfetchable document was not ingested, and the published claim
+      rests on City documents whose archived bytes the gate read directly.
+    notes: >
+      Flagged that the Gemini seat's sole primary-source citation
+      (DocumentId=241434) could not be fetched and that the quoted line appears
+      verbatim in the CBC article the same review cites — so the finding was
+      media-derived, not document-derived. Sources: round2/claude.json
+      round2_notes.errors_in_other_reviews[0]; gate/release-check.md §5a;
+      state.yaml round1 note recording the HTTP 404 at staging.
+
+  - date: "2026-09-01"
+    story: climate-targets
+    run: reviews/climate-targets/2026-09-01
+    stage: round2
+    seat: GPT-5.6 Sol
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      Upheld, same defect, found independently.
+    notes: >
+      Recorded that document 241434 could not be fetched during evidence
+      verification and that its contents must be treated as unverified unless
+      replaced by a fetchable source. Sources: round2/gpt.json
+      round2_notes.errors_in_other_reviews[1]; gate/release-check.md §5a.
+
+  - date: "2026-09-01"
+    story: climate-targets
+    run: reviews/climate-targets/2026-09-01
+    stage: round2
+    seat: Gemini 3.1 Pro
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      Upheld and adopted into the published story, which now says the City
+      "estimates" the reduction rather than asserting it as an outcome.
+    notes: >
+      Caught the other two seats treating the City's budgeted estimate of a
+      180,000-tonne reduction from funded projects as supporting evidence — a
+      funded intention presented as an observed outcome. Sources:
+      round2/gemini.json round2_notes.errors_in_other_reviews[0];
+      gate/release-check.md §5a, which records the correction reaching the
+      published text.
+
+  # --- fifteen-minute districts, run 2026-09-01 ---------------------------
+  - date: "2026-09-01"
+    story: fifteen-minute-districts
+    run: reviews/fifteen-minute-districts/2026-09-01
+    stage: round2
+    seat: Claude Fable 5
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      Upheld. The citation was not ingested; the published claim rests on the
+      adopted bylaw text and the Council minutes instead.
+    notes: >
+      Found that the Gemini seat's evidence item 1 cited a district-planning URL
+      returning a City of Edmonton 404, and that classifying a City webpage as
+      legal-audited was a source-type misclassification. Sources:
+      round2/claude.json round2_notes.errors_in_other_reviews[0] and [1];
+      gate/release-check.md §5b; state.yaml merge note.
+
+  - date: "2026-09-01"
+    story: fifteen-minute-districts
+    run: reviews/fifteen-minute-districts/2026-09-01
+    stage: round2
+    seat: GPT-5.6 Sol
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      Upheld. The misattributed figure did not reach the published story.
+    notes: >
+      Caught the Claude seat attributing a claim about the 2024 public hearings
+      to a Canadian Press article dated February 2023 — a citation that cannot
+      report a later event. Sources: round2/gpt.json
+      round2_notes.errors_in_other_reviews[0]; gate/release-check.md §5b.
+
+  - date: "2026-09-01"
+    story: fifteen-minute-districts
+    run: reviews/fifteen-minute-districts/2026-09-01
+    stage: round2
+    seat: GPT-5.6 Sol
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      Upheld and adopted; the published limitations carry the narrower wording
+      almost verbatim.
+    notes: >
+      Pushed back on the Claude seat's categorical framing that any travel
+      restriction "would require entirely separate instruments", since Council
+      can amend the District Policy — the supportable claim is that the current
+      instruments contain no such control. Sources: round2/gpt.json
+      round2_notes.errors_in_other_reviews[3]; gate/release-check.md §5b, which
+      records the correction reaching the published limitations.
+
+  # --- winter cycling, run 2026-09-01 -------------------------------------
+  - date: "2026-09-01"
+    story: winter-cycling
+    run: reviews/winter-cycling/2026-09-01
+    stage: gate
+    seat: Gemini 3.1 Pro
+    event: false-accusation
+    materiality: minor
+    disposition: >
+      Rejected at the publication gate and corrected in errata.md. The raw file
+      ships uncorrected by design — the record is annotated, never edited.
+    notes: >
+      Accused the Claude seat of citing the Active Travel Studies paper for
+      Québec winter-retention rates (Montréal 13.6%, Sherbrooke 9.09%) that "do
+      not appear in that source text". The gate read the archived bytes of
+      YF-EV-0030 and found all four figures verbatim; they are published as
+      KF-7, graded VERIFIED. Sources: round2/gemini.json
+      round2_notes.errors_in_other_reviews[1]; errata.md item 1;
+      gate/source-verification.md; gate/release-check.md §5b.
+
+  - date: "2026-09-01"
+    story: winter-cycling
+    run: reviews/winter-cycling/2026-09-01
+    stage: gate
+    seat: Gemini 3.1 Pro
+    event: false-accusation
+    materiality: minor
+    disposition: >
+      Rejected at the publication gate and corrected in errata.md.
+    notes: >
+      Accused the GPT seat of hallucinating Trondheim study findings (9.6% and
+      24.3% reductions, a 7,025-trip sample) that "do not appear in the source
+      text"; the figures appear in the staged Springer source. Recorded here as
+      a separate event from the Québec one because it names a different seat.
+      The errata entry describes both accusations together. Sources:
+      round2/gemini.json round2_notes.errors_in_other_reviews[3]; errata.md
+      item 1; gate/release-check.md §5a.
+
+  - date: "2026-09-01"
+    story: winter-cycling
+    run: reviews/winter-cycling/2026-09-01
+    stage: drafting
+    seat: Claude Fable 5
+    event: unsupported-figure
+    materiality: blocking
+    disposition: >
+      Dropped at drafting; appears nowhere in the published story or claim.
+      Preserved in the raw round-1 file and corrected in errata.md.
+    notes: >
+      round1/claude.json attributes a "3.4% mode share in 2021" figure for
+      Montréal to a source that does not contain it. Source: errata.md item 2.
+
+  - date: "2026-09-01"
+    story: winter-cycling
+    run: reviews/winter-cycling/2026-09-01
+    stage: round2
+    seat: Claude Fable 5
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      Upheld. The Eco-Counter homepage was not ingested and neither figure
+      reached the published claim.
+    notes: >
+      Fetched the Eco-Counter corporate homepage the GPT seat cited for
+      "Montreal 13-14% winter retention" and a "717 km year-round cycle network"
+      and found it contains no Montréal data, no retention figure and no network
+      length. Sources: round2/claude.json
+      round2_notes.errors_in_other_reviews[0]; gate/release-check.md §5c, which
+      names this catch as one of three known-bad citations.
+
+  - date: "2026-09-01"
+    story: winter-cycling
+    run: reviews/winter-cycling/2026-09-01
+    stage: round2
+    seat: Gemini 3.1 Pro
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      Upheld. The statement did not reach the published story or claim.
+    notes: >
+      Caught the Claude seat's suggested TL;DR stating that protected lanes
+      "are cleared to bare pavement within a day" — Edmonton's stated service
+      standard presented as an achieved outcome, with no compliance audit cited.
+      The GPT seat made the same finding independently. Sources:
+      round2/gemini.json round2_notes.errors_in_other_reviews[0];
+      round2/gpt.json round2_notes.errors_in_other_reviews[7];
+      gate/release-check.md §5e.

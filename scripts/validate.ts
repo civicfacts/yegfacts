@@ -17,7 +17,7 @@
  *   claim would fail CI on exactly the state the workflow is designed to have.
  * - **Changelog checks are the diff-independent half.** A `published` story must
  *   carry a `published` changelog entry. The two spec rules that compare a PR
- *   against its base — a changed `finding`/`confidence` needing a story entry,
+ *   against its base — a changed `finding`/`panel_agreement` needing a story entry,
  *   a touched `prompts/`/`scripts/merge*`/`scripts/synthesize*`/`methodology/`
  *   path needing a methodology entry — are not implemented here; see the TODO
  *   at the bottom of this file.
@@ -49,7 +49,7 @@ import {
   CANONICAL_FINDINGS,
   CHANGELOG_TYPES,
   COMMITMENT_STATUSES,
-  CONFIDENCE_LEVELS,
+  PANEL_AGREEMENT_LEVELS,
   STORY_STATUSES,
   TOPIC_SLUGS,
 } from '../src/lib/vocabulary.ts';
@@ -310,7 +310,7 @@ function checkClaims(): void {
       }
     }
     checkEnum(file, 'finding', data.finding, CANONICAL_FINDINGS);
-    checkEnum(file, 'confidence', data.confidence, CONFIDENCE_LEVELS);
+    checkEnum(file, 'panel_agreement', data.panel_agreement, PANEL_AGREEMENT_LEVELS);
 
     // Methodology version must be one the changelog actually records.
     const version = String(data.methodology_version ?? '');
@@ -655,7 +655,7 @@ function checkReviewRuns(): void {
 // base ref is available (`git diff --name-only origin/main...HEAD`), not in a
 // script that only ever sees the working tree:
 //
-//   1. A change to any claim's `finding` or `confidence` requires a matching
+//   1. A change to any claim's `finding` or `panel_agreement` requires a matching
 //      entry in the parent story's changelog.
 //   2. A change under `prompts/`, `scripts/merge*`, `scripts/synthesize*` or
 //      `methodology/` requires a new entry in `methodology/changelog.yaml`.

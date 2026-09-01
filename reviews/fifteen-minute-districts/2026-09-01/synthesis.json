@@ -2,16 +2,41 @@
   "story": "fifteen-minute-districts",
   "run": "2026-09-01",
   "methodology_version": "1.0",
-  "basis": "round2",
-  "generated_at": "2026-09-01T06:58:22.415Z",
+  "basis": "round1",
+  "round2_documented": true,
+  "generated_at": "2026-09-01T15:29:21.045Z",
   "claims": [
     {
       "id": "districts-travel-restrictions",
       "finding": "Contradicted",
-      "confidence": "High",
-      "agreement": "unanimous",
+      "panel_agreement": "Unanimous",
       "rationale": "Unanimous.",
       "reviewers": [
+        {
+          "provider": "claude",
+          "model_self_reported": "claude-fable-5",
+          "verdict": "Contradicted",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Per the brief, I evaluated both the strongest form (the instruments contain explicit travel restrictions, permits, penalties, or movement monitoring) and the weakest defensible form (the instruments create a mechanism that could enable such restrictions without further council action). I read the full consolidated District Policy text (Charter Bylaw 24000, office consolidation April 2026, 50 pages) as the primary evidence, plus the adopting council report. I did not read all 15 individual District Plan bylaws line by line; per the policy's own Chapter 1, those plans consist of maps showing where the District Policy applies plus area-specific land-use policies."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.1 Pro",
+          "verdict": "Contradicted",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton"
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "gpt-5",
+          "verdict": "Contradicted",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "I treated indirect changes to street design, parking, transportation investment, or development patterns as effects on travel conditions, not restrictions on where a person may go. A mechanism required an operative authorization tied to crossing district boundaries or monitoring individual movement. The possibility that Council could enact a different bylaw in the future was not treated as a current mechanism."
+        }
+      ],
+      "round2_positions": [
         {
           "provider": "claude",
           "model_self_reported": "claude-fable-5",

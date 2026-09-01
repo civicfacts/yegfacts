@@ -2,6 +2,7 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import type { Claim, Story } from '../lib/content';
+import { PANEL_AGREEMENT_GLOSS } from '../lib/findings';
 import { repoPath } from '../lib/site';
 
 /**
@@ -13,7 +14,9 @@ const REPO_ROOT = process.cwd();
 
 /**
  * AI review, three disclosure layers (spec §6):
- *   1. compact panel overview — per-claim reviewer verdicts and agreement;
+ *   1. compact panel overview — per-claim reviewer verdicts and panel agreement
+ *      (methodology v1.3: agreement over the locked round-1 multiset, glossed so
+ *      it cannot be read as a probability that the claim is true);
  *   2. each model expandable to key findings and what changed between rounds;
  *   3. links to the committed run artifacts — rendered ONLY for `published`
  *      stories, because the raw rounds, the frozen brief and the gate reports
@@ -73,8 +76,10 @@ const runArtifacts = runs.map((run) => ({
   <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">AI review</h2>
   <p class="mt-1.5 text-sm leading-relaxed text-muted">
     Three models research each claim independently, then cross-review each other’s findings. The
-    canonical finding is computed from their verdicts by a published, deterministic rule — the
-    models never vote and never decide. Authority comes from the{' '}
+    canonical finding is computed by a published, deterministic rule from the blind round-one
+    verdicts — the round in which the three are genuinely independent — and the models never vote
+    and never decide. Cross-review is where they document each other’s errors; what it changed is
+    shown below rather than folded into the finding. Authority comes from the{' '}
     <a href="/methodology" class="text-navy underline">methodology</a>, not from the models. Panel
     identity is read from the run manifest, not from what a model said it was.
   </p>
@@ -118,11 +123,14 @@ const runArtifacts = runs.map((run) => ({
                     />
                     {claim.data.finding}
                     <span class="block text-xs font-normal text-muted">
-                      {claim.data.review?.agreement} panel
+                      Panel agreement: {claim.data.panel_agreement}
                     </span>
                   </dd>
                 </div>
               </dl>
+              <p class="mt-2.5 text-xs leading-relaxed text-muted">
+                {PANEL_AGREEMENT_GLOSS[claim.data.panel_agreement]}
+              </p>
             </li>
           ))}
         </ul>
@@ -166,7 +174,10 @@ const runArtifacts = runs.map((run) => ({
                     ></span>
                     {claim.data.finding}
                     <span class="block pl-3.5 text-xs font-normal text-muted">
-                      {claim.data.review?.agreement} panel
+                      Panel agreement: {claim.data.panel_agreement}
+                    </span>
+                    <span class="block max-w-[18rem] pl-3.5 text-xs font-normal whitespace-normal text-muted">
+                      {PANEL_AGREEMENT_GLOSS[claim.data.panel_agreement]}
                     </span>
                   </td>
                 </tr>

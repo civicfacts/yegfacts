@@ -17,6 +17,7 @@ import {
   CHANGELOG_TYPES,
   COMMITMENT_STATUSES,
   CONFIDENCE_LEVELS,
+  PANEL_AGREEMENT_LEVELS,
   REVIEWER_VERDICTS,
   STORY_STATUSES,
   TOPIC_SLUGS,
@@ -27,6 +28,7 @@ export {
   CHANGELOG_TYPES,
   COMMITMENT_STATUSES,
   CONFIDENCE_LEVELS,
+  PANEL_AGREEMENT_LEVELS,
   REVIEWER_VERDICTS,
   STORY_STATUSES,
   TOPIC_SLUGS,
@@ -150,7 +152,12 @@ const claims = defineCollection({
     story: z.string().min(1),
     finding: z.enum(CANONICAL_FINDINGS),
     evidence_basis: z.string().min(1),
-    confidence: z.enum(CONFIDENCE_LEVELS),
+    /**
+     * Panel agreement over the locked round-1 multiset (methodology v1.3).
+     * Replaced a canonical `confidence`, which named something the method never
+     * computed. Per-reviewer confidence still lives in `review.reviewers`.
+     */
+    panel_agreement: z.enum(PANEL_AGREEMENT_LEVELS),
     methodology_version: z.string().min(1),
     /** Repo path of the review run that produced this verdict. */
     review_run: z.string().min(1),
@@ -182,7 +189,7 @@ const claims = defineCollection({
     /** Panel result for this claim; the AI review component renders it. */
     review: z
       .object({
-        agreement: z.enum(['Unanimous', 'Majority', 'Split']),
+        agreement: z.enum(PANEL_AGREEMENT_LEVELS),
         reviewers: z.array(panelReviewer).min(1),
       })
       .optional(),

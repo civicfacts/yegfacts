@@ -2,16 +2,42 @@
   "story": "electric-buses",
   "run": "2026-08-31",
   "methodology_version": "1.0",
-  "basis": "round2",
-  "generated_at": "2026-09-01T06:01:43.726Z",
+  "basis": "round1",
+  "round2_documented": true,
+  "generated_at": "2026-09-01T15:29:20.634Z",
   "claims": [
     {
       "id": "ebus-procurement-failure",
       "finding": "Partially supported",
-      "confidence": "Moderate",
-      "agreement": "adjacent",
-      "rationale": "Majority says part of the claim holds.",
+      "panel_agreement": "Adjacent",
+      "rationale": "Two read the claim as established, one as overreaching; the qualified reading wins.",
       "reviewers": [
+        {
+          "provider": "claude",
+          "model_self_reported": "claude-fable-5",
+          "verdict": "Supported",
+          "confidence": "Moderate",
+          "evidence_basis": "mostly-edmonton",
+          "interpretation_notes": "I treated the City's 2024 proof of claim as evidence of the City's formal assessment, not as proof of the underlying facts, per the brief. I looked separately for independent corroboration (union statements, comparable-fleet measurements of the same manufacturer, and undisputed bankruptcy-court events)."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.1 Pro",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Interpreted 'substantially failed' as material shortfalls against the 328km normal/268km cold range and severe reliability/support issues due to bankruptcy."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "gpt-5",
+          "verdict": "Partially supported",
+          "confidence": "Moderate",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "I treated documented shortfalls as evidence of failure even though some buses remained usable. The City's bankruptcy filings establish its allegations and recorded costs, not an adjudicated breach."
+        }
+      ],
+      "round2_positions": [
         {
           "provider": "claude",
           "model_self_reported": "claude-fable-5",
@@ -41,21 +67,45 @@
       ],
       "disagreement_notes": [
         "claude: Supported (Moderate)",
-        "gemini: Partially supported (Moderate)",
+        "gemini: Supported (High)",
         "gpt: Partially supported (Moderate)",
-        "claude interpretation: Unchanged from round 1: the City's legal filings are evidence of the City's formal assessment, not proof of the underlying facts, and I weight independent corroboration (TTC's measured data on the same manufacturer, union accounts, undisputed docket events) separately. Reviewer A reached Partially supported on the ground that the buses still delivered some service. I considered this and keep Supported: the brief operationalizes failure as documented material shortfalls against contracted specifications or published expectations, not total inoperability. A 38% shortfall against the extreme-cold guarantee, sub-50% availability, and a complete collapse of vendor support meet that bar even though buses ran daily. A's point is the right corrective to the circulating word 'disaster,' and my short answer already carries it, but it argues against the hyperbole, not against the normalized proposition. Reviewer A's Verita court document strengthens the record without changing its character; it is still the City's own account, so my confidence stays Moderate.",
-        "gemini interpretation: Interpreted 'substantially failed' as material shortfalls against contracted specifications. Evaluated whether the shortfalls constitute an absolute failure or a partial one, given the fleet's ongoing limited service and the adversarial nature of the City's claims.",
-        "gemini moved Supported → Partially supported: I downgraded my verdict because the most precise shortfalls (e.g., 165 km range) rely solely on the City's untested adversarial court filings rather than an independent audit, and other reviewers highlighted that the buses continue to deliver daily service, contradicting the 'complete disaster' absolute framing.",
-        "gpt interpretation: I retain Partially supported. TTC's independent Proterra results and Edmonton union accounts increase the plausibility of the City's allegations, but the decisive Edmonton range and availability figures remain measurements asserted by the City in an adversarial proceeding. Continued service and TTC's high pre-bankruptcy Proterra availability also prevent treating the procurement as total non-performance."
+        "claude interpretation: I treated the City's 2024 proof of claim as evidence of the City's formal assessment, not as proof of the underlying facts, per the brief. I looked separately for independent corroboration (union statements, comparable-fleet measurements of the same manufacturer, and undisputed bankruptcy-court events).",
+        "gemini interpretation: Interpreted 'substantially failed' as material shortfalls against the 328km normal/268km cold range and severe reliability/support issues due to bankruptcy.",
+        "gpt interpretation: I treated documented shortfalls as evidence of failure even though some buses remained usable. The City's bankruptcy filings establish its allegations and recorded costs, not an adjudicated breach."
       ]
     },
     {
       "id": "ebus-82m-loss",
       "finding": "Not established",
-      "confidence": "High",
-      "agreement": "unanimous",
+      "panel_agreement": "Unanimous",
       "rationale": "Unanimous.",
       "reviewers": [
+        {
+          "provider": "claude",
+          "model_self_reported": "claude-fable-5",
+          "verdict": "Not established",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Per the brief, I first established the identity of the $82M figure in primary-adjacent records before treating it as a loss."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.1 Pro",
+          "verdict": "Not established",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Evaluated whether $82M represents a realized, audited net loss versus a legal claim for damages."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "gpt-5",
+          "verdict": "Not established",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "I treated the circulating $82 million figure as Canadian dollars because it appears in Canadian reporting without a foreign-currency label. A proof-of-claim amount is alleged damages, not an audited net loss."
+        }
+      ],
+      "round2_positions": [
         {
           "provider": "claude",
           "model_self_reported": "claude-fable-5",
@@ -86,10 +136,35 @@
     {
       "id": "ebus-cold-cities",
       "finding": "Contradicted",
-      "confidence": "High",
-      "agreement": "unanimous",
+      "panel_agreement": "Unanimous",
       "rationale": "Unanimous.",
       "reviewers": [
+        {
+          "provider": "claude",
+          "model_self_reported": "claude-fable-5",
+          "verdict": "Contradicted",
+          "confidence": "Moderate",
+          "evidence_basis": "mostly-comparative",
+          "interpretation_notes": "The claim is a generalization from one manufacturer's product in one period to a technology category. I tested whether the cross-city evidence shows a category failure or a vendor-specific one, and separately whether cold-weather range loss (real everywhere) amounts to unsuitability."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.1 Pro",
+          "verdict": "Contradicted",
+          "confidence": "Moderate",
+          "evidence_basis": "edmonton-plus-comparators",
+          "interpretation_notes": "Evaluated whether Edmonton's failure with Proterra proves unsuitability of the entire technology category for all cold-climate cities."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "gpt-5",
+          "verdict": "Contradicted",
+          "confidence": "High",
+          "evidence_basis": "edmonton-plus-comparators",
+          "interpretation_notes": "I interpreted 'unsuitable' to mean unable to provide useful, dependable scheduled service with reasonable route, heating and charging design. Cold-weather energy and range penalties alone do not establish unsuitability."
+        }
+      ],
+      "round2_positions": [
         {
           "provider": "claude",
           "model_self_reported": "claude-fable-5",

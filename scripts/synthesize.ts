@@ -8,11 +8,22 @@
  *
  *   npx tsx scripts/synthesize.ts reviews/electric-buses/2026-08-31
  *
- * Round 2 is the panel's final word, so it is used when present. A run whose
- * round-2 files are missing falls back to round 1 and is marked
- * `round1-only`, because a finding synthesised before cross-review is a weaker
- * artifact and must not be silently indistinguishable from one that went the
- * full distance.
+ * The canonical basis is ROUND 1 (methodology v1.3). Round 1 is the only round
+ * in which the three reviewers are genuinely independent: in round 2 each one
+ * has read the other two, so a round-2 multiset can no longer be treated as
+ * three independent readings of the record. Synthesising from it quietly turned
+ * a deliberative round into the vote.
+ *
+ * Round 2 keeps its job, which is error documentation, not verdict production.
+ * Its files are still read here — every reviewer's final position is carried
+ * into `round2_positions` so dissent and movement stay on the page — and both
+ * rounds are still scanned for the framing halt. A material error caught in
+ * round 2 (a fabricated citation, wrong evidence) is not silently averaged in:
+ * it triggers a fresh blind re-run of the affected claim.
+ *
+ * Adopting this changed no published finding. Verified on all six published
+ * claims before the switch: the round-1 and round-2 multisets resolve to the
+ * same canonical finding on every one.
  *
  * A run halts here, nonzero and unsynthesised, when any reviewer flagged
  * `MATERIAL FRAMING CONCERN` against the brief (methodology v1.2). See
@@ -22,8 +33,13 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { listFiles, relative, repoPath, currentMethodologyVersion } from './lib/repo.ts';
 import { validateReviewFile, type Review, type ReviewClaim } from './lib/review-schema.ts';
-import { synthesize, type Agreement } from './synthesis-matrix.ts';
-import type { CanonicalFinding, Confidence, ReviewerVerdict } from '../src/lib/vocabulary.ts';
+import { synthesize } from './synthesis-matrix.ts';
+import type {
+  CanonicalFinding,
+  Confidence,
+  PanelAgreement,
+  ReviewerVerdict,
+} from '../src/lib/vocabulary.ts';
 
 type ReviewerPosition = {
   provider: string;
@@ -40,10 +56,16 @@ type ReviewerPosition = {
 type ClaimSynthesis = {
   id: string;
   finding: CanonicalFinding;
-  confidence: Confidence;
-  agreement: Agreement;
+  panel_agreement: PanelAgreement;
   rationale: string;
+  /** The canonical basis: the three locked round-1 positions. */
   reviewers: ReviewerPosition[];
+  /**
+   * Each reviewer's final round-2 position, when a round 2 ran. Not an input to
+   * the finding — it is the documented record of what cross-review changed, so
+   * a reader can see dissent and movement rather than infer it.
+   */
+  round2_positions: ReviewerPosition[];
   disagreement_notes: string[];
 };
 
@@ -51,8 +73,10 @@ type Synthesis = {
   story: string;
   run: string;
   methodology_version: string;
-  /** `round2` when the full cross-review ran; `round1-only` when it did not. */
-  basis: 'round2' | 'round1-only';
+  /** Always `round1` since methodology v1.3; kept explicit in the artifact. */
+  basis: 'round1';
+  /** Whether a cross-review round ran and is reflected in `round2_positions`. */
+  round2_documented: boolean;
   generated_at: string;
   claims: ClaimSynthesis[];
 };
@@ -119,19 +143,32 @@ function findClaim(review: Review, id: string): ReviewClaim | undefined {
   return review.claims.find((claim) => claim.id === id);
 }
 
+/**
+ * One round's positions on one claim.
+ *
+ * `firstRound` is passed only when reading round 2, so that a reviewer who
+ * moved carries `changed_from`/`changed_why`. A reviewer missing from a round
+ * is fatal for round 1 (the canonical basis must be complete) and skipped for
+ * round 2, where a reviewer may legitimately not restate every claim.
+ */
 function positionsFor(
   id: string,
-  finalRound: LoadedRound[],
-  firstRound: LoadedRound[],
+  round: LoadedRound[],
+  firstRound: LoadedRound[] = [],
+  { required = true }: { required?: boolean } = {},
 ): ReviewerPosition[] {
-  return finalRound.map(({ provider, review }) => {
+  const out: ReviewerPosition[] = [];
+  for (const { provider, review } of round) {
     const claim = findClaim(review, id);
-    if (!claim) throw new Error(`${provider} has no verdict for claim "${id}"`);
+    if (!claim) {
+      if (required) throw new Error(`${provider} has no verdict for claim "${id}"`);
+      continue;
+    }
     const change = review.round2_notes?.verdict_changes?.find((entry) => entry.claim === id);
     const before = firstRound.find((entry) => entry.provider === provider);
     const previous = before ? findClaim(before.review, id)?.verdict : undefined;
     const movedFrom = change?.from ?? (previous && previous !== claim.verdict ? previous : undefined);
-    return {
+    out.push({
       provider,
       model_self_reported: review.reviewer.model_self_reported,
       verdict: claim.verdict,
@@ -140,8 +177,9 @@ function positionsFor(
       ...(movedFrom ? { changed_from: movedFrom as ReviewerVerdict } : {}),
       ...(change?.why ? { changed_why: change.why } : {}),
       ...(claim.interpretation_notes ? { interpretation_notes: claim.interpretation_notes } : {}),
-    };
-  });
+    });
+  }
+  return out;
 }
 
 function disagreementNotes(positions: ReviewerPosition[], id: string): string[] {
@@ -166,8 +204,6 @@ function disagreementNotes(positions: ReviewerPosition[], id: string): string[] 
 export function synthesizeRun(runDir: string): Synthesis {
   const round1 = loadRound(runDir, 1);
   const round2 = loadRound(runDir, 2);
-  const final = round2.length > 0 ? round2 : round1;
-  const basis: Synthesis['basis'] = round2.length > 0 ? 'round2' : 'round1-only';
 
   const concerns = [...framingConcerns(round1, 1), ...framingConcerns(round2, 2)];
   if (concerns.length > 0) {
@@ -178,37 +214,35 @@ export function synthesizeRun(runDir: string): Synthesis {
     );
   }
 
-  if (final.length === 0) throw new Error(`no review JSON found under ${relative(runDir)}`);
-  if (final.length !== 3) {
+  if (round1.length === 0) throw new Error(`no round-1 review JSON found under ${relative(runDir)}`);
+  if (round1.length !== 3) {
     throw new Error(
-      `synthesis needs exactly 3 reviewers, found ${final.length} (${final
+      `synthesis needs exactly 3 round-1 reviewers, found ${round1.length} (${round1
         .map((entry) => entry.provider)
         .join(', ')}). A reviewer that failed after retry halts the run before synthesis.`,
     );
   }
 
-  const claims: ClaimSynthesis[] = claimIds(final).map((id) => {
-    const reviewers = positionsFor(id, final, round1);
-    const result = synthesize(
-      reviewers.map((reviewer) => reviewer.verdict),
-      reviewers.map((reviewer) => reviewer.confidence),
-    );
+  const claims: ClaimSynthesis[] = claimIds(round1).map((id) => {
+    const reviewers = positionsFor(id, round1);
+    const result = synthesize(reviewers.map((reviewer) => reviewer.verdict));
     return {
       id,
       finding: result.finding,
-      confidence: result.confidence,
-      agreement: result.agreement,
+      panel_agreement: result.agreement,
       rationale: result.rationale,
       reviewers,
+      round2_positions: positionsFor(id, round2, round1, { required: false }),
       disagreement_notes: disagreementNotes(reviewers, id),
     };
   });
 
   return {
-    story: final[0]!.review.story,
+    story: round1[0]!.review.story,
     run: path.basename(runDir),
     methodology_version: currentMethodologyVersion(),
-    basis,
+    basis: 'round1',
+    round2_documented: round2.length > 0,
     generated_at: new Date().toISOString(),
     claims,
   };
@@ -225,9 +259,13 @@ function main(): void {
   mkdirSync(runDir, { recursive: true });
   const out = path.join(runDir, 'synthesis.json');
   writeFileSync(out, `${JSON.stringify(synthesis, null, 2)}\n`);
-  console.log(`wrote ${relative(out)} (${synthesis.basis}, ${synthesis.claims.length} claims)`);
+  console.log(
+    `wrote ${relative(out)} (basis ${synthesis.basis}` +
+      `${synthesis.round2_documented ? ', round 2 documented' : ''}, ` +
+      `${synthesis.claims.length} claims)`,
+  );
   for (const claim of synthesis.claims) {
-    console.log(`  ${claim.id}: ${claim.finding} / ${claim.confidence} (${claim.agreement})`);
+    console.log(`  ${claim.id}: ${claim.finding} / ${claim.panel_agreement}`);
   }
 }
 

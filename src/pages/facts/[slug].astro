@@ -7,7 +7,7 @@ import Finding from '../../components/Finding.astro';
 import PendingBanner from '../../components/PendingBanner.astro';
 import SeenCards from '../../components/SeenCards.astro';
 import TopicTags from '../../components/TopicTags.astro';
-import { FINDING_GLOSS } from '../../lib/findings';
+import { FINDING_GLOSS, PANEL_AGREEMENT_GLOSS } from '../../lib/findings';
 import { SITE, issueUrl, mailto } from '../../lib/site';
 import {
   claimTopics,
@@ -196,9 +196,14 @@ const heading = 'mt-14 text-xl font-extrabold tracking-[-0.015em] text-forest';
                   <dd class="text-[0.9375rem] leading-relaxed">{claim.data.evidence_basis}</dd>
 
                   <dt class="text-xs font-semibold tracking-[0.08em] text-muted uppercase">
-                    Confidence
+                    Panel agreement
                   </dt>
-                  <dd class="text-[0.9375rem]">{claim.data.confidence}</dd>
+                  <dd>
+                    <span class="text-[0.9375rem]">{claim.data.panel_agreement}</span>
+                    <p class="mt-1 text-sm leading-relaxed text-muted">
+                      {PANEL_AGREEMENT_GLOSS[claim.data.panel_agreement]}
+                    </p>
+                  </dd>
                 </dl>
 
                 {claim.data.key_facts.length > 0 && (
@@ -238,7 +243,7 @@ const heading = 'mt-14 text-xl font-extrabold tracking-[-0.015em] text-forest';
                     {claim.data.finding}
                   </span>
                   <CopyButton
-                    text={`${claim.data.question} — ${claim.data.finding} (${claim.data.confidence} confidence). YEGFacts.ca`}
+                    text={`${claim.data.question} — ${claim.data.finding} (${claim.data.panel_agreement} panel). YEGFacts.ca`}
                     url={`${pageUrl}#${claim.data.id}`}
                     label="Copy citation"
                   />

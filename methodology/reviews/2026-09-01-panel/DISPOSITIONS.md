@@ -91,6 +91,8 @@ on all four.
    build; v1.x.
 7. **Real social-post captures** to replace composite paraphrases
    (all three) — requires a human browser session.
+8. **Harden `run-reviewer.sh` round-2 package assembly against prompt
+   injection from fetched quote text** (advisory from exposure audit).
 
 ## Rejected / clarified
 

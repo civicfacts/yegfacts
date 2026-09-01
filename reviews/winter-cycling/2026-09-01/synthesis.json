@@ -2,16 +2,42 @@
   "story": "winter-cycling",
   "run": "2026-09-01",
   "methodology_version": "1.0",
-  "basis": "round2",
-  "generated_at": "2026-09-01T06:58:21.685Z",
+  "basis": "round1",
+  "round2_documented": true,
+  "generated_at": "2026-09-01T15:29:21.458Z",
   "claims": [
     {
       "id": "wc-too-cold",
       "finding": "Contradicted",
-      "confidence": "Moderate",
-      "agreement": "unanimous",
+      "panel_agreement": "Unanimous",
       "rationale": "Unanimous.",
       "reviewers": [
+        {
+          "provider": "claude",
+          "model_self_reported": "claude-fable-5",
+          "verdict": "Contradicted",
+          "confidence": "High",
+          "evidence_basis": "edmonton-plus-comparators",
+          "interpretation_notes": "Followed the brief's operationalization: climate as the binding constraint. I treated 'meaningful' as a non-trivial share of trips (roughly, a share a transportation planner would count as a mode, not a rounding error), and evaluated the circulating forms ('nobody bikes at -30', 'bike lanes are for 4 months') as empirical claims about whether winter cycling occurs and can scale. Edmonton's currently low uptake was not counted as evidence for the claim, per the brief."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "gemini-3.1-pro",
+          "verdict": "Contradicted",
+          "confidence": "High",
+          "evidence_basis": "edmonton-plus-comparators",
+          "interpretation_notes": "The claim asserts that winter climate is the absolute, binding constraint preventing cycling from functioning as transportation. Therefore, evidence of meaningful winter cycling in comparable cold cities contradicts the claim, whereas Edmonton's current low overall mode share does not inherently prove climate is the cause."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "gpt-5.6-sol",
+          "verdict": "Contradicted",
+          "confidence": "Moderate",
+          "evidence_basis": "edmonton-plus-comparators",
+          "interpretation_notes": "I treated a winter cycling share of 10% of all trips as plainly non-trivial. I evaluated feasibility, not whether Edmonton currently achieves that share. Counter detections are evidence of use but are not mode share, unique riders or necessarily transportation trips."
+        }
+      ],
+      "round2_positions": [
         {
           "provider": "claude",
           "model_self_reported": "claude-fable-5",
