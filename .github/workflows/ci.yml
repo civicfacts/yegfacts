@@ -33,6 +33,13 @@ jobs:
       - name: Validate content
         run: npm run validate
 
+      # The repo is public, so everything tracked is published. The fail
+      # classes — secrets, private-evidence leaks, unlicensed archives, local
+      # paths — block the push; PII and long quotes warn and are dispositioned
+      # in the periodic full-tree audit (methodology/exposure-audit.md).
+      - name: Public-exposure audit
+        run: npm run audit:exposure
+
       # The synthesis matrix: exhaustive over all 20 verdict multisets and
       # permutation-invariant over all 64 ordered triples (spec §5, §8).
       - name: Unit tests

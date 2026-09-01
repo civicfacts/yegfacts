@@ -1,3 +1,13 @@
+> **What this file is.** The raw, unedited transcript of the August 2026
+> brainstorming conversations that preceded this project — committed for
+> transparency about where YEGFacts came from. Nothing in it is
+> methodology: it predates the methodology, the review panel, and every
+> published finding. It records the founder's personal starting views and
+> business thinking, including the conversation's own pushback that those
+> views must not become the site's editorial position — which is why the
+> methodology that followed was designed so they cannot. Read it as
+> provenance, not policy.
+
 # YEGFacts.ca
 
 ### user

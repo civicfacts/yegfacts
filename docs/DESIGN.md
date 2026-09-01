@@ -26,8 +26,8 @@ The gate reports are committed with the run, so the check is inspectable rather
 than asserted.
 
 The full audit trail — content, evidence registry, prompts, scripts, review
-artifacts and edit history — is version-controlled and is published at
-github.com/civicfacts/yegfacts (repository being opened to the public).
+artifacts and edit history — is public at
+github.com/civicfacts/yegfacts.
 
 The goal for v1 is a civic tool, not a platform: success is Edmontonians citing
 it in real arguments and a journalist using it.
@@ -36,7 +36,7 @@ Operator disclosure: YEGFacts is run by Ildar Abdulin, with an interests note
 on the About page. Contributions through the support page fund research and
 operating costs; contributors get no editorial influence, and every verdict
 shows its evidence, model reviews and revision history, so published changes are
-inspectable in the version-controlled history.
+inspectable in the public git history.
 
 ## 2. Content model
 

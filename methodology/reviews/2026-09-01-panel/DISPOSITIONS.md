@@ -47,27 +47,45 @@ beside this file. This document records what was done with every finding.
 - **Private evidence dead-ends the audit** (Claude, Gemini). Evidence
   pages now render permitted excerpts and a verify-independently path.
 
-## Founder decisions required (not changed tonight)
+## Decisions — resolved 2026-09-01 (methodology v1.3)
 
-1. **Repo is private** (Claude, CRITICAL — the single biggest gap).
-   Flipping visibility is the founder's action:
-   `gh repo edit civicfacts/yegfacts --visibility public`.
-2. **Synthesize from round 1 instead of round 2** (GPT #4; Claude #5).
-   The panel argues round 2 destroys independence via anchoring, so the
-   deterministic matrix combines dependent judgments. A real methodology
-   redesign (v1.3 candidate): synthesis on locked round-1 verdicts,
-   cross-review demoted to error-documentation that can trigger a fresh
-   blind run. Would warrant re-running published stories.
-3. **Rename canonical "confidence" to "panel agreement"** (GPT #6).
-   Public-vocabulary change; touches every page and the matrix. Panel is
-   right that the current label measures panel shape, not truth.
-4. **Matrix suppresses affirmative findings** (Gemini #9): {S,S,P}
-   resolving to Partially supported gives the most hedged model a veto.
-   Counter-consideration: the cautious lean is deliberate. Founder call.
-5. **Calibration ledger** (Claude #3): publish per-model error tallies
-   from round-2 catches and gate rejections, so "unanimous" can be
-   weighed against a track record. Needs a few more stories of data;
-   worth building at ~10 stories.
+The founder delegated these; the decision-maker took written second and
+third opinions from GPT-5.6 Sol and Gemini 3.1 Pro (advisory briefs and
+full responses preserved in the session record). Both advisors converged
+on all four.
+
+1. **Repo visibility** — RESOLVED: founder made the repo public on
+   2026-09-01. Site wording re-hardened the same day.
+2. **Synthesize from round 1** (GPT #4; Claude #5) — ADOPTED. Synthesis
+   consumes locked round-1 verdicts; round 2 is retained as an
+   error-documentation channel rendered as documented positions; a
+   material error caught in round 2 (fabricated citation, wrong
+   evidence) triggers a fresh blind re-run of the affected claim.
+   Verified before adoption: round-1 and round-2 multisets produce
+   identical canonical findings on all six published claims, so no
+   published verdict changed.
+3. **Rename canonical "confidence"** (GPT #6) — ADOPTED as **Panel
+   agreement**: Unanimous / Adjacent / Split, computed from the round-1
+   multiset. Per-reviewer confidence stays visible in the AI review.
+   Displayed gloss makes explicit that agreement measures the panel, not
+   the probability of truth.
+4. **Matrix cautious lean** (Gemini #9) — KEPT, rationale now published:
+   Supported means the proposition as written is affirmatively
+   established; a qualification identified by one reviewer does not
+   disappear because two others missed it, and for a fact-checking site
+   overclaiming is the costlier error. The vote composition is always
+   displayed, which answers the veto concern without publishing a
+   stronger claim than every reviewer accepted.
+5. **Error ledger** (Claude #3) — ADOPTED as the **panel quality
+   record**: adjudicated event records (model, methodology version,
+   stage, error class, disposition, denominator) captured from now on
+   and seeded retroactively from the four published runs; public
+   summary page ships when the pre-registered nine-story launch slate
+   completes. Named an error ledger, not "calibration" — error counts
+   do not calibrate against known truth.
+
+## Remaining backlog (no decision blocked)
+
 6. **"Audit this claim" page** (GPT #11): one generated page per claim
    linking every stage of the chain with statuses. Strong idea; medium
    build; v1.x.
