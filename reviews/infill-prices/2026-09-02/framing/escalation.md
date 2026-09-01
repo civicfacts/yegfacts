@@ -40,7 +40,7 @@ once more and frozen on FRAME OK.
 ## Resolution
 
 2026-09-02. The founder declined to arbitrate editorial content and
-placed it with Stew (board decision D-0020, methodology v1.7.1). As
+placed it with Stew (board decision D-0020, methodology v1.8). As
 editor, Stew adopts resolutions 1 to 8 above as written, including
 dropping Claim 3; the story returns to two claims. What the checker
 still objected to is on the record in check-3.md; check 4 is a

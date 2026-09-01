@@ -47,12 +47,12 @@ also shows a regress: a predeclared cutoff is asked for an alternative,
 and the alternative would then need one too. I propose a one-line bound
 in the prompt: a cutoff justified from an identified standard, or
 stated with one alternative and results under both, is sufficient. That
-is a prompt change (v1.7.1) and is listed for your decision separately.
+is a prompt change (v1.8) and is listed for your decision separately.
 
 ## Resolution
 
 2026-09-02. The founder declined to arbitrate editorial content and
-placed it with Stew (board decision D-0020, methodology v1.7.1). As
+placed it with Stew (board decision D-0020, methodology v1.8). As
 editor, Stew adopts resolutions 1 to 7 above as written. What the
 checker still objected to, and would still object to, is on the record
 in check-3.md; check 4 is a confirmation run, not a fourth negotiation.
