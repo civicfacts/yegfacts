@@ -2,7 +2,6 @@ export const SITE = {
   name: 'YEGFacts.ca',
   url: 'https://yegfacts.ca',
   tagline: 'Edmonton civic evidence, checked against the record.',
-  hero: 'Understand Edmonton. Check the claims. See the evidence.',
   email: 'hello@yegfacts.ca',
   /** Where a reader asks to verify a privately-archived source against its hash. */
   researchEmail: 'research@yegfacts.ca',

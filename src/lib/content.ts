@@ -24,6 +24,20 @@ export async function publicStories(): Promise<Story[]> {
   return stories.sort((a, b) => b.data.last_verified.localeCompare(a.data.last_verified));
 }
 
+/**
+ * Stories that have been through the panel, newest verification first.
+ *
+ * Narrower than `publicStories()` on purpose: the home page is built out of
+ * findings, and a `pending-review` story has none yet. Ties on `last_verified`
+ * are broken by id so the order is explicit.
+ */
+export async function publishedStories(): Promise<Story[]> {
+  const stories = await getCollection('stories', (story) => story.data.status === 'published');
+  return stories.sort(
+    (a, b) => b.data.last_verified.localeCompare(a.data.last_verified) || a.id.localeCompare(b.id),
+  );
+}
+
 /** Claims belonging to stories the public can see, keyed by claim id. */
 export async function publicClaims(): Promise<Claim[]> {
   const visible = new Set((await publicStories()).map((story) => story.id));

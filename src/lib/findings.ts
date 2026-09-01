@@ -32,3 +32,15 @@ export const PANEL_AGREEMENT_GLOSS: Record<PanelAgreement, string> = {
   Adjacent: 'Two reviewers landed one step from the third; the cautious resolution is shown.',
   Split: 'The panel materially disagreed; the disagreement is shown, not averaged.',
 };
+
+/**
+ * Subtle semantic tone per finding. The word carries the meaning; colour is a
+ * whisper (spec §6). One map, so every component that colours a finding agrees.
+ */
+export const FINDING_TONE: Record<CanonicalFinding, { text: string; border: string }> = {
+  Supported: { text: 'text-forest', border: 'border-forest' },
+  'Partially supported': { text: 'text-navy', border: 'border-navy' },
+  'Not established': { text: 'text-muted', border: 'border-rule-strong' },
+  Contradicted: { text: 'text-[#7a2f22]', border: 'border-[#7a2f22]' },
+  Mixed: { text: 'text-gold', border: 'border-gold' },
+};

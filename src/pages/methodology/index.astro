@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { PANEL_AGREEMENT_GLOSS } from '../../lib/findings';
+import { launchSlate } from '../../lib/slate';
 import { SITE, repoPath } from '../../lib/site';
 import { PANEL_AGREEMENT_LEVELS } from '../../lib/vocabulary';
 import { toc } from '../../lib/toc';
@@ -44,35 +45,11 @@ const stages = [
 ];
 
 /**
- * The five launch-slate stories that have not run yet, with the claims
- * pre-registered for them in `docs/DESIGN.md` §7. Expected findings are
- * deliberately omitted — publishing a hypothesis beside a claim prejudges it.
+ * The launch-slate stories that have not run yet. The slate itself lives in
+ * `src/lib/slate.ts`, so this page and the home page cannot drift on what was
+ * pre-registered; an entry drops off this list the moment its story publishes.
  */
-const remainingSlate = [
-  {
-    story: 'Active transportation investment',
-    claims:
-      'Edmonton spends $100 million a year on bike lanes; the active-transportation network has reduced congestion.',
-  },
-  {
-    story: 'Parking reform',
-    claims:
-      'Edmonton banned parking and new buildings provide none; removing parking minimums made housing more affordable.',
-  },
-  {
-    story: 'Infill and zoning',
-    claims:
-      '8-plexes can be built on every lot; sewer capacity is not checked before infill is approved.',
-  },
-  {
-    story: 'Vision Zero',
-    claims: 'Edmonton is making steady progress toward Vision Zero.',
-  },
-  {
-    story: 'Downtown',
-    claims: 'Downtown is dead and nobody goes there any more.',
-  },
-];
+const remainingSlate = (await launchSlate()).filter((row) => !row.published);
 
 /**
  * The three panel-agreement values, in the order a reader meets them. The gloss

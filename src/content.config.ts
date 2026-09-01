@@ -100,6 +100,11 @@ const stories = defineCollection({
       seen: z.array(seenCard).default([]),
       /** Hostile or colloquial phrasings that redirect here. */
       aliases: z.array(z.string()).default([]),
+      /**
+       * Pins this story's first claim as the home-page example. Set on at most
+       * one story; when none is set the newest-verified story is used.
+       */
+      featured: z.boolean().default(false),
       status: z.enum(STORY_STATUSES),
       as_of: isoDate,
       last_verified: isoDate,

@@ -1,45 +1,149 @@
 ---
+import { getCollection } from 'astro:content';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
+
 import Base from '../layouts/Base.astro';
+import Finding from '../components/Finding.astro';
+import FindingsBoard from '../components/FindingsBoard.astro';
 import Wordmark from '../components/Wordmark.astro';
-import StoryList from '../components/StoryList.astro';
+import { claimsForStory, orderedTopics, publishedStories, type Claim } from '../lib/content';
 import { SITE } from '../lib/site';
-import { claimsForStory, orderedTopics, publicStories, type Claim } from '../lib/content';
+import { launchSlate } from '../lib/slate';
+import { loadRunManifest } from '../../scripts/lib/review-schema.ts';
+import { highestMethodologyVersion } from '../../scripts/lib/repo.ts';
+import { methodologyChanges } from '../lib/methodology';
 
 /**
- * Answer-retrieval, not a blog index (spec §6). Draft stories never reach this
- * page: `publicStories()` is the single visibility gate.
+ * The home page is the record, not an index of it. Everything below is read out
+ * of the content collections, the evidence registry, the review manifests and
+ * the methodology changelog at build time, so no number here can be stale or
+ * hand-maintained.
  */
-const stories = await publicStories();
-const topics = await orderedTopics();
+const stories = await publishedStories();
 
 const claimsByStory: Record<string, Claim[]> = {};
 for (const story of stories) {
   claimsByStory[story.id] = await claimsForStory(story);
 }
 
-const recentlyVerified = stories.slice(0, 6);
+/** One claim stands at the top as the worked example of what the site produces. */
+const featuredStory = stories.find((story) => story.data.featured) ?? stories[0];
+/** The story's primary claim when it names one, else the first it lists. */
+const featuredClaims = featuredStory ? (claimsByStory[featuredStory.id] ?? []) : [];
+const featuredClaim =
+  featuredClaims.find((claim) => claim.data.id === featuredStory?.data.primary_claim) ??
+  featuredClaims[0];
 
-const corrected = stories
-  .filter((story) =>
-    story.data.changelog.some(
-      (entry) => entry.type === 'correction' || entry.type === 'verdict-change',
-    ),
+/**
+ * How many reviewers actually sat on the featured claim's panel, read from the
+ * run manifest rather than asserted in prose. Round 1 is the blind round, so it
+ * is the round the sentence is about.
+ */
+let reviewerCount: number | undefined;
+if (featuredClaim) {
+  const manifestPath = path.join(process.cwd(), featuredClaim.data.review_run, 'run.yaml');
+  if (existsSync(manifestPath)) {
+    const manifest = loadRunManifest(manifestPath);
+    const providers = new Set(
+      manifest.runs.filter((seat) => seat.round === 1).map((seat) => seat.provider),
+    );
+    reviewerCount = providers.size > 0 ? providers.size : undefined;
+  }
+}
+
+const evidenceCount = (await getCollection('evidence')).length;
+const methodologyVersion = highestMethodologyVersion(methodologyChanges());
+
+const CHANGE_LABELS: Record<'correction' | 'verdict-change', string> = {
+  correction: 'Correction',
+  'verdict-change': 'Verdict change',
+};
+
+/** The note up to its first full stop, so the list reads as a list. */
+function firstSentence(note: string): string {
+  const trimmed = note.trim();
+  const end = /[.!?](?=\s|$)/.exec(trimmed);
+  return end ? trimmed.slice(0, end.index + 1) : trimmed;
+}
+
+const corrections = stories
+  .flatMap((story) =>
+    story.data.changelog
+      .filter((entry) => entry.type === 'correction' || entry.type === 'verdict-change')
+      .map((entry) => ({ story, entry })),
   )
-  .slice(0, 4);
+  .sort(
+    (a, b) =>
+      b.entry.date.localeCompare(a.entry.date) ||
+      a.story.data.title.localeCompare(b.story.data.title),
+  )
+  .slice(0, 5)
+  .map((row) => {
+    const sentence = firstSentence(row.entry.note);
+    return { ...row, sentence, truncated: sentence !== row.entry.note.trim() };
+  });
 
-const storyById = new Map(stories.map((story) => [story.id, story]));
+const slate = (await launchSlate()).map((row) => ({
+  ...row,
+  publishedOn:
+    row.published?.data.changelog.find((item) => item.type === 'published')?.date ??
+    row.published?.data.last_verified,
+}));
+const doneCount = slate.filter((row) => row.published).length;
+
+const topics = (await orderedTopics()).map((topic) => ({
+  ...topic.data,
+  count: stories.filter((story) => story.data.topics.includes(topic.data.slug)).length,
+}));
+
+const heading = 'text-xl font-extrabold tracking-[-0.015em] text-forest';
+const label = 'text-xs font-semibold tracking-[0.09em] text-muted uppercase';
+const lead = 'mt-2 max-w-prose text-[0.9375rem] text-pretty leading-relaxed text-muted';
+const stepRow = 'grid grid-cols-[2ch_1fr] gap-x-4 py-4';
+const stepNumber = 'font-semibold text-gold tabular';
+const stepLabel = 'font-semibold text-forest hover:underline';
+const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
 ---
 
 <Base title={SITE.name} description={SITE.tagline}>
   <section class="border-b border-rule pb-10">
     <Wordmark size="lg" />
 
-    <h1 class="mt-6 text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] text-forest sm:text-display">
-      {SITE.hero}
+    <h1
+      class="mt-6 text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] text-balance text-forest sm:text-display"
+    >
+      YEGFacts checks what people say about Edmonton's city government against the public record.
     </h1>
-    <p class="mt-3 text-base text-muted sm:text-lg">{SITE.tagline}</p>
 
-    <form action="/search" method="get" class="mt-7 flex gap-2" role="search">
+    {
+      featuredStory && featuredClaim && (
+        <div class="mt-8">
+          <p class={label}>
+            A checked claim · verified{' '}
+            <time datetime={featuredStory.data.last_verified}>
+              {featuredStory.data.last_verified}
+            </time>
+          </p>
+          <p class="mt-2 text-xl leading-snug font-semibold tracking-[-0.012em] text-balance sm:text-2xl">
+            <a href={`/facts/${featuredStory.id}#${featuredClaim.data.id}`} class="hover:text-forest">
+              {featuredClaim.data.question}
+            </a>
+          </p>
+          <p class="mt-3">
+            <Finding finding={featuredClaim.data.finding} size="xl" />
+          </p>
+          <p class="mt-3 max-w-prose text-base leading-relaxed">{featuredStory.data.one_line}</p>
+          <p class="mt-2 text-sm">
+            <a href={`/facts/${featuredStory.id}`} class="text-navy underline">
+              Evidence, panel verdicts and history
+            </a>
+          </p>
+        </div>
+      )
+    }
+
+    <form action="/search" method="get" class="mt-8 flex gap-2" role="search">
       <label for="home-search" class="sr-only">Search checked claims</label>
       <input
         id="home-search"
@@ -60,76 +164,211 @@ const storyById = new Map(stories.map((story) => [story.id, story]));
       Search every checked claim, or filter by topic and finding on the{' '}
       <a href="/search" class="text-navy underline">search page</a>.
     </p>
-  </section>
 
-  <section class="mt-11">
-    <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">Recently verified</h2>
     {
-      recentlyVerified.length > 0 ? (
-        <div class="mt-4">
-          <StoryList stories={recentlyVerified} claimsByStory={claimsByStory} />
-          <p class="mt-5 border-l-2 border-gold pl-3.5 text-sm leading-relaxed text-muted">
-            These are the first four of a pre-committed nine-story slate — the stories and the
-            claims inside them were fixed in writing before any panel ran, so the set cannot be
-            trimmed to the answers it produced. See{' '}
-            <a href="/methodology#launch-slate" class="text-navy underline">
-              the launch slate
-            </a>{' '}
-            for the five still to come.
-          </p>
-        </div>
-      ) : (
-        <p class="mt-4 border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed text-muted">
+      stories.length === 0 && (
+        <p class="mt-8 border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed text-muted">
           Nothing is published yet. The first stories go through the full review panel before they
           appear here — how that works is set out in the{' '}
-          <a href="/methodology" class="text-navy underline">methodology</a>.
+          <a href="/methodology" class="text-navy underline">
+            methodology
+          </a>
+          .
         </p>
       )
     }
   </section>
 
   {
-    corrected.length > 0 && (
-      <section class="mt-11">
-        <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
-          Recently corrected
-        </h2>
-        <ul class="mt-4 divide-y divide-rule border-t border-rule">
-          {corrected.map((story) => {
-            const entry = story.data.changelog
-              .filter((item) => item.type === 'correction' || item.type === 'verdict-change')
-              .sort((a, b) => b.date.localeCompare(a.date))[0];
-            return (
-              <li class="py-4">
-                <a href={`/facts/${story.id}`} class="font-semibold hover:text-forest">
-                  {storyById.get(story.id)?.data.title}
-                </a>
-                <p class="mt-1 text-sm text-muted">
-                  <time datetime={entry?.date}>{entry?.date}</time> — {entry?.note}
-                </p>
-              </li>
-            );
-          })}
-        </ul>
+    stories.length > 0 && (
+      <section class="mt-14">
+        <FindingsBoard stories={stories} claimsByStory={claimsByStory} />
       </section>
     )
   }
 
-  <section class="mt-11">
-    <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">Topics</h2>
-    <ul class="mt-4 grid gap-x-8 gap-y-6 sm:grid-cols-2">
+  <section class="mt-14">
+    <h2 class={heading}>How a verdict is made</h2>
+    <p class={lead}>
+      Four steps stand behind every word on this page.{' '}
+      Methodology v{methodologyVersion},{' '}
+      <a href="/methodology/changes" class="text-navy underline">
+        change history
+      </a>
+      .
+    </p>
+
+    <ol class="mt-5 divide-y divide-rule border-t border-rule">
+      <li class={stepRow}>
+        <span class={stepNumber}>1</span>
+        <div>
+          <a href="/methodology#stages" class={stepLabel}>Blind research</a>
+          <p class={stepBody}>
+            {
+              reviewerCount
+                ? `${reviewerCount} AI reviewers, each from a different company, research every claim without seeing each other's work.`
+                : "AI reviewers from different companies research every claim without seeing each other's work."
+            }
+          </p>
+        </div>
+      </li>
+      <li class={stepRow}>
+        <span class={stepNumber}>2</span>
+        <div>
+          <a href="/methodology#synthesis" class={stepLabel}>A rule, not a vote</a>
+          <p class={stepBody}>
+            A lookup table published in advance turns the reviewers' verdicts into one finding.
+            Nobody votes on it.
+          </p>
+        </div>
+      </li>
+      <li class={stepRow}>
+        <span class={stepNumber}>3</span>
+        <div>
+          <a href="/methodology#stages" class={stepLabel}>Archived sources</a>
+          <p class={stepBody}>
+            Before publication every statement is checked against the archived bytes of the sources
+            it cites, not the live web.{
+              evidenceCount > 0 && (
+                <Fragment>
+                  {' '}
+                  <a href="/evidence" class="text-navy underline">
+                    {evidenceCount} sources archived
+                  </a>{' '}
+                  so far.
+                </Fragment>
+              )
+            }
+          </p>
+        </div>
+      </li>
+      <li class={stepRow}>
+        <span class={stepNumber}>4</span>
+        <div>
+          <a href="/methodology#vocabulary" class={stepLabel}>Four words</a>
+          <p class={stepBody}>
+            A finding is one of four words with a fixed meaning. Not established means the record
+            can't answer yet, not that the claim is false.
+          </p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="mt-14">
+    <h2 class={heading}>Corrections</h2>
+    <p class={lead}>What changed after publication, on the page it changed.</p>
+    {
+      corrections.length === 0 ? (
+        <p class="mt-4 text-[0.9375rem] text-muted">
+          No corrections yet.{' '}
+          <a href="/about#corrections" class="text-navy underline">
+            How to report one.
+          </a>
+        </p>
+      ) : (
+        <ul class="mt-4 divide-y divide-rule border-t border-rule">
+          {corrections.map((row) => (
+            <li class="py-4">
+              <p class={label}>
+                <time datetime={row.entry.date}>{row.entry.date}</time> ·{' '}
+                {CHANGE_LABELS[row.entry.type as 'correction' | 'verdict-change']}
+              </p>
+              <p class="mt-1">
+                <a href={`/facts/${row.story.id}`} class="font-semibold hover:text-forest">
+                  {row.story.data.title}
+                </a>
+              </p>
+              <p class="mt-1 max-w-prose text-[0.9375rem] leading-relaxed">
+                {row.sentence}
+                {row.truncated && (
+                  <Fragment>
+                    {' '}
+                    <a href={`/facts/${row.story.id}#history`} class="text-navy underline">
+                      Full note
+                    </a>
+                  </Fragment>
+                )}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </section>
+
+  <section class="mt-14">
+    <h2 class={heading}>The launch slate</h2>
+    <p class={lead}>
+      Nine stories, fixed in writing before any panel ran. {doneCount} of {slate.length}{' '}
+      checked.{' '}
+      <a href="/methodology#launch-slate" class="text-navy underline">
+        Why the list was fixed first
+      </a>
+      .
+    </p>
+    <ol class="mt-4 divide-y divide-rule border-t border-rule">
+      {
+        slate.map((row) => (
+          <li class="py-3 sm:grid sm:grid-cols-[14rem_1fr] sm:gap-x-6">
+            {row.published ? (
+              <Fragment>
+                <span class="block">
+                  <a href={`/facts/${row.published.id}`} class="font-semibold text-forest hover:underline">
+                    {row.published.data.title}
+                  </a>
+                </span>
+                <span class="mt-0.5 block text-[0.9375rem] text-muted sm:mt-0">
+                  Published <time datetime={row.publishedOn}>{row.publishedOn}</time>
+                </span>
+              </Fragment>
+            ) : (
+              <Fragment>
+                <span class="block">
+                  <span class="block font-semibold">{row.story}</span>
+                  <span class:list={['block', label]}>Not yet checked</span>
+                </span>
+                <span class="mt-0.5 block text-[0.9375rem] leading-relaxed text-muted sm:mt-0">
+                  {row.claims}
+                </span>
+              </Fragment>
+            )}
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="mt-14">
+    <h2 class={heading}>Topics</h2>
+    <ul class="mt-4 grid gap-x-8 gap-y-2 sm:grid-cols-2">
       {
         topics.map((topic) => (
-          <li>
-            <h3 class="font-semibold">
-              <a href={`/topics/${topic.data.slug}`} class="hover:text-forest">
-                {topic.data.name}
-              </a>
-            </h3>
-            <p class="mt-1 text-sm leading-relaxed text-muted">{topic.data.overview}</p>
+          <li class="text-[1.0625rem]">
+            {topic.count > 0 ? (
+              <Fragment>
+                <a href={`/topics/${topic.slug}`} class="font-semibold hover:text-forest">
+                  {topic.name}
+                </a>{' '}
+                <span class="text-sm text-muted tabular">
+                  {topic.count} {topic.count === 1 ? 'story' : 'stories'}
+                </span>
+              </Fragment>
+            ) : (
+              <Fragment>
+                <span class="font-semibold text-muted">{topic.name}</span>{' '}
+                <span class={label}>Coming</span>
+              </Fragment>
+            )}
           </li>
         ))
       }
     </ul>
   </section>
+
+  <p class="mt-14 border-t border-rule pt-5 text-sm leading-relaxed text-muted">
+    Built by <a href="/about" class="text-navy underline">Stew</a>, an AI steward. Ildar Abdulin is
+    the named human accountable for everything published. Self-funded, no ads, no political money:{' '}
+    <a href="/support" class="text-navy underline">what it costs and who pays</a>.
+  </p>
 </Base>
