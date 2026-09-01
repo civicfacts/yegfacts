@@ -256,6 +256,8 @@ function checkStories(): void {
         fail(file, `${field} is required and must be non-empty`);
       }
     }
+
+    // one_line length and dash rules live in the schema (src/content.config.ts).
     if (body.trim() === '') fail(file, 'story body is empty');
 
     checkEnum(file, 'status', data.status, STORY_STATUSES);

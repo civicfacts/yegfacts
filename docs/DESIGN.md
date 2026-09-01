@@ -52,11 +52,11 @@ EVIDENCE        shared source graph
 
 **Stories** (`src/content/stories/<slug>.mdx`, served at `/facts/<slug>`) are
 one coherent civic issue each: e-bus procurement, infill and zoning, winter
-cycling. The story page carries the reading experience — one-line summary,
-TL;DR, composite paraphrases of the forms the claim takes in
-public, what actually
-happened, the checked claims, related City commitments, evidence, the AI
-review, and article history.
+cycling. The story page carries the reading experience — the verdict on every
+claim, the one-line summary, composite paraphrases of the forms the claim takes
+in public, the TL;DR, what actually happened, the checked claims, related City
+commitments, evidence, the AI review, and article history. Section 10 sets out
+the order and why it is that order.
 
 A story has no verdict of its own. Verdicts belong to claims. A story may hold
 a single claim; the model stays uniform either way.
@@ -296,6 +296,8 @@ Astro build. A content error and a build error are both merge blockers.
 - all dates are ISO-8601 with `as_of` ≤ `last_verified` < `review_by`;
 - a published story carries a `published` changelog entry, at least one claim,
   and its TL;DR;
+- `one_line` is at most 30 words and contains no em or en dash, because it has
+  to read as one sentence under the title and in every share card;
 - committed panel output conforms to `prompts/review-schema.json`, and a
   published claim's review run exists and carries its `run.yaml` manifest.
 
@@ -364,3 +366,42 @@ Deliberately v2: an integrity/corruption claim ladder, risk classes,
 right-of-reply and referral packages; memberships, Pro tiers or an API beyond
 the support page; extracting the engine from the site and splitting the repo; a
 second city; a nonprofit spin-out; a newsletter and active social accounts.
+
+## 10. How a story page reads
+
+The palette is locked and light-only: paper #FAF9F6, forest #123F35, navy
+#123B5D, gold #C3A35E used sparingly, ink #20272B, Inter, thin rules. A finding
+is carried by the word, never by a badge or a traffic light, and hierarchy comes
+from type rather than decoration: a section heading is a heading, and the 12px
+uppercase grey label is reserved for metadata — dates, "Limitations", the
+sub-labels inside a claim.
+
+Order, top to bottom: topics, title, verdict strip, one-line summary, dates,
+"Common forms of the claim", TL;DR, what actually happened, claims checked, what
+the City promised, Edmonton evidence, comparable cities, what remains unknown,
+missing evidence, AI review, article history. It reads as what people say, then
+the facts, then the story, then the verdict detail.
+
+The **verdict strip** sits directly under the h1, because the findings are the
+product and they used to arrive at section four — two or three screens down on a
+phone. One row per claim: the question, linking to the check that produced it,
+and the finding word beside it, legible at 390px without expanding anything.
+
+The **one line** is one sentence, 30 words at most, no em or en dash. It is the
+first thing under the strip and the description on every share card, and CI
+enforces both limits.
+
+**Method vocabulary is glossed on demand, not restated.** Every finding,
+panel-agreement value, "evidence basis" and header date is a popover carrying
+one or two sentences and a link to the methodology section that sets the word
+out in full. Popovers work on touch and by keyboard, which the `title` tooltips
+they replaced did not, and they end the per-claim explanation paragraphs that
+printed the same fixed sentence three and four times on one page.
+
+**Body subheads feed the outline.** The `###` headings inside a story body enter
+"On this page" as children of "What actually happened", so the rail follows the
+narrative instead of pointing at one heading over a thousand words.
+
+A visual (chart, pull quote, timeline, table) must carry a number or a quotation
+the text already establishes with a source ID. If it does not, cut it. No
+photographs, no stock imagery, no decorative charts.

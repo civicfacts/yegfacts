@@ -1,25 +1,23 @@
 ---
-import { define } from '../lib/glossary';
+import Gloss from './Gloss.astro';
+import { requireTerm } from '../lib/glossary';
 
 /**
- * Glossary term: dotted underline + native tooltip. Usage in MDX:
+ * Glossary term inside prose. Usage in MDX:
  *   <Term t="proof of claim">proof of claim</Term>
  * or, when the visible text matches the glossary key exactly:
  *   <Term t="Proterra" />
+ *
+ * The definition renders in a popover rather than a `title` tooltip, so it is
+ * reachable by tap and by keyboard and can carry a link to the methodology.
  */
 interface Props {
   t: string;
 }
 
 const { t } = Astro.props;
-const definition = define(t);
-if (!definition) {
-  throw new Error(`Term "${t}" is not in src/lib/glossary.ts`);
-}
+const entry = requireTerm(t);
 const hasSlot = Astro.slots.has('default');
 ---
 
-<abbr
-  title={definition}
-  class="cursor-help no-underline [text-decoration-line:underline] [text-decoration-style:dotted] [text-decoration-color:var(--color-gold)] [text-underline-offset:3px]"
->{hasSlot ? <slot /> : t}</abbr>
+<Gloss definition={entry.definition} href={entry.href}>{hasSlot ? <slot /> : t}</Gloss>

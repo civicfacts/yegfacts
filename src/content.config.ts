@@ -89,7 +89,16 @@ const stories = defineCollection({
   schema: z
     .object({
       title: z.string().min(1),
-      one_line: z.string().min(1),
+      /**
+       * The whole answer in one sentence: first thing under the title, and the
+       * description on every share card. Thirty words is where it stops being a
+       * sentence held in one go; a dash is how a second clause sneaks in.
+       */
+      one_line: z
+        .string()
+        .min(1)
+        .refine((line) => line.trim().split(/\s+/).length <= 30, 'one_line is over 30 words')
+        .refine((line) => !/[\u2014\u2013]/.test(line), 'one_line must not contain a dash'),
       /** TL;DR bullets — the third disclosure layer. */
       tldr: z.array(z.string().min(1)).default([]),
       topics: z.array(topicSlug).min(1),

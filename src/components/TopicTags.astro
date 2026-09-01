@@ -15,7 +15,7 @@ const label = (slug: string) => slug.replace(/-/g, ' ');
       <li>
         <a
           href={`/topics/${slug}`}
-          class="border-b border-rule-strong pb-px transition-colors hover:border-forest hover:text-forest"
+          class="link"
           data-pagefind-filter={`topic:${slug}`}
         >
           {label(slug)}

@@ -7,28 +7,40 @@ import type { TocSection } from '../lib/toc';
  * displayed at any width, so the hidden copy is out of the accessibility tree
  * rather than read twice.
  *
+ * A section may carry `children`, which render as a nested indented list. They
+ * take the same `data-toc-link` hook as their parents, so the active-section
+ * script in the layout treats a body subhead exactly like a section: it
+ * observes the heading, and highlights it once its top passes into the band.
+ *
  * The active-section highlight is applied by `data-toc-link` scripting in the
  * layout; the styles for it live in `global.css` so the script toggles one
  * class rather than a list of utilities.
  */
 interface Props {
   sections: TocSection[];
+  /** Set on the nested list, which sits a step quieter than its parent. */
+  nested?: boolean;
 }
 
-const { sections } = Astro.props;
+const { sections, nested = false } = Astro.props;
+
+const link = [
+  '-ml-px block border-l border-transparent py-0.5 pl-3 leading-snug text-muted',
+  'transition-colors hover:border-rule-strong hover:text-forest',
+  nested ? 'text-[0.75rem]' : 'text-[0.8125rem]',
+].join(' ');
 ---
 
-<ul class="space-y-0.5 border-l border-rule">
+<ul class:list={['space-y-0.5 border-l border-rule', nested && 'mt-0.5 ml-3']}>
   {
     sections.map((section) => (
       <li>
-        <a
-          href={`#${section.id}`}
-          data-toc-link
-          class="-ml-px block border-l border-transparent py-0.5 pl-3 text-[0.8125rem] leading-snug text-muted transition-colors hover:border-rule-strong hover:text-forest"
-        >
+        <a href={`#${section.id}`} data-toc-link class={link}>
           {section.label}
         </a>
+        {section.children && section.children.length > 0 && (
+          <Astro.self sections={section.children} nested />
+        )}
       </li>
     ))
   }

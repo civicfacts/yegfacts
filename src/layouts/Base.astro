@@ -71,16 +71,22 @@ const hasToc = sections.length > 0;
 
     <div
       class:list={[
-        'mx-auto w-full max-w-3xl grow px-5 py-10',
+        'mx-auto w-full max-w-3xl grow px-5 py-6 sm:py-10',
         hasToc && 'lg:grid lg:max-w-[66rem] lg:grid-cols-[minmax(0,1fr)_13rem] lg:gap-x-12',
       ]}
     >
       <main id="main" data-pagefind-body={indexable ? '' : undefined}>
         {
           hasToc && (
-            <details class="mb-9 border-y border-rule lg:hidden" data-pagefind-ignore>
-              <summary class="cursor-pointer list-none py-2.5 text-[0.6875rem] font-semibold tracking-[0.11em] text-muted uppercase">
+            <details class="toc-disclosure mb-5 border-y border-rule lg:hidden" data-pagefind-ignore>
+              {/*
+                One row, and it says what tapping it will do: the label, and a
+                Show/Hide marker written out in words. A bare uppercase label
+                with no marker reads as a heading, not a control.
+              */}
+              <summary class="flex min-h-10 cursor-pointer list-none items-center justify-between gap-3 text-[0.6875rem] font-semibold tracking-[0.11em] text-muted uppercase">
                 On this page
+                <span class="toc-state font-normal" />
               </summary>
               <div class="pb-4">
                 <PageToc sections={sections} />
@@ -124,10 +130,12 @@ const hasToc = sections.length > 0;
       // does nothing.
       //
       // The observation band is the top third of the viewport: a section is
-      // "current" once its top has scrolled into that band. When nothing is in
-      // the band — part way down a long section — the current section is the
-      // last one whose top has passed above the viewport, which is what a
-      // reader would say they are in.
+      // "current" once its top has scrolled past it, and stays current until
+      // the next one does. The outline may nest — a story's body subheads sit
+      // under "What actually happened" — so the answer is the LAST target past
+      // the line, not the first: a subhead and the section containing it are
+      // both past it at once, and the deeper of the two is the one the reader
+      // is in.
       const links = new Map<string, HTMLAnchorElement[]>();
       for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')) {
         const id = link.getAttribute('href')?.slice(1);
@@ -137,6 +145,9 @@ const hasToc = sections.length > 0;
         else links.set(id, [link]);
       }
 
+      // The outline is written in render order and children follow their
+      // parent, so link order is page order: "last past the line" is the
+      // deepest heading the reader is in.
       const targets = [...links.keys()]
         .map((id) => document.getElementById(id))
         .filter((element): element is HTMLElement => element !== null);
@@ -155,23 +166,23 @@ const hasToc = sections.length > 0;
           }
         };
 
-        const visible = new Set<string>();
-        const observer = new IntersectionObserver(
-          (entries) => {
-            for (const entry of entries) {
-              if (entry.isIntersecting) visible.add(entry.target.id);
-              else visible.delete(entry.target.id);
-            }
-            const inBand = targets.find((element) => visible.has(element.id));
-            if (inBand) {
-              setCurrent(inBand.id);
-              return;
-            }
-            const above = targets.filter((element) => element.getBoundingClientRect().top < 0);
-            if (above.length > 0) setCurrent(above[above.length - 1]!.id);
-          },
-          { rootMargin: '0px 0px -66% 0px' },
-        );
+        // Which targets sit above the line, kept from the observer's own
+        // rects: it fires exactly when a target crosses the band's edge, and
+        // reading its entries costs no layout.
+        const past = new Set<string>();
+        const update = (entries: IntersectionObserverEntry[]) => {
+          const line = window.innerHeight / 3;
+          for (const entry of entries) {
+            const id = (entry.target as HTMLElement).id;
+            if (entry.boundingClientRect.top <= line) past.add(id);
+            else past.delete(id);
+          }
+          let id = '';
+          for (const target of targets) if (past.has(target.id)) id = target.id;
+          setCurrent(id);
+        };
+
+        const observer = new IntersectionObserver(update, { rootMargin: '0px 0px -66% 0px' });
         for (const target of targets) observer.observe(target);
       }
     </script>

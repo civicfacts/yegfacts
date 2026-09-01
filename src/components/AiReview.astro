@@ -96,7 +96,7 @@ const effort = effortSentence(
 ---
 
 <section id="ai-review" class="mt-14">
-  <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">AI review</h2>
+  <h2 class="section-heading">AI review</h2>
   <p class="mt-1.5 text-sm leading-relaxed text-muted">
     Three models research each claim independently, then cross-review each other’s findings. The
     canonical finding is computed from the blind round-one verdicts by a deterministic rule
@@ -128,7 +128,7 @@ const effort = effortSentence(
             <tbody>
               {reviewed.map((claim) => (
                 <tr class="border-b border-rule align-top">
-                  <td class="max-w-[16rem] py-2.5 pr-4" data-crossref>
+                  <td class="max-w-[16rem] min-w-[11rem] py-2.5 pr-4" data-crossref>
                     <a href={`#${claim.data.id}`} class="text-navy underline">
                       {claim.data.question}
                     </a>

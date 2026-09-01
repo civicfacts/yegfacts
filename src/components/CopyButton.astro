@@ -2,6 +2,9 @@
 /**
  * Copies a disclosure level as "<text>\n\n<url>" so a pasted quote always
  * arrives with the link that backs it (spec §6). Tiny vanilla JS, no island.
+ *
+ * Below `sm` the control is a 40px-tall tap target; from `sm` up it goes back
+ * to the quiet inline chip that sits on the baseline beside a heading.
  */
 interface Props {
   text: string;
@@ -14,7 +17,7 @@ const { text, url, label = 'Copy' } = Astro.props;
 
 <button
   type="button"
-  class="copy-button shrink-0 cursor-pointer border border-rule px-2 py-0.5 text-xs text-muted transition-colors hover:border-forest hover:text-forest"
+  class="copy-button inline-flex min-h-10 shrink-0 cursor-pointer items-center border border-rule px-2.5 text-xs text-muted transition-colors hover:border-forest hover:text-forest sm:min-h-0 sm:px-2 sm:py-0.5"
   data-copy-text={text}
   data-copy-url={url}
   data-copy-label={label}

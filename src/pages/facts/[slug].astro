@@ -4,12 +4,13 @@ import Base from '../../layouts/Base.astro';
 import AiReview from '../../components/AiReview.astro';
 import CopyButton from '../../components/CopyButton.astro';
 import Finding from '../../components/Finding.astro';
+import Gloss from '../../components/Gloss.astro';
 import PendingBanner from '../../components/PendingBanner.astro';
 import SeenCards from '../../components/SeenCards.astro';
 import TopicTags from '../../components/TopicTags.astro';
-import { FINDING_GLOSS, PANEL_AGREEMENT_GLOSS } from '../../lib/findings';
+import { requireTerm as gloss } from '../../lib/glossary';
 import { SITE } from '../../lib/site';
-import { toc } from '../../lib/toc';
+import { subheads, toc } from '../../lib/toc';
 import {
   claimTopics,
   claimsForStory,
@@ -47,7 +48,7 @@ interface Props {
 }
 
 const { story, claims, commitments } = Astro.props;
-const { Content } = await render(story);
+const { Content, headings } = await render(story);
 
 const evidence: Evidence[] = await evidenceForStory(claims, commitments);
 const pageUrl = new URL(`/facts/${story.id}`, Astro.site ?? SITE.url).href;
@@ -81,37 +82,14 @@ const missing = claims.flatMap((claim) =>
  */
 const methodologyVersions = [...new Set(claims.map((claim) => claim.data.methodology_version))];
 
-const heading = 'mt-14 text-xl font-extrabold tracking-[-0.015em] text-forest';
+const heading = 'section-heading mt-14';
 
-/**
- * Each fixed gloss is printed the first time its value appears on the page and
- * not again.
- *
- * The wording is invariant by design — one sentence per finding (methodology
- * v1.2) and one per agreement value (v1.3), so it cannot be tuned per claim to
- * lean an interpretation. That is exactly why repeating it under a second claim
- * with the same value adds nothing: a reader who has met "Unanimous" once on
- * this page has already read what it means, and on a three-claim story the same
- * sentence was landing three and four times.
+/*
+ * Every method word on this page — the five findings, the three agreement
+ * values, "evidence basis", the three dates — is defined once in the glossary
+ * and shown in a popover on demand (`gloss`). That replaced the fixed gloss
+ * paragraphs that used to sit under every claim.
  */
-const glossed = (() => {
-  const finding = new Set<string>();
-  const agreement = new Set<string>();
-  return claims.map((claim) => {
-    const row = {
-      claim,
-      findingGloss: finding.has(claim.data.finding)
-        ? undefined
-        : FINDING_GLOSS[claim.data.finding],
-      agreementGloss: agreement.has(claim.data.panel_agreement)
-        ? undefined
-        : PANEL_AGREEMENT_GLOSS[claim.data.panel_agreement],
-    };
-    finding.add(claim.data.finding);
-    agreement.add(claim.data.panel_agreement);
-    return row;
-  });
-})();
 
 /**
  * The outline, in render order. Every entry is conditioned on the same thing
@@ -119,9 +97,13 @@ const glossed = (() => {
  * have.
  */
 const sections = toc([
-  story.data.tldr.length > 0 && { id: 'tldr', label: 'TL;DR' },
   story.data.seen.length > 0 && { id: 'claims-we-are-seeing', label: 'Common forms' },
-  { id: 'what-happened', label: 'What actually happened' },
+  story.data.tldr.length > 0 && { id: 'tldr', label: 'TL;DR' },
+  {
+    id: 'what-happened',
+    label: 'What actually happened',
+    children: subheads(headings),
+  },
   { id: 'claims-checked', label: 'Claims checked' },
   commitments.length > 0 && { id: 'commitments', label: 'What the City promised' },
   { id: 'evidence', label: 'Edmonton evidence' },
@@ -131,56 +113,111 @@ const sections = toc([
   { id: 'ai-review', label: 'AI review' },
   { id: 'history', label: 'Article history' },
 ]);
+
+const mainClaim = 'ml-2 align-middle text-[0.6875rem] tracking-[0.08em] text-gold uppercase';
 ---
 
 <Base title={story.data.title} description={story.data.one_line} sections={sections}>
   {story.data.status === 'pending-review' && <PendingBanner />}
 
   <article>
-    <header class="border-b border-rule pb-6">
+    <header class="border-b border-rule pb-7">
       <TopicTags topics={story.data.topics} />
-      <h1 class="mt-3 text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
+      <h1
+        class="mt-3 text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] text-balance sm:text-display"
+      >
         {story.data.title}
       </h1>
 
-      {/* One-line summary */}
-      <div class="mt-4 flex items-start gap-3">
-        <p class="grow border-l-2 border-gold pl-3.5 text-lg leading-relaxed text-forest">
+      {/*
+        The verdict strip. The findings used to arrive at section four, below a
+        summary, a TL;DR, the rumour cards and a thousand words of narrative —
+        two or three screens on a phone before the page did the one thing it
+        exists to do. Now every claim and its finding sit directly under the
+        title, each row linking down to the check that produced it.
+
+        The question links; the finding word is its own control, because the
+        word opens the definition of what the word means. One row, two things
+        to touch, and neither is nested inside the other.
+
+        data-crossref: each question names the section it points at, so the
+        duplication audit reads it as a reference rather than the page saying
+        the same sentence twice.
+      */}
+      {
+        claims.length > 0 && (
+          <ul class="mt-6 divide-y divide-rule border-y border-rule">
+            {claims.map((claim) => (
+              <li class="grid gap-x-8 gap-y-1.5 py-4 sm:grid-cols-[minmax(0,30rem)_1fr] sm:items-baseline">
+                {/* Question leads at heading weight; the verdict answers it at lower weight (home page rule, D-0018). */}
+                <p class="text-lg leading-snug font-bold text-pretty" data-crossref>
+                  <a href={`#${claim.data.id}`} class="link">
+                    {claim.data.question}
+                  </a>
+                  {story.data.primary_claim === claim.data.id && (
+                    <span class={mainClaim}>Main claim</span>
+                  )}
+                </p>
+                {/* Left-aligned in a fixed column, so the leading rules stack. */}
+                <div>
+                  <Gloss {...gloss(claim.data.finding)} variant="boxed">
+                    <Finding finding={claim.data.finding} size="md" />
+                  </Gloss>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+
+      {/*
+        One-line summary: one sentence, thirty words, enforced by the validator.
+        On a phone the Copy control drops under the sentence rather than beside
+        it — sharing a 350px row with the answer squeezed the answer.
+      */}
+      <div class="mt-6 flex flex-col items-start gap-2.5 sm:flex-row sm:gap-3">
+        <p class="grow border-l-2 border-gold pl-3.5 text-lg leading-relaxed text-forest text-pretty">
           {story.data.one_line}
         </p>
         <CopyButton text={story.data.one_line} url={pageUrl} label="Copy" />
       </div>
 
       <p class="mt-5 text-xs text-muted">
-        As of <time datetime={story.data.as_of}>{story.data.as_of}</time> · last verified{' '}
-        <time datetime={story.data.last_verified}>{story.data.last_verified}</time> · next review by{' '}
+        <Gloss {...gloss('as of')}>As of</Gloss>{' '}
+        <time datetime={story.data.as_of}>{story.data.as_of}</time> ·{' '}
+        <Gloss {...gloss('last verified')}>last verified</Gloss>{' '}
+        <time datetime={story.data.last_verified}>{story.data.last_verified}</time> ·{' '}
+        <Gloss {...gloss('next review by')}>next review by</Gloss>{' '}
         <time datetime={story.data.review_by}>{story.data.review_by}</time>
         {
           methodologyVersions.length > 0 && (
             <>
               {' '}·{' '}
-              <a href="/methodology/changes" class="underline">
+              <Gloss {...gloss('methodology version')} hrefLabel="See what changed">
                 Methodology v{methodologyVersions.join(', v')}
-              </a>
+              </Gloss>
             </>
           )
         }
       </p>
     </header>
 
+    {/* Common forms of the claim — what people say, before what is true. */}
+    <SeenCards seen={story.data.seen} />
+
     {/* TL;DR */}
     {
       story.data.tldr.length > 0 && (
-        <section id="tldr" class="mt-10">
+        <section id="tldr" class="mt-14">
           <div class="flex items-baseline justify-between gap-3">
-            <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">TL;DR</h2>
+            <h2 class="section-heading">TL;DR</h2>
             <CopyButton
               text={story.data.tldr.map((line) => `• ${line}`).join('\n')}
               url={`${pageUrl}#tldr`}
               label="Copy"
             />
           </div>
-          <ul class="mt-2.5 space-y-2">
+          <ul class="mt-3.5 space-y-2">
             {story.data.tldr.map((line) => (
               <li class="border-l-2 border-rule pl-3.5 text-[0.9375rem] leading-relaxed">{line}</li>
             ))}
@@ -188,9 +225,6 @@ const sections = toc([
         </section>
       )
     }
-
-    {/* Common forms of the claim */}
-    <SeenCards seen={story.data.seen} />
 
     {/* What actually happened */}
     <section id="what-happened">
@@ -210,53 +244,48 @@ const sections = toc([
           </p>
         ) : (
           <div class="mt-4 space-y-8">
-            {glossed.map(({ claim, findingGloss, agreementGloss }) => (
+            {claims.map((claim) => (
               <div id={claim.data.id} class="scroll-mt-6 border-t border-rule-strong pt-5">
-                <h3 class="text-lg font-semibold tracking-[-0.012em]">
+                <h3 class="text-lg font-semibold tracking-[-0.012em] text-pretty">
                   {claim.data.question}
                   {story.data.primary_claim === claim.data.id && (
-                    <span class="ml-2 align-middle text-[0.6875rem] tracking-[0.08em] text-gold uppercase">
-                      Main claim
-                    </span>
+                    <span class={mainClaim}>Main claim</span>
                   )}
                 </h3>
 
-                <dl class="mt-3 grid gap-x-6 gap-y-2 sm:grid-cols-[8rem_1fr]">
-                  <dt class="text-xs font-semibold tracking-[0.08em] text-muted uppercase">
-                    Finding
-                  </dt>
-                  <dd>
-                    <Finding finding={claim.data.finding} size="lg" />
-                    {findingGloss && (
-                      <p class="mt-1 text-sm leading-relaxed text-muted">{findingGloss}</p>
-                    )}
-                  </dd>
+                {/* The verdict, then the panel behind it, then what it rests on. */}
+                <p class="mt-3.5 flex flex-wrap items-baseline gap-x-2 gap-y-1.5">
+                  <Gloss {...gloss(claim.data.finding)} variant="boxed">
+                    <Finding finding={claim.data.finding} size="md" />
+                  </Gloss>
+                  <span class="text-[0.9375rem] text-muted">
+                    · <Gloss {...gloss(claim.data.panel_agreement)}>
+                      {claim.data.panel_agreement}
+                    </Gloss>{' '}
+                    panel
+                  </span>
+                </p>
 
-                  <dt class="text-xs font-semibold tracking-[0.08em] text-muted uppercase">
-                    Evidence basis
-                  </dt>
-                  <dd class="text-[0.9375rem] leading-relaxed">{claim.data.evidence_basis}</dd>
+                <p class="mt-2.5 text-sm leading-relaxed text-muted">
+                  <Gloss {...gloss('evidence basis')}>Evidence basis</Gloss>:{' '}
+                  {claim.data.evidence_basis}
+                </p>
 
-                  <dt class="text-xs font-semibold tracking-[0.08em] text-muted uppercase">
-                    Panel agreement
-                  </dt>
-                  <dd>
-                    <span class="text-[0.9375rem]">{claim.data.panel_agreement}</span>
-                    {agreementGloss && (
-                      <p class="mt-1 text-sm leading-relaxed text-muted">{agreementGloss}</p>
-                    )}
-                  </dd>
-                </dl>
-
+                {/*
+                  Four facts, then the rest behind a native disclosure. A claim
+                  carrying eight or ten facts pushed the next claim off the
+                  phone screen; every fact still renders into the HTML, so
+                  Pagefind and the duplication audit read the whole list.
+                */}
                 {claim.data.key_facts.length > 0 && (
                   <ul class="mt-4 space-y-2">
-                    {claim.data.key_facts.map((fact) => (
+                    {claim.data.key_facts.slice(0, 4).map((fact) => (
                       <li class="border-l-2 border-rule pl-3.5 text-[0.9375rem] leading-relaxed">
                         {fact.text}{' '}
                         {fact.sources.map((source, index) => (
                           <>
                             {index > 0 && ', '}
-                            <a href={`/evidence/${source}`} class="text-navy underline">
+                            <a href={`/evidence/${source}`} class="link">
                               {source}
                             </a>
                           </>
@@ -264,6 +293,30 @@ const sections = toc([
                       </li>
                     ))}
                   </ul>
+                )}
+
+                {claim.data.key_facts.length > 4 && (
+                  <details class="mt-2">
+                    <summary class="link inline-flex min-h-10 cursor-pointer list-none items-center text-sm">
+                      {claim.data.key_facts.length - 4} more
+                      {claim.data.key_facts.length - 4 === 1 ? ' fact' : ' facts'}
+                    </summary>
+                    <ul class="space-y-2 pb-1">
+                      {claim.data.key_facts.slice(4).map((fact) => (
+                        <li class="border-l-2 border-rule pl-3.5 text-[0.9375rem] leading-relaxed">
+                          {fact.text}{' '}
+                          {fact.sources.map((source, index) => (
+                            <>
+                              {index > 0 && ', '}
+                              <a href={`/evidence/${source}`} class="link">
+                                {source}
+                              </a>
+                            </>
+                          ))}
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
                 )}
 
                 {claim.data.limitations.length > 0 && (
@@ -310,7 +363,7 @@ const sections = toc([
                   {commitment.data.promised_by} ·{' '}
                   <time datetime={commitment.data.promised_on}>{commitment.data.promised_on}</time>{' '}
                   · {commitment.data.status} ·{' '}
-                  <a href={`/evidence/${commitment.data.source}`} class="text-navy underline">
+                  <a href={`/evidence/${commitment.data.source}`} class="link">
                     {commitment.data.source}
                   </a>
                 </p>
@@ -359,7 +412,7 @@ const sections = toc([
                 /* data-crossref: the group heading names the claim it belongs to. */
                 <p class="text-xs text-muted" data-crossref>
                   On{' '}
-                  <a href={`#${group.claim.data.id}`} class="underline">
+                  <a href={`#${group.claim.data.id}`} class="link">
                     {group.claim.data.question}
                   </a>
                 </p>
@@ -445,7 +498,7 @@ const sections = toc([
         <a
           href={`${SITE.repo}/commits/main/src/content/stories/${story.id}.mdx`}
           rel="noopener"
-          class="text-navy underline"
+          class="link"
         >
           public commit history of this file
         </a>.

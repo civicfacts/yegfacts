@@ -66,6 +66,32 @@ body {
   font-weight: 600;
 }
 
+/*
+ * Safari still paints its own disclosure triangle through `list-style: none`,
+ * so every summary that carries its own marker asks for it to go.
+ */
+summary.list-none::-webkit-details-marker {
+  display: none;
+}
+
+/*
+ * The phone "On this page" row states what a tap does, in words — the site has
+ * no icon set to borrow a chevron from. The word lives in CSS because it is the
+ * disclosure's state, not its content.
+ */
+.toc-state {
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.toc-state::after {
+  content: 'Show';
+}
+
+.toc-disclosure[open] .toc-state::after {
+  content: 'Hide';
+}
+
 /* An outline link lands its section under the top of the window, not against it. */
 main [id] {
   scroll-margin-top: 1.5rem;
@@ -101,11 +127,13 @@ time,
 }
 
 .prose h3 {
-  margin-top: 1.8em;
-  margin-bottom: 0.4em;
-  font-size: 1.0625rem;
+  margin-top: 1.9em;
+  margin-bottom: 0.45em;
+  font-size: 1.125rem;
   font-weight: 600;
+  letter-spacing: -0.012em;
   color: var(--color-ink);
+  text-wrap: balance;
 }
 
 .prose a {
@@ -144,10 +172,31 @@ time,
   color: var(--color-rule-strong);
 }
 
+/*
+ * A pull quote, not an aside. It carries a quotation the body already sourced,
+ * so it reads at full strength — ink, upright, one step up from the paragraph
+ * around it — with the attribution below it in the quiet register.
+ */
 .prose blockquote {
   border-left: 2px solid var(--color-gold);
-  padding-left: 1em;
+  padding: 0.15em 0 0.15em 1.1em;
+  font-size: 1.0625rem;
+  font-style: normal;
+  color: var(--color-ink);
+  text-wrap: pretty;
+}
+
+.prose cite {
+  display: block;
+  font-style: normal;
+  font-size: 0.8125rem;
+  line-height: 1.5;
   color: var(--color-muted);
+}
+
+.prose blockquote + cite,
+.prose blockquote + p:has(cite) {
+  margin-top: 0.5em;
 }
 
 .prose hr {
@@ -187,6 +236,20 @@ time,
    one signal for "this is clickable" and headings that are not links never
    borrow it.
 --------------------------------------------------------------------------- */
+
+/*
+ * The one section-heading style. Three files render story-page sections (the
+ * page, the rumour cards, the AI review); a section that looked like a heading
+ * in one and a metadata label in another read as a database record. The 12px
+ * uppercase grey style is reserved for metadata.
+ */
+.section-heading {
+  font-size: 1.375rem;
+  line-height: 1.375;
+  font-weight: 700;
+  letter-spacing: -0.018em;
+  color: var(--color-ink);
+}
 
 .link {
   color: var(--color-navy);

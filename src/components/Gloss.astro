@@ -1,0 +1,190 @@
+---
+/**
+ * A term with its definition one tap away.
+ *
+ * The site used to gloss its vocabulary with `<abbr title>`, which is a hover
+ * tooltip: on a phone it does not exist, and it cannot carry the link to the
+ * methodology that makes the definition checkable. This is the same idea built
+ * out of the native popover API instead — a real button, a real panel, closing
+ * on Escape and on a tap outside because `popover="auto"` does that itself.
+ *
+ * The panel is marked `data-pagefind-ignore`: it is chrome, not the page's
+ * content. The same definition may sit behind several triggers on one page, and
+ * neither the search index nor the duplication audit should read it as the page
+ * saying something twice.
+ *
+ * Positioning prefers CSS anchor positioning. Where that is missing the script
+ * below writes `top`/`left` from the trigger's box before the panel is shown,
+ * so nothing paints in the wrong place first.
+ */
+interface Props {
+  /** One or two sentences. What the word means, not why it matters. */
+  definition: string;
+  /** A real anchor on the methodology, where the term is set out in full. */
+  href?: string;
+  hrefLabel?: string;
+  /** `boxed` puts the dotted rule under a block trigger such as a finding word. */
+  variant?: 'inline' | 'boxed';
+}
+
+const {
+  definition,
+  href,
+  hrefLabel = 'More in the methodology',
+  variant = 'inline',
+} = Astro.props;
+
+/**
+ * Anchor positioning needs a name unique to the instance, and `popovertarget`
+ * needs an id. One random token serves both; nothing links to it, so it does
+ * not need to be stable across builds.
+ */
+const id = `gloss-${Math.random().toString(36).slice(2, 10)}`;
+---
+
+<span class="gloss">
+  <button
+    type="button"
+    popovertarget={id}
+    aria-expanded="false"
+    class:list={['gloss-trigger', variant === 'boxed' && 'gloss-trigger--boxed']}
+    style={`anchor-name:--${id}`}><slot /></button
+  ><span
+    id={id}
+    popover
+    class="gloss-popover"
+    data-pagefind-ignore
+    style={`position-anchor:--${id}`}
+    >{definition}{href && <a href={href}>{hrefLabel}</a>}</span
+  >
+</span>
+
+<style is:global>
+  .gloss {
+    /* Inline, so a glossed phrase in prose still wraps across lines. */
+    display: inline;
+  }
+
+  .gloss-trigger {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+    cursor: help;
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: var(--color-gold);
+    text-underline-offset: 3px;
+    /*
+     * A finger-sized target on a word-sized trigger. The padding grows the hit
+     * box; the matching negative margin gives the space straight back, so no
+     * line box moves and inline text sits exactly where it did.
+     */
+    padding-block: 0.35em;
+    margin-block: -0.35em;
+  }
+
+  /*
+   * For a trigger whose visible content is an inline-block — the finding word,
+   * which carries its own leading rule — text decoration does not reach inside.
+   * A dotted rule under the box says the same thing.
+   */
+  .gloss-trigger--boxed {
+    display: inline-block;
+    text-decoration: none;
+    border-bottom: 1px dotted var(--color-gold);
+    /*
+     * The dotted rule is the trigger's own bottom border, so the extra hit area
+     * goes above the word only — otherwise the rule would drift off the text.
+     */
+    padding-block: 0.35em 2px;
+    margin-block: -0.35em 0;
+  }
+
+  .gloss-popover {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    width: max-content;
+    max-width: min(22rem, calc(100vw - 1.5rem));
+    padding: 0.75rem 0.875rem;
+    border: 1px solid var(--color-rule-strong);
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-size: 0.875rem;
+    line-height: 1.55;
+    text-wrap: pretty;
+    box-shadow: 0 1px 2px #20272b1a;
+  }
+
+  /*
+   * The user-agent sheet hides a closed popover; an author `display` on the
+   * element itself would beat it and leave every panel open, so the open state
+   * is the only one styled.
+   */
+  .gloss-popover:popover-open {
+    display: block;
+  }
+
+  .gloss-popover a {
+    display: block;
+    margin-top: 0.5rem;
+    color: var(--color-navy);
+    text-decoration: underline;
+    text-decoration-color: #123b5d4d;
+    text-underline-offset: 0.18em;
+  }
+
+  .gloss-popover a:hover {
+    text-decoration-color: var(--color-navy);
+  }
+
+  /*
+   * Physical keywords only: `position-area` rejects a physical/logical pair,
+   * and one invalid declaration would drop the whole rule and leave every
+   * panel in the top-left corner.
+   */
+  @supports (position-area: bottom span-right) {
+    .gloss-popover {
+      position-area: bottom span-right;
+      margin-top: 0.375rem;
+      position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+    }
+  }
+</style>
+
+<script>
+  // Keeps `aria-expanded` honest, and places the panel under its trigger where
+  // CSS anchor positioning is unavailable. `beforetoggle` does not bubble, so
+  // the listener runs in the capture phase; one listener serves every gloss on
+  // the page.
+  const anchored = typeof CSS !== 'undefined' && CSS.supports('position-area: bottom span-right');
+  const GAP = 6;
+  const EDGE = 8;
+
+  document.addEventListener(
+    'beforetoggle',
+    (event) => {
+      const panel = event.target;
+      if (!(panel instanceof HTMLElement) || !panel.classList.contains('gloss-popover')) return;
+
+      const open = (event as Event & { newState?: string }).newState === 'open';
+      const trigger = document.querySelector<HTMLElement>(`[popovertarget="${panel.id}"]`);
+      trigger?.setAttribute('aria-expanded', String(open));
+      if (!open || anchored || !trigger) return;
+
+      // Width is measured from the cap rather than the hidden element, which
+      // has no box yet at `beforetoggle`.
+      const width = Math.min(352, window.innerWidth - 24);
+      const box = trigger.getBoundingClientRect();
+      const left = Math.min(Math.max(box.left, EDGE), window.innerWidth - width - EDGE);
+      panel.style.left = `${Math.max(EDGE, left)}px`;
+      panel.style.top = `${box.bottom + GAP}px`;
+    },
+    true,
+  );
+</script>
