@@ -1,8 +1,9 @@
 # Review brief: A century of low-density housing and neighbourhood planning
 
-Status: PROVISIONAL, drafted by Stew under D-0019 on 2026-09-02; Revision 2
-after framing check 2; framing check pending; frozen before round 1;
-Methodology: v1.7.
+Status: FROZEN 2026-09-02 on framing check 5 FRAME OK (framing/check-5.md).
+Drafted by Stew under D-0019; three revisions after checks 1 to 3; check-3
+findings resolved by the editor (framing/escalation.md); one check-4 defect
+fixed (framing/response-4.md). Methodology: v1.8
 
 ## Story
 
@@ -16,8 +17,8 @@ Claims in this story, reviewed and reported separately:
 
 - `ldh-existed-century`: low-density housing has existed in Edmonton since
   approximately 1926.
-- `ldh-planned-around`: many Edmonton neighbourhoods were planned around
-  low-density housing during that period.
+- `ldh-planned-around`: many neighbourhoods inside Edmonton's boundary at
+  the time were planned around low-density housing during that period.
 
 ## Why this story (selection rationale)
 
@@ -77,13 +78,26 @@ comparison rules.
 **Normalized proposition:** Low-density housing has existed in Edmonton
 since approximately 1926.
 
+Claim A tests whether documented built low-density housing existed in
+Edmonton approximately a century before the claim was recorded. Report the
+result at the exact-date cutoff and for calendar year 1926. If those
+results differ, give separate variant-specific verdicts. Do not let failure
+at an exact day by itself decide the proposition stated as "approximately
+1926."
+
 ### Claim B, id: ldh-planned-around
 
-**Normalized proposition:** Many Edmonton neighbourhoods were planned
-around low-density housing during that period.
+**Normalized proposition:** Many neighbourhoods inside Edmonton's boundary
+in force at the time were planned around low-density housing during that
+period.
+
+Claim B's proposition and its geography are limited to Edmonton's
+historical boundaries in each era. Planning done for land before it was
+annexed to Edmonton is reported as context only and enters no Claim B
+calculation.
 
 Review and report the two propositions separately, each with its own
-verdict, confidence and evidence-basis label. Do not treat "low density" as
+verdict, its own confidence in that verdict, and an evidence-basis label; the claim itself carries panel agreement, computed from the three verdicts, not a confidence. Do not treat "low density" as
 synonymous with "detached", or "many" as synonymous with "most". A finding
 about Claim A is not by itself a finding about Claim B.
 
@@ -109,13 +123,14 @@ record's year stated. Occupied means the record shows dwellings in use, for
 example an assessment roll, a census enumeration, a street directory, a
 building permit with an occupancy record, or a plan annotated as built out.
 A registered plan with no evidence of occupation does not by itself satisfy
-this test. Classify the area as low density under the two
-operationalizations below.
+this test. Classify the area as low density under the Claim A
+built-outcome rule below.
 
 Test whether such housing was present at the start of the exact 100-year
-window and remained part of Edmonton's housing stock throughout it. Report
-legal permission and official planning terminology separately from built
-existence. If continuous legal permission is also tested, identify it as a
+window, whether it was present at any point in calendar year 1926, and
+whether it remained part of Edmonton's housing stock throughout the
+window. Report legal permission and official planning terminology
+separately from built existence. If continuous legal permission is also tested, identify it as a
 separate operational variant and do not substitute it for built existence.
 
 ### "Planned around"
@@ -166,36 +181,63 @@ not carry the date forward on a secondary description.
 
 ### "Low density"
 
-Report both of the following, and report each finding under both:
+The two claims use separate cross-era rules, because Claim A is about
+documented built outcome and Claim B is about intended or permitted
+development. Permission does not establish the density of an occupied area,
+and built form does not establish what an instrument allowed.
 
-1. Each era's own terminology, quoted from the instrument in force at the
-   date of that instrument. The labels changed over time (residential
-   districts, RF1 and the R-series, small scale residential), and the
-   permissions behind a label changed with them. Do not apply the current
-   category names backwards.
-2. A cross-era classification rule, fixed here before any evidence is
-   reviewed. A district, plan or other instrument counts as low density
-   when its permitted principal residential use is one or two dwellings per
-   lot, or the era's own term for that use. An instrument whose permitted
-   principal residential use is three or more dwellings per lot is not low
-   density under this rule. Report, for every instrument classified, the
-   permitted housing types, permitted units per lot, any available
-   unit-density measure (units per hectare or per acre), minimum lot area
-   and frontage, and site coverage, so that the classification can be
-   checked against the measurements.
+**Claim A, the built-outcome rule, fixed here before any evidence is
+reviewed.** Classify the documented built outcome using an actual built
+density measure, stated in dwellings per hectare, and report the observed
+housing forms alongside it. The measure is dwellings in use divided by land
+area, using the land-area denominator defined by the identified source for
+the low-density threshold. State whether that denominator is site area, net
+residential area or gross area, and list the land classes it includes and
+excludes. Do not compare a density calculated using one denominator with a
+threshold defined using another, and do not use a threshold whose
+denominator is not defined. Report, for every area classified, the housing
+forms observed, the dwelling count, the land area and its denominator type,
+the boundary source and year for that area, and the resulting
+dwellings-per-hectare figure.
 
-The source of the rule is the permitted principal use on the face of each
-instrument, which the residential schedules of every era state, so one
-threshold can be applied across eras without translating one era's labels
-into another's. Raw measurements alone do not classify an area as low
-density; the rule above does. This is the only cross-era threshold used in
-this brief, and it may not be changed after the evidence is seen.
+**Claim B, the permitted-development rule, fixed here before any evidence
+is reviewed.** Classify the intended or permitted development using each
+era's own terminology, quoted from the instrument, together with one
+predeclared cross-era density measure: the dwellings per hectare the
+instrument permitted, computed from the dwellings it permitted on a site
+and the minimum site area it required. Count all permitted residential
+forms, not only the principal use, so that permitted secondary suites,
+garden suites, duplexes, rowhousing and small apartment buildings enter the
+figure.
+
+**Thresholds and their sources.** Identify the source of every threshold
+used to call a figure low density: name the instrument, standard or
+published definition it comes from, quote it, and give its date. Do not
+apply a threshold whose source cannot be named. Where more than one
+threshold is reasonable on identified sources, report separate results and
+separate verdicts under each, and name the threshold with each result. A
+units-per-lot count is not a density measure and does not classify an area
+or an instrument on its own, because lot sizes differ; report permitted
+units per lot as an attribute alongside the density figure, not as the
+classification. The rules in this section are fixed before any evidence is
+reviewed and may not be changed after the evidence is seen.
+
+**Era terminology, reported for both claims.** Quote each era's own terms
+from the instrument in force at the date of that instrument. The labels
+changed over time (residential districts, RF1 and the R-series, small scale
+residential), and the permissions behind a label changed with them. Do not
+apply the current category names backwards.
+
+Report, for every instrument classified, the permitted housing types,
+permitted units per lot, permitted dwellings per hectare, minimum lot area
+and frontage, and site coverage, so that the classification can be checked
+against the measurements.
 
 Report borderline instruments separately. A borderline instrument is one
-whose permitted principal use cannot be read as one or two dwellings per
-lot without an interpretation, for example where the schedule is silent on
-unit count, where a discretionary or conditional use changes the count, or
-where a secondary or garden suite is permitted in addition to the permitted
+whose permitted density cannot be computed without an interpretation, for
+example where the schedule is silent on unit count or on minimum site area,
+where a discretionary or conditional use changes the count, or where a
+secondary or garden suite is permitted in addition to the permitted
 principal dwellings. Report the count of borderline instruments, state how
 each was treated and why, and report every threshold calculation with
 borderline instruments included and excluded.
@@ -204,59 +246,110 @@ Do not equate "low density" with detached-only housing. Where a residential
 district permitted duplexes, secondary suites, rowhousing or small
 apartment buildings, those permissions are part of what the district was,
 and must be reported even where the district label reads as low density
-today.
-
-Both operationalizations, the era's own terminology and the cross-era rule,
-apply to Claim A and to Claim B, and every finding is reported under both.
+today. An area or an instrument expressly called low density in its own
+source can permit more than two dwellings on a lot; the density measure,
+not the label and not a units-per-lot count, decides the classification.
 
 ### The neighbourhood unit, coverage and "many"
 
-**Eras, fixed here.** An era is the period during which one city-wide
-zoning or land use bylaw was in force, ending on the date that bylaw was
-replaced. Where a finding rests on a non-zoning instrument, the era is the
-period of the statutory plan or subdivision regime that instrument belongs
-to. List the eras used with their start and end dates and the instrument
-that defines each, and use the same era list for every calculation.
+**Eras, fixed here.** The common eras are the periods during which one
+city-wide zoning or land use bylaw was in force, each ending on the date
+that bylaw was replaced. Assign neighbourhood-specific plans and
+subdivisions to those periods by their operative dates rather than creating
+overlapping eras from them. List the eras used with their start and end
+dates and the bylaw that defines each, and use the same era list for every
+calculation.
 
-**The neighbourhood unit, fixed here.** Count neighbourhoods using the City
-of Edmonton's current neighbourhood boundaries, applied to historical
-instruments. An area covered by a historical instrument that predates those
-boundaries is mapped to the current neighbourhood that contains it. This is
-the only neighbourhood unit used in this brief, for every era and for both
-claims. Where a historical plan or subdivision name does not correspond to
-a current neighbourhood name, state the mapping used and its source.
+**How era results become a Claim B result, fixed here.** Claim B is tested
+at the end of the exact 100-year window and, separately, cumulatively
+across the window, counting every neighbourhood planned around low-density
+housing at any point in it. Report both, each with its own verdict, and
+report the era-by-era results alongside them. Where another equally
+reasonable reading of the aggregation would change the result, report a
+separate verdict for that reading and name it.
 
-**Which neighbourhoods count as then-existing.** A current neighbourhood
-counts as existing at the end of an era when its boundary lay within the
-city boundary in force at that date and the record shows documented
-occupied residential development inside it at that date. State the source
-of the city boundary used for each era end, and list the neighbourhoods
-counted as then-existing.
+**The neighbourhood unit, fixed here.** Report results under two units, and
+give a separate variant-specific verdict under each where the unit changes
+the result:
 
-**Coverage rule, fixed here.** A neighbourhood counts as covered by an
-instrument when the instrument applied to at least half of that
-neighbourhood's land area. Do not count a whole neighbourhood as covered
-unless that rule is met. Report separately the count of neighbourhoods with
-some coverage that falls below the rule.
+1. Present-day City of Edmonton neighbourhood polygons, applied to
+   historical instruments.
+2. Contemporaneous subdivisions or planning units, wherever their
+   boundaries are recoverable from the record.
 
-**"Many", fixed here.** For each era, "many" has two predeclared readings:
+Splits, overlaps and many-to-one mappings, predeclared. Under the
+present-day unit, a historical instrument that spans more than one current
+neighbourhood is assessed against each current neighbourhood it touches,
+with its covered share measured separately in each; a current neighbourhood
+covered by several historical instruments is counted once, and its covered
+share is the share of its land area those instruments cover taken together.
+Under the contemporaneous unit, the historical planning unit is the
+counting unit and each such unit is counted once, and a later instrument
+covering part of an earlier unit is reported against that unit by covered
+share. Where a historical plan or subdivision name does not correspond to a
+current neighbourhood name, state the mapping used and its source.
 
-1. **Count reading:** at least 10 then-existing neighbourhoods are covered.
-2. **Share reading:** at least 25 percent of then-existing neighbourhoods
-   are covered.
+Where contemporaneous boundaries cannot be recovered, identify the affected
+periods and report that limitation. Do not treat the present-day-polygon
+result as equivalent to a contemporaneous-unit result for those periods.
+
+**Which neighbourhoods count as then-existing.** A neighbourhood counts as
+existing at the end of an era when its boundary lay within the city
+boundary in force at that date. State the source of the city boundary used
+for each era end, and list the neighbourhoods counted. Report two
+denominators, and state which one supplied each result:
+
+1. Neighbourhoods with documented occupied residential development inside
+   them at that date.
+2. Neighbourhood units planned or approved by that date, whether or not
+   they were occupied.
+
+A neighbourhood deliberately planned during an era but not yet occupied at
+its end belongs to the second denominator, because Claim B is about
+planning intent and not about built existence. Give separate verdicts where
+the choice of denominator changes the finding.
+
+**Coverage, fixed here.** Report each neighbourhood's exact covered-area
+share. Give the results under both of the following, and state which one
+supplied each result:
+
+1. **The 50 percent rule:** a neighbourhood counts as covered when the
+   instrument applied to at least half of its land area.
+2. **An area-weighted calculation:** each neighbourhood contributes its
+   exact covered share rather than a whole unit, so partial coverage is not
+   converted into a whole-neighbourhood binary.
+
+Report separately the count of neighbourhoods with some coverage that falls
+below the 50 percent rule. Give separate verdicts where the two
+calculations change the finding.
+
+**"Many", fixed here.** "Many" has two readings. They are separate
+operational variants with separate verdicts. They are not combined, and
+neither controls the other:
+
+1. **Count reading:** the number of then-existing neighbourhoods covered.
+   Primary cutoff 10; stated alternative 5. Report the result under both.
+2. **Share reading:** the share of then-existing neighbourhoods covered.
+   Primary cutoff 25 percent; stated alternative one third. Report the
+   result under both.
 
 Ten is the smallest count that cannot fairly be described as a handful of
-exceptional cases. One quarter is a share plainly larger than a token
+exceptional cases, and one quarter is a share plainly larger than a token
 minority and plainly smaller than "most", which would be more than half.
-Neither threshold was chosen with any expected result in view, and neither
-may be changed after the evidence is seen.
+Neither cutoff is drawn from an identified pre-existing standard, so each
+is stated here with one other reasonable cutoff and results are required
+under both, which methodology v1.8 accepts as sufficient. No cutoff was
+chosen with any expected result in view, and none may be changed after the
+evidence is seen.
 
-Report the exact count and the exact share for every era, and give a
-separate result under each reading. "Many" is established for an era only
-when both readings are met. Where the two readings point in different
-directions, say so and report each result under its own reading; do not
-collapse them into one unqualified statement. Do not convert "many" into
-"most", and do not select a reading after seeing the results.
+Report the exact count and the exact share for every era and for each
+aggregation reading, and give a separate variant-specific verdict under
+each reading and each cutoff. Do not produce one unqualified Claim B
+verdict where the readings or the cutoffs differ. The two readings are not
+required to be met together: the proposition contains no such conjunction,
+and requiring both would let whichever reading is harder to meet decide the
+verdict. Do not convert "many" into "most", and do not select a reading or
+a cutoff after seeing the results.
 
 Report also the share of residential land covered, where the necessary
 boundary data exists, and report the conclusion it supports separately,
@@ -267,11 +360,15 @@ coverage. The land share is a reported denominator, not one of the two
 Distinguish the historical city boundary from the present-day boundary in
 every coverage calculation.
 
-### Pre-annexation instruments
+### Pre-annexation instruments, context only
 
-For land now within Edmonton, include applicable planning instruments from
-the municipality or county that governed it before annexation. Report those
-separately from Edmonton instruments and state the annexation date.
+Claim B's geography is Edmonton's boundary in force in each era, so
+planning done by another municipality or county before annexation is not
+part of any Claim B calculation. It enters no numerator, no denominator, no
+count, no share and no verdict. Where such planning helps a reader
+understand a neighbourhood's history, report it as context, separately from
+Edmonton instruments and labelled as context, with the annexation date
+stated. Do not carry it into a result.
 
 ### The instrument in force at the end of the window
 
@@ -287,23 +384,32 @@ follows, and do not report a variant against a claim it does not fit.
 
 **Claim A, ldh-existed-century.** Assess Claim A over the exact 100-year
 window, 1926-09-02 through 2026-09-02, using the built-housing meaning of
-"has existed" above. Report the first-zoning-bylaw window separately, as
-context about the legal record and not as a test of Claim A: a bylaw that
-began after 1926 cannot establish whether housing existed in 1926. Classify
-the housing under the era's own terminology and under the cross-era rule,
-and report both. The neighbourhood count, the neighbourhood share, the
-coverage rule and the residential-land denominator do not apply to Claim A,
-and no coverage threshold is required for it. Claim A's canonical reviewer
-verdict is the result over the exact 100-year window under the cross-era
-classification rule, with the era-terminology result reported alongside it.
+"has existed" above, and report the result both at that exact-date cutoff
+and for calendar year 1926. Report the first-zoning-bylaw window
+separately, as context about the legal record and not as a test of Claim A:
+a bylaw that began after 1926 cannot establish whether housing existed in
+1926. Classify the housing under the Claim A built-outcome rule, in
+dwellings per hectare with the observed housing forms reported, and report
+the era-terminology result alongside it. The neighbourhood count, the
+neighbourhood share, the coverage calculations and the residential-land
+denominator do not apply to Claim A. Claim A's reviewer verdict is the
+result over the exact 100-year window under the built-outcome rule. Where
+the exact-date cutoff and calendar year 1926 give different results, or
+where more than one sourced threshold is used, report a separate verdict
+for each variant and name the variant with it.
 
-**Claim B, ldh-planned-around.** Assess Claim B under both low-density
-operationalizations, under the count reading and the share reading of
-"many", and under both windows, with the era-by-era results reported. The
+**Claim B, ldh-planned-around.** Assess Claim B under the
+permitted-development rule and each era's own terminology, under the count
+reading and the share reading of "many" with each cutoff and its stated
+alternative, under both neighbourhood units, under both coverage
+calculations, under both then-existing denominators, and under both
+aggregation readings, with the era-by-era results reported. The
 neighbourhood and residential-land denominators apply to Claim B only.
-Claim B's canonical reviewer verdict is the result over the exact 100-year
-window, under the cross-era classification rule, with "many" established
-only when both the count reading and the share reading are met.
+Claim B's geography in every calculation is Edmonton's boundary in force in
+the era being tested. Claim B has no single canonical verdict where those
+variants disagree: report a verdict for every variant that changes the
+result and name the variant with it. Where the variants agree, say so and
+report the agreed verdict.
 
 **When a variant changes the verdict.** Where an equally reasonable
 operational variant named in this brief would change the reviewer verdict
@@ -330,9 +436,14 @@ why relevant, how it differs, what can and cannot be inferred.
 
 ## Scope
 
-Geography: land within the present-day boundary of Edmonton, including
-areas annexed during the period, with annexation dates stated and
-pre-annexation instruments reported separately.
+Geography: Edmonton's own boundary as it stood at the date being tested.
+Claim A tests documented built housing inside the city boundary in force in
+the year cited. Claim B's proposition and geography are limited to
+Edmonton's historical boundaries in each era, so a neighbourhood enters a
+Claim B calculation only for the eras in which it lay inside the city. Land
+annexed during the period belongs to the story from its annexation date
+onward, and every annexation date is stated. Planning done for that land
+before annexation is context only and enters no calculation.
 
 Time: the two windows above.
 
