@@ -22,6 +22,19 @@ const reviewed = claims.filter((claim) => claim.data.review !== undefined);
 /** Model column order is taken from the first reviewed claim and held steady. */
 const models = reviewed[0]?.data.review?.reviewers.map((reviewer) => reviewer.model) ?? [];
 
+/** Short display name for matrix headers; the full id stays in layer 2. */
+const shortModel = (model: string) =>
+  model.replace(/\s*\(.*\)$/, '').replace(/^claude-fable-5$/, 'Claude Fable 5').replace(/^gpt-5$/, 'GPT-5');
+
+/** Subtle semantic tone per verdict — the word still carries the meaning. */
+const verdictTone: Record<string, string> = {
+  Supported: 'var(--color-forest)',
+  'Partially supported': 'var(--color-gold)',
+  'Not established': 'var(--color-muted)',
+  Contradicted: '#7a3030',
+  Mixed: 'var(--color-navy)',
+};
+
 const runs = [...new Set(reviewed.map((claim) => claim.data.review_run))];
 const showRaw = story.data.status === 'published' && runs.length > 0;
 ---
@@ -49,9 +62,11 @@ const showRaw = story.data.status === 'published' && runs.length > 0;
               <tr class="border-b border-rule-strong text-left">
                 <th class="py-2 pr-4 font-semibold text-muted">Claim</th>
                 {models.map((model) => (
-                  <th class="py-2 pr-4 font-semibold text-muted">{model}</th>
+                  <th class="py-2 pr-4 font-semibold text-muted" title={model}>
+                    {shortModel(model)}
+                  </th>
                 ))}
-                <th class="py-2 font-semibold text-muted">Panel</th>
+                <th class="py-2 font-semibold text-muted">Panel finding</th>
               </tr>
             </thead>
             <tbody>
@@ -63,14 +78,26 @@ const showRaw = story.data.status === 'published' && runs.length > 0;
                     </a>
                   </td>
                   {claim.data.review?.reviewers.map((reviewer) => (
-                    <td class="py-2.5 pr-4">
-                      {reviewer.verdict}
-                      <span class="block text-xs text-muted">{reviewer.confidence} confidence</span>
+                    <td class="py-2.5 pr-4 whitespace-nowrap">
+                      <span
+                        class="mr-1.5 inline-block h-2 w-2 rounded-full align-middle"
+                        style={`background:${verdictTone[reviewer.verdict] ?? 'var(--color-muted)'}`}
+                        aria-hidden="true"
+                      ></span>
+                      <span class="font-medium">{reviewer.verdict}</span>
+                      <span class="block pl-3.5 text-xs text-muted">{reviewer.confidence}</span>
                     </td>
                   ))}
-                  <td class="py-2.5 font-semibold">
-                    {claim.data.review?.agreement}
-                    <span class="block text-xs font-normal text-muted">{claim.data.finding}</span>
+                  <td class="py-2.5 whitespace-nowrap font-semibold">
+                    <span
+                      class="mr-1.5 inline-block h-2 w-2 rounded-full align-middle"
+                      style={`background:${verdictTone[claim.data.finding] ?? 'var(--color-muted)'}`}
+                      aria-hidden="true"
+                    ></span>
+                    {claim.data.finding}
+                    <span class="block pl-3.5 text-xs font-normal text-muted">
+                      {claim.data.review?.agreement} panel
+                    </span>
                   </td>
                 </tr>
               ))}

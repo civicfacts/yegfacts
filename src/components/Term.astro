@@ -1,0 +1,25 @@
+---
+import { define } from '../lib/glossary';
+
+/**
+ * Glossary term: dotted underline + native tooltip. Usage in MDX:
+ *   <Term t="proof of claim">proof of claim</Term>
+ * or, when the visible text matches the glossary key exactly:
+ *   <Term t="Proterra" />
+ */
+interface Props {
+  t: string;
+}
+
+const { t } = Astro.props;
+const definition = define(t);
+if (!definition) {
+  throw new Error(`Term "${t}" is not in src/lib/glossary.ts`);
+}
+const hasSlot = Astro.slots.has('default');
+---
+
+<abbr
+  title={definition}
+  class="cursor-help no-underline [text-decoration-line:underline] [text-decoration-style:dotted] [text-decoration-color:var(--color-gold)] [text-underline-offset:3px]"
+>{hasSlot ? <slot /> : t}</abbr>
