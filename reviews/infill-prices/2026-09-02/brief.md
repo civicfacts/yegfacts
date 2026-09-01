@@ -1,0 +1,537 @@
+# Review brief: Infill teardown prices
+
+Status: PROVISIONAL, drafted by Stew under D-0019 on 2026-09-02; Revision 2
+after framing check 2; framing check pending; frozen before round 1;
+Methodology: v1.7.
+
+## Story
+
+The circulating claim describes an older house being demolished and
+replaced by housing alleged to be much more expensive. Two separate things
+are being asserted. One is a price relationship on lots where a dwelling
+was demolished and replaced. The other is about whether that replacement
+housing is affordable on an income-based test, and two established
+income-based tests can classify the same dwellings differently, so each is
+put as its own proposition. This story separates all three and tests each
+on its own terms. Topic: housing-development.
+
+Claims in this story, reviewed and reported separately:
+
+- `ip-teardown-price-gap`: the price relationship on linked
+  demolition-and-replacement lots.
+- `ip-infill-shelter-cost-test`: whether replacement housing on those lots
+  fails the predeclared 30 percent shelter-cost-to-income test.
+- `ip-infill-city-definition-test`: whether replacement housing on those
+  lots fails the City of Edmonton's own affordable-housing definition.
+
+Each claim carries its own verdict, confidence and evidence-basis label.
+The price relationship stays in Claim 1 and is not part of either
+affordability proposition. Where the three findings disagree, report the
+disagreement in synthesis; do not join them into one proposition.
+
+## Why this story (selection rationale)
+
+- Prevalence: the founder supplied this as a recurring response in Edmonton
+  infill discussions. Because no source sample was captured, this brief
+  cannot establish how prevalent or representative the wording is, and
+  reviewers should not treat prevalence as established.
+- Civic importance: mature-neighbourhood infill rules and the zoning bylaw
+  renewal are live council business, and affordability is argued over on
+  several sides.
+- Verifiability: property assessments, demolition and building permits,
+  market association reports and CMHC series are published, each with known
+  limits, so the answer turns on being explicit about which measure is used
+  and what it can establish.
+
+## Circulating forms
+
+**Captured form:** One founder-supplied quotation, possibly a composite
+paraphrase. Its platform, author, URL and original context were not
+captured.
+
+> "AFFORDABLE!?! Have you looked at the prices of these houses?! A $350,000
+> house is torn down and a $1,000,000 house goes up in its place!!"
+
+**Prevalence:** Unknown from this intake. It contains one founder-supplied
+formulation.
+
+**Site-written formulations, not captured posts.** The sentences below were
+written by the site as editorial interpretations of how the claim might be
+put. They were not observed anywhere, they do not establish how the claim
+circulates, and reviewers must not treat them as source material:
+
+- "They knock down a $400k bungalow and put up two $900k skinnies."
+- "It is all million dollar infill."
+- "The house that came down was the affordable one."
+- "Infill was supposed to make housing affordable and it did the opposite."
+- "Nothing being built here is affordable for anyone."
+- "Replacing one affordable house with expensive units is not
+  affordability."
+
+## Unit of analysis, fixed for every claim
+
+The unit of analysis is the matched lot pair: one lot on which one existing
+dwelling was demolished, paired with the replacement dwelling or dwellings
+built on that same lot. Every verdict in this brief is stated at the
+lot-pair level, and every denominator that carries a verdict is a count of
+matched lot pairs. Per-dwelling and per-unit figures are reported for
+multi-unit replacements, and a dwelling-level share is reported alongside
+every lot-pair share, but neither replaces the lot-pair rule.
+
+Lots on which more than one dwelling was demolished do not enter a verdict
+denominator. Report them as a separate series, stating for each the number
+of dwellings demolished, their values, the replacement dwellings and their
+prices, and state how many such lots the frame contained.
+
+How several replacement dwellings on one lot are weighted, fixed here: the
+lot pair counts once. Its direction on the total-price-per-dwelling basis
+is the higher-price direction only when every separately saleable
+replacement dwelling on that lot has a higher price than the demolished
+dwelling's value. Report as declared sensitivities the lot-pair share under
+a rule that counts a lot pair when at least one replacement dwelling has a
+higher price, and the dwelling-level share that counts every separately
+saleable replacement dwelling once. These rules are fixed before any share
+is calculated and may not be changed after the results are seen.
+
+## Claims under review
+
+### Claim 1, id: ip-teardown-price-gap
+
+**Normalized proposition:** Among Edmonton lots where an existing dwelling
+is demolished for infill, the replacement dwellings usually cost more than
+the demolished dwelling, measured as the first arm's-length sale price of
+each separately saleable replacement dwelling against the last arm's-length
+sale price of the demolished dwelling, in constant dollars. Report
+alongside the verdict the median replacement-to-demolished price ratio and
+the distribution of that ratio, so the size of the gap is reported and not
+only its direction.
+
+The alleged $350,000 to $1,000,000 example cannot be verified as a specific
+case, because its source and its property were not captured. It is context
+only and it receives no verdict, and the findings on the claims in this
+brief must not be presented as verification of it. The two round numbers
+are not cutoffs and are not the test. Do not treat $350,000 and $1,000,000
+as thresholds; report the actual distributions on both sides of the
+comparison.
+
+**Verdict measure, fixed here.** Compare the demolished dwelling's value
+with the replacement's price on two bases, and report both for every
+matched lot pair:
+
+1. **Total price per dwelling.** The whole first arm's-length sale price of
+   each separately saleable replacement dwelling, undivided.
+2. **Per unit.** The same sale price divided by the number of dwelling
+   units the replacement dwelling contains, where it contains more than
+   one.
+
+Claim 1 is Supported only when the "usually" threshold below is met on the
+total-price-per-dwelling basis. That basis is what the captured wording
+means by "a $1,000,000 house": the price of a whole house someone buys. The
+per-unit result is reported alongside as the qualification on the finding,
+with its own share, median ratio and distribution, and it is stated in the
+interpretation notes whenever the two bases point in different directions.
+A per-unit result does not carry the verdict on its own, and neither does a
+lot total: an added unit count does not erase a high purchase price, and a
+high lot total does not erase a lower per-dwelling price.
+
+No per-square-foot, per-bedroom, assessed-value, asking-price,
+aggregate-title or rent measure substitutes for the sale-price comparison
+in Claim 1's verdict.
+
+**Population.** Restrict this claim to linked demolition-and-replacement
+lots: a lot with a demolition permit for an existing dwelling and an
+identifiable replacement dwelling or dwellings built on the same lot.
+Infill that is not a teardown (for example redevelopment of a vacant or
+non-residential parcel) is not part of this claim's population; if it is
+examined at all, report it separately and label it.
+
+**Geography.** The mature-neighbourhood restriction is not assumed and is
+not part of the proposition. Report two sets and give both results: the
+city-wide set of linked demolition-and-replacement lots, and the
+mature-neighbourhood subset of that same set. Mature neighbourhoods are
+delimited by the City's own instrument; identify the zoning bylaw or
+mature-neighbourhood policy instrument and the official consolidation in
+force on the freeze date recorded in run.yaml, quote the definition, and
+state the date and version reviewed. Where the applicable boundary differed
+at the date a permit was issued, say so and report which boundary was used.
+
+**"Usually."** "Usually" means more than 50 percent of matched lot pairs
+show the higher-price direction on the total-price-per-dwelling basis, with
+a lot pair's direction determined by the rule in the unit-of-analysis
+section above. Report that share with its numerator and denominator. Report
+separately the median ratio, the full distribution (at minimum the
+quartiles and the range), the count, and the number and character of
+unmatched or excluded cases. A
+median ratio is not by itself evidence that most lot pairs follow the
+pattern, and neither figure substitutes for the other.
+
+**Sampling, matching and missing data, predeclared.** Fix these rules
+before looking at results and report any departure from them:
+
+- Frame: all residential demolition permits issued in the window below, on
+  land within the present-day boundary of Edmonton.
+- Match: a demolition permit is matched to a replacement when a building
+  permit or completed dwelling is recorded at the same parcel identifier or
+  address after the demolition permit date. State the matching key used
+  (parcel identifier preferred, address as fallback) and the number matched
+  on each key.
+- Inclusion: matched pairs where both a demolished-dwelling value and a
+  replacement price are recorded on the declared series below.
+- Exclusion: pairs where the replacement is non-residential. Report the
+  excluded count and reason. Fire-order and safety-order demolitions are
+  not excluded. Include every otherwise eligible residential teardown in
+  the primary result, and report as a declared sensitivity the same result
+  with fire-order and safety-order demolitions removed, with their count
+  and the effect on the demolished-dwelling values.
+- Completion lag: replacements not yet completed or not yet sold at the end
+  of the window stay in the frame and are reported as unmatched, with their
+  count. Do not drop them silently.
+- Missing data: report the count and share of the frame lost at each step
+  (no match, no price, no old-house value) and describe how the lost cases
+  differ from the retained cases on any observable attribute.
+
+**Old-house value, predeclared.** Report two separate series and never
+average them:
+
+1. the last arm's-length sale price of the demolished dwelling before
+   demolition, with its date;
+2. the City assessed total value of the demolished dwelling taken from the
+   assessment roll in force in the year before the demolition, which is the
+   last roll that valued the dwelling while it was standing, with that year
+   stated.
+
+Where the assessment separates land from improvement, report total assessed
+value, land value and improvement value separately. Where the assessment
+year nearest the demolition permit date is a different year from the roll
+named above, report that year's figure as a labelled sensitivity. Do not
+select whichever series is available after seeing results; report which
+pairs have one series, which have both, and the result under each.
+
+**Replacement assessed value, predeclared.** Where the assessed series is
+reported for a replacement dwelling, take it from that dwelling's first
+full assessment year after completion, and state that year. Both assessment
+years, the demolished dwelling's and the replacement's, are stated for
+every pair for which the assessed series is reported.
+
+**Admissible price series, predeclared.** Only matched arm's-length sale
+prices enter Claim 1's verdict series: the last arm's-length sale price of
+the demolished dwelling before demolition, and the first arm's-length sale
+price of each separately saleable replacement dwelling after completion. A
+matched lot pair that lacks either of those sale prices is missing from the
+verdict series. It is not filled in from another measure. Report its
+absence in the missing-data counts.
+
+Report each of the following as its own labelled series, never pooled into
+the verdict series and never mixed within one reported figure:
+
+- City assessed values, on the timing rules above, with the assessment
+  years stated;
+- listing or asking prices, labelled as asking;
+- aggregate sale prices where a multi-unit replacement was sold on one
+  title without separate unit titles, with the unit count stated and
+  labelled as an aggregate;
+- property-level contract rents at first occupancy, where recorded;
+- CMHC rental market survey rents for the same bedroom count, year and
+  neighbourhood or zone, labelled as a survey figure rather than a
+  property-level figure.
+
+For every case, record which series supplied each figure and how many cases
+each series covered. Asking price, first sale price, assessed value,
+aggregate multi-unit sale price, per-unit condominium sale price and rent
+are not interchangeable.
+
+**Tenure changes, predeclared.** Compare sale price with sale price and
+contract rent with prior contract rent. A matched lot pair in which the
+demolished dwelling and the replacement are of different tenure, for
+example an owner-occupied dwelling replaced by rental housing or a rental
+replaced by ownership, is reported as a separate series with its count. Do
+not assign such a pair a higher-cost or lower-cost direction and do not
+count it in a verdict denominator: a purchase price and a monthly rent are
+not comparable figures, and this brief predeclares no common shelter-cost
+calculation that would make them so. Where both the demolished dwelling and
+the replacement were rental, compare the replacement's contract rent at
+first occupancy with the prior dwelling's recorded rent, and report that
+comparison as its own series with its own share, median ratio and count,
+separate from the sale-price verdict series.
+
+**Other measures reported alongside.** Report per matched lot pair: total
+price per dwelling, per-unit price, total price for all replacement
+dwellings on the lot, bedroom count, tenure, and the total replacement-unit
+count. The verdict rests on the two bases named above and on no other
+measure.
+
+Price per square foot and price per bedroom are supplementary measures.
+Report them where the record supports them, never as substitutes for total
+purchase price or rent.
+
+**Timing, predeclared.** Report every comparison in nominal dollars and in
+constant dollars. For the constant-dollar comparison, deflate both sides to
+the most recent complete calendar year in the window using the Statistics
+Canada Consumer Price Index, all-items, Edmonton census metropolitan area,
+and state the base year. Report as a declared sensitivity the same
+comparison adjusted with the Statistics Canada New Housing Price Index for
+the Edmonton census metropolitan area, labelled as a market-index
+adjustment rather than a general price adjustment. State the date of each
+price used and the gap in years between the two sides of every pair.
+
+**Window and cohort, predeclared.** Primary cohort: demolition permits
+issued in the ten complete calendar years ending with the most recent
+complete calendar year before the freeze date recorded in run.yaml,
+matched to replacements recorded up to that freeze date. Declared
+sensitivity: the five complete calendar years ending with the same year.
+Report both. Where the data supports it, also report the cohort defined by
+replacement completion year rather than demolition permit year, and say
+whether the two cohort definitions change the result. Do not blend a
+partial year into an annual figure.
+
+**Datasets to look for.** City of Edmonton property assessment data on the
+open data portal; demolition permits and building permits on the same
+portal; any City infill or mature-neighbourhood monitoring reporting;
+REALTORS Association of Edmonton monthly and annual reports for sale prices
+by dwelling type; CMHC Housing Market Information for starts, completions
+and absorbed prices by dwelling type; CMHC rental market survey for rents;
+Statistics Canada price indices for the adjustments named above. Where two
+datasets cannot be joined lot to lot, say so: a comparison of citywide
+averages answers a different question than the one this claim asks, and
+must be labelled as such if it is used at all.
+
+### Claim 2, id: ip-infill-shelter-cost-test
+
+**Normalized proposition (descriptive):** Among matched lot pairs on linked
+teardown-infill lots, more than 50 percent carry replacement housing that
+exceeds the declared 30 percent shelter-cost-to-income threshold. A lot pair
+counts as exceeding the threshold only when every separately saleable
+replacement dwelling on that lot exceeds it.
+
+### Claim 3, id: ip-infill-city-definition-test
+
+**Normalized proposition (descriptive):** Among matched lot pairs on linked
+teardown-infill lots, more than 50 percent carry replacement housing that
+does not meet the City of Edmonton affordable-housing definition in force
+on the freeze date recorded in run.yaml. A lot pair counts as not meeting
+the definition only when no separately saleable replacement dwelling on
+that lot meets it.
+
+### Operationalization for Claims 2 and 3
+
+Everything below applies to both affordability claims unless it names one
+of them.
+
+**The price relationship is not part of either affordability claim.** A
+replacement dwelling can exceed an affordability threshold while costing
+less than the dwelling it replaced, and it can cost far more than the
+dwelling it replaced while passing the threshold. The comparison with what
+was demolished is Claim 1, and it is verdict-bearing there and nowhere
+else. Report what the two affordability tests and the price comparison each
+found; where they disagree, report the disagreement in synthesis and do not
+join them into one proposition.
+
+**The causal claim is not tested here, and why.** Whether infill "makes"
+housing more affordable is a causal proposition. Testing it would require a
+defined no-infill counterfactual, added supply, time lags and filtering
+over a specified period, and the price comparisons in this brief cannot
+establish any of that. No such causal claim was captured in the intake in a
+form that fixes a counterfactual or a period. This brief therefore tests
+the descriptive propositions above and does not test, and no verdict in it
+may be read as testing, whether infill causes housing to be more or less
+affordable. The causal effect of infill on city-wide housing costs is out
+of scope for this review. Do not research or report it here. Test it only
+in a separate brief with a declared counterfactual and period.
+
+**Population, geography and unit.** The same linked
+demolition-and-replacement lots as Claim 1, the same matched lot pair as
+the unit of analysis, and the same city-wide set and mature-neighbourhood
+subset reported separately.
+
+**The two tests, one per claim.** Apply both tests to every replacement
+dwelling in the matched set and report them separately. Each test carries
+its own claim and its own verdict:
+
+1. **Claim 2, the shelter-cost-to-income test.** A dwelling meets the
+   threshold if monthly shelter cost is 30 percent or less of monthly
+   before-tax median household income. A dwelling that exceeds 30 percent
+   does not meet the threshold.
+2. **Claim 3, the City of Edmonton's own affordable-housing definition**,
+   as stated in the City instrument in force on the freeze date recorded in
+   run.yaml. Quote the definition with its source and date and apply it as
+   written.
+
+Report both results even where they classify the same dwellings
+differently, and say which dwellings they classify differently and why.
+
+**Affordability denominator and the majority threshold, predeclared.** For
+each affordability claim the verdict denominator is matched lot pairs,
+counted on the lot-pair rule stated in that claim's proposition, and the
+majority threshold is more than 50 percent of that denominator. Report the
+numerator and the denominator for that share. Report alongside it the
+dwelling-level share, counting every separately saleable replacement
+dwelling once, and report both shares broken down by tenure and by bedroom
+count, together with the tenure and bedroom-count distribution of the
+matched set. A dwelling whose test result is Not established under the
+utilities rule below is reported in its own category, is not counted as
+meeting or as failing the test, and its count and share of the denominator
+are stated. Fix these rules before any share is calculated.
+
+**Assumptions for the shelter-cost-to-income test, fixed in this brief.**
+Do not vary them after seeing results; report any input that could not be
+obtained as missing evidence.
+
+- Income source: Statistics Canada census median total before-tax household
+  income for the City of Edmonton, from the most recent census available on
+  the freeze date, with the census year stated. Where Statistics Canada
+  publishes a later median household income estimate for the Edmonton
+  census metropolitan area, report the test under that figure as well and
+  label which figure produced which result. Report the test at the City
+  median household income and, in addition, by each available
+  household-income band or household type, matched to bedroom count where
+  the source permits, labelling which income figure produced which result.
+- Down payment: 20 percent of purchase price. Declared sensitivity: the
+  regulatory minimum of 5 percent on the first $500,000 of purchase price
+  and 10 percent on the portion above $500,000, with mortgage default
+  insurance included in the financed amount.
+- Mortgage rate: the Bank of Canada five-year conventional mortgage rate
+  for the month in which the price is dated, stated with that date.
+- Amortization: report the test under a 25-year amortization and under a
+  30-year amortization, and label which produced which result. Where a
+  30-year amortization is not available to the purchaser and dwelling class
+  being tested, state the rule that makes it unavailable, with its source
+  and date, and report only the amortization that is available.
+- Property taxes: the City of Edmonton annual property tax levy for the
+  subject property in the price year where published; otherwise the City's
+  residential tax rate for that year applied to the assessed value. State
+  which was used for each case.
+- Utilities: heat, water and electricity. For rentals, follow the CMHC
+  rental market survey convention and state whether the reported rent
+  includes heat. For ownership, use a named published utility cost series
+  with its source and year. Where a required utility input is unavailable
+  for a dwelling, the complete shelter-cost test for that dwelling is Not
+  established: report the calculation that excludes utilities as a labelled
+  lower-bound sensitivity, and do not use it to classify that dwelling for
+  either affordability verdict. Do not substitute an unsourced allowance.
+- Ownership shelter cost is mortgage principal and interest plus property
+  taxes plus utilities, plus condominium fees where applicable, stated
+  separately. Rental shelter cost is contract rent plus any utilities not
+  included in rent.
+
+**Verdict mapping, predeclared.** Each of the three claims carries its own
+verdict and uses the methodology's four verdict words directly. There is no
+compound rule and no conjunct, and no claim's verdict depends on another
+claim's result:
+
+- **Supported:** the declared majority threshold for that claim is
+  affirmatively established on that claim's verdict denominator.
+- **Contradicted:** the opposite majority is affirmatively established on
+  that denominator.
+- **Not established:** the usable evidence establishes neither.
+- **Partially supported:** only where the stated proposition contains a
+  meaningful part that the evidence establishes while the rest overreaches.
+  Name which part fails and on what evidence, as prompts/reviewer.md
+  requires.
+
+A favourable result on a supplementary comparator (price per square foot,
+price per bedroom, or a comparison with new construction elsewhere in the
+region) is not the "meaningful part" that justifies Partially supported.
+For Claim 1, a per-unit result that differs from the result on the
+total-price-per-dwelling basis is reported as the qualification on the
+verdict, not as a "meaningful part" that changes it.
+
+**Comparators, reported separately and never combined.** Each of the
+following answers a different question. Label each one and do not merge
+them into a single finding:
+
+- the price or rent of the replacement against the housing it replaced on
+  the same lot (this is Claim 1);
+- the replacement against the median or typical price in the same
+  neighbourhood in the same year;
+- the replacement against new construction elsewhere in the region in the
+  same year, including new suburban single-detached and new suburban row or
+  townhouse product. Report regional new-construction comparisons as a
+  separate comparator. Do not assume that it represents the relevant
+  alternative for every buyer;
+- rents against neighbourhood rents for units of the same bedroom count
+  (CMHC rental market survey).
+
+Where one of these measures does not exist in the public record, say so and
+record it as missing evidence rather than substituting a proxy without
+labelling it a proxy. Reporting a subset of the measures without saying
+which ones were unavailable is not acceptable.
+
+**Prior tenure and displacement, in scope as evidence.** Where the record
+supports it, report for the demolished dwelling: whether it was owner
+occupied or rented at the time of the demolition permit, the number of
+dwelling units it contained, the rent charged, and any recorded notice to
+tenants or municipal tracking of tenant displacement. Report these as
+evidence about what was lost on the lot, with their sources and years, and
+record them as missing evidence where the record does not support them.
+This brief does not ask reviewers to estimate a displacement count that the
+record does not contain.
+
+**Transferred evidence.** Another city's evidence cannot answer these
+Edmonton-specific propositions. It may supply context or illustrate a
+mechanism, and if used it carries the transferability statement the
+methodology requires (why relevant, how it differs, what can and cannot be
+inferred), but Edmonton-specific missing evidence stays recorded as
+missing. Do not substitute comparator evidence for an Edmonton figure the
+record does not contain.
+
+## Scope
+
+Geography: land within the present-day boundary of Edmonton. Both the
+city-wide set of linked demolition-and-replacement lots and the
+mature-neighbourhood subset are reported. Regional and suburban figures are
+in scope only as the separately labelled comparator named above.
+
+Time: the primary cohort and the declared sensitivity window above.
+
+In scope as evidence: prior tenure, occupancy, prior rent and prior unit
+count of the demolished dwelling, and recorded tenant displacement.
+
+Out of scope: whether infill should be permitted or encouraged; design and
+neighbourhood-character disputes; construction quality; property tax
+effects beyond their use as an input to the shelter-cost test; the causal
+question of what infill does to housing costs city-wide; and whether
+Edmonton was planned around low-density housing (see the
+low-density-history story).
+
+## Required calculations
+
+- Every price comparison states its source, its year, whether the figures
+  are nominal or inflation adjusted (and if adjusted, the index and base
+  year), and whether the figure is per lot or per unit.
+- Assessed values and sale prices are reported as separate series and never
+  combined into one average.
+- Every median, share or average states its count, its numerator, its
+  denominator and its geography, and states whether the denominator is
+  matched lot pairs or replacement dwellings.
+- Every step of the sampling and matching pipeline states the count
+  entering and the count leaving, and the reason for the loss.
+- Every shelter-cost calculation states each of the fixed assumptions above
+  and the figure used for it.
+- Amounts are Canadian dollars unless stated otherwise; no silent
+  conversions.
+
+## Reviewer instructions of special note
+
+- Apply the same documented sampling and matching rules to every eligible
+  redevelopment, and report the complete resulting distribution.
+- Report what individual cases establish, label them as cases, and do not
+  infer population frequency from them.
+- Where available, report total assessed value, land value and improvement
+  value separately.
+- Do not join datasets that were not built to be joined without stating
+  what the join assumed and what it could get wrong.
+- Keep the three claims separate. A finding about the price relationship on
+  redeveloped lots is not by itself a finding about either affordability
+  threshold, and the reverse; and a finding under one affordability test is
+  not a finding under the other.
+- Report the city-wide set and the mature-neighbourhood subset for every
+  claim.
+- State the unit behind every figure. Every verdict share is a share of
+  matched lot pairs; report the dwelling-level share alongside it and never
+  in place of it.
+- Where the public record cannot answer a measure, record it as missing
+  evidence and name who likely holds it.
+- Record every source URL; you have no repo access, so cite fully.
+- If any definition, measure, window or predeclared rule here changes what
+  the honest answer is, record a MATERIAL FRAMING CONCERN per
+  prompts/reviewer.md and answer the claims as posed alongside it.
