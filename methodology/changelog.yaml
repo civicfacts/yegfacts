@@ -1,6 +1,22 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.5"
+  date: "2026-09-01"
+  scope: reviewer-model-refresh
+  summary: >
+    Updated the Claude panel seat from Fable 5 to Fable 5.1 for new review
+    runs.
+  highlights:
+    - New review runs use Claude Fable 5.1 with the pinned model ID claude-fable-5-1.
+    - Historical review artifacts retain the model identity recorded when they ran.
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+  note: >
+    The Claude panel seat moved from Fable 5 to Fable 5.1. The pinned reviewer
+    command now uses claude-fable-5-1. Historical review artifacts remain
+    unchanged.
 - version: "1.4"
   date: "2026-09-01"
   scope: verdict-semantics-and-freshness

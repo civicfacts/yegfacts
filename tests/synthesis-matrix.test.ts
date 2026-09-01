@@ -172,7 +172,7 @@ describe('the rules the rows encode', () => {
 // has (spec §3): Mixed is a synthesis outcome, never a reviewer verdict.
 describe('reviewer JSON containing "Mixed" is rejected', () => {
   const review = (verdict: string): unknown => ({
-    reviewer: { provider: 'anthropic', model_self_reported: 'claude-fable-5' },
+    reviewer: { provider: 'anthropic', model_self_reported: 'claude-fable-5-1' },
     story: 'electric-buses',
     round: 1,
     claims: [

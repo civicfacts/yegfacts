@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest';
 import { extractReview, jsonCandidates } from '../scripts/panel/extract-review.ts';
 
 const REVIEW = {
-  reviewer: { provider: 'anthropic', model_self_reported: 'claude-fable-5' },
+  reviewer: { provider: 'anthropic', model_self_reported: 'claude-fable-5-1' },
   story: 'electric-buses',
   round: 1,
   claims: [

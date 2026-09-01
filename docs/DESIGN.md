@@ -202,11 +202,11 @@ stopped.
    the gate. A story may be deployed in `pending-review` status with a visible
    banner before it; `published` requires it.
 
-Pinned reviewer commands (v1, 2026-08-31; `scripts/panel/run-reviewer.sh`):
+Pinned reviewer commands (methodology v1.5, 2026-09-01; `scripts/panel/run-reviewer.sh`):
 
 | Panel seat | Command |
 |---|---|
-| Claude Fable 5 | `claude -p --model claude-fable-5` |
+| Claude Fable 5.1 | `claude -p --model claude-fable-5-1` |
 | GPT-5.6 Sol | `codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check` |
 | Gemini 3.1 Pro | `agy -p --effort high` |
 

@@ -56,9 +56,9 @@ case "$ROUND" in 1|2) ;; *) echo "round must be 1 or 2, got '$ROUND'" >&2; exit 
 # ---------------------------------------------------------------------------
 case "$PROVIDER_ARG" in
   claude|anthropic)
-    SLOT="claude"; CLI="claude"; MODEL_ID="claude-fable-5"
-    PROVIDER_CANONICAL="anthropic"; SEAT="Claude Fable 5"
-    CMD=(claude -p --model claude-fable-5)
+    SLOT="claude"; CLI="claude"; MODEL_ID="claude-fable-5-1"
+    PROVIDER_CANONICAL="anthropic"; SEAT="Claude Fable 5.1"
+    CMD=(claude -p --model claude-fable-5-1)
     ;;
   codex|gpt|openai)
     SLOT="gpt"; CLI="codex"; MODEL_ID="gpt-5.6-sol"
