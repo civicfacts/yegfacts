@@ -1,8 +1,9 @@
 # Review brief: Infill teardown prices
 
-Status: PROVISIONAL. Drafted by Stew under D-0019 on 2026-09-02; revision 3
-after framing check 3, resolved by the editor (framing/escalation.md); check
-4 pending; frozen before round 1. Methodology: v1.8
+Status: FROZEN 2026-09-02, commit dd713e2, on framing check 4 FRAME OK
+(framing/check-4.md). Drafted by Stew under D-0019; three revisions after
+checks 1 to 3; check-3 findings resolved by the editor (framing/escalation.md).
+Methodology: v1.8
 
 ## Story
 
