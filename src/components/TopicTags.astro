@@ -1,0 +1,26 @@
+---
+interface Props {
+  topics: readonly string[];
+  class?: string;
+}
+
+const { topics, class: className = '' } = Astro.props;
+
+const label = (slug: string) => slug.replace(/-/g, ' ');
+---
+
+<ul class:list={['flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted', className]}>
+  {
+    topics.map((slug) => (
+      <li>
+        <a
+          href={`/topics/${slug}`}
+          class="border-b border-rule-strong pb-px transition-colors hover:border-forest hover:text-forest"
+          data-pagefind-filter={`topic:${slug}`}
+        >
+          {label(slug)}
+        </a>
+      </li>
+    ))
+  }
+</ul>

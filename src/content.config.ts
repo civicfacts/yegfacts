@@ -1,0 +1,280 @@
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
+import { glob } from 'astro/loaders';
+
+/**
+ * Controlled vocabularies (design spec §3).
+ *
+ * These are the rules Zod can decide by looking at a single file. Cross-file
+ * rules — a claim's `story` existing, evidence IDs resolving, claim topics
+ * being a subset of the story's — belong to `scripts/validate.ts`.
+ */
+export const TOPIC_SLUGS = [
+  'transportation',
+  'housing-development',
+  'city-finances',
+  'growth-planning',
+  'climate-environment',
+  'downtown',
+] as const;
+
+/** What a model may output. Reviewers never output Mixed (spec §3). */
+export const REVIEWER_VERDICTS = [
+  'Supported',
+  'Partially supported',
+  'Not established',
+  'Contradicted',
+] as const;
+
+/** What synthesis may produce: the reviewer verdicts plus Mixed. */
+export const CANONICAL_FINDINGS = [...REVIEWER_VERDICTS, 'Mixed'] as const;
+
+export const CONFIDENCE_LEVELS = ['High', 'Moderate', 'Low'] as const;
+
+export const STORY_STATUSES = ['draft', 'pending-review', 'published'] as const;
+
+export const CHANGELOG_TYPES = [
+  'published',
+  'updated',
+  'correction',
+  'verdict-change',
+  'verified',
+] as const;
+
+export const COMMITMENT_STATUSES = [
+  'Recorded',
+  'Not yet assessable',
+  'Assessable',
+  'Assessed',
+] as const;
+
+const topicSlug = z.enum(TOPIC_SLUGS);
+
+/**
+ * ISO-8601 calendar date, `YYYY-MM-DD`, that is also a real date.
+ *
+ * YAML parses a bare `2026-08-31` into a Date, so an unquoted date in
+ * frontmatter arrives here as an object. It is normalised back to the string
+ * form the repo stores, which keeps ordering comparisons plain string
+ * comparisons and keeps authors from having to quote every date.
+ */
+const isoDate = z
+  .preprocess(
+    (value) => (value instanceof Date ? value.toISOString().slice(0, 10) : value),
+    z.string(),
+  )
+  .refine(
+    (value) => /^\d{4}-\d{2}-\d{2}$/.test(value),
+    'must be an ISO-8601 date (YYYY-MM-DD)',
+  )
+  .refine((value) => {
+    const parsed = new Date(`${value}T00:00:00Z`);
+    return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+  }, 'must be a real calendar date');
+
+const evidenceId = z.string().regex(/^YF-EV-\d{4}$/, 'must look like YF-EV-0001');
+
+const changelogEntry = z.object({
+  date: isoDate,
+  type: z.enum(CHANGELOG_TYPES),
+  note: z.string().min(1),
+});
+
+/**
+ * A quoted public post shown in "Claims we're seeing". Presentation strips
+ * names, usernames and avatars (spec §3); `attribution` is set only for public
+ * officials and organizations, and `source_url` records provenance.
+ */
+const seenCard = z.object({
+  platform: z.enum(['facebook', 'reddit', 'x']),
+  text: z.string().min(1),
+  /** Kept only for public officials and organizations. */
+  attribution: z.string().optional(),
+  /** Subreddit, group name, or similar surrounding context. */
+  context: z.string().optional(),
+  source_url: z.url().optional(),
+  /** True when the wording was paraphrased rather than quoted exactly. */
+  paraphrased: z.boolean().default(false),
+});
+
+const stories = defineCollection({
+  loader: glob({ base: './src/content/stories', pattern: '**/*.mdx' }),
+  schema: z
+    .object({
+      title: z.string().min(1),
+      one_line: z.string().min(1),
+      /** Short answer — the second disclosure layer. */
+      short_answer: z.string().optional(),
+      /** TL;DR bullets — the third disclosure layer. */
+      tldr: z.array(z.string().min(1)).default([]),
+      topics: z.array(topicSlug).min(1),
+      claims: z.array(z.string()).default([]),
+      commitments: z.array(z.string()).default([]),
+      /** Set only when one claim clearly dominates the story. */
+      primary_claim: z.string().optional(),
+      seen: z.array(seenCard).default([]),
+      /** Hostile or colloquial phrasings that redirect here. */
+      aliases: z.array(z.string()).default([]),
+      status: z.enum(STORY_STATUSES),
+      as_of: isoDate,
+      last_verified: isoDate,
+      review_by: isoDate,
+      changelog: z.array(changelogEntry).default([]),
+    })
+    .superRefine((story, ctx) => {
+      if (story.as_of > story.last_verified) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['last_verified'],
+          message: 'last_verified must be on or after as_of',
+        });
+      }
+      if (story.last_verified >= story.review_by) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['review_by'],
+          message: 'review_by must be after last_verified',
+        });
+      }
+      if (story.primary_claim && !story.claims.includes(story.primary_claim)) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['primary_claim'],
+          message: 'primary_claim must be one of this story’s claims',
+        });
+      }
+    }),
+});
+
+/** One reviewer's position on one claim, as rendered in the AI review panel. */
+const panelReviewer = z.object({
+  model: z.string().min(1),
+  verdict: z.enum(REVIEWER_VERDICTS),
+  confidence: z.enum(CONFIDENCE_LEVELS),
+  key_findings: z.array(z.string().min(1)).default([]),
+  /** What this reviewer changed between round 1 and the cross-review round. */
+  changed_between_rounds: z.string().optional(),
+});
+
+const claims = defineCollection({
+  loader: glob({ base: './src/content/claims', pattern: '**/*.{yaml,yml}' }),
+  schema: z.object({
+    id: z.string().min(1),
+    question: z.string().min(1),
+    /** Parent story slug. */
+    story: z.string().min(1),
+    finding: z.enum(CANONICAL_FINDINGS),
+    evidence_basis: z.string().min(1),
+    confidence: z.enum(CONFIDENCE_LEVELS),
+    methodology_version: z.string().min(1),
+    /** Repo path of the review run that produced this verdict. */
+    review_run: z.string().min(1),
+    /** Narrower than the story's topics; validated as a subset in CI. */
+    topics: z.array(topicSlug).optional(),
+    evidence: z.array(evidenceId).default([]),
+    key_facts: z
+      .array(
+        z.object({
+          text: z.string().min(1),
+          source: evidenceId,
+        }),
+      )
+      .default([]),
+    aliases: z.array(z.string()).default([]),
+    limitations: z.array(z.string().min(1)).default([]),
+    unknowns: z.array(z.string().min(1)).default([]),
+    missing_evidence: z.array(z.string().min(1)).default([]),
+    comparisons: z
+      .array(
+        z.object({
+          city: z.string().min(1),
+          note: z.string().min(1),
+          transferability: z.string().min(1),
+          source: evidenceId.optional(),
+        }),
+      )
+      .default([]),
+    /** Panel result for this claim; the AI review component renders it. */
+    review: z
+      .object({
+        agreement: z.enum(['Unanimous', 'Majority', 'Split']),
+        reviewers: z.array(panelReviewer).min(1),
+      })
+      .optional(),
+  }),
+});
+
+const commitments = defineCollection({
+  loader: glob({ base: './src/content/commitments', pattern: '**/*.{yaml,yml}' }),
+  schema: z
+    .object({
+      id: z.string().min(1),
+      statement: z.string().min(1),
+      promised_by: z.string().min(1),
+      promised_on: isoDate,
+      /** Evidence object carrying the original City statement. */
+      source: evidenceId,
+      /** The measurable claim inside the promise. */
+      measurable: z.string().min(1),
+      /** When the promise becomes assessable. */
+      assessable_on: isoDate.optional(),
+      status: z.enum(COMMITMENT_STATUSES),
+      /** Set when status is Assessed: the claim that went through the panel. */
+      assessed_claim: z.string().optional(),
+      story: z.string().optional(),
+      topics: z.array(topicSlug).optional(),
+    })
+    .superRefine((commitment, ctx) => {
+      if (commitment.status === 'Assessed' && !commitment.assessed_claim) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['assessed_claim'],
+          message: 'an Assessed commitment must link the claim that assessed it',
+        });
+      }
+    }),
+});
+
+const topics = defineCollection({
+  loader: glob({ base: './src/content/topics', pattern: '**/*.{yaml,yml}' }),
+  schema: z.object({
+    slug: topicSlug,
+    name: z.string().min(1),
+    /** Short curated overview shown on the hub. Neutral category, never a conclusion. */
+    overview: z.string().min(1),
+    order: z.number().int().nonnegative(),
+  }),
+});
+
+/**
+ * Evidence registry (spec §4 puts it at the repo root, outside src/content, so
+ * the ingest script and the site read the same files).
+ */
+const evidence = defineCollection({
+  loader: glob({ base: './evidence/registry', pattern: '**/*.{yaml,yml}' }),
+  schema: z.object({
+    id: evidenceId,
+    title: z.string().min(1),
+    publisher: z.string().min(1),
+    url: z.url(),
+    published_on: isoDate.optional(),
+    retrieved_on: isoDate,
+    kind: z.string().min(1),
+    /** What this source can establish — the claim-vs-outcome distinction. */
+    establishes: z.string().min(1),
+    archive: z.object({
+      required: z.boolean(),
+      sha256: z.string().regex(/^[0-9a-f]{64}$/, 'must be a lowercase sha256 hex digest'),
+      visibility: z.enum(['public', 'private']),
+      path: z.string().optional(),
+    }),
+    rights: z.object({
+      redistribution: z.enum(['allowed', 'restricted', 'unclear']),
+      note: z.string().optional(),
+    }),
+    /** Excerpts permitted for sources that cannot be mirrored. */
+    excerpts: z.array(z.string().min(1)).default([]),
+  }),
+});
+
+export const collections = { stories, claims, commitments, topics, evidence };

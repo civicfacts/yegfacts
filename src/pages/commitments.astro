@@ -1,0 +1,96 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { publicStories, type Commitment } from '../lib/content';
+import { COMMITMENT_STATUSES } from '../content.config';
+
+/**
+ * The generated view across all stories (spec §3). A commitment attached to a
+ * story the public cannot see yet is withheld with it.
+ */
+const stories = await publicStories();
+const visible = new Set(stories.map((story) => story.id));
+const storyById = new Map(stories.map((story) => [story.id, story]));
+
+const commitments = (await getCollection('commitments')).filter(
+  (commitment) => !commitment.data.story || visible.has(commitment.data.story),
+);
+
+const ladder = COMMITMENT_STATUSES.map((status) => ({
+  status,
+  entries: commitments.filter((commitment: Commitment) => commitment.data.status === status),
+})).filter((group) => group.entries.length > 0);
+---
+
+<Base
+  title="Commitments"
+  description="What the City of Edmonton said it would deliver, when it becomes assessable, and what happened when it was assessed."
+>
+  <header class="border-b border-rule pb-6">
+    <h1 class="text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
+      Commitments
+    </h1>
+    <p class="mt-3 max-w-prose text-base leading-relaxed text-muted">
+      Attributed, sourced City statements of expected outcome — what was promised, by whom, and the
+      measurable claim inside it. Recording a promise is transcription, not a verdict. A commitment
+      only becomes <strong class="font-semibold text-ink">Assessed</strong> when a claim about it has
+      been through the full review panel.
+    </p>
+  </header>
+
+  {
+    ladder.length > 0 ? (
+      <div class="mt-9 space-y-10">
+        {ladder.map((group) => (
+          <section>
+            <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
+              {group.status}
+            </h2>
+            <ul class="mt-3 divide-y divide-rule border-t border-rule">
+              {group.entries.map((commitment) => (
+                <li class="py-4">
+                  <p class="text-[0.9375rem] leading-relaxed">{commitment.data.statement}</p>
+                  <p class="mt-1.5 text-sm text-muted">
+                    <span class="font-semibold text-ink">Measurable:</span>{' '}
+                    {commitment.data.measurable}
+                  </p>
+                  <p class="mt-1.5 text-xs text-muted">
+                    {commitment.data.promised_by} ·{' '}
+                    <time datetime={commitment.data.promised_on}>
+                      {commitment.data.promised_on}
+                    </time>
+                    {commitment.data.assessable_on && (
+                      <>
+                        {' '}· assessable{' '}
+                        <time datetime={commitment.data.assessable_on}>
+                          {commitment.data.assessable_on}
+                        </time>
+                      </>
+                    )}{' '}
+                    ·{' '}
+                    <a href={`/evidence/${commitment.data.source}`} class="text-navy underline">
+                      {commitment.data.source}
+                    </a>
+                    {commitment.data.story && storyById.has(commitment.data.story) && (
+                      <>
+                        {' '}·{' '}
+                        <a href={`/facts/${commitment.data.story}`} class="text-navy underline">
+                          {storyById.get(commitment.data.story)?.data.title}
+                        </a>
+                      </>
+                    )}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+    ) : (
+      <p class="mt-8 border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed text-muted">
+        No commitments are recorded yet. They are transcribed from City reports and council
+        decisions as the stories that touch them are produced.
+      </p>
+    )
+  }
+</Base>

@@ -1,0 +1,135 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { publicClaims, publicStories, type Claim, type Evidence, type Story } from '../../lib/content';
+
+/**
+ * One page per evidence object. "Used by" is generated here at build time and
+ * never stored in the YAML — two stored lists would drift (spec §3). Only
+ * publicly visible claims are listed, so drafts stay hidden.
+ */
+export async function getStaticPaths() {
+  const evidence = await getCollection('evidence');
+  const claims = await publicClaims();
+  const stories = await publicStories();
+  const storyById = new Map(stories.map((story) => [story.id, story]));
+
+  return evidence.map((entry) => ({
+    params: { id: entry.data.id },
+    props: {
+      entry,
+      usedBy: claims
+        .filter(
+          (claim) =>
+            claim.data.evidence.includes(entry.data.id) ||
+            claim.data.key_facts.some((fact) => fact.source === entry.data.id),
+        )
+        .map((claim) => ({ claim, story: storyById.get(claim.data.story) })),
+    },
+  }));
+}
+
+interface Props {
+  entry: Evidence;
+  usedBy: Array<{ claim: Claim; story: Story | undefined }>;
+}
+
+const { entry, usedBy } = Astro.props;
+const rows = [
+  { label: 'Publisher', value: entry.data.publisher },
+  { label: 'Kind', value: entry.data.kind },
+  { label: 'Published', value: entry.data.published_on ?? 'not stated' },
+  { label: 'Retrieved', value: entry.data.retrieved_on },
+  { label: 'Redistribution', value: entry.data.rights.redistribution },
+  {
+    label: 'Archive',
+    value:
+      entry.data.archive.visibility === 'public'
+        ? 'mirrored in this repo'
+        : 'retained privately; hash published',
+  },
+];
+---
+
+<Base title={entry.data.title} description={entry.data.establishes}>
+  <header class="border-b border-rule pb-6">
+    <p class="text-xs font-semibold tracking-[0.09em] text-muted uppercase tabular">
+      {entry.data.id}
+    </p>
+    <h1 class="mt-2 text-[1.5rem] leading-tight font-extrabold tracking-[-0.02em] sm:text-[2rem]">
+      {entry.data.title}
+    </h1>
+    <p class="mt-3">
+      <a href={entry.data.url} rel="noopener" class="text-navy underline break-words">
+        {entry.data.url}
+      </a>
+    </p>
+  </header>
+
+  <section class="mt-8">
+    <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
+      What this source can establish
+    </h2>
+    <p class="mt-2.5 border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed">
+      {entry.data.establishes}
+    </p>
+  </section>
+
+  <section class="mt-8">
+    <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">Record</h2>
+    <dl class="mt-3 grid gap-x-6 gap-y-2 text-[0.9375rem] sm:grid-cols-[9rem_1fr]">
+      {
+        rows.map((row) => (
+          <>
+            <dt class="text-muted">{row.label}</dt>
+            <dd>{row.value}</dd>
+          </>
+        ))
+      }
+      <dt class="text-muted">SHA-256</dt>
+      <dd class="font-mono text-xs break-all">{entry.data.archive.sha256}</dd>
+    </dl>
+    {
+      entry.data.rights.note && (
+        <p class="mt-3 text-sm text-muted">{entry.data.rights.note}</p>
+      )
+    }
+  </section>
+
+  {
+    entry.data.excerpts.length > 0 && (
+      <section class="mt-8">
+        <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
+          Permitted excerpts
+        </h2>
+        <ul class="mt-3 space-y-3">
+          {entry.data.excerpts.map((excerpt) => (
+            <li class="border-l-2 border-rule pl-3.5 text-[0.9375rem] leading-relaxed">
+              “{excerpt}”
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section class="mt-8">
+    <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">Used by</h2>
+    {
+      usedBy.length > 0 ? (
+        <ul class="mt-3 space-y-2 text-[0.9375rem]">
+          {usedBy.map(({ claim, story }) => (
+            <li>
+              <a href={`/facts/${claim.data.story}#${claim.data.id}`} class="text-navy underline">
+                {claim.data.question}
+              </a>
+              {story && <span class="text-muted"> — {story.data.title}</span>}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="mt-3 text-sm text-muted">No published claim rests on this source yet.</p>
+      )
+    }
+  </section>
+</Base>

@@ -1,0 +1,64 @@
+---
+import Base from '../../layouts/Base.astro';
+import { methodologyChanges } from '../../lib/methodology';
+
+/** Renders `methodology/changelog.yaml`; an absent file renders as no history. */
+const entries = methodologyChanges();
+---
+
+<Base
+  title="Methodology changes"
+  description="Every change to the YEGFacts prompts, merge and synthesis rules, verdict vocabulary, validation rules, or panel composition."
+>
+  <header class="border-b border-rule pb-6">
+    <p class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
+      <a href="/methodology" class="hover:text-forest">Methodology</a>
+    </p>
+    <h1 class="mt-2 text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
+      Methodology changes
+    </h1>
+    <p class="mt-3 max-w-prose text-base leading-relaxed text-muted">
+      Changing how findings are produced is itself a public act. Any change to the prompts, the
+      merge or synthesis rules, the verdict vocabulary, the validation rules, or which models sit on
+      the panel bumps a methodology version and lands here. Every claim records the version that
+      produced it, so an old verdict can be flagged for re-review when the method moves under it.
+    </p>
+  </header>
+
+  {
+    entries.length > 0 ? (
+      <ol class="mt-9 divide-y divide-rule border-t border-rule">
+        {entries.map((entry) => (
+          <li class="py-5">
+            <div class="flex flex-wrap items-baseline gap-x-3">
+              <h2 class="text-lg font-semibold tracking-[-0.012em] text-forest tabular">
+                v{entry.version}
+              </h2>
+              <time datetime={entry.date} class="text-sm text-muted">
+                {entry.date}
+              </time>
+              {entry.scope && (
+                <span class="text-[0.6875rem] tracking-[0.08em] text-gold uppercase">
+                  {entry.scope}
+                </span>
+              )}
+            </div>
+            <p class="mt-2 text-[0.9375rem] leading-relaxed whitespace-pre-line">{entry.note}</p>
+            {entry.changes.length > 0 && (
+              <ul class="mt-2 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs text-muted">
+                {entry.changes.map((path) => (
+                  <li>{path}</li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ol>
+    ) : (
+      <p class="mt-8 border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed text-muted">
+        No methodology changes are recorded yet. The first entry lands with version 1.0, when the
+        prompts and synthesis rules are committed.
+      </p>
+    )
+  }
+</Base>

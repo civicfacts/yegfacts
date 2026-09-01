@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "YEGFacts panel review (round 1 and round 2)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["reviewer", "story", "round", "claims"],
+  "properties": {
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model_self_reported"],
+      "properties": {
+        "provider": { "enum": ["anthropic", "openai", "google"] },
+        "model_self_reported": { "type": "string" }
+      }
+    },
+    "story": { "type": "string" },
+    "round": { "enum": [1, 2] },
+    "round2_notes": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "evidence_i_missed": { "type": "array", "items": { "type": "string" } },
+        "errors_in_other_reviews": { "type": "array", "items": { "type": "string" } },
+        "verdict_changes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["claim", "from", "to", "why"],
+            "properties": {
+              "claim": { "type": "string" },
+              "from": { "$ref": "#/$defs/verdict" },
+              "to": { "$ref": "#/$defs/verdict" },
+              "why": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id", "proposition_evaluated", "verdict", "confidence",
+          "evidence_basis", "supporting_evidence", "challenging_evidence",
+          "limitations", "unknowns", "what_would_change_my_verdict",
+          "suggested_one_line"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "proposition_evaluated": { "type": "string" },
+          "interpretation_notes": { "type": "string" },
+          "verdict": { "$ref": "#/$defs/verdict" },
+          "confidence": { "enum": ["High", "Moderate", "Low"] },
+          "evidence_basis": {
+            "enum": [
+              "direct-edmonton", "mostly-edmonton",
+              "edmonton-plus-comparators", "mostly-comparative",
+              "broader-research", "modelled-uncertain"
+            ]
+          },
+          "supporting_evidence": { "type": "array", "items": { "$ref": "#/$defs/evidenceItem" } },
+          "challenging_evidence": { "type": "array", "items": { "$ref": "#/$defs/evidenceItem" } },
+          "comparisons": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["jurisdiction", "why_relevant", "differences", "supports", "does_not_establish", "transferability"],
+              "properties": {
+                "jurisdiction": { "type": "string" },
+                "why_relevant": { "type": "string" },
+                "differences": { "type": "array", "items": { "type": "string" } },
+                "supports": { "type": "string" },
+                "does_not_establish": { "type": "string" },
+                "transferability": { "enum": ["high", "moderate", "low"] }
+              }
+            }
+          },
+          "limitations": { "type": "array", "items": { "type": "string" } },
+          "unknowns": { "type": "array", "items": { "type": "string" } },
+          "missing_evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["description", "likely_holder"],
+              "properties": {
+                "description": { "type": "string" },
+                "likely_holder": { "type": "string" },
+                "importance": { "enum": ["critical", "high", "moderate"] }
+              }
+            }
+          },
+          "calculations_needed": { "type": "array", "items": { "type": "string" } },
+          "what_would_change_my_verdict": { "type": "array", "items": { "type": "string" } },
+          "suggested_one_line": { "type": "string" },
+          "suggested_short_answer": { "type": "string" },
+          "suggested_tldr": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "verdict": {
+      "enum": ["Supported", "Partially supported", "Not established", "Contradicted"]
+    },
+    "evidenceItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["finding", "source_title", "source_url", "source_type", "establishes"],
+      "properties": {
+        "finding": { "type": "string" },
+        "source_title": { "type": "string" },
+        "source_url": { "type": "string" },
+        "source_publisher": { "type": "string" },
+        "source_date": { "type": "string" },
+        "source_type": {
+          "enum": ["legal-audited", "observed-data", "analytical-report", "policy-document", "city-webpage", "media", "advocacy"]
+        },
+        "establishes": { "type": "string" },
+        "quote": { "type": "string" },
+        "strength": { "enum": ["strong", "moderate", "weak"] }
+      }
+    }
+  }
+}

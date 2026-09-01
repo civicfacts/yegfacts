@@ -1,0 +1,408 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import AiReview from '../../components/AiReview.astro';
+import CopyButton from '../../components/CopyButton.astro';
+import Finding from '../../components/Finding.astro';
+import PendingBanner from '../../components/PendingBanner.astro';
+import SeenCards from '../../components/SeenCards.astro';
+import TopicTags from '../../components/TopicTags.astro';
+import { SITE, issueUrl, mailto } from '../../lib/site';
+import {
+  claimTopics,
+  claimsForStory,
+  commitmentsForStory,
+  evidenceForStory,
+  publicStories,
+  type Claim,
+  type Commitment,
+  type Evidence,
+  type Story,
+} from '../../lib/content';
+
+/**
+ * `/facts/<slug>`. Paths come from `publicStories()`, so a `draft` story has no
+ * page — which also keeps it out of Pagefind and out of every internal link.
+ */
+export async function getStaticPaths() {
+  const stories = await publicStories();
+  return Promise.all(
+    stories.map(async (story) => ({
+      params: { slug: story.id },
+      props: {
+        story,
+        claims: await claimsForStory(story),
+        commitments: await commitmentsForStory(story),
+      },
+    })),
+  );
+}
+
+interface Props {
+  story: Story;
+  claims: Claim[];
+  commitments: Commitment[];
+}
+
+const { story, claims, commitments } = Astro.props;
+const { Content } = await render(story);
+
+const evidence: Evidence[] = await evidenceForStory(claims, commitments);
+const pageUrl = new URL(`/facts/${story.id}`, Astro.site ?? SITE.url).href;
+
+const comparisons = claims.flatMap((claim) =>
+  claim.data.comparisons.map((comparison) => ({ claim, comparison })),
+);
+const unknowns = claims.flatMap((claim) =>
+  claim.data.unknowns.map((text) => ({ claim, text })),
+);
+const missing = claims.flatMap((claim) =>
+  claim.data.missing_evidence.map((text) => ({ claim, text })),
+);
+
+const heading = 'mt-14 text-xl font-extrabold tracking-[-0.015em] text-forest';
+---
+
+<Base title={story.data.title} description={story.data.one_line}>
+  {story.data.status === 'pending-review' && <PendingBanner />}
+
+  <article>
+    <header class="border-b border-rule pb-6">
+      <TopicTags topics={story.data.topics} />
+      <h1 class="mt-3 text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
+        {story.data.title}
+      </h1>
+
+      {/* One-line summary */}
+      <div class="mt-4 flex items-start gap-3">
+        <p class="grow border-l-2 border-gold pl-3.5 text-lg leading-relaxed text-forest">
+          {story.data.one_line}
+        </p>
+        <CopyButton text={story.data.one_line} url={pageUrl} label="Copy" />
+      </div>
+
+      <p class="mt-5 text-xs text-muted">
+        As of <time datetime={story.data.as_of}>{story.data.as_of}</time> · last verified{' '}
+        <time datetime={story.data.last_verified}>{story.data.last_verified}</time> · next review by{' '}
+        <time datetime={story.data.review_by}>{story.data.review_by}</time>
+      </p>
+    </header>
+
+    {/* Short answer */}
+    {
+      story.data.short_answer && (
+        <section id="short-answer" class="mt-10">
+          <div class="flex items-baseline justify-between gap-3">
+            <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
+              Short answer
+            </h2>
+            <CopyButton
+              text={story.data.short_answer}
+              url={`${pageUrl}#short-answer`}
+              label="Copy"
+            />
+          </div>
+          <p class="mt-2.5 text-[1.0625rem] leading-relaxed">{story.data.short_answer}</p>
+        </section>
+      )
+    }
+
+    {/* TL;DR */}
+    {
+      story.data.tldr.length > 0 && (
+        <section id="tldr" class="mt-10">
+          <div class="flex items-baseline justify-between gap-3">
+            <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">TL;DR</h2>
+            <CopyButton
+              text={story.data.tldr.map((line) => `• ${line}`).join('\n')}
+              url={`${pageUrl}#tldr`}
+              label="Copy"
+            />
+          </div>
+          <ul class="mt-2.5 space-y-2">
+            {story.data.tldr.map((line) => (
+              <li class="border-l-2 border-rule pl-3.5 text-[0.9375rem] leading-relaxed">{line}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {/* Claims we're seeing */}
+    <SeenCards seen={story.data.seen} />
+
+    {/* What actually happened */}
+    <section id="what-happened">
+      <h2 class={heading}>What actually happened</h2>
+      <div class="prose mt-4">
+        <Content />
+      </div>
+    </section>
+
+    {/* Claims checked */}
+    <section id="claims-checked">
+      <h2 class={heading}>Claims checked</h2>
+      {
+        claims.length === 0 ? (
+          <p class="mt-4 border-l-2 border-rule-strong pl-3.5 text-sm text-muted">
+            No claims from this story have completed the review panel yet.
+          </p>
+        ) : (
+          <div class="mt-4 space-y-8">
+            {claims.map((claim) => (
+              <div id={claim.data.id} class="scroll-mt-6 border-t border-rule-strong pt-5">
+                <h3 class="text-lg font-semibold tracking-[-0.012em]">
+                  {claim.data.question}
+                  {story.data.primary_claim === claim.data.id && (
+                    <span class="ml-2 align-middle text-[0.6875rem] tracking-[0.08em] text-gold uppercase">
+                      Main claim
+                    </span>
+                  )}
+                </h3>
+
+                <dl class="mt-3 grid gap-x-6 gap-y-2 sm:grid-cols-[8rem_1fr]">
+                  <dt class="text-xs font-semibold tracking-[0.08em] text-muted uppercase">
+                    Finding
+                  </dt>
+                  <dd>
+                    <Finding finding={claim.data.finding} size="lg" />
+                  </dd>
+
+                  <dt class="text-xs font-semibold tracking-[0.08em] text-muted uppercase">
+                    Evidence basis
+                  </dt>
+                  <dd class="text-[0.9375rem] leading-relaxed">{claim.data.evidence_basis}</dd>
+
+                  <dt class="text-xs font-semibold tracking-[0.08em] text-muted uppercase">
+                    Confidence
+                  </dt>
+                  <dd class="text-[0.9375rem]">{claim.data.confidence}</dd>
+                </dl>
+
+                {claim.data.key_facts.length > 0 && (
+                  <ul class="mt-4 space-y-2">
+                    {claim.data.key_facts.map((fact) => (
+                      <li class="border-l-2 border-rule pl-3.5 text-[0.9375rem] leading-relaxed">
+                        {fact.text}{' '}
+                        <a href={`/evidence/${fact.source}`} class="text-navy underline">
+                          {fact.source}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {claim.data.limitations.length > 0 && (
+                  <div class="mt-4">
+                    <h4 class="text-xs font-semibold tracking-[0.08em] text-muted uppercase">
+                      Limitations
+                    </h4>
+                    <ul class="mt-1.5 space-y-1 text-sm text-muted">
+                      {claim.data.limitations.map((item) => (
+                        <li>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+                  <TopicTags topics={claimTopics(claim, story)} />
+                  <span data-pagefind-filter={`finding:${claim.data.finding}`} class="sr-only">
+                    {claim.data.finding}
+                  </span>
+                  <CopyButton
+                    text={`${claim.data.question} — ${claim.data.finding} (${claim.data.confidence} confidence). YEGFacts.ca`}
+                    url={`${pageUrl}#${claim.data.id}`}
+                    label="Copy citation"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        )
+      }
+    </section>
+
+    {/* What the City promised */}
+    {
+      commitments.length > 0 && (
+        <section id="commitments">
+          <h2 class={heading}>What the City promised</h2>
+          <ul class="mt-4 divide-y divide-rule border-t border-rule">
+            {commitments.map((commitment) => (
+              <li class="py-4">
+                <p class="text-[0.9375rem] leading-relaxed">{commitment.data.statement}</p>
+                <p class="mt-1.5 text-xs text-muted">
+                  {commitment.data.promised_by} ·{' '}
+                  <time datetime={commitment.data.promised_on}>{commitment.data.promised_on}</time>{' '}
+                  · {commitment.data.status} ·{' '}
+                  <a href={`/evidence/${commitment.data.source}`} class="text-navy underline">
+                    {commitment.data.source}
+                  </a>
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {/* Edmonton evidence */}
+    <section id="evidence">
+      <h2 class={heading}>Edmonton evidence</h2>
+      {
+        evidence.length === 0 ? (
+          <p class="mt-4 border-l-2 border-rule-strong pl-3.5 text-sm text-muted">
+            No evidence objects are registered for this story yet.
+          </p>
+        ) : (
+          <ul class="mt-4 divide-y divide-rule border-t border-rule">
+            {evidence.map((entry) => (
+              <li class="py-4">
+                <a href={`/evidence/${entry.data.id}`} class="font-semibold hover:text-forest">
+                  {entry.data.title}
+                </a>
+                <p class="mt-1 text-xs text-muted">
+                  {entry.data.publisher} · retrieved{' '}
+                  <time datetime={entry.data.retrieved_on}>{entry.data.retrieved_on}</time> ·{' '}
+                  {entry.data.id}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </section>
+
+    {/* Comparable-city evidence with transferability */}
+    {
+      comparisons.length > 0 && (
+        <section id="comparisons">
+          <h2 class={heading}>Comparable cities</h2>
+          <ul class="mt-4 divide-y divide-rule border-t border-rule">
+            {comparisons.map(({ claim, comparison }) => (
+              <li class="py-4">
+                <p class="font-semibold">{comparison.city}</p>
+                <p class="mt-1 text-[0.9375rem] leading-relaxed">{comparison.note}</p>
+                <p class="mt-1.5 text-sm text-muted">
+                  <span class="font-semibold">Transfers to Edmonton?</span>{' '}
+                  {comparison.transferability}
+                </p>
+                <p class="mt-1 text-xs text-muted">
+                  <a href={`#${claim.data.id}`} class="underline">
+                    {claim.data.question}
+                  </a>
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {/* What remains unknown */}
+    {
+      unknowns.length > 0 && (
+        <section id="unknown">
+          <h2 class={heading}>What remains unknown</h2>
+          <ul class="mt-4 space-y-2">
+            {unknowns.map(({ text }) => (
+              <li class="border-l-2 border-rule pl-3.5 text-[0.9375rem] leading-relaxed">{text}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {/* Missing evidence */}
+    {
+      missing.length > 0 && (
+        <section id="missing-evidence">
+          <h2 class={heading}>Missing evidence</h2>
+          <p class="mt-1.5 text-sm text-muted">
+            Records we asked for and have not received, or that do not appear to exist publicly.
+          </p>
+          <ul class="mt-3 space-y-2">
+            {missing.map(({ text }) => (
+              <li class="border-l-2 border-rule pl-3.5 text-[0.9375rem] leading-relaxed">{text}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {/* AI review */}
+    <AiReview story={story} claims={claims} />
+
+    {/* Article history */}
+    <section id="history">
+      <h2 class={heading}>Article history</h2>
+      {
+        story.data.changelog.length > 0 ? (
+          <ul class="mt-4 divide-y divide-rule border-t border-rule">
+            {[...story.data.changelog]
+              .sort((a, b) => b.date.localeCompare(a.date))
+              .map((entry) => (
+                <li class="flex flex-wrap gap-x-3 py-2.5 text-sm">
+                  <time datetime={entry.date} class="text-muted">
+                    {entry.date}
+                  </time>
+                  <span class="font-semibold text-forest">{entry.type}</span>
+                  <span class="basis-full text-ink sm:basis-auto">{entry.note}</span>
+                </li>
+              ))}
+          </ul>
+        ) : (
+          <p class="mt-4 border-l-2 border-rule-strong pl-3.5 text-sm text-muted">
+            No history yet — this story has not been published or revised.
+          </p>
+        )
+      }
+      <p class="mt-3 text-xs text-muted">
+        Every change to this page is in{' '}
+        <a href={`${SITE.repo}/commits/main/src/content/stories/${story.id}.mdx`} rel="noopener" class="text-navy underline">
+          the public git history
+        </a>.
+      </p>
+    </section>
+
+    {/* CTAs */}
+    <section id="challenge" class="mt-14 border-t-2 border-rule-strong pt-6" data-pagefind-ignore>
+      <h2 class="text-lg font-extrabold tracking-[-0.015em] text-forest">
+        Think we got something wrong?
+      </h2>
+      <p class="mt-1.5 text-sm leading-relaxed text-muted">
+        Point at the evidence. Corrections are published with a dated entry in the article history
+        above.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-3 text-sm">
+        <a
+          href={issueUrl(
+            `Challenge: ${story.data.title}`,
+            `Page: ${pageUrl}\n\nWhich claim:\n\nWhat you think is wrong:\n\nEvidence (links):\n`,
+          )}
+          rel="noopener"
+          class="border border-rule px-3 py-1.5 transition-colors hover:border-forest hover:text-forest"
+        >
+          Challenge this conclusion
+        </a>
+        <a
+          href={mailto(
+            `Evidence for: ${story.data.title}`,
+            `Page: ${pageUrl}\n\nWhat you have:\n`,
+          )}
+          class="border border-rule px-3 py-1.5 transition-colors hover:border-forest hover:text-forest"
+        >
+          Send us evidence
+        </a>
+        <a
+          href={issueUrl('Suggest a topic', 'What should YEGFacts check, and why?\n')}
+          rel="noopener"
+          class="border border-rule px-3 py-1.5 transition-colors hover:border-forest hover:text-forest"
+        >
+          Suggest a topic
+        </a>
+      </div>
+    </section>
+  </article>
+</Base>

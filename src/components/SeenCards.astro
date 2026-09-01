@@ -1,0 +1,85 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+/**
+ * "Claims we're seeing" — public posts rendered as platform-native cards
+ * (spec §3). Names, usernames and profile images are stripped in presentation;
+ * `attribution` survives only for public officials and organizations. Cards are
+ * labelled as examples, never as "most common".
+ */
+interface Props {
+  seen: CollectionEntry<'stories'>['data']['seen'];
+}
+
+const { seen } = Astro.props;
+
+const chrome = {
+  facebook: {
+    name: 'Facebook',
+    frame: 'bg-white border-[#dfe3e8]',
+    handle: 'text-[#385898]',
+    meta: 'Comment',
+  },
+  reddit: {
+    name: 'Reddit',
+    frame: 'bg-white border-[#e2dfd9]',
+    handle: 'text-[#7a5230]',
+    meta: 'Comment',
+  },
+  x: {
+    name: 'X',
+    frame: 'bg-white border-[#dcdfe2]',
+    handle: 'text-ink',
+    meta: 'Post',
+  },
+} as const;
+---
+
+{
+  seen.length > 0 && (
+    <section id="claims-we-are-seeing" class="mt-14">
+      <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Claims we’re seeing</h2>
+      <p class="mt-1.5 text-sm text-muted">
+        Examples of how this is being argued in public — not a measure of how common each version
+        is. Names, usernames and profile pictures are removed here; the original posts remain
+        public.
+      </p>
+
+      <ul class="mt-5 grid gap-3.5 sm:grid-cols-2">
+        {seen.map((card) => {
+          const skin = chrome[card.platform];
+          return (
+            <li class:list={['border p-3.5 text-[0.9375rem] leading-snug', skin.frame]}>
+              <div class="flex items-center gap-2.5">
+                <span
+                  aria-hidden="true"
+                  class="h-7 w-7 shrink-0 rounded-full bg-[#e6e2da]"
+                />
+                <span class="min-w-0">
+                  <span class:list={['block truncate text-sm font-semibold', skin.handle]}>
+                    {card.attribution ?? 'Name removed'}
+                  </span>
+                  <span class="block text-[0.6875rem] text-muted">
+                    {skin.name} {skin.meta.toLowerCase()}
+                    {card.context ? ` · ${card.context}` : ''}
+                  </span>
+                </span>
+              </div>
+
+              <p class="mt-2.5 text-ink">{card.text}</p>
+
+              <p class="mt-2.5 flex items-center gap-2 text-[0.6875rem] text-muted">
+                <span>{card.paraphrased ? 'Paraphrased' : 'Quoted exactly'}</span>
+                {card.source_url && (
+                  <a href={card.source_url} rel="noopener nofollow" class="underline">
+                    original
+                  </a>
+                )}
+              </p>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  )
+}

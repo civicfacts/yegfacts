@@ -1,0 +1,62 @@
+---
+import type { Claim, Story } from '../lib/content';
+import Finding from './Finding.astro';
+import TopicTags from './TopicTags.astro';
+
+/**
+ * A list of stories with their claim findings nested underneath — the shape
+ * used on the homepage and on every topic hub.
+ */
+interface Props {
+  stories: Story[];
+  claimsByStory: Record<string, Claim[]>;
+  showTopics?: boolean;
+}
+
+const { stories, claimsByStory, showTopics = true } = Astro.props;
+---
+
+<ul class="divide-y divide-rule border-t border-rule">
+  {
+    stories.map((story) => (
+      <li class="py-5">
+        <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <h3 class="text-lg font-semibold tracking-[-0.012em]">
+            <a href={`/facts/${story.id}`} class="hover:text-forest">
+              {story.data.title}
+            </a>
+          </h3>
+          {story.data.status === 'pending-review' && (
+            <span class="text-[0.6875rem] tracking-[0.08em] text-gold uppercase">
+              Pending review
+            </span>
+          )}
+        </div>
+
+        <p class="mt-1 text-[0.9375rem] leading-relaxed text-muted">{story.data.one_line}</p>
+
+        {(claimsByStory[story.id] ?? []).length > 0 && (
+          <ul class="mt-3 space-y-1.5">
+            {(claimsByStory[story.id] ?? []).map((claim) => (
+              <li class="text-sm">
+                <a href={`/facts/${story.id}#${claim.data.id}`} class="text-ink hover:text-forest">
+                  {claim.data.question}
+                </a>
+                <span class="mt-0.5 block">
+                  <Finding finding={claim.data.finding} />
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1">
+          {showTopics && <TopicTags topics={story.data.topics} />}
+          <span class="text-xs text-muted">
+            Verified <time datetime={story.data.last_verified}>{story.data.last_verified}</time>
+          </span>
+        </div>
+      </li>
+    ))
+  }
+</ul>

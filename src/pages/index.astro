@@ -1,0 +1,126 @@
+---
+import Base from '../layouts/Base.astro';
+import Wordmark from '../components/Wordmark.astro';
+import StoryList from '../components/StoryList.astro';
+import { SITE } from '../lib/site';
+import { claimsForStory, orderedTopics, publicStories, type Claim } from '../lib/content';
+
+/**
+ * Answer-retrieval, not a blog index (spec §6). Draft stories never reach this
+ * page: `publicStories()` is the single visibility gate.
+ */
+const stories = await publicStories();
+const topics = await orderedTopics();
+
+const claimsByStory: Record<string, Claim[]> = {};
+for (const story of stories) {
+  claimsByStory[story.id] = await claimsForStory(story);
+}
+
+const recentlyVerified = stories.slice(0, 6);
+
+const corrected = stories
+  .filter((story) =>
+    story.data.changelog.some(
+      (entry) => entry.type === 'correction' || entry.type === 'verdict-change',
+    ),
+  )
+  .slice(0, 4);
+
+const storyById = new Map(stories.map((story) => [story.id, story]));
+---
+
+<Base title={SITE.name} description={SITE.tagline}>
+  <section class="border-b border-rule pb-10">
+    <Wordmark size="lg" />
+
+    <h1 class="mt-6 text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] text-forest sm:text-display">
+      {SITE.hero}
+    </h1>
+    <p class="mt-3 text-base text-muted sm:text-lg">{SITE.tagline}</p>
+
+    <form action="/search" method="get" class="mt-7 flex gap-2" role="search">
+      <label for="home-search" class="sr-only">Search checked claims</label>
+      <input
+        id="home-search"
+        type="search"
+        name="q"
+        placeholder="Did Edmonton lose $82M on electric buses?"
+        autocomplete="off"
+        class="min-w-0 grow border border-rule-strong bg-white px-3 py-2.5 text-[0.9375rem] placeholder:text-muted/70 focus:border-forest focus:outline-none"
+      />
+      <button
+        type="submit"
+        class="shrink-0 cursor-pointer bg-forest px-4 py-2.5 text-sm font-semibold text-paper transition-opacity hover:opacity-90"
+      >
+        Search
+      </button>
+    </form>
+    <p class="mt-2 text-xs text-muted">
+      Search every checked claim, or filter by topic and finding on the{' '}
+      <a href="/search" class="text-navy underline">search page</a>.
+    </p>
+  </section>
+
+  <section class="mt-11">
+    <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">Recently verified</h2>
+    {
+      recentlyVerified.length > 0 ? (
+        <div class="mt-4">
+          <StoryList stories={recentlyVerified} claimsByStory={claimsByStory} />
+        </div>
+      ) : (
+        <p class="mt-4 border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed text-muted">
+          Nothing is published yet. The first stories go through the full review panel before they
+          appear here — how that works is set out in the{' '}
+          <a href="/methodology" class="text-navy underline">methodology</a>.
+        </p>
+      )
+    }
+  </section>
+
+  {
+    corrected.length > 0 && (
+      <section class="mt-11">
+        <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
+          Recently corrected
+        </h2>
+        <ul class="mt-4 divide-y divide-rule border-t border-rule">
+          {corrected.map((story) => {
+            const entry = story.data.changelog
+              .filter((item) => item.type === 'correction' || item.type === 'verdict-change')
+              .sort((a, b) => b.date.localeCompare(a.date))[0];
+            return (
+              <li class="py-4">
+                <a href={`/facts/${story.id}`} class="font-semibold hover:text-forest">
+                  {storyById.get(story.id)?.data.title}
+                </a>
+                <p class="mt-1 text-sm text-muted">
+                  <time datetime={entry?.date}>{entry?.date}</time> — {entry?.note}
+                </p>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    )
+  }
+
+  <section class="mt-11">
+    <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">Topics</h2>
+    <ul class="mt-4 grid gap-x-8 gap-y-6 sm:grid-cols-2">
+      {
+        topics.map((topic) => (
+          <li>
+            <h3 class="font-semibold">
+              <a href={`/topics/${topic.data.slug}`} class="hover:text-forest">
+                {topic.data.name}
+              </a>
+            </h3>
+            <p class="mt-1 text-sm leading-relaxed text-muted">{topic.data.overview}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Base>

@@ -1,0 +1,21 @@
+---
+/**
+ * Symbol + styled-text wordmark. The wordmark is never an image: "YEGFacts" in
+ * deep forest, ".ca" in muted gold (spec §6).
+ */
+interface Props {
+  size?: 'sm' | 'lg';
+}
+
+const { size = 'sm' } = Astro.props;
+
+const symbol = size === 'lg' ? 'h-10 sm:h-12' : 'h-7';
+const text = size === 'lg' ? 'text-2xl sm:text-3xl' : 'text-lg';
+---
+
+<span class="inline-flex items-center gap-2.5">
+  <img src="/symbol.png" alt="" width="480" height="400" class={`${symbol} w-auto shrink-0`} />
+  <span class={`${text} font-extrabold tracking-[-0.025em] text-forest`}>
+    YEGFacts<span class="text-gold">.ca</span>
+  </span>
+</span>

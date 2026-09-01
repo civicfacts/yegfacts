@@ -1,0 +1,92 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../lib/site';
+---
+
+<Base
+  title="About & independence"
+  description="Who runs YEGFacts, what he thinks about Edmonton, and why the method is built so that it does not matter."
+>
+  <header class="border-b border-rule pb-6">
+    <h1 class="text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
+      About
+    </h1>
+    <p class="mt-3 max-w-prose text-base leading-relaxed text-muted">
+      YEGFacts checks claims about Edmonton civic government against public records, data and
+      research, and publishes what it finds with the evidence attached.
+    </p>
+  </header>
+
+  <section class="mt-10 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Who runs it</h2>
+    <p>
+      YEGFacts is built and operated by <strong class="font-semibold">Ildar Abdulin</strong>, in
+      Edmonton. One person, working in bursts, on evenings and weekends. There is no newsroom behind
+      this and no institution funding it.
+    </p>
+    <p>
+      Reach me at{' '}
+      <a href={`mailto:${SITE.email}`} class="text-navy underline">{SITE.email}</a>. Everything
+      the site is made of — content, prompts, scripts, edit history — is public at{' '}
+      <a href={SITE.repo} rel="noopener" class="text-navy underline">github.com/civicfacts/yegfacts</a>.
+    </p>
+  </section>
+
+  <section class="mt-12 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
+      What I think, and why it doesn't decide anything here
+    </h2>
+    <p>
+      I have views about urban policy. I think density and transit are usually good for a city, and
+      I am more interested in what a policy produced than in who proposed it. Pretending otherwise
+      would be the dishonest move, so: that is where I start from.
+    </p>
+    <p>
+      The method is built so those views do not get to pick the answers. Three models research each
+      claim independently, without seeing each other's work. The canonical finding is computed from
+      their verdicts by a rule written down in advance and published, not chosen after the fact. My
+      role is applying that published methodology — freezing the brief before the models run,
+      verifying every cited source by hand, and editing prose.
+    </p>
+    <p>
+      That is not a promise that I have no influence; it is a structure that makes influence
+      visible. Every finding on this site shows the evidence it rests on, what each model concluded
+      including where they disagreed, and a dated history of every revision. If I ever overrode the
+      process, the override would be sitting in public next to the evidence it contradicted.
+    </p>
+    <p>
+      A test of whether this is working: the findings should cut in more than one political
+      direction. If every conclusion here flattered the same side, you should stop trusting it —
+      and so should I.
+    </p>
+  </section>
+
+  <section class="mt-12 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Interests to declare</h2>
+    <p>
+      I hold no office and am not a member of any political party. I have no contract with the City
+      of Edmonton and no financial interest in any of the programs checked here. If that changes, it
+      gets written on this page before it affects anything published.
+    </p>
+    <p>
+      YEGFacts is not a charity and does not solicit charitable donations. If contributions are ever
+      accepted to cover research and operating costs, they are disclosed and carry no editorial
+      influence — see the <a href="/support" class="text-navy underline">support page</a>.
+    </p>
+  </section>
+
+  <section class="mt-12 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Corrections</h2>
+    <p>
+      If something here is wrong, the fastest fix is to point at the evidence. Corrections are
+      published as dated entries in the article history on the page that was wrong — nothing is
+      quietly edited.
+    </p>
+    <p>
+      <a href={`${SITE.repo}/issues/new`} rel="noopener" class="text-navy underline">
+        Open an issue
+      </a>{' '}
+      or <a href={`mailto:${SITE.email}`} class="text-navy underline">email me</a>.
+    </p>
+  </section>
+</Base>

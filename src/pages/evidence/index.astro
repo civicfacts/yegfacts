@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const evidence = (await getCollection('evidence')).sort((a, b) =>
+  a.data.id.localeCompare(b.data.id),
+);
+---
+
+<Base
+  title="Evidence registry"
+  description="Every source YEGFacts relies on, with its publisher, retrieval date, archive hash, and what it can establish."
+>
+  <header class="border-b border-rule pb-6">
+    <h1 class="text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
+      Evidence registry
+    </h1>
+    <p class="mt-3 max-w-prose text-base leading-relaxed text-muted">
+      One entry per source. Each records the publisher, the URL, the date it was retrieved, the
+      SHA-256 of the archived bytes, what the source can and cannot establish, and whether we are
+      allowed to mirror it. Claims reference evidence by ID and never inline it.
+    </p>
+  </header>
+
+  {
+    evidence.length > 0 ? (
+      <ul class="mt-8 divide-y divide-rule border-t border-rule">
+        {evidence.map((entry) => (
+          <li class="py-4">
+            <a href={`/evidence/${entry.data.id}`} class="font-semibold hover:text-forest">
+              {entry.data.title}
+            </a>
+            <p class="mt-1 text-xs text-muted">
+              <span class="tabular">{entry.data.id}</span> · {entry.data.publisher} · retrieved{' '}
+              <time datetime={entry.data.retrieved_on}>{entry.data.retrieved_on}</time> ·{' '}
+              {entry.data.archive.visibility === 'public' ? 'mirrored' : 'retained privately'}
+            </p>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="mt-8 border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed text-muted">
+        The registry is empty. Evidence is ingested as stories go through the review panel.
+      </p>
+    )
+  }
+</Base>

@@ -1,0 +1,176 @@
+---
+import Base from '../../layouts/Base.astro';
+import { SITE } from '../../lib/site';
+
+const stages = [
+  {
+    n: '1',
+    name: 'Framing',
+    body: 'A written brief fixes the scope of the story and states each claim precisely before any model runs. This is where the arguable words get pinned down — what “lost” means, gross versus net, whose money, and the as-of date that closes the accounting window. Any calculation the verdict depends on is named here. The brief is frozen before round one, so nobody can move the goalposts once the answers start arriving.',
+  },
+  {
+    n: '2',
+    name: 'Blind research round',
+    body: 'Three models — Claude, GPT and Gemini — receive the identical package: the brief, the public reviewer prompt, and a required JSON output schema. Each runs in its own scratch directory with no access to this repo and no sight of the others. Each returns a per-claim verdict, its confidence, the evidence supporting and challenging it, its limitations, what it could not find, and comparison cities with a judgement about whether those cases transfer to Edmonton.',
+  },
+  {
+    n: '3',
+    name: 'Evidence staging and deterministic merge',
+    body: 'Cited URLs are fetched, hashed and snapshotted. Then a script — no model, no network — validates the three JSON files, de-duplicates the sources, and produces a combined evidence set plus an explicit list of where the models disagree. Accepted sources are added to the evidence registry deliberately, by a separate serialised script, never automatically.',
+  },
+  {
+    n: '4',
+    name: 'Cross-review round',
+    body: 'Each model now sees the combined evidence and the other two sets of findings. The instruction is the opposite of consensus-seeking: find what you missed, find their errors, and state your final position. Disagreement that survives this round is real disagreement, and it is published.',
+  },
+  {
+    n: '5',
+    name: 'Deterministic synthesis',
+    body: 'A script computes the canonical finding from the three reviewer verdicts using a published lookup table over every possible combination. Model identity never enters the calculation, and the property is tested. Unanimous verdicts carry through with the most cautious of the three confidences. A genuinely split panel produces Mixed, with the split shown. All published arithmetic lives in a tested script, never in prose.',
+  },
+  {
+    n: '6',
+    name: 'Drafting and faithfulness check',
+    body: 'Claude drafts the story and the claim records from the merged evidence — a fixed choice, disclosed here. The other two models then check the draft against the evidence sentence by sentence, looking for anything asserted that the evidence does not carry. Flags are fixed before a human sees it.',
+  },
+  {
+    n: '7',
+    name: 'Human gate',
+    body: 'Ildar Abdulin verifies every source cited by the final claims — every one, not a sample — reads the raw model output before it is committed, edits the prose, and merges. Nothing reaches published status without this. A story may be deployed earlier in pending-review status; it is bannered as such and is not a finding.',
+  },
+];
+
+const findings = [
+  {
+    word: 'Supported',
+    body: 'The evidence establishes the claim.',
+  },
+  {
+    word: 'Partially supported',
+    body: 'Part of the claim holds and part does not — usually because a true fact has been stretched past what it shows.',
+  },
+  {
+    word: 'Not established',
+    body: 'The evidence available does not settle it. This is not a synonym for false. It means the record cannot answer the question yet, and we say what is missing.',
+  },
+  {
+    word: 'Contradicted',
+    body: 'The evidence points against the claim.',
+  },
+  {
+    word: 'Mixed',
+    body: 'Reserved for a materially split panel. Reviewers cannot output Mixed; only synthesis produces it, and only when the three reviewers genuinely divide. Where you see Mixed, the disagreement is shown rather than smoothed over.',
+  },
+];
+---
+
+<Base
+  title="Methodology"
+  description="How YEGFacts produces a finding: a frozen brief, three models researching blind, a deterministic merge, a cross-review round, and a human gate before anything is published."
+>
+  <header class="border-b border-rule pb-6">
+    <h1 class="text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
+      Methodology
+    </h1>
+    <p class="mt-3 max-w-prose text-base leading-relaxed text-muted">
+      AI does the research labour here. It does not carry the authority. Authority comes from a
+      public, auditable process: what was asked, which sources answered it, what three independent
+      models each concluded, how those conclusions were combined by a rule written in advance, and
+      what a named human checked before it was published.
+    </p>
+    <p class="mt-3">
+      <a href="/methodology/changes" class="text-navy underline">Methodology changes</a>
+      <span class="text-muted"> — every revision to the process, versioned and dated.</span>
+    </p>
+  </header>
+
+  <section class="mt-11">
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
+      Seven stages, per story
+    </h2>
+    <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+      One run covers all of a story’s claims. The state of every run lives in the repo, so any
+      session can pick up where the last one stopped, and so can you.
+    </p>
+
+    <ol class="mt-6 divide-y divide-rule border-t border-rule">
+      {
+        stages.map((stage) => (
+          <li class="grid gap-x-5 gap-y-1 py-5 sm:grid-cols-[2rem_1fr]">
+            <span class="text-lg font-extrabold text-gold tabular">{stage.n}</span>
+            <div>
+              <h3 class="font-semibold tracking-[-0.012em] text-forest">{stage.name}</h3>
+              <p class="mt-1.5 text-[0.9375rem] leading-relaxed">{stage.body}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="mt-14">
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">The words we use</h2>
+    <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+      No TRUE/FALSE. No scores out of ten. A finding is a sentence in a controlled vocabulary, and
+      it is reported alongside two separate things: the evidence basis (what kind of record answered
+      the question) and confidence (High, Moderate or Low). A claim can be Supported on a thin
+      basis, or Not established with high confidence that the record simply does not exist.
+    </p>
+
+    <dl class="mt-6 divide-y divide-rule border-t border-rule">
+      {
+        findings.map((finding) => (
+          <div class="grid gap-x-6 gap-y-1 py-4 sm:grid-cols-[11rem_1fr]">
+            <dt class="font-semibold text-forest">{finding.word}</dt>
+            <dd class="text-[0.9375rem] leading-relaxed">{finding.body}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <p class="mt-5 max-w-prose border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed">
+      There are two vocabularies, deliberately. A reviewer may only return Supported, Partially
+      supported, Not established or Contradicted. Mixed is a synthesis outcome, not a hedge a model
+      can reach for — which is why a Mixed finding always comes with the panel split that produced
+      it.
+    </p>
+  </section>
+
+  <section class="mt-14">
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">What stories carry</h2>
+    <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed">
+      A story has no verdict of its own. Verdicts belong to claims — the atomic, testable
+      propositions inside it — and each claim has its own anchor so it can be linked and quoted
+      directly. Stories also record what the City promised, separately from whether the promise was
+      kept: recording a commitment is transcription and needs no panel run, and it only becomes
+      assessed when a real claim about it goes through the process above.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      Every load-bearing source is registered with its publisher, retrieval date, and the SHA-256 of
+      the bytes we archived. Where we are allowed to mirror a file, it is committed to the public
+      repo. Where we are not, the hash and the original URL are published and the file is retained
+      privately, so a missing document can still be proved to be the one we read.
+    </p>
+  </section>
+
+  <section class="mt-14">
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Limits we set on ourselves</h2>
+    <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed">
+      Version 1 of YEGFacts publishes no allegations about named individuals. The claims we check
+      are about policies, programs, budgets and outcomes.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      Reproducibility has a real limit and we would rather state it than paper over it. The panel
+      runs through consumer CLI subscriptions, so an identical rerun cannot be guaranteed to produce
+      identical model output. What is recorded instead is the manifest: which models, which CLI
+      versions, which prompt hash, which methodology version, and when. The method is rerunnable;
+      the model output is not bit-exact, and no finding depends on it being so — the evidence and
+      the synthesis rule are both public.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      Everything on this site is in a public repository:{' '}
+      <a href={SITE.repo} rel="noopener" class="text-navy underline">{SITE.repo}</a>. The prompts,
+      the synthesis matrix, the validation rules and the full edit history are all there.
+    </p>
+  </section>
+</Base>

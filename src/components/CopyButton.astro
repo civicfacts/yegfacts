@@ -1,0 +1,40 @@
+---
+/**
+ * Copies a disclosure level as "<text>\n\n<url>" so a pasted quote always
+ * arrives with the link that backs it (spec §6). Tiny vanilla JS, no island.
+ */
+interface Props {
+  text: string;
+  url: string;
+  label?: string;
+}
+
+const { text, url, label = 'Copy' } = Astro.props;
+---
+
+<button
+  type="button"
+  class="copy-button shrink-0 cursor-pointer border border-rule px-2 py-0.5 text-xs text-muted transition-colors hover:border-forest hover:text-forest"
+  data-copy-text={text}
+  data-copy-url={url}
+  data-copy-label={label}
+>
+  {label}
+</button>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.copy-button').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const payload = `${button.dataset.copyText ?? ''}\n\n${button.dataset.copyUrl ?? ''}`;
+      try {
+        await navigator.clipboard.writeText(payload);
+        button.textContent = 'Copied';
+      } catch {
+        button.textContent = 'Press ⌘C';
+      }
+      window.setTimeout(() => {
+        button.textContent = button.dataset.copyLabel ?? 'Copy';
+      }, 1600);
+    });
+  });
+</script>

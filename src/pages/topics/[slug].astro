@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import StoryList from '../../components/StoryList.astro';
+import { claimsForStory, publicStories, type Claim, type Topic } from '../../lib/content';
+
+/**
+ * A topic hub: the curated overview plus an auto-assembled list of the topic's
+ * stories with their claim findings nested (spec §3). Draft stories are absent
+ * because the list comes from `publicStories()`.
+ */
+export async function getStaticPaths() {
+  const topics = await getCollection('topics');
+  const stories = await publicStories();
+
+  return Promise.all(
+    topics.map(async (topic) => {
+      const matching = stories.filter((story) => story.data.topics.includes(topic.data.slug));
+      const claimsByStory: Record<string, Claim[]> = {};
+      for (const story of matching) {
+        claimsByStory[story.id] = await claimsForStory(story);
+      }
+      return {
+        params: { slug: topic.data.slug },
+        props: { topic, stories: matching, claimsByStory },
+      };
+    }),
+  );
+}
+
+interface Props {
+  topic: Topic;
+  stories: Awaited<ReturnType<typeof publicStories>>;
+  claimsByStory: Record<string, Claim[]>;
+}
+
+const { topic, stories, claimsByStory } = Astro.props;
+---
+
+<Base title={topic.data.name} description={topic.data.overview}>
+  <header class="border-b border-rule pb-6">
+    <p class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">Topic</p>
+    <h1 class="mt-2 text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
+      {topic.data.name}
+    </h1>
+    <p class="mt-3 max-w-prose text-base leading-relaxed text-muted">{topic.data.overview}</p>
+  </header>
+
+  <section class="mt-9">
+    <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
+      Checked under this topic
+    </h2>
+    {
+      stories.length > 0 ? (
+        <div class="mt-4">
+          <StoryList stories={stories} claimsByStory={claimsByStory} showTopics={false} />
+        </div>
+      ) : (
+        <p class="mt-4 border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed text-muted">
+          Nothing is published under this topic yet.
+        </p>
+      )
+    }
+  </section>
+</Base>

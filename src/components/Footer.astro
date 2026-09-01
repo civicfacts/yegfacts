@@ -1,0 +1,73 @@
+---
+import { SITE } from '../lib/site';
+
+const columns = [
+  {
+    heading: 'The site',
+    links: [
+      { href: '/', label: 'Home' },
+      { href: '/search', label: 'Search' },
+      { href: '/commitments', label: 'Commitments' },
+      { href: '/evidence', label: 'Evidence' },
+    ],
+  },
+  {
+    heading: 'How this works',
+    links: [
+      { href: '/methodology', label: 'Methodology' },
+      { href: '/methodology/changes', label: 'Methodology changes' },
+      { href: '/about', label: 'About & independence' },
+      { href: '/support', label: 'Support' },
+    ],
+  },
+];
+---
+
+<footer class="mt-20 border-t border-rule" data-pagefind-ignore>
+  <div class="mx-auto max-w-3xl px-5 py-10">
+    <div class="grid gap-8 sm:grid-cols-3">
+      {
+        columns.map((column) => (
+          <nav aria-label={column.heading}>
+            <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
+              {column.heading}
+            </h2>
+            <ul class="mt-3 space-y-1.5 text-sm">
+              {column.links.map((link) => (
+                <li>
+                  <a href={link.href} class="text-ink transition-colors hover:text-forest">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
+      <div>
+        <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">Contact</h2>
+        <ul class="mt-3 space-y-1.5 text-sm">
+          <li>
+            <a href={`mailto:${SITE.email}`} class="text-ink transition-colors hover:text-forest">
+              {SITE.email}
+            </a>
+          </li>
+          <li>
+            <a
+              href={SITE.repo}
+              rel="noopener"
+              class="text-ink transition-colors hover:text-forest"
+            >
+              Source on GitHub
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="mt-9 border-t border-rule pt-5 text-xs leading-relaxed text-muted">
+      Operated by {SITE.operator}. Non-partisan civic evidence for Edmonton — every finding shows
+      its evidence, its model reviews, and its revision history.
+    </p>
+  </div>
+</footer>

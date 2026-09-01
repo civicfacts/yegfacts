@@ -1,0 +1,127 @@
+---
+import type { Claim, Story } from '../lib/content';
+import { repoPath } from '../lib/site';
+
+/**
+ * AI review, three disclosure layers (spec §6):
+ *   1. compact panel overview — per-claim reviewer verdicts and agreement;
+ *   2. each model expandable to key findings and what changed between rounds;
+ *   3. a link to the raw committed run JSON — rendered ONLY for `published`
+ *      stories, because the raw rounds are committed at the §5 stage-7 release
+ *      check and do not exist in the repo before it.
+ */
+interface Props {
+  story: Story;
+  claims: Claim[];
+}
+
+const { story, claims } = Astro.props;
+
+const reviewed = claims.filter((claim) => claim.data.review !== undefined);
+
+/** Model column order is taken from the first reviewed claim and held steady. */
+const models = reviewed[0]?.data.review?.reviewers.map((reviewer) => reviewer.model) ?? [];
+
+const runs = [...new Set(reviewed.map((claim) => claim.data.review_run))];
+const showRaw = story.data.status === 'published' && runs.length > 0;
+---
+
+<section id="ai-review" class="mt-14">
+  <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">AI review</h2>
+  <p class="mt-1.5 text-sm leading-relaxed text-muted">
+    Three models research each claim independently, then cross-review each other’s findings. The
+    canonical finding is computed from their verdicts by a published, deterministic rule — the
+    models never vote and never decide. Authority comes from the{' '}
+    <a href="/methodology" class="text-navy underline">methodology</a>, not from the models.
+  </p>
+
+  {
+    reviewed.length === 0 ? (
+      <p class="mt-5 border-l-2 border-rule-strong pl-3 text-sm text-muted">
+        No panel run has been published for this story yet.
+      </p>
+    ) : (
+      <>
+        {/* Layer 1 — panel overview */}
+        <div class="mt-5 overflow-x-auto">
+          <table class="w-full min-w-[34rem] border-collapse text-sm">
+            <thead>
+              <tr class="border-b border-rule-strong text-left">
+                <th class="py-2 pr-4 font-semibold text-muted">Claim</th>
+                {models.map((model) => (
+                  <th class="py-2 pr-4 font-semibold text-muted">{model}</th>
+                ))}
+                <th class="py-2 font-semibold text-muted">Panel</th>
+              </tr>
+            </thead>
+            <tbody>
+              {reviewed.map((claim) => (
+                <tr class="border-b border-rule align-top">
+                  <td class="py-2.5 pr-4">
+                    <a href={`#${claim.data.id}`} class="text-navy underline">
+                      {claim.data.question}
+                    </a>
+                  </td>
+                  {claim.data.review?.reviewers.map((reviewer) => (
+                    <td class="py-2.5 pr-4">
+                      {reviewer.verdict}
+                      <span class="block text-xs text-muted">{reviewer.confidence} confidence</span>
+                    </td>
+                  ))}
+                  <td class="py-2.5 font-semibold">
+                    {claim.data.review?.agreement}
+                    <span class="block text-xs font-normal text-muted">{claim.data.finding}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Layer 2 — each model expandable */}
+        <div class="mt-6 space-y-2.5">
+          {reviewed.map((claim) =>
+            claim.data.review?.reviewers.map((reviewer) => (
+              <details class="border border-rule px-3.5 py-2.5">
+                <summary class="cursor-pointer list-none text-sm">
+                  <span class="font-semibold text-forest">{reviewer.model}</span>
+                  <span class="text-muted"> on “{claim.data.question}” — {reviewer.verdict}</span>
+                </summary>
+                <ul class="mt-2.5 space-y-1.5 border-t border-rule pt-2.5 text-sm text-ink">
+                  {reviewer.key_findings.map((finding) => (
+                    <li class="border-l-2 border-rule pl-3">{finding}</li>
+                  ))}
+                </ul>
+                {reviewer.changed_between_rounds && (
+                  <p class="mt-2.5 text-sm text-muted">
+                    <span class="font-semibold">Changed after cross-review:</span>{' '}
+                    {reviewer.changed_between_rounds}
+                  </p>
+                )}
+              </details>
+            )),
+          )}
+        </div>
+
+        {/* Layer 3 — raw run JSON, published stories only */}
+        <p class="mt-5 text-sm text-muted">
+          {showRaw ? (
+            <>
+              Raw review runs:{' '}
+              {runs.map((run, index) => (
+                <>
+                  {index > 0 && ', '}
+                  <a href={repoPath(run)} rel="noopener" class="text-navy underline">
+                    {run}
+                  </a>
+                </>
+              ))}
+            </>
+          ) : (
+            'Raw run JSON is published with the story, after the founder release check.'
+          )}
+        </p>
+      </>
+    )
+  }
+</section>

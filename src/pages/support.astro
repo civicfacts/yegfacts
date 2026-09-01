@@ -1,0 +1,76 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../lib/site';
+---
+
+<Base
+  title="Support YEGFacts"
+  description="How to support the research and operating costs behind YEGFacts, and the funding policy that comes with it."
+>
+  <header class="border-b border-rule pb-6">
+    <h1 class="text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
+      Support YEGFacts
+    </h1>
+    <p class="mt-3 max-w-prose text-base leading-relaxed text-muted">
+      Checking a claim properly costs time: reading council reports, chasing records that are not
+      posted anywhere, verifying every source by hand. Contributions pay for that work and for
+      keeping the site running.
+    </p>
+  </header>
+
+  <section class="mt-9">
+    <div class="border border-rule-strong bg-wash px-4 py-5">
+      <h2 class="font-semibold text-forest">Contribution links coming soon</h2>
+      <p class="mt-1.5 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+        Payment links are not live yet. Until they are, the most useful support is evidence and
+        corrections: <a href={`mailto:${SITE.email}`} class="text-navy underline">{SITE.email}</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="mt-12 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
+      What your money does and does not buy
+    </h2>
+    <p>
+      Contributions support research and operating costs. They buy no editorial influence of any
+      kind: not which claims get checked, not how a claim is framed, and certainly not what the
+      finding turns out to be. There is no tier that comes with a say.
+    </p>
+    <p>
+      Contributions are disclosed. Anyone who contributes materially is named on this page unless
+      they ask not to be, in which case the amount is still disclosed without the name.
+    </p>
+    <p>
+      Nobody who is a subject of a check — a candidate, a party, a campaign, or a firm holding a
+      City contract we are examining — can contribute. If a contribution like that arrives, it is
+      returned and the fact is recorded here.
+    </p>
+  </section>
+
+  <section class="mt-12 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
+      These are not charitable donations
+    </h2>
+    <p>
+      Being plain about this: YEGFacts is operated as a for-profit business, not a registered
+      charity. Contributions are <strong class="font-semibold">not charitable donations</strong>,
+      they are not tax-deductible, and
+      <strong class="font-semibold">no tax receipt is issued</strong>. If you are contributing
+      because you want a receipt, this is not that.
+    </p>
+  </section>
+
+  <section class="mt-12 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Why this is credible</h2>
+    <p>
+      Independence claims are cheap. What makes this one checkable is that the whole process is in
+      public: the evidence behind every finding, what each of the three models concluded and where
+      they disagreed, the rule that combined those verdicts, and a dated history of every revision.
+      My role is applying that published methodology — an override would be visible sitting next to
+      the evidence it contradicted. See{' '}
+      <a href="/methodology" class="text-navy underline">the methodology</a> and{' '}
+      <a href="/about" class="text-navy underline">about &amp; independence</a>.
+    </p>
+  </section>
+</Base>

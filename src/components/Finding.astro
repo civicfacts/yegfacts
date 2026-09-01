@@ -1,0 +1,30 @@
+---
+/**
+ * A finding is carried by the word, not by a badge. Colour is a whisper: a
+ * 2px leading rule and a slight hue shift. No traffic lights (spec §6).
+ */
+interface Props {
+  finding: string;
+  size?: 'sm' | 'lg';
+}
+
+const { finding, size = 'sm' } = Astro.props;
+
+const tone: Record<string, string> = {
+  Supported: 'text-forest border-forest',
+  'Partially supported': 'text-navy border-navy',
+  'Not established': 'text-muted border-rule-strong',
+  Contradicted: 'text-[#7a2f22] border-[#7a2f22]',
+  Mixed: 'text-gold border-gold',
+};
+
+const classes = tone[finding] ?? 'text-ink border-rule-strong';
+---
+
+<span
+  class:list={[
+    'inline-block border-l-2 pl-2 font-semibold',
+    classes,
+    size === 'lg' ? 'text-lg' : 'text-sm',
+  ]}>{finding}</span
+>

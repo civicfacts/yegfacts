@@ -1,0 +1,13 @@
+# Methodology changelog. Every entry bumps the version.
+# CI requires an entry here for any change under prompts/, scripts/merge*,
+# scripts/synthesize*, or methodology/.
+- version: "1.0"
+  date: "2026-08-31"
+  scope: initial
+  note: >
+    Initial methodology: three-reviewer panel (Claude Fable 5, GPT-5.6 Sol,
+    Gemini 3.1 Pro via CLI), blind round 1, deterministic merge,
+    cross-review round 2, deterministic multiset synthesis matrix,
+    drafting with two-model faithfulness check, human publication gate.
+    Reviewer verdicts: Supported / Partially supported / Not established /
+    Contradicted. Canonical findings add Mixed (split panel only).
