@@ -87,10 +87,23 @@ const hasToc = sections.length > 0;
                 with no marker reads as a heading, not a control.
               */}
               <summary class="flex min-h-10 cursor-pointer list-none items-center justify-between gap-3 text-[0.6875rem] font-semibold tracking-[0.11em] text-muted uppercase">
-                On this page
-                <span class="toc-state font-normal" />
+                <span class="flex min-w-0 items-baseline gap-1.5">
+                  <span class="shrink-0">On this page</span>
+                  {/*
+                    Where the reader is, written into the bar by the same script
+                    that highlights the outline. Once the bar is stuck to the
+                    top it is the only thing on screen that can say it, and a
+                    long subhead truncates rather than wrapping the row to two
+                    lines.
+                  */}
+                  <span
+                    class="truncate font-normal tracking-normal normal-case"
+                    data-toc-current
+                  />
+                </span>
+                <span class="toc-state shrink-0 font-normal" />
               </summary>
-              <div class="pb-4">
+              <div class="toc-panel pb-4">
                 <PageToc sections={sections} />
                 <div class="mt-5">
                   <ReportBox path={path} title={title} />
@@ -140,6 +153,16 @@ const hasToc = sections.length > 0;
       // the line, not the first: a subhead and the section containing it are
       // both past it at once, and the deeper of the two is the one the reader
       // is in.
+
+      // The phone bar closes when a link inside it is followed: one listener on
+      // the disclosure, because the panel holds both the outline and the report
+      // box and every link in it navigates away from the bar.
+      const disclosure = document.querySelector<HTMLDetailsElement>('.toc-disclosure');
+      disclosure?.addEventListener('click', (event) => {
+        const target = event.target;
+        if (target instanceof Element && target.closest('a')) disclosure.open = false;
+      });
+
       const links = new Map<string, HTMLAnchorElement[]>();
       for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')) {
         const id = link.getAttribute('href')?.slice(1);
@@ -157,10 +180,17 @@ const hasToc = sections.length > 0;
         .filter((element): element is HTMLElement => element !== null);
 
       if (targets.length > 0) {
+        const label = document.querySelector<HTMLElement>('[data-toc-current]');
         let current = '';
         const setCurrent = (id: string) => {
           if (id === current) return;
           current = id;
+          // The stuck bar says which section the reader is in; nothing current
+          // — above the first heading — leaves it empty rather than guessing.
+          if (label) {
+            const text = links.get(id)?.[0]?.textContent?.trim();
+            label.textContent = text ? `\u00b7 ${text}` : '';
+          }
           for (const [key, group] of links) {
             for (const link of group) {
               link.classList.toggle('is-current', key === id);

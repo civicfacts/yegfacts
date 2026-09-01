@@ -92,9 +92,48 @@ summary.list-none::-webkit-details-marker {
   content: 'Hide';
 }
 
+/*
+ * On a phone the outline is the only navigation a story has, and it used to
+ * scroll away with the first screen. Stuck to the top it stays reachable and
+ * doubles as a position indicator — see `[data-toc-current]` in the layout.
+ * Nothing between it and the viewport sets `overflow`, which would turn the
+ * sticky into an ordinary block. Above `lg` the rail takes over and the bar is
+ * hidden, so this stops there.
+ */
+@media (width < 64rem) {
+  .toc-disclosure {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background-color: var(--color-paper);
+  }
+
+  /*
+   * The open panel is a panel, not a page: it caps at three fifths of the
+   * screen and scrolls inside itself, so the story stays visible behind it.
+   */
+  .toc-panel {
+    max-height: 60vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+}
+
 /* An outline link lands its section under the top of the window, not against it. */
 main [id] {
   scroll-margin-top: 1.5rem;
+}
+
+/*
+ * Below `lg` the outline bar is stuck over the top of the page, so a heading
+ * needs to clear the bar rather than the window. Stated after the rule above
+ * because the two have the same specificity.
+ */
+@media (width < 64rem) {
+  main [id] {
+    scroll-margin-top: 3.5rem;
+  }
 }
 
 /* Numbers in evidence tables and dates should not jitter. */

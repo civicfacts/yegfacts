@@ -97,8 +97,8 @@ const heading = 'section-heading mt-14';
  * have.
  */
 const sections = toc([
-  story.data.seen.length > 0 && { id: 'claims-we-are-seeing', label: 'Common forms' },
   story.data.tldr.length > 0 && { id: 'tldr', label: 'TL;DR' },
+  story.data.seen.length > 0 && { id: 'claims-we-are-seeing', label: 'Common forms' },
   {
     id: 'what-happened',
     label: 'What actually happened',
@@ -122,7 +122,16 @@ const mainClaim = 'ml-2 align-middle text-[0.6875rem] tracking-[0.08em] text-gol
 
   <article>
     <header class="border-b border-rule pb-7">
-      <TopicTags topics={story.data.topics} />
+      {/*
+        The kicker names the genre before the topics name the subject: a reader
+        arriving from a search result should know this is a fact check without
+        reading the title first. Plain text, not a link and not a badge — the
+        topics beside it are the only things here worth touching.
+      */}
+      <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-xs text-muted">
+        <span>Fact check ·</span>
+        <TopicTags topics={story.data.topics} />
+      </div>
       <h1
         class="mt-3 text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] text-balance sm:text-display"
       >
@@ -182,8 +191,18 @@ const mainClaim = 'ml-2 align-middle text-[0.6875rem] tracking-[0.08em] text-gol
         <CopyButton text={story.data.one_line} url={pageUrl} label="Copy" />
       </div>
 
+      {/*
+        Provenance, then dates. The line used to open with the dates alone,
+        which answered "how old is this?" and left "who decided this?" to a
+        reader who scrolled far enough to reach the AI review. Naming the panel
+        and the rule here — both glossed, both linking into the methodology —
+        puts the answer where the finding is.
+      */}
       <p class="mt-5 text-xs text-muted">
-        <Gloss {...gloss('as of')}>As of</Gloss>{' '}
+        Verdicts by a{' '}
+        <Gloss {...gloss('three-model AI panel')}>three-model AI panel</Gloss> under a{' '}
+        <Gloss {...gloss('published rule')}>published rule</Gloss> ·{' '}
+        <Gloss {...gloss('as of')}>as of</Gloss>{' '}
         <time datetime={story.data.as_of}>{story.data.as_of}</time> ·{' '}
         <Gloss {...gloss('last verified')}>last verified</Gloss>{' '}
         <time datetime={story.data.last_verified}>{story.data.last_verified}</time> ·{' '}
@@ -194,7 +213,7 @@ const mainClaim = 'ml-2 align-middle text-[0.6875rem] tracking-[0.08em] text-gol
             <>
               {' '}·{' '}
               <Gloss {...gloss('methodology version')} hrefLabel="See what changed">
-                Methodology v{methodologyVersions.join(', v')}
+                methodology v{methodologyVersions.join(', v')}
               </Gloss>
             </>
           )
@@ -202,9 +221,12 @@ const mainClaim = 'ml-2 align-middle text-[0.6875rem] tracking-[0.08em] text-gol
       </p>
     </header>
 
-    {/* Common forms of the claim — what people say, before what is true. */}
-    <SeenCards seen={story.data.seen} />
-
+    {/*
+      The TL;DR follows the one-sentence answer directly, because it is the
+      next layer of the same answer: one_line → tldr → body. It used to sit
+      below the rumour cards, which put what people say ahead of the second
+      pass at what is true.
+    */}
     {/* TL;DR */}
     {
       story.data.tldr.length > 0 && (
@@ -225,6 +247,9 @@ const mainClaim = 'ml-2 align-middle text-[0.6875rem] tracking-[0.08em] text-gol
         </section>
       )
     }
+
+    {/* Common forms of the claim — what people say, before what is true. */}
+    <SeenCards seen={story.data.seen} />
 
     {/* What actually happened */}
     <section id="what-happened">

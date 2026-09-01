@@ -110,6 +110,17 @@ export const glossary: Record<string, GlossaryEntry> = {
       'The version of the published method that produced these findings. Every change to the prompts, the merge and synthesis rules, the vocabulary or the validation bumps it.',
     href: '/methodology/changes',
   },
+  'three-model AI panel': {
+    definition:
+      'Three AI reviewers from different vendors research each claim independently, and blind to each other. Which models ran is recorded with every run and shown in the AI review section of every story.',
+    href: STAGES,
+  },
+  'published rule': {
+    definition:
+      'A fixed synthesis rule, published in advance, turns the three verdicts into one finding word, so no person chooses the finding. The rule and every change to it are versioned in the methodology changelog.',
+    href: AGREEMENT,
+  },
+
   panel: {
     definition:
       'The three models that research each claim independently, blind to each other and to this repo. They never vote: the finding is computed from their locked first-round verdicts by a rule published in advance.',

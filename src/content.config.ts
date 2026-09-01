@@ -99,8 +99,13 @@ const stories = defineCollection({
         .min(1)
         .refine((line) => line.trim().split(/\s+/).length <= 30, 'one_line is over 30 words')
         .refine((line) => !/[\u2014\u2013]/.test(line), 'one_line must not contain a dash'),
-      /** TL;DR bullets — the third disclosure layer. */
-      tldr: z.array(z.string().min(1)).default([]),
+      /**
+       * TL;DR bullets — the second disclosure layer, directly under the answer.
+       * Five at most. Each should carry a fact the one-sentence answer does
+       * not (a figure, a date, a clause of the record); the duplication audit
+       * catches restatement, so the schema only caps the count.
+       */
+      tldr: z.array(z.string().min(1)).max(5, 'tldr has more than five bullets').default([]),
       topics: z.array(topicSlug).min(1),
       claims: z.array(z.string()).default([]),
       commitments: z.array(z.string()).default([]),
