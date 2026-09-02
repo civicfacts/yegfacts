@@ -387,7 +387,8 @@ body, metadata, labels and buttons. Interface chrome is square-cornered —
 badges, panels, buttons, inputs, tables and rules carry no radius, and the one
 exception is 2px on inline code. Three things are circles because the thing
 itself is: the two portrait images on the About and Support pages, and the
-verdict dots in the AI-review matrix. No shadows, and no animation beyond
+verdict dots in the AI-review matrix. No shadows except the one that lifts a
+glossary popover off the text it covers, and no animation beyond
 colour transitions on a few controls — the copy button, the outline links. A
 finding is a filled badge in its own colour — forest Supported, navy Partially
 supported, charcoal Not established, brick Contradicted, gold Mixed — with the
