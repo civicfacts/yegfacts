@@ -1,7 +1,18 @@
 import { parse } from 'yaml';
 
-/** The stages a candidate can be at. `pre-triage` predates triage existing. */
-export type CandidateOutcome = 'GO' | 'PARK' | 'NO' | 'not-triaged' | 'pre-triage';
+/**
+ * The stages a candidate can be at. `pre-triage` predates triage existing.
+ * `not-answered` (methodology v1.13) is a claim we did check and then took off
+ * the findings board, because the public record cannot answer it at the level
+ * people ask it.
+ */
+export type CandidateOutcome =
+  | 'GO'
+  | 'PARK'
+  | 'NO'
+  | 'not-answered'
+  | 'not-triaged'
+  | 'pre-triage';
 
 /** Where the wording came from. */
 export type CandidateOrigin = 'captured' | 'supplied' | 'editor';
@@ -22,6 +33,8 @@ export interface Candidate {
   note?: string;
   /** Repo-relative path to the triage report behind the outcome. */
   triage?: string;
+  /** Repo-relative path to the intake record the triage read. */
+  intake?: string;
   /** Slug of the story carrying the claim, when one does. */
   story?: string;
 }
@@ -50,9 +63,12 @@ const optional = (value: unknown): string | undefined => {
   return trimmed === '' ? undefined : trimmed;
 };
 
+let registerCache: Candidate[] | undefined;
+
 /** Every candidate in the register, in the order the file lists them. */
 export function candidateRegister(): Candidate[] {
-  return Object.values(sources)
+  if (registerCache) return registerCache;
+  registerCache = Object.values(sources)
     .flatMap((raw) => {
       const parsed: unknown = parse(raw);
       const list = (parsed as { candidates?: unknown } | null)?.candidates;
@@ -70,7 +86,75 @@ export function candidateRegister(): Candidate[] {
       reason: optional(entry.reason),
       note: optional(entry.note),
       triage: optional(entry.triage),
+      intake: optional(entry.intake),
       story: optional(entry.story),
     }))
     .filter((candidate) => candidate.id !== '');
+  return registerCache;
+}
+
+/**
+ * The register's outcomes, in the order `/considered` prints them, with the
+ * sentence each one is worth to a reader.
+ *
+ * The outcome is a section heading rather than a badge: a declined claim is a
+ * decision the site defends, not a state to colour-code. The list lives here
+ * because `/considered` and `/considered/<id>` must call the same outcome the
+ * same thing, and a candidate page states in a sentence what the listing states
+ * as a heading.
+ */
+export const REGISTER_SECTIONS = [
+  { id: 'declined', outcome: 'NO', heading: 'Declined' },
+  { id: 'parked', outcome: 'PARK', heading: 'Parked' },
+  { id: 'not-answered', outcome: 'not-answered', heading: 'Checked, not answered' },
+  { id: 'going-ahead', outcome: 'GO', heading: 'Going ahead' },
+  { id: 'pre-triage', outcome: 'pre-triage', heading: 'Checked before triage existed' },
+  { id: 'not-triaged', outcome: 'not-triaged', heading: 'Not yet triaged' },
+] as const;
+
+/** What to call an outcome in running text. Unknown values print themselves. */
+export function outcomeHeading(outcome: string): string {
+  return REGISTER_SECTIONS.find((section) => section.outcome === outcome)?.heading ?? outcome;
+}
+
+const ORIGINS: Record<string, string> = {
+  captured: 'captured from a post',
+  supplied: 'passed to us, source not captured',
+  editor: 'our own hypothesis',
+};
+
+/**
+ * `supplied_by` is written for the register and carries the circumstance as
+ * well as the person ("founder, as a test case for the triage"). Readers need
+ * the circumstance too, or a test case reads as a serious suggestion, so the
+ * whole clause is shown. A lowercase value is a role and takes an article; a
+ * capitalised one is a name and does not.
+ */
+function attribution(suppliedBy: string): string {
+  const article = /^[a-z]/.test(suppliedBy) ? 'the ' : '';
+  return `from ${article}${suppliedBy}`;
+}
+
+/** The one-line "where this wording came from", shared by both register pages. */
+export function provenance(candidate: Candidate): string {
+  const origin = ORIGINS[candidate.origin] ?? candidate.origin;
+  return candidate.supplied_by ? `${origin}, ${attribution(candidate.supplied_by)}` : origin;
+}
+
+/** The label for the link to a candidate's story, when it has one. */
+export function storyLinkLabel(candidate: Candidate): string {
+  return candidate.outcome === 'not-answered'
+    ? 'The story, kept for the record'
+    : 'Where it was checked';
+}
+
+/**
+ * The reports behind a candidate, in the order a page shows them. A candidate
+ * with neither has no page of its own and nothing to link to.
+ */
+export function reportsFor(candidate: Candidate): Array<{ label: string; path: string }> {
+  return [
+    candidate.intake && { label: 'Intake record', path: candidate.intake },
+    candidate.triage && { label: 'Triage', path: candidate.triage },
+  ].filter((report): report is { label: string; path: string } => Boolean(report));
 }

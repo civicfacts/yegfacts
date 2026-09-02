@@ -1,18 +1,26 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { publicClaims, publicStories, type Claim, type Evidence, type Story } from '../../lib/content';
+import {
+  allPublicClaims,
+  allPublicStories,
+  type Claim,
+  type Evidence,
+  type Story,
+} from '../../lib/content';
 import { SITE } from '../../lib/site';
 
 /**
  * One page per evidence object. "Used by" is generated here at build time and
  * never stored in the YAML — two stored lists would drift (spec §3). Only
- * publicly visible claims are listed, so drafts stay hidden.
+ * publicly visible claims are listed, so drafts stay hidden. A withdrawn story
+ * stays in the list: the evidence trail is what it kept when it stopped being a
+ * finding.
  */
 export async function getStaticPaths() {
   const evidence = await getCollection('evidence');
-  const claims = await publicClaims();
-  const stories = await publicStories();
+  const claims = await allPublicClaims();
+  const stories = await allPublicStories();
   const storyById = new Map(stories.map((story) => [story.id, story]));
 
   return evidence.map((entry) => ({

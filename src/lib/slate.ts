@@ -1,4 +1,4 @@
-import { publishedStories, type Story } from './content';
+import { allPublishedStories, type Story } from './content';
 
 /**
  * The nine-story launch slate, pre-registered in `docs/DESIGN.md` §7 before any
@@ -88,6 +88,6 @@ export interface SlateRow extends SlateEntry {
  * cannot disagree about what is still to come.
  */
 export async function launchSlate(): Promise<SlateRow[]> {
-  const byId = new Map((await publishedStories()).map((story) => [story.id, story]));
+  const byId = new Map((await allPublishedStories()).map((story) => [story.id, story]));
   return LAUNCH_SLATE.map((entry) => ({ ...entry, published: byId.get(entry.slug) }));
 }

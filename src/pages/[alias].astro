@@ -1,5 +1,5 @@
 ---
-import { claimsForStory, publicStories } from '../lib/content';
+import { allPublicStories, claimsForStory } from '../lib/content';
 
 /**
  * Root-level alias redirects (spec §6). Hostile or colloquial phrasings — the
@@ -7,10 +7,10 @@ import { claimsForStory, publicStories } from '../lib/content';
  * anchor when the alias came from a claim.
  *
  * Aliases of `draft` stories generate nothing: the source list is
- * `publicStories()`.
+ * `allPublicStories()` — a withdrawn story keeps its aliases, since it keeps its page.
  */
 export async function getStaticPaths() {
-  const stories = await publicStories();
+  const stories = await allPublicStories();
   const paths: Array<{ params: { alias: string }; props: { target: string } }> = [];
   const seen = new Set<string>();
 

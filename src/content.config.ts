@@ -1,6 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
+import { candidateReportsLoader } from './lib/candidate-reports';
 
 /**
  * Controlled vocabularies (design spec §3) live in `src/lib/vocabulary.ts` so
@@ -117,6 +118,25 @@ const stories = defineCollection({
       /** Hostile or colloquial phrasings that redirect here. */
       aliases: z.array(z.string()).default([]),
       status: z.enum(STORY_STATUSES),
+      /**
+       * Set when the story has left the findings board (methodology v1.13):
+       * every claim on it came back Not established because the public record
+       * cannot answer the question at the level people ask it.
+       *
+       * `status` stays `published` — the panel did run, the corrections history
+       * is still the history of a published page, and the page keeps its URL.
+       * What changes is listing: `src/lib/content.ts` keeps a withdrawn story
+       * off every board, and `/considered` lists its claims instead.
+       */
+      withdrawn: z
+        .object({
+          date: isoDate,
+          /** One sentence, shown to readers in the note at the top of the page. */
+          reason: z.string().min(1),
+          /** The `not-answered` candidate id in `intake/register.yaml`. */
+          register: z.string().min(1),
+        })
+        .optional(),
       as_of: isoDate,
       last_verified: isoDate,
       review_by: isoDate,
@@ -324,4 +344,26 @@ const journal = defineCollection({
     }),
 });
 
-export const collections = { stories, claims, commitments, topics, evidence, journal };
+/**
+ * The intake records and triage reports behind `/considered/<id>`, rendered
+ * from Markdown at build time. The loader explains why they cannot be a plain
+ * `glob()`: the register, not a directory, is what says which files exist.
+ */
+const candidateReports = defineCollection({
+  loader: candidateReportsLoader(),
+  schema: z.object({
+    path: z.string().min(1),
+    reader: z.string().optional(),
+    run: z.string().optional(),
+  }),
+});
+
+export const collections = {
+  stories,
+  claims,
+  commitments,
+  topics,
+  evidence,
+  journal,
+  candidateReports,
+};

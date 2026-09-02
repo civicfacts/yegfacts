@@ -674,30 +674,95 @@ function checkReviewRuns(): void {
   }
 }
 
-const CANDIDATE_OUTCOMES = ['GO', 'PARK', 'NO', 'not-triaged', 'pre-triage'];
+const CANDIDATE_OUTCOMES = ['GO', 'PARK', 'NO', 'not-answered', 'not-triaged', 'pre-triage'];
 const CANDIDATE_ORIGINS = ['captured', 'supplied', 'editor'];
 
-/**
- * The candidate register, which `/considered` publishes verbatim.
- *
- * The rule that matters to readers is the last one: a claim we declined or
- * parked must carry a public sentence saying why, because the whole point of
- * the page is that nobody has to wonder.
- */
-function checkCandidateRegister(): void {
-  const file = repoPath('intake', 'register.yaml');
-  if (!existsSync(file)) return;
+/** Outcomes that owe the reader a sentence saying why. */
+const OUTCOMES_NEEDING_REASON = ['PARK', 'NO', 'not-answered'];
 
-  let candidates: Record_[];
+/** The candidates, or `null` when the register is absent or unreadable. */
+function loadCandidateRegister(file: string): Record_[] | null {
+  if (!existsSync(file)) return null;
   try {
     const data = loadYaml<{ candidates?: unknown }>(file);
     if (!Array.isArray(data?.candidates)) {
       fail(file, 'must contain a `candidates` list');
-      return;
+      return null;
     }
-    candidates = data.candidates as Record_[];
+    return data.candidates as Record_[];
   } catch (error) {
     fail(file, `unreadable YAML: ${(error as Error).message}`);
+    return null;
+  }
+}
+
+/**
+ * A `withdrawn` story and its `not-answered` register entry have to point at
+ * each other (methodology v1.13).
+ *
+ * The story leaves the findings boards and `/considered` becomes the only place
+ * its claims are listed, so a half-made pair is a claim that has quietly
+ * vanished: withdrawn with nowhere saying so, or a register entry promising a
+ * story that still counts itself a finding.
+ */
+function checkWithdrawals(file: string, candidates: Record_[]): void {
+  const byId = new Map(
+    candidates
+      .filter((candidate) => typeof candidate?.id === 'string')
+      .map((candidate) => [candidate.id as string, candidate]),
+  );
+
+  for (const candidate of candidates) {
+    if (candidate?.outcome !== 'not-answered') continue;
+    const where = typeof candidate.id === 'string' ? candidate.id : 'candidate';
+    const slug = candidate.story;
+    if (typeof slug !== 'string' || slug.trim() === '') {
+      fail(file, `${where}: outcome not-answered must name the story it withdrew`);
+      continue;
+    }
+    const story = storyBySlug.get(slug);
+    if (!story) {
+      fail(file, `${where}: story "${slug}" does not exist`);
+      continue;
+    }
+    const withdrawn = story.data.withdrawn as Record_ | undefined;
+    if (withdrawn?.register !== candidate.id) {
+      fail(
+        file,
+        `${where}: story "${slug}" must carry withdrawn.register: ${String(candidate.id)}`,
+      );
+    }
+  }
+
+  for (const story of stories) {
+    const withdrawn = story.data.withdrawn as Record_ | undefined;
+    if (withdrawn === undefined) continue;
+    const register = withdrawn.register;
+    const entry = typeof register === 'string' ? byId.get(register) : undefined;
+    if (!entry) {
+      fail(story.file, `withdrawn.register "${String(register)}" is not in the candidate register`);
+    } else if (entry.outcome !== 'not-answered' || entry.story !== story.slug) {
+      fail(
+        story.file,
+        `withdrawn.register "${String(register)}" must be a not-answered entry naming this story`,
+      );
+    }
+  }
+}
+
+/**
+ * The candidate register, which `/considered` publishes verbatim.
+ *
+ * The rule that matters to readers is the reason one: a claim we declined,
+ * parked or checked without an answer must carry a public sentence saying why,
+ * because the whole point of the page is that nobody has to wonder.
+ */
+function checkCandidateRegister(): void {
+  const file = repoPath('intake', 'register.yaml');
+  const candidates = loadCandidateRegister(file);
+  if (candidates === null) {
+    // A withdrawn story with no register at all still has to be caught.
+    checkWithdrawals(file, []);
     return;
   }
 
@@ -717,20 +782,26 @@ function checkCandidateRegister(): void {
     checkEnum(file, `${where} origin`, candidate.origin, CANDIDATE_ORIGINS);
     checkIsoDate(file, `${where} recorded`, candidate.recorded);
 
-    if (candidate.outcome === 'PARK' || candidate.outcome === 'NO') {
+    if (OUTCOMES_NEEDING_REASON.includes(candidate.outcome as string)) {
       if (typeof candidate.reason !== 'string' || candidate.reason.trim() === '') {
-        fail(file, `${where}: outcome ${candidate.outcome} needs a public reason sentence`);
+        fail(file, `${where}: outcome ${String(candidate.outcome)} needs a public reason sentence`);
       }
     }
 
-    if (candidate.triage !== undefined) {
-      if (typeof candidate.triage !== 'string' || candidate.triage.trim() === '') {
-        fail(file, `${where}: triage must be a repo-relative path`);
-      } else if (!existsSync(repoPath(candidate.triage))) {
-        fail(file, `${where}: triage report "${candidate.triage}" does not exist`);
+    // Both paths are rendered at `/considered/<id>`, so a path that does not
+    // resolve is a page that silently loses a section.
+    for (const field of ['triage', 'intake'] as const) {
+      const value = candidate[field];
+      if (value === undefined) continue;
+      if (typeof value !== 'string' || value.trim() === '') {
+        fail(file, `${where}: ${field} must be a repo-relative path`);
+      } else if (!existsSync(repoPath(value))) {
+        fail(file, `${where}: ${field} record "${value}" does not exist`);
       }
     }
   }
+
+  checkWithdrawals(file, candidates);
 }
 
 // ---------------------------------------------------------------------------

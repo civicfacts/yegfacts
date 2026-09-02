@@ -19,33 +19,62 @@ export function isPublic(story: Story): boolean {
   return story.data.status !== 'draft';
 }
 
-/** Every story that may be shown to the public, newest verification first, ties by id. */
-export async function publicStories(): Promise<Story[]> {
-  const stories = await getCollection('stories', isPublic);
-  return stories.sort(
+/**
+ * The second gate (methodology v1.13): a story every one of whose claims came
+ * back Not established because the public record cannot answer the question at
+ * the level people ask it is no longer a finding.
+ *
+ * It keeps its page, its URL and its history — the check happened and the
+ * record of it is the point — but it comes off every board. Hence the pairing
+ * below: the plain helpers are the boards' view and exclude it, and the `all…`
+ * siblings are the whole set, for route generation and for the pages whose job
+ * is the audit trail rather than the findings.
+ */
+export function isWithdrawn(story: Story): boolean {
+  return story.data.withdrawn !== undefined;
+}
+
+const byNewest = (stories: Story[]): Story[] =>
+  stories.sort(
     (a, b) => b.data.last_verified.localeCompare(a.data.last_verified) || a.id.localeCompare(b.id),
   );
+
+/** Every story with a page, withdrawn ones included, newest verification first. */
+export async function allPublicStories(): Promise<Story[]> {
+  return byNewest(await getCollection('stories', isPublic));
+}
+
+/** Every story that may be listed to the public, newest verification first, ties by id. */
+export async function publicStories(): Promise<Story[]> {
+  return (await allPublicStories()).filter((story) => !isWithdrawn(story));
+}
+
+/** Every story that has been through the panel, withdrawn ones included. */
+export async function allPublishedStories(): Promise<Story[]> {
+  return byNewest(await getCollection('stories', (story) => story.data.status === 'published'));
 }
 
 /**
- * Stories that have been through the panel, newest verification first.
+ * Stories that have been through the panel and still stand as findings, newest
+ * verification first.
  *
  * Narrower than `publicStories()` on purpose: the home page is built out of
  * findings, and a `pending-review` story has none yet. Ties on `last_verified`
  * are broken by id so the order is explicit.
  */
 export async function publishedStories(): Promise<Story[]> {
-  const stories = await getCollection('stories', (story) => story.data.status === 'published');
-  return stories.sort(
-    (a, b) => b.data.last_verified.localeCompare(a.data.last_verified) || a.id.localeCompare(b.id),
-  );
+  return (await allPublishedStories()).filter((story) => !isWithdrawn(story));
 }
 
-/** Claims belonging to stories the public can see, keyed by claim id. */
-export async function publicClaims(): Promise<Claim[]> {
-  const visible = new Set((await publicStories()).map((story) => story.id));
+async function claimsOf(stories: Story[]): Promise<Claim[]> {
+  const visible = new Set(stories.map((story) => story.id));
   const claims = await getCollection('claims');
   return claims.filter((claim) => visible.has(claim.data.story));
+}
+
+/** Claims belonging to every story with a page — the evidence trail's view. */
+export async function allPublicClaims(): Promise<Claim[]> {
+  return claimsOf(await allPublicStories());
 }
 
 /** The claims of one story, in the order the story lists them. */
