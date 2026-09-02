@@ -46,7 +46,15 @@ Check, in this order:
 3. **Is it the strongest fair reading?** A brief can decide a verdict in
    advance by testing a weak form of the claim. Rewrite the proposition
    if a fair-minded holder of the view would say "that is not what I
-   meant".
+   meant". The opposite failure is as bad: a proposition that no
+   informed person disputes (new housing on a lot is worth more than the
+   old house that was demolished) is not a claim anyone is making, and
+   a verdict on it, whatever it is, tells the reader nothing. If the
+   circulating claim is about magnitude or consequence, the proposition
+   must carry the magnitude or the consequence, with a predeclared
+   threshold and one alternative, even though a threshold is a
+   judgement. Do not neutralise a claim into a truism in the name of
+   fairness.
 4. **Operationalization and its alternatives.** For every definition,
    threshold, denominator, as-of date and calculation in the brief,
    state at least one other reasonable choice and whether it could
