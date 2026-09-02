@@ -1,0 +1,115 @@
+story: low-density-history
+date: 2026-09-02
+methodology_version: "1.8"
+runs:
+  - provider: anthropic
+    round: 1
+    command: claude -p --model claude-fable-5-1 --effort high < package.md
+    cli_version: 2.1.258 (Claude Code)
+    model_id: claude-fable-5-1
+    seat: Claude Fable 5.1
+    reasoning_effort: high
+    prompt_sha256: 7a1447e33b585b61a8c73e3663864a12072ec822cab5e3a703c6f3d2594e1523
+    methodology_version: "1.8"
+    started_at: 2026-09-01T22:46:56Z
+    finished_at: 2026-09-01T23:03:09Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - reviewer.md
+      - review-schema.json
+  - provider: google
+    round: 1
+    command: agy --effort high --sandbox --print-timeout 45m -p "$(cat package.md)"
+    cli_version: 1.1.23
+    model_id: gemini-3.1-pro
+    seat: Gemini 3.1 Pro
+    reasoning_effort: high
+    prompt_sha256: 7a1447e33b585b61a8c73e3663864a12072ec822cab5e3a703c6f3d2594e1523
+    methodology_version: "1.8"
+    started_at: 2026-09-01T22:47:01Z
+    finished_at: 2026-09-01T22:49:08Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - reviewer.md
+      - review-schema.json
+  - provider: openai
+    round: 1
+    command: codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check < package.md
+    cli_version: codex-cli 0.152.0
+    model_id: gpt-5.6-sol
+    seat: GPT-5.6 Sol
+    reasoning_effort: high
+    prompt_sha256: 7a1447e33b585b61a8c73e3663864a12072ec822cab5e3a703c6f3d2594e1523
+    methodology_version: "1.8"
+    started_at: 2026-09-01T22:46:59Z
+    finished_at: 2026-09-01T22:53:11Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - reviewer.md
+      - review-schema.json
+  - provider: anthropic
+    round: 2
+    command: claude -p --model claude-fable-5-1 --effort high < package.md
+    cli_version: 2.1.258 (Claude Code)
+    model_id: claude-fable-5-1
+    seat: Claude Fable 5.1
+    reasoning_effort: high
+    prompt_sha256: 9ce2b2d88173cb1ebf54f076c8ec7552a56a1f1d98fc871d6cf6f363588cbc35
+    methodology_version: "1.8"
+    started_at: 2026-09-01T23:23:33Z
+    finished_at: 2026-09-01T23:37:56Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - cross-review.md
+      - review-schema.json
+      - combined-evidence.json
+      - other-review-gemini.json
+      - other-review-gpt.json
+  - provider: google
+    round: 2
+    command: agy --effort high --sandbox --print-timeout 45m -p "$(cat package.md)"
+    cli_version: 1.1.23
+    model_id: gemini-3.1-pro
+    seat: Gemini 3.1 Pro
+    reasoning_effort: high
+    prompt_sha256: b02724bb89389eb789da83f50e3890756988b4f6da29badb077823572cb8079a
+    methodology_version: "1.8"
+    started_at: 2026-09-01T23:41:27Z
+    finished_at: 2026-09-01T23:42:40Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - cross-review.md
+      - review-schema.json
+      - combined-evidence.json
+      - other-review-claude.json
+      - other-review-gpt.json
+  - provider: openai
+    round: 2
+    command: codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check < package.md
+    cli_version: codex-cli 0.152.0
+    model_id: gpt-5.6-sol
+    seat: GPT-5.6 Sol
+    reasoning_effort: high
+    prompt_sha256: 026f8ee359fde0d8ce4039a7a21bdf0a0d52b8ccea6d1677e6ce00163d9ccac3
+    methodology_version: "1.8"
+    started_at: 2026-09-01T23:38:14Z
+    finished_at: 2026-09-01T23:41:23Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - cross-review.md
+      - review-schema.json
+      - combined-evidence.json
+      - other-review-claude.json
+      - other-review-gemini.json

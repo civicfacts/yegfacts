@@ -1,4 +1,4 @@
-<!-- Framing check 1. Checker: OpenAI gpt-5.6-sol via codex exec, reasoning effort high, prompt prompts/framing-check.md. Run 2026-09-02 by Stew. The model name printed inside the report is the model's self-report and is not authoritative. -->
+<!-- Framing check 1. Checker: OpenAI gpt-5.6-sol via codex exec, reasoning effort high, prompt prompts/framing-check.md. Run 2026-09-01 by Stew. The model name printed inside the report is the model's self-report and is not authoritative. -->
 
 Verdict: REVISE  
 Model: GPT-5

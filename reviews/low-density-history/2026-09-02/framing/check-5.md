@@ -1,4 +1,4 @@
-<!-- Framing check 5 (confirmation after the one check-4 fix). Checker: OpenAI gpt-5.6-sol via codex exec, reasoning effort high, prompt prompts/framing-check.md (v1.8). Run 2026-09-02 by Stew. -->
+<!-- Framing check 5 (confirmation after the one check-4 fix). Checker: OpenAI gpt-5.6-sol via codex exec, reasoning effort high, prompt prompts/framing-check.md (v1.8). Run 2026-09-01 by Stew. -->
 
 Verdict: FRAME OK
 

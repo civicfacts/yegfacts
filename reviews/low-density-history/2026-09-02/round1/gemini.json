@@ -1,0 +1,112 @@
+{
+  "reviewer": {
+    "provider": "google",
+    "model_self_reported": "Gemini 3.1 Pro",
+    "runner_model": "gemini-3.1-pro",
+    "runner_seat": "Gemini 3.1 Pro",
+    "runner_effort": "high"
+  },
+  "story": "low-density-history",
+  "round": 1,
+  "claims": [
+    {
+      "id": "ldh-existed-century",
+      "proposition_evaluated": "Low-density housing has existed in Edmonton since approximately 1926.",
+      "interpretation_notes": "The operationalization requires classifying 1926 housing using an actual built density measure compared against an identified source's threshold and its specific land-area denominator. Since 1926 records (such as the 1926 Census of the Prairie Provinces) do not provide such a strictly defined threshold with a matching denominator, this rule makes it impossible to classify the clearly existing single-detached housing of that era as 'low-density' under the brief's rules. This predetermines a failure to establish the claim. MATERIAL FRAMING CONCERN",
+      "verdict": "Not established",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Edmonton possessed established residential neighbourhoods with dwelling houses prior to and during 1926, though specific architectural classifications like 'single-detached' were not explicitly categorized in the 1926 Census schedules.",
+          "source_title": "1926 Census of the Prairie Provinces",
+          "source_url": "https://www.bac-lac.gc.ca/eng/census/1926/Pages/default.aspx",
+          "source_type": "legal-audited",
+          "establishes": "The existence of built dwelling houses in Edmonton in 1926, although it does not provide the density threshold required by the brief.",
+          "strength": "moderate"
+        }
+      ],
+      "challenging_evidence": [],
+      "limitations": [
+        "The 1926 Census did not classify dwellings by structural type (e.g., single-detached).",
+        "Public web sources do not provide a contemporaneous 1926 planning document that defines a low-density threshold with a specific land-area denominator."
+      ],
+      "unknowns": [
+        "The exact built density (dwellings per hectare) of Edmonton neighbourhoods in 1926 according to a defined historical denominator."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A 1926-era Edmonton planning or assessment document defining a 'low density' threshold and its exact land-area denominator.",
+          "likely_holder": "City of Edmonton Archives",
+          "importance": "critical"
+        }
+      ],
+      "calculations_needed": [
+        "Calculation of 1926 built dwellings per hectare for a specific neighbourhood using historical lot data and a matching historical threshold."
+      ],
+      "what_would_change_my_verdict": [
+        "Access to a 1926-era Edmonton source that explicitly defines a low-density threshold and its denominator, along with lot-level assessment data for a 1926 neighbourhood to perform the required calculation."
+      ],
+      "suggested_one_line": "While residential dwellings existed in Edmonton in 1926, the strict density threshold required by the brief cannot be computed from available public records.",
+      "suggested_short_answer": "Edmonton had single-family homes in 1926, but the precise historical data required to mathematically prove they met a formally defined 'low-density' threshold is not available in public web sources.",
+      "suggested_tldr": [
+        "Single-family homes existed in Edmonton in 1926.",
+        "The 1926 Census counted dwellings but did not classify them by density or type.",
+        "A formal threshold to mathematically classify 1926 density is missing from public records."
+      ]
+    },
+    {
+      "id": "ldh-planned-around",
+      "proposition_evaluated": "Many neighbourhoods inside Edmonton's boundary in force at the time were planned around low-density housing during that period.",
+      "interpretation_notes": "The brief requires calculating permitted cross-era density (dwellings per hectare) based on the minimum site area and permitted dwellings in historical instruments. Edmonton's first zoning bylaw (Bylaw 26) was not enacted until 1933, meaning there was no city-wide zoning for the 1926-1933 portion of the exact 100-year window. Furthermore, the full text of Bylaw 26-1933 is not available online to extract the minimum site area and permitted secondary uses. Evaluating the 'many' thresholds (count of 10 or 25% share) across historical boundaries requires GIS and archival data unavailable via web search. The requirement to compute density from minimum site area across all historical instruments is impossible without archival access, predetermining a 'Not established' verdict. MATERIAL FRAMING CONCERN",
+      "verdict": "Not established",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Edmonton's first comprehensive zoning bylaw was Bylaw 26-1933, which established one-family residential development zones. This leaves a gap from 1926 to 1933.",
+          "source_title": "History of Zoning in Edmonton",
+          "source_url": "https://canadacommons.ca/artifacts/1220463/history-of-zoning-in-edmonton/1773663/",
+          "source_type": "analytical-report",
+          "establishes": "The start date of Edmonton's first zoning bylaw (1933) and its focus on one-family residential zones.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [],
+      "limitations": [
+        "The full legal text of Bylaw 26-1933 and its schedules are not available in public web searches to determine minimum lot sizes or permitted secondary dwellings.",
+        "Historical city boundaries and neighbourhood polygons cannot be mapped and weighted for the 50% coverage rule without GIS data."
+      ],
+      "unknowns": [
+        "The exact minimum site area and permitted dwelling count under Bylaw 26-1933's residential districts.",
+        "The number and share of neighbourhoods covered by low-density zoning at the end of each era."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Full text of Bylaw 26-1933 and subsequent zoning bylaws to extract minimum lot sizes and permitted uses.",
+          "likely_holder": "City of Edmonton Archives",
+          "importance": "critical"
+        },
+        {
+          "description": "Historical GIS boundary data for Edmonton and its subdivisions for each zoning era.",
+          "likely_holder": "City of Edmonton Open Data / Archives",
+          "importance": "critical"
+        }
+      ],
+      "calculations_needed": [
+        "Permitted dwellings per hectare under Bylaw 26-1933.",
+        "Neighbourhood count and area-weighted share of residential land covered by low-density zoning in each era."
+      ],
+      "what_would_change_my_verdict": [
+        "Access to the complete archival text of Edmonton's historical zoning bylaws and corresponding historical mapping data to perform the required coverage calculations."
+      ],
+      "suggested_one_line": "While Edmonton introduced one-family residential zoning in 1933, the archival records required to mathematically verify the density and neighbourhood coverage rules are not publicly available.",
+      "suggested_short_answer": "Edmonton's first zoning bylaw in 1933 focused on single-family homes, but proving that 'many' neighbourhoods met the strict density and coverage definitions across a century requires archival maps and texts not found online.",
+      "suggested_tldr": [
+        "Edmonton's first zoning bylaw was enacted in 1933, seven years after the 1926 cutoff.",
+        "The 1933 bylaw prioritized one-family residential development.",
+        "The exact lot sizes and neighbourhood coverage maps required by the brief are locked in archives."
+      ]
+    }
+  ]
+}

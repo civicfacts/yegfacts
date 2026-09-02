@@ -1,0 +1,459 @@
+{
+  "reviewer": {
+    "provider": "anthropic",
+    "model_self_reported": "claude-fable-5-1",
+    "runner_model": "claude-fable-5-1",
+    "runner_seat": "Claude Fable 5.1",
+    "runner_effort": "high"
+  },
+  "story": "low-density-history",
+  "round": 1,
+  "claims": [
+    {
+      "id": "ldh-existed-century",
+      "proposition_evaluated": "Documented, occupied low-density housing existed inside Edmonton's city boundary as in force in 1926 (the 1917 boundary), both at the exact-window start of 1926-09-02 and at some point in calendar year 1926, and remained part of the housing stock through 2026-09-02. Built existence is tested separately from legal permission.",
+      "interpretation_notes": "Interpretations added: (1) 'Occupied' is evidenced by the 1926 Henderson's Edmonton City Directory (householder listings at street addresses), by dated house histories in City heritage documents, and by 2001 federal census 'period of construction' counts of surviving pre-1946 dwellings; no 1926 assessment roll was accessible online. (2) The Claim A built-outcome rule requires a dwellings-per-hectare figure with a stated denominator. No source found gives a 1926 dwelling count and area for any occupied area on a net-residential denominator, so a compliant 1926 density figure could not be computed; the housing forms are documented directly, and only bounding figures on a gross denominator are reported, labelled as non-classifying. This is an evidentiary limitation, not a framing defect. (3) Thresholds used: T1 = 25 dwelling units per net residential hectare (Ellerslie NSP, Bylaw 12581, 2001: 'Residential densities of 25 units per net residential hectare for low density residential'); T2 = 30 du/nrha, the lowest planned-density class ('less than 30 du/nrha') in the City's 2023 Net Residential Density Report. Net residential land area per that report 'excludes rural residential parcels as well as parcels with non-residential land uses such as open spaces, road right-of-ways, commercial and institutional uses and undeveloped land'. (4) The exact-date cutoff (1926-09-02) and calendar-year-1926 variants give the same result: the 1926 directory and dated 1912-1921 house occupations cover both. (5) The first-zoning-bylaw window (1933-10-10 onward) is reported as legal context only.",
+      "verdict": "Supported",
+      "confidence": "Moderate",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Edmonton's population in 1926 was 65,163 (City of Edmonton historical population table, compiled from census tabulations); 1921: 58,821; 1931: 79,059. The same table lists annexations of Strathcona (Feb 1, 1912), North Edmonton (July 18, 1912) and Calder (April 26, 1917) with the next annexation Beverly (Dec 30, 1961), so the 1917 boundary was the boundary in force in 1926.",
+          "source_title": "City of Edmonton Population, Historical (updated August 2008)",
+          "source_url": "https://webdocs.edmonton.ca/infraplan/demographic/edmonton%20population%20historical.Pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2008-08",
+          "source_type": "observed-data",
+          "establishes": "City population in 1926 and the annexation sequence fixing the 1926 boundary at the 1917 limits.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The 1926 Census of the Prairie Provinces was taken 'as of date June 1, 1926' under the Statistics Act of 1918; the page consulted gives provincial and Manitoba figures, not the Edmonton city figure.",
+          "source_title": "Canada Year Book appendix: Census of the Prairie Provinces in 1926 (p. 1034)",
+          "source_url": "https://www66.statcan.gc.ca/eng/1926/192610761034_p.%201034.pdf",
+          "source_publisher": "Dominion Bureau of Statistics / Statistics Canada",
+          "source_date": "1926",
+          "source_type": "observed-data",
+          "establishes": "Date and legal basis of the 1926 census; corroborates that a 1926 enumeration exists as a potential occupancy record.",
+          "quote": "A census of the Prairie Provinces was, therefore, taken as of date June 1, 1926",
+          "strength": "moderate"
+        },
+        {
+          "finding": "A Henderson's Edmonton City Directory for 1926 exists and is digitized (publisher Henderson Directories, date 1926). Its OCR text contains a 'Street Directory' section and hundreds of householder entries of the form 'h [house number] [street]', e.g. 'Ambler Mrs Eliza E h 11432 87th St', 'Allyn Frank L brklyr h 11236 126th St'. OCR quality is poor, so counts by neighbourhood could not be made reliably.",
+          "source_title": "Henderson's Edmonton City Directory (1926)",
+          "source_url": "https://archive.org/details/P002962-20",
+          "source_publisher": "Henderson Directories (digitized by Internet Archive / University of Alberta Peel collection)",
+          "source_date": "1926",
+          "source_type": "observed-data",
+          "establishes": "That dwellings at specific residential street addresses in Edmonton were occupied in 1926; a directory-type record of the kind the brief accepts as occupancy evidence.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Highlands (subdivision plan filed June 1911, annexed December 1911): lots marketed from 1910 with a $2,500 minimum house cost; the developers built 24 houses on speculation in November 1912, doubling the house count on a 516-lot subdivision; named houses were built and occupied in 1912-1921 (Owen Residence 1912, Bell Residence 1912, occupied by the Bell family from 1921); by the 1920s some houses were 'divided into suites, and many were rented out'. House types described are two-storey wood-frame Foursquare houses.",
+          "source_title": "Highlands Edmonton Historical Walking Tour, Centennial Edition 1912-2012",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/HighlandsWalkingTour.pdf",
+          "source_publisher": "City of Edmonton (Heritage) with Highlands Historical Society",
+          "source_date": "2012",
+          "source_type": "city-webpage",
+          "establishes": "Documented built and occupied detached houses in Highlands before and through the 1920s, and their form; also that build-out was sparse (516 lots, roughly 48 houses by 1913).",
+          "quote": "The number of houses was doubled, but since it had 516 lots, The Highlands was still sparsely developed.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Westmount / Groat Estate: 'The majority of homes were erected during the 1912 land boom'; residences ranged from brick or arts-and-crafts manors in Groat Estate to 'large clapboard homes' for young professionals; streetcar reached 142 Street by 1910.",
+          "source_title": "Westmount - Edmonton Historical Board",
+          "source_url": "https://www.edmontonhistoricalboard.com/neighbourhoods/westmount/",
+          "source_publisher": "Edmonton Historical Board",
+          "source_date": "n.d.",
+          "source_type": "city-webpage",
+          "establishes": "Built detached housing in Westmount before 1926 (form and period), not a dwelling count.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "2001 federal census neighbourhood profiles (City of Edmonton tabulation) give occupied private dwellings by period of construction 'Before 1946': Glenora 260 of 1,495 (17.4%); Highlands 385 of 1,230 (31.3%); Westmount 785 of 3,070 (25.6%); Strathcona 770 of 5,150 (15.0%). Figures rounded for privacy.",
+          "source_title": "2001 Federal Census neighbourhood housing profiles: Glenora, Highlands, Westmount, Strathcona",
+          "source_url": "https://censusdocs.edmonton.ca/DD23/FEDERAL%202001/Neighbourhood/GLENORA.pdf",
+          "source_publisher": "City of Edmonton (from Statistics Canada)",
+          "source_date": "2001",
+          "source_type": "observed-data",
+          "establishes": "A lower bound on pre-1946 dwellings still occupied in 2001 in four neighbourhoods inside the 1917 boundary; does not isolate 1926 and does not give a net residential land area.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Glenora: Carruthers acquired the land in 1905-06; the Carruthers bridge (1910) opened development; the 1913 crash slowed it; The Graenon mansion dates to 1914; 'Three out of four residences are single-family dwellings' (2012 municipal census, 1,546 dwellings, 1.63 km2 gross area). Highlands: 1.15 km2 gross area; 90% single-family dwellings (2012). Westmount: 1.86 km2; 42% single-family, 54% apartments (2005).",
+          "source_title": "Glenora, Edmonton (with Highlands, Edmonton and Westmount, Edmonton)",
+          "source_url": "https://en.wikipedia.org/wiki/Glenora,_Edmonton",
+          "source_publisher": "Wikipedia, citing City of Edmonton municipal census",
+          "source_date": "2012 census figures",
+          "source_type": "observed-data",
+          "establishes": "Gross neighbourhood areas and present-day housing mix (secondary compilation of City census data); used only for the non-classifying bounding figures below.",
+          "strength": "weak"
+        },
+        {
+          "finding": "Continuity to the end of the window: the zone in force on 2026-09-02 under Charter Bylaw 20001 (passed October 23, 2023, effective January 1, 2024, online consolidation 'for convenience only') is the RS Small Scale Residential Zone, whose purpose is 'To allow for a range of small scale Residential development up to 3 Storeys in Height, including detached, attached, and multi-unit Residential housing'. Detached houses remain a permitted form.",
+          "source_title": "2.10 RS - Small Scale Residential Zone, Zoning Bylaw 20001",
+          "source_url": "https://zoningbylaw.edmonton.ca/part-2-standard-zones-and-overlays/residential-zones/210-rs-small-scale-residential-zone",
+          "source_publisher": "City of Edmonton",
+          "source_date": "consolidation viewed 2026-09-02; latest amendment visible Bylaw 21474",
+          "source_type": "legal-audited",
+          "establishes": "That single detached housing remained a permitted use in the principal residential zone at the end of the window (legal permission, not built stock).",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City's 2023 Net Residential Density Report defines low density residential (LDR) as 'single and semi-detached units', reports the redeveloping area (inside Anthony Henday Drive, which encloses all 1926 neighbourhoods) at 32 du/nrha overall in 2023, and maps planned densities in classes 'less than 30', '30 and 45' and 'greater than 45' du/nrha.",
+          "source_title": "Net Residential Density Annual Report 2023, Redeveloping and Developing Areas",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-Net-Residential-Density-Report.pdf?cb=1737286411",
+          "source_publisher": "City of Edmonton, Urban Planning and Economy",
+          "source_date": "2024",
+          "source_type": "analytical-report",
+          "establishes": "The T2 threshold and denominator definition, and that LDR forms remain a large part of the 2023 stock (built outcome at the end of the window).",
+          "quote": "Net residential land area excludes rural residential parcels as well as parcels with non-residential land uses such as open spaces, road right-of-ways, commercial and institutional uses and undeveloped land.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "Between 1918 and 1920 Edmonton took possession of some 70,000 lots through tax-arrears forfeiture after the 1913 collapse; the 1912 boom had subdivided far more land than was ever built on. Much of the 'residential' land inside the 1917 boundary in 1926 was vacant subdivided lots, not occupied housing.",
+          "source_title": "J. David Hulchanski, The Origins of Urban Land Use Planning in Alberta, 1900-1945 (Research Paper No. 119, Centre for Urban and Community Studies, University of Toronto, January 1981), p. 23",
+          "source_url": "https://utoronto.scholaris.ca/bitstream/1807/92488/1/Origins%20Land%20Use%20Planning%20Alberta_TSpace.pdf",
+          "source_publisher": "University of Toronto",
+          "source_date": "1981-01",
+          "source_type": "analytical-report",
+          "establishes": "That built housing in 1926 was sparse relative to subdivided land; a registered plan alone did not mean occupation, which is why occupancy records matter for this claim.",
+          "quote": "Between 1918 and 1920 Edmonton took possession of some 70,000 lots",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Early housing was not uniformly single-unit: by the 1920s Highlands houses were 'divided into suites, and many were rented out'; the 1913 Gibbard Block was an apartment building at the Highlands' edge. A 1926 household count would exceed the house count in such areas.",
+          "source_title": "Highlands Edmonton Historical Walking Tour, Centennial Edition 1912-2012",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/HighlandsWalkingTour.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2012",
+          "source_type": "city-webpage",
+          "establishes": "That 'low density' cannot be equated with one household per building in 1926; a density figure would need dwelling units, not houses.",
+          "strength": "weak"
+        }
+      ],
+      "limitations": [
+        "No source accessed gives a 1926 dwelling count and a net residential land area for any Edmonton area, so the Claim A built-outcome rule (dwellings per hectare on a named denominator) could not be applied; classification rests on documented housing forms plus bounding figures that are explicitly non-classifying.",
+        "Bounding figures, gross denominator, not comparable to T1/T2: surviving pre-1946 occupied dwellings (2001 census) divided by present-day gross neighbourhood area: Highlands 385 / 115 ha = 3.3 du per gross ha; Glenora 260 / 163 ha = 1.6; Westmount 785 / 186 ha = 4.2. These use 2001 survivors (undercounting 1926 stock) over gross area including roads, parks and the river valley (overstating land), and are reported only to show the order of magnitude.",
+        "The 1926 Henderson's directory OCR is poor (street-name hits for Highlands/Glenora streets returned almost nothing), so occupied-dwelling counts by neighbourhood were not extracted; the page images would need to be read directly.",
+        "The 1926 census Edmonton table page was not located online (the page consulted covers Manitoba); the 65,163 figure comes from the City's compiled table and Wikipedia's Statistics Canada citation.",
+        "The 1913 (Chas. E. Goad, 63 sheets) and 1925 (Underwriters' Survey Bureau) fire insurance plans held by the City of Edmonton Archives were identified but their sheets were not read; they would show built dwellings parcel by parcel around 1926.",
+        "Heritage-society and City heritage documents are secondary narratives; dates of individual houses are taken from them, not from permits."
+      ],
+      "unknowns": [
+        "Number of occupied dwellings in Edmonton on 1926-09-02 and in calendar 1926, city-wide and by subdivision.",
+        "Net residential land area of any 1926 occupied area under the T1/T2 denominator, and therefore whether 1926 built density fell below 25 or 30 du/nrha (given one- and two-storey houses on 1912-era lots with sparse build-out, it very likely did, but this is inference, not a computed result).",
+        "Share of 1926 dwellings that were suites within houses or apartment units."
+      ],
+      "missing_evidence": [
+        {
+          "description": "1926 assessment roll or the Edmonton city table of the 1926 Census of the Prairie Provinces (dwellings, families, population).",
+          "likely_holder": "City of Edmonton Archives; Library and Archives Canada; Statistics Canada (Census of Prairie Provinces 1926, CS98-1926)",
+          "importance": "critical"
+        },
+        {
+          "description": "1925 Underwriters' Survey Bureau fire insurance plan sheets and 1913 Goad plan (revised) to count built dwellings per block for a defined area, with the block area measured from the plan.",
+          "likely_holder": "City of Edmonton Archives (RG-200-6-1); University of Waterloo Geospatial Centre",
+          "importance": "high"
+        },
+        {
+          "description": "Page images of Henderson's 1926 Edmonton directory Street Directory section for Ada Boulevard, 133-136 Street (Glenora) and 124-131 Street (Westmount).",
+          "likely_holder": "University of Alberta Peel's Prairie Provinces; Internet Archive item P002962-20",
+          "importance": "high"
+        }
+      ],
+      "calculations_needed": [
+        "1926 built density for at least one occupied area: dwellings in use (directory or assessment) divided by net residential parcel area (sum of occupied and vacant residential lots, excluding streets, lanes, parks) from the registered plan or fire insurance plan; compare to T1 (25 du/nrha) and T2 (30 du/nrha).",
+        "If a city-wide figure is wanted: 1926 dwelling count divided by net residential land inside the 1917 boundary; the 1917 boundary area (about 106 km2 per the Wikipedia annexation table) is gross and must not be used as the denominator."
+      ],
+      "what_would_change_my_verdict": [
+        "Evidence that documented 1926 residential areas had built densities above 30 du/nrha on a net residential denominator (for example, that most 1926 dwellings were suites and apartments in the core) would move the verdict toward Partially supported or Not established.",
+        "A 1926 assessment roll or fire insurance plan confirming block-level dwelling counts on standard lots would raise confidence to High."
+      ],
+      "suggested_one_line": "Edmonton had occupied detached houses on subdivided lots in 1926 (Highlands, Glenora, Westmount, Strathcona and elsewhere), and detached housing has remained in the stock since, but no public record found lets a 1926 dwellings-per-hectare figure be computed.",
+      "suggested_short_answer": "Yes, with a caveat about measurement. Edmonton's 1926 population was 65,163 inside the boundary fixed by the 1917 Calder annexation. The 1926 Henderson's directory lists householders at street addresses, City heritage documents date occupied detached houses in Highlands and Westmount to 1912-1921, and 2001 census profiles still counted 260 to 785 pre-1946 dwellings in each of Glenora, Highlands, Westmount and Strathcona. Those are low-density forms. What the record does not supply online is a 1926 dwelling count and net residential land area, so the built density cannot be stated in dwellings per hectare against the 25 or 30 du/nrha thresholds. Legal permission is a separate story: there was no city-wide zoning bylaw until Zoning Bylaw 26 on October 10, 1933; partial residential-street protections date from Bylaw 35 (1923) and Bylaw 30 (1925).",
+      "suggested_tldr": [
+        "Occupied detached houses existed in Edmonton in 1926 and have existed since; the claim's built-existence part is supported.",
+        "No accessible source gives 1926 dwellings per net residential hectare, so the brief's density classification could not be completed.",
+        "City-wide zoning began in 1933, after the window start; permission and built stock are different questions."
+      ]
+    },
+    {
+      "id": "ldh-planned-around",
+      "proposition_evaluated": "Many neighbourhoods inside Edmonton's boundary in force in each era were planned around low-density housing during 1926-09-02 to 2026-09-02, tested (a) at the end of the window and (b) cumulatively across the window, under the count reading (cutoffs 10 and 5) and the share reading (cutoffs 25% and one third), with 'low density' classified by permitted dwellings per hectare against T1 (25 du/nrha) and T2 (30 du/nrha).",
+      "interpretation_notes": "Eras used (city-wide instrument in force): E0 1926-09-02 to 1933-10-09, no comprehensive zoning bylaw; Bylaw 35 (1923) and Bylaw 30 (1925) imposed spacing rules and residential-street use restrictions (Hulchanski citing Dale). E1 1933-10-10 to 1950-10-16, Zoning Bylaw 26 (11 districts A to K; B One-family Dwelling District). E2 1950-10-17 to 1961-10, Interim Development Bylaw 1339 (retained Bylaw 26 regulations) then Interim Development Bylaw No. 2 (the City history report numbers it 1998; the City's 2024 resource guide lists it as 1988; unresolved), adopted September 1, 1959. E3 1961-10 to 1980-07-02, Zoning Bylaw 2135 (17 districts; R-1 one-family district), with Development Control Bylaws 2624 (1965) and 4949 (1977) for unzoned areas. E4 1980-07-03 to 2001-06-13, Land Use Bylaw 5996 (RF1 Single Detached Residential District). E5 2001-06-14 to 2023-12-31, Zoning Bylaw 12800 (RF1 Single Detached Residential Zone, materially amended 2015-2018). E6 2024-01-01 to 2026-09-02, Charter Bylaw 20001 (RS Small Scale Residential Zone). City boundary per era: 1917 limits until Beverly (1961-12-30) and Jasper Place (1964-08-17) amalgamations and the 1982-01-01 general annexation; the eras therefore straddle boundary changes and I could not obtain era-end boundary polygons. Permitted-density results (dwellings per hectare of minimum site area; site area is a parcel measure and is comparable to a net residential denominator, which also excludes roads, parks and non-residential parcels): Bylaw 26 B district: minimum lot area not obtained, cannot compute (borderline instrument 1). Bylaw 2135 R-1: text not obtained (borderline 2). LUB 5996 RF1 (1998 consolidation read; 360 m2 minimum site area per dwelling, one dwelling per lot except edge lots): 27.8 du/ha, above T1, below T2. Zoning Bylaw 12800 RF1 as adopted 2001 (same 360 m2 rule): 27.8 du/ha, above T1, below T2. Zoning Bylaw 12800 RF1 as amended to 2023 (minimum site area 250.8 m2, width 7.5 m, secondary and garden suites permitted): principal dwelling only 39.9 du/ha; with a secondary suite and garden suite 3 dwellings, 119.6 du/ha; above both thresholds either way (borderline 3, suites). Charter Bylaw 20001 RS (75 m2 per dwelling, maximum 8 dwellings on an interior site): 133.3 du/ha on a 600 m2 site; above both thresholds. Borderline instruments counted: 3; with them excluded, the classifiable instruments are the two 360 m2 RF1 versions, which are low density under T2 only. Contemporaneous-unit evidence for E0 is limited to three subdivisions with documented deliberate low-density planning (Glenora, Groat Estate/Westmount, Highlands). Exact neighbourhood counts and shares for E1 to E6 could not be computed because no digitized historical district map was accessible (the City open-data zoning history dataset begins 2019-05-10) and per-plan LDR land shares for the 71 NSPs/NASPs in effect were not extracted. No MATERIAL FRAMING CONCERN is raised: the variants are answerable in principle and none predetermines the result; the difficulty is data access, and it is reported as such. Variant verdicts: (V1) E0 count and share readings, both units: Not established, count found = 3 (below 5 and 10), share unknown. (V2) E1 to E5 era-by-era exact counts and shares: Not established (not computable from accessed record), although the City's own history states a majority of lots were zoned One-Family in 1933 and RF1 was the standard mature-area residential zone. (V3) Cumulative across window, count reading, cutoffs 10 and 5, either unit, denominator 2 (planned or approved): Supported, Moderate. (V4) Cumulative across window, share reading, cutoffs 25% and one third: Supported, Low (exact share not computed; qualitative City statements only). (V5) End of window, public-instrument variant limited to the city-wide zoning bylaw: Not established leaning against, because RS permits 133 du/ha. (V6) End of window, statutory-plan variant (NSPs designating LDR at 25 du/nrha): Supported, Low to Moderate for the count reading (71 plans in effect), Not established for the share reading. Under T1 alone, the RF1 instruments of 1980-2001 are not low density by permitted density, which weakens V3 and V4 to the pre-1933 covenants, the 1933 B district (uncomputable) and NSP LDR designations; under T2 they count. The overall verdict below is the cumulative count reading (V3) with the others named.",
+      "verdict": "Supported",
+      "confidence": "Low",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Zoning Bylaw 26, enacted October 10, 1933, divided the city into 11 districts (A to K) including 'One-family Dwelling District, Two-family Dwelling District and Three and Six Storey Multiple Dwelling Districts'. 'The Bylaw largely favoured low-density development of single-family homes, with a majority of the lots in the city zoned One-Family Unit District.' Height limit in the B district 35 feet; side setback 10% of site width; accessory offices and businesses permitted in B. Figure 1 reproduces the 1933 district map.",
+          "source_title": "History of Zoning in Edmonton (Attachment 1 to Zoning Bylaw Renewal Report #1, CR_6664)",
+          "source_url": "https://www.edmonton.ca/city_government/documents/PDF/HistoryofZoninginEdmonton.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2019",
+          "source_type": "analytical-report",
+          "establishes": "The existence, date, district structure and one-family emphasis of the first city-wide zoning instrument, and the City's characterization that most lots were zoned one-family; it is a secondary description of the bylaw text, and the minimum lot area for the B district is not stated.",
+          "quote": "The Bylaw largely favoured low-density development of single-family homes, with a majority of the lots in the city zoned One-Family Unit District.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The Edmonton Tower Resource Centre lists the primary instruments and maps: 'The zoning bylaw of the City of Edmonton, no. 26 [October 10, 1933]' and its 1942 office consolidation; 'District map to accompany zoning bylaw no. 26 [October 10, 1933]'; Interim Development By-law 1339 [July 18, 1950]; Interim development by-law no. 2: bylaw no. 1988 [September 1, 1959]; zoning bylaw no. 2135 [as amended March 9, 1964] with zoning maps 1961-62; development control bylaws 2624 and 4949; Land Use Bylaw 5996 consolidations from July 3, 1980; Zoning Bylaw 12800 effective June 14, 2001.",
+          "source_title": "Resource Guide: Historical Land Use Bylaws 1933-Present, version 1.5 (revised Aug 15, 2024)",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/ResourceGuide-HistoricalLandUseBylaws.pdf?cb=1724283952",
+          "source_publisher": "City of Edmonton, Edmonton Tower Resource Centre",
+          "source_date": "2024-08-15",
+          "source_type": "city-webpage",
+          "establishes": "The catalogue of instruments and their dates, including that a 1933 district map exists; confirms the 1933 bylaw is no. 26 and shows the numbering discrepancy for the 1959 interim bylaw (1988 here, 1998 in the City history report).",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Before zoning: Bylaw 35 (1923) 'prescribed the space to be left vacant around buildings', 'limited the number and nature of buildings to be erected on a lot within certain parts of the city and declared certain streets or portions of streets to be purely residential'; clause 8 barred shops, stores, laundries, stables and any business use on lots abutting a residential street. Bylaw 30 (1925) confined noxious uses to specific areas. Not until the 1929 Town Planning Act could municipalities adopt comprehensive zoning; Edmonton's Town Planning Commission was created in August 1929 and directed to prepare a major street plan and a zoning bylaw rather than a master plan. Between 1933 and 1945 Bylaw 26 was amended 27 times.",
+          "source_title": "J. David Hulchanski, The Origins of Urban Land Use Planning in Alberta, 1900-1945, pp. 41-42 (citing E.H. Dale)",
+          "source_url": "https://utoronto.scholaris.ca/bitstream/1807/92488/1/Origins%20Land%20Use%20Planning%20Alberta_TSpace.pdf",
+          "source_publisher": "Centre for Urban and Community Studies, University of Toronto",
+          "source_date": "1981-01",
+          "source_type": "analytical-report",
+          "establishes": "That partial residential-protection instruments existed in 1926 (E0) and that comprehensive zoning began only in 1933; a units-per-lot limit existed in 'certain parts of the city' under Bylaw 35, but its geography is not given.",
+          "quote": "It limited the number and nature of buildings to be erected on a lot within certain parts of the city and declared certain streets or portions of streets to be purely residential.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Glenora and Groat Estate (Westmount): James Carruthers, who bought Malcolm Groat's property in 1906, registered restrictive covenants requiring that 'the houses to be erected on the said land shall be either detached or semi-detached' with minimum construction costs of $3,500 to $5,000 depending on location, and prohibiting commercial and religious buildings; the Glenora street layout followed the ravine topography in the Garden City manner. The Old Glenora Conservation Association describes the 1911 caveat as stipulating 'no commercial development, one dwelling per lot and established building setbacks' over land from Stony Plain Road to the river and from Groat Ravine to 142 Street.",
+          "source_title": "Glenora - Edmonton Historical Board (with Old Glenora Conservation Association, Establishing the Association)",
+          "source_url": "https://www.edmontonhistoricalboard.com/neighbourhoods/glenora",
+          "source_publisher": "Edmonton Historical Board; Old Glenora Conservation Association (https://oldglenora.ca/establishing-the-association/)",
+          "source_date": "n.d.",
+          "source_type": "city-webpage",
+          "establishes": "Documented deliberate pre-1926 planning of two subdivisions around detached or semi-detached houses by restrictive covenant (a non-public instrument class); the exact covenant text was not read.",
+          "quote": "the houses to be erected on the said land shall be either detached or semi-detached",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The Carruthers Caveat, registered as instrument 4387AI against Plan 2803AF lots, prohibits erecting any building other than a private dwelling house and limits development; in 2357596 Alberta Ltd v Antoniuk, 2026 ABKB 81 (February 2026) the Court of King's Bench discharged it from two Glenora lots (zoned medium-rise apartment in 2022), finding conflict with the zoning bylaw and public interest; the decision is fact-specific and under appeal. The caveat remains on more than 400 Glenora properties.",
+          "source_title": "Casual legal: Restrictive covenants vs redevelopment (Alberta Municipalities); CBC News, Judge overrules century-old legal covenant, Feb 18, 2026",
+          "source_url": "https://www.abmunis.ca/news/casual-legal-restrictive-covenants-vs-redevelopment",
+          "source_publisher": "Alberta Municipalities; CBC News (https://www.cbc.ca/news/canada/edmonton/edmonton-infill-development-curruthers-caveat-defeated-9.7094474)",
+          "source_date": "2026",
+          "source_type": "media",
+          "establishes": "That the 1911 covenant is a real registered instrument with dwelling-type restrictions still on title in 2026, as described by a municipal legal newsletter and reported by CBC; a court filing or judgment summary, not the covenant text.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Highlands: announced August 1910 on land east of the city limits, subdivision plan filed June 1911, annexed December 1911; 516 lots; $2,500 minimum house cost; 'Unlike Glenora ... The Highlands was not regulated by legal restrictions. Instead, development was controlled by having buyers take out building permits before purchasing land'; laid out 'almost entirely ... in a grid pattern'.",
+          "source_title": "Highlands Edmonton Historical Walking Tour, Centennial Edition 1912-2012",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/HighlandsWalkingTour.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2012",
+          "source_type": "city-webpage",
+          "establishes": "A third pre-1926 subdivision deliberately planned for high-value detached houses by developer control rather than covenant (evidence class: developer plans and lot layout).",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Land Use Bylaw 5996 RF1 Single Detached Residential District (1998 consolidation): purpose 'To establish a District primarily for Single Detached Housing'; permitted uses Single Detached Housing, Limited Group Homes, Minor Home Occupations; Semi-detached, Duplex and Secondary Suites discretionary only where the side lot line abuts an industrial, commercial, row housing or apartment district; 'the minimum site area shall be 360 m2 (3,875.0 sq. ft.) per Dwelling'; minimum site width 12 m; maximum height 10 m; total site coverage 40%; 'a maximum of one Dwelling per lot shall be allowed' except where semi-detached, duplex or suites are allowed.",
+          "source_title": "Edmonton Land Use Bylaw 5996, office consolidation version 7 (August 24, 1998), s. 110",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/1998_LUB_5996_Consolidation_Aug_24_1998.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "1998-08-24 consolidation of the bylaw adopted 1980-07-03",
+          "source_type": "legal-audited",
+          "establishes": "E4 permitted forms and dimensional rules: 27.8 du/ha of site area maximum, one dwelling per lot as the norm (consolidation read, not the 1980 text as adopted).",
+          "quote": "the minimum site area shall be 360 m2 (3,875.0 sq. ft.) per Dwelling",
+          "strength": "strong"
+        },
+        {
+          "finding": "Zoning Bylaw 12800 as adopted (effective June 14, 2001) s. 110 RF1: 'The purpose of this Zone is to provide primarily for Single Detached Housing'; permitted Single Detached Housing; Semi-detached, Duplex and Secondary Suites discretionary only on lots abutting industrial, commercial, row housing or apartment zones; minimum site area 360 m2 per dwelling; minimum site width 12.0 m; height 10.0 m; one dwelling per lot except where those forms are allowed.",
+          "source_title": "Edmonton Zoning Bylaw 12800, version 01.06.18, effective June 14, 2001, s. 110",
+          "source_url": "https://www.gov.edmonton.ab.ca/public-files/assets/document?path=PDF/Zoning_Bylaw_June_2001.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2001-06-14",
+          "source_type": "legal-audited",
+          "establishes": "E5 initial permitted forms and dimensions (27.8 du/ha of site area).",
+          "strength": "strong"
+        },
+        {
+          "finding": "Zoning Bylaw 12800 RF1 as last amended: purpose 'to provide for Single Detached Housing while allowing other forms of small scale housing in the form of Secondary Suites, Garden Suites, Semi-detached Housing and Duplex Housing' (Charter Bylaw 18638, December 10, 2018); Secondary Suites and Garden Suites permitted; minimum site area for Single Detached Housing 250.8 m2, minimum site width 7.5 m (Bylaw 18050, June 12, 2017); Duplex 300 m2 and 10.0 m; Semi-detached 488.4 m2 and 14.8 m; height 10.0 m; site coverage 40-42%.",
+          "source_title": "Edmonton Zoning Bylaw 12800, s. 110 (RF1) Single Detached Residential Zone, web consolidation",
+          "source_url": "https://webdocs.edmonton.ca/zoningbylaw/ZoningBylaw/Part2/Residential/110_(RF1)_Single_Detached_Residential_Zone.htm",
+          "source_publisher": "City of Edmonton",
+          "source_date": "amendments dated 2007 to 2021; consolidation as archived",
+          "source_type": "legal-audited",
+          "establishes": "That the RF1 label's permissions changed within E5: by 2018 a detached house plus secondary suite plus garden suite on a 250.8 m2 lot was permitted (39.9 du/ha principal only; 119.6 du/ha all dwellings).",
+          "strength": "strong"
+        },
+        {
+          "finding": "Charter Bylaw 20001 RS zone: 'The maximum number of Dwellings on an Interior Site is 8' (s. 3.2.1); minimum site area per dwelling 75.0 m2 (4.1.1); minimum site width 7.5 m (4.1.3); minimum site depth 30.0 m; permitted forms include single detached, semi-detached, duplex, row housing, cluster housing and small apartments; height 9.5 m; site coverage 45% (47% in specified conditions).",
+          "source_title": "2.10 RS - Small Scale Residential Zone, Zoning Bylaw 20001",
+          "source_url": "https://zoningbylaw.edmonton.ca/part-2-standard-zones-and-overlays/residential-zones/210-rs-small-scale-residential-zone",
+          "source_publisher": "City of Edmonton",
+          "source_date": "passed 2023-10-23, effective 2024-01-01; consolidation viewed 2026-09-02",
+          "source_type": "legal-audited",
+          "establishes": "E6 permitted density of 133.3 du/ha of site area, above both thresholds; the instrument in force at the end of the window.",
+          "quote": "The maximum number of Dwellings on an Interior Site is 8",
+          "strength": "strong"
+        },
+        {
+          "finding": "Ellerslie Neighbourhood Structure Plan (Bylaw 12581, approved May 1, 2001; consolidated June 2023): 'Residential densities of 25 units per net residential hectare for low density residential and 50 units per hectare for medium density residential'; within the LDR area 'housing forms will be predominantly single and semi-detached housing'; plan area 155.18 ha.",
+          "source_title": "Ellerslie Neighbourhood Structure Plan, Office Consolidation June 2023",
+          "source_url": "https://webdocs.edmonton.ca/infraplan/plans_in_effect/Ellerslie_NSP_Consolidation.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2001-05-01 (consolidation 2023-06)",
+          "source_type": "policy-document",
+          "establishes": "The T1 threshold and an example of a statutory plan that designates LDR land at 25 du/nrha (planning intent, not outcome).",
+          "quote": "Residential densities of 25 units per net residential hectare for low density residential and 50 units per hectare for medium density residential",
+          "strength": "strong"
+        },
+        {
+          "finding": "As of December 2023, 86 residential neighbourhoods in the developing area were in the developing stage; 71 had NASPs or NSPs in effect, 48 of them approved in or before 2010; 'Older NSPs typically have lower planned residential densities, while more recent NSPs have planned densities greater than 35 du/nrha'; 'Most dwellings in this area continue to be LDR'. EMRB greenfield targets of 45 du/nrha took effect in 2017 for areas without approved plans.",
+          "source_title": "Net Residential Density Annual Report 2023",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-Net-Residential-Density-Report.pdf?cb=1737286411",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2024",
+          "source_type": "analytical-report",
+          "establishes": "A count of neighbourhood-level statutory plans in effect at the end of the window (denominator 2 material) and that LDR is the dominant planned and built form in the developing area; it does not give each plan's LDR land share.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The Highlands Neighbourhood Planning Study (approved by Council March 12, 1985; repealed by Bylaw 19725, June 8, 2021) described Highlands as 'predominantly a low density residential community' and tabulated 1983 dwellings: 1,023 single family (81.5%), 128 single family containing a suite (10.2%), 18 semi-detached/duplex, 29 multi-family, 57 apartment units.",
+          "source_title": "Highlands Neighbourhood Planning Study, Office Consolidation June 2021",
+          "source_url": "https://webdocs.edmonton.ca/infraplan/plans_in_effect/Highlands_Neighbourhood_Planning_Study_Consolidation.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "1985-03-12 (consolidation 2021-06)",
+          "source_type": "policy-document",
+          "establishes": "A neighbourhood-specific plan in E4 that planned around low-density housing and recorded the built mix (outcome) separately, including one in ten houses containing a suite.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Edmonton has 375 developed neighbourhoods in 7 sectors (not counting planned but undeveloped ones); the central core comprises Downtown and 11 surrounding neighbourhoods.",
+          "source_title": "List of neighbourhoods in Edmonton",
+          "source_url": "https://en.wikipedia.org/wiki/List_of_neighbourhoods_in_Edmonton",
+          "source_publisher": "Wikipedia, citing City of Edmonton",
+          "source_date": "n.d.",
+          "source_type": "city-webpage",
+          "establishes": "A present-day denominator (375) for the share reading; the then-existing denominators per era were not computed.",
+          "strength": "weak"
+        },
+        {
+          "finding": "City boundary history: Strathcona (Dec 20, 1911 / Feb 1, 1912), North Edmonton (July 1912), further 1912-1914 annexations, Village of West Edmonton/Calder (April 1917); 'No annexations occurred between 1917 and 1947' apart from small separations in 1921 and 1922; city area about 106 km2 in 1917, 221.6 km2 by 1964, 700.6 km2 after January 1, 1982.",
+          "source_title": "Edmonton annexations",
+          "source_url": "https://en.wikipedia.org/wiki/Edmonton_annexations",
+          "source_publisher": "Wikipedia",
+          "source_date": "n.d.",
+          "source_type": "city-webpage",
+          "establishes": "The boundary in force per era (secondary compilation; the City Archives' 1959 'History of Annexations' map, EAM-529, is the primary source and was identified but not read).",
+          "strength": "weak"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "For 1926-1933 the record accessed documents deliberate low-density planning in only three subdivisions (Glenora, Groat Estate/Westmount, Highlands). Highlands was explicitly 'not regulated by legal restrictions'. This is below both count cutoffs (5 and 10) for E0, and the share of then-existing neighbourhoods is unknown.",
+          "source_title": "Highlands Edmonton Historical Walking Tour, Centennial Edition 1912-2012",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/HighlandsWalkingTour.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2012",
+          "source_type": "city-webpage",
+          "establishes": "That pre-zoning planning intent is documented for a handful of elite subdivisions, not 'many' neighbourhoods, on the evidence found.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Dale (quoted by Hulchanski) argued the 1933 bylaw 'completely failed to achieve or promote rational land use. It merely attempted to separate particular use-districts'; there was no master plan, amendments were approved 'on most any grounds', and the bylaw 'achieved what they were actually intended to achieve -- protection of certain districts, mainly better quality residential areas, from undesirable uses'. Hulchanski also records Edmonton took possession of some 70,000 tax-forfeited lots in 1918-1920.",
+          "source_title": "J. David Hulchanski, The Origins of Urban Land Use Planning in Alberta, 1900-1945, pp. 23, 41-42",
+          "source_url": "https://utoronto.scholaris.ca/bitstream/1807/92488/1/Origins%20Land%20Use%20Planning%20Alberta_TSpace.pdf",
+          "source_publisher": "University of Toronto",
+          "source_date": "1981-01",
+          "source_type": "analytical-report",
+          "establishes": "That the 1933 one-family districting was use-separation applied largely to vacant subdivided land rather than neighbourhood design, which bears on whether 'zoned one-family' equals 'planned around low-density housing' and on which denominator (planned versus occupied) applies.",
+          "quote": "It merely attempted to separate particular use-districts and as such was rather more regulative and negative than either constructive or positive.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Under T1 (25 du/nrha) the RF1 instruments of 1980-2001 (360 m2 per dwelling, 27.8 du/ha) are not low density by permitted density, and the 2015-2023 RF1 (250.8 m2, suites permitted) and the 2024 RS zone (75 m2 per dwelling, up to 8 dwellings) exceed both thresholds. The 'low density' label attached to RF1 in City documents therefore does not survive the brief's predeclared measure under T1, and the city-wide instrument in force at the end of the window does not plan around low-density housing under either threshold.",
+          "source_title": "Edmonton Zoning Bylaw 12800 s. 110 (RF1); Zoning Bylaw 20001 s. 2.10 (RS)",
+          "source_url": "https://webdocs.edmonton.ca/zoningbylaw/ZoningBylaw/Part2/Residential/110_(RF1)_Single_Detached_Residential_Zone.htm",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2001-2026",
+          "source_type": "legal-audited",
+          "establishes": "That instrument classification depends on the threshold chosen and that E6 fails the low-density test on the zoning-instrument variant.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The 1933 B One-Family Dwelling District also permitted accessory offices and business uses, 'making it a more mixed-use zone than the corresponding residential zones in Zoning Bylaw 12800', and the 1980 bylaw introduced Direct Control districts and statutory plan overlays that altered standard rules area by area.",
+          "source_title": "History of Zoning in Edmonton (Attachment 1 to CR_6664)",
+          "source_url": "https://www.edmonton.ca/city_government/documents/PDF/HistoryofZoninginEdmonton.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2019",
+          "source_type": "analytical-report",
+          "establishes": "That era labels do not map onto today's meaning of a low-density residential zone and that coverage by a standard district was not uniform after 1980.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The City's open-data 'Zoning Bylaw Map - History' dataset retains zoning polygons only from May 10, 2019 onward (weekly extracts), so no digitized 1933, 1961 or 1980 district map is available online for neighbourhood-level coverage calculation.",
+          "source_title": "Zoning Bylaw Map - History, Edmonton Open Data Portal",
+          "source_url": "https://data.edmonton.ca/Thematic-Features/Zoning-Bylaw-Map-History/67p2-r285",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2019-05-17 (first published)",
+          "source_type": "observed-data",
+          "establishes": "Why the brief's exact coverage counts and shares for E1 to E5 could not be produced from public digital data.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "No exact neighbourhood counts, covered-area shares, then-existing denominators or residential-land shares were computed for any era: historical district maps (1933, 1961-62, 1971, 1980-2001) exist only as paper or Issuu scans in the Edmonton Tower Resource Centre and were not read; the Issuu copy of Bylaw 26 returned an error when fetched.",
+        "Zoning Bylaw 26 (1933) and Zoning Bylaw 2135 (1961) texts were not read; their residential district rules are taken from the City's 2019 history report, a secondary description. Minimum lot areas for the B and R-1 districts are unknown, so those instruments are borderline and unclassified.",
+        "Land Use Bylaw 5996 was read in its 1998 consolidation, not as adopted July 3, 1980; the RF1 rules quoted carry amendment notes from 1980-1998.",
+        "Restrictive covenant texts (Carruthers 1911; Groat Estate) were not read; wording is quoted from the Edmonton Historical Board and community association pages and a municipal legal newsletter.",
+        "The share reading uses a present-day denominator of 375 neighbourhoods; the then-existing denominators (occupied, and planned-or-approved) at each era end were not constructed, and the 1961-1964 and 1982 boundary changes fall inside eras E3 and E4.",
+        "The two neighbourhood units give the same result only for E0 (three contemporaneous subdivisions mapping to the present-day Glenora, Westmount and Highlands polygons, with the caveat also covering Capital Hill inside the Glenora polygon); for later eras neither unit was computed.",
+        "'Planned around' in E1 rests on a use-district covering mostly vacant lots; whether that is 'planning' in the neighbourhood-design sense is contested in the literature (Dale), so E1 results should be read under denominator 2 (planned, not occupied)."
+      ],
+      "unknowns": [
+        "Minimum lot area and permitted dwellings per lot in the 1933 B district and the 1961 R-1 district, hence their permitted du/ha.",
+        "The exact number and land share of then-existing neighbourhoods covered by the B district in 1933 and by R-1/RF1 in 1961-2023.",
+        "The LDR land share within each of the 71 NSPs/NASPs in effect in 2023, needed for the 50 percent rule and area-weighted results at the end of the window.",
+        "Whether other pre-1933 subdivisions carried covenants comparable to Carruthers' (only Glenora, Groat Estate and Highlands were found)."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Text of Zoning Bylaw 26 (1933) with its district schedule (lot area, frontage, permitted dwellings) and the 1933 district map, georeferenced to present-day neighbourhood polygons.",
+          "likely_holder": "Edmonton Tower Resource Centre (Issuu 'aesdl' library and paper collection); Office of the City Clerk; City of Edmonton Archives",
+          "importance": "critical"
+        },
+        {
+          "description": "Zoning Bylaw 2135 (1961) text and the 1961-62 zoning maps; Land Use Bylaw 5996 as adopted (1980) and its 1980 land use district map.",
+          "likely_holder": "Edmonton Tower Resource Centre; Office of the City Clerk",
+          "importance": "high"
+        },
+        {
+          "description": "Registered text of the Carruthers Caveat (instrument 4387AI) and the Groat Estate covenants, plus a list of other pre-1930 Edmonton subdivisions with registered building restrictions.",
+          "likely_holder": "Alberta Land Titles (SPIN2); Old Glenora Conservation Association",
+          "importance": "moderate"
+        },
+        {
+          "description": "Per-NSP land use statistics (LDR hectares and units versus total residential) for plans in effect on 2026-09-02.",
+          "likely_holder": "City of Edmonton Urban Planning and Economy (plans in effect library)",
+          "importance": "high"
+        }
+      ],
+      "calculations_needed": [
+        "Permitted dwellings per hectare of site area: LUB 5996 RF1 and Zoning Bylaw 12800 RF1 (2001): 10,000 / 360 = 27.8; Zoning Bylaw 12800 RF1 (2017-2023): 10,000 / 250.8 = 39.9 (principal only), 3 x 39.9 = 119.6 with secondary and garden suite; Zoning Bylaw 20001 RS: 10,000 / 75 = 133.3 (8 dwellings on 600 m2); results to be compared to T1 = 25 and T2 = 30 du/nrha, both parcel-based denominators.",
+        "Era-by-era neighbourhood counts and shares under both units, both coverage rules and both then-existing denominators, once the 1933, 1961 and 1980 district maps are digitized; count of neighbourhoods with some coverage below 50 percent.",
+        "Residential-land share covered by low-density instruments per era, with the boundary in force at each era end (1917 limits through 1961; 1964 limits to 1981; 1982 limits after)."
+      ],
+      "what_would_change_my_verdict": [
+        "A digitized 1933 district map showing the B district covering at least half of the land area of 10 or more then-existing neighbourhoods would move the E1 era verdict from Not established to Supported and raise overall confidence to Moderate or High.",
+        "Evidence that Bylaw 26's B district permitted more than one dwelling per lot on small lots (permitted density above 30 du/ha) would move E1 toward Not established or Contradicted under the permitted-density rule.",
+        "Finding that most NSPs in effect designate less than half their residential land as LDR would move the end-of-window statutory-plan variant to Not established.",
+        "Adopting T1 only would remove the 1980-2001 RF1 instruments from the low-density set and weaken the cumulative verdict to Low or Not established."
+      ],
+      "suggested_one_line": "Edmonton's record shows deliberate low-density planning in a few pre-1926 subdivisions, a one-family district over most lots from 1933, and single-detached zones and low-density plan designations for decades after, but the brief's exact neighbourhood counts and shares cannot be computed from the public digital record, and the zoning in force in 2026 no longer fits the low-density test.",
+      "suggested_short_answer": "Partly answerable. Before city-wide zoning, only three subdivisions (Glenora and Groat Estate under Carruthers' 1911 covenants, Highlands under developer controls) are documented as deliberately planned around detached houses; that is fewer than the brief's cutoffs of 5 and 10. From October 10, 1933, Zoning Bylaw 26 placed 'a majority of the lots in the city' in a One-family Dwelling District, according to the City's own history, but the bylaw text and map were not accessible online, so how many then-existing neighbourhoods it covered is not computed. From 1980 to 2001 the RF1 district allowed one dwelling per 360 m2 lot (27.8 dwellings per hectare of site area), which is low density under a 30 du/nrha threshold but not under the 25 du/nrha threshold used in Edmonton's own neighbourhood plans; by 2018 RF1 allowed suites on 250.8 m2 lots, and the 2024 RS zone allows up to 8 dwellings at 75 m2 each. Statutory neighbourhood plans still designate low-density areas at 25 du/nrha in developing neighbourhoods (71 plans in effect in 2023). Cumulatively across the century, 'many' on the count reading is supported at low confidence; the share reading and the era-by-era counts are not established from accessible records.",
+      "suggested_tldr": [
+        "Three pre-1926 subdivisions were deliberately planned around detached houses; that is a handful, not 'many'.",
+        "From 1933 the City says most lots were zoned one-family, but the map and text needed to count neighbourhoods were not accessible.",
+        "Whether RF1 (1980-2001) counts as low density depends on the threshold: yes under 30 du/nrha, no under 25.",
+        "The zone in force in 2026 permits up to 8 dwellings per site and fails the low-density test, though neighbourhood plans still designate low-density areas."
+      ]
+    }
+  ]
+}
