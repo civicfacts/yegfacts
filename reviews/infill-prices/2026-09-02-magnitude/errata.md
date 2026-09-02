@@ -141,3 +141,27 @@ of Statistics Canada table 11-10-0222-01 and is now sourced to
 `reviews/infill-prices/2026-09-01-rerun2/round1/claude.json`, with the
 story saying so.
 - YF-EV-0094: the establishes line asserted that recorded house demolitions collapse after 2018; that is one seat's tabulation, not something the dataset page carries. Reworded (2026-09-02).
+
+## Release-check redaction (2026-09-02)
+
+The release check on this run's artifacts raised finding 2: the
+case-level records from Claude's 40-permit open-data probe carried exact
+residential legal descriptions (plan, block and lot), the neighbourhood,
+the year built and the exact assessed value for each property, which
+together identify specific homes and their owners' financial records.
+
+The editor redacted those records after the run, in eight properties
+across four files: `combined-evidence.json`, `round1/claude.json`,
+`round2/claude.json` and `synthesis.json`. In each, the legal description
+and neighbourhood were replaced by a case label (Case A through Case H,
+the same label for the same property in every file), each exact assessed
+value was replaced by a range rounded to $50,000 steps, and the years
+built were removed. The three subdivided lots' child legal descriptions
+were replaced by their case labels. No street address appeared in the
+run. Verdicts, confidences, ratios, counts and every other field are
+as the seats wrote them.
+
+This is an editor action taken after the run closed, not a seat
+correction and not a round-2 documented error. The archived reviewer
+output as published therefore differs from what the seats wrote, in
+exactly these fields and in no others.
