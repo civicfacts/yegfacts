@@ -1253,9 +1253,9 @@ exec
 /bin/zsh -lc "git show --format=fuller --find-renames --find-copies 13812ce -- src/styles/global.css src/components/Header.astro src/components/StoryList.astro src/components/charts/BarChart.astro src/layouts/Base.astro src/pages/404.astro src/pages/about.astro src/pages/commitments.astro 'src/pages/evidence/[id].astro' src/pages/evidence/index.astro 'src/pages/facts/[slug].astro' src/pages/methodology/changes.astro src/pages/methodology/index.astro src/pages/support.astro src/components/AiReview.astro docs/DESIGN.md" in .
  succeeded in 0ms:
 commit 13812ce468a2f494d2a1d454dc459e473a9125a6
-Author:     Ildar Abdulin <ildar.abdulin@gmail.com>
+Author:     Ildar Abdulin <author email redacted>
 AuthorDate: Tue Sep 1 23:21:13 2026 -0600
-Commit:     Ildar Abdulin <ildar.abdulin@gmail.com>
+Commit:     Ildar Abdulin <author email redacted>
 CommitDate: Tue Sep 1 23:22:31 2026 -0600
 
     Design D review round 1: landmark, skip link, font weight, base layer, link style, contrast, DESIGN.md wording
