@@ -31,6 +31,15 @@ const STAGES = '/methodology#stages';
 const STORIES = '/methodology#stories';
 
 export const glossary: Record<string, GlossaryEntry> = {
+  'frozen brief': {
+    definition:
+      'The written question each story\u2019s panel answers: the exact claims, definitions, dates and cutoffs, fixed and published before any reviewer runs, so the framing cannot move after the answers arrive.',
+    href: STAGES,
+  },
+  'capital profile': {
+    definition:
+      'The City of Edmonton\u2019s unit of capital budgeting: one numbered project or program with an approved amount by year. Approval is permission to spend, not spending.',
+  },
   Proterra: {
     definition:
       'Proterra Inc. — the U.S. manufacturer that built Edmonton’s 60 battery-electric buses. It filed for bankruptcy in August 2023.',
