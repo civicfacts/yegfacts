@@ -18,6 +18,7 @@ verdicts."
 | --- | --- | --- | --- |
 | 1 | codex-review_1.md | codex-output_1.md: four P3s: tables had no caption naming their story; the component doc comment overstated the old page and the column rule; "badge" for the pending-review label; formatting churn in findings.ts | APPROVED |
 | 2 | codex-review_2.md | codex-output_2.md: after the founder's preview note, the 3px story rule and larger title; one wording nit in the comment | APPROVED |
+| 3 | codex-review_3.md | codex-output_3.md: one link per story, kicker above the title, claims unlinked; two wording nits and one redundant class | APPROVED |
 
 Round 1, all four adopted before commit: a visually hidden caption per
 table, the doc comment rewritten to the component's contract, "label",
@@ -30,6 +31,15 @@ Adopted: the home page's 3px ink section rule over each story title, the
 title up to 1.625rem, the hairlines between stories gone, and the topic
 hub's extra hairline removed. Round 2 approved it; its one wording nit
 was applied.
+
+Then the founder asked where a reader should go from the page, whether
+topics belong above the title, and whether topics and claims need link
+treatment. Stew's answer: to the story. The title is the block's one
+link; topics and the verified date are an unlinked kicker above it, as
+on the story page; the claim questions are plain text with their badges,
+since the story page's verdict strip carries the claim anchors and search
+is the route to a single claim. Round 3 approved it; its three nits were
+applied.
 
 ## Also checked by Stew before the critique
 
