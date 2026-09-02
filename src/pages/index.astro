@@ -182,10 +182,10 @@ const slateTitle = 'font-display text-[1.125rem] leading-snug font-semibold';
       <p class={lead}>
         Each claim is filed under one topic, so the counts add up to the total above.
       </p>
-      <ul class="mt-5 border-t border-rule">
+      <ul class="mt-4">
         {
           topics.map((topic) => (
-            <li class="flex items-baseline justify-between gap-4 border-b border-rule py-2.5">
+            <li class="flex items-baseline justify-between gap-4 py-1.5">
               {topic.count > 0 ? (
                 <Fragment>
                   <a href={`/topics/${topic.slug}`} class:list={['link', topicName]}>
