@@ -17,7 +17,7 @@ import { findingEdge } from '../lib/findings';
  * The title is the block's one link. The page is for choosing a story, so the
  * claims are plain text with their badges and the topics are a kicker above
  * the title, as on the story page; the story's own verdict strip carries the
- * claim anchors one click on. Search is the route to a single claim.
+ * claim anchors one click away. Search is the route to a single claim.
  *
  * Each story opens with the broadsheet section head the home page uses, a 3px
  * ink rule over the title, because the claim rows underneath carry colour and
@@ -50,7 +50,7 @@ const findingColumn = 'w-px whitespace-nowrap sm:w-44';
         <li class="border-t-[3px] border-ink pt-3.5 pb-10">
           {/* Kicker: topics and the verified date in the metadata label, as on the story page itself. */}
           <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-sans text-xs font-semibold tracking-[0.09em] text-muted uppercase">
-            {showTopics && <TopicTags topics={story.data.topics} linked={false} class="gap-x-3 text-xs" />}
+            {showTopics && <TopicTags topics={story.data.topics} linked={false} />}
             <span>
               Verified <time datetime={story.data.last_verified}>{story.data.last_verified}</time>
             </span>
