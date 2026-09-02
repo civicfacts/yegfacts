@@ -1,0 +1,57 @@
+{
+  "reviewer": {
+    "provider": "google",
+    "model_self_reported": "Gemini 3.1 Pro (High)",
+    "runner_model": "gemini-3.1-pro",
+    "runner_seat": "Gemini 3.1 Pro",
+    "runner_effort": "high"
+  },
+  "story": "infill-prices",
+  "round": 1,
+  "claims": [
+    {
+      "id": "ip-teardown-price-gap",
+      "proposition_evaluated": "On Edmonton lots where one house was demolished for infill, the housing built in its place is typically worth about three times the house that came down: the median ratio of the replacement dwelling unit's assessed value to the demolished house's assessed value, in constant dollars, is at least 2.5, and more than half of matched replacement dwelling units are worth at least double the demolished house.",
+      "interpretation_notes": "The public record provides historical property assessments and demolition/building permits in separate datasets, but does not provide a pre-computed dataset joining the exact demolished property value with the specific replacement unit values on a lot-by-lot basis.",
+      "verdict": "Not established",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [],
+      "challenging_evidence": [],
+      "limitations": [
+        "The City of Edmonton Open Data portal publishes property assessments and building permits separately.",
+        "There is no publicly available, pre-joined dataset matching historical demolished unit values with newly constructed replacement unit values on the same lot.",
+        "Performing the requested calculation requires bespoke scripting to match lot identifiers across multiple massive historical datasets, which does not exist as an authoritative public report."
+      ],
+      "unknowns": [
+        "The median ratio of replacement dwelling unit assessed value to demolished house assessed value in Edmonton.",
+        "The share of matched replacement dwelling units that are assessed at double or more the value of the demolished house."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A unit-level dataset matching the last assessed value of demolished residential houses with the first full assessed value of replacement dwelling units on the same lot, adjusted to constant dollars.",
+          "likely_holder": "City of Edmonton (Assessment and Taxation Branch)",
+          "importance": "critical"
+        }
+      ],
+      "calculations_needed": [
+        "Match residential demolition permits to subsequent building permits by lot or parcel identifier.",
+        "Retrieve the last assessed total value of the demolished house from the assessment roll year prior to demolition.",
+        "Retrieve the first full assessed value of each replacement unit (or the average for single-title multi-unit buildings).",
+        "Convert both values to constant dollars using the Edmonton CMA CPI.",
+        "Calculate the ratio for each replacement unit and determine the median and majority share."
+      ],
+      "what_would_change_my_verdict": [
+        "Publication of a city report or independent analysis performing the required lot-matching and constant-dollar calculations.",
+        "Provision of a pre-joined dataset linking historical demolition and assessment records lot by lot."
+      ],
+      "suggested_one_line": "The public record does not contain the matched data required to verify if Edmonton infill homes typically cost three times as much as the houses they replace.",
+      "suggested_short_answer": "While it is a common assumption that infill homes are much more expensive than the older homes they replace, there is no published data in Edmonton that tracks the specific assessed value of demolished homes against their replacements. Calculating the true median ratio requires matching historical demolition and assessment records lot by lot, which the City of Edmonton has not done publicly.",
+      "suggested_tldr": [
+        "The claim requires comparing the value of new infill homes against the specific older houses they replaced on the exact same lot.",
+        "The City of Edmonton publishes property assessments and demolition permits separately, but does not publish a joined dataset matching teardowns to replacements.",
+        "Without this matched data, it is impossible to establish the median ratio or confirm if new units are typically worth triple the demolished house."
+      ]
+    }
+  ]
+}
