@@ -41,12 +41,34 @@ export const figures = {
   snow2022NetOperatingRequirementThousands: 63_653,
 
   /**
-   * Council minutes, 2022-07-04 (item 6.6, CO01277): a one-time $4.7 million
-   * increase to the Parks and Roads Services budget for the Snow and Ice
-   * Control program, from the Financial Stabilization Reserve. The frozen
-   * brief's Alternative A adds in-year amendments to the printed cell.
+   * Council's in-year additions to the 2022 Snow and Ice Control budget, all
+   * one-time ($000s), as the panel found them in the minutes and adjustment
+   * reports: 2022-03-14, a carry-forward of 2021 program surplus; 2022-04-19,
+   * the Spring supplemental operating budget adjustment for the enhanced
+   * snow-clearing pilot; 2022-07-04 (item 6.6, CO01277), an increase from the
+   * Financial Stabilization Reserve. The frozen brief's Alternative A adds
+   * every amendment in force on 2022-12-12 to the printed cell.
    */
-  snow2022OneTimeIncreaseJuly2022Thousands: 4_700,
+  snow2022CouncilAdditionsThousands: {
+    '2022-03-14': 2_300,
+    '2022-04-19': 14_300,
+    '2022-07-04': 4_700,
+  },
+
+  /**
+   * The City's own year-end figures for the Snow and Ice Control program
+   * ($000s): the adjusted expense budget and actual expense by year, from the
+   * December 31 operating financial updates for 2022 (FCS01636 attachment),
+   * 2023, 2024 and 2025. The 2022 adjusted budget does not equal the printed
+   * cell plus the three additions above; the panel reported the gap and did
+   * not resolve it. Actuals are context: the frozen brief compares budgets.
+   */
+  snowYearEndThousands: {
+    2022: { adjustedBudget: 79_474, actual: 97_571 },
+    2023: { adjustedBudget: 63_574, actual: 54_917 },
+    2024: { adjustedBudget: 67_090, actual: 72_086 },
+    2025: { adjustedBudget: 67_554, actual: 76_648 },
+  },
 
   /**
    * YF-EV-0114 — 2023-2026 Capital Budget, Table 8, "Active Pathways and Roads
@@ -122,9 +144,17 @@ const byYear = figures.cm200330ApprovedByYearThousands;
 const approvedTotalThousands = byYear[2023] + byYear[2024] + byYear[2025] + byYear[2026];
 
 const snowPrimaryMillions = thousandsToMillions(figures.snow2022ExpenditureAndTransfersThousands);
-const snowAmendedMillions = thousandsToMillions(
-  figures.snow2022ExpenditureAndTransfersThousands + figures.snow2022OneTimeIncreaseJuly2022Thousands,
+const additions = figures.snow2022CouncilAdditionsThousands;
+const snowAmendedThousands =
+  figures.snow2022ExpenditureAndTransfersThousands +
+  additions['2022-03-14'] +
+  additions['2022-04-19'] +
+  additions['2022-07-04'];
+const snowAmendedMillions = thousandsToMillions(snowAmendedThousands);
+const snowJulyOnlyMillions = thousandsToMillions(
+  figures.snow2022ExpenditureAndTransfersThousands + additions['2022-07-04'],
 );
+const snowYearEndAdjustedMillions = thousandsToMillions(figures.snowYearEndThousands[2022].adjustedBudget);
 const snowNetMillions = thousandsToMillions(figures.snow2022NetOperatingRequirementThousands);
 
 const roadsPrimaryThousands =
@@ -140,8 +170,13 @@ export const results = {
 
   /** Claim A, primary: $100M over the printed 2022 gross cell. */
   snowRatioPrimary: round(figures.claimedProgramMillions / snowPrimaryMillions, 3),
-  /** Claim A, Alternative A: the cell plus the July 2022 one-time increase. */
+  /** Claim A, Alternative A: the cell plus every 2022 council addition in force on 2022-12-12. */
+  snowAmended2022Millions: round(snowAmendedMillions, 3),
   snowRatioAmended2022: round(figures.claimedProgramMillions / snowAmendedMillions, 3),
+  /** The same alternative counting only the July addition, as two seats first computed it. */
+  snowRatioJulyAdditionOnly: round(figures.claimedProgramMillions / snowJulyOnlyMillions, 3),
+  /** The City's own year-end adjusted 2022 expense budget as the denominator. */
+  snowRatioYearEndAdjusted2022: round(figures.claimedProgramMillions / snowYearEndAdjustedMillions, 3),
   /** Context only: the net operating requirement instead of the gross cell. */
   snowRatioNet2022: round(figures.claimedProgramMillions / snowNetMillions, 3),
   /** Like for like: the program's 2023 allocation over the 2022 gross cell. */

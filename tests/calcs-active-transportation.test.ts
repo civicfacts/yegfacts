@@ -8,7 +8,10 @@ describe('active-transportation calcs', () => {
 
   it('snow ratios come from the printed 2022 cell and its named alternative', () => {
     expect(results.snowRatioPrimary).toBe(1.551);
-    expect(results.snowRatioAmended2022).toBe(1.446);
+    expect(results.snowAmended2022Millions).toBe(85.766);
+    expect(results.snowRatioAmended2022).toBe(1.166);
+    expect(results.snowRatioJulyAdditionOnly).toBe(1.446);
+    expect(results.snowRatioYearEndAdjusted2022).toBe(1.258);
     expect(results.snowRatioNet2022).toBe(1.571);
     expect(results.snowRatioLikeForLike2023Allocation).toBe(0.092);
     expect(results.snowRatioLikeForLikeAverageYear).toBe(0.388);
