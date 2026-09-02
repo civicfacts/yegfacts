@@ -17,9 +17,9 @@ import { findingEdge } from '../lib/findings';
  * Topics and the verification date sit as a dateline directly under the
  * title, where a reader looking for provenance expects them.
  *
- * The list draws no rule above itself. The caller does, when nothing above it
- * already draws one: /stories sits under the page header's rule, a topic hub
- * under a bare label.
+ * Each story opens with the broadsheet section head the home page uses, a 3px
+ * ink rule over the title, because the claim rows underneath carry colour and
+ * badges and a hairline between stories lost against them.
  */
 interface Props {
   stories: Story[];
@@ -40,14 +40,14 @@ const th = 'border-b border-rule pb-2 text-left font-sans text-xs font-semibold 
 const findingColumn = 'w-px whitespace-nowrap sm:w-44';
 ---
 
-<ul class="divide-y divide-rule">
+<ul class="space-y-2">
   {
     stories.map((story) => {
       const claims = claimsByStory[story.id] ?? [];
       return (
-        <li class="py-8">
+        <li class="border-t-[3px] border-ink pt-3.5 pb-10">
           <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <Heading class="font-display text-[1.375rem] leading-[1.25] font-semibold">
+            <Heading class="font-display text-[1.625rem] leading-[1.2] font-semibold">
               <a href={`/facts/${story.id}`} class="link">
                 {story.data.title}
               </a>
