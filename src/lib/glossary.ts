@@ -125,7 +125,7 @@ export const glossary: Record<string, GlossaryEntry> = {
   },
   'three-model AI panel': {
     definition:
-      'Three AI reviewers from different vendors research each claim independently, and blind to each other. Which models ran is recorded with every run and shown in the AI review section of every story.',
+      'Three AI reviewers from different vendors research each claim independently, without seeing one another\u2019s work. Which models ran is recorded with every run and shown in the AI review section of every story.',
     href: STAGES,
   },
   'published rule': {
