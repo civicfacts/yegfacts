@@ -97,7 +97,9 @@ in those notes. Synthesis halts on that string: the brief is revised and
 round 1 is rerun rather than a verdict being computed over a question
 nobody should have asked. Use it for framing that changes the answer, not
 for wording you would have phrased differently — still answer the claim as
-posed alongside the concern.
+posed alongside the concern. Write the string only to raise a concern.
+If you have none, do not mention it at all, not even to say so; the halt
+is a plain text match.
 
 ## Honesty requirements
 

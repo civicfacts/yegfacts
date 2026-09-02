@@ -117,7 +117,10 @@ function framingConcerns(rounds: LoadedRound[], round: number): string[] {
   for (const { provider, review } of rounds) {
     for (const claim of review.claims) {
       const notes = claim.interpretation_notes;
-      if (notes?.includes(FRAMING_HALT_MARKER)) {
+      // A negated mention ("no MATERIAL FRAMING CONCERN") is a reviewer saying
+      // the frame held, not raising one; the reviewer prompt now asks them not
+      // to write the string at all in that case, and this guards the seam.
+      if (notes && new RegExp(`(?<!\\bno\\s)${FRAMING_HALT_MARKER}`, 'i').test(notes)) {
         hits.push(`round ${round} · ${provider} · claim "${claim.id}": ${notes.replace(/\s+/g, ' ').trim()}`);
       }
     }

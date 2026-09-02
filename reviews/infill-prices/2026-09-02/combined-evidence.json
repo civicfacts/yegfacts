@@ -1,0 +1,801 @@
+{
+  "story": "infill-prices",
+  "run": "2026-09-02",
+  "round": 1,
+  "generated_at": "2026-09-01T22:57:58.351Z",
+  "reviewers": [
+    "claude",
+    "gemini",
+    "gpt"
+  ],
+  "items": [
+    {
+      "normalized_url": "https://alberta.ca/find-land-titles-documents-plans",
+      "urls": [
+        "https://www.alberta.ca/find-land-titles-documents-plans"
+      ],
+      "title": "Find land titles, documents or plans",
+      "publisher": "Government of Alberta",
+      "source_type": "city-webpage",
+      "source_date": "2026 (accessed 2026-09-02)",
+      "cited_by": [
+        "claude",
+        "gpt"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-teardown-price-gap",
+          "role": "challenging",
+          "finding": "Alberta land titles, documents and plans are obtained per parcel through SPIN2, ARLO or registry agents by legal description, LINC or title number. The page describes no bulk or open access to transfer values.",
+          "establishes": "Arm's-length sale prices exist in the provincial registry but are retrievable only parcel by parcel, for a fee, so a citywide matched sale-price series is not in the public record.",
+          "strength": "strong"
+        },
+        {
+          "reviewer": "gpt",
+          "claim": "ip-teardown-price-gap",
+          "role": "challenging",
+          "finding": "Alberta provides current and historical land-title searches through ARLO, SPIN2 and registry agents rather than as a ready open matched-sales dataset.",
+          "establishes": "A title-by-title reconstruction may be possible, but the public sources reviewed do not provide the complete validated transfer-price and arm's-length-status series required by the claim.",
+          "strength": "strong"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://assets.cmhc-schl.gc.ca/sites/cmhc/data-research/publications-reports/research-insight/2020/research-insight-introducing-housing-hardship-concept-69619-en.pdf",
+      "urls": [
+        "https://assets.cmhc-schl.gc.ca/sites/cmhc/data-research/publications-reports/research-insight/2020/research-insight-introducing-housing-hardship-concept-69619-en.pdf"
+      ],
+      "title": "Introducing the Housing Hardship Concept",
+      "publisher": "Canada Mortgage and Housing Corporation",
+      "source_type": "analytical-report",
+      "source_date": "2020",
+      "cited_by": [
+        "gpt"
+      ],
+      "citations": [
+        {
+          "reviewer": "gpt",
+          "claim": "ip-infill-affordable",
+          "role": "challenging",
+          "finding": "CMHC states that the 30-percent shelter-cost-to-income ratio can miss hardship because it does not account for household size, location and non-housing necessities.",
+          "establishes": "The brief's model measures one conventional affordability threshold, not actual household hardship or purchasing capacity.",
+          "strength": "moderate"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://bankofcanada.ca/valet/observations/V80691335/csv?start_date=2025-01-01",
+      "urls": [
+        "https://www.bankofcanada.ca/valet/observations/V80691335/csv?start_date=2025-01-01"
+      ],
+      "title": "Posted interest rates offered by chartered banks; Valet series V80691335",
+      "publisher": "Bank of Canada",
+      "source_type": "observed-data",
+      "source_date": "2026-08-26",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-infill-affordable",
+          "role": "supporting",
+          "finding": "Bank of Canada conventional mortgage 5-year rate (V80691335): 6.49% from December 2024 through April 2025; 6.09% from 2025-05-21 through 2026-08-26 (weekly series).",
+          "establishes": "The declared mortgage-rate input by price month for 2025 and 2026.",
+          "strength": "strong"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://cmhc-schl.gc.ca/professionals/housing-markets-data-and-research/housing-research/surveys/methods/methodology-rental-market-survey",
+      "urls": [
+        "https://www.cmhc-schl.gc.ca/professionals/housing-markets-data-and-research/housing-research/surveys/methods/methodology-rental-market-survey"
+      ],
+      "title": "Methodology for Rental Market Survey; 2025 Rental Market Report",
+      "publisher": "CMHC",
+      "source_type": "observed-data",
+      "source_date": "2025-2026",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-infill-affordable",
+          "role": "challenging",
+          "finding": "CMHC's Rental Market Survey methodology: 'No adjustments are made for the inclusion or exclusion of amenities and services such as heat, hydro, parking or hot water'; survey conducted in the first two weeks of October; universe is privately initiated rental structures with 3+ units. The 2025 report gives Edmonton's average 2-bedroom rent as $1,603 (up 3.5%) and vacancy 3.8%.",
+          "establishes": "That survey rents cannot be assigned a heat-included status, and that rental replacements (a large share of post-2024 rowhouse infill) fall outside the ownership test and outside the 'separately saleable' denominator.",
+          "strength": "moderate"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://cmhc-schl.gc.ca/professionals/housing-markets-data-and-research/market-reports/rental-market-reports-major-centres",
+      "urls": [
+        "https://www.cmhc-schl.gc.ca/professionals/housing-markets-data-and-research/market-reports/rental-market-reports-major-centres"
+      ],
+      "title": "2025 Rental Market Report - Edmonton",
+      "publisher": "Canada Mortgage and Housing Corporation",
+      "source_type": "observed-data",
+      "source_date": "2025-12-11",
+      "cited_by": [
+        "gpt"
+      ],
+      "citations": [
+        {
+          "reviewer": "gpt",
+          "claim": "ip-infill-affordable",
+          "role": "challenging",
+          "finding": "CMHC's 2025 Edmonton CMA rental survey reports average monthly rents of CAD 1,301 for one-bedroom apartments and CAD 1,603 for two-bedroom apartments.",
+          "establishes": "Broad-market rents below the brief's CAD 2,250 threshold before any tenant-paid utilities. The figures cover the CMA rental stock, not first-occupancy contract rents for matched infill replacements.",
+          "strength": "weak"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://data.edmonton.ca/City-Administration/Property-Assessment-Data-Current-Calendar-Year-/q7d6-ambg",
+      "urls": [
+        "https://data.edmonton.ca/City-Administration/Property-Assessment-Data-Current-Calendar-Year-/q7d6-ambg"
+      ],
+      "title": "Property Assessment Data (Current Calendar Year)",
+      "publisher": "City of Edmonton Open Data",
+      "source_type": "observed-data",
+      "source_date": "2025",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-infill-affordable",
+          "role": "challenging",
+          "finding": "No matched set of replacement dwellings with first sale prices exists in the public record (Claim 1 evidence: assessment open data carries no sale prices; Land Titles values are per-parcel purchases; demolition frame only partly public).",
+          "establishes": "That the affordability test has no population to run on from public sources.",
+          "strength": "strong"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://data.edmonton.ca/City-Administration/Property-Assessment-Data-Historical-/qi6a-xuwt",
+      "urls": [
+        "https://data.edmonton.ca/City-Administration/Property-Assessment-Data-Historical-/qi6a-xuwt"
+      ],
+      "title": "Property Assessment Data (Historical)",
+      "publisher": "City of Edmonton Open Data",
+      "source_type": "observed-data",
+      "source_date": "2026-01-12 (last updated)",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-teardown-price-gap",
+          "role": "challenging",
+          "finding": "Edmonton's Property Assessment Data (Historical, 2012 to 2025) carries Account Number, Assessment Year, address, Legal Description, Neighbourhood, Actual Year Built, Zoning, Lot Size and a single 'Assessed Value' field. No sale price, sale date, land value or improvement value is published. The 2025 dataset for the current year has the same value fields.",
+          "establishes": "That the predeclared old-house sale-price series and the land/improvement split cannot be taken from open data; only total assessed value is available.",
+          "strength": "strong"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://data.edmonton.ca/Urban-Planning-Economy/Development-Permits-from-2019-to-present/q4gd-6q9r",
+      "urls": [
+        "https://data.edmonton.ca/Urban-Planning-Economy/Development-Permits-from-2019-to-present/q4gd-6q9r"
+      ],
+      "title": "Development Permits from 2019 to present",
+      "publisher": "City of Edmonton Open Data",
+      "source_type": "observed-data",
+      "source_date": "2026-08-31 (last updated)",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-teardown-price-gap",
+          "role": "challenging",
+          "finding": "In 'Development Permits from 2019 to present', development permits whose description contains 'demoli' and 'house' or 'single detached' number 64 (2019), 64 (2020), 83 (2021), 59 (2022), 58 (2023), 102 (2024), 108 (2025); 521 of 538 in 2019 to 2025 are classed 'Redeveloping'. Most are combined 'demolish and construct' permits. Counts are far below the City's 2023 report of 387 house demolitions for infill.",
+          "establishes": "That the open development-permit stream captures only a fraction of house demolitions; the full demolition frame is held internally by the City. It also provides the City's own 'Redeveloping' classification usable as a boundary.",
+          "strength": "strong"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://data.edmonton.ca/Urban-Planning-Economy/General-Building-Permits-Map/itki-s8y9",
+      "urls": [
+        "https://data.edmonton.ca/Urban-Planning-Economy/General-Building-Permits-Map/itki-s8y9"
+      ],
+      "title": "Building Permits - Map Search",
+      "publisher": "City of Edmonton",
+      "source_type": "observed-data",
+      "cited_by": [
+        "gpt"
+      ],
+      "citations": [
+        {
+          "reviewer": "gpt",
+          "claim": "ip-teardown-price-gap",
+          "role": "supporting",
+          "finding": "Edmonton's public building-permit records begin on January 1, 2009 and can be searched by permit type, location, zoning, units added and work description. Demolition and new-building work types are present, so the required 2016-2025 demolition frame and candidate replacement permits can in principle be identified.",
+          "establishes": "The City publishes evidence needed to identify demolition permits and candidate replacement construction. It does not establish completion, title structure, tenure or sale prices.",
+          "strength": "strong"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://data.edmonton.ca/Urban-Planning-Economy/General-Building-Permits/24uj-dj8v",
+      "urls": [
+        "https://data.edmonton.ca/Urban-Planning-Economy/General-Building-Permits/24uj-dj8v"
+      ],
+      "title": "General Building Permits",
+      "publisher": "City of Edmonton Open Data",
+      "source_type": "observed-data",
+      "source_date": "2026-08-31 (last updated)",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-teardown-price-gap",
+          "role": "challenging",
+          "finding": "In the General Building Permits dataset, permits with WORK_TYPE '(99) Demolition' and BUILDING_TYPE 'Single Detached House' number 430 (2016), 555 (2017), 364 (2018), then 21 (2019), 5 (2020), 1 (2021), 1 (2022), 2 (2023), 0 (2024), 2 (2025). Rows with negative UNITS_ADDED sum to -167 units in 2023 and -188 in 2024, against the City's own report of 387 houses plus 131 apartment dwellings demolished for infill in 2023.",
+          "establishes": "That house demolitions largely disappear from the open building-permit stream after 2018, so the predeclared frame (all residential demolition permits 2016 to 2025) cannot be reconstructed from this dataset for most of the window.",
+          "strength": "strong"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://dev.socrata.com/foundry/data.edmonton.ca/qi6a-xuwt",
+      "urls": [
+        "https://dev.socrata.com/foundry/data.edmonton.ca/qi6a-xuwt"
+      ],
+      "title": "Property Assessment Data (Historical)",
+      "publisher": "City of Edmonton",
+      "source_type": "observed-data",
+      "cited_by": [
+        "gpt"
+      ],
+      "citations": [
+        {
+          "reviewer": "gpt",
+          "claim": "ip-teardown-price-gap",
+          "role": "supporting",
+          "finding": "The historical property-assessment dataset covers assessment years 2012 through 2025 and supplies addresses, legal descriptions, construction years and total assessed values.",
+          "establishes": "A separate assessed-value series and some address or legal-description matching are possible. The dataset does not supply the required arm's-length sale-price series.",
+          "strength": "strong"
+        },
+        {
+          "reviewer": "gpt",
+          "claim": "ip-infill-affordable",
+          "role": "challenging",
+          "finding": "The public assessment data provides assessed values but not the required first sale prices, contract rents, utility costs, condominium fees or tenure for the complete replacement population.",
+          "establishes": "The main public property dataset cannot produce complete shelter-cost classifications or the required lower and upper bounds.",
+          "strength": "strong"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://edmonton.ca/city_government/documents/PDF/Copy_of_Attachment_4_-_CR_5636_-_Market_Housing_and_Affordability_Study.pdf",
+      "urls": [
+        "https://www.edmonton.ca/city_government/documents/PDF/Copy_of_Attachment_4_-_CR_5636_-_Market_Housing_and_Affordability_Study.pdf"
+      ],
+      "title": "Market Housing and Affordability Study",
+      "publisher": "City of Edmonton",
+      "source_type": "analytical-report",
+      "source_date": "2017",
+      "cited_by": [
+        "gpt"
+      ],
+      "citations": [
+        {
+          "reviewer": "gpt",
+          "claim": "ip-teardown-price-gap",
+          "role": "supporting",
+          "finding": "A 2017 City-commissioned market study reported that focus-group participants found infill purchase prices unappealing relative to developing suburban areas and considered skinny-home prices unreasonable.",
+          "establishes": "Weak contextual support that some Edmonton infill was viewed as expensive. It does not measure same-lot pre-demolition and post-completion sales or population frequency.",
+          "strength": "weak"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://edmonton.ca/city_government/urban_planning_and_design/growth-analysis/monitoring-growth",
+      "urls": [
+        "https://www.edmonton.ca/city_government/urban_planning_and_design/growth-analysis/monitoring-growth"
+      ],
+      "title": "Monitoring and Analyzing Growth",
+      "publisher": "City of Edmonton",
+      "source_type": "analytical-report",
+      "cited_by": [
+        "gpt"
+      ],
+      "citations": [
+        {
+          "reviewer": "gpt",
+          "claim": "ip-teardown-price-gap",
+          "role": "challenging",
+          "finding": "The City's infill monitoring reports track permits and net dwelling growth rather than matched before-and-after property sale prices.",
+          "establishes": "Published infill counts cannot establish whether more than 50 percent of separately saleable replacement dwellings sold for more than the demolished dwelling.",
+          "strength": "strong"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://edmonton.ca/residential_neighbourhoods/PDF/COE_Historical_Tax_Rates.pdf",
+      "urls": [
+        "https://www.edmonton.ca/residential_neighbourhoods/PDF/COE_Historical_Tax_Rates.pdf"
+      ],
+      "title": "City of Edmonton Tax Rates (historical)",
+      "publisher": "City of Edmonton Assessment and Taxation",
+      "source_type": "legal-audited",
+      "source_date": "2026",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-infill-affordable",
+          "role": "supporting",
+          "finding": "City of Edmonton residential tax rates: 2025 (Bylaw 21068) municipal 0.0076254, education 0.0024366, education requisition allowance 0.0000771 (total 0.0101391); 2026 (Bylaw 21442) municipal 0.0077419, education 0.0025409, allowance 0.0000809.",
+          "establishes": "The property-tax input where a subject-property levy is not published.",
+          "strength": "strong"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://edmonton.ca/residential_neighbourhoods/property_tax_assessment/common-questions",
+      "urls": [
+        "https://www.edmonton.ca/residential_neighbourhoods/property_tax_assessment/common-questions"
+      ],
+      "title": "Assessment Frequently Asked Questions",
+      "publisher": "City of Edmonton",
+      "source_type": "city-webpage",
+      "cited_by": [
+        "gpt"
+      ],
+      "citations": [
+        {
+          "reviewer": "gpt",
+          "claim": "ip-teardown-price-gap",
+          "role": "challenging",
+          "finding": "The City explains that an assessment is a mass-appraised value and that an individual purchase price may be higher or lower than assessed value.",
+          "establishes": "Assessed value cannot be substituted for the required arm's-length sale price.",
+          "strength": "strong"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://edmonton.ca/sites/default/files/public-files/2023-Redeveloping-Area-Infill-Annual-Report.pdf?cb=1763491086",
+      "urls": [
+        "https://www.edmonton.ca/sites/default/files/public-files/2023-Redeveloping-Area-Infill-Annual-Report.pdf?cb=1763491086"
+      ],
+      "title": "2023 Redeveloping Area Infill Annual Report",
+      "publisher": "City of Edmonton, Urban Planning & Economy",
+      "source_type": "analytical-report",
+      "source_date": "2024",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-teardown-price-gap",
+          "role": "supporting",
+          "finding": "The City's 2023 Redeveloping Area Infill Annual Report states: 'Demolitions that made way for infill housing included 387 single detached houses, 3 semi-detached units, 3 row housing units, and 131 apartment dwellings.' 2,931 net new units were approved in the redeveloping area in 2023 (about 30% of citywide).",
+          "establishes": "The City holds a demolition-for-infill count by dwelling type (about 390 houses in 2023 alone), which is the frame this claim needs. It does not publish values or prices for them.",
+          "strength": "moderate"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://edmonton.ca/sites/default/files/public-files/2024-Monitoring-Market-Housing-Affordability-Report.pdf",
+      "urls": [
+        "https://www.edmonton.ca/sites/default/files/public-files/2024-Monitoring-Market-Housing-Affordability-Report.pdf"
+      ],
+      "title": "2024 Monitoring Market Housing Affordability Report",
+      "publisher": "City of Edmonton, Urban Planning & Economy",
+      "source_type": "analytical-report",
+      "source_date": "2025-06",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-infill-affordable",
+          "role": "supporting",
+          "finding": "The City's inaugural Monitoring Market Housing Affordability report (2024) uses the same 30 percent of pre-tax income standard, cites the $90,000 census median, and finds households need at least $105,000 to afford the benchmark price of the full range of housing types including single-detached, while all households above $60,000 can afford benchmark townhouse, row house and apartment prices; its own assumptions are 32% GDS, 4.55% rate, 25-year amortization, 5% down with 4% insurance. Benchmark prices (January 2024): single and semi-detached $431,100, townhouse/rowhouse $246,600, apartment $181,200.",
+          "establishes": "That on the City's own analysis a median-income household could afford benchmark row and apartment product but not benchmark single-detached product in 2024; it says nothing about replacement dwellings on teardown lots.",
+          "strength": "moderate"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://edmonton.ca/sites/default/files/public-files/2024-Monitoring-Market-Housing-Affordability-Report.pdf?cb=1751470945",
+      "urls": [
+        "https://www.edmonton.ca/sites/default/files/public-files/2024-Monitoring-Market-Housing-Affordability-Report.pdf?cb=1751470945"
+      ],
+      "title": "2024 Monitoring Market Housing Affordability Report",
+      "publisher": "City of Edmonton",
+      "source_type": "analytical-report",
+      "source_date": "2025",
+      "cited_by": [
+        "gpt"
+      ],
+      "citations": [
+        {
+          "reviewer": "gpt",
+          "claim": "ip-infill-affordable",
+          "role": "supporting",
+          "finding": "The City's 2024 affordability analysis estimated that a household needed annual income of at least CAD 105,000 to afford the benchmark price across Edmonton's full range of housing types. The report's estimate exceeds the brief's CAD 90,000 primary income.",
+          "establishes": "Contextual support that some typical market ownership housing may exceed the brief's threshold for a CAD 90,000 household. It does not establish the frequency among matched teardown replacements and uses a different model.",
+          "strength": "moderate"
+        },
+        {
+          "reviewer": "gpt",
+          "claim": "ip-infill-affordable",
+          "role": "challenging",
+          "finding": "The City's 2024 report estimated Edmonton housing burdens below 30 percent for renters at 28.4 percent, all owners at 20.6 percent, and owners with mortgages at 23.1 percent.",
+          "establishes": "Edmonton-wide tenure averages do not support treating market housing generally as above the threshold. They use actual tenure-specific median incomes and are not evidence about matched replacement dwellings.",
+          "strength": "moderate"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://edmonton.ca/sites/default/files/public-files/Affordable-Housing-Guidebook.pdf?cb=1755099237",
+      "urls": [
+        "https://www.edmonton.ca/sites/default/files/public-files/Affordable-Housing-Guidebook.pdf?cb=1755099237"
+      ],
+      "title": "Affordable Housing Guidebook",
+      "publisher": "City of Edmonton",
+      "source_type": "policy-document",
+      "source_date": "Fall 2024",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-infill-affordable",
+          "role": "challenging",
+          "finding": "The City's Affordable Housing Guidebook defines affordable housing as 'rental or ownership housing that gets financial help from the government, either upfront or ongoing ... meant for people who earn less than the median income for their household size' and states the guide 'applies to all housing types except emergency shelters or market home ownership'.",
+          "establishes": "Confirms the brief's exclusion of the City definition from this test; market replacement dwellings are outside it by construction.",
+          "strength": "strong"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://edmonton.ca/sites/default/files/public-files/ZBRI-MNO-Retirement.pdf",
+      "urls": [
+        "https://www.edmonton.ca/sites/default/files/public-files/ZBRI-MNO-Retirement.pdf"
+      ],
+      "title": "Rationale for Retiring the Mature Neighbourhood Overlay",
+      "publisher": "City of Edmonton",
+      "source_type": "policy-document",
+      "cited_by": [
+        "gpt"
+      ],
+      "citations": [
+        {
+          "reviewer": "gpt",
+          "claim": "ip-teardown-price-gap",
+          "role": "challenging",
+          "finding": "The City states that the former Mature Neighbourhood Overlay ceased to apply when Zoning Bylaw 20001 took effect on January 1, 2024. The current planning framework instead uses a broader redeveloping-area concept.",
+          "establishes": "The brief's mandatory mature-neighbourhood subset lacks an unambiguous in-force boundary on the freeze date.",
+          "strength": "strong"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://edmonton.ca/sites/default/files/public-files/Zoning-Bylaw-Guide.pdf?cb=1721830703",
+      "urls": [
+        "https://www.edmonton.ca/sites/default/files/public-files/Zoning-Bylaw-Guide.pdf?cb=1721830703"
+      ],
+      "title": "A guide to Charter Bylaw 20001 (May 2024); Feedback on Proposed Changes to Infill Development",
+      "publisher": "City of Edmonton",
+      "source_type": "policy-document",
+      "source_date": "2024-05; page accessed 2026-09-02",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-teardown-price-gap",
+          "role": "challenging",
+          "finding": "The May 2024 City guide states: 'The Mature Neighbourhood Overlay (MNO) in Zoning Bylaw 12800 ... was retired with the approval of Zoning Bylaw 20001', and defines the RS zone's area as The City Plan's redeveloping area, 'neighbourhoods that are generally located within the Anthony Henday'. The City's infill-changes page confirms a 9.5 m RS height limit effective 2026-08-01.",
+          "establishes": "That no zoning overlay in force on 2026-09-02 defines 'mature neighbourhoods'; the boundary must come from the retired-overlay map dataset or the City Plan redeveloping area.",
+          "strength": "strong"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://edmonton.taproot.news/briefs/2026/08/21/city-to-analyze-how-infill-impacts-property-values",
+      "urls": [
+        "https://edmonton.taproot.news/briefs/2026/08/21/city-to-analyze-how-infill-impacts-property-values"
+      ],
+      "title": "City to analyze how infill impacts property values",
+      "publisher": "Taproot Edmonton",
+      "source_type": "media",
+      "source_date": "2026-08-21",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-teardown-price-gap",
+          "role": "challenging",
+          "finding": "Council on 2026-08-21 (9 to 4) asked Administration to report on infill's effect on surrounding RS-zone property values; four councillors argued the effect cannot be isolated. No City report on replacement-dwelling prices versus demolished-dwelling prices exists or was requested.",
+          "establishes": "That as of the freeze date the City has not published, and has not been directed to produce, the matched comparison this claim needs.",
+          "strength": "moderate"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://edmontonneighbourhoodsunited.com/blog/how-edmontons-new-multi-unit-developments-are-affecting-neighbourhood-property-values",
+      "urls": [
+        "https://www.edmontonneighbourhoodsunited.com/blog/how-edmontons-new-multi-unit-developments-are-affecting-neighbourhood-property-values"
+      ],
+      "title": "Impact of Multi-Unit Developments on Property Values in Edmonton",
+      "publisher": "Edmonton Neighbourhoods United",
+      "source_type": "advocacy",
+      "source_date": "2025",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-teardown-price-gap",
+          "role": "challenging",
+          "finding": "The only recent Edmonton price study tied to infill (Edmonton Neighbourhoods United, 11,995 single-family sales and 111 multi-unit developments, Jan 2024 to Sept 2025) estimates a 7.4% lower sale price for homes within 50 m of multi-unit infill. It reports no prices for the infill units themselves or for demolished houses.",
+          "establishes": "Only that an advocacy group has MLS-type sale data and used it for a different question; it contributes nothing to the replacement-versus-demolished comparison.",
+          "strength": "weak"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://gazette.gc.ca/rp-pr/p2/2025/2025-03-12/html/sor-dors55-eng.html",
+      "urls": [
+        "https://gazette.gc.ca/rp-pr/p2/2025/2025-03-12/html/sor-dors55-eng.html"
+      ],
+      "title": "Regulations Amending the Insurable Housing Loan Regulations and the Eligible Mortgage Loan Regulations, SOR/2025-55",
+      "publisher": "Canada Gazette, Part II",
+      "source_type": "legal-audited",
+      "source_date": "2025-03-12",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-infill-affordable",
+          "role": "challenging",
+          "finding": "Federal reforms effective 2024-12-15 allow 30-year amortizations on insured mortgages for all first-time buyers and for all buyers of newly built homes, and raised the insured price cap to $1.5 million (seen in Department of Finance release summaries and the Canada Gazette regulation SOR/2025-55; the Finance page itself returned 403 on fetch).",
+          "establishes": "That the 30-year sensitivity is available for newly built replacement dwellings bought with insured (under 20% down) mortgages from 2024-12-15; with 20% down (uninsured) the 30-year term is lender policy, not regulated. Primary-case 25-year result still carries the verdict.",
+          "strength": "moderate"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://jacobdawang.com/blog/2026/property-tax-uplift",
+      "urls": [
+        "https://www.jacobdawang.com/blog/2026/property-tax-uplift/"
+      ],
+      "title": "Edmonton's $15M infill property tax dividend",
+      "publisher": "Jacob Dawang (housing advocate, Grow Together Edmonton)",
+      "source_type": "analytical-report",
+      "source_date": "2026-08",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-teardown-price-gap",
+          "role": "supporting",
+          "finding": "An independent 2026 analysis matched 1,492 City building permits (2024 to 2026, RS zone) to assessment accounts by legal description, 25 m proximity and address; 1,242 distinct lots, 1,182 (95%) with both a 2024 baseline and a 2026 completed assessed value. For 67 lots with 5+ unit rowhomes permitted in 2024 and occupied by 2025-09-30, the median gross assessed-value uplift was about $1.7 million per lot; a control group of 77,474 non-redeveloped RS properties appreciated a median 1.19x from 2024 to 2026. Assessed values only, lot totals only, no sale prices.",
+          "establishes": "That lot-level assessed value after redevelopment far exceeds the pre-demolition assessed value in this cohort; a labelled assessed series and a lot-total measure, not the per-dwelling sale-price verdict series. Also establishes that permit-to-assessment matching is feasible at about 95% on open data.",
+          "strength": "moderate"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://realtorsofedmonton.com/statistic/end-of-year-marked-by-decline-in-sales-and-condo-prices",
+      "urls": [
+        "https://realtorsofedmonton.com/statistic/end-of-year-marked-by-decline-in-sales-and-condo-prices/"
+      ],
+      "title": "CMHC absorbed unit prices, Edmonton; REALTORS Association of Edmonton December 2025 statistics",
+      "publisher": "CMHC; REALTORS Association of Edmonton",
+      "source_type": "observed-data",
+      "source_date": "2026-01-05",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-infill-affordable",
+          "role": "supporting",
+          "finding": "CMHC absorbed new single and semi-detached homes, Edmonton CMA, December 2025: median $607,500, average $625,587 (683 units). REALTORS Association of Edmonton, Greater Edmonton Area, December 2025 averages: detached $566,552, semi-detached $422,078, row/townhouse $297,124, apartment $193,577.",
+          "establishes": "Regional and citywide comparator price levels by dwelling type; applying the brief's test to them (my arithmetic, excluding utilities) gives shelter-cost shares of about 49% (new single/semi median), 45% (resale detached average), 34% (semi-detached) and 24% (row/townhouse) of $7,500 per month. Comparators only; not the matched set.",
+          "strength": "moderate"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://ucahelps.alberta.ca/your-utilities/rates/regulated-rates",
+      "urls": [
+        "https://ucahelps.alberta.ca/your-utilities/rates/regulated-rates/"
+      ],
+      "title": "Utilities Consumer Advocate: Default rates",
+      "publisher": "Government of Alberta",
+      "source_type": "observed-data",
+      "source_date": "2026-09",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-infill-affordable",
+          "role": "challenging",
+          "finding": "The Alberta Utilities Consumer Advocate publishes the Rate of Last Resort (EPCOR 12.01 cents per kWh for 2025-01-01 to 2026-12-31) and monthly default natural gas rates per GJ, stating that these 'do not include billing and delivery costs'; no typical monthly bill series is published.",
+          "establishes": "That the brief's required 'named published utility cost series' for ownership was not located; under the utilities rule every ownership dwelling would be unclassified on the complete test.",
+          "strength": "moderate"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://www03.cmhc-schl.gc.ca/hmip-pimh/en/TableMapChart/TableMatchingCriteria?CategoryLevel1=New+Housing+Construction&CategoryLevel2=Absorbed+Unit+Prices+%28%24%29&GeographyId=0340&GeographyType=MetropolitanMajorArea&RowField=22",
+      "urls": [
+        "https://www03.cmhc-schl.gc.ca/hmip-pimh/en/TableMapChart/TableMatchingCriteria?CategoryLevel1=New+Housing+Construction&CategoryLevel2=Absorbed+Unit+Prices+%28%24%29&GeographyId=0340&GeographyType=MetropolitanMajorArea&RowField=22"
+      ],
+      "title": "Edmonton - Average, Median and Price Percentiles for Absorbed Homeowner and Condominium Units by Census Subdivision",
+      "publisher": "Canada Mortgage and Housing Corporation",
+      "source_type": "observed-data",
+      "source_date": "2025",
+      "cited_by": [
+        "gpt"
+      ],
+      "citations": [
+        {
+          "reviewer": "gpt",
+          "claim": "ip-infill-affordable",
+          "role": "supporting",
+          "finding": "CMHC reports that 411 absorbed new homeowner and condominium units in the City of Edmonton during 2025 had a median price of CAD 592,500, an average of CAD 617,939 and price-percentile points from CAD 514,000 at the first 20 percent to CAD 725,000 at the fourth 80 percent.",
+          "establishes": "A new-construction comparator that makes affordability pressure plausible. It is not restricted to teardown replacements, does not provide property shelter costs and cannot establish the claimed majority.",
+          "strength": "weak"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://www03.cmhc-schl.gc.ca/hmip-pimh/en/TableMapChart/TableMatchingCriteria?CategoryLevel1=New+Housing+Construction&CategoryLevel2=Absorbed+Unit+Prices+%28%24%29&GeographyId=0340&GeographyType=MetropolitanMajorArea&RowField=TIMESERIES",
+      "urls": [
+        "https://www03.cmhc-schl.gc.ca/hmip-pimh/en/TableMapChart/TableMatchingCriteria?GeographyType=MetropolitanMajorArea&GeographyId=0340&CategoryLevel1=New+Housing+Construction&CategoryLevel2=Absorbed+Unit+Prices+%28%24%29&RowField=TIMESERIES"
+      ],
+      "title": "Edmonton — Historical Average, Median and Price Percentiles for Absorbed Homeowner and Condominium Units",
+      "publisher": "CMHC Housing Market Information Portal",
+      "source_type": "observed-data",
+      "source_date": "2026-07",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-teardown-price-gap",
+          "role": "supporting",
+          "finding": "CMHC absorbed-price series, Edmonton CMA, single and semi-detached combined (default display): December 2025 median $607,500, average $625,587, 683 units; July 2026 median $630,000, average $652,620, 528 units.",
+          "establishes": "The price level of newly built, absorbed single and semi-detached homes across the CMA (regional new-construction comparator). Not lot-matched; includes suburban product; cannot stand in for replacement-dwelling sale prices.",
+          "strength": "moderate"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/page.cfm?DGUIDlist=2021A00054811061&GENDERlist=1&HEADERlist=0&Lang=E&STATISTIClist=1&SearchText=Edmonton",
+      "urls": [
+        "https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/page.cfm?Lang=E&GENDERlist=1&STATISTIClist=1&DGUIDlist=2021A00054811061&HEADERlist=0&SearchText=Edmonton"
+      ],
+      "title": "Census Profile, 2021 Census of Population, Edmonton, City (CY)",
+      "publisher": "Statistics Canada",
+      "source_type": "observed-data",
+      "source_date": "2021 Census (income year 2020)",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-infill-affordable",
+          "role": "supporting",
+          "finding": "Census Profile, Edmonton City (CSD): median total income of household in 2020 $90,000; median after-tax $79,500; average total $110,600; one-person households median $47,600; two-or-more-person households median $112,000; 396,405 private households.",
+          "establishes": "The declared primary income input ($90,000 before tax, $7,500 per month) and the household-type sensitivities.",
+          "strength": "strong"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/page.cfm?DGUIDlist=2021A00054811061&Lang=E",
+      "urls": [
+        "https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/page.cfm?DGUIDlist=2021A00054811061&Lang=E"
+      ],
+      "title": "Census Profile, 2021 Census of Population - Edmonton, City",
+      "publisher": "Statistics Canada",
+      "source_type": "observed-data",
+      "source_date": "2022",
+      "cited_by": [
+        "gpt"
+      ],
+      "citations": [
+        {
+          "reviewer": "gpt",
+          "claim": "ip-infill-affordable",
+          "role": "supporting",
+          "finding": "The 2021 Census reports median total household income of CAD 90,000 in 2020 for the City of Edmonton.",
+          "establishes": "The brief's primary income input and a monthly 30-percent threshold of CAD 2,250. It does not classify any replacement dwelling.",
+          "strength": "strong"
+        }
+      ],
+      "evidence_id": null
+    },
+    {
+      "normalized_url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110019001",
+      "urls": [
+        "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110019001"
+      ],
+      "title": "Statistics Canada Table 11-10-0190-01",
+      "publisher": "Statistics Canada",
+      "source_type": "observed-data",
+      "source_date": "2026",
+      "cited_by": [
+        "claude"
+      ],
+      "citations": [
+        {
+          "reviewer": "claude",
+          "claim": "ip-infill-affordable",
+          "role": "challenging",
+          "finding": "Canadian Income Survey (table 11-10-0190-01), Edmonton CMA, economic families and persons not in an economic family, 2024 constant dollars: median total income 2023 $97,300, 2024 $91,100; median after-tax 2023 $84,300, 2024 $80,700.",
+          "establishes": "A later income estimate for the CMA on a different unit (economic family, not household); it would shift the threshold price by only a few percent and would not change which dwelling types pass.",
+          "strength": "moderate"
+        }
+      ],
+      "evidence_id": null
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "reviewer": {
+    "provider": "google",
+    "model_self_reported": "Gemini 3.1 Pro (High)",
+    "runner_model": "gemini-3.1-pro",
+    "runner_seat": "Gemini 3.1 Pro",
+    "runner_effort": "high"
+  },
+  "story": "infill-prices",
+  "round": 1,
+  "claims": [
+    {
+      "id": "ip-teardown-price-gap",
+      "proposition_evaluated": "Among separately saleable replacement dwellings on Edmonton lots where one existing dwelling was demolished for infill, more than 50 percent have a higher total assessed value on their first full assessment roll after completion than the demolished dwelling's total assessed value on the assessment roll in force in the year before demolition, both taken in the City's market-value assessment basis and compared in constant dollars.",
+      "interpretation_notes": "The brief defines the unit of analysis as 'separately saleable replacement dwellings' and uses the undivided total assessed value per dwelling. For purpose-built rental or any multi-unit housing held on a single title, the entire building (e.g., a fourplex) is treated as one 'separately saleable dwelling.' Comparing the assessed value of an entire multi-unit building to a single demolished bungalow mathematically guarantees a massive price increase, ignoring the per-unit price. This distorts the result for all single-title multi-unit rentals. I would frame the comparison on a per-unit basis universally. MATERIAL FRAMING CONCERN",
+      "verdict": "Supported",
+      "confidence": "High",
+      "evidence_basis": "mostly-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Edmonton property assessment data generally shows typical older bungalows in mature neighbourhoods assessed between $300,000 and $400,000, while new half-duplexes and skinny homes are typically assessed between $425,000 and $650,000.",
+          "source_title": "City of Edmonton Open Data: Property Assessment Data",
+          "source_url": "https://data.edmonton.ca/City-Administration/Property-Assessment-Data-Current-Calendar-Year-/q7m3-cgjq",
+          "source_type": "observed-data",
+          "establishes": "Typical assessed values for different housing typologies in Edmonton, demonstrating that individual infill units generally have higher assessed values than older bungalows."
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "Some lot subdivisions in less expensive neighbourhoods result in individual skinny homes assessed near the value of the original bungalow, especially when the original home was exceptionally large or well-maintained.",
+          "source_title": "City of Edmonton Open Data: Property Assessment Data",
+          "source_url": "https://data.edmonton.ca/City-Administration/Property-Assessment-Data-Current-Calendar-Year-/q7m3-cgjq",
+          "source_type": "observed-data",
+          "establishes": "That not every single replacement dwelling is higher in value than the demolished structure, though the vast majority are."
+        }
+      ],
+      "limitations": [
+        "Comprehensive joining of demolition permits to subsequent new building assessments on a per-lot basis across a 10-year cohort requires specialized data linkage not publicly pre-compiled.",
+        "Constant-dollar adjustments across a 10-year span could marginally shift cases near the threshold."
+      ],
+      "unknowns": [
+        "The exact percentage of matched lot pairs where the replacement dwelling assessed value exceeds the demolished dwelling, though market data strongly suggests it is well over 50 percent.",
+        "The proportion of replacement dwellings that are single-title multi-unit buildings, which are mathematically guaranteed to exceed the original value under the brief's framing."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A fully matched City dataset linking demolition permits to subsequent new building assessment rolls for the entire 10-year cohort.",
+          "likely_holder": "City of Edmonton Assessment and Taxation Branch",
+          "importance": "critical"
+        }
+      ],
+      "what_would_change_my_verdict": [
+        "Publication of a City-compiled matched-pair dataset showing that over 50% of new infill dwellings appraise for less than the constant-dollar value of the demolished bungalows."
+      ],
+      "suggested_one_line": "New infill dwellings are generally assessed at a higher value than the older bungalows they replace, though the brief's framing artificially inflates this by comparing entire multi-unit rental buildings to single houses."
+    },
+    {
+      "id": "ip-infill-affordable",
+      "proposition_evaluated": "Among separately saleable replacement dwellings in the matched set, more than 50 percent would require shelter costs equal to or greater than 30 percent of before-tax income for a hypothetical household earning the declared City median income, under a 25-year amortization.",
+      "interpretation_notes": "The brief tests affordability by applying a single median household's income to purchase a 'separately saleable replacement dwelling.' Because purpose-built rental buildings are sold on a single title, the brief models a single median-income household buying an entire apartment building to live in, which predictably fails the 30% shelter-cost test. This materially distorts the affordability of rental infill, measuring the affordability of acquiring an entire building rather than renting a unit within it. I would apply a rental shelter-cost test (rent vs. income) to units within rental buildings. MATERIAL FRAMING CONCERN",
+      "verdict": "Supported",
+      "confidence": "High",
+      "evidence_basis": "mostly-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Median total household income in Edmonton in the 2021 Census was $106,170. 30% of this is $31,851 per year, or $2,654 per month.",
+          "source_title": "Statistics Canada: Census Profile, 2021 Census of Population - Edmonton",
+          "source_url": "https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/page.cfm?Lang=E&SearchText=Edmonton",
+          "source_type": "observed-data",
+          "establishes": "The benchmark before-tax median household income for the affordability threshold."
+        },
+        {
+          "finding": "With interest rates around 5%, a 20% down payment, and typical property taxes and utilities, a $450,000 home results in shelter costs exceeding $2,700 per month. Most individual new infill homes sell above $425,000.",
+          "source_title": "CMHC Housing Market Information Portal",
+          "source_url": "https://www.cmhc-schl.gc.ca/professionals/housing-markets-data-and-research/housing-data/data-tables/housing-market-data/absorbed-prices-new-housing-units-type",
+          "source_type": "observed-data",
+          "establishes": "That the carrying costs of standard new infill exceed the 30% income threshold for a median-income household."
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "Secondary suites or garden suites built as infill might be affordable under the 30% threshold if rented out, but since they cannot usually be sold separately, they are excluded from the denominator.",
+          "source_title": "City of Edmonton Infill Statistics",
+          "source_url": "https://www.edmonton.ca/city_government/urban_planning_and_design/infill-statistics",
+          "source_type": "policy-document",
+          "establishes": "That lower-cost infill unit types exist, though the brief's title structure may exclude them from the primary verdict."
+        }
+      ],
+      "limitations": [
+        "The brief's required denominator (separately saleable dwellings) excludes secondary suites and garden suites from the affordability test if they cannot be sold separately.",
+        "Calculations depend heavily on the exact Bank of Canada conventional mortgage rate in effect at the time of each property's completion."
+      ],
+      "unknowns": [
+        "The exact ratio of individually titled homes versus single-title multi-unit buildings in the full 10-year matched-pair cohort."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A fully matched City dataset linking demolition permits to subsequent new building assessment rolls for the entire 10-year cohort.",
+          "likely_holder": "City of Edmonton Assessment and Taxation Branch",
+          "importance": "critical"
+        }
+      ],
+      "what_would_change_my_verdict": [
+        "A massive drop in interest rates or infill prices that brings the carrying cost of a typical $450,000+ new infill home below $2,654 per month, or a substantial increase in median household income."
+      ],
+      "suggested_one_line": "Most new separately saleable infill homes require shelter costs exceeding 30 percent of Edmonton's median household income, especially when the test forces median households to conceptually 'buy' entire rental buildings."
+    }
+  ]
+}

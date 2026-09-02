@@ -1,0 +1,341 @@
+{
+  "reviewer": {
+    "provider": "openai",
+    "model_self_reported": "GPT-5",
+    "runner_model": "gpt-5.6-sol",
+    "runner_seat": "GPT-5.6 Sol",
+    "runner_effort": "high"
+  },
+  "story": "infill-prices",
+  "round": 2,
+  "round2_notes": {
+    "evidence_i_missed": [
+      "Claude's comparison of the open permit datasets with the City's 2023 infill report materially strengthens the missing-frame finding. The City reported 387 single-detached demolitions for infill in 2023, while the public permit categories used by Claude produced far fewer cases.",
+      "The Dawang analysis shows that permit-to-assessment matching is feasible for a recent RS-zone cohort and that redeveloped lot totals had large assessed-value increases. It remains an assessed-value, lot-total series and cannot carry Claim 1's per-dwelling sale-price verdict.",
+      "Claude supplied official mortgage-rate and Edmonton tax-rate sources needed for Claim 2, plus the federal rule governing insured 30-year amortizations after December 15, 2024.",
+      "CMHC's Rental Market Survey methodology confirms that its published rents do not identify whether heat, electricity or hot water is included. The averages therefore cannot classify individual replacement rentals under the brief's complete shelter-cost test.",
+      "Cross-checking Claude's utility finding surfaced Statistics Canada Table 11-10-0222-01, which publishes annual provincial household spending for water, fuel and electricity. It may provide a named model input, although it is an Alberta average rather than an Edmonton property-specific bill."
+    ],
+    "errors_in_other_reviews": [
+      "Claude and Gemini overstate the access problem by describing sale-price evidence as proprietary or unavailable to the public. Alberta transfer documents can be purchased parcel by parcel and require consideration and current-value information. The actual problem is that no ready bulk matched dataset or verified arm's-length classification appears in the evidence package.",
+      "The cited Alberta page titled 'Find land titles, documents or plans' explains title and document access but does not itself say that titles contain sale prices or identify arm's-length transfers. A separate official Transfer of Land page discusses consideration. Even there, consideration and stated value are not automatically a validated arm's-length sale price.",
+      "Gemini says Claim 2's shelter-cost calculation requires the first arm's-length sale price of every replacement dwelling. That is false for rentals, for which the brief specifies contract rent plus tenant-paid utilities. Missing ownership sale prices still leave rental cases conceptually testable if tenure, rent and utility information exist.",
+      "Claude similarly treats the absence of a Claim 1 sale-price set as meaning Claim 2 has no population. Claim 2 first needs the linked replacement frame, title structure and tenure. Ownership cases then need prices, while rental cases need contract rents.",
+      "Claude states that rental replacements fall outside the separately saleable denominator. Tenure and legal saleability are different attributes. An individually titled dwelling can be rented and remain separately saleable; only replacements lacking separately saleable dwelling titles are excluded by that denominator.",
+      "Claude concludes that every ownership dwelling would be unclassified because no published utility-cost series was located. Statistics Canada Table 11-10-0222-01 publishes annual provincial spending for water, fuel and electricity, and EPCOR publishes some average residential bill information. Whether those averages are suitable must be declared, but the cited default-rate page does not establish that no named cost series exists.",
+      "Claude's roughly CAD 374,600 threshold is not the threshold under the brief's complete primary test. It excludes utilities and applies the residential tax rate to purchase price, while the brief requires the subject levy or the tax rate applied to assessed value. It is only a rough, labelled sensitivity.",
+      "Claude's combined CMHC and REALTORS Association comparator cites a REALTORS Association URL that does not establish the CMHC absorbed-unit figures. The CMHC values require the separate CMHC Housing Market Information Portal citation.",
+      "Claude's statement that the result is unlikely to change between sale-price and assessed-value measures is unsupported. Long holding periods, land appreciation, multi-unit replacement counts and assessment timing could change both ratios and the majority direction.",
+      "Claude's statements that post-2024 permits are dominated by five-to-eight-unit rowhouses and that many are rentals are not established by the cited evidence registry. They should remain hypotheses until permit, title and tenure counts are supplied.",
+      "Gemini provides empty evidence arrays while making factual claims about municipal data and proprietary records. Those claims need the source URLs and narrower qualifications supplied elsewhere in the combined registry."
+    ],
+    "verdict_changes": []
+  },
+  "claims": [
+    {
+      "id": "ip-teardown-price-gap",
+      "proposition_evaluated": "Among separately saleable replacement dwellings on Edmonton lots where one existing dwelling was demolished under permits issued from 2016 through 2025, more than 50 percent had a higher first arm's-length sale price than the demolished dwelling's last arm's-length sale price, in 2025 constant dollars, on the total-price-per-dwelling basis. The city-wide and mature-neighbourhood results, per-unit result, price-ratio distribution and both lot-level sensitivities are reported separately.",
+      "interpretation_notes": "Verdict unchanged from round 1. The new permit-count evidence makes the data gap clearer but supplies no verdict numerator or denominator. Paid Alberta transfer documents make reconstruction possible in principle, so I do not describe the proposition as inherently untestable. No reviewed source has performed the required reconstruction or validated arm's-length status across the predeclared frame. MATERIAL FRAMING CONCERN: the Mature Neighbourhood Overlay was retired when Zoning Bylaw 20001 took effect on January 1, 2024. The archived overlay boundary and the current City Plan redeveloping area are different instruments and must not be silently substituted for one another. MATERIAL FRAMING CONCERN: comparing a replacement's first sale with the demolished dwelling's possibly decades-old last sale can measure long-run property appreciation as well as redevelopment. CPI adjustment does not isolate housing-market appreciation. This may differ from the captured quotation's apparent contemporaneous value comparison. I answer the declared proposition while requiring the sale-date gap and assessed-value series to be prominent qualifications.",
+      "verdict": "Not established",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "A 2026 independent analysis matched recent RS-zone permits to assessment accounts and reported a median gross assessed-value increase of about CAD 1.7 million per lot for 67 lots with five or more rowhouse units.",
+          "source_title": "Edmonton's $15M infill property tax dividend",
+          "source_url": "https://www.jacobdawang.com/blog/2026/property-tax-uplift/",
+          "source_publisher": "Jacob Dawang, Grow Together Edmonton",
+          "source_date": "2026-08",
+          "source_type": "analytical-report",
+          "establishes": "Large assessed-value increases are possible on redeveloped lots, and open permit-to-assessment matching is feasible for a recent cohort. The analysis uses lot totals and assessed values, not separately saleable dwelling prices or matched arm's-length sales.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "CMHC reported a 2025 median price of CAD 592,500 for 411 absorbed new homeowner and condominium units in the City of Edmonton.",
+          "source_title": "Edmonton average, median and price percentiles for absorbed homeowner and condominium units",
+          "source_url": "https://www03.cmhc-schl.gc.ca/hmip-pimh/en/TableMapChart/TableMatchingCriteria?CategoryLevel1=New+Housing+Construction&CategoryLevel2=Absorbed+Unit+Prices+%28%24%29&GeographyId=0340&GeographyType=MetropolitanMajorArea&RowField=22",
+          "source_publisher": "Canada Mortgage and Housing Corporation",
+          "source_date": "2025",
+          "source_type": "observed-data",
+          "establishes": "New ownership housing can sell at prices consistent with the circulating claim's general concern. The series is not restricted to teardown replacements and contains no demolished-dwelling comparator.",
+          "strength": "weak"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "Edmonton's historical assessment dataset publishes total assessed value, address, legal description and related property fields but no sale price, sale date, land-value split or improvement-value split.",
+          "source_title": "Property Assessment Data (Historical)",
+          "source_url": "https://dev.socrata.com/foundry/data.edmonton.ca/qi6a-xuwt",
+          "source_publisher": "City of Edmonton",
+          "source_date": "Last updated 2026-01-12",
+          "source_type": "observed-data",
+          "establishes": "The assessment dataset can support a separate assessed-value series and some matching, but it cannot supply Claim 1's required arm's-length sale prices.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Alberta provides current and historical titles and registered documents through ARLO, SPIN2 and registry agents, generally using a legal description, LINC or title number.",
+          "source_title": "Find land titles, documents or plans",
+          "source_url": "https://www.alberta.ca/find-land-titles-documents-plans",
+          "source_publisher": "Government of Alberta",
+          "source_date": "Accessed 2026-09-02",
+          "source_type": "city-webpage",
+          "establishes": "Parcel-level title and document reconstruction is possible, but this page supplies neither a bulk matched-sales dataset nor arm's-length classifications.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The official transfer guidance says a transfer requires the consideration paid and the current value of the land and improvements.",
+          "source_title": "Transfer of land",
+          "source_url": "https://landregistry.alberta.ca/customer-service/help/completing-land-titles-forms/transfer-of-land",
+          "source_publisher": "Alberta Land Titles",
+          "source_date": "Accessed 2026-09-02",
+          "source_type": "city-webpage",
+          "establishes": "Transfer documents may contain useful transaction information. Consideration or stated value still requires transaction-level review before it can be treated as an arm's-length sale price.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City's 2023 infill report counted demolitions making way for infill housing that included 387 single-detached houses, three semi-detached units, three row-housing units and 131 apartment dwellings.",
+          "source_title": "2023 Redeveloping Area Infill Annual Report",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-Redeveloping-Area-Infill-Annual-Report.pdf?cb=1763491086",
+          "source_publisher": "City of Edmonton, Urban Planning and Economy",
+          "source_date": "2024",
+          "source_type": "analytical-report",
+          "establishes": "The City holds a substantially larger demolition-for-infill frame than the cases found under narrow demolition categories in the public permit datasets. The report supplies no matched sale prices.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City states that Zoning Bylaw 20001 took effect on January 1, 2024 and retired the former Mature Neighbourhood Overlay.",
+          "source_title": "Rationale for Retiring the Mature Neighbourhood Overlay",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/ZBRI-MNO-Retirement.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2023",
+          "source_type": "policy-document",
+          "establishes": "There is no current overlay that supplies the brief's requested mature-neighbourhood boundary. An archived overlay subset and the current redeveloping-area subset would answer different questions.",
+          "strength": "strong"
+        }
+      ],
+      "limitations": [
+        "No reviewed source reports the dwelling-level numerator, denominator, median ratio, quartiles or range required for either geography or cohort.",
+        "The public permit datasets do not plainly expose the full 2016 to 2025 residential-demolition frame under one stable work-type classification.",
+        "Land-title documents are available parcel by parcel, but the evidence package contains no purchased transfer series or transaction-level arm's-length validation.",
+        "Assessment evidence uses a prohibited substitute for the verdict measure and often represents an entire lot rather than each separately saleable replacement dwelling.",
+        "The archived Mature Neighbourhood Overlay and the current redeveloping area are not interchangeable boundaries.",
+        "No evidence establishes the title structure, replacement-dwelling count, tenure or transaction history for the full matched frame."
+      ],
+      "unknowns": [
+        "The share of separately saleable replacement dwellings with a higher constant-dollar first sale price.",
+        "The distribution of replacement-to-demolished sale-price ratios on the total-price and per-unit bases.",
+        "The city-wide and mature-subset results for the ten-year and five-year cohorts.",
+        "The number of replacements on each lot and the results under the every-replacement and at-least-one-replacement rules.",
+        "The frequency and effect of tenure changes, aggregate-title projects, fire-order demolitions and safety-order demolitions.",
+        "The ages and arm's-length status of the demolished dwellings' last recorded transfers."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A complete residential-demolition frame for permits issued from 2016 through 2025, with parcel identifiers, addresses, permit dates, demolished unit counts and fire or safety order status.",
+          "likely_holder": "City of Edmonton, Urban Planning and Economy",
+          "importance": "critical"
+        },
+        {
+          "description": "Matched replacement permits, completion or occupancy dates, title structure and separately saleable dwelling counts for every demolition lot.",
+          "likely_holder": "City of Edmonton Development Services and Alberta Land Titles",
+          "importance": "critical"
+        },
+        {
+          "description": "The last pre-demolition and first post-completion transfer documents, dates, consideration or value fields, and evidence sufficient to classify each transfer as arm's-length.",
+          "likely_holder": "Alberta Land Titles through ARLO, SPIN2 or registry agents; MLS records held by REALTORS Association of Edmonton",
+          "importance": "critical"
+        },
+        {
+          "description": "Separate land and improvement assessments for the demolished and replacement dwellings under the brief's timing rules.",
+          "likely_holder": "City of Edmonton Assessment and Taxation",
+          "importance": "high"
+        }
+      ],
+      "calculations_needed": [
+        "Build the 2016 to 2025 primary cohort and 2021 to 2025 sensitivity, recording every loss at matching, completion, title and price stages.",
+        "Validate every transfer's arm's-length status rather than treating consideration or assessed value as a sale price automatically.",
+        "Adjust both sale prices to 2025 dollars with Edmonton CMA all-items CPI and run the declared Edmonton NHPI sensitivity.",
+        "Count each separately saleable replacement dwelling once and report the higher-price numerator and denominator.",
+        "Report the total-price and per-unit ratios, count, quartiles, range and median, with sale dates and the year gap for every pair.",
+        "Compute the every-replacement and at-least-one-replacement lot shares without substituting either for the dwelling-level verdict.",
+        "Repeat every result city-wide, for the explicitly chosen mature-area boundary, without fire or safety order cases, and under the five-year window."
+      ],
+      "what_would_change_my_verdict": [
+        "A validated matched series covering the predeclared frame would support the claim if more than 50 percent of separately saleable replacements had higher constant-dollar total prices.",
+        "The same series would contradict the claim if 50 percent or fewer had higher prices.",
+        "A partial or selected sample would not change the verdict unless its sampling rule and coverage justified inference to the declared population."
+      ],
+      "suggested_one_line": "The evidence package contains no complete matched series of demolished-house and replacement-dwelling arm's-length sales, so the claimed majority is not established.",
+      "suggested_short_answer": "Edmonton publishes permits and total assessments, and Alberta sells parcel-level transfer documents, but nobody in the reviewed evidence has joined and validated those records across the declared cohort. Recent assessed-value work shows large increases for some redeveloped lot totals, but that is not the required per-dwelling sale-price comparison.",
+      "suggested_tldr": [
+        "No reviewed source supplies the required matched sales.",
+        "Paid parcel-level reconstruction is possible in principle.",
+        "Assessment and regional-price comparators cannot carry the verdict."
+      ]
+    },
+    {
+      "id": "ip-infill-affordable",
+      "proposition_evaluated": "Among separately saleable replacement dwellings in the linked Edmonton teardown set, more than 50 percent would require complete monthly shelter costs exceeding 30 percent of CAD 90,000 in before-tax household income, using 20 percent down, the Bank of Canada five-year conventional mortgage rate for the price month, 25-year amortization, property tax, utilities and applicable condominium fees. City-wide and mature-neighbourhood results are required separately, with unclassified cases handled through the declared bounds rule.",
+      "interpretation_notes": "Verdict unchanged from round 1. Claim 2 does not logically depend on every case having a Claim 1 sale-price comparison. Ownership cases require a replacement price; rental cases require first-occupancy contract rent and tenant-paid utilities. The evidence package supplies neither a complete linked replacement frame nor the tenure-specific inputs needed to calculate lower and upper bounds. I interpret 'separately saleable' as a legal or title characteristic, not as proof that the dwelling was owner-occupied. Individually saleable dwellings that were rented remain rental cases; units held only under an aggregate project title do not enter the denominator. The City and CMHC comparators show that results could differ sharply by dwelling type and tenure, so they cannot establish the majority. The roughly CAD 374,600 figure offered by Claude is not used because it substitutes purchase price for assessed value in the tax calculation and excludes required utilities.",
+      "verdict": "Not established",
+      "confidence": "High",
+      "evidence_basis": "modelled-uncertain",
+      "supporting_evidence": [
+        {
+          "finding": "The 2021 Census reports median total household income of CAD 90,000 for Edmonton in income year 2020.",
+          "source_title": "Census Profile, 2021 Census of Population, Edmonton, City",
+          "source_url": "https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/page.cfm?Lang=E&GENDERlist=1&STATISTIClist=1&DGUIDlist=2021A00054811061&HEADERlist=0&SearchText=Edmonton",
+          "source_publisher": "Statistics Canada",
+          "source_date": "2021 Census, 2020 income",
+          "source_type": "observed-data",
+          "establishes": "The primary model income is CAD 7,500 per month and its 30 percent shelter-cost threshold is CAD 2,250 per month. It classifies no dwelling by itself.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City's 2024 affordability report says single and semi-detached benchmark housing at CAD 431,100 was likely out of reach for households earning less than CAD 105,000 under its model.",
+          "source_title": "2024 Monitoring Market Housing Affordability Report",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2024-Monitoring-Market-Housing-Affordability-Report.pdf",
+          "source_publisher": "City of Edmonton, Urban Planning and Economy",
+          "source_date": "2025-06",
+          "source_type": "analytical-report",
+          "establishes": "Some common ownership housing types may exceed the capacity of a CAD 90,000 household. The City used a different interest rate, down payment, insurance and 32 percent debt-service model and did not isolate teardown replacements.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "CMHC reported a 2025 median price of CAD 592,500 for 411 absorbed new homeowner and condominium units in the City of Edmonton.",
+          "source_title": "Edmonton average, median and price percentiles for absorbed homeowner and condominium units",
+          "source_url": "https://www03.cmhc-schl.gc.ca/hmip-pimh/en/TableMapChart/TableMatchingCriteria?CategoryLevel1=New+Housing+Construction&CategoryLevel2=Absorbed+Unit+Prices+%28%24%29&GeographyId=0340&GeographyType=MetropolitanMajorArea&RowField=22",
+          "source_publisher": "Canada Mortgage and Housing Corporation",
+          "source_date": "2025",
+          "source_type": "observed-data",
+          "establishes": "Affordability pressure among new ownership units is plausible. The series does not identify teardown replacements or provide taxes, utilities, fees or the population frequency needed for a verdict.",
+          "strength": "weak"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The City's 2024 report says households earning more than CAD 60,000 should be able to afford its benchmark townhouse, rowhouse and apartment prices of CAD 246,600 and CAD 181,200.",
+          "source_title": "2024 Monitoring Market Housing Affordability Report",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2024-Monitoring-Market-Housing-Affordability-Report.pdf",
+          "source_publisher": "City of Edmonton, Urban Planning and Economy",
+          "source_date": "2025-06",
+          "source_type": "analytical-report",
+          "establishes": "The claimed direction is not uniform across dwelling types. The comparator uses a different model and cannot establish the matched-set result.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "CMHC's 2025 Edmonton rental survey reported average rents of CAD 1,301 for one-bedroom apartments and CAD 1,603 for two-bedroom apartments.",
+          "source_title": "2025 Rental Market Report, Edmonton",
+          "source_url": "https://www.cmhc-schl.gc.ca/professionals/housing-markets-data-and-research/market-reports/rental-market-reports-major-centres",
+          "source_publisher": "Canada Mortgage and Housing Corporation",
+          "source_date": "2025-12-11",
+          "source_type": "observed-data",
+          "establishes": "Broad-market rents can fall below the CAD 2,250 threshold before tenant-paid utilities. These averages are not first-occupancy contract rents for matched replacements.",
+          "strength": "weak"
+        },
+        {
+          "finding": "CMHC states that Rental Market Survey rents may or may not include heat, electricity and hot water and that no adjustment is made for their inclusion.",
+          "source_title": "Methodology for Rental Market Survey",
+          "source_url": "https://www.cmhc-schl.gc.ca/professionals/housing-markets-data-and-research/housing-research/surveys/methods/methodology-rental-market-survey",
+          "source_publisher": "Canada Mortgage and Housing Corporation",
+          "source_date": "Published 2024-01-29",
+          "source_type": "observed-data",
+          "establishes": "CMHC survey averages cannot identify complete shelter cost for an individual rental replacement without separate utility information.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Statistics Canada publishes annual provincial household spending for water, fuel and electricity in Table 11-10-0222-01.",
+          "source_title": "Household spending, Canada, regions and provinces",
+          "source_url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110022201",
+          "source_publisher": "Statistics Canada",
+          "source_date": "Release 2025-05-21",
+          "source_type": "observed-data",
+          "establishes": "A named published utility-cost series exists, contrary to a categorical claim that none is available. It is an Alberta household average rather than an Edmonton dwelling-specific bill, so its use and limitations must be declared.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Edmonton's public assessment data supplies assessed values but not first sale prices, contract rents, tenure, utility costs or condominium fees.",
+          "source_title": "Property Assessment Data (Historical)",
+          "source_url": "https://dev.socrata.com/foundry/data.edmonton.ca/qi6a-xuwt",
+          "source_publisher": "City of Edmonton",
+          "source_date": "Last updated 2026-01-12",
+          "source_type": "observed-data",
+          "establishes": "The principal public property dataset cannot classify the ownership and rental replacement population under the complete test.",
+          "strength": "strong"
+        },
+        {
+          "finding": "CMHC warns that the 30 percent shelter-cost-to-income ratio does not account for household size, location or non-housing necessities.",
+          "source_title": "Introducing the Housing Hardship Concept",
+          "source_url": "https://assets.cmhc-schl.gc.ca/sites/cmhc/data-research/publications-reports/research-insight/2020/research-insight-introducing-housing-hardship-concept-69619-en.pdf",
+          "source_publisher": "Canada Mortgage and Housing Corporation",
+          "source_date": "2020",
+          "source_type": "analytical-report",
+          "establishes": "The verdict would describe one modelled threshold, not actual buyer hardship, mortgage qualification or household-specific affordability.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "The evidence package does not contain a complete linked replacement frame with title structure, tenure and bedroom count.",
+        "Ownership cases lack a complete series of first arm's-length sale prices, assessed values in the price year, condominium fees and subject-property tax levies.",
+        "Rental cases lack first-occupancy contract rents and reliable identification of tenant-paid utilities.",
+        "The primary income is a 2020 census measure applied to transactions across a later and much wider period.",
+        "The prescribed posted mortgage rate may differ from negotiated contract rates, but it remains the brief's required model input.",
+        "Provincial average utility spending may be usable as a named model series, but it is not property-specific and may not represent a new Edmonton replacement dwelling.",
+        "No numerator, denominator, unclassified count or lower and upper bounds were calculated for either geography."
+      ],
+      "unknowns": [
+        "How many linked replacements are legally separately saleable.",
+        "The ownership and rental shares within that denominator.",
+        "The complete shelter cost of each ownership replacement.",
+        "The first-occupancy contract rent and tenant-paid utilities for each rental replacement.",
+        "The bedroom-count and condominium-fee distributions.",
+        "Whether the lower bound exceeds 50 percent or the upper bound is 50 percent or less.",
+        "Whether the city-wide and mature-area results differ."
+      ],
+      "missing_evidence": [
+        {
+          "description": "The complete linked replacement frame with parcel, title, separately saleable dwelling count, completion date, tenure and bedroom count.",
+          "likely_holder": "City of Edmonton Development Services and Alberta Land Titles",
+          "importance": "critical"
+        },
+        {
+          "description": "First arm's-length sale price, price date, assessed value, tax levy and condominium fee for every ownership replacement.",
+          "likely_holder": "Alberta Land Titles, REALTORS Association of Edmonton, City of Edmonton Assessment and Taxation, and condominium corporations",
+          "importance": "critical"
+        },
+        {
+          "description": "First-occupancy contract rent and a record of which utilities were included for each rental replacement.",
+          "likely_holder": "Property owners, managers and tenants",
+          "importance": "critical"
+        },
+        {
+          "description": "A predeclared utility-cost series and documented method for applying it by dwelling, year and included service.",
+          "likely_holder": "Statistics Canada, EPCOR, ATCO and the Alberta Utilities Commission",
+          "importance": "high"
+        }
+      ],
+      "calculations_needed": [
+        "Fix the complete denominator before classification and report separately saleable dwellings per lot, tenure and bedroom count.",
+        "For ownership cases, compute mortgage principal and interest using 20 percent down, the posted five-year conventional rate for the price month and 25-year amortization.",
+        "Add the subject-property tax levy or apply the annual residential tax rate to assessed value, not purchase price.",
+        "Add sourced heat, water, electricity and applicable condominium fees, stating every source and year.",
+        "For rental cases, add first-occupancy contract rent and every utility not included in that rent.",
+        "Classify cases with missing required inputs as unclassified and calculate lower and upper bounds over the complete denominator.",
+        "Report the dwelling-level share and both lot-level sensitivities city-wide and for the explicitly defined mature-area subset.",
+        "Run the declared 30-year, minimum-down-payment, later-income and household-type sensitivities without allowing them to carry the verdict."
+      ],
+      "what_would_change_my_verdict": [
+        "A complete classified set whose lower bound exceeds 50 percent would change the verdict to Supported.",
+        "A complete classified set whose upper bound is 50 percent or less would change the verdict to Contradicted.",
+        "Comparator prices or rents alone would not change the verdict because the result depends on the matched population's type, tenure and cost distribution."
+      ],
+      "suggested_one_line": "The reviewed evidence does not identify the matched replacements or their complete ownership and rental costs, so it cannot show whether a majority exceed the 30 percent threshold.",
+      "suggested_short_answer": "Edmonton and CMHC comparators point in different directions by dwelling type: detached ownership housing often looks costly for a CAD 90,000 household, while benchmark row units and broad-market rents can fall below the threshold. The matched teardown-replacement population and its complete shelter costs are missing, so neither the majority nor its bounds can be calculated.",
+      "suggested_tldr": [
+        "The result depends on the replacement mix and tenure.",
+        "Required sale, rent, tax, utility and fee inputs are incomplete.",
+        "City-wide comparators cannot establish the matched-set majority."
+      ]
+    }
+  ]
+}
