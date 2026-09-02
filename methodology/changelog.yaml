@@ -1,6 +1,53 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.12"
+  date: "2026-09-02"
+  scope: intake-triage
+  summary: >
+    A one-page triage decides whether a claim is worth checking before any
+    brief is written; the framing check is capped at three reports.
+  highlights:
+    - "prompts/intake-triage.md: a model other than the editor answers five questions from the intake record, who asks this in their words, how it circulates and what we captured, whether the public record can answer it at the level people ask, which verdicts are possible and whom each would surprise, and what it costs. It ends GO, PARK or NO with a one-sentence reason that can be shown to whoever suggested the claim."
+    - "GO requires a real question, a record that can answer it at a level people care about, and at least two verdicts that would surprise someone. The editor may overrule a NO in writing."
+    - "The framing check is capped at three reports: after the second the editor resolves open findings in writing, the third confirms, and a brief still at REVISE after the third is parked and reopens only on new intake evidence."
+    - "A public candidate register, intake/register.yaml, lists every claim the site has considered, sent to triage or not, with where its wording came from (captured, supplied, or the editor's own hypothesis) and the outcome. Cost decides when a claim is scheduled, never whether it is worth checking; who is affected and whether a decision turns on it decide that."
+    - "An Evidence and Methodology specialist read (GPT) said REVISE before first use and named what is still missing: a harm and neglect test with teeth, an audit of a sample of NO and PARK decisions, intake events in the quality ledger, and a preregistered blind re-triage pilot. The register, the origin labels, the cost rule and the cap resolution are adopted here; the rest is recorded as an open question in the board record."
+    - "Prompted by the founder: the first delegated story spent four briefs, twelve framing checks and four panel rounds on claims nobody asks; two of them are now being re-framed. The first case through triage is the re-brief of that story."
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: Infill teardown prices
+      href: /facts/infill-prices
+  note: >
+    Every check in this method asks whether a claim is fair, precise or
+    computable. None asked whether it was worth the work, so the loop
+    optimised claims into shapes the record could answer and nobody had
+    asked. Triage puts the reader's question first and the cost beside
+    it, and the cap on framing rounds stops the loop from running past
+    the point where the claim is still the claim.
+- version: "1.11"
+  date: "2026-09-02"
+  scope: framing-check-who-asks-this
+  summary: >
+    A brief must name the question a resident or reporter would actually
+    ask, and the proposition must answer it, not a measurable cousin of it.
+  highlights:
+    - "Check 9 in prompts/framing-check.md: the brief states the question people actually ask; a proposition stated in the units the record happens to publish, when nobody would ask it in those units, fails even if every other check passes."
+    - "Where the record cannot answer at the level people ask, the brief says so and tests the nearest level the record does answer, in words a reader would use."
+    - "Prompted by the founder's read of the published infill story: its two claims were shaped by what the record could compute (a lot-matched value ratio; a purchase model on separately titled dwellings) and answered questions nobody asks. The story is being re-briefed around the questions people do ask: were the demolished houses more affordable than what replaced them, is new infill luxury housing, and can a median-income household afford infill."
+  links:
+    - label: Infill teardown prices
+      href: /facts/infill-prices
+    - label: How a finding is produced
+      href: /methodology#stages
+  note: >
+    v1.10 stopped a claim from being neutralised into a truism. This
+    entry closes the neighbouring gap: a claim can be fair, checkable
+    and precise and still be a question nobody asked, because the
+    framing loop optimises toward what the record can compute. The
+    check now starts from the reader's question and works back to the
+    record, instead of the other way round.
 - version: "1.10"
   date: "2026-09-02"
   scope: framing-check-truism-test

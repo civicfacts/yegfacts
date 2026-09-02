@@ -83,6 +83,15 @@ Check, in this order:
    arguing about and the brief is REVISE. This is the test the
    published infill price-gap claim failed: Supported would have told
    the opponent nothing and Contradicted could not happen.
+9. **Who asks this.** The brief must state, in plain words, the
+   question a resident or a reporter would actually type or ask, and
+   the proposition must answer that question, not a measurable cousin
+   of it. A proposition stated in the units the record happens to
+   publish, when nobody would ask it in those units, fails this check
+   even if every other check passes. Where the record cannot answer
+   the question people ask at the level they ask it, the brief says
+   so and tests the nearest level the record does answer, and the
+   proposition names that level in words a reader would use.
 
 Two rules that override the others. A claim is tested as its holders
 assert it: when a post offers one example as evidence for a general
@@ -111,11 +120,14 @@ with one reasonable alternative and results required under both, is
 sufficient. Do not ask for an alternative to the alternative.
 
 What happens with your report: after REVISE, the author revises and the
-brief comes back to you; it is frozen only on FRAME OK. If a finding is
-still OPEN or WEAKENED after two revisions, Stew, as the editor
-responsible for content, decides it in writing in the committed framing
-record, stating what you still objected to; the brief is then frozen
-with that record beside it. Ildar Abdulin remains accountable for the
+brief comes back to you; it is frozen only on FRAME OK. The check is
+capped at three reports for one brief (methodology v1.12). After your
+second report, Stew, as the editor responsible for content, resolves in
+writing any finding still OPEN or WEAKENED, stating what you objected
+to, and the brief is revised once more. Your third report is a
+confirmation: FRAME OK freezes the brief with the editor's resolution
+beside it; REVISE parks the brief, and it reopens only on new intake
+evidence, never on a further revision of the same brief. Ildar Abdulin remains accountable for the
 result and can revert it. Every report, the author's responses and the
 resolution are committed beside the brief, and a framing defect found
 later by the panel, the publication gate or a correction is logged

@@ -1,0 +1,88 @@
+# Candidate register (methodology v1.12).
+#
+# Every claim the site has considered checking, whether or not it reached
+# triage, with where the wording came from and what happened. The
+# pre-registered launch slate (docs/DESIGN.md section 7) is not repeated
+# here; everything else is. A candidate that never reached triage says so.
+#
+# origin: captured (a post we hold with a URL or screenshot) |
+#         supplied (wording passed to us by a person, provenance not
+#         captured) | editor (a hypothesis the editor or founder proposed)
+# outcome: GO | PARK | NO | not-triaged | pre-triage (checked before
+#          v1.12 existed)
+#
+# reason:  one sentence, written for readers, saying why the outcome is what
+#          it is. Required on PARK and NO — /considered publishes it, so a
+#          declined claim never sits there unexplained. `note` stays as the
+#          internal shorthand and is shown only when there is no reason.
+# triage:  repo-relative path to the triage report behind the outcome, when
+#          one exists. Validated to exist on disk; /considered links it.
+# story:   slug of the story that carries the claim, when one does. Linked as
+#          /facts/<slug> only if that story is published.
+
+candidates:
+  - id: infill-teardown-350k-1m
+    recorded: "2026-09-01"
+    origin: supplied
+    wording: "AFFORDABLE!?! Have you looked at the prices of these houses?! A $350,000 house is torn down and a $1,000,000 house goes up in its place!!"
+    supplied_by: founder
+    context: an Edmonton social-media thread on infill; platform, author and URL not captured; may be a composite paraphrase
+    outcome: pre-triage
+    story: infill-prices
+    reason: "Checked before triage existed; its price gap is published as the teardown claim in the infill prices story, Not established after three runs."
+    note: checked before triage existed (story infill-prices, three runs); its magnitude reading stays as claim ip-teardown-price-gap
+  - id: low-density-century
+    recorded: "2026-09-01"
+    origin: supplied
+    wording: "Proper management and fewer pet projects is a good start. We've had low density housing in this city for 100 years. Many neighbourhoods were planned around it."
+    supplied_by: founder
+    context: an Edmonton social-media thread on infill; platform, author and URL not captured
+    outcome: pre-triage
+    story: low-density-history
+    reason: "Checked before triage existed; the run stopped in its first round because one of the three reviewing models returned nothing after six attempts, so nothing was published. It runs again once that is fixed."
+    note: checked before triage existed (reviews/low-density-history, two runs, parked at round 1 because the Gemini seat could not complete it, OQ-17 in the board record)
+  - id: infill-teardown-more-affordable
+    recorded: "2026-09-02"
+    origin: editor
+    wording: "The houses being torn down for infill were more affordable than what replaces them."
+    supplied_by: founder, as a suggested claim in his critique of the published story
+    outcome: PARK
+    reason: "The question is about the same lots, and Edmonton publishes nothing that joins a demolished house to what replaced it; a category comparison would answer a different question."
+    triage: reviews/infill-prices/2026-09-02-questions/triage-1.md
+    note: triage report reviews/infill-prices/2026-09-02-questions/triage-1.md; the category-level comparison answers a cousin of the question; reopens on a matched demolition-and-replacement record or captured posts
+  - id: infill-luxury
+    recorded: "2026-09-02"
+    origin: editor
+    wording: "New infill housing is luxury housing."
+    supplied_by: founder, as a suggested claim
+    outcome: NO
+    reason: "No captured post makes this claim, and \"luxury\" has no definition on which either side could lose."
+    triage: reviews/infill-prices/2026-09-02-questions/triage-1.md
+    note: same triage report; see the editor decision in that directory
+  - id: infill-not-affordable-median-household
+    recorded: "2026-09-02"
+    origin: editor
+    wording: "A median-income Edmonton household cannot afford new infill housing."
+    supplied_by: founder, as a suggested claim
+    outcome: PARK
+    reason: "Published new-home prices do not identify infill by dwelling form; the claim reopens if the record does, or if it is narrowed to all new housing citywide."
+    triage: reviews/infill-prices/2026-09-02-questions/triage-1.md
+    note: same triage report; see the editor decision in that directory
+  - id: earth-flat
+    recorded: "2026-09-02"
+    origin: supplied
+    wording: "Earth is flat"
+    supplied_by: founder, as a test case for the triage and this register
+    outcome: NO
+    reason: "Neither a factual claim about Edmonton nor a claim shown circulating locally, so it falls outside the site's scope."
+    triage: intake/candidates/earth-flat/triage.md
+    note: intake record beside the triage report
+  - id: oilers-held-back
+    recorded: "2026-09-02"
+    origin: supplied
+    wording: "The Edmonton Oilers are held back from glory intentionally by the NHL because the fan base is smaller and more loyal than larger (American) markets"
+    supplied_by: founder, as a test case for the triage and this register
+    outcome: NO
+    reason: "Public NHL records can compare penalties, reviews and discipline across teams, but cannot establish a deliberate market-based scheme, and this exact claim has not been shown circulating."
+    triage: intake/candidates/oilers-held-back/triage.md
+    note: the triage found fan posts alleging biased officiating; a narrower claim about penalty or review rates versus other teams could be triaged on its own if captured
