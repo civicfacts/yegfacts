@@ -23,7 +23,7 @@ const sections = toc(entries.map((entry) => ({ id: anchor(entry.version), label:
 >
   <header class="border-b border-rule pb-6">
     <p class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
-      <a href="/methodology" class="hover:text-forest">Methodology</a>
+      <a href="/methodology" class="link">Methodology</a>
     </p>
     <h1 class="mt-2 text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
       Methodology changes
@@ -49,7 +49,7 @@ const sections = toc(entries.map((entry) => ({ id: anchor(entry.version), label:
                   {entry.date}
                 </time>
                 {entry.scope && (
-                  <span class="text-xs font-semibold tracking-[0.04em] text-gold">
+                  <span class="text-xs font-semibold tracking-[0.04em] text-muted">
                     {scopeLabel(entry.scope)}
                   </span>
                 )}
@@ -93,7 +93,7 @@ const sections = toc(entries.map((entry) => ({ id: anchor(entry.version), label:
                         <a
                           href={link.href}
                           rel={link.href.startsWith('http') ? 'noopener' : undefined}
-                          class="text-navy underline underline-offset-2 transition-colors hover:text-forest"
+                          class="link"
                         >
                           {link.label}
                         </a>

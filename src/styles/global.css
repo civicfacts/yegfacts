@@ -3,8 +3,9 @@
 /* ---------------------------------------------------------------------------
    YEGFacts visual system — broadsheet ledger (design spec §10). Locked palette,
    light theme only: ink on paper, one saturated forest ground, filled verdict
-   badges. Zero border-radius, no shadows, no animation. A finding is printed in
-   full and filled in its own colour, so a list of them reads down one edge.
+   badges. Square corners (2px on inline code is the one exception), no shadows,
+   and no animation beyond colour transitions on a control. A finding is printed
+   in full and filled in its own colour, so a list of them reads down one edge.
 --------------------------------------------------------------------------- */
 
 @theme {
@@ -32,43 +33,54 @@
   --text-display--letter-spacing: -0.022em;
 }
 
-:root {
-  color-scheme: light;
-}
-
-html {
-  -webkit-text-size-adjust: 100%;
-}
-
-body {
-  background-color: var(--color-paper);
-  color: var(--color-ink);
-  font-family: var(--font-sans);
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 /*
- * Headings are the display face; the sans is for body, metadata and labels.
- * A heading that is deliberately a label — the footer's column heads, the step
- * titles in the verdict strip — asks for `font-sans` back.
+ * Element defaults belong in `@layer base`, beside Tailwind's own preflight.
+ * An unlayered rule beats every layered one whatever its specificity, so a
+ * bare `h1, h2, h3` selector stated outside a layer silently outranks the
+ * `font-sans` utility on a heading that is really a label — and the label goes
+ * on rendering in the display face with nothing in the markup to explain it.
+ * What is meant to win over a utility — the masthead's link colour, `.prose`,
+ * `.link` — stays unlayered on purpose.
  */
-h1,
-h2,
-h3,
-.section-heading {
-  font-family: var(--font-display);
-}
+@layer base {
+  :root {
+    color-scheme: light;
+  }
 
-::selection {
-  background-color: #123f351f;
-}
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
 
-:focus-visible {
-  outline: 3px solid var(--color-navy);
-  outline-offset: 2px;
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /*
+   * Headings are the display face; the sans is for body, metadata and labels.
+   * A heading that is deliberately a label — the footer's column heads, the
+   * step titles in the verdict strip — asks for `font-sans` back, and gets it.
+   */
+  h1,
+  h2,
+  h3,
+  .section-heading {
+    font-family: var(--font-display);
+  }
+
+  ::selection {
+    background-color: #123f351f;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-navy);
+    outline-offset: 2px;
+  }
 }
 
 /*

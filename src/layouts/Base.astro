@@ -85,12 +85,18 @@ const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700;6..72,800&display=swap"
     />
   </head>
   <body class="flex min-h-screen flex-col">
+    {/*
+      The home page's h1 and search field live in the masthead slot, which the
+      banner renders ahead of <main>. Sending the skip link to #main there would
+      jump the reader past the page's own headline, so the target is whichever
+      of the two comes first.
+    */}
     <a
-      href="#main"
+      href={hasMasthead ? '#masthead' : '#main'}
       class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-10 focus:bg-white focus:px-4 focus:py-3 focus:font-semibold focus:text-navy"
     >
       Skip to content
@@ -109,7 +115,11 @@ const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY
       )
     }
     <Header wordmark={hasMasthead ? 'masthead' : 'compact'}>
-      <slot name="masthead" />
+      {hasMasthead && (
+        <div id="masthead" tabindex="-1">
+          <slot name="masthead" />
+        </div>
+      )}
     </Header>
 
     <div

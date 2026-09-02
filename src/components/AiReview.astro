@@ -102,7 +102,7 @@ const effort = effortSentence(
     canonical finding is computed from the blind round-one verdicts by a deterministic rule
     published in advance; the models never vote and never decide. Cross-review documents their
     errors, and what it changed is shown below rather than folded into the finding. Authority comes
-    from the <a href="/methodology" class="text-navy underline">methodology</a>, not from the
+    from the <a href="/methodology" class="link">methodology</a>, not from the
     models.
   </p>
 
@@ -129,7 +129,7 @@ const effort = effortSentence(
               {reviewed.map((claim) => (
                 <tr class="border-b border-rule align-top">
                   <td class="max-w-[16rem] min-w-[11rem] py-2.5 pr-4" data-crossref>
-                    <a href={`#${claim.data.id}`} class="text-navy underline">
+                    <a href={`#${claim.data.id}`} class="link">
                       {claim.data.question}
                     </a>
                   </td>
@@ -200,14 +200,14 @@ const effort = effortSentence(
         <div class="mt-6 border-t border-rule pt-4 text-sm text-muted">
           {runArtifacts.map(({ run, files }) => (
             <p class="mt-2">
-              <a href={repoPath(run)} rel="noopener" class="text-navy underline">
+              <a href={repoPath(run)} rel="noopener" class="link">
                 {run}
               </a>
               {files.length > 0 && ' — '}
               {files.map((file, index) => (
                 <>
                   {index > 0 && ' · '}
-                  <a href={file.href} rel="noopener" class="text-navy underline">
+                  <a href={file.href} rel="noopener" class="link">
                     {file.label}
                   </a>
                 </>
