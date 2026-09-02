@@ -96,10 +96,10 @@ const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY
   </head>
   <body class="flex min-h-screen flex-col">
     {/*
-      The home page's h1 and search field live in the masthead slot, which the
-      banner renders ahead of <main>. Sending the skip link to #main there would
-      jump the reader past the page's own headline, so the target is whichever
-      of the two comes first.
+      The home page's h1 lives in the header row (the `deck` slot) and its search
+      field in the masthead slot, both rendered ahead of <main>. Sending the
+      skip link to #main there would jump the reader past the page's own
+      headline, so the target is the deck.
     */}
     <a
       href={hasMasthead ? '#masthead' : '#main'}
@@ -122,10 +122,11 @@ const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY
     }
     <Header wordmark={hasMasthead ? 'masthead' : 'compact'}>
       {hasMasthead && (
-        <div id="masthead" tabindex="-1">
-          <slot name="masthead" />
+        <div slot="deck" id="masthead" tabindex="-1" class="order-last min-w-0 grow basis-full lg:order-none lg:basis-[30rem]">
+          <slot name="deck" />
         </div>
       )}
+      {hasMasthead && <slot name="masthead" />}
     </Header>
 
     <div

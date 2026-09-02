@@ -6,6 +6,12 @@
  *
  * `masthead` is the home page's front-page size; `compact` is what every inner
  * page carries, where the mark identifies the site rather than announcing it.
+ *
+ * The type size is set on the outer span so the dome and the gap scale in em
+ * with the letters. Newsreader's bold caps sit about 0.11em above the centre
+ * of a leading-none box (ascent 43, descent 15 at 58px), so a flex-centred
+ * dome lands high against the letters; the text is nudged down by that much
+ * to put the dome level with the caps.
  */
 interface Props {
   size?: 'compact' | 'masthead';
@@ -13,18 +19,18 @@ interface Props {
 
 const { size = 'compact' } = Astro.props;
 
-const symbol =
-  size === 'masthead' ? 'h-[clamp(2.5rem,9vw,4rem)]' : 'h-8';
 const text =
   size === 'masthead'
-    ? 'text-[clamp(2rem,7.75vw,3.625rem)]'
-    : 'text-[1.375rem]';
-const gap = size === 'masthead' ? 'gap-5' : 'gap-2.5';
+    ? 'text-[clamp(2rem,7.75vw,3.625rem)] gap-[0.3em]'
+    : 'text-[1.625rem] gap-[0.4em]';
+const symbol = size === 'masthead' ? 'h-[1.27em]' : 'h-[1.5em]';
 ---
 
-<span class:list={['inline-flex items-center', gap]}>
+<span class:list={['inline-flex items-center', text]}>
   <img src="/symbol.png" alt="" width="480" height="400" class={`${symbol} w-auto shrink-0`} />
-  <span class={`${text} font-display leading-none font-bold tracking-[-0.015em] text-paper`}>
+  <span
+    class="translate-y-[0.11em] font-display leading-none font-bold tracking-[-0.015em] text-paper"
+  >
     YEGFacts<span class="text-gold">.ca</span>
   </span>
 </span>

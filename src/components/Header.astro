@@ -9,10 +9,11 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
  * than a coloured box wrapped around one. The header row is the same
  * everywhere; the default slot renders inside the forest block under it, so the
  * home page can extend its own masthead — deck, search, helper line — without a
- * second dark band or a seam between two greens.
+ * second dark band or a seam between two greens. The `deck` slot goes into the
+ * header row itself, between the mark and the nav.
  *
- * `narrowHidden` drops a link below `md`, which is where the labels plus the
- * wordmark stop sharing a row. Search is the one that goes: it is the first
+ * `narrowHidden` drops a link below `lg`, which is where seven labels stop
+ * fitting on one row and the last one wraps alone. Search is the one that goes: it is the first
  * item in the footer's site column and the whole of the home page's search
  * field, so it is never more than one tap away from where it was.
  */
@@ -42,12 +43,14 @@ const links: { href: string; label: string; narrowHidden?: boolean }[] = [
       <a href="/" class="no-underline" aria-label="YEGFacts.ca home">
         <Wordmark size={wordmark} />
       </a>
+      {/* The home page sets its deck beside the mark; from `lg` the two share the row and the nav drops under them. */}
+      <slot name="deck" />
       {/* Below 640px the nav wraps under the mark and reads from the left. */}
       <nav aria-label="Primary">
         <ul class="flex flex-wrap gap-x-7 gap-y-2 sm:justify-end">
           {
             links.map((link) => (
-              <li class:list={[link.narrowHidden && 'hidden md:block']}>
+              <li class:list={[link.narrowHidden && 'hidden lg:block']}>
                 <a
                   href={link.href}
                   aria-current={path === link.href ? 'page' : undefined}
