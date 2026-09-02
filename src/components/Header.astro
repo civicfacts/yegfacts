@@ -1,7 +1,8 @@
 ---
 import Wordmark from './Wordmark.astro';
+import { servedPath } from '../lib/site';
 
-const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const path = servedPath(Astro.url.pathname);
 
 /**
  * The full-bleed forest masthead, on every page. It is the `<header>` element

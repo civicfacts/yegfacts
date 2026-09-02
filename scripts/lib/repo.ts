@@ -11,6 +11,7 @@ import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import YAML from 'yaml';
+import { servedPath } from '../../src/lib/site.ts';
 
 /** Repo root, resolved from this file's location rather than `process.cwd()`. */
 export const REPO_ROOT = path.resolve(fileURLToPath(new URL('../..', import.meta.url)));
@@ -70,10 +71,16 @@ export function builtPages(dist: string): string[] {
   return out.sort();
 }
 
-/** `dist/facts/electric-buses/index.html` → `/facts/electric-buses`; `dist/index.html` → `/`. */
+/**
+ * The URL a built file is served at, by the same rule the pages use for their
+ * canonical (`servedPath`): `dist/facts/electric-buses.html` →
+ * `/facts/electric-buses`, `dist/index.html` → `/`. The build writes one file
+ * per route (`build.format: 'file'`), but the `/index.html` case is kept
+ * because that is still how the home page lands.
+ */
 export function builtPageUrl(dist: string, file: string): string {
   const relative = `/${path.relative(dist, file).split(path.sep).join('/')}`;
-  return relative.replace(/\/index\.html$/, '').replace(/\.html$/, '') || '/';
+  return servedPath(relative);
 }
 
 export type Loaded<T> = { file: string; data: T };
