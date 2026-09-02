@@ -14,6 +14,11 @@ export function repoPath(path: string): string {
   return `${SITE.repo}/tree/main/${path.replace(/^\/+/, '')}`;
 }
 
+/** A single file in the project repository, rather than a directory. */
+export function repoFile(path: string): string {
+  return `${SITE.repo}/blob/main/${path.replace(/^\/+/, '')}`;
+}
+
 export function issueUrl(title: string, body: string): string {
   const params = new URLSearchParams({ title, body });
   return `${SITE.repo}/issues/new?${params.toString()}`;

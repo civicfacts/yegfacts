@@ -674,6 +674,65 @@ function checkReviewRuns(): void {
   }
 }
 
+const CANDIDATE_OUTCOMES = ['GO', 'PARK', 'NO', 'not-triaged', 'pre-triage'];
+const CANDIDATE_ORIGINS = ['captured', 'supplied', 'editor'];
+
+/**
+ * The candidate register, which `/considered` publishes verbatim.
+ *
+ * The rule that matters to readers is the last one: a claim we declined or
+ * parked must carry a public sentence saying why, because the whole point of
+ * the page is that nobody has to wonder.
+ */
+function checkCandidateRegister(): void {
+  const file = repoPath('intake', 'register.yaml');
+  if (!existsSync(file)) return;
+
+  let candidates: Record_[];
+  try {
+    const data = loadYaml<{ candidates?: unknown }>(file);
+    if (!Array.isArray(data?.candidates)) {
+      fail(file, 'must contain a `candidates` list');
+      return;
+    }
+    candidates = data.candidates as Record_[];
+  } catch (error) {
+    fail(file, `unreadable YAML: ${(error as Error).message}`);
+    return;
+  }
+
+  const seen = new Set<string>();
+  for (const [index, candidate] of candidates.entries()) {
+    if (typeof candidate !== 'object' || candidate === null) {
+      fail(file, `candidate ${index + 1} must be a mapping`);
+      continue;
+    }
+    const id = typeof candidate.id === 'string' ? candidate.id : '';
+    const where = id === '' ? `candidate ${index + 1}` : id;
+    if (id === '') fail(file, `${where}: needs an id`);
+    else if (seen.has(id)) fail(file, `id "${id}" appears more than once`);
+    seen.add(id);
+
+    checkEnum(file, `${where} outcome`, candidate.outcome, CANDIDATE_OUTCOMES);
+    checkEnum(file, `${where} origin`, candidate.origin, CANDIDATE_ORIGINS);
+    checkIsoDate(file, `${where} recorded`, candidate.recorded);
+
+    if (candidate.outcome === 'PARK' || candidate.outcome === 'NO') {
+      if (typeof candidate.reason !== 'string' || candidate.reason.trim() === '') {
+        fail(file, `${where}: outcome ${candidate.outcome} needs a public reason sentence`);
+      }
+    }
+
+    if (candidate.triage !== undefined) {
+      if (typeof candidate.triage !== 'string' || candidate.triage.trim() === '') {
+        fail(file, `${where}: triage must be a repo-relative path`);
+      } else if (!existsSync(repoPath(candidate.triage))) {
+        fail(file, `${where}: triage report "${candidate.triage}" does not exist`);
+      }
+    }
+  }
+}
+
 // ---------------------------------------------------------------------------
 // TODO — the two spec §8 rules that need a diff, not a snapshot
 //
@@ -698,6 +757,7 @@ checkCommitments();
 checkEvidence();
 checkReviewRuns();
 checkCombinedEvidence();
+checkCandidateRegister();
 
 if (warnings.length > 0) {
   for (const warning of warnings) {
