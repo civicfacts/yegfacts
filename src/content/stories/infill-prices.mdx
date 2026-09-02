@@ -3,10 +3,10 @@ title: "Infill teardown prices"
 one_line: "The run found no published Edmonton series matching demolished houses to what replaced them, so the panel established neither the price gap nor the affordability claim; both are Not established."
 tldr:
   - "The City's own 2024 Redeveloping Area Infill Report records a net loss of 294 single-detached houses in the redeveloping area, with other built forms taking over from the detached stock that comes down."
-  - "Recorded house demolitions largely drop out of the City's open building-permit stream after 2018, so the review's own frame, every residential demolition permit from 2016 to 2025, cannot be rebuilt from it."
-  - "The pieces exist but do not join. The assessment roll publishes account, address, legal description, year built, lot size and total assessed value, and none of the land or improvement split, the dwelling count inside a title, or the separately-titled marker. Arm's-length sale prices sit in Alberta's land-title registry parcel by parcel for a fee."
+  - "One seat's tabulation of the open building-permit records has recorded house demolitions thinning out after 2018, which is why it treated the review's own frame, every residential demolition permit from 2016 to 2025, as impossible to rebuild from that stream. A second seat documented that the tabulation does not establish the thinning."
+  - "The pieces exist but do not join. The assessment roll publishes account, address, legal description, year built, lot size and total assessed value, and none of the land or improvement split, the dwelling count inside a title, or the separately-titled marker. Alberta's land-title registry works one order at a time, over SPIN2, ARLO or a registry agent, and offers no bulk download."
   - "One seat rebuilt the match from the rolls anyway and reports 62.0 percent of 6,603 replacement dwelling units assessed above the house they replaced, on a classification it inferred rather than read from any published field. Roughly 3,000 unverified recent units, counted fractionally and so outside the brief's discrete-unit rule, put its bounds at 42.6 and 73.8 percent, straddling the majority line the review fixed in advance."
-  - "That seat's affordability model, on a declared $90,000 median household income, 20 percent down, a 25-year amortization and a $377.67 monthly utility allowance, put 88.4 percent of 3,359 replacements it classed as separately titled at or over the 30 percent line. The other two seats did not accept the frame, and the Census pages cited for that income returned File not found when the run archived them."
+  - "That seat's affordability model, on a declared $90,000 median household income, 20 percent down, a 25-year amortization and a $377.67 monthly utility allowance, put 88.4 percent of 3,359 replacements it classed as separately titled at or over the 30 percent line. The other two seats did not accept the frame in round one; the Gemini seat moved to Supported in round two. The Census pages cited for that income returned File not found when the run archived them."
 topics: [housing-development]
 claims: [ip-teardown-price-gap, ip-infill-affordable]
 seen: []
@@ -20,7 +20,7 @@ review_by: "2027-03-01"
 changelog:
   - date: "2026-09-01"
     type: published
-    note: "Initial publication. First story produced under a delegated brief (decision D-0019, methodology v1.7 to v1.9): the founder set the question and froze the brief, and the panel ran without the founder writing the reviewer package. Two earlier runs on this story were halted by the panel on framing concerns before this one cleared framing check 3. Gate audit: pending. The gate records its audit results in this note."
+    note: "Initial publication. First story produced under a delegated brief (decision D-0019, methodology v1.7 to v1.9): the founder set the question and froze the brief, and the panel ran without the founder writing the reviewer package. Two earlier runs on this story were halted by the panel on framing concerns before this one cleared framing check 3. Faithfulness check: 18 items from the GPT and Gemini seats applied over four passes, both seats FAITHFUL. Gate audit: source verification checked 103 statements against archived bytes, found 3 unsupported and 15 imprecise on the first pass, all corrected, 103 verified on the third; release check clean after one local-path fix in a committed report; freshness audit found nothing material. The gate records its audit results in this note."
 ---
 
 import Term from '../../components/Term.astro';
@@ -43,10 +43,10 @@ finding that the replacement housing is cheap.
 Quite a lot, as long as you do not need the two halves joined. The City
 counts the redevelopment. Its infill annual reports track how the detached
 stock changes where redevelopment happens: 294 of those houses lost on net in
-2024, the losses made up in other forms, and something on the order of 390
-teardowns tallied by type the year before. Both counts sit in the claim record
-below. Neither report puts a dollar figure against a single property, and
-neither is built on the permit cohort the frame names.
+2024, the losses made up in other forms, and 387 single-detached houses among
+the 524 dwellings demolished the year before. Both counts sit in the claim
+record below. Neither report puts a dollar figure against a single property,
+and neither is built on the permit cohort the frame names.
 
 The City also counts what gets built, though never against what came down.
 Administration reviewed Zoning Bylaw 20001 after its first year and counted
@@ -63,10 +63,12 @@ two seats contested.
 
 The failure is a join, not a gap in any one dataset.
 
-- Most house demolitions vanish from the open general building permit stream
-  after 2018, which is why the ten-year permit cohort the brief froze, 2016
-  through 2025, cannot be rebuilt out of it. The development permit stream
-  opens in 2019 and reaches only part of the same window.
+- One seat's tabulation of the open general building permit records has most
+  house demolitions disappearing after 2018, which is why it treated the
+  ten-year permit cohort the brief froze, 2016 through 2025, as beyond
+  rebuilding out of that stream; another seat documented in round two that this
+  reading of the permit records is not established. The development permit
+  stream opens in 2019 and reaches only part of the same window.
 - The historical assessment roll carries an account, a year, an address, a
   legal description, coordinates, the year built, the lot size and one total
   value. What it withholds is the land and improvement split, how many
@@ -74,9 +76,9 @@ The failure is a join, not a gap in any one dataset.
   three of the fields the valuation rules turn on.
 - The two sides of the comparison are different kinds of number. An assessed
   value, the City says, is a mass appraisal of market value struck on a date
-  the statute fixes, not a price anyone paid. Real arm's-length sale prices
-  live in Alberta's land-title registry and come out one parcel at a time for
-  a fee, never as an open dataset.
+  the statute fixes, not a price anyone paid. Alberta's land-title registry
+  hands over a single title at a time, ordered from SPIN2, ARLO or a registry
+  agent, never as an open dataset.
 - The run found no published join by its freeze date, 2026-09-01. In August
   2026 there was a live request for the City to study how infill bears on
   property values, and a request is all that source establishes. By its
@@ -129,8 +131,9 @@ utility allowance on top. It is not what anyone actually paid.
 
 Most inputs to that model are published. Statistics Canada supplies the 30
 percent classification, the Bank of Canada the posted five-year rate, the City
-its residential mill rates, and Statistics Canada the household spending line
-behind the $377.67 monthly utility allowance. Three inputs are missing. The
+its residential mill rates, and Statistics Canada an annual household
+spending table on provincial geography, from which the run read the $377.67
+monthly utility allowance. Three inputs are missing. The
 income figure, a declared $90,000 median household income that puts the line
 at $2,250 a month, was cited to two Census Profile pages that returned a File
 not found body when the run archived them, so it rests on the run's fetch
@@ -155,7 +158,8 @@ where the majority found the record silent.
 Two things are worth keeping straight at the end. The City's own affordability
 work exists and reaches a different question: on its method, a median-income
 household could afford benchmark row and apartment product in 2024 and could
-not afford benchmark single-detached. And the City's affordable-housing
+not afford the benchmark single and semi-detached price of $431,100. And the
+City's affordable-housing
 program definition, set out in its guidebook, covers subsidised,
 income-tested units, which market infill
 is outside by construction. Neither one answers what was asked here, which is

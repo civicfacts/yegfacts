@@ -425,9 +425,11 @@ events:
     disposition: >
       Documented against the Claude seat that the figures "286 built, 387
       demolished, net loss 101" do not appear in the 2024 Redeveloping Area
-      Infill Report, which states a net loss of 294. The figures had been
-      transcribed into the registry's establishes line for YF-EV-0101 at
-      ingest from the 2023 report. Registry line corrected at drafting;
+      Infill Report, which states a net loss of 294. The three figures are the
+      2023 report's real ones, carried verbatim in YF-EV-0048; they were
+      filed against the 2024 report in the registry's establishes line for
+      YF-EV-0101 at ingest, a wrong-year attribution rather than a garbled
+      transcription. Registry line corrected at drafting;
       the draft, calcs and claim corrected.
     notes: >
       round2/gpt.json errors_in_other_reviews; errata.md "Registry
@@ -441,8 +443,9 @@ events:
     materiality: blocking
     disposition: >
       Faithfulness check 1 traced the draft's 286/387/101 figures to the
-      wrong report and to the erroneous registry line, and identified the
-      2024 report's actual figure. The GPT seat's faithfulness check
+      2023 report they actually come from and to the registry line that had
+      filed them against the 2024 report, and identified the 2024 report's
+      actual figure. The GPT seat's faithfulness check
       flagged the same item among fourteen. Both applied before the gate.
     notes: >
       faithfulness/gemini-1.md; faithfulness/gpt-1.md.
