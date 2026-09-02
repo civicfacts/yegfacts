@@ -3,7 +3,9 @@
 # Every claim the site has considered checking, whether or not it reached
 # triage, with where the wording came from and what happened. The
 # pre-registered launch slate (docs/DESIGN.md section 7) is not repeated
-# here; everything else is. A candidate that never reached triage says so.
+# here as a whole; a slate claim appears once it has been through triage
+# or a framing check and did not go to a panel as registered. Everything
+# else is here. A candidate that never reached triage says so.
 #
 # origin: captured (a post we hold with a URL or screenshot) |
 #         supplied (wording passed to us by a person, provenance not
@@ -93,3 +95,27 @@ candidates:
     triage: intake/candidates/oilers-held-back/triage.md
     intake: intake/candidates/oilers-held-back/intake.md
     note: the triage found fan posts alleging biased officiating; a narrower claim about penalty or review rates versus other teams could be triaged on its own if captured
+  - id: at-100m-a-year
+    recorded: "2026-08-31"
+    origin: editor
+    wording: "Edmonton spends $100 million a year on bike lanes."
+    supplied_by: the founder and the assistant that drafted the design document, as the pre-registered launch-slate wording (docs/DESIGN.md section 7)
+    context: the launch slate, registered before any panel ran; not captured from a post
+    outcome: PARK
+    story: active-transportation
+    reason: "No captured post or statement makes the claim as an annual amount; every captured form says \"$100 million on bike lanes\" with no period attached, so the story checks the comparisons holders actually make with the figure instead. Reopens if the annual wording is captured from a holder."
+    triage: reviews/active-transportation/2026-09-02/triage-1.md
+    intake: reviews/active-transportation/2026-09-02/intake.md
+    note: triage said GO on the figure; framing check 1 (reviews/active-transportation/2026-09-02/framing/check-1.md) found the annual form uncaptured, and the brief was re-framed around the captured comparisons
+  - id: at-congestion-reduced
+    recorded: "2026-08-31"
+    origin: editor
+    wording: "The active-transportation network has reduced congestion."
+    supplied_by: the founder and the assistant that drafted the design document, as the pre-registered launch-slate wording (docs/DESIGN.md section 7)
+    context: the launch slate, registered before any panel ran; the City asserts the benefit on its project page and in council reports, the Province asserts the reverse ahead of legislation, neither as a measured Edmonton result
+    outcome: PARK
+    story: active-transportation
+    reason: "No published Edmonton evaluation joins the bike-lane expansion to before-and-after travel times with a basis for attributing the change to the lanes, so no verdict but Not established is reachable; reopens when the City publishes a traffic evaluation of the expansion, or route opening dates can be joined to comparable before-and-after traffic data."
+    triage: reviews/active-transportation/2026-09-02/triage-1.md
+    intake: reviews/active-transportation/2026-09-02/intake.md
+    note: the editor overruled the PARK in writing, framing check 1 reached the same conclusion independently, and the overrule was withdrawn (reviews/active-transportation/2026-09-02/triage-decision.md)

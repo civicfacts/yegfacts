@@ -29,7 +29,11 @@ coverage is cited by headline only and no CBC sentence is quoted.
 
 1. Common Sense Edmonton, "Stop The Bike Lane Boondoggle"
    (https://www.commonsenseedmonton.com/stop_the_bike_lane_boondoggle),
-   an advocacy page, undated, retrieved 2026-09-02. Verbatim:
+   an advocacy page, undated on its face, retrieved 2026-09-02; the
+   Wayback Machine holds a capture dated 2022-12-12
+   (https://web.archive.org/web/20221212055823/https://www.commonsenseedmonton.com/stop_the_bike_lane_boondoggle),
+   so the page dates from council's December 2022 budget deliberations.
+   Verbatim:
    "spending $100 million on more bike lanes"; "$100 million of
    spending, requested by Mayor Sohi"; "the $100 million he wants to
    spend on Bike Lanes is almost 5 times the amount he wants to spend on
@@ -43,14 +47,23 @@ coverage is cited by headline only and no CBC sentence is quoted.
    (https://globalnews.ca/news/9343735/edmonton-bike-plan-100-million-reaction),
    quoting Councillor Michael Janz: "Only $100 million is going to bike
    lanes but $1.8 billion, 180 times as much, is going towards roads."
-3. CBC News headlines, not retrievable in this session: "Edmonton set to
+3. Global News, "Edmonton city council approves $100M for bike lanes",
+   2022-12-09
+   (https://globalnews.ca/news/9338993/edmonton-city-council-100-million-bike-lanes):
+   "Edmonton city council approved $100 million to implement a bike plan
+   over four years"; "The motion passed 9-4 with councillors Tim
+   Cartmell, Sarah Hamilton, Karen Principe and Jennifer Rice voting in
+   opposition"; the same article reports "$22.9 million for the
+   planning, design and delivery of affordable housing" in the same
+   budget.
+4. CBC News headlines, not retrievable in this session: "Edmonton set to
    build $100M in bike lanes as city council votes to amend capital
    budget" (2022-12-09,
    https://www.cbc.ca/news/canada/edmonton/edmonton-city-council-1.6681387);
    "Edmonton councillors to discuss dialing back on rapid bike lane
    expansion" (August 2026); "Edmonton bike lane expansion to continue as
    planned" (August 2026).
-4. Taproot Edmonton, "Bike routes cancelled or put off despite council
+5. Taproot Edmonton, "Bike routes cancelled or put off despite council
    direction", 2026-09-01
    (https://edmonton.taproot.news/news/2026/09/01/bike-routes-cancelled-or-put-off-despite-council-direction):
    "59 kilometres of active transportation infrastructure — including
@@ -59,12 +72,15 @@ coverage is cited by headline only and no CBC sentence is quoted.
    project to expand the bike network in 2022."
 
 What was not captured: a verbatim instance of "$100 million a year" or
-"per year". Every captured form says "$100 million on bike lanes" with
-no period attached. The advocacy page sets the figure against "the
-City's annual snow-clearing budget", which reads the sum as if it were
-an annual one; the pre-registered wording makes that reading explicit.
-The brief has to say which reading carries the verdict and report the
-other.
+"per year", by Stew's searches or by the triage reader's. Every
+captured form says "$100 million on bike lanes" with no period
+attached. The intake establishes circulation of a $100 million program
+figure and of two comparisons made with it (against the annual
+snow-clearing budget, by the advocacy page; against roads, by a
+councillor). It does not establish circulation of a "$100 million a
+year" claim. After framing check 1 the brief tests the two captured
+comparisons, and the registered annual wording is listed on the
+register as PARK.
 
 ### Claim B, the congestion effect
 
@@ -119,7 +135,12 @@ What was not captured: a verbatim instance of the pre-registered wording
 general or prospective ("reduces", "will also help manage"). The
 opponents' wording asserts the reverse effect. Both sides put the claim
 in Edmonton's argument as a matter of fact, which is why it is on the
-slate.
+slate. Outcome: the triage reader returned PARK because no published
+Edmonton evaluation joins the expansion to before-and-after travel
+times with a basis for attribution; the editor overruled, framing check
+1 reached the same conclusion independently, and the overrule was
+withdrawn (triage-decision.md). The claim is on the register as PARK
+with the reader's condition and is not in the brief.
 
 ## Context on 2026-09-02
 

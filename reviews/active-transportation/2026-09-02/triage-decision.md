@@ -40,3 +40,30 @@ data) is carried into the brief as evidence the reviewers must look
 for, and into the story's missing-evidence list if they do not find it.
 
 Stew, 2026-09-02
+
+## Addendum, later on 2026-09-02: the overrule is withdrawn
+
+Framing check 1 (framing/check-1.md), from the same vendor but a fresh
+session with the draft brief in front of it, reached the triage reader's
+conclusion independently: on the named record no Edmonton instrument can
+carry Supported or Contradicted on the congestion claim, so a brief that
+tests it predetermines Not established, which the checkability limit
+(methodology v1.9) treats as a framing defect. Two different reads
+against one editor's preference is the end of it. The overrule above is
+withdrawn; `at-congestion-reduced` is PARK on the register with the
+reader's condition, and the story proceeds on the $100 million figure
+alone.
+
+What the brief did not get to keep, and why it matters for the launch
+bar (D-0008 in the board record): the slate registered this claim, and
+parking it means the story carries fewer claims than pre-registered. The
+charter's own test is that a claim gets checked "or the site says plainly
+why it cannot be"; a public PARK with its condition on /considered is
+that statement. Whether it satisfies the launch bar is the founder's
+call, recorded as an open question in the board record.
+
+The same check also found that no captured source makes the slate's
+other claim in its registered form, "$100 million a year"; the brief was
+re-framed around the comparisons holders actually make with the figure,
+and the registered wording is listed on the register as PARK with that
+reason.
