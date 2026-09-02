@@ -1,0 +1,416 @@
+{
+  "reviewer": {
+    "provider": "anthropic",
+    "model_self_reported": "Claude Fable 5.1 (claude-fable-5-1)",
+    "runner_model": "claude-fable-5-1",
+    "runner_seat": "Claude Fable 5.1",
+    "runner_effort": "high"
+  },
+  "story": "low-density-history",
+  "round": 1,
+  "claims": [
+    {
+      "id": "ldh-existed-century",
+      "proposition_evaluated": "Documented, occupied low-density housing (one or two dwellings on an identified lot, branch (b) for Claim A) existed inside Edmonton's boundary in force at the time in calendar year 1926, at the 2026-09-01 endpoint, and at least once in each city-wide bylaw era between, over the exact window 1926-09-01 to 2026-09-01.",
+      "interpretation_notes": "Applied the brief's fixed test: one qualifying occupied lot in 1926 (calendar-year reading primary), an endpoint observation, and one observation per era. Eras used, from the City's History of Zoning and Historical Land Use Bylaws guide: no city-wide zoning instrument 1926-09-01 to 1933-10-10; Zoning Bylaw 26, 1933-10-10 to 1950-10-17; Interim Development Bylaw 1339, 1950-10-17 to 1959-09-01; Interim Development Bylaw No. 2, 1959-09-01 to October 1961 (the History calls it Bylaw 1998, the resource guide lists it as bylaw no. 1988; discrepancy unresolved); Zoning Bylaw 2135, October 1961 to 1980-07-03; Land Use Bylaw 5996, 1980-07-03 to 2001-06-14; Zoning Bylaw 12800, 2001-06-14 to 2024-01-01; Zoning Bylaw 20001, 2024-01-01 onward (Council passed 2023-10-23; amendments through Bylaw 21538, adopted 2026-07-06, per the official register). Observations obtained: 1926 (Henderson's 1926 street directory, Ada Boulevard, Highlands, householder Bidwell A Holgate at the Holgate Residence lot, 6210 Ada Boulevard, a house on a single lot built 1912; Highlands inside Edmonton since the 1911-12-20 annexation per the City's annexation dataset), 1935 and 1946 (Henderson's, householders at 5650 and 5222 Ada Boulevard, Highlands), 1956 (Henderson's, Ada Blvd Highlands Subdivision, householders at 5014, 5022 and onward), 1964 (Henderson's, householder at 4442 Ada Blvd, in the Beverly area annexed 1961-12-31), 2021 (federal census, 196,535 occupied single-detached houses), and January 2026 (City assessment: 440,051 properties, median single-family detached home $492,500 CAD; the 2025 report counts 1,077 single-family detached properties in Highlands and 1,152 in Glenora as of 2024-12-31). No observation was obtained for the Land Use Bylaw 5996 era (1980-07-03 to 2001-06-14), so the fixed per-era test is not fully met by my evidence; the longest interval between observations is 1964 to 2021 (57 years). The 1996 and 2001 census dwelling-type tables exist but I could not retrieve the Edmonton rows. Indirect evidence for that era: the City's 2005 municipal-census profile of Parkallen describes the neighbourhood as dominated by single-detached bungalows built by 1960, which must have stood through 1980-2001. Exact-date result (1926-09-01): the 1926 directory is an annual compilation with no day-specific date, so the exact-day observation is not separately established; the calendar-year test is met. Legal permission reported separately: no zoning instrument existed in 1926; Bylaw 26 (1933) created a One-family Dwelling District per the City's History (bylaw text not obtained; Issuu copy inaccessible to me); RF1 districts in Bylaws 5996 and 12800 were labelled Single Detached; the RS zone in force on 2026-09-01 permits up to 8 dwellings on interior sites and is not low density under the brief's rule, so at the endpoint built low-density housing exists without a low-density-labelled city-wide zone.",
+      "verdict": "Supported",
+      "confidence": "Moderate",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Henderson's 1926 Edmonton street directory lists, on the north side of Ada Boulevard at 60th Street in the Highlands, 'Holgate Bidwell A' followed by 'Sheldon Carleton G', i.e., named occupants of numbered houses in 1926 (the OCR truncates house numbers).",
+          "source_title": "Henderson's Edmonton City Directory (1926)",
+          "source_url": "https://archive.org/details/P002962-20",
+          "source_publisher": "Henderson Directories (digitized by University of Alberta / Internet Archive)",
+          "source_date": "1926",
+          "source_type": "observed-data",
+          "establishes": "An occupied dwelling on the Holgate lot on Ada Boulevard in calendar year 1926, inside Edmonton (Highlands annexed 1911-12-20). Branch (b) for Claim A: one dwelling, occupied, 1926.",
+          "quote": "60th St begins / Holgate Bidwell A / Sheldon Carleton G / 61st St begins",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The Holgate Residence, 6210 Ada Boulevard, was built in 1912 for Bidwell Holgate on a single lot in the Highlands; Provincial Historic Resource since 1987-05-06.",
+          "source_title": "Holgate Residence - Canadian Register of Historic Places",
+          "source_url": "https://www.historicplaces.ca/en/rep-reg/place-lieu.aspx?id=5105",
+          "source_publisher": "Parks Canada / Alberta Culture",
+          "source_date": "listed 2006-03-27",
+          "source_type": "legal-audited",
+          "establishes": "Identity of the 1926 directory lot as a single-lot house (one dwelling), fixing the address and lot for the branch (b) classification.",
+          "quote": "located on a single lot in Edmonton's Highlands district",
+          "strength": "strong"
+        },
+        {
+          "finding": "Highlands entered Edmonton with the 1911-12-20 annexation (annex_id 6, 2.19 km2, 'Highlands_Amalgamation of City of Edmonton and City of Strathcona'); Beverly on 1961-12-31; Jasper Place 1964-08-17; the 1982-01-01 annexation added 359.23 km2; Leduc County lands 2019-01-01.",
+          "source_title": "City of Edmonton - Boundary (Annexation) History (Open Data API)",
+          "source_url": "https://data.edmonton.ca/Administrative/City-of-Edmonton-Boundary-Annexation-History/c2wd-nyfn",
+          "source_publisher": "City of Edmonton Open Data",
+          "source_date": "records 1892-2019",
+          "source_type": "observed-data",
+          "establishes": "City boundary in force for each observation date (boundary source used throughout this review).",
+          "strength": "strong"
+        },
+        {
+          "finding": "Henderson's 1935 directory lists 'Davidson Adam J h 5650 Ada Boul' and the 1946 directory lists 'Frank h 5222 Ada Blvd' (Dayman family), 'h' denoting householder; both addresses are in the Highlands.",
+          "source_title": "Henderson's Edmonton City Directory (1935) and (1946)",
+          "source_url": "https://archive.org/details/P002962-29",
+          "source_publisher": "Henderson Directories (Internet Archive; 1946 volume at https://archive.org/details/P002962-40)",
+          "source_date": "1935; 1946",
+          "source_type": "observed-data",
+          "establishes": "Occupied low-density dwellings inside Edmonton during the Zoning Bylaw 26 era (1933-1950).",
+          "quote": "Davidson Adam J h 5650 Ada Boul",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Henderson's 1956 Greater Edmonton directory, street section 'ADA BLVD. - HIGHLANDS SUBDIV.', lists householders at 5014 (Hook Fred), 5022 (Ready J Clark), 5104, 5108 and onward, one name per house number.",
+          "source_title": "Henderson's Greater Edmonton Directory (1956)",
+          "source_url": "https://archive.org/details/N030701",
+          "source_publisher": "Henderson Directories (Internet Archive)",
+          "source_date": "1956",
+          "source_type": "observed-data",
+          "establishes": "Occupied low-density dwellings inside Edmonton during the Interim Development Bylaw era (1950-1961).",
+          "quote": "ADA BLVD. - Cont. HIGHLANDS SUBDIV. 5014 Hook Fred ... 5022 Ready J Clark",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Henderson's 1964 directory lists 'Abbott Abr retd h4442 Ada blvd' (householder) and 'Savaryn Neil 6240 Ada blvd' (the Magrath Mansion address); its street directory explains that 'the names of the householders and concerns are placed opposite the numbers'.",
+          "source_title": "Henderson's Edmonton (Alberta) City Directory (1964)",
+          "source_url": "https://archive.org/details/P002962-58",
+          "source_publisher": "Henderson Directories (Internet Archive)",
+          "source_date": "1964",
+          "source_type": "observed-data",
+          "establishes": "Occupied low-density dwellings inside Edmonton during the Zoning Bylaw 2135 era (1961-1980); 4442 Ada Blvd lies in the former Beverly area, inside the city from 1961-12-31.",
+          "quote": "Abbott Abr retd h4442 Ada blvd",
+          "strength": "moderate"
+        },
+        {
+          "finding": "2021 Census, Edmonton (City, CSD): 396,400 occupied private dwellings by structural type, of which 196,535 single-detached houses, 28,150 semi-detached, 38,860 row houses, 10,145 apartments or flats in a duplex.",
+          "source_title": "Census Profile, 2021 Census of Population - Edmonton, City (CY), Alberta",
+          "source_url": "https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/page.cfm?Lang=E&SearchText=Edmonton&DGUIDlist=2021A00054811061&GENDERlist=1&STATISTIClist=1&HEADERlist=0",
+          "source_publisher": "Statistics Canada",
+          "source_date": "2021-05-11 reference date; released 2022",
+          "source_type": "observed-data",
+          "establishes": "Occupied single-detached (one dwelling per lot) housing at scale during the Zoning Bylaw 12800 era. Denominator: occupied private dwellings, City of Edmonton CSD, 2021 boundary.",
+          "strength": "strong"
+        },
+        {
+          "finding": "City 2025 Assessment Change Report for residential single-family detached homes lists property counts as of 2024-12-31 by neighbourhood, e.g. Highlands 1,077 and Glenora 1,152; the 2026 assessment overview (market conditions as of 2025-07-01) reports 440,051 properties and a median single-family home value of $492,500 CAD.",
+          "source_title": "2025 Assessment Change Report - Residential, single-family, detached homes (and 2026 Property Assessment overview)",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2025_AssessmentChangeReport_SF_Neighbourhood.pdf",
+          "source_publisher": "City of Edmonton (2026 overview at https://www.edmonton.ca/sites/default/files/public-files/2026_AMO_Infographics.pdf)",
+          "source_date": "2025-01-10; January 2026",
+          "source_type": "observed-data",
+          "establishes": "Assessment-roll evidence of single-family detached dwellings inside the present boundary at the endpoint era (Zoning Bylaw 20001, 2024-2026). Counts are properties, not persons.",
+          "strength": "strong"
+        },
+        {
+          "finding": "1926 Census of the Prairie Provinces, Table IV, records Edmonton's population at 65,163 (census date 1926-06-01).",
+          "source_title": "Census of Prairie Provinces, 1926: Population and Agriculture",
+          "source_url": "https://publications.gc.ca/collections/collection_2017/statcan/CS98-1926.pdf",
+          "source_publisher": "Dominion Bureau of Statistics",
+          "source_date": "1926 (published 1931)",
+          "source_type": "observed-data",
+          "establishes": "Context only: an inhabited city of 65,163 in 1926. The published volume gives no per-lot dwelling data, so it does not by itself satisfy branch (b).",
+          "strength": "weak"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The zoning instrument in force at the endpoint, Zoning Bylaw 20001 (effective 2024-01-01), replaces the RF1 label with the RS Small Scale Residential Zone, whose purpose is 'a range of small scale Residential development up to 3 Storeys in Height, including detached, attached, and multi-unit Residential housing', with a maximum of 8 dwellings on interior sites, minimum site area 75 m2 per dwelling, minimum site width 7.5 m, maximum site coverage 45 percent; Bylaw 21474 (adopted 2026-04-27, effective 2026-08-01) reduced the maximum height.",
+          "source_title": "2.10 RS - Small Scale Residential Zone, Zoning Bylaw 20001 (online consolidation)",
+          "source_url": "https://zoningbylaw.edmonton.ca/part-2-standard-zones-and-overlays/residential-zones/210-rs-small-scale-residential-zone",
+          "source_publisher": "City of Edmonton (amendment register: https://zoningbylaw.edmonton.ca/amendments)",
+          "source_date": "consolidation read 2026-09-01",
+          "source_type": "legal-audited",
+          "establishes": "At the endpoint, legal permission is not low density under the brief's rule even though built low-density housing exists; permission and built form diverge. Does not contradict built existence.",
+          "quote": "To allow for a range of small scale Residential development up to 3 Storeys in Height, including detached, attached, and multi-unit Residential housing.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The City's Historical Land Use Bylaws resource guide records that the 1933 district map and several later zoning maps are held only in physical form or are partly missing (e.g., 1961 and 1971 zoning maps 'East side only (West missing)').",
+          "source_title": "Resource Guide - Historical Land Use Bylaws 1933-Present (version 1.5, revised 2024-08-15)",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/ResourceGuide-HistoricalLandUseBylaws.pdf",
+          "source_publisher": "City of Edmonton, Edmonton Tower Resource Centre",
+          "source_date": "2024-08-15",
+          "source_type": "city-webpage",
+          "establishes": "Limits on what the legal record can show for the 1933-1980 eras; a limitation on the permission side, not on built existence.",
+          "quote": "East side only (West missing)",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "No observation was obtained for the Land Use Bylaw 5996 era (1980-07-03 to 2001-06-14); the fixed per-era test is therefore met for six of seven eras. Longest interval between observations: 1964 to 2021 (57 years).",
+        "The 1926 directory OCR truncates house numbers; the lot identity (6210 Ada Boulevard) rests on pairing the directory's Holgate entry at 60th Street with the historic-place record for the Holgate Residence.",
+        "Exact-date reading (1926-09-01): not separately established; directories are annual compilations. Calendar-year 1926 reading is met.",
+        "The 1926 census volume was used for population context only; its per-lot dwelling schedules are not in the published tables.",
+        "Permission record: Zoning Bylaw 26 text and 1933 map were not obtained (Issuu copy inaccessible to me); classification of the 1933 One-family Dwelling District rests on the City's History of Zoning, a secondary description.",
+        "Endpoint counts are assessment 'properties' (single-family detached class) and 2021 census dwellings; neither is dated exactly 2026-09-01."
+      ],
+      "unknowns": [
+        "Whether the Holgate Residence was continuously occupied through 1926-09-01 specifically (no day-level record).",
+        "Single-detached dwelling counts for Edmonton from the 1981, 1991 and 1996 federal censuses (tables exist but Edmonton rows were not retrieved).",
+        "The operative text of Zoning Bylaw 26 (1933) and Zoning Bylaw 2135 (1961) residential districts."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A dated occupancy record (assessment roll, directory, or census dwelling-type table) from 1980-2001 for an identified Edmonton lot or the city as a whole.",
+          "likely_holder": "City of Edmonton Archives (Henderson's directories after 1965; municipal census reports 1980s-1990s); Statistics Canada 1981/1991/1996 census tables",
+          "importance": "moderate"
+        },
+        {
+          "description": "Scans of Zoning Bylaw 26 (1933) with district map and Zoning Bylaw 2135 (1961) residential district text.",
+          "likely_holder": "Edmonton Tower Resource Centre (Issuu 'aesdl' library); City of Edmonton Archives",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "Interval between observations in years: 1926, 1935, 1946, 1956, 1964, 2021, 2026; longest gap 1964-2021 = 57 years (arithmetic to be checked by the article).",
+        "2021 single-detached share = 196,535 / 396,400 occupied private dwellings (StatCan rounds to multiples of 5)."
+      ],
+      "what_would_change_my_verdict": [
+        "Evidence that the 1926 Ada Boulevard entries referred to lots outside Edmonton's 1926 boundary or to multi-dwelling buildings (would remove the 1926 observation).",
+        "A showing that the Highlands annexation postdated 1926 (the City dataset gives 1911-12-20, so this is unlikely).",
+        "Confidence would rise to High with one occupancy record from 1980-2001 and a legible 1926 house number."
+      ],
+      "suggested_one_line": "Occupied single-detached houses are documented in Edmonton's Highlands in 1926 and in nearly every zoning era since, so low-density housing has existed for about a century, though my record has a 1980-2001 gap.",
+      "suggested_short_answer": "Henderson's 1926 directory lists householders on Ada Boulevard in the Highlands, annexed in 1911, and the same street shows occupied houses in 1935, 1946, 1956 and 1964. The 2021 census counts 196,535 single-detached houses and the City's 2026 assessment roll values a median single-family home at $492,500. Zoning is a separate question: no zoning bylaw existed in 1926, the first (Bylaw 26) came in 1933, and the zone in force today allows up to eight dwellings on a small-scale residential lot.",
+      "suggested_tldr": [
+        "Occupied single-lot houses in the Highlands appear in the 1926 city directory; Highlands was inside Edmonton from 1911.",
+        "Later directories (1935, 1946, 1956, 1964), the 2021 census and the 2026 assessment roll show the housing type continuing.",
+        "No observation was retrieved for 1980-2001; the longest gap between observations is 57 years.",
+        "Zoning permission is a different story: none in 1926, single-family districts from 1933 to 2023, and an 8-dwelling small-scale zone since 2024."
+      ]
+    },
+    {
+      "id": "ldh-planned-around",
+      "proposition_evaluated": "Under the primary readings fixed in the brief: at least 10 present-day City of Edmonton neighbourhood polygons were, at some point between 1926-09-01 and 2026-09-01 and while inside Edmonton's boundary then in force, named or mapped by a published neighbourhood-specific plan, subdivision document, covenant, developer plan or official historical report stating that low-density housing (branch (a) era terminology or branch (b) no more than two principal dwellings per lot) was a principal or predominant planned residential form.",
+      "interpretation_notes": "Primary count result: 10 neighbourhoods counted, meeting the cutoff of 10 exactly; the alternative cutoff of 5 is met. Counted (plan, adoption date, operative statement, boundary check from the City annexation dataset): Lymburn (NSP Bylaw 6033, 1980-07-09; Single Detached 944 units, 90.5 percent of units; West Jasper Place annexed 1972-01-01); Ozerna (NSP Bylaw 6385, 1981-03-24; Low Density Residential 66.25 ha, 1,193 units, 81.3 percent; Lake District annexed 1971-01-01); Cumberland (NSP Bylaw 7563, 1984-06-19; 'Low density is proposed at 83%', 'The emphasis of housing for this Neighbourhood is on Low Density Residential'; annexed 1982-01-01); Oxford (NSP Bylaw 7963, 1985-09-10; Low Density Residential 52.9 ha, 927 units, 74.1 percent; annexed 1982); Silver Berry (NSP Bylaw 10818, 1994-12-14; Low Density Residential 75.67 ha, 1,286 units, 70.97 percent; annexed 1982); Carlton (NSP Bylaw 12001, 1999-04-26; 'Low density residential is 72% ... of the total dwelling units'; annexed 1982); Tamarack (NSP Bylaw 14112, 2006-02-22; Low Density Residential Single/Semi-detached 89.04 ha, 2,226 units, LDR/MDR ratio 72/28; annexed 1982); Stewart Greens (NSP Bylaw 14674, 2007-08-21; 'Low-density residential development will occupy approximately 27 ha of land mostly in the form of single-detached housing', LDR to MDR ratio about 52 to 48; annexed 1982; weakest entry because the shares are near parity); Laurel (NSP Bylaw 14622, July 2007; states the plan 'maintains a housing mix unit ratio within the recommended' guideline of 65 to 85 percent low density residential; annexed 1982); Kendal (NSP Bylaw 21113, 2025-04-28; Low Density Residential 127.99 ha, 3,839 units, 76.0 percent of net residential area; within the Windermere ASP area annexed 1982). All ten meet branch (a) through the plans' own 'Low Density Residential' or 'Single Detached' designations; branch (b) is also met for Lymburn (RF1/RPL/RSL single detached). Era-by-era counts (firm): no-zoning era 1926-1933: 0; Bylaw 26 era: 0; Interim Development era: 0; Bylaw 2135 era: 0 firm (Riverbend ASP, Bylaw 5710, 1979-09-12, names six neighbourhoods, Bulyea Heights, Rhatigan Ridge, Henderson Estates, Falconer Heights, Ogilvie Ridge, Carter Crest, 'designated for low-medium density development' and 'low density development for Riverbend' at 40-55 persons per gross hectare; treated as borderline, not counted; land annexed 1959-12-30); Land Use Bylaw 5996 era: 6; Zoning Bylaw 12800 era: 3; Zoning Bylaw 20001 era: 1. Borderline or unextracted, not counted: Riverbend's six; Walker, Ellerslie, Secord, Windermere, The Hamptons, Summerside, Eaux Claires and Klarvatten NSPs all designate Low Density Residential areas but I could not extract their land-use tables, so no share was obtained; Mill Woods Development Concept (Council resolution, March 1971; Mill Woods annexed 1971-01-01) plans 38.2 percent low density dwellings and 60 percent multiple accommodation overall and names sectors rather than present-day neighbourhoods, so it adds nothing to the count and is partial contrary evidence. Pre-window context only: Glenora's 1911 Carruthers caveat ('detached or semi-detached', one dwelling per lot; Groat Estate inside Edmonton from the 1904 incorporation or 1908 annexation) and the Highlands 1910 Magrath-Holgate subdivision (minimum house value; land annexed 1911-12-20, so planning predates annexation) were planned before 1926-09-01 and enter no calculation. Westmount: same covenant wording reported but registration date and area not established from a published source; not counted. End-of-window reading (2026-09-01): the counted NSPs remain in effect with their Low Density Residential designations (office consolidations dated 2021-2025), but the city-wide zoning instrument, Zoning Bylaw 20001, no longer carries a low-density-labelled standard zone; instrument (RS, up to 8 dwellings) and statutory-plan designation diverge, so the end-of-window count on plans alone is 10 and on zoning alone is 0. Share reading: no published complete roster with low-density flags was found for any era; no share calculated. Contemporaneous-unit reading: NSP boundaries coincide with present-day polygons in these cases, so the result is the same 10; no historical subdivision boundaries were obtained for pre-1980 eras. Residential-land share and dwellings-per-hectare: not calculated; the plans state target densities (e.g. 25 or 30 units per net residential hectare for LDR) as sensitivities only. City-wide context not counted: the City's History of Zoning says Bylaw 26 (1933-10-10) 'largely favoured low-density development of single-family homes, with a majority of the lots in the city zoned One-Family Unit District' (secondary description; bylaw text not obtained), and RF1 in Bylaws 5996 (1998 consolidation read) and 12800 (2001 text read) was labelled Single Detached with 360 m2 minimum site area and 'a maximum of one Dwelling per lot' except where semi-detached, duplex or secondary suites were allowed (later, by Charter Bylaw 18638 of 2018-12-10, those became permitted uses in RF1, so a lot could hold two principal dwellings plus suites; borderline under branch (b), still branch (a) by label). A 1991 Council guideline of 65 to 85 percent low-density units for new suburban neighbourhoods is quoted in the Walker and Laurel NSPs.",
+      "verdict": "Supported",
+      "confidence": "Moderate",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Lymburn NSP (Bylaw 6033, 1980-07-09) land use table: 'Single Detached (RF1, RPL, RSL) 46.59 [ha] 54.22 [%] 944 [units] 90.5 [% of units] 3,089 [pop]', with Semi Detached 2.1 percent and Row Housing 7.4 percent.",
+          "source_title": "Lymburn Neighbourhood Structure Plan, Office Consolidation",
+          "source_url": "https://webdocs.edmonton.ca/infraplan/plans_in_effect/Lymburn_NSP_Consolidation.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "adopted 1980-07-09; consolidation read 2026-09-01",
+          "source_type": "policy-document",
+          "establishes": "Planning intent: single-detached the predominant planned form (branch (a) and (b)). Neighbourhood inside Edmonton from the 1972-01-01 West Jasper Place annexation.",
+          "quote": "Single Detached (RF1, RPL, RSL) 46.59 54.22 944 90.5 3,089",
+          "strength": "strong"
+        },
+        {
+          "finding": "Ozerna NSP (Bylaw 6385, 1981-03-24) statistics: 'Low Density Residential 66.25 [ha] 1193 [units] 81.3 [%] 4126 [pop]; Medium Density Residential 3.90 144 9.8 429'.",
+          "source_title": "Ozerna Neighbourhood Structure Plan, Office Consolidation (June 2021)",
+          "source_url": "https://webdocs.edmonton.ca/infraplan/plans_in_effect/Ozerna_NSP_Consolidation.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "adopted 1981-03-24",
+          "source_type": "policy-document",
+          "establishes": "Planning intent, branch (a): low density residential the predominant planned form; land annexed 1971-01-01 (Lake District).",
+          "quote": "Low Density Residential 66.25 1193 81.3 4126",
+          "strength": "strong"
+        },
+        {
+          "finding": "Cumberland NSP (Bylaw 7563, 1984-06-19): 'Low density is proposed at 83% with medium density comprising 17%' and 'The emphasis of housing for this Neighbourhood is on Low Density Residential'; table 'Low Density 80.14 [ha] 1,603 [units] 84.3 [%]'.",
+          "source_title": "Cumberland Neighbourhood Structure Plan, Office Consolidation (June 2021)",
+          "source_url": "https://webdocs.edmonton.ca/infraplan/plans_in_effect/Cumberland_NSP_Consolidation.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "adopted 1984-06-19",
+          "source_type": "policy-document",
+          "establishes": "Planning intent, branch (a); land annexed 1982-01-01.",
+          "quote": "The emphasis of housing for this Neighbourhood is on Low Density Residential.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Oxford NSP (Bylaw 7963, 1985-09-10): 'Low Density Residential 52.9 ha 74.1%' of residential units (927 units) and, for the add-on area, 'approximately 87% will be developed with low density housing forms (single and semi-detached houses)'.",
+          "source_title": "Oxford Neighbourhood Structure Plan, Office Consolidation (June 2021)",
+          "source_url": "https://webdocs.edmonton.ca/infraplan/plans_in_effect/Oxford_NSP_Consolidation.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "adopted 1985-09-10",
+          "source_type": "policy-document",
+          "establishes": "Planning intent, branch (a) and (b) (single and semi-detached named); land annexed 1982-01-01.",
+          "quote": "approximately 87% will be developed with low density housing forms (single and semi-detached houses)",
+          "strength": "strong"
+        },
+        {
+          "finding": "Silver Berry NSP (Bylaw 10818, 1994-12-14): 'The most prevalent residential type will be of the low density variety comprising approximately 65% of the total number of dwelling units'; consolidated table 'Low Density Residential 75.67 [ha] 1286 [units] 70.97 [%]'.",
+          "source_title": "Silver Berry Neighbourhood Structure Plan, Office Consolidation (October 2024)",
+          "source_url": "https://webdocs.edmonton.ca/infraplan/plans_in_effect/Silver_Berry_NSP_Consolidation.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "adopted 1994-12-14",
+          "source_type": "policy-document",
+          "establishes": "Planning intent, branch (a); land annexed 1982-01-01.",
+          "quote": "The most prevalent residential type will be of the low density variety",
+          "strength": "strong"
+        },
+        {
+          "finding": "Carlton NSP (Bylaw 12001, 1999-04-26): 'Low density residential is 72% and medium density is 28% of the total dwelling units' (target split 75/25 within Council guidelines).",
+          "source_title": "Carlton Neighbourhood Structure Plan, Office Consolidation (February 2019)",
+          "source_url": "https://webdocs.edmonton.ca/infraplan/plans_in_effect/Carlton_NSP_Consolidation.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "adopted 1999-04-26",
+          "source_type": "policy-document",
+          "establishes": "Planning intent, branch (a); land annexed 1982-01-01.",
+          "quote": "Low density residential is 72% and medium density is 28% of the total dwelling units.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Tamarack NSP (Bylaw 14112, 2006-02-22): land use table 'Low Density Residential | Single/Semi-detached | 89.04 [ha] | 25 [units/ha] | 2,226 [units]' and 'LDR / MDR Ratio: 72% / 28%'.",
+          "source_title": "Tamarack Neighbourhood Structure Plan, Office Consolidation (March 2014)",
+          "source_url": "https://webdocs.edmonton.ca/infraplan/plans_in_effect/Tamarack_NSP_Consolidation.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "adopted 2006-02-22",
+          "source_type": "policy-document",
+          "establishes": "Planning intent, branch (a) and (b); land annexed 1982-01-01. Density sensitivity: 25 units per net residential hectare (plan's stated denominator: net residential area).",
+          "quote": "LDR / MDR Ratio: 72% / 28%",
+          "strength": "strong"
+        },
+        {
+          "finding": "Kendal NSP (Bylaw 21113, 2025-04-28) statistics: 'Low Density Residential 127.99 [ha] 30 [units/ha] 3,839 [units] 2.80 10,749 [pop] 76.0% [of net residential area]'; Row Housing 3.8 percent, Street-Oriented 2.6 percent.",
+          "source_title": "Kendal Neighbourhood Structure Plan, Office Consolidation (April 2025)",
+          "source_url": "https://webdocs.edmonton.ca/infraplan/plans_in_effect/Kendal_NSP.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "adopted 2025-04-28",
+          "source_type": "policy-document",
+          "establishes": "Planning intent in the Zoning Bylaw 20001 era, branch (a); a neighbourhood planned around low-density housing even after the RS zone replaced RF1. Located in the Windermere ASP area (annexed 1982).",
+          "quote": "Low Density Residential 127.99 30 3,839 2.80 10,749 76.0%",
+          "strength": "strong"
+        },
+        {
+          "finding": "Stewart Greens NSP (Bylaw 14674, 2007-08-21) and Laurel NSP (Bylaw 14622, July 2007): Stewart Greens plans about 27 ha of low-density land 'mostly in the form of single-detached housing' at a 52 to 48 low-to-medium ratio; Laurel states it 'maintains a housing mix unit ratio within the recommended Suburban Housing Mix guidelines' of 65 to 85 percent low density residential.",
+          "source_title": "Stewart Greens NSP Office Consolidation (June 2017); Laurel NSP Office Consolidation (January 2018)",
+          "source_url": "https://webdocs.edmonton.ca/infraplan/plans_in_effect/Stewart_Greens_NSP_Consolidation.pdf",
+          "source_publisher": "City of Edmonton (Laurel at https://webdocs.edmonton.ca/infraplan/plans_in_effect/Laurel_NSP_Consolidation.pdf)",
+          "source_date": "2007-08-21; July 2007",
+          "source_type": "policy-document",
+          "establishes": "Planning intent, branch (a), for the ninth and tenth counted neighbourhoods; both annexed 1982-01-01. These are the weakest entries: Stewart Greens is near parity and Laurel gives a guideline range rather than its own figure.",
+          "quote": "Low-density residential development will occupy approximately 27 ha of land mostly in the form of single-detached housing",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The City's History of Zoning states that Zoning Bylaw 26 (enacted 1933-10-10) had four residential zones, 'One-family Dwelling District, Two-family Dwelling District and Three and Six Storey Multiple Dwelling Districts', and 'largely favoured low-density development of single-family homes, with a majority of the lots in the city zoned One-Family Unit District'; height limit for the 'B' district 10.6 m; accessory offices permitted.",
+          "source_title": "History of Zoning in Edmonton (Attachment One, Zoning Bylaw Renewal Report #1, CR_6664)",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/HistoryofZoninginEdmonton.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2019",
+          "source_type": "analytical-report",
+          "establishes": "City-wide context for the Bylaw 26 era (1933-1950): a one-family district covered most lots. City-wide instrument without neighbourhood geography; adds nothing to the count. Secondary description; bylaw text not obtained.",
+          "quote": "The Bylaw largely favoured low-density development of single-family homes, with a majority of the lots in the city zoned One-Family Unit District.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Land Use Bylaw 5996 (adopted 1980-07-03; 1998 consolidation read) section 110 '(RF1) Single Detached Residential District': purpose 'To establish a District primarily for Single Detached Housing'; permitted use Single Detached Housing; discretionary Semi-detached, Duplex and Secondary Suites only where the side lot line abuts a non-low-density district; minimum site area 360 m2 per dwelling, width 12 m, coverage 40 percent; 'a maximum of one Dwelling per lot shall be allowed' except where those discretionary forms apply. Zoning Bylaw 12800 as effective 2001-06-14 carried the same RF1 text.",
+          "source_title": "Edmonton Land Use Bylaw 5996, consolidation of 1998-08-24 (and Zoning Bylaw 12800, version effective 2001-06-14)",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/1998_LUB_5996_Consolidation_Aug_24_1998.pdf",
+          "source_publisher": "City of Edmonton (12800 at https://www.gov.edmonton.ab.ca/public-files/assets/document?path=PDF/Zoning_Bylaw_June_2001.pdf)",
+          "source_date": "1998-08-24 consolidation; 2001-06-14",
+          "source_type": "legal-audited",
+          "establishes": "Era terminology for 1980-2001 and 2001-2018: RF1 meets branch (a) by label and branch (b) by the one-dwelling rule with limited two-dwelling exceptions. Instrument only; maps not obtained, so no neighbourhood is counted from it.",
+          "quote": "Except where Semi-detached Housing, Duplex Housing and Secondary Suites are allowed in this District, and may thereby constitute two Dwellings on a lot, a maximum of one Dwelling per lot shall be allowed.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The Old Glenora Conservation Association records that in 1911 James Carruthers registered a restrictive covenant at Alberta Land Titles on most lots of his subdivision south of Stony Plain Road, west of Groat Ravine to 142 Street, specifying 'no commercial development, one dwelling per lot and established building setbacks'; the Edmonton Historical Board quotes the caveat: 'the houses to be erected on the said land shall be either detached or semi-detached'.",
+          "source_title": "Establishing the Association - Old Glenora Conservation Association; Glenora - Edmonton Historical Board",
+          "source_url": "https://oldglenora.ca/establishing-the-association/",
+          "source_publisher": "Old Glenora Conservation Association (advocacy); Edmonton Historical Board (https://www.edmontonhistoricalboard.com/neighbourhoods/glenora/)",
+          "source_date": "covenant 1911; pages read 2026-09-01",
+          "source_type": "advocacy",
+          "establishes": "Context only, pre-window: a 1911 covenant planning Glenora around one detached or semi-detached house per lot (branch (b)). Registered before 1926-09-01, so it enters no Claim B count. Covenant text itself not obtained.",
+          "quote": "The restrictive covenant specified no commercial development, one dwelling per lot and established building setbacks.",
+          "strength": "moderate"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The Mill Woods Development Concept (approved by Council resolution March 1971, after the 1971-01-01 annexation) planned 'a potential total dwelling stock of some 33,000 units, generally comprised of 60% in the form of multiple accommodation'; its housing component table gives Low Density Dwellings 11,200 (38.2 percent), Horizontal Multiple 7,300 (25.1 percent), Vertical Multiple 8,000 (27.1 percent) plus public housing, and 'within the low density neighbourhoods, some 60-70% of the net residential land area has been allocated to single family use'.",
+          "source_title": "Mill Woods Development Concept, Office Consolidation (February 2009)",
+          "source_url": "https://www.edmonton.ca/public-files/assets/document?path=plans_in_effect/Mill_Woods_Development_Concept_Consolidation.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "March 1971",
+          "source_type": "policy-document",
+          "establishes": "Edmonton's largest 1970s plan was not planned around low-density housing overall; it names sectors, not present-day neighbourhoods, so it neither adds to nor subtracts from the count, but it shows that 'many' is not 'all' or 'most'.",
+          "quote": "generally comprised of 60% in the form of multiple accommodation",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Zoning Bylaw 20001, in force at the end of the window, has no low-density-labelled standard zone; the RS Small Scale Residential Zone permits up to 8 dwellings on interior sites and its purpose covers 'detached, attached, and multi-unit Residential housing'. Zoning Bylaw 12800's RF1 zone had already been amended (Charter Bylaw 18638, 2018-12-10) to permit Semi-detached, Duplex, Secondary Suites and Garden Suites outright, its purpose reading 'to provide for Single Detached Housing while allowing other forms of small scale housing'.",
+          "source_title": "RS Small Scale Residential Zone (Zoning Bylaw 20001); 110 (RF1) Single Detached Residential Zone (Zoning Bylaw 12800, final web consolidation)",
+          "source_url": "https://webdocs.edmonton.ca/zoningbylaw/ZoningBylaw/Part2/Residential/110_(RF1)_Single_Detached_Residential_Zone.htm",
+          "source_publisher": "City of Edmonton (RS at https://zoningbylaw.edmonton.ca/part-2-standard-zones-and-overlays/residential-zones/210-rs-small-scale-residential-zone)",
+          "source_date": "2018-12-10; 2024-01-01; read 2026-09-01",
+          "source_type": "legal-audited",
+          "establishes": "End-of-window reading: the city-wide instrument is not low density under the brief's rule; the late-12800 RF1 is borderline under branch (b). Does not affect the cumulative count, which rests on statutory plans.",
+          "quote": "The purpose of this Zone is to provide for Single Detached Housing while allowing other forms of small scale housing in the form of Secondary Suites, Garden Suites, Semi-detached Housing and Duplex Housing.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The Edmonton Historical Board's neighbourhood index describes Aldergrove as 'Planned in the 1970s, this area's multi-family dwellings on smaller lots were designed to help preserve agricultural land and conserve energy', and records that Garneau's first high-rise was erected in 1963 and the University expropriated houses 'unhindered by municipal zoning regulations'.",
+          "source_title": "Edmonton Built Heritage - Neighbourhoods (Edmonton Historical Board)",
+          "source_url": "https://www.edmontonhistoricalboard.com/neighbourhoods",
+          "source_publisher": "Edmonton Historical Board",
+          "source_date": "read 2026-09-01",
+          "source_type": "analytical-report",
+          "establishes": "Some in-window neighbourhoods were deliberately planned around multi-family forms; supports 'many', not 'all'.",
+          "quote": "Planned in the 1970s, this area's multi-family dwellings on smaller lots were designed to help preserve agricultural land and conserve energy.",
+          "strength": "weak"
+        },
+        {
+          "finding": "The Riverbend ASP (Bylaw 5710, 1979-09-12) designates Bulyea Heights, Rhatigan Ridge and Henderson Estates 'for low-medium density development' with a density range of 40-55 persons per gross hectare, while recording that the 1971 General Plan provided 'low density development for Riverbend'.",
+          "source_title": "Riverbend Area Structure Plan, Office Consolidation (June 2021)",
+          "source_url": "https://webdocs.edmonton.ca/infraplan/plans_in_effect/Riverbend_ASP_Consolidation.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "adopted 1979-09-12",
+          "source_type": "policy-document",
+          "establishes": "A borderline instrument for six present-day neighbourhoods (annexed 1959-12-30): 'low-medium' cannot be classified under branch (a) or (b) without interpretation, so none of the six is counted. Illustrates that the 1961-1980 era count is zero because the plans I obtained are ambiguous, not because they favoured density.",
+          "quote": "Bulyea Heights, Ratigan Ridge and Henderson Estates are designated for low-medium density development",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "The primary count is exactly 10, at the cutoff. Two entries (Stewart Greens, Laurel) rest on qualitative or guideline statements rather than a plan-specific share; removing both would give 8, below the cutoff, which is why confidence is Moderate rather than High.",
+        "Eight further NSPs I read (Walker, Ellerslie, Secord, Windermere, The Hamptons, Summerside, Eaux Claires, Klarvatten) designate Low Density Residential areas but their land-use tables did not extract legibly, so no share was obtained and none was counted; the true count is very likely higher than 10.",
+        "Era-by-era firm counts: 1926-1933: 0; Bylaw 26 era: 0; Interim era: 0; Bylaw 2135 era: 0 (Riverbend's six borderline); Bylaw 5996 era: 6; Bylaw 12800 era: 3; Bylaw 20001 era: 1. Alternative cutoff of 5: met. End-of-window reading: 10 on statutory plans still in effect, 0 on the zoning instrument alone.",
+        "No count was made for 1926-1980 neighbourhoods such as Parkallen, Crestwood or Sherbrooke: the Edmonton Historical Board pages give development dates and Noel Dant's 1950s planning of west Westmount but no published plan text stating the intended housing form, and the 1933, 1950 and 1961 bylaw texts and maps were not obtained.",
+        "Pre-window planning (Glenora 1911 covenant, Highlands 1910 subdivision, Westmount covenant) is context only and enters no count; Highlands' subdivision also predates its 1911-12-20 annexation.",
+        "Share reading, covered-area share, residential-land share and contemporaneous-unit results: not calculated; no published roster or geometry was found for any era. The City neighbourhood polygon layer (Neighbourhoods, FeatureServer layer 35) has 407 features and was used only to confirm that each counted plan name is a present-day neighbourhood.",
+        "Classification of Bylaw 26 (1933) and Bylaw 2135 (1961) residential districts rests on the City's History of Zoning, a secondary description; count of borderline instruments: 3 (Bylaw 26 'B' district and Bylaw 2135 R-1, text not obtained; late Bylaw 12800 RF1 after 2018, two principal dwellings plus suites). None was used in the count.",
+        "All plan quotations are from City office consolidations, which state that the original bylaws govern; adoption dates are as recorded in each consolidation's amendment list."
+      ],
+      "unknowns": [
+        "Low-density shares in the eight NSPs whose tables I could not extract, and in the 1971-1974 Castle Downs, West Jasper Place and Kaskitayo outline plans (not obtained).",
+        "Whether any published 1933-1961 neighbourhood-level plan or subdivision covenant exists for mature neighbourhoods such as Parkallen, Crestwood, Sherbrooke or Grovenor.",
+        "The registration date and lot coverage of the Westmount (Groat Estate) covenant, and the exact plan numbers covered by the 1911 Carruthers caveat."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Land-use statistics appendices (LDR share of units) for Walker, Ellerslie, Secord, Windermere, The Hamptons, Summerside, Eaux Claires and Klarvatten NSPs, plus the 1971-1974 outline plans.",
+          "likely_holder": "City of Edmonton, Urban Planning and Economy (plans in effect library at webdocs.edmonton.ca)",
+          "importance": "moderate"
+        },
+        {
+          "description": "Scanned text and district maps of Zoning Bylaw 26 (1933) and Zoning Bylaw 2135 (1961), and any 1950s subdivision plans or covenants for post-war neighbourhoods.",
+          "likely_holder": "Edmonton Tower Resource Centre; City of Edmonton Archives; Alberta Land Titles",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "Primary count: 10 neighbourhoods (numerator); no denominator required. Boundary year checked per plan against the City annexation dataset.",
+        "If the article reports NSP shares, state each plan's own denominator (units, net residential area or gross area) as quoted; they differ between plans."
+      ],
+      "what_would_change_my_verdict": [
+        "Showing that two or more of the ten counted plans do not treat low-density housing as a principal form (for example, that Laurel's actual unit mix fell below 50 percent low density), which would drop the count below 10.",
+        "Evidence that any counted neighbourhood lay outside Edmonton's boundary at its plan's adoption date (the City dataset places all ten inside).",
+        "Extracted tables for the eight unread NSPs would likely raise the count well above 10 and lift confidence to High."
+      ],
+      "suggested_one_line": "At least ten Edmonton neighbourhoods, from Lymburn in 1980 to Kendal in 2025, have City-adopted plans that make low-density housing the main planned form, so 'many neighbourhoods were planned around it' holds, though the count sits right at the cutoff and Edmonton's biggest 1970s plan, Mill Woods, was 60 percent multi-family.",
+      "suggested_short_answer": "Ten present-day neighbourhoods inside Edmonton's boundary at the time have published neighbourhood structure plans stating that low-density or single-detached housing was the predominant planned form: Lymburn (1980, 90.5 percent of units single detached), Ozerna (1981), Cumberland (1984), Oxford (1985), Silver Berry (1994), Carlton (1999), Tamarack (2006), Stewart Greens (2007), Laurel (2007) and Kendal (2025). That meets the brief's cutoff of ten exactly, with eight more plans designating low-density areas whose tables I could not read. Pre-1926 planning such as Glenora's 1911 one-house-per-lot covenant is context only. The Mill Woods concept of 1971 planned 60 percent multiple housing, and the zoning bylaw in force since 2024 has no single-detached zone, so the claim is true of many neighbourhoods, not of the city as a whole.",
+      "suggested_tldr": [
+        "Ten neighbourhood plans adopted between 1980 and 2025 state low-density housing as the predominant planned form; cutoff of ten met exactly.",
+        "Era counts: none confirmed for 1926-1980 (plans not obtained or ambiguous), six for 1980-2001, three for 2001-2024, one since 2024.",
+        "Glenora's 1911 covenant and Highlands' 1910 subdivision predate the window and are context only.",
+        "Counter-evidence: Mill Woods (1971) planned 60 percent multi-family; the current RS zone allows up to eight dwellings per lot."
+      ]
+    }
+  ]
+}
