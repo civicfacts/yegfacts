@@ -78,7 +78,7 @@ Changes to anything under `prompts/`, the merge or synthesis scripts, or `method
 
 ## Licence
 
-No licence file has been chosen yet, so the default applies: all rights reserved. Archived evidence files carry their own rights status in the registry and are mirrored only when redistribution is allowed. If you want to reuse the method, the prompts, or the content, write to hello@yegfacts.ca.
+All rights reserved for now, and the choice of licence is deferred on purpose. [LICENSE](LICENSE) says so, says what a reader may still do (read, verify, cite, open an issue), and notes that archived evidence keeps its own rights from the registry. If you want to reuse the method, the prompts, or the content, write to hello@yegfacts.ca.
 
 ## Contact
 
