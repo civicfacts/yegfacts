@@ -1,7 +1,7 @@
 ---
 import type { Claim, Story } from '../lib/content';
 import Finding from './Finding.astro';
-import { FINDING_TONE } from '../lib/findings';
+import { findingEdge } from '../lib/findings';
 
 /**
  * Claims as ledger rows, in whatever grouping the page asks for: by story on a
@@ -34,9 +34,6 @@ interface Props {
 }
 
 const { groups, showStory = true } = Astro.props;
-
-const edge = (finding: string) =>
-  FINDING_TONE[finding as keyof typeof FINDING_TONE]?.border ?? 'border-charcoal';
 ---
 
 <div>
@@ -59,7 +56,7 @@ const edge = (finding: string) =>
             <li
               class:list={[
                 'border-l-[5px] py-6 pl-4 first:pt-0',
-                edge(claim.data.finding),
+                findingEdge(claim.data.finding),
                 'sm:grid sm:grid-cols-[minmax(0,1fr)_11rem] sm:gap-x-6',
               ]}
             >
