@@ -1,10 +1,12 @@
 # Review brief: Active transportation investment
 
 Status: PROVISIONAL. Drafted 2026-09-02 by Stew under D-0019; revised
-after the intake triage (triage-1.md, triage-decision.md) and rewritten
+after the intake triage (triage-1.md, triage-decision.md); rewritten
 after framing check 1 (framing/check-1.md, REVISE; response in
-framing/response-1.md). Goes back to the framing check before freezing.
-Methodology: v1.13. Fourth story of the pre-registered launch slate
+framing/response-1.md); revised after framing check 2 (framing/check-2.md,
+REVISE on three consequences of the rewrite; editor's resolution in
+framing/resolution.md). Goes to the third and final check before
+freezing. Methodology: v1.13. Fourth story of the pre-registered launch slate
 (docs/DESIGN.md section 7).
 
 ## Story
@@ -97,13 +99,16 @@ words.
 **As-of date (freeze date):** 2026-09-02.
 
 **Comparison date:** both statements were made during council's
-2023-2026 budget deliberations in December 2022. The primary comparison
-uses the budgets as council approved them in that cycle: the 2023-2026
-capital budget as approved in December 2022, and the 2023 operating
-budget as approved in December 2022. Later amendments (supplemental
-capital budget adjustments, the spring and fall operating adjustments)
-and actual expenditures up to the as-of date are reported as
-qualifications with their dates.
+2023-2026 budget deliberations in December 2022: the advocacy page was
+captured on 2022-12-12 and the councillor was quoted on 2022-12-12; the
+2023-2026 capital budget and the 2023 operating budget were approved on
+2022-12-16. For Claim B the capital budget as approved in December 2022
+is the instrument the statement was about. For Claim A the annual snow
+budget in force when the statement was made was 2022's, and the 2023
+budget approved days later is the alternative; the claim's own section
+fixes both. Later amendments (supplemental capital budget adjustments,
+the spring and fall operating adjustments) and actual expenditures up to
+the as-of date are reported as qualifications with their dates.
 
 **Accounting years:** the City's fiscal years, which are calendar years.
 Completed years of the cycle on the as-of date: 2023, 2024, 2025.
@@ -135,36 +140,47 @@ the December 2022 deliberations, and report any later amendment to the
 profile with its date. No other cycling spending enters this figure: the
 circulating number is the program.
 
-**"The City's annual snow-clearing budget", fixed here.** The City's
-approved operating expenditure budget for snow and ice control for 2023,
-as approved in December 2022, in the City's 2023-2026 operating budget
-and its December 2022 council amendments. Primary reading: gross
-expenditure budget for the snow and ice control program or service line,
-whatever the City names it in that document. Alternative reading: the
-net tax-levy budget for the same line, where the City publishes it. If
-the City publishes only one of the two, use it and say so. Report the
-2022 approved budget and the 2022 actual expenditure as context.
-Reviewers name the document, page or table, and the figure exactly as
-printed, including whether it is in thousands.
+**"The City's annual snow-clearing budget", fixed here.** Primary
+denominator: the approved 2022 gross Snow and Ice Control expenditure
+budget, the annual budget in force when the statement was captured
+(2022-12-12), unless a contemporaneous source establishes that the
+holder used the proposed 2023 figure. Alternative denominator: the final
+approved 2023 gross Snow and Ice Control expenditure budget, approved
+2022-12-16. Compute the ratio and the classification under both. Sources:
+the City's 2023-2026 Operating Budget document
+(https://www.edmonton.ca/sites/default/files/public-files/2023-2026OperatingBudget.pdf),
+its December 2022 council amendments (including the snow and ice
+enhancement considered in the same deliberations), and the Snow and Ice
+Control budget table for 2022 through 2026 published as a council
+attachment
+(https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=e47d4d08-6ac8-485a-a99a-8e8111148e93&Item=23&Tab=attachments&lang=English).
+"Gross expenditure" is the program's total expenditure budget before
+revenues and transfers; where the City publishes only a net tax-levy
+figure for a year, use it, say so, and report the difference. Report
+2022 actual expenditure separately as context, because an actual is not
+a budget. Reviewers name the document, page or table, and the figure
+exactly as printed, including whether it is in thousands.
 
 **"Almost double", fixed here with thresholds.** The verdict figure is
-the ratio of the approved $100 million to the 2023 snow-clearing budget
-under the primary reading, in nominal dollars.
+the ratio of the approved $100 million to the snow-clearing budget under
+the primary denominator (2022 approved gross), in nominal dollars. The
+classification under the alternative denominator (2023 approved gross)
+is required and reported beside it.
 
 - **Supported** if the ratio is at least 1.8.
 - **Partially supported** if the ratio is at least 1.5 and below 1.8:
   the figure is well above the snow budget, and the failing part is the
   word "double".
 - **Contradicted** if the ratio is below 1.5.
-- **Not established** if the City did not publish a 2023 snow and ice
+- **Not established** if the City did not publish a 2022 snow and ice
   control budget in a form from which the ratio can be computed.
 
-Alternative cutoffs, results required under both: Supported at 1.7 and
-Contradicted below 1.25. Neither set is drawn from an identified
-pre-existing standard; 1.8 is where "almost double" stops being a
-stretch in ordinary speech, and 1.5 is where the figure is "half again"
-rather than "double". No cutoff may be changed after the figures are
-seen.
+Alternative cutoffs, results required under both: Supported at 1.7 or
+above; Partially supported from 1.25 to below 1.7; Contradicted below
+1.25. Neither set is drawn from an identified pre-existing standard; 1.8
+is where "almost double" stops being a stretch in ordinary speech, and
+1.5 is where the figure is "half again" rather than "double". No cutoff
+may be changed after the figures are seen.
 
 **Qualifications reported, never carrying the verdict:**
 
@@ -176,7 +192,8 @@ seen.
 2. The same ratios on actual expenditure where published: CM-20-0330
    actual spending by year against snow and ice control actual
    expenditure by year, for 2023, 2024 and 2025.
-3. The ratio under the alternative snow reading (net tax levy).
+3. The ratio on the net tax-levy figure for the primary year, where the
+   City publishes one.
 4. Constant-dollar restatement, if any reviewer applies one, with the
    index used and whether it changes the classification.
 
@@ -204,26 +221,61 @@ separate claim. Reviewers report the discrepancy in
 the figure appears as "180" or "18" in any other record of the same
 statement (council meeting minutes or video, other coverage).
 
-**"Roads", fixed here.** Capital budget funding for road infrastructure
-in the City's 2023-2026 capital budget as approved in December 2022, on
-the City's own classification: the capital profiles the City groups
-under roads (or its equivalent heading, for example "roads and
-bridges", "road renewal and growth", or the transportation category net
-of transit and LRT), including arterial and collector renewal, the
-roadway share of neighbourhood renewal where the City reports it
-separately, road growth projects, interchanges and freeway conversions,
-and bridges where the City groups them with roads. Excluded: transit,
-LRT, bus rapid transit, active-transportation profiles, and anything
-the City books as fleet. Reviewers state which heading they used, what
-it contains, and the figure exactly as printed. Where the City's own
-document gives a roads total for the cycle (for example in its capital
-budget summary or its public budget communications), that figure is
-the primary one, named with its source; where reviewers must add
-profiles, they list them.
+**"Roads", fixed here.** The City's adopted 2023-2026 Capital Budget
+(https://www.edmonton.ca/sites/default/files/public-files/2023-2026CapitalBudget.pdf)
+publishes no roads-only total. Its Table 8, "Adopted Capital Budget by
+Service", gives one combined line, "Active Pathways and Roads Service",
+$1,794.0 million for 2023-2026, which includes active pathways. So the
+primary roads-only boundary is fixed by the City's own label on each
+capital profile sheet in that document, and the combined line is the
+required alternative.
+
+*Primary boundary (roads-only).* The sum of the 2023-2026 approved
+amounts (Appendix A of the same document, in thousands) of every capital
+profile whose sheet carries Service Category "Roads" or Service Category
+"Neighbourhood Renewal", with these predeclared exceptions: excluded
+from "Roads", 21-20-2100 (170 Street Pedestrian Bridge) and 14-66-2570
+(Parking Control Technology), because neither carries vehicle traffic;
+included although their sheets carry no Service Category, the three
+vehicle-carrying bridge profiles 23-24-0300 (High Level Bridge
+Rehabilitation), 21-24-9301 (Latta Bridge Replacement) and 21-24-9302
+(Glenora Bridge Renewal). Every included profile is included in full;
+no mixed profile is apportioned unless the City itself publishes the
+roadway share. The editor's reading of the resulting membership, for
+reviewers to verify against the sheets and correct on the record, not to
+take on trust: Roads, 18-66-6503, 19-22-9006 (both lines), 21-20-9301,
+21-20-9302, 21-40-9031, 21-40-9032, 22-22-9700, 22-22-9701, CM-20-2020,
+CM-22-0000, CM-24-0000, CM-26-0000, CM-66-2194, CM-66-2525, CM-66-2585,
+CM-66-2596, CM-99-0060, CM-99-9600; Neighbourhood Renewal, 20-40-9017,
+20-40-9019, 21-40-9023, 21-40-9024, 21-40-9025, 21-40-9026, 21-40-9027,
+22-40-9028, 22-40-9029, CM-25-0000, CM-27-0000; plus the three bridges.
+Reviewers list every profile they summed with its amount and page, and
+state any profile whose sheet's label differs from this reading.
+
+*Required alternative.* Table 8's "Active Pathways and Roads Service"
+total, $1,794.0 million, identified by its full published name, with
+CM-20-0330 and the other active-pathway funding it contains left
+visible. It is never called a roads total; a result on it establishes
+the combined service allocation, not a roads-only one.
+
+*Widest and narrowest readings, qualifications.* Widest: the primary
+boundary plus the streetscape and pedestrian-realm profiles the City
+lists under the same service (103 Avenue Streetscape, 103A Avenue
+Pedway, Jasper Avenue New Vision Phase 2, Chinatown Infrastructure
+Improvements, Missing and Enhanced Sidewalk Connections, the
+Edmonton-Strathcona County Pedestrian Bridge). Narrowest: Service
+Category "Roads" profiles only, without Neighbourhood Renewal and
+without the three bridges. Excluded under every reading: transit, LRT,
+bus, active-transportation profiles including CM-20-0330, and fleet.
+Reviewers report the classification under the primary boundary and the
+required alternative, and the totals under the widest and narrowest
+readings.
 
 **"$1.8 billion, about eighteen times", fixed here with thresholds.**
-The verdict figure is the approved roads total for 2023-2026 under the
-primary reading, in nominal dollars, and its ratio to $100 million.
+The verdict figure is the approved roads-only total for 2023-2026 under
+the primary boundary, in nominal dollars, and its ratio to $100 million.
+The classification under the required alternative (the combined service
+line) is reported beside it.
 
 - **Supported** if the roads total is at least $1.5 billion (fifteen
   times or more).
@@ -235,7 +287,8 @@ primary reading, in nominal dollars, and its ratio to $100 million.
   let a roads total be computed on any reasonable reading.
 
 Alternative cutoffs, results required under both: Supported at
-$1.62 billion (nine tenths of the stated figure) and Contradicted below
+$1.62 billion or above (nine tenths of the stated figure); Partially
+supported from $0.9 billion to below $1.62 billion; Contradicted below
 $0.9 billion. Neither set is drawn from an identified pre-existing
 standard; five-sixths of a stated figure is "about" that figure in
 ordinary speech, and a figure below one thousand million is a different
@@ -244,9 +297,9 @@ figures are seen.
 
 **Qualifications reported, never carrying the verdict:**
 
-1. The roads total under the widest and narrowest fair readings of
-   "roads" (with and without bridges; with and without the roadway share
-   of neighbourhood renewal), each with its ratio to $100 million.
+1. The classification under the required alternative, and the totals
+   under the widest and narrowest readings, each with its ratio to
+   $100 million.
 2. The roads total as amended to the as-of date (supplemental capital
    budget adjustments, including the 2024 increase council approved to
    the capital budget), with dates.
@@ -277,16 +330,25 @@ in itself. Each verdict is reachable on the budget documents and each
 changes something for one side.
 
 **Claim B.** Supported would mean the supporters' proportion argument
-holds: the City has committed to roads something like eighteen times
-what it has committed to bike lanes, and opponents could not call the
-bike-lane figure outsized without answering that. Contradicted would
-mean the roads figure is much smaller than stated once "roads" is read
-on the City's own classification, and the councillor's comparison would
-not stand. Partially supported would mean roads get an order of
-magnitude more but not $1.8 billion. Not established would mean the
-City's published budget does not let anyone compute a roads total, which
-would itself be a finding. Each verdict is reachable and each would
-surprise someone.
+holds on the City's own labels: the City has committed to roads
+something like eighteen times what it has committed to bike lanes, and
+opponents could not call the bike-lane figure outsized without answering
+that. Contradicted would mean the roads figure is much smaller than
+stated once "roads" is read on the City's own classification, and the
+councillor's comparison would not stand. Partially supported would mean
+roads get an order of magnitude more but not $1.8 billion. Not
+established would mean the City's published budget does not let anyone
+compute a roads total, which would itself be a finding. Each verdict is
+reachable and each would surprise someone.
+
+**Both claims, definition sensitivity.** Each verdict applies under the
+named primary denominator (Claim A: the 2022 approved gross snow budget)
+or boundary (Claim B: the roads-only profile set). If the required
+alternative produces a different classification, the finding is
+definition-sensitive, the story says so beside the verdict, and neither
+side can fairly cite the verdict without that qualification. A result
+on the "Active Pathways and Roads Service" line establishes the
+combined service allocation, not a roads-only allocation.
 
 ## Scope
 
@@ -322,14 +384,17 @@ question:
 
 Claim A:
 
-- The 2023 snow and ice control budget under the primary and alternative
-  readings, with source; the ratio under each; the like-for-like ratios
-  in the qualifications, each with numerator, denominator and source.
+- The 2022 and 2023 approved gross Snow and Ice Control budgets, with
+  source and page; the ratio and classification under each; the
+  net-tax-levy figure where published; the like-for-like ratios in the
+  qualifications, each with numerator, denominator and source.
 
 Claim B:
 
-- The roads total under the primary reading, listing the profiles or the
-  City's summary line it comes from, with source and page; the totals
+- The roads-only total under the primary boundary, listing every
+  profile summed with its 2023-2026 amount and Appendix A page, and any
+  label that differs from the editor's reading; the classification
+  under the required alternative (Table 8 line, full name); the totals
   under the widest and narrowest readings; each ratio to $100 million;
   the as-amended total with dates; the shares in qualification 4.
 
@@ -351,6 +416,8 @@ restatement is reported as a qualification with its index named.
 - Keep the program from the network. CM-20-0330 is the figure; bike
   infrastructure funded elsewhere is context in the required
   calculations, not part of any verdict.
+- Keep the combined service line from a roads total. "Active Pathways
+  and Roads Service" is reported under that name only.
 - Report one verdict per claim under the primary readings and cutoffs
   fixed here, and every alternative reading's result in
   `interpretation_notes` or `limitations`. The schema carries one
