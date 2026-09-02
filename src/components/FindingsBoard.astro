@@ -73,6 +73,12 @@ const { groups, showStory = true } = Astro.props;
               {/* Answer directly under the question on phones; in its own column, all badges starting on one line, from sm up. */}
               <p class="mt-2.5 sm:col-start-2 sm:row-start-1 sm:mt-0.5 sm:justify-self-start">
                 <Finding finding={claim.data.finding} size="md" />
+                {/* Unanimous stays silent; Adjacent and Split print under the badge they qualify, so a contested verdict is never taken for a firm one. */}
+                {claim.data.panel_agreement !== 'Unanimous' && (
+                  <span class="mt-1.5 block font-sans text-xs font-semibold tracking-[0.09em] text-muted uppercase">
+                    {claim.data.panel_agreement} panel
+                  </span>
+                )}
               </p>
               {/*
                 One line, two deliberate halves: who and where on the left, when
@@ -86,13 +92,6 @@ const { groups, showStory = true } = Astro.props;
                     <a href={`/facts/${story.id}`} class="link">
                       {story.data.title}
                     </a>
-                  )}
-                  {/* Unanimous is the default and stays silent; Adjacent and Split are printed so a contested verdict is never taken for a firm one. */}
-                  {claim.data.panel_agreement !== 'Unanimous' && (
-                    <Fragment>
-                      {showStory && <span class="text-muted"> · </span>}
-                      {claim.data.panel_agreement} panel
-                    </Fragment>
                   )}
                 </span>
                 <span class="text-muted sm:sr-only"> · </span>
