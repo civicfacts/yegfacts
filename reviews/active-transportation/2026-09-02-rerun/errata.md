@@ -88,9 +88,10 @@ Evidence Gemini 3.1 Pro said it had missed in round 1:
 ## Found at the gate
 
 The source-verification audit found that the frozen brief's selection
-rationale (and the first run's intake record, which the brief drew on)
-describes the Infrastructure Committee of 2026-08-26 as having declined
-administration's recommendation. The committee's minutes (YF-EV-0135)
+rationale describes the Infrastructure Committee of 2026-08-26 as having
+declined administration's recommendation (the first run's intake record
+says only that the committee did not adopt it, which the minutes bear
+out). The committee's minutes (YF-EV-0135)
 show the recommendation was never put and a substitute motion to continue
 the program under its approved scope was defeated on a tied vote, so the
 committee made no decision. The brief is frozen and is not edited; the

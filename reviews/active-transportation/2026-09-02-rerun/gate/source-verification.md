@@ -799,3 +799,341 @@ elsewhere in the same tree.
 
 A second pass need only re-read the six statements above, plus the two registry
 `establishes` lines and the calcs comment named under collateral.
+
+---
+
+## Pass 2, 2026-09-02
+
+Scope: the six non-VERIFIED items above in the wording now in the tree, the new
+archive YF-EV-0140, the two registry `establishes` lines and the calcs comment
+named under collateral, the `errata.md` record of the brief's error, and the four
+sentences the page critique changed after pass 1 (the opening paragraph, the
+snow section's "1.55 times a year of snow clearing" sentence, the roads section's
+"Both of those fall short" sentence, and the closing paragraph). Same method,
+same archives, same run artifacts, no web access. Graded state: commit `f9160fc`,
+story `md5 ee8a3cff…`, snow claim `0fe40620…`, roads claim `454259f3…`, calcs
+`447a8882…`.
+
+**Integrity.** YF-EV-0140 hashes clean against its registry entry
+(`7acca16e…`), as do the five entries this pass touches or leans on (YF-EV-0114,
+0115, 0118, 0135, 0140). `npm run validate` passes: 6 stories, 10 claims, 1
+commitment, 6 topics, 140 evidence entries. `scripts/calcs/active-transportation.ts`
+still reproduces every published ratio from the archived cells: 1.551, 1.166,
+1.258, 1,945.703, 19.46, 40.2.
+
+### The new archive, YF-EV-0140 — **VERIFIED**
+
+Two pages, headed "REPLACEMENT Attachment 5 / Modified Approach for the Active
+Transportation Network Expansion Program", footer "August 26, 2026 -
+Infrastructure Committee | IS03688". Both counts are in the bytes and I counted
+the bullets rather than taking the registry's word:
+
+- **13 continuing.** "The following projects will continue as planned:" is
+  followed by exactly thirteen bullets, 50 Street (109A Avenue to Goldbar Park
+  Road) through Victoria Park Road (116 Street to River Valley Road).
+- **14 re-evaluated.** "If Council approves the approach, the following projects
+  may be re-evaluated using alternate design approaches." is followed by exactly
+  fourteen bullets, 50 Street (101 Avenue to 109A Avenue) through the Grovenor
+  group.
+
+The rest of the entry's `establishes` line is verbatim too: "The modified
+approach would apply only to routes under the Active Transportation Network
+Expansion Program (Capital Profile CM-20-0330) that have not yet started
+construction"; "Routes that are planned, and where plans do not impact travel
+lanes or parking will continue as planned"; "In Q1 2027, Administration will
+bring forward a report outlining trade-offs and options for the remaining routes,
+including an update on the remaining funding and budget implications". The
+closing negative — "it does not establish what the committee decided" — is right,
+and the document's own conditional ("**If** Council approves the approach") is
+what makes it right.
+
+### The six items
+
+**1. Snow KF-2 — was UNSUPPORTED, now VERIFIED.** "approved by council in its
+December 2022 budget deliberations (9 to 4)". The date is now the record's own
+scope rather than a day the record does not carry, and the vote was in December
+2022 on every reading available: the minutes' clerk's note lists the ten sitting
+days, and the two archives that bound the vote (YF-EV-0122's "9-4 vote on Friday"
+captured 2022-12-12, YF-EV-0121 of 2022-12-12 treating the decision as made) put
+it at 2022-12-09 or thereabouts. The first run's own intake record says so
+independently: "Council approved the $100 million on **2022-12-09** as part of
+the 2023-2026 capital budget (vote reported as 9 to 4)." *Observation, not a
+grade:* the deliberations opened 2022-11-30, so "December 2022 budget
+deliberations" names the round by the month it concluded and voted, which is the
+brief's own phrasing ("during council's 2023-2026 budget deliberations in
+December 2022") and is not misleading.
+
+**2. Story TL;DR 1 — was UNSUPPORTED, now VERIFIED.** "during its 2023-2026
+budget deliberations in December 2022, 9 to 4". Better than the claim's wording,
+in fact: it names the budget cycle, which is the minutes' own subject.
+
+**3. Story committee sentence — was UNSUPPORTED, now VERIFIED.**
+
+> "On 2026-08-26 administration asked the Infrastructure Committee to let it
+> re-evaluate 14 named routes that had not started construction; the minutes show
+> no decision was taken, because the recommendation was never put and a motion to
+> carry on under the approved scope was defeated on a tied vote."
+
+Every element now sits on bytes. The 14 and "not yet started construction" are
+YF-EV-0140, counted above. The recommendation is YF-EV-0118 page 1, "That the
+updated approach for the remaining routes… as outlined in Attachment 5… be
+approved". "Never put" is a clean negative in YF-EV-0135: the string "updated
+approach" occurs **nowhere** in the minutes, so the recommendation was not merely
+lost on a vote, it was never moved. The defeat is verbatim: "In Favour (2) A.
+Salvador, and M. Janz Opposed (2) E. Rutherford, and R. Clarke **Defeated (2 to
+2)**", on a motion to "Continue implementation… in accordance with the previously
+approved scope of Capital Profile CM-20-0330". The only motion carried on item
+7.6 kept Attachment 4 private, 4 to 0. This is the strongest repair in the batch:
+the sentence went from an unsourced number and an inverted verb to a
+route-by-route count and the minutes' own sequence.
+
+**4. Snow KF-6 — was IMPRECISE, now VERIFIED.** "council funded in the same
+December 2022 deliberations" replaces the unsupported day. Operating Budget
+Amendment 18 and its two 2023 amounts are verbatim in YF-EV-0131 and carried 12
+to 1 in the same minutes, so "the same deliberations" is exactly what the archive
+supports.
+
+**5. Snow, Gemini key finding — was IMPRECISE, now VERIFIED.**
+
+> "In round 1: the word double is an overstatement under every reading, 1.55 on
+> the printed cell, 1.45 with the July addition, 1.64 on the 2023 figure;
+> recomputed in round 2 to 1.17 and 1.57 after the additions it had missed."
+
+Both halves check. `round1/gemini.json`: "The ratio under the primary denominator
+is 1.55… Under Alternative A, the ratio drops to 1.45 (Contradicted). Under
+Alternative B, it is 1.64… The word 'double' is an overstatement under all
+readings." `round2/gemini.json`: "adding council amendments of $2.3M (March 14),
+$14.3M (April 19), and $4.7M (July 4)… Ratio: **1.166**" and "the ratio is
+**1.573**". The round is now labelled and the supersession is on the page.
+*Observation:* the round-2 1.573 is against a different denominator as well as a
+different amendment list — Gemini switched Alternative B from the fact sheet's
+$60.9 million to the 2023 adjusted expense budget of $63.574 million — so the
+1.64 → 1.57 pairing is a recomputation of the same *slot*, not of the same
+division. "Recomputed" is the right verb for that and the sentence claims no more.
+
+**6. Story "summed the same profiles" — was IMPRECISE, now VERIFIED.** Now "All
+three seats reached the same total, $1.95 billion, about nineteen times the bike
+program, and two of them rebuilt it profile by profile", which matches the roads
+claim's KF-3 and `errata.md`'s record that Gemini's per-profile list was absent
+while its five sums matched.
+
+### The four sentences the critique changed
+
+**Opening paragraph — IMPRECISE.** New finding, and one I under-graded in pass 1
+rather than a regression the critique introduced.
+
+> "Since council's budget vote of December 2022, **opponents** of Edmonton's bike
+> lanes **have compared** the $100 million program with what the City spends
+> clearing snow, and **supporters have compared** it with what the City spends on
+> roads."
+
+The rest of the paragraph is right and is an improvement: "This story tests one
+comparison from each side, in the words each was captured using" is the brief's
+own scope, and "Neither comparison says whether the program is worth it, well
+used or good for traffic, and neither verdict does" is the brief's out-of-scope
+list. The rewrite also dropped two unmeasured claims the earlier draft carried
+("have travelled together", "almost never stated on its own"), so on balance it
+is a net gain.
+
+But the plural group attribution is the one thing `brief.md` predeclares it will
+not say: "Each comparison was captured from one identified holder; **the brief
+does not claim either comparison is common**, only that each was made publicly,
+in the budget debate, by a party to it." The snow comparison rests on exactly one
+captured holder, the Common Sense Edmonton campaign page (YF-EV-0122); the
+roads comparison on one councillor, in a news quotation and on his own page
+(YF-EV-0121, YF-EV-0134). The captured Facebook thread carries no second holder
+of either comparison — its only "snow clearing" line is "Fix our roads and
+sidewalks. Improve snow clearing", which is not the budget comparison, and its
+roads line is the separate "around 1% of the capital expansion budget for roads"
+form, registered as its own candidate. Writing "opponents… have compared" and
+"supporters have compared" tells a reader the comparisons are group habits where
+the frozen brief refused to claim it.
+
+**Fix:** say what the body already says. "Since council's budget vote of December
+2022, a campaign against Edmonton's bike lanes has compared the $100 million
+program with what the City spends clearing snow, and a councillor who backed it
+has compared the same figure with what the City spends on roads."
+
+**Snow, "1.55 times a year of snow clearing" — VERIFIED.** "Against that cell,
+$100 million is 1.55 times a year of snow clearing: more than a year of snow
+clearing, and not almost double." 100,000 / 64,466 = 1.551. Naming the figure
+rather than rounding it to "about one and a half times" is the stronger form. The
+gloss "more than a year of snow clearing" understates the brief's own band
+description ("well above the snow budget"), which is a safe direction to err in.
+The following sentence — "Whether the figure counts as 'partially supported' or
+'contradicted' under the thresholds fixed in advance depends on which snow budget
+you divide by" — is verified against `brief.md`'s cutoffs and against the three
+round-2 files, which classify 1.551 Partially supported and 1.166 Contradicted.
+
+**Roads, "Both of those fall short" — VERIFIED, unchanged from pass 1 and
+re-confirmed.** 1,452.303 and 1,116.532 are each below the brief's $1.5 billion
+Supported line; 1,945.703 and 1,794.0 each clear it. `round2/gpt.json` classifies
+the narrowest reading as Partially supported and `round2/claude.json` the
+Yellowhead-stripped reading the same way, so "fall short" is the seats' own
+result and not the drafter's inference.
+
+**Closing "What remains open" — VERIFIED.** "which of the City's several 2022
+snow figures a fair comparison should use" is the snow claim's unknown 1 and
+limitation 1; "what roads spending, as opposed to roads approvals, has been" is
+the roads claim's unknown 2 and limitation 3, and `round2/claude.json`'s "no
+consistent published series for the whole roads set". The paragraph no longer
+restates the findings, which now live in the `one_line` and the TL;DRs, and both
+of those verify (1.55 and about 19 times).
+
+### Registry lines, calcs and errata
+
+**YF-EV-0135 — VERIFIED.** The line now describes only what the minutes carry —
+"the recommendation to approve administration's updated approach was not put; a
+substitute motion… was defeated on a tied vote (2 to 2), and the only motion
+carried kept Attachment 4 private (4 to 0)" — and closes with the correct
+negative, "It carries no route lengths or spending figures." Both the vote counts
+and the absence of any "km" string check.
+
+**YF-EV-0118 — VERIFIED.** The recommendation is now quoted from the bytes rather
+than paraphrased as "a modified approach", and "Attachment 5 is archived
+separately" points at YF-EV-0140. The rest of the line was already sound.
+
+**Calcs comment — VERIFIED.** Now "FCS01656 attachment", matching the archive's
+own footer "March 14, 2023 - City Council | FCS01656".
+
+**`errata.md`, "Found at the gate" — VERIFIED, with one over-attribution.** The
+record is accurate on the substance and correctly scoped: the brief is frozen and
+not edited, the error "sits in the rationale and not in any proposition or
+definition", and "no seat relied on it" — which I confirmed, since "declined"
+appears in no round file. One correction for the record: the entry also blames
+"the first run's intake record, which the brief drew on", but that record is not
+wrong. `reviews/active-transportation/2026-09-02/intake.md` says "the committee
+**did not adopt it and the program stands as approved**", which is consistent
+with the minutes. The escalation from "did not adopt" to "declined it" is the
+brief's alone. The intake's 13-and-14 route split is likewise correct and is now
+confirmed by YF-EV-0140.
+
+### Collateral
+
+**Which Attachment 5 is archived cannot be settled from the bytes.** YF-EV-0135's
+agenda list carries three versions — "REPLACEMENT (Version 2) Attachment 5",
+"REPLACEMENT (Version 1) Attachment 5" and a plain "Attachment 5" — and the
+archived document's own header reads only "REPLACEMENT Attachment 5", with no
+version number anywhere in its two pages. The route counts could differ between
+versions, and the 13 and 14 now sit in a story sentence and a key fact. The
+registry title calls it "replacement Attachment 5", which is honest but does not
+resolve it. Recommended: add a note to YF-EV-0140 recording that the meeting
+posted three Attachment 5 files, that DocumentId 304030 is the one captured, and
+that its bytes carry no version marker.
+
+### Counts
+
+Pass 2 re-enumerated the story body at a finer grain than pass 1, so the story
+total below is not comparable line-for-line with the pass-1 table; the claim
+totals are unchanged in structure.
+
+| | Snow claim | Roads claim | Story | Total |
+|---|---|---|---|---|
+| Statements checked | 27 | 26 | 54 | **107** |
+| VERIFIED | 27 | 26 | 53 | **106** |
+| IMPRECISE | 0 | 0 | 1 | **1** |
+| UNSUPPORTED | 0 | 0 | 0 | **0** |
+| SKIPPED | 0 | 0 | 0 | **0** |
+
+Both claim files are now clean end to end. All six pass-1 items are repaired at
+the source rather than papered over, and the three that changed a fact rather
+than an attribution — the vote date, the committee's disposition, the 14 routes —
+each moved toward the archive: two of them onto a document that did not exist in
+the registry at pass 1 and now does.
+
+### Verdict
+
+**GATE FAIL, on one sentence.**
+
+Zero unsupported, down from three, and the repairs are the right kind. The
+committee sentence in particular went from an unsourced number and an inverted
+verb to a count I could reproduce bullet by bullet and a sequence the minutes
+state in terms, which is what registering Attachment 5 bought. The vote date is
+now scoped to the record instead of asserting a day two archives contradict, and
+the two registry `establishes` lines no longer claim content their own bytes do
+not hold.
+
+The single remaining imprecision is the opening paragraph's plural attribution,
+and it is mine as much as the drafter's: the earlier wording carried the same
+generalisation and I passed it. It matters for the same reason the rest of this
+audit does — the brief predeclared that it would not claim either comparison is
+common, and the story's first sentence claims it — but it touches no figure and
+no verdict, and the body already says the supported thing.
+
+A third pass need only re-read one sentence.
+
+### Addendum: re-grade at commit `32b3db6`
+
+The story and both claims moved twice more while pass 2 was being written (page
+critique 2, then a one-line trim). Re-graded state: commit `32b3db6`, story
+`md5 3ecc5b2c…`, snow claim `4c4db470…`, roads claim `c9990cd8…`. Nothing in the
+diff touches an archive, a figure or an attribution, and **the opening paragraph
+is unchanged, so the single IMPRECISE above stands as written.** The nine changed
+or new statements all verify:
+
+- **`one_line`** — "spread over four budget years… 1.55 times the printed 2022
+  snow budget, not double, and roads were **authorized** about 19 times as much."
+  1.551 and 19.457. "Authorized" is more accurate than the previous "get": Table
+  8 and Appendix A are approvals, which is the roads claim's own limitation 3.
+- **TL;DR 1** — "No single year gets $100 million: council authorized it across
+  2023 to 2026 ($5.95 million, $26.75 million, $33.65 million, $33.65 million),
+  9 to 4, in its December 2022 budget deliberations." The lead clause is a new
+  assertion and it checks: the largest single year in Appendix A and on the
+  profile sheet is $33.65 million. The date scoping from pass 2 survives.
+- **TL;DR 2** — adds "The comparison sets four years of capital against one year
+  of operating money", which is the snow claim's limitation 2 verbatim in
+  substance.
+- **TL;DR 4** — "'180 times as much' is **wrong**" for "is an arithmetic slip".
+  Same fact, plainer; 1,800 / 100 = 18.
+- **Snow paragraph** — "against the base budget plus those three additions the
+  $100 million is 1.17 times a year of snow", and "which the **reviewers** could
+  not reconcile with the base budget plus the three additions". The dropped
+  "brief's calculation" hedge costs nothing: the new wording describes the
+  arithmetic (64,466 + 2,300 + 14,300 + 4,700 = 85,766) rather than calling the
+  result the City's amended budget, which is the distinction GPT raised in round 2
+  and limitation 3 still carries.
+- **Snow paragraph close** — "the verdict should always be quoted with the budget
+  figure it was measured against" is limitation 1's "Neither side can cite the
+  verdict word without saying which budget it compares against."
+- **Roads paragraph** — "All three **reviewers** reached the same total… and two
+  of them rebuilt it profile by profile." The pass-2 repair is intact; only the
+  house word for a seat changed.
+- **Closing** — "This page does not assess safety, usage, congestion,
+  cost-effectiveness or whether the program should have been approved" is
+  `brief.md`'s own out-of-scope list ("whether $100 million is too much or too
+  little"; "whether bike lanes affect congestion, safety, parking or business";
+  "ridership"; "the value or cost-effectiveness of any spending"). The two open
+  items are unchanged and still match the claims' unknowns.
+- **Both claims' `question` fields** — newly carrying assertions, so newly graded.
+  Snow: "Measured against the City's printed 2022 snow budget; other City figures
+  for 2022 move the answer" is limitation 1. Roads: "The quotation says 180 times;
+  its own figures imply 18, and that is what was tested" is `brief.md`'s "The
+  proposition tests the two dollar figures the councillor gave and the ratio they
+  imply… The brief does not test '180 times' as a separate claim." Both VERIFIED.
+
+`npm run validate` passes at this commit: 6 stories, 10 claims, 1 commitment, 6
+topics, 140 evidence entries.
+
+**Out-of-scope observation, flagged for whoever owns the glossary.** The same
+commits reworded the site-wide `three-model AI panel` entry to say the three
+reviewers work "without seeing one another's work". That describes round 1 only:
+`run.yaml` records each round-2 package as carrying `other-review-*.json`, and
+round 2 is the cross-review round by design. The previous wording ("blind to each
+other") had the same gap. This story does not render that term — it uses only
+`capital profile` and `frozen brief` — so it is outside this audit, but it is
+published copy about the method and is worth a line such as "independently and
+blind in the first round, then cross-reviewing each other's work in the second".
+
+### Counts, final
+
+| | Snow claim | Roads claim | Story | Total |
+|---|---|---|---|---|
+| Statements checked | 28 | 27 | 54 | **109** |
+| VERIFIED | 28 | 27 | 53 | **108** |
+| IMPRECISE | 0 | 0 | 1 | **1** |
+| UNSUPPORTED | 0 | 0 | 0 | **0** |
+| SKIPPED | 0 | 0 | 0 | **0** |
+
+Verdict unchanged: **GATE FAIL, on one sentence** — the opening paragraph's
+plural attribution. Everything else in both claims and the story now verifies
+against the archived bytes or the run artifacts.
