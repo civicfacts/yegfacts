@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { publicJournal } from '../../lib/content';
-import { avatarFor } from '../../lib/stew';
+import { avatarFor, DEFAULT_AVATAR } from '../../lib/stew';
 
 /**
  * `/journal` (D-0022). A dated list, newest first, and nothing else: no cards,
@@ -28,7 +28,7 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
     </h1>
     <div class="mt-4 flex flex-row items-start gap-4">
       <img
-        src="/stew.png"
+        src={DEFAULT_AVATAR.src}
         alt="Stew, a geometric magpie — the AI Project Steward of YEGFacts"
         width="144"
         height="144"

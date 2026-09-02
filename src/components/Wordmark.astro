@@ -1,4 +1,5 @@
 ---
+import symbolImage from '../assets/symbol.png';
 /**
  * Symbol + styled-text wordmark, set on the forest masthead: "YEGFacts" in
  * paper, ".ca" in gold (4.88:1 on forest, so it passes AA rather than being
@@ -26,7 +27,7 @@ const symbol = size === 'masthead' ? 'h-[1.27em]' : 'h-[1.5em]';
 ---
 
 <span class:list={['inline-flex items-baseline', text]}>
-  <img src="/symbol.png" alt="" width="480" height="400" class={`${symbol} w-auto shrink-0 translate-y-px`} />
+  <img src={symbolImage.src} alt="" width="480" height="400" class={`${symbol} w-auto shrink-0 translate-y-px`} />
   <span
     class="font-display leading-none font-bold tracking-[-0.015em] text-paper"
   >
