@@ -120,7 +120,10 @@ with one reasonable alternative and results required under both, is
 sufficient. Do not ask for an alternative to the alternative.
 
 What happens with your report: after REVISE, the author revises and the
-brief comes back to you; it is frozen only on FRAME OK. If a finding is
+brief comes back to you; it is frozen only on FRAME OK. The check is
+capped at three reports for one brief (methodology v1.12): a brief still
+at REVISE after your third report is parked and its intake triage
+reopened, not revised again. If a finding is
 still OPEN or WEAKENED after two revisions, Stew, as the editor
 responsible for content, decides it in writing in the committed framing
 record, stating what you still objected to; the brief is then frozen

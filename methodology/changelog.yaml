@@ -1,6 +1,29 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.12"
+  date: "2026-09-02"
+  scope: intake-triage
+  summary: >
+    A one-page triage decides whether a claim is worth checking before any
+    brief is written; the framing check is capped at three reports.
+  highlights:
+    - "prompts/intake-triage.md: a model other than the editor answers five questions from the intake record, who asks this in their words, how it circulates and what we captured, whether the public record can answer it at the level people ask, which verdicts are possible and whom each would surprise, and what it costs. It ends GO, PARK or NO with a one-sentence reason that can be shown to whoever suggested the claim."
+    - "GO requires a real question, a record that can answer it at a level people care about, and at least two verdicts that would surprise someone. The editor may overrule a NO in writing."
+    - "The framing check is capped at three reports. A brief still at REVISE after three is parked and its triage reopened, instead of being polished until it means nothing."
+    - "Prompted by the founder: the first delegated story spent four briefs, twelve framing checks and four panel rounds on claims nobody asks; two of them are now being re-framed. The first case through triage is the re-brief of that story."
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: Infill teardown prices
+      href: /facts/infill-prices
+  note: >
+    Every check in this method asks whether a claim is fair, precise or
+    computable. None asked whether it was worth the work, so the loop
+    optimised claims into shapes the record could answer and nobody had
+    asked. Triage puts the reader's question first and the cost beside
+    it, and the cap on framing rounds stops the loop from running past
+    the point where the claim is still the claim.
 - version: "1.11"
   date: "2026-09-02"
   scope: framing-check-who-asks-this
