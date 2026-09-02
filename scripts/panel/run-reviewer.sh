@@ -79,7 +79,19 @@ case "$PROVIDER_ARG" in
     # agy takes the prompt as the argument of -p and does not read stdin;
     # `-p --effort` made it treat "--effort" as the prompt. --sandbox and the
     # long print timeout are what the four published runs used.
-    CMD=(agy --effort "$EFFORT" --sandbox --print-timeout 45m -p)
+    #
+    # --dangerously-skip-permissions (methodology v1.14, founder decision
+    # 2026-09-02): in headless mode agy auto-denies any tool that needs a
+    # permission prompt, and this seat reaches for a shell (curl, wget,
+    # python3) whenever a brief names PDF sources its URL tool cannot read;
+    # it then returns nothing, six times running on the active-transportation
+    # brief, including twice with the documents pre-fetched as text. The flag
+    # approves its tool calls; --sandbox keeps the terminal restrictions. The
+    # other two seats already run with a shell (Claude's Bash tool, Codex's
+    # read-only sandbox), so this levels the seats rather than loosening one.
+    # Isolation still comes from the scratch directory, which holds only the
+    # package.
+    CMD=(agy --effort "$EFFORT" --sandbox --dangerously-skip-permissions --print-timeout 45m -p)
     ;;
   *)
     echo "unknown provider: $PROVIDER_ARG" >&2; usage
