@@ -101,3 +101,29 @@ No seat moved its verdict; all three recorded an empty `verdict_changes`
 and stayed at Not established. Confidence moved without changing any
 verdict: Claude Moderate to High, GPT Moderate to High, Gemini High to
 Moderate. The canonical finding rests on round 1 and is unaffected.
+
+## Registry corrections at drafting (magnitude re-run), 2026-09-02
+
+Raised by the Gemini seat of faithfulness check 1 and adopted by the
+editor. Only the `establishes` text changed in each entry; the archived
+bytes, hashes and every other field are untouched.
+
+- `evidence/registry/YF-EV-0049.yaml` (2024 Monitoring Market Housing
+  Affordability Report). The story cites this entry as a second holder of
+  the $90,000 median household income, and the `establishes` line covered
+  only the benchmark affordability result. The archived PDF states "The
+  2021 median household income was $90,000", so the line now records that
+  the report states it. The story sentence stands.
+- `evidence/registry/YF-EV-0055.yaml` (Jacob Dawang, infill property tax
+  uplift). The claim and the story carry 1,492 permits and 1,182 lots
+  with both values, and the `establishes` line carried only 1,242 lots
+  and 95 percent. The archived bytes contain both 1492 and 1182, so the
+  line now carries all four figures. The claim and the story keep theirs.
+
+Not a registry correction, recorded here because the same check raised
+it: the $4,532 Alberta annual utilities figure was attributed in
+`scripts/calcs/infill-prices.ts` to YF-EV-0107, whose archived table view
+carries the Canada geography only. It is the affordability run's own read
+of Statistics Canada table 11-10-0222-01 and is now sourced to
+`reviews/infill-prices/2026-09-01-rerun2/round1/claude.json`, with the
+story saying so.

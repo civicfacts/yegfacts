@@ -52,9 +52,13 @@ export const figures = {
   netNewUnitsRedevelopingArea2023: 2_931,
 
   /**
-   * YF-EV-0107 — StatCan table 11-10-0222-01, Alberta, water, fuel and
-   * electricity for the principal accommodation, 2023 reference year (CAD/year).
-   * A provincial average, not any dwelling's bill.
+   * Run output: the affordability run's own read of StatCan table
+   * 11-10-0222-01, Alberta, water, fuel and electricity for the principal
+   * accommodation, 2023 reference year (CAD/year), from
+   * reviews/infill-prices/2026-09-01-rerun2/round1/claude.json. NOT carried by
+   * YF-EV-0107: the archived table view holds the Canada geography only, so the
+   * Alberta average is the seat's read of the table rather than a figure in the
+   * archived bytes. A provincial average, not any dwelling's bill.
    */
   utilitiesAlbertaAnnualCAD: 4_532,
   /**
@@ -97,9 +101,11 @@ export const figures = {
   dawangLotsWithBothValues: 1_182,
 
   /**
-   * YF-EV-0044 — one seat's candidate demolition frame from the general
-   * building permit dataset, built from job-description text. Candidate
-   * records, not the brief's validated frame.
+   * Run output (2026-09-02, seat Claude Fable 5.1): one seat's candidate
+   * demolition frame, read out of the general building permit dataset's
+   * job-description text. These are the seat's query results: neither count is
+   * carried by YF-EV-0044 or its archived bytes. Candidate records, not the
+   * brief's validated frame.
    */
   candidateDemolitionPermits: 5_672,
   candidateDemolitionPermitsWithLegal: 5_668,
@@ -131,6 +137,15 @@ export const utilityAllowanceMonthlyCAD =
 /** The 30 percent line for the declared household, per month. */
 export const shelterCostLimitMonthlyCAD =
   (figures.declaredMedianHouseholdIncomeCAD / 12) * figures.shelterCostThreshold;
+
+/**
+ * Probe lots found on the 2018 roll that failed an exact legal-description
+ * match on the 2025 roll. Three of them were recovered by address as
+ * subdivided pairs; the rest were not run down, so this is a linkage risk and
+ * not a measured bias.
+ */
+export const probeUnmatchedOn2025Roll =
+  figures.probeMatchedOn2018Roll - figures.probeMatchedOn2025Roll;
 
 /**
  * Total dwellings demolished in the redeveloping area in 2023: the four
@@ -177,6 +192,7 @@ export const medianComponentSumCAD =
 export const calculations = {
   utilityAllowanceMonthlyCAD,
   shelterCostLimitMonthlyCAD,
+  probeUnmatchedOn2025Roll,
   demolishedDwellings2023,
   affordabilityClassifiedSharePct,
   affordabilityDenominator,
