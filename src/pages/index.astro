@@ -9,7 +9,6 @@ import ReportBox from '../components/ReportBox.astro';
 import {
   claimTopics,
   orderedTopics,
-  publicStories,
   publishedClaims,
   publishedStories,
 } from '../lib/content';
@@ -31,7 +30,6 @@ const rows = await publishedClaims();
 const claimCount = rows.length;
 const storyCount = stories.length;
 /** The /stories link counts what /stories lists, which includes a story still in review. */
-const publicStoryCount = (await publicStories()).length;
 
 /** The most recent claims, in the record's own order. */
 const recent = rows.slice(0, 8);
@@ -118,9 +116,9 @@ const slateTitle = 'font-display text-[1.125rem] leading-snug font-semibold';
 <Base title={SITE.name} description={SITE.tagline} rail={false}>
   {/*
     The deck sits in the header row beside the wordmark (from `lg`; under it
-    below that), and the search and helper line extend the masthead. They are
-    how the site introduces itself, and on the forest ground they read as one
-    block instead of three stacked headers.
+    below that), and the search extends the masthead. They are how the site
+    introduces itself, and on the forest ground they read as one block
+    instead of two stacked headers.
   */}
   <h1
     slot="deck"
@@ -129,14 +127,14 @@ const slateTitle = 'font-display text-[1.125rem] leading-snug font-semibold';
     YEGFacts checks what people say about Edmonton's city government against the public record.
   </h1>
   <Fragment slot="masthead">
-    <div class="pb-9">
+    <div class="pb-8">
       <form action="/search" method="get" class="mt-4" role="search">
         <div class="flex flex-wrap gap-3">
           <input
             id="home-search"
             type="search"
             name="q"
-            placeholder="Did Edmonton lose $82M on electric buses?"
+            placeholder='Search claims, e.g. "Did Edmonton lose $82M on electric buses?"'
             aria-label="Search checked claims"
             autocomplete="off"
             class="h-[50px] min-w-0 flex-1 basis-72 appearance-none rounded-none border-0 bg-white px-3.5 text-base text-ink placeholder:text-muted"
@@ -149,12 +147,6 @@ const slateTitle = 'font-display text-[1.125rem] leading-snug font-semibold';
           </button>
         </div>
       </form>
-      <p class="mt-3 text-[0.9375rem] text-paper">
-        {claimCount} {claimCount === 1 ? 'claim' : 'claims'} checked in{' '}
-        <a href="/stories" class="underline underline-offset-[0.16em]">{publicStoryCount} {publicStoryCount === 1 ? 'story' : 'stories'}</a>.
-        Browse by topic below, or filter by topic and finding on the{' '}
-        <a href="/search" class="underline underline-offset-[0.16em]">search page</a>.
-      </p>
     </div>
   </Fragment>
 

@@ -8,10 +8,9 @@
  * page carries, where the mark identifies the site rather than announcing it.
  *
  * The type size is set on the outer span so the dome and the gap scale in em
- * with the letters. Newsreader's bold caps sit about 0.11em above the centre
- * of a leading-none box (ascent 43, descent 15 at 58px), so a flex-centred
- * dome lands high against the letters; the text is nudged down by that much
- * to put the dome level with the caps.
+ * with the letters. The row aligns on the baseline: an image's baseline is its
+ * bottom edge, so the letters stand on the base of the dome rather than
+ * floating against its middle.
  */
 interface Props {
   size?: 'compact' | 'masthead';
@@ -26,10 +25,10 @@ const text =
 const symbol = size === 'masthead' ? 'h-[1.27em]' : 'h-[1.5em]';
 ---
 
-<span class:list={['inline-flex items-center', text]}>
+<span class:list={['inline-flex items-baseline', text]}>
   <img src="/symbol.png" alt="" width="480" height="400" class={`${symbol} w-auto shrink-0`} />
   <span
-    class="translate-y-[0.11em] font-display leading-none font-bold tracking-[-0.015em] text-paper"
+    class="font-display leading-none font-bold tracking-[-0.015em] text-paper"
   >
     YEGFacts<span class="text-gold">.ca</span>
   </span>
