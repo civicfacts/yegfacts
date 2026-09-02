@@ -1,0 +1,334 @@
+{
+  "reviewer": {
+    "provider": "openai",
+    "model_self_reported": "GPT-5",
+    "runner_model": "gpt-5.6-sol",
+    "runner_seat": "GPT-5.6 Sol",
+    "runner_effort": "high"
+  },
+  "story": "active-transportation",
+  "round": 2,
+  "round2_notes": {
+    "evidence_i_missed": [
+      "For Claim A, the cross-review surfaced two 2022 council-approved additions beyond the July 4 top-up: a $2.3 million carry-forward approved March 14 and a $14.3 million Spring Supplemental Operating Budget Adjustment approved April 19. These materially change Alternative A.",
+      "The December 31, 2022 operating update reports an adjusted Snow and Ice Control expense budget of $79.474 million and actual expense of $97.571 million. This provides an important reconciliation check, although the adjusted budget does not equal the printed cell plus the three identified council additions.",
+      "The December 31, 2025 reports provide later evidence than the September 2025 interim report: CM-20-0330 cumulative actuals were $39.984 million, while Snow and Ice Control expense was budgeted at $67.554 million and recorded at $76.648 million.",
+      "The Spring 2025 capital adjustment transferred $0.430 million from CM-20-0330, reducing its current approved budget to $99.570 million without changing the original December 2022 approval used for either verdict.",
+      "For Claim B, the other review supplied the complete profile-by-profile primary-boundary membership, the $2.025848 billion widest total, and the sensitivity result obtained by removing the four Yellowhead Trail profiles."
+    ],
+    "errors_in_other_reviews": [
+      "Gemini's Alternative A counts only the July 4, 2022 $4.7 million increase. It omits the March 14 $2.3 million carry-forward and the April 19 $14.3 million supplemental adjustment identified in City records, so its $69.166 million denominator is not the brief's required cell-plus-every-council-amendment calculation.",
+      "Gemini says significantly different actual snow-clearing expenditure could change the Claim A verdict. That confuses outcome with authorization: the brief fixes the verdict denominator to the approved 2022 budget cell, while actual expenditure is contextual and cannot change that verdict.",
+      "Gemini classifies the adopted capital and operating budget documents as legal-audited. They are policy documents; council minutes and enacted adjustments are the legal-audited records.",
+      "Claude uses a reported 2025 annual snow budget of about $67 million as a placeholder for the unlocated 2026 approved program budget. A prior-year figure cannot establish the 2026 denominator, so the resulting four-year ratio of about 0.377 should be labelled an illustration, not a completed required calculation.",
+      "Claude presents $85.766 million as Alternative A while also reporting the City's year-end adjusted 2022 expense budget as $79.474 million. The addition is arithmetically correct under the brief's mechanical cell-plus-council-amendments rule, but calling it the definitive amended budget requires reconciling the $6.292 million difference or identifying intervening transfers.",
+      "Claude reports one set of Snow and Ice Control actual expenses for 2023-2025—$54.917 million, $72.086 million and $76.648 million—without reconciling it to the separate City program-reporting series in the evidence registry—$51.750 million, $64.749 million and $66.588 million. The two series appear to have different accounting scope and should not be treated as interchangeable.",
+      "Neither other review should describe Table 8's $1.794 billion line as a roads total. Its published name is Active Pathways and Roads Service, and it includes CM-20-0330 and other active-pathway funding. Both reviews generally acknowledge this, but some suggested wording blurs the distinction.",
+      "The primary Claim B total is reproducible under the brief's prescribed boundary, but it is not a City-published roads-only total: it combines Roads and Neighbourhood Renewal profile labels, three uncategorized bridges, and profiles that Table 8 presents under separate transformational or safety groupings. Describing it without that construction overstates what the City directly publishes."
+    ],
+    "verdict_changes": []
+  },
+  "claims": [
+    {
+      "id": "at-100m-vs-snow",
+      "proposition_evaluated": "The $100 million approved in December 2022 for capital profile CM-20-0330 over 2023-2026 is almost double the City's annual snow-clearing budget, using the Approved 2019-2022 Operating Budget's printed 2022 Snow and Ice Control Expenditure & Transfers cell as the primary denominator.",
+      "interpretation_notes": "PRIMARY: The capital profile was approved at $100.000 million, allocated $5.950 million in 2023, $26.750 million in 2024, $33.650 million in 2025 and $33.650 million in 2026. The operating-budget table is printed in thousands and gives 2022 Snow and Ice Control Expenditure & Transfers of $64.466 million. The ratio is 100/64.466 = 1.551, producing Partially supported under both the primary cutoffs and the alternative cutoffs. The failing element is 'almost double.' ALTERNATIVE A: The identified council additions are $2.3 million approved March 14, $14.3 million approved April 19 and $4.7 million approved July 4. Applying the brief's mechanical rule gives $64.466 million + $21.3 million = $85.766 million and a ratio of 1.166, Contradicted under both cutoff sets. The City's year-end table instead reports an adjusted expense budget of $79.474 million; 100/79.474 = 1.258, Contradicted under the primary cutoffs and Partially supported under the alternative cutoffs. The $6.292 million discrepancy is unresolved, so the additive figure should not be represented as a reconciled year-end budget. ALTERNATIVE B: The named 2023 Snow and Ice Control program-summary cell does not appear in the 2023-2026 Operating Budget and Plans. A City fact sheet reports $60.9 million, while the 2023 year-end financial update reports an adjusted expense budget of $63.574 million. Their ratios are 1.642 and 1.573 respectively, both Partially supported under both cutoff sets, but neither is the exact named adopted cell. CONTEXT: The printed 2022 Total Net Operating Requirement is $63.653 million, giving 1.571. The 2022 actual expense of $97.571 million gives 1.025, but actuals do not carry the verdict. LIKE FOR LIKE: The approved 2023 profile allocation was 5.950/60.9 = 0.098 using the fact-sheet snow figure, or 5.950/63.574 = 0.094 using the year-end adjusted budget. A defensible four-year approved-budget ratio cannot be completed without a sourced 2026 program budget. ACTUALS: CM-20-0330 cumulative actuals were $0.807 million at 2023 year-end, $10.496 million at 2024 year-end and $39.984 million at 2025 year-end, producing annual amounts of $0.807 million, $9.689 million and $29.488 million. Against the operating financial updates' snow actuals of $54.917 million, $72.086 million and $76.648 million, the annual ratios are 0.015, 0.134 and 0.385. A separate City program-reporting series gives lower snow actuals and must be reconciled before publication. Total profile spending through 2025 was $39.984 million; the original approved average was $25.000 million per year, and the 2023-2025 actual average was $13.328 million per year. A June 10, 2025 transfer reduced the current profile budget by $0.430 million to $99.570 million. No constant-dollar restatement was applied.",
+      "verdict": "Partially supported",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Appendix A lists CM-20-0330 at 5,950, 26,750, 33,650 and 33,650 for 2023-2026, totalling 100,000, with figures printed in thousands.",
+          "source_title": "City of Edmonton, 2023-2026 Capital Budget",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-2026CapitalBudget.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-12",
+          "source_type": "policy-document",
+          "establishes": "The original approved numerator, its four-year period and annual allocation.",
+          "quote": "CM-20-0330 Active Transportation Implementation Acceleration - Approach 3 5,950 26,750 33,650 33,650 100,000 - Approved",
+          "strength": "strong"
+        },
+        {
+          "finding": "The Snow and Ice Control program summary reports 2022 Expenditure & Transfers of $64.466 million and Total Net Operating Requirement of $63.653 million, with figures printed in thousands.",
+          "source_title": "City of Edmonton, Approved 2019-2022 Operating Budget",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/assets/APPROVED_2019-2022_OPERATING_BUDGET.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2018-12",
+          "source_type": "policy-document",
+          "establishes": "The fixed primary denominator and contextual net figure on printed page 212.",
+          "quote": "Expenditure & Transfers 64,466; Total Net Operating Requirement 63,653",
+          "strength": "strong"
+        },
+        {
+          "finding": "Council's budget minutes record approval of $100 million for CM-20-0330, allocated across 2023-2026 and funded by tax-supported debt.",
+          "source_title": "City Council budget deliberations, November 30 to December 16, 2022",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Id=215a3a89-60c7-4eff-8533-cf94079fabd2&Agenda=PostMinutes&lang=English",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-12-16",
+          "source_type": "legal-audited",
+          "establishes": "Council authorization of the numerator.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The Spring 2022 adjustment records $16.6 million for the enhanced snow-clearing pilot, comprising a previously approved $2.3 million carry-forward and a further $14.3 million expense adjustment approved April 19.",
+          "source_title": "Spring 2022 Supplemental Operating Budget Adjustment, FCS01143",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=217869",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-04-19",
+          "source_type": "legal-audited",
+          "establishes": "Two additions required for Alternative A.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Council approved a one-time $4.7 million increase to Parks and Roads Services for the 2022 portion of the Snow and Ice Control program.",
+          "source_title": "City Council minutes, July 4, 2022, item 6.6",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=af273061-b1c9-4143-a0c5-a56b48d415a4&Item=53&Tab=attachments&lang=English",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-07-04",
+          "source_type": "legal-audited",
+          "establishes": "The third identified council addition required for Alternative A.",
+          "quote": "That the Parks and Roads Services Branch budget be increased by $4.7 million, from the Financial Stabilization Reserve, on a one time basis to fund the Snow and Ice Control program for the 2022 portion of the upcoming winter season.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The 2022 year-end supplemental table reports a Snow and Ice Control expense budget of $79.474 million and actual expense of $97.571 million.",
+          "source_title": "Operating Financial Update - December 31, 2022, FCS01656 Attachment 1",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=178634",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2023-03-14",
+          "source_type": "observed-data",
+          "establishes": "An official reconciliation check and the required 2022 actual context.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The 2023-2026 Operating Budget prints the enhanced-service package but does not contain the Snow and Ice Control program-summary cell named by Alternative B.",
+          "source_title": "City of Edmonton, 2023-2026 Operating Budget and Plans",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-2026OperatingBudget.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-12",
+          "source_type": "policy-document",
+          "establishes": "Why the exact Alternative B denominator cannot be extracted from the specified document.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The 2023 year-end update reports a Snow and Ice Control expense budget of $63.574 million and actual expense of $54.917 million.",
+          "source_title": "Operating Financial Update - December 31, 2023, FCS02229 Attachment 1",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=215334",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2024-03-12",
+          "source_type": "observed-data",
+          "establishes": "A City-published adjusted 2023 budget and actual, not the missing adopted program cell.",
+          "strength": "strong"
+        },
+        {
+          "finding": "At December 31, 2025, CM-20-0330 had a current approved budget of $99.570 million and cumulative actual expenditure of $39.984 million.",
+          "source_title": "Capital Financial Update - December 31, 2025, FCS03313 Attachment 2",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=291480",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-03-17",
+          "source_type": "observed-data",
+          "establishes": "The latest published profile budget and actual expenditure before the freeze date, while preserving the original approval for the verdict.",
+          "strength": "strong"
+        }
+      ],
+      "limitations": [
+        "The verdict is definition-sensitive: Partially supported on the fixed printed cell, but Contradicted under the brief's full Alternative A calculation.",
+        "The $85.766 million Alternative A calculation does not reconcile to the City's $79.474 million year-end adjusted expense budget; intervening reallocations or accounting-scope differences remain unidentified.",
+        "The exact adopted 2023 program-level cell required by Alternative B is absent from the specified document.",
+        "A four-year approved-budget comparison cannot be completed honestly without a sourced 2026 Snow and Ice Control program budget.",
+        "Two City sources provide different Snow and Ice Control actual-expenditure series for 2023-2025, requiring scope reconciliation.",
+        "Approved capital, adjusted budget and actual expenditure are distinct measures; only the original approval and fixed primary denominator carry the verdict."
+      ],
+      "unknowns": [
+        "The exact reconciliation from the printed $64.466 million 2022 cell to the $79.474 million year-end adjusted expense budget.",
+        "The exact Snow and Ice Control program budget approved for 2023 on December 16, 2022.",
+        "The approved 2026 Snow and Ice Control program budget.",
+        "The accounting-scope difference between the operating financial updates' snow actuals and the lower program-reporting series."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A City reconciliation of every 2022 Snow and Ice Control budget adjustment from the printed cell to the year-end adjusted budget.",
+          "likely_holder": "City of Edmonton Financial and Corporate Services",
+          "importance": "high"
+        },
+        {
+          "description": "Program-level Snow and Ice Control budgets for 2023 and 2026 as approved, with the December 2022 and subsequent council amendments incorporated.",
+          "likely_holder": "City of Edmonton Financial and Corporate Services",
+          "importance": "moderate"
+        },
+        {
+          "description": "Definitions reconciling the two City-reported Snow and Ice Control actual-expenditure series.",
+          "likely_holder": "City of Edmonton Financial and Corporate Services and Parks and Roads Services",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "Primary: 100.000 / 64.466 = 1.551, Partially supported under both cutoff sets.",
+        "Alternative A: 64.466 + 2.300 + 14.300 + 4.700 = 85.766; 100.000 / 85.766 = 1.166, Contradicted under both cutoff sets.",
+        "Year-end adjusted check: 100.000 / 79.474 = 1.258, Contradicted under primary cutoffs and Partially supported under alternative cutoffs.",
+        "Alternative B proxies: 100.000 / 60.900 = 1.642 and 100.000 / 63.574 = 1.573, both Partially supported under both cutoff sets.",
+        "Net context: 100.000 / 63.653 = 1.571. Actual context: 100.000 / 97.571 = 1.025.",
+        "2023 like-for-like: 5.950 / 60.900 = 0.098, or 5.950 / 63.574 = 0.094.",
+        "CM-20-0330 annual actuals: 0.807; 10.496 - 0.807 = 9.689; 39.984 - 10.496 = 29.488 million.",
+        "Using the operating-update snow actuals: 0.807/54.917 = 0.015; 9.689/72.086 = 0.134; 29.488/76.648 = 0.385.",
+        "Approved profile average: 100.000/4 = 25.000 million per year. Actual 2023-2025 average: 39.984/3 = 13.328 million per year."
+      ],
+      "what_would_change_my_verdict": [
+        "A correction to the fixed primary budget cell that moved the denominator below $55.556 million or above $66.667 million.",
+        "A revised brief making the reconciled in-year amended budget the primary denominator; on the presently available figures that would change the verdict to Contradicted.",
+        "Evidence that the quoted holder explicitly used a different published annual snow-clearing denominator."
+      ],
+      "suggested_one_line": "The $100 million four-year bike program was about 1.55 times Edmonton's printed $64.466 million 2022 snow budget, so it was substantially larger but not almost double; including the identified 2022 top-ups reduces the ratio to about 1.17."
+    },
+    {
+      "id": "at-100m-vs-roads",
+      "proposition_evaluated": "In Edmonton's adopted 2023-2026 capital budget, the profiles inside the brief's prescribed roads boundary total about $1.8 billion or more, approximately eighteen times the $100 million approved for CM-20-0330.",
+      "interpretation_notes": "PRIMARY: The prescribed sum is $1,945.703 million: $1,116.532 million from profiles labelled Roads, $722.289 million from profiles labelled Neighbourhood Renewal and $106.882 million from the three specified bridge profiles. The ratio is 19.457, Supported under both cutoff sets. The profiles and 2023-2026 amounts in $000s are: Roads—18-66-6503 94,202; 19-22-9006 119,200 plus 41,821; 21-20-9301 54,634; 21-20-9302 54,597; 21-40-9031 12; 21-40-9032 10; 22-22-9700 10,056; 22-22-9701 5,094; CM-20-2020 9,007; CM-22-0000 64,843; CM-24-0000 209,836; CM-26-0000 9,308; CM-66-2194 720; CM-66-2525 16,000; CM-66-2585 25,875; CM-66-2596 17,148; CM-99-0060 7,914; CM-99-9600 376,255. Neighbourhood Renewal—20-40-9017 4,658; 20-40-9019 721; 21-40-9023 14,652; 21-40-9024 22,047; 21-40-9025 9,780; 21-40-9026 2,100; 21-40-9027 464; 22-40-9028 17,130; 22-40-9029 23,710; CM-25-0000 545,717; CM-27-0000 81,310. Added bridges—23-24-0300 97,000; 21-24-9301 9,832; 21-24-9302 50. Appendix A prints these amounts in thousands on pages 101-104; the detailed sheets match the editor's stated category reading. REQUIRED ALTERNATIVE: Table 8 prints Active Pathways and Roads Service at $1,794.0 million, a ratio of 17.94 and Supported under both cutoff sets. This is a combined allocation containing CM-20-0330 and other active-pathway funding, not a roads-only total. WIDEST: Adding the six prescribed streetscape and pedestrian-realm profiles totalling $80.145 million gives $2,025.848 million, or 20.258 times, Supported. NARROWEST: Roads-labelled profiles alone total $1,116.532 million, or 11.165 times, Partially supported under both cutoff sets. SENSITIVITY: The four Yellowhead profiles total $493.400 million and are labelled Roads on their sheets, although Table 8 presents Yellowhead Trail Freeway Conversion separately. Removing them from the primary gives $1,452.303 million, or 14.523 times, Partially supported under both cutoff sets. This does not change the result under the brief's predeclared primary membership. THE QUOTATION: Global News reports '180 times,' but $1.8 billion divided by $100 million is 18. The normalized proposition correctly tests the two dollar figures and their implied ratio; the erroneous 180 is not silently adopted. AMENDMENTS AND ACTUALS: The original $100 million profile was reduced by $0.430 million in June 2025 and stood at $99.570 million at December 31, 2025, with cumulative actual expenditure of $39.984 million. Published adjustments do not supply a complete roads-only as-amended total, and the available significant-project tables do not establish annual actual expenditure for every profile in the primary boundary. SHARES: CM-20-0330 was 1.26% of the $7.91 billion adopted capital budget, 4.43% of the $2.256 billion Movement of People and Goods total, 5.57% of Active Pathways and Roads Service, and about 1.95% of the $5.1243 billion transportation grouping formed by Movement of People and Goods, LRT Expansion and Yellowhead Trail Freeway Conversion.",
+      "verdict": "Supported",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Summing the adopted 2023-2026 amounts for the brief's prescribed Roads, Neighbourhood Renewal and bridge profiles gives $1,945.703 million.",
+          "source_title": "City of Edmonton, 2023-2026 Capital Budget, Appendix A and capital profile sheets",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-2026CapitalBudget.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-12",
+          "source_type": "policy-document",
+          "establishes": "The primary-boundary total of $1.945703 billion and its profile membership.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Table 8 reports $622.8 million in growth and $1,171.2 million in renewal for Active Pathways and Roads Service, totalling $1,794.0 million.",
+          "source_title": "City of Edmonton, 2023-2026 Capital Budget, Table 8",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-2026CapitalBudget.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-12",
+          "source_type": "policy-document",
+          "establishes": "The required combined-service alternative and its exact published label.",
+          "quote": "Active Pathways and Roads Service 622.8 1,171.2 1,794.0",
+          "strength": "strong"
+        },
+        {
+          "finding": "Council approved CM-20-0330 at $100 million over 2023-2026.",
+          "source_title": "City Council budget deliberations, November 30 to December 16, 2022",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Id=215a3a89-60c7-4eff-8533-cf94079fabd2&Agenda=PostMinutes&lang=English",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-12-16",
+          "source_type": "legal-audited",
+          "establishes": "The comparison denominator as originally approved.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The narrowest boundary, consisting only of profiles whose sheets carry the Roads service-category label, totals $1,116.532 million, or 11.165 times CM-20-0330.",
+          "source_title": "City of Edmonton, 2023-2026 Capital Budget, Appendix A and capital profile sheets",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-2026CapitalBudget.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-12",
+          "source_type": "policy-document",
+          "establishes": "A reasonable narrower reading is only Partially supported.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Table 8's closest published figure to $1.8 billion is explicitly a combined Active Pathways and Roads Service allocation, while Yellowhead Trail Freeway Conversion is separately reported at $493.4 million.",
+          "source_title": "City of Edmonton, 2023-2026 Capital Budget, Table 8",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-2026CapitalBudget.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-12",
+          "source_type": "policy-document",
+          "establishes": "The primary total is a constructed profile sum that crosses the City's published service-level presentation.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Global News quotes Councillor Janz saying that $1.8 billion is 180 times $100 million.",
+          "source_title": "Global News, City council hearing mixed reaction on $100 million to Edmonton bike plan",
+          "source_url": "https://globalnews.ca/news/9343735/edmonton-bike-plan-100-million-reaction/",
+          "source_publisher": "Global News",
+          "source_date": "2022-12-12",
+          "source_type": "media",
+          "establishes": "The wording of the circulating claim and its factor-of-ten arithmetic error.",
+          "quote": "Only $100 million is going to bike lanes but $1.8 billion, 180 times as much, is going towards roads.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The Spring 2025 adjustment transferred $0.430 million from CM-20-0330 to the Dunluce Neighbourhood and Alley Renewal profile.",
+          "source_title": "Spring 2025 Supplemental Capital Budget Adjustment, FCS02852 Attachment 4",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=261605",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025-06-10",
+          "source_type": "legal-audited",
+          "establishes": "The identified amendment reducing CM-20-0330 to $99.570 million after the original approval.",
+          "strength": "strong"
+        },
+        {
+          "finding": "At December 31, 2025, CM-20-0330 had cumulative actual expenditure of $39.984 million against a current approved budget of $99.570 million.",
+          "source_title": "Capital Financial Update - December 31, 2025, FCS03313 Attachment 2",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=291480",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-03-17",
+          "source_type": "observed-data",
+          "establishes": "That authorization and spending are different; actual expenditure does not alter the approval-based verdict.",
+          "strength": "strong"
+        }
+      ],
+      "limitations": [
+        "The primary total is imposed by the brief and reproducible from profile labels, but the City does not print it as a single roads-only total.",
+        "Neighbourhood Renewal and bridge profiles contain sidewalks, alleys, structures or other non-roadway components, and the brief requires each mixed profile to be counted in full.",
+        "The $1.794 billion Table 8 alternative includes active pathways and cannot be relabelled as roads spending.",
+        "The verdict is boundary-sensitive: Supported under the prescribed primary, combined-service and widest readings, but Partially supported under the narrowest reading and when Yellowhead is removed from the primary.",
+        "A complete roads-only total as amended through September 2, 2026 cannot be calculated from the supplied evidence.",
+        "Annual actual road-capital expenditure for every included profile is not published in the supplied records.",
+        "The reported quotation's '180 times' is arithmetically false even though the normalized eighteen-times proposition is supported."
+      ],
+      "unknowns": [
+        "Whether Councillor Janz derived the $1.8 billion figure from Table 8's combined Active Pathways and Roads Service line.",
+        "The roadway-only shares of mixed Neighbourhood Renewal and bridge profiles.",
+        "The fully reconciled as-amended total for the prescribed primary profile set.",
+        "Annual actual expenditure for the complete prescribed roads profile set in 2023, 2024 and 2025.",
+        "Whether the councillor said 18 or 180 in the meeting video rather than the published quotation."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A City-published separation of Active Pathways and Roads Service into roadway and active-pathway components.",
+          "likely_holder": "City of Edmonton Financial and Corporate Services and Integrated Infrastructure Services",
+          "importance": "high"
+        },
+        {
+          "description": "A transaction-level reconciliation of amendments to every profile in the prescribed primary boundary.",
+          "likely_holder": "City of Edmonton Financial and Corporate Services",
+          "importance": "moderate"
+        },
+        {
+          "description": "Annual actual expenditure for every profile in the prescribed roads boundary for 2023-2025.",
+          "likely_holder": "City of Edmonton Capital Financial Reporting",
+          "importance": "moderate"
+        },
+        {
+          "description": "Council video or transcript confirming whether the spoken ratio was 18 or 180.",
+          "likely_holder": "City of Edmonton Office of the City Clerk",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "Primary: 1,116.532 + 722.289 + 106.882 = 1,945.703 million; 1,945.703/100 = 19.457, Supported under both cutoff sets.",
+        "Required alternative: 1,794.0/100 = 17.94, Supported under both cutoff sets.",
+        "Widest: 1,945.703 + 80.145 = 2,025.848 million; 2,025.848/100 = 20.258, Supported.",
+        "Narrowest: 1,116.532/100 = 11.165, Partially supported under both cutoff sets.",
+        "Yellowhead sensitivity: 1,945.703 - 493.400 = 1,452.303 million; ratio 14.523, Partially supported under both cutoff sets.",
+        "Quoted ratio: 1,800/100 = 18, not 180.",
+        "Shares: 100/7,910 = 1.26%; 100/2,256.0 = 4.43%; 100/1,794.0 = 5.57%; 100/5,124.3 = 1.95%.",
+        "CM-20-0330 annual actuals: 0.807; 10.496 - 0.807 = 9.689; 39.984 - 10.496 = 29.488 million. Total through 2025: 39.984 million."
+      ],
+      "what_would_change_my_verdict": [
+        "Evidence that one or more profile labels or adopted amounts in the prescribed primary membership were transcribed incorrectly enough to reduce the total below $1.5 billion.",
+        "A revised primary boundary following Table 8's presentation and excluding the separately presented Yellowhead profiles; the resulting $1.452 billion would be Partially supported.",
+        "A City-published roads-only allocation below $1.5 billion that supersedes the brief's constructed profile boundary."
+      ],
+      "suggested_one_line": "Under the brief's profile-based boundary, Edmonton approved about $1.946 billion for roads, neighbourhood renewal and specified bridges—19.5 times the $100 million bike program—while the City's closest printed line is the combined $1.794 billion Active Pathways and Roads Service."
+    }
+  ]
+}
