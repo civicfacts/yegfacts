@@ -53,6 +53,11 @@ placement). Stew kept the contested marker rather than dropping the
 line entirely: a Split verdict on the front page must not look as firm
 as a unanimous one. Round 4 approved it with no findings.
 
+After round 4 the founder asked for the finding column to be right-aligned
+on both pages ("then fine to merge"); applied to the stories table and to
+FindingsBoard's badge, marker and date column without a further round, as
+an alignment class only.
+
 ## Also checked by Stew before the critique
 
 - A four-angle simplification pass on the diff (reuse, simplification,
