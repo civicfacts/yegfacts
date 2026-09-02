@@ -1,0 +1,69 @@
+{
+  "story": "infill-prices",
+  "run": "2026-09-02-magnitude",
+  "methodology_version": "1.10",
+  "basis": "round1",
+  "round2_documented": true,
+  "generated_at": "2026-09-02T15:40:15.565Z",
+  "claims": [
+    {
+      "id": "ip-teardown-price-gap",
+      "finding": "Not established",
+      "panel_agreement": "Unanimous",
+      "rationale": "Unanimous.",
+      "reviewers": [
+        {
+          "provider": "claude",
+          "model_self_reported": "claude-fable-5-1",
+          "verdict": "Not established",
+          "confidence": "Moderate",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "No published source carries the matched, unit-level ratio series the proposition is stated in, and I did not build the full population series. I tested whether the public record can support it. It can, with work: Edmonton open data holds house demolition permits with legal descriptions (5,672 single-detached-house demolition permits 2016-2025 in the General Building Permits dataset, 5,668 with a legal description), and annual assessed values by legal description for rolls 2012-2025. Two pipeline findings matter for anyone running it. First, the permit dataset's classification changed in 2019: demolitions before 2019 sit under job category 'Other Miscellaneous Building' with work type '(99) Demolition', and from 2019 they sit under 'Home Improvement' identified only by a job description beginning 'To demolish', and some of those rows carry building type 'Single Detached House' while describing a garage-only demolition, so the frame must be built from the job description text, not the category. Second, exact legal-description matching finds the demolished house on the prior roll but loses subdivided replacements: in a 40-permit probe of January 2019 house demolitions, 35 matched the 2018 roll by exact legal description but only 17 matched the 2025 roll, and address lookup on three of the unmatched lots found each on the 2025 roll as two separately titled dwellings under new plan numbers (for example Plan 2938HW Blk 13 Lot 17 became Plan 1821663 Lots 17A and 17B). A legal-description-only join would therefore drop most two-dwelling skinny-lot redevelopments, which are the product the circulating claim most often describes, and bias any result toward single large replacement houses. Address or coordinate fallback recovers them. The cases I did match are reported below as cases only, in nominal dollars from the 2025 roll rather than the first full roll after completion, and in an approximate constant-dollar form flagged as arithmetic; they cannot supply a median or a share. On the closest existing analysis (Jacob Dawang, August 2026), the 2024 RS-zone cohort shows large per-lot uplift but a median net uplift of only $0.2M per home added for 5+ unit rowhomes, which is a different measure (uplift, not ratio; 2024 and 2026 rolls; mature-neighbourhood RS zone only) and enters as context. Both predeclared thresholds are undetermined because the verdict series does not exist in the public record as consulted, so the predeclared mapping gives Not established. Lot-level sensitivities, the mature-neighbourhood subset, the sale-to-sale series, the tenure and rent series, and the by-year distributions are all unreported for the same reason."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.1 Pro (High)",
+          "verdict": "Not established",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "The public record provides historical property assessments and demolition/building permits in separate datasets, but does not provide a pre-computed dataset joining the exact demolished property value with the specific replacement unit values on a lot-by-lot basis."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "gpt-5.6-sol",
+          "verdict": "Not established",
+          "confidence": "Moderate",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "I applied the brief's dwelling-unit denominator and its separate-title and single-title valuation rules. I treated the claim as a city-wide population generalization, not verification of the uncited $350,000-to-$1,000,000 example. No primary threshold can be classified as met or failed because I found no complete matched series or valid bounds."
+        }
+      ],
+      "round2_positions": [
+        {
+          "provider": "claude",
+          "model_self_reported": "Claude Fable 5.1",
+          "verdict": "Not established",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "My verdict is unchanged at Not established, and I hold it for a different reason than gemini gives. The public record does contain the inputs: a demolition-permit frame of about 5,672 single-detached demolition permits for 2016 to 2025 with legal descriptions, and a historical assessment roll keyed by legal description and account. An independent analyst has shown the join is feasible at about 95 percent on a one-year cohort. What no published source has done is apply the brief's rules (prior-year roll, first full roll after completion, dwelling-unit denominator, building-average rule, constant dollars) to the whole frame and report the distribution with bounds. My own 40-permit probe produced eight ratios and is a convenience sample of one month's permits valued on the 2025 roll rather than the first full roll after completion; it cannot supply a median or a share, and I do not infer either from it. The cases do show two things a future run should expect: single large replacements on one title can exceed 2.5 in constant dollars (three of five did), and two-dwelling split lots, the dominant low-density replacement form per the City's 2024 report, ran between 1.37 and 1.89 per dwelling in constant dollars. Split lots are also the cases a legal-description-only join drops, because the children carry new plan and lot numbers. Any published figure built on a parcel key alone should be read as biased upward. The bounds rule leaves both thresholds undetermined because the classified set is not a defined sample of the frame. Both other reviewers reached Not established; I did not adopt that because of them. I disagree with gemini's High confidence on an uncited review and with the implication in both reviews that the record cannot yield the series. It can. Someone has to build it."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.1 Pro",
+          "verdict": "Not established",
+          "confidence": "Moderate",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "The verdict remains Not established. Both Claude and GPT correctly conclude that the required fully matched, unit-level, constant-dollar assessed value series does not exist in published City reports. While the raw open data exists (permits and historical assessments), calculating the actual population median and majority shares requires complex data linkage. Claude's probe effectively proved that a simple legal-description join fails to capture subdivided lots, meaning any analysis lacking an address or spatial fallback will systematically exclude the multi-unit redevelopments most likely to have lower per-unit ratios. Without executing this specific linkage across the whole 2016-2025 frame and adjusting via the mandated July CPI, neither primary threshold can be evaluated."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "GPT-5",
+          "verdict": "Not established",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "My round-1 verdict remains unchanged. The combined evidence materially improves understanding of the reconstruction method, linkage risks, inflation adjustment and range of possible case results, but it does not provide the predeclared city-wide population denominator, a conforming ratio for every classified replacement dwelling unit, or bounds incorporating every unclassified unit. The reported probe contains eight lots and eleven replacement units with approximate constant-dollar ratios ranging from about 1.37 to 3.94, but it is a convenience sample of January 2019 permits and uses 2025 replacement assessments rather than each replacement's first full roll after completion. It therefore cannot establish either the population median or the majority share. The permit count is also not a completed frame because its filter contains garage-only records and was not shown to include every eligible residential teardown. Exact legal descriptions can change after subdivision, but three recovered examples show a matching risk rather than its population incidence. Dawang's analysis concerns net uplift rather than the claim's ratio and cannot be converted into one without the missing baseline and denominator. Both primary thresholds and both declared alternatives remain undetermined. This is not evidence that the ratios are small, and it is not verification of the captured $350,000-to-$1,000,000 example. No material framing concern changes the answer to the proposition as posed."
+        }
+      ],
+      "disagreement_notes": []
+    }
+  ]
+}
