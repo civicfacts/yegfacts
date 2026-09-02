@@ -84,3 +84,17 @@ Evidence Gemini 3.1 Pro said it had missed in round 1:
 - City Council minutes March 14, 2022 carrying forward $2.3 million to the 2022 Snow and Ice Control budget.
 - Operating and Capital Financial Updates providing adjusted year-end budgets and actual expenditures for 2022, 2023, 2024, and 2025.
 - Spring 2025 Supplemental Capital Budget Adjustment transferring $430,000 out of CM-20-0330.
+
+## Found at the gate
+
+The source-verification audit found that the frozen brief's selection
+rationale (and the first run's intake record, which the brief drew on)
+describes the Infrastructure Committee of 2026-08-26 as having declined
+administration's recommendation. The committee's minutes (YF-EV-0135)
+show the recommendation was never put and a substitute motion to continue
+the program under its approved scope was defeated on a tied vote, so the
+committee made no decision. The brief is frozen and is not edited; the
+error entered from news coverage summarised at intake, it sits in the
+rationale and not in any proposition or definition, and no seat relied on
+it. The story and claims follow the minutes.
+
