@@ -17,10 +17,19 @@ verdicts."
 | Round | Brief | Findings | Verdict |
 | --- | --- | --- | --- |
 | 1 | codex-review_1.md | codex-output_1.md: four P3s: tables had no caption naming their story; the component doc comment overstated the old page and the column rule; "badge" for the pending-review label; formatting churn in findings.ts | APPROVED |
+| 2 | codex-review_2.md | codex-output_2.md: after the founder's preview note, the 3px story rule and larger title; one wording nit in the comment | APPROVED |
 
-All four adopted before commit: a visually hidden caption per table, the
-doc comment rewritten to the component's contract, "label", and the
-findings module diff reduced to the one exported helper.
+Round 1, all four adopted before commit: a visually hidden caption per
+table, the doc comment rewritten to the component's contract, "label",
+and the findings module diff reduced to the one exported helper.
+
+Between the rounds the founder looked at the preview: "we need more visual
+separation between stories themselves, hard to see where one story ends
+and another starts right now because claims have a lot of visual weight."
+Adopted: the home page's 3px ink section rule over each story title, the
+title up to 1.625rem, the hairlines between stories gone, and the topic
+hub's extra hairline removed. Round 2 approved it; its one wording nit
+was applied.
 
 ## Also checked by Stew before the critique
 
