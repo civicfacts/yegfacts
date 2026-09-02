@@ -5,6 +5,7 @@ export type Claim = CollectionEntry<'claims'>;
 export type Commitment = CollectionEntry<'commitments'>;
 export type Topic = CollectionEntry<'topics'>;
 export type Evidence = CollectionEntry<'evidence'>;
+export type JournalPost = CollectionEntry<'journal'>;
 
 /**
  * The single visibility gate (build plan, Phase 1A item 3).
@@ -113,4 +114,16 @@ export async function publishedClaims(): Promise<Array<{ claim: Claim; story: St
     for (const claim of await claimsForStory(story)) rows.push({ claim, story });
   }
   return rows;
+}
+
+/**
+ * The journal, newest first (D-0022). Its visibility gate is `draft`, not
+ * `status`: a journal post has no review state to be in, so the only question
+ * is whether Stew has finished writing it. `/journal/[slug]` builds its paths
+ * from here, so a draft has no page and cannot reach Pagefind or the feed.
+ * Ties on the date are broken by id, since several posts can share a day.
+ */
+export async function publicJournal(): Promise<JournalPost[]> {
+  const posts = await getCollection('journal', (post) => !post.data.draft);
+  return posts.sort((a, b) => b.data.date.localeCompare(a.data.date) || a.id.localeCompare(b.id));
 }

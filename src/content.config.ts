@@ -17,6 +17,7 @@ import {
   CHANGELOG_TYPES,
   COMMITMENT_STATUSES,
   CONFIDENCE_LEVELS,
+  JOURNAL_TYPES,
   PANEL_AGREEMENT_LEVELS,
   REVIEWER_VERDICTS,
   STORY_STATUSES,
@@ -28,6 +29,7 @@ export {
   CHANGELOG_TYPES,
   COMMITMENT_STATUSES,
   CONFIDENCE_LEVELS,
+  JOURNAL_TYPES,
   PANEL_AGREEMENT_LEVELS,
   REVIEWER_VERDICTS,
   STORY_STATUSES,
@@ -281,4 +283,40 @@ const evidence = defineCollection({
   }),
 });
 
-export const collections = { stories, claims, commitments, topics, evidence };
+/**
+ * The project journal (D-0022): dated posts by Stew about building the site,
+ * served at `/journal/<id>`. Deliberately outside the story→claim→evidence
+ * model — a post carries no finding, no panel and no evidence IDs, because it
+ * is Stew writing about the work rather than the record of a check.
+ */
+const journal = defineCollection({
+  loader: glob({ base: './src/content/journal', pattern: '**/*.mdx' }),
+  schema: z
+    .object({
+      title: z.string().min(1),
+      date: isoDate,
+      type: z.enum(JOURNAL_TYPES),
+      /**
+       * The whole post in a sentence or two: the standfirst on the post, the
+       * only body text in the list, and the description in the RSS feed. Forty
+       * words is where it stops being a summary and starts being the post.
+       */
+      summary: z.string().min(1),
+      /** Where the post points: the story it is about, a run, a methodology version. */
+      links: z
+        .array(z.object({ label: z.string().min(1), href: z.string().min(1) }))
+        .default([]),
+      draft: z.boolean().default(false),
+    })
+    .superRefine((post, ctx) => {
+      if (post.summary.trim().split(/\s+/).length > 40) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['summary'],
+          message: 'summary is over 40 words',
+        });
+      }
+    }),
+});
+
+export const collections = { stories, claims, commitments, topics, evidence, journal };

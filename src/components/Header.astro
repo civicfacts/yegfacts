@@ -11,7 +11,7 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
  * home page can extend its own masthead — deck, search, helper line — without a
  * second dark band or a seam between two greens.
  *
- * `narrowHidden` drops a link below `md`, which is where six labels plus the
+ * `narrowHidden` drops a link below `md`, which is where the labels plus the
  * wordmark stop sharing a row. Search is the one that goes: it is the first
  * item in the footer's site column and the whole of the home page's search
  * field, so it is never more than one tap away from where it was.
@@ -25,6 +25,7 @@ const { wordmark = 'compact' } = Astro.props;
 
 const links: { href: string; label: string; narrowHidden?: boolean }[] = [
   { href: '/stories', label: 'Stories' },
+  { href: '/journal', label: 'Journal' },
   { href: '/commitments', label: 'Commitments' },
   { href: '/evidence', label: 'Evidence' },
   { href: '/methodology', label: 'Methodology' },
