@@ -2,21 +2,23 @@
  * Published arithmetic for the infill-prices story (spec §5.5: every number in
  * the story/claims traces here or directly to a source figure).
  *
- * A note on what this file is and is not. The two propositions in this story
- * came back Not established, so there is no verified population share to
- * compute. What there is instead is one seat's own reconstruction, built from
- * the City's open assessment rolls because no published series matches a
- * demolished dwelling to what replaced it. Its counts are transcribed here so
- * that the story, the claims and any chart cannot drift apart, and so that the
- * shares quoted on the page are recomputed from the counts rather than retyped.
+ * A note on what this file is and is not. Both propositions in this story came
+ * back Not established, so there is no verified population share to compute.
+ * The price-gap claim, re-briefed as a magnitude proposition and re-run on
+ * 2026-09-02, produced no population series at all: one seat ran a 40-permit
+ * feasibility probe and reported its lots as cases. Those counts are
+ * transcribed here so that the story and the claim cannot drift apart, and so
+ * that the few figures the page derives are recomputed rather than retyped.
  *
- * The counts themselves are panel output, not archived source figures. The
- * evidence registry entries behind the rolls (YF-EV-0098, YF-EV-0099) archive
- * the open data portal pages and carry none of these shares, and no row-level
- * working file was published with the run. Anything sourced here to the run
- * path is traceable to the run and to nothing stronger.
+ * Panel output is labelled as such. It is not an archived source figure: the
+ * registry entries behind the rolls and the permits archive dataset pages and
+ * carry none of these counts, and no row-level working file was published with
+ * either run. Anything sourced here to a run is traceable to that run and to
+ * nothing stronger.
  *
- * Run: reviews/infill-prices/2026-09-01-rerun2 (round 1, seat Claude Fable 5.1).
+ * Runs: reviews/infill-prices/2026-09-02-magnitude (price gap, round 1, seat
+ * Claude Fable 5.1) and reviews/infill-prices/2026-09-01-rerun2
+ * (affordability, round 1, same seat).
  */
 
 // ---------------------------------------------------------------------------
@@ -32,8 +34,22 @@ export const figures = {
    * wrong-year attribution corrected at drafting (see the run's errata.md).
    */
   netSingleDetachedChange2024: -294,
-  /** YF-EV-0103 — Zoning Bylaw 20001 one-year review: dwelling units approved in 2024. */
-  dwellingUnitsApproved2024: 16_511,
+  /** YF-EV-0101 — net new dwelling units in the redeveloping area in 2024. */
+  netNewUnitsRedevelopingArea2024: 3_535,
+  /** YF-EV-0101 — net new semi-detached units in the redeveloping area in 2024. */
+  netNewSemiDetachedUnits2024: 221,
+
+  /**
+   * YF-EV-0048 — 2023 Redeveloping Area Infill Annual Report (reporting on
+   * 2023, published 2024): demolitions by dwelling type, and the net new unit
+   * count they sit against. The report gives the four counts; their total is
+   * derived below rather than read off the page.
+   */
+  demolishedSingleDetached2023: 387,
+  demolishedSemiDetachedUnits2023: 3,
+  demolishedRowUnits2023: 3,
+  demolishedApartmentDwellings2023: 131,
+  netNewUnitsRedevelopingArea2023: 2_931,
 
   /**
    * YF-EV-0107 — StatCan table 11-10-0222-01, Alberta, water, fuel and
@@ -51,20 +67,42 @@ export const figures = {
   /** YF-EV-0106 / YF-EV-0110 — StatCan shelter-cost-to-income threshold. */
   shelterCostThreshold: 0.3,
 
-  /** Run output — replacement dwelling units assessed above the demolished dwelling. */
-  unitsHigher: 4_091,
-  /** Run output — classified replacement dwelling units (the verdict numerator's base). */
-  unitsClassified: 6_603,
   /**
-   * Run output — replacement dwelling units that could not be verified as
-   * complete. Reported fractionally by the run, which is itself one of the
-   * documented departures: a self-contained dwelling unit cannot be fractional.
+   * The magnitude run's feasibility probe (2026-09-02, seat Claude Fable 5.1).
+   * Forty January 2019 house demolition permits, not the ten-year frame, so
+   * these are case counts and can produce no median and no share. The
+   * replacement values behind the ratios come off the 2025 roll rather than
+   * each replacement's first full roll after completion, which is a departure
+   * the seat reported and another seat documented.
    */
-  unitsUnclassified: 2_995.6,
-  /** Run output — median replacement-to-demolished assessed-value ratio, constant July-2025 dollars. */
-  medianValueRatio: 1.222,
-  /** Run output — replacement dwelling units inside single-title multi-unit buildings. */
-  unitsSingleTitle: 3_244,
+  probePermits: 40,
+  probeMatchedOn2018Roll: 35,
+  probeMatchedOn2025Roll: 17,
+  probeLots: 8,
+  probeReplacementDwellings: 11,
+  /** Approximate constant-dollar ratio range across all eleven probe dwellings. */
+  probeRatioMin: 1.37,
+  probeRatioMax: 3.94,
+  /** The same range restricted to the five lots where one house replaced one house. */
+  probeSingleReplacementRatioMin: 1.71,
+  probeSingleReplacementRatioMax: 3.94,
+
+  /**
+   * YF-EV-0055 — independent August 2026 analysis of 2024 small-scale
+   * residential permits joined to the 2024 and 2026 rolls. Its measure is net
+   * assessed-value uplift, not this claim's ratio.
+   */
+  dawangPermits: 1_492,
+  dawangLots: 1_242,
+  dawangLotsWithBothValues: 1_182,
+
+  /**
+   * YF-EV-0044 — one seat's candidate demolition frame from the general
+   * building permit dataset, built from job-description text. Candidate
+   * records, not the brief's validated frame.
+   */
+  candidateDemolitionPermits: 5_672,
+  candidateDemolitionPermitsWithLegal: 5_668,
 
   /** Run output — separately titled replacement dwellings at or above the threshold. */
   dwellingsOverThreshold: 2_968,
@@ -94,22 +132,15 @@ export const utilityAllowanceMonthlyCAD =
 export const shelterCostLimitMonthlyCAD =
   (figures.declaredMedianHouseholdIncomeCAD / 12) * figures.shelterCostThreshold;
 
-/** Claim 1, classified share: 4,091 of 6,603 replacement dwelling units. */
-export const priceGapClassifiedSharePct = pct1(figures.unitsHigher / figures.unitsClassified);
-
-/** Claim 1, complete verdict denominator: classified units plus unclassified. */
-export const priceGapDenominator = figures.unitsClassified + figures.unitsUnclassified;
-
-/** Claim 1 lower bound: every unclassified unit treated as not exceeding. */
-export const priceGapLowerBoundPct = pct1(figures.unitsHigher / priceGapDenominator);
-
-/** Claim 1 upper bound: every unclassified unit treated as exceeding. */
-export const priceGapUpperBoundPct = pct1(
-  (figures.unitsHigher + figures.unitsUnclassified) / priceGapDenominator,
-);
-
-/** Share of classified replacement units held inside single-title buildings. */
-export const singleTitleShareOfUnitsPct = pct1(figures.unitsSingleTitle / figures.unitsClassified);
+/**
+ * Total dwellings demolished in the redeveloping area in 2023: the four
+ * type counts the report publishes, added up here rather than on the page.
+ */
+export const demolishedDwellings2023 =
+  figures.demolishedSingleDetached2023 +
+  figures.demolishedSemiDetachedUnits2023 +
+  figures.demolishedRowUnits2023 +
+  figures.demolishedApartmentDwellings2023;
 
 /** Claim 2, classified share: 2,968 of 3,359 separately titled dwellings. */
 export const affordabilityClassifiedSharePct = pct1(
@@ -146,11 +177,7 @@ export const medianComponentSumCAD =
 export const calculations = {
   utilityAllowanceMonthlyCAD,
   shelterCostLimitMonthlyCAD,
-  priceGapClassifiedSharePct,
-  priceGapDenominator,
-  priceGapLowerBoundPct,
-  priceGapUpperBoundPct,
-  singleTitleShareOfUnitsPct,
+  demolishedDwellings2023,
   affordabilityClassifiedSharePct,
   affordabilityDenominator,
   affordabilityLowerBoundPct,
