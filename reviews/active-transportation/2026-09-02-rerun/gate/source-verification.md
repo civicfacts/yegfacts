@@ -1137,3 +1137,154 @@ blind in the first round, then cross-reviewing each other's work in the second".
 Verdict unchanged: **GATE FAIL, on one sentence** — the opening paragraph's
 plural attribution. Everything else in both claims and the story now verifies
 against the archived bytes or the run artifacts.
+
+---
+
+## Pass 3, 2026-09-02
+
+Scope: the one IMPRECISE item from pass 2 (the opening sentence), the `one_line`,
+the five TL;DR bullets and the two claim `question` lines, plus confirmation that
+the two collateral notes are applied. Same method, archived bytes and run
+artifacts only, no web access. Graded state: commit `31eaa6a`, story
+`md5 9cbd0798…`, snow claim `4c4db470…`, roads claim `c9990cd8…`.
+
+**Integrity.** The three archives this pass turns on rehash clean: YF-EV-0121
+`2d5ff770…`, YF-EV-0122 `64d26760…`, YF-EV-0131 `62f2c082…`. `npm run validate`
+passes: 6 stories, 10 claims, 1 commitment, 6 topics, 140 evidence entries.
+
+**What actually moved.** The diff against the pass-2 state is one paragraph. The
+`one_line`, all five TL;DR bullets and both `question` lines are byte-identical to
+the text graded in the pass-2 addendum (the claim files hash unchanged), so the
+re-grade below is a re-read against the archives rather than a new comparison.
+
+### Opening sentence — was IMPRECISE, now **VERIFIED**
+
+> "Since council's budget vote of December 2022, **a campaign against Edmonton's
+> bike lanes** has compared the $100 million program with what the City spends
+> clearing snow, and **a councillor who backed the program** has compared the same
+> figure with what the City spends on roads."
+
+Both holders are now singular and both descriptions are carried by the bytes.
+
+*The campaign.* YF-EV-0122 is titled "Stop The Bike Lane Boondoggle - Common
+Sense Edmonton" and its petition text is "We the undersigned call on Edmonton
+Council to **drop their plan to spend $100 million on bike lanes**", introduced by
+"If you agree that $100 million is too much money to spend on bike lanes, please
+sign our petition". "A campaign against Edmonton's bike lanes" is what the page
+is on its face. The comparison it makes is the archived sentence graded at KF-1,
+"it's almost double the City's annual snow-clearing budget!"
+
+*The councillor.* "Backed the program" is on the record twice over. YF-EV-0131
+records him in the majority on the very amendment that created the profile: "In
+Favour (9) A. Knack, A. Paquette, A. Sohi, A. Salvador, **M. Janz**, K. Tang, E.
+Rutherford, A. Stevenson, and J. Wright". YF-EV-0121 has him arguing for it —
+"Janz said it's vital to invest in infrastructure that will encourage people to
+choose biking and walking over driving" — immediately after the quoted roads
+comparison. The same minutes also record him moving an amendment to raise the
+profile to $201,000,000, which is backing it in the strongest available form.
+
+This closes the last open item. The sentence now says exactly what `brief.md`
+predeclared it could say — "each was made publicly, in the budget debate, by a
+party to it" — and no longer claims either comparison is a group habit.
+
+### `one_line` — **VERIFIED**
+
+> "The $100 million for bike lanes is spread over four budget years: 1.55 times
+> the printed 2022 snow budget, not double, and roads were authorized about 19
+> times as much."
+
+100,000 / 64,466 = 1.551; 1,945,703 / 100,000 = 19.457. "Spread over four budget
+years" is Appendix A's own 2023-2026 schedule, and "authorized" is the right verb
+for a capital budget, which is the roads claim's limitation 3.
+
+### TL;DR 1 to 5 — **VERIFIED (5 of 5)**
+
+- **1** — "No single year gets $100 million: council authorized it across 2023 to
+  2026 ($5.95 million, $26.75 million, $33.65 million, $33.65 million), 9 to 4, in
+  its December 2022 budget deliberations, as capital profile CM-20-0330." The lead
+  clause checks against the schedule itself: the largest single year in Appendix A
+  (printed page 103) and on the profile sheet (page 540) is 33,650. The four
+  amounts, the 9-to-4 split and the profile number are the minutes' own, and the
+  date is scoped to the deliberations, which is the pass-2 repair holding.
+- **2** — "The comparison sets four years of capital against one year of operating
+  money. Against the printed 2022 snow-clearing budget of $64.5 million the ratio
+  is 1.55; add the three one-time top-ups council approved during 2022 and the
+  same calculation gives $85.8 million and 1.17. Which snow budget you divide by
+  changes the answer, and no reading reaches double." 64,466 → $64.5M; 1.551 →
+  1.55; 64,466 + 2,300 + 14,300 + 4,700 = 85,766 → $85.8M; 1.166 → 1.17. The
+  mismatch sentence is the claim's limitation 2. "No reading reaches double" holds
+  across every figure the run produced: 1.551, 1.166, 1.258, 1.642, and the two
+  context readings 1.571 (net) and 1.446 (July addition only), all far below 2.
+- **3** — 1,945,703 → "$1.95 billion" and Table 8's "Active Pathways and Roads
+  Service … 1,794.0" → "$1.79 billion", which contains CM-20-0330.
+- **4** — the Global News quotation, 1,800 / 100 = 18, and the councillor's page
+  verbatim ("The $100M represents half a percent of the $1.8 Billion dollar
+  capital budget over the same period"), against 100 / 1,800 = 5.56 per cent.
+- **5** — 39,984 → "$40.0 million"; 99,570 → "$99.6 million"; 807, 10,496 − 807 =
+  9,689, 39,984 − 10,496 = 29,488 → "$0.8 / $9.7 / $29.5 million"; 5,950 + 26,750
+  + 33,650 = 66,350 → "$66.35 million"; and YF-EV-0118's "approximately 35 km of
+  new routes were installed".
+
+### Claim `question` lines — **VERIFIED (2 of 2)**
+
+Snow: the qualification "Measured against the City's printed 2022 snow budget;
+other City figures for 2022 move the answer" is limitation 1 compressed, and it
+puts the definition-sensitivity in front of the reader at the top of the record
+rather than at the bottom. Roads: "The quotation says 180 times; its own figures
+imply 18, and that is what was tested" is `brief.md` in terms — "The proposition
+tests the two dollar figures the councillor gave and the ratio they imply… The
+brief does not test '180 times' as a separate claim."
+
+### Collateral, both applied
+
+**`errata.md` — VERIFIED.** The "Found at the gate" entry no longer lays the
+error at the intake's door: "(the first run's intake record says only that the
+committee did not adopt it, which the minutes bear out)". That matches
+`reviews/active-transportation/2026-09-02/intake.md` exactly, and the rest of the
+entry — brief frozen, error in the rationale only, no seat relied on it — still
+checks.
+
+**YF-EV-0140 — VERIFIED.** The `establishes` line now pins the capture: "The
+committee agenda lists three versions of Attachment 5 (original, replacement
+version 1, replacement version 2); the archived bytes are DocumentId 304030,
+headed REPLACEMENT Attachment 5 with no version marker, and the 13 and 14 counts
+are read from those bytes." Every part of that is checkable against YF-EV-0135's
+agenda list and against the archived document's own header, and it tells a future
+reader precisely how far the 13 and 14 can be trusted.
+
+### Counts, final
+
+| | Snow claim | Roads claim | Story | Total |
+|---|---|---|---|---|
+| Statements checked | 28 | 27 | 54 | **109** |
+| VERIFIED | 28 | 27 | 54 | **109** |
+| IMPRECISE | 0 | 0 | 0 | **0** |
+| UNSUPPORTED | 0 | 0 | 0 | **0** |
+| SKIPPED | 0 | 0 | 0 | **0** |
+
+Across the three passes: 3 unsupported and 3 imprecise found, 6 repaired at the
+source, 0 remaining. Registry entries read against their bytes: 27 of 27 hash
+clean; three `establishes` lines corrected (YF-EV-0118, YF-EV-0135, YF-EV-0140).
+
+### Verdict
+
+**GATE PASS.**
+
+Every published statement in the story and both claim records now reproduces
+against the archived bytes of its cited evidence or against the run artifact it
+attributes. The three repairs that changed a fact rather than a phrase all moved
+toward the archive: the vote is scoped to the record instead of asserting a day
+two archives contradict; the committee's disposition follows the minutes' own
+sequence, including the negative that administration's recommendation was never
+moved; and the 14 routes now rest on a document that was fetched, hashed and
+registered because this gate asked for it, with its version ambiguity disclosed
+rather than hidden.
+
+The rule worth carrying forward from this story is the one the last defect turned
+on: **a brief's framing and selection-rationale prose is not evidence.** The
+committee error entered there, survived a framing check and two review rounds
+untouched because no seat had reason to read it, and reached the page as a number
+and a verb with nothing under either. `errata.md` now records it against the
+frozen brief. The counterpart rule from the opening sentence is its mirror: where
+a brief predeclares what it will *not* claim — here, that neither comparison is
+common — the story may not claim it either.
