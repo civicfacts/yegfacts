@@ -109,3 +109,33 @@ recording as its reason that Claude's operationalisation of the
 assessment data supplied a price basis whose 82.8-percent lower bound
 clears the 50-percent threshold. No other seat moved on either claim. The
 canonical findings rest on round 1 and are unaffected.
+
+## Registry corrections at drafting (2026-09-01)
+
+The stage-6 faithfulness checks flagged five registry `establishes` lines as
+claiming more than the archived bytes carry. The editor corrected the text of
+each; no `sha256`, `path`, `url`, rights or date was touched.
+
+- YF-EV-0101 (2024 Redeveloping Area Infill Report): the line recorded 286
+  built, 387 demolished and a net loss of 101. A seat extracted the archived
+  report, searched for all three and found none of them, reading a net loss of
+  294 single detached houses instead. The line now reports the net loss of 294
+  and states that the report does not carry 286/387/101. The story, the claim
+  key fact and `scripts/calcs/infill-prices.ts` were corrected with it. The
+  "on the order of 390" demolition count for 2023 stays with YF-EV-0048.
+- YF-EV-0053 (Taproot, City to analyse infill and property values): the line
+  said the archive establishes that no matched comparison had been published
+  or directed. It establishes only that the analysis was being requested;
+  non-publication is a run search conclusion and is now labelled as one.
+- YF-EV-0059 (StatCan table 11-10-0190-01): the line was cited for the
+  declared $90,000 household income and carried "without changing which
+  dwelling types pass". It covers economic families, not households, and that
+  sensitivity result is run arithmetic; both are now stated.
+- YF-EV-0103 (Zoning Bylaw 20001 one-year review): the line implied the report
+  supports a per-dwelling comparison turning unfavourable. It reports
+  city-wide approvals and product mix, with no matched teardown replacements,
+  prices or assessed values, which is what the line now says.
+- YF-EV-0105 (CMHC absorbed prices): the line described the distribution as
+  covering homeowner and condominium units. The captured table's type selector
+  is single- and semi-detached only, so the line now states that scope and
+  that the table carries nothing about new row or apartment prices.
