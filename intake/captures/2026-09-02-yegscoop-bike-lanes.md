@@ -84,9 +84,7 @@ and later:
 
 > they are not removing lanes for cyclists. They are removing lanes for
 > traffic calming measures and in places where applicable putting bike
-> Lanes there to save money combining the two. If you're getting a lane
-> removed, it's happening whether there's a bike lane there or not
-> because of dangerous driving statistics.
+> Lanes there to save money combining the two.
 
 **Commenter 7** (replying to Commenter 6):
 
