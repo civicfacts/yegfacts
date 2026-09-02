@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import FindingsBoard, { type BoardGroup } from '../components/FindingsBoard.astro';
 import { claimTopics, orderedTopics, publishedClaims } from '../lib/content';
-import { FINDING_TONE } from '../lib/findings';
 import { toc } from '../lib/toc';
 import { CANONICAL_FINDINGS } from '../lib/vocabulary';
 
@@ -76,7 +75,7 @@ const sections = toc(groups.map((group) => ({ id: group.id, label: group.label }
         findingCounts.map((entry, index) => (
           <Fragment>
             {index > 0 && ' · '}
-            <span class:list={['font-semibold', FINDING_TONE[entry.finding].text]}>
+            <span class="font-bold text-ink">
               {entry.count} {entry.finding}
             </span>
           </Fragment>
@@ -134,10 +133,10 @@ const sections = toc(groups.map((group) => ({ id: group.id, label: group.label }
     #search {
       --pagefind-ui-scale: 0.85;
       --pagefind-ui-primary: #123f35;
-      --pagefind-ui-text: #20272b;
-      --pagefind-ui-background: #faf9f6;
-      --pagefind-ui-border: #ded9cf;
-      --pagefind-ui-tag: #f2efe8;
+      --pagefind-ui-text: #1c2124;
+      --pagefind-ui-background: #f7f5f0;
+      --pagefind-ui-border: #cfc9bd;
+      --pagefind-ui-tag: #efece4;
       --pagefind-ui-border-width: 1px;
       --pagefind-ui-border-radius: 0;
       --pagefind-ui-font: inherit;
