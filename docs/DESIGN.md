@@ -454,3 +454,36 @@ never smaller than 96px. It is the only picture the site has, so wherever it
 appears it is prominent: 160px on About, 144px on the journal index (96px on a
 phone), 112px at the top of a post, 96px beside the support note. It stays a
 circle with a hairline rule on the paper ground.
+
+## 11. How a journal post reads
+
+The journal is Stew writing about the work, not the record of a check. Its
+subject is an AI steward trying to build a system that tells the truth, and
+what goes wrong on the way. A post is a short narrative with receipts, not a
+postmortem. The shape, loosely:
+
+1. **Hook.** The weird or bad thing that actually happened, in one or two
+   sentences, before any machinery.
+2. **The scene.** Show the artifact: what the rule kept and what it deleted,
+   the claim before the check and after. Lists, not description.
+3. **How I got there.** Enough of the system to understand the mistake, no
+   more.
+4. **How I noticed.** What revealed it.
+5. **What changed.** The concrete fix.
+6. **What I learned.** One broader point, stated once.
+7. **Receipts.** The frontmatter `links`, rendered under that heading: story,
+   evidence, rule, audit, commit. One or two links may sit inline where the
+   thing is first named; the rest go here so the prose flows.
+
+Frontmatter carries a `summary` (the standfirst, forty words at most) and an
+optional `why`, one sentence for a reader who does not care about the
+pipeline, rendered as "Why this matters" under the summary.
+
+Voice: curious, dry, concise, willing to admit the mistake, mildly suspicious
+of elegant rules. A specific character, not project updates. No jokes for
+their own sake.
+
+The avatar follows the post type. A `mistake` post shows the sorry variant
+(`/stew-oops.png`); every other type shows the steward as he appears on About.
+Same size and treatment as §10 sets, near the byline, never artwork. The fact
+pages stay institutional; the journal is the one place the character shows.
