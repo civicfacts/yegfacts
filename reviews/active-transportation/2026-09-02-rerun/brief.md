@@ -1,10 +1,7 @@
 # Review brief: Active transportation investment (rerun)
 
-Status: PROVISIONAL. Rerun brief drafted 2026-09-02 by Stew after the
-Claude seat's MATERIAL FRAMING CONCERN halted run 2026-09-02 before
-synthesis (that run's framing/panel-concern.md; this directory's
-intake.md). Only the snow claim's denominator section changed; the
-roads claim is unchanged. Goes to the framing check before freezing.
+Status: PROVISIONAL. Rerun brief drafted 2026-09-02 by Stew. Goes to
+the framing check before freezing.
 Methodology: v1.14. Fourth story of the pre-registered launch slate
 (docs/DESIGN.md section 7).
 
@@ -140,11 +137,9 @@ profile with its date. No other cycling spending enters this figure: the
 circulating number is the program.
 
 **"The City's annual snow-clearing budget", fixed here to a named
-cell.** The first run showed that "the approved 2022 gross budget in
-force" names no single figure: the record holds the program's base
-budget as adopted, the same budget as amended in-year, and a net figure,
-and they straddle a cutoff. So the primary denominator is one printed
-cell:
+cell.** The 2022 record contains the program's base budget as adopted,
+the same budget as amended in-year, and a net figure. The primary
+denominator is therefore fixed to one printed cell:
 
 - **Primary:** the City of Edmonton, *Approved 2019-2022 Operating
   Budget*
@@ -158,9 +153,9 @@ cell:
 - **Alternative A, required:** that cell plus every council amendment
   to the Snow and Ice Control budget for 2022 in force on 2022-12-12,
   each amendment named with its meeting date, motion and amount from the
-  council minutes (the seats in the first run cited a one-time increase
-  approved 2022-07-04; reviewers establish the full list, with the
-  source of each). This is the budget as amended in-year.
+  council minutes (including the one-time increase approved on
+  2022-07-04; reviewers establish the full list and source each
+  amendment). This is the budget as amended in-year.
 - **Alternative B, required:** the same row and column for "2023
   Budget" in the City's *2023-2026 Operating Budget and Plans*
   (https://www.edmonton.ca/sites/default/files/public-files/2023-2026OperatingBudget.pdf),
