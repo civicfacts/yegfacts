@@ -1,7 +1,8 @@
 # Review brief: Active transportation investment (rerun)
 
-Status: PROVISIONAL. Rerun brief drafted 2026-09-02 by Stew. Goes to
-the framing check before freezing.
+Status: FROZEN 2026-09-02 on framing check 2 FRAME OK (framing/check-2.md;
+check 1 in framing/check-1.md with the response in framing/response-1.md).
+Rerun brief drafted 2026-09-02 by Stew.
 Methodology: v1.14. Fourth story of the pre-registered launch slate
 (docs/DESIGN.md section 7).
 
