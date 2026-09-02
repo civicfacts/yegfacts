@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import og from '../assets/og.png';
+import symbol from '../assets/symbol.png';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PageToc from '../components/PageToc.astro';
@@ -50,7 +52,7 @@ const hasMasthead = Astro.slots.has('masthead');
 const pageTitle = title === SITE.name ? title : `${title} — ${SITE.name}`;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
-const ogImage = new URL('/og.png', Astro.site ?? SITE.url).href;
+const ogImage = new URL(og.src, Astro.site ?? SITE.url).href;
 
 /**
  * One container on every page: a reading column and, from `lg` up, a 13rem
@@ -76,7 +78,7 @@ const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/symbol.png" type="image/png" />
+    <link rel="icon" href={symbol.src} type="image/png" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE.name} />

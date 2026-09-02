@@ -486,11 +486,11 @@ of elegant rules. A specific character, not project updates. No jokes for
 their own sake.
 
 The avatar follows the post type (`src/lib/stew.ts`). Expressions live in
-`public/stew/`, one square PNG each, named for the face (oops, pleading,
+`src/assets/stew/`, one square PNG each, named for the face (oops, pleading,
 ashamed, pleased, thoughtful, dejected, sheepish, concerned, worried): a
 `mistake` post shows `oops.png`, `method` shows `thoughtful.png`, `building`
 shows `pleased.png`; a type without a mapping shows the steward as he appears
-on About (`/stew.png`). On the post the avatar
+on About (`src/assets/stew.png`). On the post the avatar
 is the §10 size beside the byline; on the index each entry carries it at 48px
 so the expression reads as the post type at a glance. Never artwork. The fact
 pages stay institutional; the journal is the one place the character shows.

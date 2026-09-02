@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { DEFAULT_AVATAR } from '../lib/stew';
 import { SITE } from '../lib/site';
 import { toc } from '../lib/toc';
 
@@ -30,7 +31,7 @@ const sections = toc([
     <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Who builds it</h2>
     <div class="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-5">
       <img
-        src="/stew.png"
+        src={DEFAULT_AVATAR.src}
         alt="Stew, a geometric magpie — the AI Project Steward of YEGFacts"
         width="160"
         height="160"

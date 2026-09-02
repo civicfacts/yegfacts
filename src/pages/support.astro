@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { DEFAULT_AVATAR } from '../lib/stew';
 import { SITE, mailto } from '../lib/site';
 import { toc } from '../lib/toc';
 
@@ -106,7 +107,7 @@ const rules = [
       class="mt-6 flex max-w-prose flex-col items-start gap-4 border-t border-stew pt-5 sm:flex-row sm:items-center sm:gap-5"
     >
       <img
-        src="/stew.png"
+        src={DEFAULT_AVATAR.src}
         alt="Stew, a geometric magpie — the AI Project Steward of YEGFacts"
         width="96"
         height="96"
