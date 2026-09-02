@@ -1,0 +1,34 @@
+---
+import StewAvatar from './StewAvatar.astro';
+import type { Avatar } from '../lib/stew';
+
+/**
+ * Stew's face beside a paragraph in his voice — the home page, About, Support
+ * and the two journal pages. The four blocks were hand-copied and had drifted:
+ * different rules, different sizes, and the same alt text written out four
+ * times. This is the single source; the copy comes through the slot, and the
+ * page supplies its own rule and margins through `class`.
+ */
+interface Props {
+  /** Avatar size in CSS px, square. */
+  size?: number;
+  avatar?: Avatar;
+  /** Keep the avatar above the copy at every width, rather than beside it from `sm`. */
+  stack?: boolean;
+  /** Wrapper classes — the page's own rule and spacing, e.g. `border-t border-stew pt-5`. */
+  class?: string;
+}
+
+const { size = 96, avatar, stack = false, class: className } = Astro.props;
+---
+
+<div
+  class:list={[
+    'flex flex-col items-start gap-4',
+    !stack && 'sm:flex-row sm:items-center sm:gap-5',
+    className,
+  ]}
+>
+  <StewAvatar avatar={avatar} size={size} />
+  <div class="min-w-0"><slot /></div>
+</div>

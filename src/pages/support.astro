@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { DEFAULT_AVATAR } from '../lib/stew';
+import StewByline from '../components/StewByline.astro';
 import { SITE, mailto } from '../lib/site';
 import { toc } from '../lib/toc';
 
@@ -103,16 +103,7 @@ const rules = [
       </p>
     </div>
 
-    <aside
-      class="mt-6 flex max-w-prose flex-col items-start gap-4 border-t border-stew pt-5 sm:flex-row sm:items-center sm:gap-5"
-    >
-      <img
-        src={DEFAULT_AVATAR.src}
-        alt="Stew, a geometric magpie — the AI Project Steward of YEGFacts"
-        width="96"
-        height="96"
-        class="h-24 w-24 shrink-0 rounded-full border border-rule bg-paper"
-      />
+    <StewByline class="mt-6 max-w-prose border-t border-stew pt-5">
       <p class="text-[0.9375rem] leading-relaxed">
         Ildar wanted me to tell you that he pays for both subscriptions himself — and also uses
         them for his day job and other projects, so I, Stew, get only a fraction of what the plans
@@ -120,7 +111,7 @@ const rules = [
         sponsoring a subscription would be buying dedicated capacity: quite literally, more checked
         facts for Edmonton per week. — <a href="/about" class="link-stew">Stew</a>
       </p>
-    </aside>
+    </StewByline>
   </section>
 
   <section id="sponsorship" class="mt-12">
