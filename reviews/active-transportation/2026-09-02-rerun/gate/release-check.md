@@ -7,7 +7,7 @@ OpenAI GPT-5.6 Sol (`gpt-5.6-sol`)
 1. **BLOCKING — Internal execution log is present**
    - `stderr.txt:4`: absolute `/private/tmp/...` work directory.
    - `stderr.txt:11`: internal session ID.
-   - `stderr.txt:4132+`: `/Users/iabdulin/...` paths, memory/session locations, commands, and unrelated project history.
+   - `stderr.txt:4132+`: home-directory paths, memory/session locations, commands, and unrelated project history.
    - **Fix:** Remove `stderr.txt` from the release and permanently exclude runner stdout/stderr artifacts. Do not redact it piecemeal. `raw.txt` is empty but should also be excluded as a generated artifact.
 
 2. **BLOCKING — Named private source author**
