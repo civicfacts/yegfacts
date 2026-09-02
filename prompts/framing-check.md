@@ -121,13 +121,13 @@ sufficient. Do not ask for an alternative to the alternative.
 
 What happens with your report: after REVISE, the author revises and the
 brief comes back to you; it is frozen only on FRAME OK. The check is
-capped at three reports for one brief (methodology v1.12): a brief still
-at REVISE after your third report is parked and its intake triage
-reopened, not revised again. If a finding is
-still OPEN or WEAKENED after two revisions, Stew, as the editor
-responsible for content, decides it in writing in the committed framing
-record, stating what you still objected to; the brief is then frozen
-with that record beside it. Ildar Abdulin remains accountable for the
+capped at three reports for one brief (methodology v1.12). After your
+second report, Stew, as the editor responsible for content, resolves in
+writing any finding still OPEN or WEAKENED, stating what you objected
+to, and the brief is revised once more. Your third report is a
+confirmation: FRAME OK freezes the brief with the editor's resolution
+beside it; REVISE parks the brief, and it reopens only on new intake
+evidence, never on a further revision of the same brief. Ildar Abdulin remains accountable for the
 result and can revert it. Every report, the author's responses and the
 resolution are committed beside the brief, and a framing defect found
 later by the panel, the publication gate or a correction is logged

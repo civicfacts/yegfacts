@@ -1,0 +1,51 @@
+# Candidate register (methodology v1.12).
+#
+# Every claim the site has considered checking, whether or not it reached
+# triage, with where the wording came from and what happened. The
+# pre-registered launch slate (docs/DESIGN.md section 7) is not repeated
+# here; everything else is. A candidate that never reached triage says so.
+#
+# origin: captured (a post we hold with a URL or screenshot) |
+#         supplied (wording passed to us by a person, provenance not
+#         captured) | editor (a hypothesis the editor or founder proposed)
+# outcome: GO | PARK | NO | not-triaged | pre-triage (checked before
+#          v1.12 existed)
+
+candidates:
+  - id: infill-teardown-350k-1m
+    recorded: "2026-09-01"
+    origin: supplied
+    wording: "AFFORDABLE!?! Have you looked at the prices of these houses?! A $350,000 house is torn down and a $1,000,000 house goes up in its place!!"
+    supplied_by: founder
+    context: an Edmonton social-media thread on infill; platform, author and URL not captured; may be a composite paraphrase
+    outcome: pre-triage
+    note: checked before triage existed (story infill-prices, three runs); its magnitude reading stays as claim ip-teardown-price-gap
+  - id: low-density-century
+    recorded: "2026-09-01"
+    origin: supplied
+    wording: "Proper management and fewer pet projects is a good start. We've had low density housing in this city for 100 years. Many neighbourhoods were planned around it."
+    supplied_by: founder
+    context: an Edmonton social-media thread on infill; platform, author and URL not captured
+    outcome: pre-triage
+    note: checked before triage existed (reviews/low-density-history, two runs, parked at round 1 because the Gemini seat could not complete it, OQ-17 in the board record)
+  - id: infill-teardown-more-affordable
+    recorded: "2026-09-02"
+    origin: editor
+    wording: "The houses being torn down for infill were more affordable than what replaces them."
+    supplied_by: founder, as a suggested claim in his critique of the published story
+    outcome: GO
+    note: triage report reviews/infill-prices/2026-09-02-questions/triage-1.md; brief in the same directory
+  - id: infill-luxury
+    recorded: "2026-09-02"
+    origin: editor
+    wording: "New infill housing is luxury housing."
+    supplied_by: founder, as a suggested claim
+    outcome: GO
+    note: same triage report and brief
+  - id: infill-not-affordable-median-household
+    recorded: "2026-09-02"
+    origin: editor
+    wording: "A median-income Edmonton household cannot afford new infill housing."
+    supplied_by: founder, as a suggested claim
+    outcome: GO
+    note: same triage report and brief
