@@ -2,10 +2,9 @@
 import { getEntry, render, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import {
-  candidateRegister,
+  candidatesWithPages,
   outcomeHeading,
   provenance,
-  reportsFor,
   storyLinkLabel,
   type Candidate,
 } from '../../lib/intake';
@@ -27,12 +26,8 @@ type Report = CollectionEntry<'candidateReports'>;
  * `/considered` links only the ones that do.
  */
 export async function getStaticPaths() {
-  const withReports = candidateRegister()
-    .map((candidate) => ({ candidate, reports: reportsFor(candidate) }))
-    .filter(({ reports }) => reports.length > 0);
-
   return Promise.all(
-    withReports.map(async ({ candidate, reports }) => ({
+    candidatesWithPages().map(async ({ candidate, reports }) => ({
       params: { id: candidate.id },
       props: {
         candidate,

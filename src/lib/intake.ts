@@ -158,3 +158,18 @@ export function reportsFor(candidate: Candidate): Array<{ label: string; path: s
     candidate.triage && { label: 'Triage', path: candidate.triage },
   ].filter((report): report is { label: string; path: string } => Boolean(report));
 }
+
+/**
+ * The candidates that have a page under `/considered/<id>`: the ones with at
+ * least one report to show. `/considered/[id]` builds its routes from this and
+ * the sitemap lists them from it, so "which candidates have a page" is decided
+ * once.
+ */
+export function candidatesWithPages(): Array<{
+  candidate: Candidate;
+  reports: ReturnType<typeof reportsFor>;
+}> {
+  return candidateRegister()
+    .map((candidate) => ({ candidate, reports: reportsFor(candidate) }))
+    .filter(({ reports }) => reports.length > 0);
+}

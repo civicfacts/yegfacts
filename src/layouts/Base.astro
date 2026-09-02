@@ -32,6 +32,18 @@ interface Props {
    * makes no sense on a journal post, which isn't a finding. Off only there.
    */
   report?: boolean;
+  /**
+   * Schema.org structured data for this page, one `<script type="ld+json">`
+   * per object. The page builds it, because only the page knows what its
+   * content is; the layout only knows where the head is.
+   */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /**
+   * Set on a page that is a dated piece of writing rather than a standing part
+   * of the site — a finding, a journal post. It switches `og:type` and adds the
+   * two article times, which is what a share card needs to show a date.
+   */
+  article?: { published: string; modified?: string };
 }
 
 const {
@@ -41,7 +53,18 @@ const {
   sections = [],
   rail = true,
   report = true,
+  jsonLd,
+  article,
 } = Astro.props;
+
+/**
+ * `</` inside a `<script>` ends the element whatever the surrounding JSON says,
+ * so the one character that can break out is escaped. Everything else JSON
+ * already handles.
+ */
+const structuredData = (jsonLd === undefined ? [] : [jsonLd].flat()).map((entry) =>
+  JSON.stringify(entry).replace(/</g, '\\u003c'),
+);
 
 /**
  * A page that fills the `masthead` slot is extending the forest block itself,
@@ -81,14 +104,31 @@ const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={symbol.src} type="image/png" />
 
-    <meta property="og:type" content="website" />
+    <link rel="alternate" type="application/rss+xml" title="YEGFacts findings" href="/rss.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="YEGFacts journal"
+      href="/journal/rss.xml"
+    />
+
+    <meta property="og:type" content={article ? 'article' : 'website'} />
     <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content="en_CA" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+    {article && <meta property="article:published_time" content={article.published} />}
+    {article?.modified && <meta property="article:modified_time" content={article.modified} />}
     <meta name="twitter:card" content="summary_large_image" />
     {isPreview && <meta name="robots" content="noindex, nofollow" />}
+
+    {
+      structuredData.map((entry) => (
+        <script is:inline type="application/ld+json" set:html={entry} />
+      ))
+    }
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

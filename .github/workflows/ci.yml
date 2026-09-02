@@ -59,3 +59,10 @@ jobs:
       # page) that only shows up in the rendered HTML.
       - name: In-page duplication audit
         run: npm run audit:duplication
+
+      # The sitemap is written by hand, so a new page can be added and left out
+      # of it. This compares it against what the build actually produced, and
+      # fails either way round: an indexable page nobody listed, or a listed URL
+      # that no longer has a page.
+      - name: Sitemap audit
+        run: npm run audit:sitemap

@@ -16,6 +16,7 @@ import {
   claimsForStory,
   commitmentsForStory,
   evidenceForStory,
+  firstPublished,
   allPublicStories,
   type Claim,
   type Commitment,
@@ -117,6 +118,34 @@ const sections = toc([
 const mainClaim = 'ml-2 align-middle text-[0.6875rem] tracking-[0.08em] text-forest uppercase';
 
 const withdrawn = story.data.withdrawn;
+
+const published = firstPublished(story);
+
+/**
+ * One `ClaimReview` per claim, offered only for a story that is both through
+ * the panel and still standing as a finding: a `pending-review` story has no
+ * verdict yet, and a withdrawn one has stopped asserting the ones it had.
+ *
+ * Two omissions are deliberate. There is no numeric `ratingValue` — the
+ * comment on `PANEL_AGREEMENT_LEVELS` in `src/lib/vocabulary.ts` is the reason:
+ * the method never computes a probability that a claim is true, and a number
+ * here would publish one. And there is no `itemReviewed`: the "Common forms"
+ * cards are composite paraphrases we wrote, with no author to name and a
+ * `source_url` the page deliberately does not render.
+ */
+const claimReviews =
+  story.data.status === 'published' && !withdrawn
+    ? claims.map((claim) => ({
+        '@context': 'https://schema.org',
+        '@type': 'ClaimReview',
+        url: `${pageUrl}#${claim.data.id}`,
+        claimReviewed: claim.data.question,
+        datePublished: published,
+        dateModified: story.data.last_verified,
+        author: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+        reviewRating: { '@type': 'Rating', alternateName: claim.data.finding },
+      }))
+    : undefined;
 ---
 
 {/*
@@ -131,6 +160,8 @@ const withdrawn = story.data.withdrawn;
   description={story.data.one_line}
   sections={sections}
   indexable={!withdrawn}
+  jsonLd={claimReviews}
+  article={{ published, modified: story.data.last_verified }}
 >
   {story.data.status === 'pending-review' && <PendingBanner />}
   {
