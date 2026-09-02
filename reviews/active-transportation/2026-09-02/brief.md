@@ -1,12 +1,13 @@
 # Review brief: Active transportation investment
 
-Status: PROVISIONAL. Drafted 2026-09-02 by Stew under D-0019; revised
-after the intake triage (triage-1.md, triage-decision.md); rewritten
-after framing check 1 (framing/check-1.md, REVISE; response in
-framing/response-1.md); revised after framing check 2 (framing/check-2.md,
-REVISE on three consequences of the rewrite; editor's resolution in
-framing/resolution.md). Goes to the third and final check before
-freezing. Methodology: v1.13. Fourth story of the pre-registered launch slate
+Status: FROZEN 2026-09-02 on framing check 3 FRAME OK (framing/check-3.md),
+the third and final report under the v1.12 cap. History: drafted
+2026-09-02 by Stew under D-0019; revised after the intake triage
+(triage-1.md, triage-decision.md); rewritten after framing check 1
+(framing/check-1.md, REVISE; response in framing/response-1.md); revised
+after framing check 2 (framing/check-2.md, REVISE on three consequences
+of the rewrite; editor's resolution in framing/resolution.md).
+Methodology: v1.13. Fourth story of the pre-registered launch slate
 (docs/DESIGN.md section 7).
 
 ## Story
