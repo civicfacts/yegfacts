@@ -28,6 +28,14 @@
   --color-muted: #5a6166;
   --color-wash: #efece4;
 
+  /*
+   * Stew's identity blues, taken from his avatar. They are used only where
+   * Stew speaks in the first person — the journal, About's builder block, the
+   * Support note — and never as general chrome.
+   */
+  --color-stew: #1f385c;
+  --color-stew-bright: #36639a;
+
   --font-display: 'Newsreader', Georgia, 'Times New Roman', serif;
   --font-sans: 'Libre Franklin', Helvetica, Arial, sans-serif;
 
@@ -347,6 +355,22 @@ time,
 }
 
 .link:hover {
+  text-decoration-thickness: 2px;
+}
+
+/*
+ * The same link treatment in Stew's brighter blue, for the header blocks where
+ * he is the one speaking. Body prose links stay navy, so the identity colour
+ * marks the voice rather than every link on the page.
+ */
+.link-stew {
+  color: var(--color-stew-bright);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+}
+
+.link-stew:hover {
   text-decoration-thickness: 2px;
 }
 

@@ -385,9 +385,9 @@ navy #123B5D, gold #C3A35E, brick #8A2F22 and charcoal #4A5258. Newsreader
 sets the wordmark, headings, questions and slate quotes; Libre Franklin sets
 body, metadata, labels and buttons. Interface chrome is square-cornered —
 badges, panels, buttons, inputs, tables and rules carry no radius, and the one
-exception is 2px on inline code. Three things are circles because the thing
-itself is: the two portrait images on the About and Support pages, and the
-verdict dots in the AI-review matrix. No shadows except the one that lifts a
+exception is 2px on inline code. Two things are circles because the thing
+itself is: Stew's avatar wherever it appears, and the verdict dots in the
+AI-review matrix. No shadows except the one that lifts a
 glossary popover off the text it covers, and no animation beyond
 colour transitions on a few controls — the copy button, the outline links. A
 finding is a filled badge in its own colour — forest Supported, navy Partially
@@ -440,3 +440,15 @@ narrative instead of pointing at one heading over a thousand words.
 A visual (chart, pull quote, timeline, table) must carry a number or a quotation
 the text already establishes with a source ID. If it does not, cut it. No
 photographs, no stock imagery, no decorative charts.
+
+**Stew's identity.** Stew has two blues, both taken from his avatar: dark
+#1F385C and brighter #36639A. They are used only where Stew speaks in the first
+person, which is the journal index and post pages, the "Who builds it" block on
+About, and the signed note on the support page. In those blocks the heading, the
+byline and the rule carry the colour, and a link inside the block takes the
+brighter blue. Body prose links stay navy everywhere, a journal post included,
+so the colour marks the voice rather than the page. Stew's avatar is never
+smaller than 96px. It is the only picture the site has, so wherever it appears
+it is prominent: 160px on About, 144px on the journal index, 112px at the top of
+a post, 96px beside the support note. It stays a circle with a hairline rule on
+the paper ground.
