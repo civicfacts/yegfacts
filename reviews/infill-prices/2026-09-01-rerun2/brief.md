@@ -1,11 +1,11 @@
 # Review brief: Infill teardown prices
 
-Status: PROVISIONAL, revision after a MATERIAL FRAMING CONCERN in round one
+Status: FROZEN 2026-09-01, commit 1db3446, on framing check 3 FRAME OK (framing/check-3.md); revision after a MATERIAL FRAMING CONCERN in round one
 of reviews/infill-prices/2026-09-02-rerun (framing/panel-concern.md);
 Revision 1 after framing check 1 (framing/check-1.md); Revision 2 after
 framing check 2 (framing/check-2.md); editor's resolution: purchase model on
-separately titled dwellings; frozen before round 1.
-Methodology: v1.8
+separately titled dwellings.
+Methodology: v1.9
 
 ## Story
 
