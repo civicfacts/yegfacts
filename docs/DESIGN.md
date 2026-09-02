@@ -381,23 +381,26 @@ second city; a nonprofit spin-out; a newsletter and active social accounts.
 
 The visual system is the broadsheet ledger, locked and light-only: paper
 #F7F5F0, ink #1C2124, muted #5A6166, hairline rules #CFC9BD, forest #123F35,
-navy #123B5D, gold #C3A35E, brick #8A2F22 and charcoal #4A5258. Newsreader sets
-the wordmark, headings, questions and slate quotes; Libre Franklin sets body,
-metadata, labels and buttons. Badges, panels, buttons and inputs have square
-corners; the only rounding anywhere is 2px on inline code. No shadows, and no
-animation beyond colour transitions on a few controls — the copy button, the
-outline links. A finding is a filled badge in its own colour — forest
-Supported, navy Partially supported, charcoal Not established, brick
-Contradicted, gold Mixed — with the word always printed in full, and a claim
-list is a run of ledger rows each carrying a 5px left edge in the same colour,
-so the verdicts read down one column. Gold is load-bearing in exactly two
-places, the ".ca" of the wordmark on forest and the Mixed badge; it never sets
-text on a light ground, where it fails AA. Every page opens with the full-bleed
-forest masthead, and the home page extends it with the descriptor, the search
-field and the helper line. Hierarchy still comes from type rather than
-decoration: a section heading is a heading — on the home page's front page each
-one sits above a 3px ink rule — and the 11px uppercase label is reserved for
-metadata — dates, "Limitations", the sub-labels inside a claim.
+navy #123B5D, gold #C3A35E, brick #8A2F22 and charcoal #4A5258. Newsreader
+sets the wordmark, headings, questions and slate quotes; Libre Franklin sets
+body, metadata, labels and buttons. Interface chrome is square-cornered —
+badges, panels, buttons, inputs, tables and rules carry no radius, and the one
+exception is 2px on inline code. Three things are circles because the thing
+itself is: the two portrait images on the About and Support pages, and the
+verdict dots in the AI-review matrix. No shadows, and no animation beyond
+colour transitions on a few controls — the copy button, the outline links. A
+finding is a filled badge in its own colour — forest Supported, navy Partially
+supported, charcoal Not established, brick Contradicted, gold Mixed — with the
+word always printed in full, and a claim list is a run of ledger rows each
+carrying a 5px left edge in the same colour, so the verdicts read down one
+column. Gold is load-bearing in exactly two places, the ".ca" of the wordmark
+on forest and the Mixed badge; it never sets text on a light ground, where it
+fails AA. Every page opens with the full-bleed forest masthead, and the home
+page extends it with the descriptor, the search field and the helper line.
+Hierarchy still comes from type rather than decoration: a section heading is a
+heading — on the home page's front page each one sits above a 3px ink rule —
+and the 11px uppercase label is reserved for metadata — dates, "Limitations",
+the sub-labels inside a claim.
 
 This supersedes the earlier rule that a finding is carried by the word and never
 by a badge, and that colour is a whisper (founder decision, 2026-09-01). The

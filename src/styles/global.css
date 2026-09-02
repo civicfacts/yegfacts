@@ -3,9 +3,11 @@
 /* ---------------------------------------------------------------------------
    YEGFacts visual system — broadsheet ledger (design spec §10). Locked palette,
    light theme only: ink on paper, one saturated forest ground, filled verdict
-   badges. Square corners (2px on inline code is the one exception), no shadows,
-   and no animation beyond colour transitions on a control. A finding is printed
-   in full and filled in its own colour, so a list of them reads down one edge.
+   badges. Interface chrome is square-cornered (2px on inline code is the one
+   exception; a portrait and a status dot are circles because they are round
+   things, not chrome), no shadows, and no animation beyond colour transitions
+   on a control. A finding is printed in full and filled in its own colour, so a
+   list of them reads down one edge.
 --------------------------------------------------------------------------- */
 
 @theme {
@@ -116,20 +118,22 @@ summary.list-none::-webkit-details-marker {
 }
 
 /*
- * The phone "On this page" row states what a tap does, in words — the site has
- * no icon set to borrow a chevron from. The word lives in CSS because it is the
- * disclosure's state, not its content.
+ * Every disclosure on the site says what tapping it will do, in words — there
+ * is no icon set to borrow a chevron from, and `list-none` takes the native
+ * marker away. The word lives in CSS because it is the disclosure's state, not
+ * its content, and it is stated on the summary of the details it belongs to so
+ * a nested disclosure cannot read its parent's state.
  */
-.toc-state {
+.disclosure-state {
   letter-spacing: normal;
   text-transform: none;
 }
 
-.toc-state::after {
+.disclosure-state::after {
   content: 'Show';
 }
 
-.toc-disclosure[open] .toc-state::after {
+details[open] > summary .disclosure-state::after {
   content: 'Hide';
 }
 

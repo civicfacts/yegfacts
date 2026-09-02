@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { loadRunManifest } from '../../scripts/lib/review-schema.ts';
 import type { Claim, Story } from '../lib/content';
+import { FINDING_TONE } from '../lib/findings';
 import { effortSentence } from '../lib/runs';
 import { repoPath } from '../lib/site';
 
@@ -49,14 +50,15 @@ const reviewed = claims.filter((claim) => claim.data.review !== undefined);
 /** Seat column order, taken from the first reviewed claim and held steady. */
 const models = reviewed[0]?.data.review?.reviewers.map((reviewer) => reviewer.model) ?? [];
 
-/** Subtle semantic tone per verdict — the word still carries the meaning. */
-const verdictTone: Record<string, string> = {
-  Supported: 'var(--color-forest)',
-  'Partially supported': 'var(--color-gold)',
-  'Not established': 'var(--color-muted)',
-  Contradicted: '#7a3030',
-  Mixed: 'var(--color-navy)',
-};
+/**
+ * The dot beside a verdict takes its colour from the one map the badges and the
+ * ledger rows use. This component used to carry a second map of its own, which
+ * drifted: it painted Partially supported gold and Mixed navy while the rest of
+ * the site painted them the other way round, so the same word meant two colours
+ * on one page.
+ */
+const dot = (verdict: string) =>
+  FINDING_TONE[verdict as keyof typeof FINDING_TONE]?.bg ?? 'bg-charcoal';
 
 const runs = [...new Set(reviewed.map((claim) => claim.data.review_run))];
 const published = story.data.status === 'published';
@@ -136,8 +138,10 @@ const effort = effortSentence(
                   {claim.data.review?.reviewers.map((reviewer) => (
                     <td class="py-2.5 pr-4 whitespace-nowrap">
                       <span
-                        class="mr-1.5 inline-block h-2 w-2 rounded-full align-middle"
-                        style={`background:${verdictTone[reviewer.verdict] ?? 'var(--color-muted)'}`}
+                        class:list={[
+                          'mr-1.5 inline-block h-2 w-2 rounded-full align-middle',
+                          dot(reviewer.verdict),
+                        ]}
                         aria-hidden="true"
                       />
                       <span class="font-medium">{reviewer.verdict}</span>
@@ -146,8 +150,10 @@ const effort = effortSentence(
                   ))}
                   <td class="py-2.5 whitespace-nowrap font-semibold">
                     <span
-                      class="mr-1.5 inline-block h-2 w-2 rounded-full align-middle"
-                      style={`background:${verdictTone[claim.data.finding] ?? 'var(--color-muted)'}`}
+                      class:list={[
+                        'mr-1.5 inline-block h-2 w-2 rounded-full align-middle',
+                        dot(claim.data.finding),
+                      ]}
                       aria-hidden="true"
                     />
                     {claim.data.finding}
@@ -166,8 +172,20 @@ const effort = effortSentence(
         <div class="mt-5 space-y-2">
           {reviewed.map((claim) => (
             <details class="border border-rule px-3.5 py-2.5">
-              <summary class="cursor-pointer list-none text-sm text-muted" data-crossref>
-                Reviewer notes — <span class="text-ink">{claim.data.question}</span>
+              {/*
+                The Show/Hide word is the disclosure's own affordance. Without
+                it `list-none` leaves a row that only looks like a control once
+                a pointer is already over it — and a touch reader never has a
+                pointer.
+              */}
+              <summary
+                class="flex cursor-pointer list-none items-baseline justify-between gap-3 text-sm text-muted"
+                data-crossref
+              >
+                <span>
+                  Reviewer notes — <span class="text-ink">{claim.data.question}</span>
+                </span>
+                <span class="disclosure-state shrink-0 text-xs" />
               </summary>
               <div class="mt-2.5 space-y-3 border-t border-rule pt-2.5">
                 {claim.data.review?.reviewers.map((reviewer) => (
