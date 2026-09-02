@@ -1,0 +1,201 @@
+---
+import { getEntry, render, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import {
+  candidateRegister,
+  outcomeHeading,
+  provenance,
+  reportsFor,
+  storyLinkLabel,
+  type Candidate,
+} from '../../lib/intake';
+import { repoFile } from '../../lib/site';
+import { toc } from '../../lib/toc';
+
+type Report = CollectionEntry<'candidateReports'>;
+
+/**
+ * `/considered/<id>` — one candidate, with the records behind its outcome.
+ *
+ * `/considered` publishes the decision; this publishes the working. Until now
+ * the intake record and the triage report were links into GitHub, which asks a
+ * reader to leave the site and read a repository to find out why their claim
+ * was not checked, and left the claim's wording out of the search index
+ * entirely.
+ *
+ * A candidate with neither record has nothing to show and gets no page, so
+ * `/considered` links only the ones that do.
+ */
+export async function getStaticPaths() {
+  const withReports = candidateRegister()
+    .map((candidate) => ({ candidate, reports: reportsFor(candidate) }))
+    .filter(({ reports }) => reports.length > 0);
+
+  return Promise.all(
+    withReports.map(async ({ candidate, reports }) => ({
+      params: { id: candidate.id },
+      props: {
+        candidate,
+        reports: (
+          await Promise.all(
+            reports.map(async ({ label, path }) => ({
+              label,
+              path,
+              entry: await getEntry('candidateReports', path),
+            })),
+          )
+        ).filter(
+          (report): report is { label: string; path: string; entry: Report } =>
+            report.entry !== undefined,
+        ),
+      },
+    })),
+  );
+}
+
+interface Props {
+  candidate: Candidate;
+  reports: Array<{ label: string; path: string; entry: Report }>;
+}
+
+const { candidate, reports } = Astro.props;
+
+const rendered = await Promise.all(
+  reports.map(async (report) => ({
+    label: report.label,
+    /** The section id is the record's kind, so the outline reads as the page does. */
+    id: report.label === 'Triage' ? 'triage' : 'intake',
+    reader: report.entry.data.reader,
+    run: report.entry.data.run,
+    Content: (await render(report.entry)).Content,
+  })),
+);
+
+const sections = toc([
+  { id: 'outcome', label: 'Outcome' },
+  ...rendered.map((report) => ({ id: report.id, label: report.label })),
+]);
+
+const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
+---
+
+<Base
+  sections={sections}
+  title={candidate.wording}
+  description={candidate.reason ??
+    'A claim YEGFacts considered, with the intake record and triage behind the decision.'}
+>
+  <article>
+    <header class="border-b border-rule pb-7">
+      <div class="text-xs text-muted" data-crossref>
+        <a href="/considered" class="link">Every claim we've considered</a>
+      </div>
+
+      {/*
+        The claim in its own words is the title, quoted, because this page is
+        about a sentence somebody said rather than about a subject we named.
+      */}
+      <h1
+        class="mt-3 text-[1.5rem] leading-[1.2] font-extrabold tracking-[-0.02em] text-pretty sm:text-[1.875rem]"
+      >
+        “{candidate.wording}”
+      </h1>
+
+      {/* Straight out of the register, in the words `/considered` uses. */}
+      <p class={`mt-4 ${label}`} data-record>
+        <time datetime={candidate.recorded}>{candidate.recorded}</time>
+        {' · '}
+        <span class="normal-case tracking-normal">{provenance(candidate)}</span>
+      </p>
+    </header>
+
+    <section id="outcome" class="mt-10 scroll-mt-6">
+      {/* The outcome is a heading, as it is on `/considered`, not a badge. */}
+      <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
+        {outcomeHeading(candidate.outcome)}
+      </h2>
+      {
+        (candidate.reason ?? candidate.note) && (
+          <p class="mt-3.5 max-w-prose border-l-2 border-gold pl-3.5 text-[1.0625rem] leading-relaxed text-pretty">
+            {candidate.reason ?? candidate.note}
+          </p>
+        )
+      }
+      {
+        candidate.story && (
+          <p class="mt-4 text-sm" data-crossref>
+            <a href={`/facts/${candidate.story}`} class="link">
+              {storyLinkLabel(candidate)}
+            </a>
+          </p>
+        )
+      }
+    </section>
+
+    {
+      rendered.map(({ id, label: heading, reader, run, Content }) => (
+        <section id={id} class="mt-14 scroll-mt-6">
+          <h2 class="section-heading">{heading}</h2>
+          {/*
+            The triage is somebody else's reading, and it has to be unmistakable
+            which. A byline naming the model read as if the model had reviewed
+            the site's work, and left the report's judgements available to be
+            taken for the site's own. The notice says both things instead: whose
+            reading this is, and that the decision above is ours. The intake
+            record needs none of it — that one is Stew's.
+          */}
+          {id === 'triage' && (
+            <aside
+              class="mt-4 border-t-2 border-b border-t-gold border-b-rule bg-wash px-4 py-3.5"
+              role="note"
+            >
+              <p class="text-sm leading-relaxed text-forest">
+                What follows is the triage read, written by a model from another vendor and
+                published as written. The site's decision is the outcome above.
+              </p>
+              {(reader || run) && (
+                <p class="mt-1 text-xs text-muted" data-record>
+                  {reader}
+                  {reader && run && ' · '}
+                  {run && (
+                    <>
+                      run <time datetime={run}>{run}</time>
+                    </>
+                  )}
+                </p>
+              )}
+            </aside>
+          )}
+          {/*
+            `data-record` for the same reason the register's meta line carries
+            it: this is a stored record rendered verbatim, not the site writing
+            prose. One triage report covers three candidates, so its words
+            legitimately appear on three pages.
+          */}
+          <div class="prose mt-4" data-record>
+            <Content />
+          </div>
+        </section>
+      ))
+    }
+
+    <footer class="mt-14 border-t border-rule pt-5">
+      {/*
+        Each source names the record it is: the site footer already carries a
+        "Source on GitHub" pointing at the repository, and a page with both an
+        intake record and a triage report would otherwise offer two links with
+        the same words and different destinations.
+      */}
+      <p class="flex flex-wrap gap-x-5 gap-y-1 text-sm" data-crossref>
+        <a href="/considered" class="link">Every claim we've considered</a>
+        {
+          reports.map((report) => (
+            <a href={repoFile(report.path)} rel="noopener" class="link">
+              {report.label} on GitHub
+            </a>
+          ))
+        }
+      </p>
+    </footer>
+  </article>
+</Base>

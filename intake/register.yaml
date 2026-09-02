@@ -27,10 +27,12 @@ candidates:
     wording: "AFFORDABLE!?! Have you looked at the prices of these houses?! A $350,000 house is torn down and a $1,000,000 house goes up in its place!!"
     supplied_by: founder
     context: an Edmonton social-media thread on infill; platform, author and URL not captured; may be a composite paraphrase
-    outcome: pre-triage
+    outcome: not-answered
     story: infill-prices
-    reason: "Checked before triage existed; its price gap is published as the teardown claim in the infill prices story, Not established after three runs."
-    note: checked before triage existed (story infill-prices, three runs); its magnitude reading stays as claim ip-teardown-price-gap
+    reason: "Checked before triage existed, three runs, both claims Not established. A triage read then parked both: the price gap needs a decade-scale lot-by-lot linkage the run did not build, and no public record says what the housing that replaced particular demolished homes costs. The story is no longer a finding until one of those exists."
+    triage: intake/candidates/infill-teardown-350k-1m/triage.md
+    intake: intake/candidates/infill-teardown-350k-1m/intake.md
+    note: first application of methodology v1.13 (2026-09-02); the story page stays at its URL with a note
   - id: low-density-century
     recorded: "2026-09-01"
     origin: supplied
@@ -49,6 +51,7 @@ candidates:
     outcome: PARK
     reason: "The question is about the same lots, and Edmonton publishes nothing that joins a demolished house to what replaced it; a category comparison would answer a different question."
     triage: reviews/infill-prices/2026-09-02-questions/triage-1.md
+    intake: reviews/infill-prices/2026-09-02-questions/intake.md
     note: triage report reviews/infill-prices/2026-09-02-questions/triage-1.md; the category-level comparison answers a cousin of the question; reopens on a matched demolition-and-replacement record or captured posts
   - id: infill-luxury
     recorded: "2026-09-02"
@@ -58,6 +61,7 @@ candidates:
     outcome: NO
     reason: "No captured post makes this claim, and \"luxury\" has no definition on which either side could lose."
     triage: reviews/infill-prices/2026-09-02-questions/triage-1.md
+    intake: reviews/infill-prices/2026-09-02-questions/intake.md
     note: same triage report; see the editor decision in that directory
   - id: infill-not-affordable-median-household
     recorded: "2026-09-02"
@@ -67,6 +71,7 @@ candidates:
     outcome: PARK
     reason: "Published new-home prices do not identify infill by dwelling form; the claim reopens if the record does, or if it is narrowed to all new housing citywide."
     triage: reviews/infill-prices/2026-09-02-questions/triage-1.md
+    intake: reviews/infill-prices/2026-09-02-questions/intake.md
     note: same triage report; see the editor decision in that directory
   - id: earth-flat
     recorded: "2026-09-02"
@@ -76,6 +81,7 @@ candidates:
     outcome: NO
     reason: "Neither a factual claim about Edmonton nor a claim shown circulating locally, so it falls outside the site's scope."
     triage: intake/candidates/earth-flat/triage.md
+    intake: intake/candidates/earth-flat/intake.md
     note: intake record beside the triage report
   - id: oilers-held-back
     recorded: "2026-09-02"
@@ -85,4 +91,5 @@ candidates:
     outcome: NO
     reason: "Public NHL records can compare penalties, reviews and discipline across teams, but cannot establish a deliberate market-based scheme, and this exact claim has not been shown circulating."
     triage: intake/candidates/oilers-held-back/triage.md
+    intake: intake/candidates/oilers-held-back/intake.md
     note: the triage found fan posts alleging biased officiating; a narrower claim about penalty or review rates versus other teams could be triaged on its own if captured

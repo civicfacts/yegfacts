@@ -16,7 +16,7 @@ import {
   claimsForStory,
   commitmentsForStory,
   evidenceForStory,
-  publicStories,
+  allPublicStories,
   type Claim,
   type Commitment,
   type Evidence,
@@ -24,11 +24,11 @@ import {
 } from '../../lib/content';
 
 /**
- * `/facts/<slug>`. Paths come from `publicStories()`, so a `draft` story has no
+ * `/facts/<slug>`. Paths come from `allPublicStories()`, so a `draft` story has no
  * page — which also keeps it out of Pagefind and out of every internal link.
  */
 export async function getStaticPaths() {
-  const stories = await publicStories();
+  const stories = await allPublicStories();
   return Promise.all(
     stories.map(async (story) => ({
       params: { slug: story.id },
@@ -115,10 +115,44 @@ const sections = toc([
 ]);
 
 const mainClaim = 'ml-2 align-middle text-[0.6875rem] tracking-[0.08em] text-forest uppercase';
+
+const withdrawn = story.data.withdrawn;
 ---
 
-<Base title={story.data.title} description={story.data.one_line} sections={sections}>
+{/*
+  A withdrawn story keeps its page and loses its standing, so it also loses its
+  place in the search index: `indexable` is what puts `data-pagefind-body` on
+  `<main>`, and a page without it is the repo's one way of staying built but
+  unindexed. A reader can still reach it from `/considered` and from its own
+  URL, which is the whole point of keeping it.
+*/}
+<Base
+  title={story.data.title}
+  description={story.data.one_line}
+  sections={sections}
+  indexable={!withdrawn}
+>
   {story.data.status === 'pending-review' && <PendingBanner />}
+  {
+    withdrawn && (
+      <aside
+        class="mb-8 border-t-2 border-b border-t-gold border-b-rule bg-wash px-4 py-3.5"
+        role="note"
+      >
+        <p class="text-sm font-semibold text-forest">
+          No longer a finding · <time datetime={withdrawn.date}>{withdrawn.date}</time>
+        </p>
+        <p class="mt-1 text-sm leading-relaxed text-muted">
+          This story is no longer a finding. {withdrawn.reason} It stays here for the record; its
+          claims are listed with{' '}
+          <a href={`/considered#${withdrawn.register}`} class="link">
+            every claim we've considered
+          </a>
+          .
+        </p>
+      </aside>
+    )
+  }
 
   <article>
     <header class="border-b border-rule pb-7">

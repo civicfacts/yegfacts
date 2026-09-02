@@ -1,8 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
-import { publishedStories } from '../lib/content';
-import { candidateRegister, type Candidate } from '../lib/intake';
-import { repoFile } from '../lib/site';
+import { allPublishedStories } from '../lib/content';
+import {
+  REGISTER_SECTIONS,
+  candidateRegister,
+  provenance,
+  reportsFor,
+  storyLinkLabel,
+} from '../lib/intake';
 import { toc } from '../lib/toc';
 
 /**
@@ -17,42 +22,17 @@ import { toc } from '../lib/toc';
  */
 const candidates = candidateRegister();
 
-/** A story link is only offered when there is a published page behind it. */
-const published = new Set((await publishedStories()).map((story) => story.id));
+/**
+ * A story link is only offered when there is a page behind it — which a
+ * withdrawn story still has, so this reads the whole published set rather than
+ * the boards' view of it.
+ */
+const published = new Set((await allPublishedStories()).map((story) => story.id));
 
-const sections = [
-  { id: 'declined', outcome: 'NO', heading: 'Declined' },
-  { id: 'parked', outcome: 'PARK', heading: 'Parked' },
-  { id: 'going-ahead', outcome: 'GO', heading: 'Going ahead' },
-  { id: 'pre-triage', outcome: 'pre-triage', heading: 'Checked before triage existed' },
-  { id: 'not-triaged', outcome: 'not-triaged', heading: 'Not yet triaged' },
-].map((section) => ({
+const sections = REGISTER_SECTIONS.map((section) => ({
   ...section,
   entries: candidates.filter((candidate) => candidate.outcome === section.outcome),
 }));
-
-const ORIGINS: Record<string, string> = {
-  captured: 'captured from a post',
-  supplied: 'passed to us, source not captured',
-  editor: 'our own hypothesis',
-};
-
-/**
- * `supplied_by` is written for the register and carries the circumstance as
- * well as the person ("founder, as a test case for the triage"). Readers need
- * the circumstance too, or a test case reads as a serious suggestion, so the
- * whole clause is shown. A lowercase value is a role and takes an article; a
- * capitalised one is a name and does not.
- */
-function attribution(suppliedBy: string): string {
-  const article = /^[a-z]/.test(suppliedBy) ? 'the ' : '';
-  return `from ${article}${suppliedBy}`;
-}
-
-function provenance(candidate: Candidate): string {
-  const origin = ORIGINS[candidate.origin] ?? candidate.origin;
-  return candidate.supplied_by ? `${origin}, ${attribution(candidate.supplied_by)}` : origin;
-}
 
 const outline = toc(
   sections.map((section) => section.entries.length > 0 && { id: section.id, label: section.heading }),
@@ -90,10 +70,22 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
           <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">{section.heading}</h2>
 
           <ol class="mt-5 divide-y divide-rule border-t border-rule">
-            {section.entries.map((candidate) => (
-              <li class="py-7">
+            {section.entries.map((candidate) => {
+              const reports = reportsFor(candidate);
+              return (
+              /* The register id is the anchor, so a story that was withdrawn can
+                 send a reader to the entry that says why. */
+              <li id={candidate.id} class="scroll-mt-6 py-7">
                 <article>
-                  <blockquote class="max-w-prose border-l-2 border-gold pl-4 text-[1.0625rem] leading-relaxed text-pretty">
+                  {/* The claim in the words it reached us in. `data-record` for the
+                      same reason the meta line below carries it: one wording can be
+                      registered twice — once when it was checked, once when the story
+                      it produced was withdrawn — and that is the register's business,
+                      not this page saying the same thing twice. */}
+                  <blockquote
+                    class="max-w-prose border-l-2 border-gold pl-4 text-[1.0625rem] leading-relaxed text-pretty"
+                    data-record
+                  >
                     {candidate.wording}
                   </blockquote>
 
@@ -111,23 +103,28 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
                     </p>
                   )}
 
-                  {(candidate.triage || (candidate.story && published.has(candidate.story))) && (
+                  {(reports.length > 0 ||
+                    (candidate.story && published.has(candidate.story))) && (
                     <p class="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm">
-                      {candidate.triage && (
-                        <a href={repoFile(candidate.triage)} rel="noopener" class="link">
-                          Triage report (GitHub)
+                      {/* The reports are on the site now, so the reader is sent
+                          there rather than to GitHub; the repository copy is
+                          linked at the foot of the candidate's own page. */}
+                      {reports.length > 0 && (
+                        <a href={`/considered/${candidate.id}`} class="link">
+                          {candidate.triage ? 'Read the triage' : 'Read the intake record'}
                         </a>
                       )}
                       {candidate.story && published.has(candidate.story) && (
                         <a href={`/facts/${candidate.story}`} class="link">
-                          Where it was checked
+                          {storyLinkLabel(candidate)}
                         </a>
                       )}
                     </p>
                   )}
                 </article>
               </li>
-            ))}
+              );
+            })}
           </ol>
         </section>
       ))

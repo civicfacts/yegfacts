@@ -1,6 +1,29 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.13"
+  date: "2026-09-02"
+  scope: findings-board
+  summary: >
+    A checked story whose claims are all Not established, and all parked
+    or declined on a triage read, stops being a finding; it moves to the
+    claims considered and its page stays.
+  highlights:
+    - "A story leaves the findings board, the story list, search results and topic counts when every claim on it is Not established and a triage read of those claims (prompts/intake-triage.md) returns PARK or NO for each. Its page stays at its URL with a note at the top, so nothing disappears quietly and corrections still apply."
+    - "The story is listed on /considered under Checked, not answered, with a one-sentence reason and the condition on which it reopens. The register entry and the triage read are public."
+    - "First application: Infill teardown prices. Both published claims are Not established; the read parked both, one because the price-gap ratio needs a decade-scale lot-by-lot linkage the run did not build, the other because no public record says what the housing that replaced particular demolished homes costs."
+    - "Every candidate with an intake record and a triage read gets a page of its own under /considered, rendered from the same files that are kept on GitHub."
+    - "Prompted by the founder, who asked whether it is good to publish stories that are meaningless. A Not established verdict is a finding when the question is one people ask and the record could have answered it; when neither holds, a verdict tells the reader nothing and the board should not carry it."
+  links:
+    - label: Every claim we've considered
+      href: /considered
+    - label: Infill teardown prices
+      href: /facts/infill-prices
+  note: >
+    Not established was doing two jobs: an answer (the record was
+    checked and does not support the claim) and a shrug (nobody could
+    check). Only the first belongs on a board of findings. The second
+    belongs with the claims considered, where the reader can see why.
 - version: "1.12"
   date: "2026-09-02"
   scope: intake-triage
