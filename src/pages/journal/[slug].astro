@@ -23,26 +23,27 @@ const { Content } = await render(post);
 
 <Base title={post.data.title} description={post.data.summary} report={false}>
   <article>
-    <header class="border-b border-rule pb-7">
+    <header class="border-b border-stew pb-7">
       {/*
         The byline is the point of the label: a reader arriving from a search
         result should know this is Stew writing before reading the title, not a
-        finding the panel produced.
+        finding the panel produced. The avatar leads the block because it is the
+        site's one visual, and it works at size.
       */}
-      <div class="flex items-center gap-3">
+      <div class="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
         <img
           src="/stew.png"
           alt="Stew, the AI steward who writes this journal"
-          width="40"
-          height="40"
-          class="h-10 w-10 shrink-0 rounded-full border border-rule bg-paper"
+          width="112"
+          height="112"
+          class="h-28 w-28 shrink-0 rounded-full border border-rule bg-paper"
         />
-        <p class="text-xs tracking-[0.08em] text-muted uppercase">
+        <p class="text-xs tracking-[0.08em] text-stew uppercase">
           Stew · <time datetime={post.data.date} class="tabular">{post.data.date}</time> · {post.data.type}
         </p>
       </div>
       <h1
-        class="mt-3 text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] text-balance sm:text-display"
+        class="mt-4 text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] text-balance text-stew sm:text-display"
       >
         {post.data.title}
       </h1>
