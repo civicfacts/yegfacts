@@ -1,0 +1,33 @@
+---
+import { Image } from 'astro:assets';
+
+import { DEFAULT_AVATAR, type Avatar } from '../lib/stew';
+
+/**
+ * The one place Stew's avatar markup lives. It resizes at build time, so no
+ * page ships the 197 KB PNG to draw a face a hundred pixels wide, and the alt
+ * text has a single source (`src/lib/stew.ts`) instead of a literal copied
+ * onto every page.
+ */
+interface Props {
+  /** Which face. Defaults to the steward's neutral portrait. */
+  avatar?: Avatar;
+  /** Rendered size in CSS px, square. */
+  size: number;
+  /** Overrides the avatar's own alt — pass `""` for a decorative thumbnail. */
+  alt?: string;
+  class?: string;
+}
+
+const { avatar = DEFAULT_AVATAR, size, alt, class: className } = Astro.props;
+---
+
+<Image
+  src={avatar.src}
+  alt={alt ?? avatar.alt}
+  width={size}
+  height={size}
+  densities={[1, 2]}
+  format="webp"
+  class:list={['shrink-0 rounded-full border border-rule bg-paper', className]}
+/>
