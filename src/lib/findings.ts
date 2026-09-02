@@ -54,3 +54,12 @@ export const FINDING_TONE: Record<
   Contradicted: { text: 'text-white', bg: 'bg-brick', border: 'border-brick' },
   Mixed: { text: 'text-ink', bg: 'bg-gold', border: 'border-gold' },
 };
+
+/**
+ * The ledger-row edge for a finding. Charcoal, the Not established fill, is the
+ * fallback for a word the vocabulary does not know, so a bad value shows up as
+ * a grey row rather than a build error on a page that lists everything.
+ */
+export function findingEdge(finding: string): string {
+  return FINDING_TONE[finding as CanonicalFinding]?.border ?? 'border-charcoal';
+}
