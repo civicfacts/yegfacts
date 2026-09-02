@@ -12,10 +12,12 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
  * second dark band or a seam between two greens. The `deck` slot goes into the
  * header row itself, between the mark and the nav.
  *
- * `narrowHidden` drops a link below `lg`, which is where seven labels stop
- * fitting on one row and the last one wraps alone. Search is the one that goes: it is the first
- * item in the footer's site column and the whole of the home page's search
- * field, so it is never more than one tap away from where it was.
+ * Search is the one item here that is an action rather than a section, so it
+ * is drawn as an icon and sits outside the nav. As a word it was the seventh
+ * label and was hidden below `lg`; the glyph fits at every width, beside the
+ * mark below `md` and at the end of the nav row from `md` up, where the words
+ * and the glyph first fit on one line. The magnifier is the glyph the search
+ * box on /search already shows.
  */
 interface Props {
   /** The home page's mark is the front-page size; every other page is compact. */
@@ -24,33 +26,37 @@ interface Props {
 
 const { wordmark = 'compact' } = Astro.props;
 
-const links: { href: string; label: string; narrowHidden?: boolean }[] = [
+const links: { href: string; label: string }[] = [
   { href: '/stories', label: 'Stories' },
   { href: '/journal', label: 'Journal' },
   { href: '/commitments', label: 'Commitments' },
   { href: '/evidence', label: 'Evidence' },
   { href: '/methodology', label: 'Methodology' },
   { href: '/about', label: 'About' },
-  { href: '/search', label: 'Search', narrowHidden: true },
 ];
 ---
 
 <header class="masthead bg-forest text-paper" data-pagefind-ignore>
   <div class="mx-auto w-full max-w-3xl px-5 pt-4 lg:max-w-[66rem]">
-    <div
-      class="flex flex-wrap items-baseline-last justify-between gap-x-7 gap-y-3 pb-4"
-    >
-      <a href="/" class="no-underline" aria-label="YEGFacts.ca home">
+    {/*
+      The row is ordered, not sourced: mark 1, deck 2 (set in Base.astro), nav 3,
+      icon 4, and below `md` the icon and nav trade places so the glyph rides
+      beside the mark. `mr-auto` on the mark replaces `justify-between`, which
+      would strand a three-item row's middle item; an `ml-auto` on the nav
+      would throw the home page's nav right on the line it has to itself.
+    */}
+    <div class="flex flex-wrap items-baseline-last gap-x-7 gap-y-3 pb-4">
+      <a href="/" class="order-1 mr-auto no-underline" aria-label="YEGFacts.ca home">
         <Wordmark size={wordmark} />
       </a>
       {/* The home page sets its deck beside the mark; from `lg` the two share the row and the nav drops under them. */}
       <slot name="deck" />
-      {/* Below 640px the nav wraps under the mark and reads from the left. */}
-      <nav aria-label="Primary">
+      {/* Below `md` the nav has a line of its own; the words align right from `sm`. */}
+      <nav aria-label="Primary" class="order-4 basis-full md:order-3 md:basis-auto">
         <ul class="flex flex-wrap gap-x-7 gap-y-2 sm:justify-end">
           {
             links.map((link) => (
-              <li class:list={[link.narrowHidden && 'hidden lg:block']}>
+              <li>
                 <a
                   href={link.href}
                   aria-current={path === link.href ? 'page' : undefined}
@@ -66,6 +72,49 @@ const links: { href: string; label: string; narrowHidden?: boolean }[] = [
           }
         </ul>
       </nav>
+      {/*
+        The search link is outside the nav so it can be ordered on its own: beside
+        the mark below `md`, last on the nav line from `md` up. Last in source, so
+        the tab order is mark, words, search. The home page omits it: its masthead
+        is the search field.
+
+        The 18px glyph sits in a 44px target, and the negative margins hand the
+        target back so it adds nothing to the row: the glyph lands flush on the
+        column edge where the word Search ended, 20px after About, and the row's
+        last-baseline alignment puts it on the wordmark's cap centre; the `md`
+        transform nudges it onto the words' centre without moving a box.
+      */}
+      {wordmark === 'compact' && (
+        <a
+          href="/search"
+          aria-label="Search"
+          aria-current={path === '/search' ? 'page' : undefined}
+          class="group relative order-3 -mt-[22px] -mr-[13px] -mb-[22px] -ml-[21px] inline-flex h-11 w-11 items-center justify-center text-paper no-underline md:order-4 md:translate-y-[3.5px]"
+        >
+          <svg
+            viewBox="0 0 20 20"
+            class="h-[18px] w-[18px] group-hover:[stroke-width:2.5]"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <circle cx="8.5" cy="8.5" r="5.5"></circle>
+            <path d="M12.6 12.6 17 17"></path>
+          </svg>
+          {
+            path === '/search' && (
+              /* Current-page rule; positioned, not a border, so the glyph does not move on /search. */
+              <span
+                class="absolute inset-x-[13px] bottom-[8px] h-0.5 bg-paper"
+                aria-hidden="true"
+              />
+            )
+          }
+        </a>
+      )}
     </div>
     <slot />
   </div>
