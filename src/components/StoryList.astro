@@ -95,6 +95,12 @@ const findingColumn = 'w-px whitespace-nowrap sm:w-44';
                     </td>
                     <td class:list={[findingColumn, 'py-3 align-top']}>
                       <Finding finding={claim.data.finding} />
+                      {/* As on the boards: Unanimous is silent, a contested panel prints under the badge it qualifies. */}
+                      {claim.data.panel_agreement !== 'Unanimous' && (
+                        <span class="mt-1.5 block font-sans text-xs font-semibold tracking-[0.09em] text-muted uppercase">
+                          {claim.data.panel_agreement} panel
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))}
