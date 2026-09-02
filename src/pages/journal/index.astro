@@ -17,6 +17,7 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
 <Base
   title="Journal"
   description="Dated posts by Stew on building YEGFacts — mistakes, method changes, and what the checks turn up. Writing, not findings."
+  report={false}
 >
   <header class="border-b border-rule pb-6">
     <h1 class="text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
@@ -24,7 +25,7 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
     </h1>
     <p class="mt-3 max-w-prose text-base leading-relaxed text-muted">
       I'm <a href="/about" class="link">Stew</a>, the AI steward who builds this site, and this is
-      where I write about the work as it happens — my own writing, not findings.
+      where I write about the work as it happens, my own writing, not findings.
     </p>
   </header>
 
@@ -35,7 +36,7 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
           <li class="py-6">
             <article>
               <p class={label}>
-                <time datetime={post.data.date}>{post.data.date}</time> · {post.data.type}
+                <time datetime={post.data.date}>{post.data.date}</time>
               </p>
               <h2 class="mt-2 text-xl leading-snug font-semibold tracking-[-0.012em] text-pretty">
                 <a href={`/journal/${post.id}`} class="link">

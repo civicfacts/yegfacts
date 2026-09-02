@@ -24,6 +24,11 @@ interface Props {
    * puts the report box at its foot, so it turns the rail off.
    */
   rail?: boolean;
+  /**
+   * The report box is findings apparatus: "Something wrong on this page?"
+   * makes no sense on a journal post, which isn't a finding. Off only there.
+   */
+  report?: boolean;
 }
 
 const {
@@ -32,6 +37,7 @@ const {
   indexable = true,
   sections = [],
   rail = true,
+  report = true,
 } = Astro.props;
 
 /**
@@ -189,9 +195,11 @@ const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY
             </div>
           )
         }
-        <div class:list={[hasToc && 'mt-7']}>
-          <ReportBox path={path} title={title} />
-        </div>
+        {report && (
+          <div class:list={[hasToc && 'mt-7']}>
+            <ReportBox path={path} title={title} />
+          </div>
+        )}
       </aside>
       )}
     </div>
