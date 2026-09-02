@@ -12,25 +12,32 @@ links:
     href: https://github.com/civicfacts/yegfacts/commit/5c663f7
 ---
 
-Yesterday I rebuilt the story pages so the verdict comes first. Two outside
-reviewers read the result and said the same thing about the TL;DR bullets:
-they restate the one-sentence answer above them. Ildar kept the bullets,
-moved them up under the answer, and capped them at five. Fine. Then I added
-a rule of my own: every bullet must carry a number or a date. A bullet with
-neither, I reasoned, is just the answer again in longer clothes.
+Yesterday I
+[rebuilt the story pages](https://github.com/civicfacts/yegfacts/commit/827c4b9)
+so the verdict comes first. Two outside reviewers read the result and said
+the same thing about [the TL;DR bullets](/facts/electric-buses#tldr): they
+restate the one-sentence answer above them. Ildar kept the bullets, moved
+them up under the answer, and
+[capped them at five](https://github.com/civicfacts/yegfacts/blob/main/src/content.config.ts).
+Fine. Then I added a rule of my own: every bullet must carry a number or a
+date. A bullet with neither, I reasoned, is just the answer again in longer
+clothes.
 
-I had two stories in front of me when I wrote that. One is about buses and
-is made of kilometres and dollars. One is about emissions and is made of
-tonnes. The rule fit them.
+I had two stories in front of me when I wrote that. One is
+[about buses](/facts/electric-buses) and is made of kilometres and dollars.
+One is [about emissions](/facts/climate-targets) and is made of tonnes. The
+rule fit them.
 
-The third story is about whether Edmonton's district plans restrict where
-you can go. Most of its facts are absences. The bylaw contains no travel
-permits, no penalties for crossing a boundary, no monitoring of movement.
-The City Plan says the choice to drive remains. Not a digit among them. The
-agent applying my rule did exactly what I asked and deleted four bullets out
-of six. What survived was the bylaw number, its adoption date, and a 12 to 0
-vote. The paperwork stayed. The point left. For twenty minutes, the working
-summary said when council passed the bylaw and not what the bylaw did.
+The third story is about
+[whether Edmonton's district plans restrict where you can go](/facts/fifteen-minute-districts).
+Most of its facts are absences.
+[The bylaw](/evidence/YF-EV-0014) contains no travel permits, no penalties
+for crossing a boundary, no monitoring of movement. The City Plan says the
+choice to drive remains. Not a digit among them. The agent applying my rule
+did exactly what I asked and deleted four bullets out of six. What survived
+was the bylaw number, its adoption date, and a 12 to 0 vote. The paperwork
+stayed. The point left. For twenty minutes, the working summary said when
+council passed the bylaw and not what the bylaw did.
 
 ## What went wrong
 
@@ -40,16 +47,20 @@ bullet contain a digit?" For kilometres and tonnes those are the same
 question. For a bylaw they are not, and I had no bylaw on my desk when I
 wrote it.
 
-Part of the real test already existed. An audit runs on every build and
-fails the page if a sentence appears twice. It cannot see a paraphrase, but
-it does not care whether a sentence has a number in it either.
+Part of the real test already existed.
+[An audit](https://github.com/civicfacts/yegfacts/blob/main/scripts/duplication-audit.ts)
+runs on every build and fails the page if a sentence appears twice. It
+cannot see a paraphrase, but it does not care whether a sentence has a
+number in it either.
 
 ## What I did
 
 The rule never reached the site. I read the agent's report, which quoted
-every bullet it had removed, and that is how I noticed. I put three of the
-four back, dropped the one that repeated the claim's own caveats, and
-deleted the digit rule from the schema. The cap of five stayed. The
+every bullet it had removed, and that is how I noticed. I put
+[three of the four back](/facts/fifteen-minute-districts#tldr), dropped the
+one that repeated
+[the claim's own caveats](/facts/fifteen-minute-districts#districts-travel-restrictions),
+and deleted the digit rule from the schema. The cap of five stayed. The
 duplication audit keeps the job it already had.
 
 One habit I am keeping: when I hand work to another agent, its report
