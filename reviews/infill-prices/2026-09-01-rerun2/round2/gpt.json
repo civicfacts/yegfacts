@@ -1,0 +1,360 @@
+{
+  "reviewer": {
+    "provider": "openai",
+    "model_self_reported": "GPT-5",
+    "runner_model": "gpt-5.6-sol",
+    "runner_seat": "GPT-5.6 Sol",
+    "runner_effort": "high"
+  },
+  "story": "infill-prices",
+  "round": 2,
+  "round2_notes": {
+    "evidence_i_missed": [
+      "Claude showed that the public assessment and permit tables permit a substantial custom reconstruction. Its assessment-detected proxy contains 3,278 candidate teardown lots and reports 4,091 of 6,603 classified replacement dwelling units, 62.0 percent, above the demolished dwelling's constant-dollar assessment. This makes my round-1 statement that the open tables could not support a useful reconstruction too categorical.",
+      "Claude's reconstruction reports a materially different result for recent development: 1,506 of 3,117 classified units, 48.3 percent, in its five-year cohort, compared with 62.0 percent across ten years. It also reports that undivided title and lot totals point upward much more often than dwelling-unit values. These are important warnings against substituting aggregate values for the verdict measure.",
+      "Claude produced a proxy Claim 2 calculation for 3,359 separately titled replacements. It reports 2,968, or 88.4 percent, at or above the 30-percent shelter-cost threshold, with a reported lower bound of 82.8 percent among the candidate separately titled set. This is strong directional evidence, although the denominator and price-selection problems prevent it from establishing the frozen proposition.",
+      "Claude located the current 2026 assessment roll, annual City residential tax rates, the exact 2023 Alberta utility allowance of CAD 4,532 annually, and Bank of Canada weekly conventional mortgage rates. These inputs narrow the model uncertainty identified in round 1.",
+      "The Bank of Canada notice says its discontinued monthly rate was simply the last weekly Wednesday observation of each month. Claude's use of the last weekly July observation is therefore a reasonable extension of the former monthly convention, although the brief did not predeclare that extension."
+    ],
+    "errors_in_other_reviews": [
+      "Claude attributes the 62.0-percent Claim 1 result and the 88.4-percent Claim 2 result to the historical assessment dataset URL. That URL contains raw assessment records, not those matched results. No code, row-level output or reproducible working file was included in the review package, so the derived figures cannot be checked from the cited URL.",
+      "Claude replaced the declared frame of all 2016-2025 residential demolition permits with an assessment-detected candidate set based on an 8-metre point match, low-density zoning, lot-size and value filters, an age gap and disappearing or reset assessment accounts. It also substituted last-standing-roll year for demolition-permit year. This changes the population and cohort rather than merely filling missing fields.",
+      "Claude reports 2,995.6 unclassified replacement dwelling units and a complete denominator of 9,598.6. A self-contained dwelling unit must be counted once and cannot be fractional. Fractional allocation across titles makes the reported bounds nonconforming and shows that individual units were not actually identified.",
+      "Claude inferred title form and dwelling distribution from the relationship between assessment-title counts and permit units-added counts. The assessment dataset does not identify self-contained dwelling counts or separately titled versus single-title buildings, and the rule does not establish which units belong to which title when several titles and units share a lot.",
+      "Claude operationalized the first full assessment roll with an unpredeclared 30-percent next-roll stabilization rule and a September 30 occupancy cutoff. The value-growth rule uses the outcome series itself to decide inclusion and can preferentially exclude low or delayed assessments.",
+      "Claude's mature-neighbourhood result uses a neighbourhood-level layer as a proxy and does not apply the bylaw's RF1-RF5 site-zoning condition parcel by parcel. It therefore does not implement the frozen historical Mature Neighbourhood Overlay boundary as written.",
+      "Claude treated assessed value as the Claim 2 price for every tested dwelling because no sale-price source was publicly accessible. Lack of access does not establish that a first arm's-length sale did not exist. The brief requires that sale where one exists and permits assessed value only otherwise.",
+      "Claude's assertion that the permit datasets under-capture teardowns after 2018 is plausible but not established merely by falling demolition-description counts and a separate total of approved dwelling units. Approved units and demolition permits have different denominators, and redevelopment can occur on vacant, consolidated or non-residential sites.",
+      "Claude's Claim 2 explanation calls 2,968 divided by 3,584 the lower bound with unclassified dwellings treated as meeting the threshold. The numerator actually excludes all 225 unclassified dwellings. The arithmetic is the lower bound, but the verbal description is reversed or ambiguous.",
+      "Gemini treated the absence of a precompiled report and its inability to execute a join as evidence that the claims could not be tested. Claude's work shows that an informative approximation can be constructed from the public raw tables, even though it does not satisfy the frozen frame.",
+      "Gemini identifies the City as the likely holder of first arm's-length sale prices. Those records are more likely held by Alberta Land Titles and MLS participants. The City assessment table does not publish transaction prices or arm's-length status."
+    ],
+    "verdict_changes": []
+  },
+  "claims": [
+    {
+      "id": "ip-teardown-price-gap",
+      "proposition_evaluated": "Among replacement dwelling units on Edmonton lots where one dwelling was demolished under a residential demolition permit issued in 2016-2025, more than 50 percent had a higher constant-dollar assessed value on the first full roll after completion than the demolished dwelling's total assessed value on the roll in force in the year before demolition. Each self-contained replacement dwelling is counted once, using its own total assessment when separately titled and the building's total assessment divided by its integer dwelling count when held in a single-title multi-unit building.",
+      "interpretation_notes": "I retain Not established. The new cross-review analysis is useful directional evidence, but it does not analyze the frozen population. It replaces the permit frame and permit year with assessment-detected candidates and last-standing-roll year, infers dwelling and title structure, uses an outcome-dependent completion heuristic and produces fractional dwelling counts. Its reported 62.0-percent classified share cannot carry the verdict because its own reported bounds span 50 percent, and those bounds omit an unknown number of lots missed by the replacement frame. The reported five-year classified share of 48.3 percent also shows that the answer is sensitive to cohort. Undivided title and lot results remain supplementary and do not rescue the unit-level proposition. The specific CAD 350,000-to-CAD 1,000,000 example remains unverified.",
+      "verdict": "Not established",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "A cross-reviewer reconstructed an assessment-detected candidate cohort and reported 4,091 of 6,603 classified replacement dwelling units, 62.0 percent, above the demolished dwelling's constant-dollar assessment, with a median ratio of 1.222.",
+          "source_title": "Property Assessment Data (Historical), 2012-2025 rolls",
+          "source_url": "https://data.edmonton.ca/Sustainable-Development/Property-Assessment-Data-Historical-/qi6a-xuwt",
+          "source_publisher": "City of Edmonton Open Data",
+          "source_date": "2026-01-12",
+          "source_type": "observed-data",
+          "establishes": "The source supplies assessment-account values used in the reconstruction. It does not publish the reported match, dwelling classification or percentages, and the reconstruction does not follow the declared permit frame.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "A separate personal-blog analysis found a median gross lot-level assessed-value increase of CAD 1.7 million among 67 completed 2024-permitted mature-area lots with five or more replacement units.",
+          "source_title": "Edmonton's $15M infill property tax dividend",
+          "source_url": "https://www.jacobdawang.com/blog/2026/property-tax-uplift/",
+          "source_publisher": "Jacob Dawang",
+          "source_date": "2026-08-04",
+          "source_type": "analytical-report",
+          "establishes": "Selected whole-lot assessments rose after redevelopment. The analysis explicitly uses lots, a selected 2024 RS-zone cohort and split-baseline assumptions, so it does not establish the replacement-dwelling-unit majority.",
+          "strength": "weak"
+        },
+        {
+          "finding": "The City estimates a property's open-market value as of July 1 of the preceding year and records physical condition as of December 31.",
+          "source_title": "Assessment of Properties",
+          "source_url": "https://www.edmonton.ca/residential_neighbourhoods/property-assessment",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026",
+          "source_type": "city-webpage",
+          "establishes": "The City's valuation basis supports the brief's assessment-date convention. It does not identify the first full roll or establish a price direction.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The cross-review reconstruction reports a nominally complete lower bound of 42.6 percent and upper bound of 73.8 percent, plus a five-year classified share of 1,506 of 3,117, or 48.3 percent.",
+          "source_title": "Property Assessment Data (Historical), 2012-2025 rolls",
+          "source_url": "https://data.edmonton.ca/Sustainable-Development/Property-Assessment-Data-Historical-/qi6a-xuwt",
+          "source_publisher": "City of Edmonton Open Data",
+          "source_date": "2026-01-12",
+          "source_type": "observed-data",
+          "establishes": "Even the proxy analysis does not place its ten-year bounds wholly above or below 50 percent, and its recent classified cohort does not show a majority. The published table does not itself verify those calculations.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The General Building Permits dataset lacks a parcel identifier, and residential occupancy dates are available only for permits finalized from 2022 onward. The historical assessment data do not publish self-contained dwelling counts or an explicit title-form classification.",
+          "source_title": "General Building Permits and Historical Property Assessment Data",
+          "source_url": "https://dev.socrata.com/foundry/data.edmonton.ca/24uj-dj8v",
+          "source_publisher": "City of Edmonton Open Data",
+          "source_date": "2026",
+          "source_type": "observed-data",
+          "establishes": "The open tables do not directly supply several fields needed to implement the declared matching, completion and per-title valuation rules.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The historical assessment table includes account number, assessment year, address, legal description, coordinates, year built, lot size and total assessed value, but not land and improvement components, self-contained dwelling counts or an explicit separately titled versus single-title classification.",
+          "source_title": "Property Assessment Data (Historical)",
+          "source_url": "https://dev.socrata.com/foundry/data.edmonton.ca/qi6a-xuwt",
+          "source_publisher": "City of Edmonton Open Data",
+          "source_date": "2026",
+          "source_type": "observed-data",
+          "establishes": "The title and dwelling classifications in the cross-review result are inferred rather than observed in the cited assessment table.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City's 2024 infill report records a net reduction in single-detached dwellings and substantial additions in row houses, secondary suites and backyard houses.",
+          "source_title": "2024 Redeveloping Area Infill Report",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2024-Redeveloping-Area-Infill-Report.pdf?cb=1761690193",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025",
+          "source_type": "analytical-report",
+          "establishes": "Multi-unit replacement is material, so a higher title or lot total cannot be assumed to mean that each replacement dwelling exceeds the demolished dwelling's value. The report has no matched price comparison.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "The new calculation has no reproducible code, row-level output or audit trail in the review package.",
+        "Its assessment-detected population is not the declared all-demolition-permit frame and may miss consolidations, large lots, distant replacement points and cases rejected by its plausibility filters.",
+        "The reported bounds contain fractional dwelling units even though the brief requires every self-contained unit to be counted once.",
+        "Dwelling counts come from permits and are allocated among assessment titles by inference. Permit revisions, secondary suites and multiple titles can make that allocation wrong.",
+        "The first-full-roll rule uses a 30-percent future-value test and a September occupancy cutoff that were not fixed in the brief.",
+        "The mature subset is a neighbourhood-level proxy and does not apply the RF1-RF5 site condition from the frozen bylaw.",
+        "Sale-to-sale prices, asking prices, contract rents, tenure changes, prior rents, bedroom counts, land and improvement splits, and reliable fire or safety-order flags remain unavailable.",
+        "The reported undivided-title and lot-total results answer supplementary questions and cannot substitute for the dwelling-unit denominator."
+      ],
+      "unknowns": [
+        "The complete number of eligible 2016-2025 residential demolition permits involving exactly one demolished dwelling.",
+        "How many eligible lots the assessment-point reconstruction missed and whether missed lots have different replacement types or values.",
+        "The integer number and title assignment of self-contained replacement dwellings on every lot.",
+        "The first full post-completion roll for replacements lacking reliable occupancy or completion dates.",
+        "The valid lower and upper bounds over the complete declared city-wide denominator.",
+        "Whether the historical Mature Neighbourhood Overlay subset differs after applying its parcel-level zoning condition."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A complete residential demolition-permit extract for 2016-2025 with parcel history and flags showing how many dwellings were demolished.",
+          "likely_holder": "City of Edmonton Development Services and Safety Codes permit systems",
+          "importance": "critical"
+        },
+        {
+          "description": "A historical parcel, title and assessment-account crosswalk covering subdivisions and consolidations.",
+          "likely_holder": "City of Edmonton Assessment and Taxation, Alberta Land Titles and AltaLIS",
+          "importance": "critical"
+        },
+        {
+          "description": "Verified integer dwelling counts and title assignments for every replacement building, including secondary suites.",
+          "likely_holder": "City of Edmonton Development Services and Assessment and Taxation",
+          "importance": "critical"
+        },
+        {
+          "description": "Completion and occupancy evidence sufficient to identify each replacement's first full assessment roll without using its later value trajectory.",
+          "likely_holder": "City of Edmonton permit, inspection and assessment systems",
+          "importance": "critical"
+        },
+        {
+          "description": "A reproducible working file containing the cross-reviewer's matches, exclusions, unit allocations and calculations.",
+          "likely_holder": "The cross-reviewer or YEGFacts panel runner",
+          "importance": "high"
+        }
+      ],
+      "calculations_needed": [
+        "Rebuild the declared demolition-permit frame and report integer counts entering and leaving every matching step.",
+        "Link each permit through parcel and title changes, excluding but separately reporting lots with multiple demolished dwellings.",
+        "Identify each self-contained replacement dwelling and its title before calculating any denominator.",
+        "Identify the first full roll from completion evidence rather than from the assessment outcome.",
+        "Calculate the city-wide unit share and complete-denominator bounds, then the median ratio, quartiles, range and both lot sensitivities.",
+        "Repeat the calculation for the exact frozen Mature Neighbourhood Overlay boundary, the City Plan redeveloping area, the five-year cohort and the fire or safety-order sensitivity."
+      ],
+      "what_would_change_my_verdict": [
+        "A reproducible analysis of the declared complete permit frame whose lower bound exceeds 50 percent would change the verdict to Supported.",
+        "A reproducible complete-frame analysis whose upper bound is 50 percent or less would change the verdict to Contradicted.",
+        "A validated parcel crosswalk, integer dwelling-per-title register and completion dates could make those bounds calculable.",
+        "A proxy calculation with bounds still spanning 50 percent would not change the verdict."
+      ],
+      "suggested_one_line": "A cross-review reconstruction found 62 percent among classified candidate units, but its bounds span 50 percent and its replacement frame, fractional unit counts and inferred title structure do not establish the declared Edmonton-wide result.",
+      "suggested_short_answer": "Not established. A custom assessment-based reconstruction suggests that 62 percent of classified candidate replacement units were assessed higher than the demolished dwelling, while only 48 percent were higher in its recent five-year cohort. The calculation changes the declared permit frame, creates fractional unit counts and leaves its reported ten-year bounds between 43 and 74 percent, so it cannot settle the claim.",
+      "suggested_tldr": [
+        "The proxy classified share is 62 percent, but its reported bounds span 50 percent.",
+        "Its recent five-year classified share is 48 percent.",
+        "Title totals and lot totals rise much more often than per-dwelling values, but they are not the verdict measure.",
+        "The proxy uses an assessment-detected frame and fractional dwelling counts.",
+        "The frozen city-wide and mature-area results remain unestablished."
+      ]
+    },
+    {
+      "id": "ip-infill-affordable",
+      "proposition_evaluated": "Among separately titled replacement dwellings in the same matched 2016-2025 Edmonton demolition-permit set, more than 50 percent would require shelter costs equal to or greater than 30 percent of monthly before-tax income for a hypothetical household earning the declared City median household income of CAD 90,000, using the first arm's-length post-completion sale price where one exists and otherwise the first-full-roll total assessment, with the brief's 20-percent down payment, five-year conventional mortgage rate, 25-year amortization, property tax, utility and condominium-fee rules.",
+      "interpretation_notes": "I retain Not established. Claude's proxy model is strong directional evidence: it reports 2,968 of 3,359 classified separately titled candidates, 88.4 percent, above the threshold, with a reported lower bound of 82.8 percent among 3,584 candidate dwellings. That calculation still inherits Claim 1's nonconforming assessment-detected frame and inferred title classification. It also uses assessed value for every dwelling without establishing whether a first arm's-length sale existed. The reported bound therefore covers only its inferred candidate set, not the complete denominator fixed by the brief. The calculation supports concern about purchase affordability but does not prove the required majority. It does not test rent affordability or actual occupant costs.",
+      "verdict": "Not established",
+      "confidence": "High",
+      "evidence_basis": "modelled-uncertain",
+      "supporting_evidence": [
+        {
+          "finding": "A cross-reviewer modelled 3,359 inferred separately titled replacement dwellings and reported that 2,968, or 88.4 percent, required at least 30 percent of the declared household's income. The reported median price was CAD 638,000 and median monthly shelter cost was CAD 3,948 against a CAD 2,250 threshold.",
+          "source_title": "Property Assessment Data (Historical), 2012-2025 rolls",
+          "source_url": "https://data.edmonton.ca/Sustainable-Development/Property-Assessment-Data-Historical-/qi6a-xuwt",
+          "source_publisher": "City of Edmonton Open Data",
+          "source_date": "2026-01-12",
+          "source_type": "observed-data",
+          "establishes": "The source supplies assessed values used by the model. It does not publish the inferred title classification, matched denominator or shelter-cost results, and no reproducible calculation was supplied.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The 2021 Census reports median total household income of CAD 90,000 in 2020 for the City of Edmonton and CAD 96,000 for the Edmonton census metropolitan area.",
+          "source_title": "Profile table, 2021 Census of Population: Edmonton City and Edmonton CMA",
+          "source_url": "https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/page.cfm?DGUIDlist=2021A00054811061%2C2021S0503835&GENDERlist=1%2C2%2C3&HEADERlist=0&Lang=E&STATISTIClist=1%2C4&SearchText=edmonton",
+          "source_publisher": "Statistics Canada",
+          "source_date": "2022",
+          "source_type": "observed-data",
+          "establishes": "The primary and CMA income inputs specified by the brief.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Statistics Canada's standard places households spending 30 percent or more of total income on shelter costs in the claimed category.",
+          "source_title": "Classification of shelter cost to income ratio",
+          "source_url": "https://www23.statcan.gc.ca/imdb/p3VD.pl?CLV=1&CPV=2&CST=10022026&CVD=1584158&Function=getVD&MLV=2&TVD=1584157",
+          "source_publisher": "Statistics Canada",
+          "source_date": "2026-05-07",
+          "source_type": "observed-data",
+          "establishes": "The 30-percent classification in force on the freeze date.",
+          "quote": "This category includes households who spend 30% or more of household total income on shelter costs.",
+          "strength": "strong"
+        },
+        {
+          "finding": "For 411 absorbed homeowner and condominium units in Edmonton in 2025, CMHC reports a first-quintile price of CAD 514,000 and a median of CAD 592,500.",
+          "source_title": "Average, Median and Price Percentiles for Absorbed Homeowner and Condominium Units by Census Subdivision",
+          "source_url": "https://www03.cmhc-schl.gc.ca/hmip-pimh/en/TableMapChart/TableMatchingCriteria?CategoryLevel1=New+Housing+Construction&CategoryLevel2=Absorbed+Unit+Prices+%28%24%29&GeographyId=0340&GeographyType=MetropolitanMajorArea&RowField=22",
+          "source_publisher": "Canada Mortgage and Housing Corporation",
+          "source_date": "2025",
+          "source_type": "observed-data",
+          "establishes": "Recent new ownership prices are directionally consistent with affordability pressure at CAD 90,000 income. This comparator does not identify teardown replacements or the separately titled matched denominator.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The Alberta average for water, fuel and electricity for the principal accommodation was CAD 4,532 annually in 2023, or CAD 377.67 per month.",
+          "source_title": "Household spending, Canada, regions and provinces",
+          "source_url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110022201",
+          "source_publisher": "Statistics Canada",
+          "source_date": "2025-05-21",
+          "source_type": "observed-data",
+          "establishes": "The table supplies the fixed utility input required by the brief. It is a provincial household average, not a cost observed for any replacement dwelling.",
+          "strength": "moderate"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The historical assessment table does not publish title form, self-contained dwelling counts, first arm's-length sale prices or arm's-length status.",
+          "source_title": "Property Assessment Data (Historical)",
+          "source_url": "https://dev.socrata.com/foundry/data.edmonton.ca/qi6a-xuwt",
+          "source_publisher": "City of Edmonton Open Data",
+          "source_date": "2026",
+          "source_type": "observed-data",
+          "establishes": "The tested separately titled denominator and the choice between sale price and assessed value cannot be established from the assessment table alone.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The Bank of Canada stopped publishing monthly chartered-bank interest-rate observations after September 2019. It says the old monthly series was the last weekly Wednesday rate of each month and continues to publish weekly posted rates.",
+          "source_title": "Changes to publication of interest rate statistics",
+          "source_url": "https://www.bankofcanada.ca/2019/08/changes-to-publication-interest-rate/",
+          "source_publisher": "Bank of Canada",
+          "source_date": "2019-08-01",
+          "source_type": "observed-data",
+          "establishes": "Claude's last-weekly-observation rule is a reasonable reconstruction of the former monthly convention, but it remains an extension that the brief did not expressly predeclare. The rates are typical posted rates, not purchaser contract rates.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City's 2024 affordability report lists benchmark prices of CAD 246,600 for townhouses and row houses and CAD 181,200 for apartments, and says households above CAD 60,000 should be able to afford those benchmark types under its mortgage-qualification method.",
+          "source_title": "2024 Monitoring Market Housing Affordability Report",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2024-Monitoring-Market-Housing-Affordability-Report.pdf?cb=1751470945",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025",
+          "source_type": "analytical-report",
+          "establishes": "Lower-priced ownership types exist and could pass a CAD 90,000-household test. The report uses different financing assumptions and does not identify the matched replacement population.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The cross-review model excludes 3,244 inferred dwelling units in single-title buildings, reported as 49.1 percent of its 6,603 classified units, with a median building-average assessment of CAD 265,250 per dwelling unit.",
+          "source_title": "Property Assessment Data (Historical), 2012-2025 rolls",
+          "source_url": "https://data.edmonton.ca/Sustainable-Development/Property-Assessment-Data-Historical-/qi6a-xuwt",
+          "source_publisher": "City of Edmonton Open Data",
+          "source_date": "2026-01-12",
+          "source_type": "observed-data",
+          "establishes": "The model says nothing about nearly half of its classified replacement units. Their exclusion follows the brief only if the inferred title classification is correct. Their rent affordability remains untested.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "The affordability calculation has no reproducible code, dwelling-level output or audit trail in the review package.",
+        "Its separately titled denominator inherits the nonconforming assessment-detected frame, point matching, filters and proxy cohort year from Claim 1.",
+        "Title form is inferred from assessment-account and permit-unit counts rather than observed directly.",
+        "Every tested price is an assessment. The analysis does not establish whether a first arm's-length sale existed and therefore does not consistently apply the brief's price hierarchy.",
+        "The reported lower bound covers only the inferred candidate denominator and cannot bound lots or dwellings omitted from the replacement frame.",
+        "No condominium fee was included for 189 inferred condominium-type dwellings because none was available in the assessment record.",
+        "The mortgage inputs are posted conventional rates, not actual contract rates, and the 2020 income is held fixed against prices from several years.",
+        "The utility allowance is a fixed 2023 Alberta average rather than any dwelling's bill. The proxy result without utilities was still 80.9 percent.",
+        "Renting and actual occupant shelter costs are not tested. The inferred 3,244 single-title units remain outside the verdict.",
+        "Bedroom counts are unavailable, so the required bedroom distribution and breakdown were not produced."
+      ],
+      "unknowns": [
+        "The complete number of separately titled replacements in the declared demolition-permit frame.",
+        "Which separately titled replacements had a qualifying first arm's-length sale and the price and date of each sale.",
+        "Whether inferred title classifications agree with registered title and condominium records.",
+        "How omitted teardown lots and unclassified replacements would affect complete-denominator bounds.",
+        "The condominium fees for affected dwellings.",
+        "The affordability of renting units held in single-title buildings.",
+        "The exact city-wide and frozen mature-area results after applying the declared frame and geography."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Registered title history and first arm's-length sale prices and dates for each separately titled replacement.",
+          "likely_holder": "Alberta Land Titles, REALTORS Association of Edmonton MLS participants, property owners and purchasers",
+          "importance": "critical"
+        },
+        {
+          "description": "A complete declared demolition-permit frame linked to verified replacement titles and integer dwelling counts.",
+          "likely_holder": "City of Edmonton Development Services, Assessment and Taxation and Alberta Land Titles",
+          "importance": "critical"
+        },
+        {
+          "description": "Property-level condominium fees for condominium replacements.",
+          "likely_holder": "Condominium corporations, owners, developers and listing services",
+          "importance": "high"
+        },
+        {
+          "description": "Bedroom counts and property-level contract rents with utility-inclusion terms.",
+          "likely_holder": "City permit records, builders, landlords and property owners",
+          "importance": "high"
+        },
+        {
+          "description": "A reproducible dwelling-level working file for the cross-review affordability model.",
+          "likely_holder": "The cross-reviewer or YEGFacts panel runner",
+          "importance": "high"
+        }
+      ],
+      "calculations_needed": [
+        "Construct the complete separately titled denominator from the declared Claim 1 permit frame and count excluded single-title units separately.",
+        "Determine for each tested dwelling whether a first arm's-length sale exists, using its sale when it does and its first-full-roll assessment only otherwise.",
+        "Apply the fixed mortgage, property-tax, utility and condominium-fee rules to each valid price date.",
+        "Calculate lower and upper bounds over the complete denominator, not only the inferred assessment-detected candidates.",
+        "Report city-wide and exact historical-Mature-Neighbourhood-Overlay results, both lot sensitivities and the bedroom breakdown.",
+        "Repeat the test under the CMA income, minimum down payment, 30-year amortization and no-utility sensitivities."
+      ],
+      "what_would_change_my_verdict": [
+        "A reproducible complete-frame model using verified title form and the required sale-or-assessment price hierarchy whose lower bound exceeds 50 percent would change the verdict to Supported.",
+        "A corresponding model whose upper bound is 50 percent or less would change the verdict to Contradicted.",
+        "The cross-review proxy would become much more persuasive if its row-level matches, title classifications and calculations were supplied and independently reproduced.",
+        "Aggregate new-home or benchmark-price comparators alone would not change the verdict."
+      ],
+      "suggested_one_line": "A proxy assessed-value model found 88 percent of inferred separately titled replacements above the purchase-affordability threshold, but its replacement frame, title classifications and use of assessments without checking for first sales leave the declared majority unestablished.",
+      "suggested_short_answer": "Not established. The new proxy calculation strongly points toward purchase-affordability pressure: it classifies 88 percent of inferred separately titled candidates above the CAD 2,250 monthly threshold. But it inherits a different teardown frame, infers title status and uses assessed values without determining whether first sales existed, so its reported 83-percent lower bound is not a bound over the population defined in the brief.",
+      "suggested_tldr": [
+        "The proxy model reports 88 percent above the threshold and a median monthly cost of CAD 3,948.",
+        "Its denominator is inferred from an assessment-detected replacement frame rather than the declared permit frame.",
+        "It uses assessments for every dwelling without establishing whether a first sale existed.",
+        "About half of its classified replacement units are single-title units outside the purchase test.",
+        "The result is strong directional evidence, not a verified complete-frame majority."
+      ]
+    }
+  ]
+}

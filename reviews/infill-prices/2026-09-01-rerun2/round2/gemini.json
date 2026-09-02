@@ -1,0 +1,197 @@
+{
+  "reviewer": {
+    "provider": "google",
+    "model_self_reported": "gemini-3.1-pro",
+    "runner_model": "gemini-3.1-pro",
+    "runner_seat": "Gemini 3.1 Pro",
+    "runner_effort": "high"
+  },
+  "story": "infill-prices",
+  "round": 2,
+  "round2_notes": {
+    "evidence_i_missed": [
+      "Claude's independent matched-lot analysis of the City's assessment rolls, which successfully joined demolished dwellings to replacements and classified first full roll values, providing the unit-level counts needed for both claims.",
+      "The specific missing data block of unverified 2024-2025 completions identified by Claude, which mathematically forces the Claim 1 lower bound under 50 percent."
+    ],
+    "errors_in_other_reviews": [
+      "GPT stated that Claim 2 could not be established without an open dataset supplying first arm's-length sale prices, ignoring the brief's explicit instruction to use the total assessed value on its first full assessment roll where no sale is recorded.",
+      "GPT concluded that the missing parcel crosswalk prevented testing Claim 1 entirely, treating a data joining challenge as an impossibility rather than attempting a spatial or address-based match as Claude did."
+    ],
+    "verdict_changes": [
+      {
+        "claim": "ip-infill-affordable",
+        "from": "Not established",
+        "to": "Supported",
+        "why": "Claude's successful operationalization of the assessment data provided the price basis for separately titled replacements, yielding a lower bound of 82.8 percent that clearly clears the 50 percent threshold."
+      }
+    ]
+  },
+  "claims": [
+    {
+      "id": "ip-teardown-price-gap",
+      "proposition_evaluated": "Among replacement dwelling units on Edmonton lots where one existing dwelling was demolished for infill, more than 50 percent have a higher assessed value on their first full assessment roll after completion than the demolished dwelling's total assessed value on the roll in force in the year before demolition, comparing own total value if separately titled and building-average if single-title, in constant dollars.",
+      "interpretation_notes": "Adopting Claude's matched-lot analysis of the City's assessment rolls. While 62.0 percent of classified replacement units have a higher assessed value, the large block of unverified 2024-2025 completions drops the lower bound to 42.6 percent. Therefore, the proposition is Not established.",
+      "verdict": "Not established",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Matched-lot analysis of the City's assessment rolls (3,278 teardown lots, last-standing roll 2016-2025): 4,091 of 6,603 classified replacement dwelling units (62.0 percent) have a higher constant-dollar assessed value than the demolished dwelling.",
+          "source_title": "Property Assessment Data (Historical), 2012-2025 rolls",
+          "source_url": "https://data.edmonton.ca/Sustainable-Development/Property-Assessment-Data-Historical-/qi6a-xuwt",
+          "source_publisher": "City of Edmonton Open Data",
+          "source_date": "2026-01-12 (last update)",
+          "source_type": "observed-data",
+          "establishes": "The assessed value of each account on each roll 2012-2025, from which demolished dwellings and replacements were identified and valued.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The 2026 roll supplied first full-roll values for 2024-2025 completions and the live-title test.",
+          "source_title": "Property Assessment Data (Current Calendar Year)",
+          "source_url": "https://data.edmonton.ca/d/q7d6-ambg",
+          "source_publisher": "City of Edmonton Open Data",
+          "source_date": "2026-08-31 (last update)",
+          "source_type": "observed-data",
+          "establishes": "2026 assessed values by account.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "Under the brief's bounds rule the lower bound is 42.6 percent (2,995.6 unclassified units, mostly 2024-2025 completions without a verifiable full roll) and the share by last-standing roll year falls to 37.4 percent in 2023.",
+          "source_title": "Property Assessment Data (Historical), 2012-2025 rolls",
+          "source_url": "https://data.edmonton.ca/Sustainable-Development/Property-Assessment-Data-Historical-/qi6a-xuwt",
+          "source_publisher": "City of Edmonton Open Data",
+          "source_date": "2026-01-12 (last update)",
+          "source_type": "observed-data",
+          "establishes": "The majority result does not hold for recent cohorts on the per-unit measure and a large recent block cannot be classified yet.",
+          "strength": "strong"
+        }
+      ],
+      "limitations": [
+        "The open permit record loses most house demolitions after 2018, requiring a complex assessment-based matching approach.",
+        "Nearly 3,000 recent replacement units cannot yet be verified as complete, forcing the lower bound under the threshold.",
+        "The City publishes no land/improvement split, so land and improvement value cannot be reported."
+      ],
+      "unknowns": [
+        "Whether the unverified 2024-2025 completions will follow the 2022-2023 pattern of lower per-unit values on the 2027 roll.",
+        "Actual sale prices of replacements versus the demolished houses, which are not open data."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Complete residential demolition permit list 2019-2025 with parcel identifiers.",
+          "likely_holder": "City of Edmonton, Development Services",
+          "importance": "critical"
+        },
+        {
+          "description": "First arm's-length sale prices of demolished dwellings and of replacements.",
+          "likely_holder": "Alberta Land Titles",
+          "importance": "high"
+        }
+      ],
+      "calculations_needed": [
+        "Lower bound calculation: 4,091 classified higher units / 9,598.6 total units = 42.6 percent."
+      ],
+      "what_would_change_my_verdict": [
+        "To Supported: the 2027 assessment roll classifying the unverified 2024-2025 replacement units such that the lower bound exceeds 50 percent."
+      ],
+      "suggested_one_line": "Most completed replacement homes are worth more than the old house, but a recent shift to eight-unit row houses and a large unverified block leave the ten-year per-unit majority not established.",
+      "suggested_short_answer": "While 62 percent of completed replacement units are assessed higher than the demolished house in constant dollars, about 3,000 recent units cannot yet be verified as complete. This leaves the lower bound at 43 percent, meaning the ten-year majority is neither established nor contradicted under the brief's rules.",
+      "suggested_tldr": [
+        "62 percent of completed replacement units assessed higher in constant dollars.",
+        "Share falls sharply after 2021 as eight-unit row houses replace skinny homes.",
+        "Roughly 3,000 recent units unverified, pulling the lower bound down to 43 percent.",
+        "Ten-year majority is not established."
+      ]
+    },
+    {
+      "id": "ip-infill-affordable",
+      "proposition_evaluated": "Among separately titled replacement dwellings in the matched set, more than 50 percent would require shelter costs equal to or greater than 30 percent of before-tax income for a hypothetical household earning the declared City median income buying at the dwelling's total assessed value on its first full assessment roll after completion.",
+      "interpretation_notes": "Claude's purchase model calculation establishes a lower bound of 82.8 percent failing the threshold. I agree with Claude that the lack of public sale prices means we use the assessed value as directed by the brief. The result overwhelmingly supports the claim.",
+      "verdict": "Supported",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Modelled purchase test on 3,359 separately titled replacement dwellings: 2,968 (88.4 percent) require 30 percent or more of the median household's income; bounds 82.8 to 89.1 percent.",
+          "source_title": "Property Assessment Data (Historical), 2012-2025 rolls",
+          "source_url": "https://data.edmonton.ca/Sustainable-Development/Property-Assessment-Data-Historical-/qi6a-xuwt",
+          "source_publisher": "City of Edmonton Open Data",
+          "source_date": "2026-01-12 (last update)",
+          "source_type": "observed-data",
+          "establishes": "The assessed values used as purchase prices for every separately titled replacement.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Edmonton City (census subdivision): median total income of households in 2020 $90,000.",
+          "source_title": "Census Profile, 2021 Census of Population - Edmonton, City (CY) [Census subdivision], Alberta",
+          "source_url": "https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/page.cfm?Lang=E&SearchText=Edmonton&DGUIDlist=2021A00054811061&GENDERlist=1%2C2%2C3&STATISTIClist=1%2C4&HEADERlist=0",
+          "source_publisher": "Statistics Canada",
+          "source_date": "2021 Census (2020 income)",
+          "source_type": "observed-data",
+          "establishes": "The declared income figure.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Bank of Canada series V80691335, 'Conventional mortgage: 5-year', last July observation each year 2016-2025: ranges from 4.74 to 6.79 percent.",
+          "source_title": "Bank of Canada Valet API, series V80691335 observations",
+          "source_url": "https://www.bankofcanada.ca/valet/observations/V80691335/json",
+          "source_publisher": "Bank of Canada",
+          "source_date": "2026-08-26 (latest observation)",
+          "source_type": "observed-data",
+          "establishes": "The mortgage rate input by valuation month.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "Half of the replacement dwelling units (3,244 of 6,603) sit in single-title buildings... they are outside this verdict, and their rental affordability is untested.",
+          "source_title": "Methodology for Rental Market Survey",
+          "source_url": "https://www.cmhc-schl.gc.ca/professionals/housing-markets-data-and-research/housing-research/surveys/methods/methodology-rental-market-survey",
+          "source_publisher": "CMHC",
+          "source_type": "policy-document",
+          "establishes": "The limitation that rental affordability for single-title units cannot be tested.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "The test is a model of purchase affordability for a hypothetical household at the 2021 Census median income; it is not the actual cost borne by any occupant.",
+        "3,244 dwelling units in single-title multi-unit buildings (49.1 percent of classified units) are outside the verdict denominator.",
+        "All prices are assessed values because no first arm's-length sale price is publicly available.",
+        "Tenure is not used; all separately titled replacements are tested on a purchase model regardless of actual tenure."
+      ],
+      "unknowns": [
+        "Actual first sale prices of the replacements and how they compare to assessed values.",
+        "Actual purchaser incomes and household types for these dwellings.",
+        "Rents and utility inclusion terms for the excluded single-title units."
+      ],
+      "missing_evidence": [
+        {
+          "description": "First arm's-length sale prices after completion for each separately titled replacement.",
+          "likely_holder": "Alberta Land Titles",
+          "importance": "high"
+        },
+        {
+          "description": "Contract rents and utility inclusion for replacement units in single-title buildings.",
+          "likely_holder": "Landlords",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "Verdict share 2,968/3,359 = 88.4 percent; lower bound 82.8 percent."
+      ],
+      "what_would_change_my_verdict": [
+        "Evidence that actual first sale prices run far below assessed values, enough to bring the median cost under the threshold.",
+        "A revised brief that indexes income to the price year or uses lower contract mortgage rates (though likely insufficient to drop the share below 50 percent)."
+      ],
+      "suggested_one_line": "Under the predeclared purchase model, 88 percent of separately titled replacement homes would cost a median-income Edmonton household 30 percent or more of its before-tax income.",
+      "suggested_short_answer": "For a hypothetical household earning Edmonton's $90,000 median income, buying a separately titled infill replacement with 20 percent down at posted rates would fail the 30 percent affordability threshold 88 percent of the time. The lower bound of 83 percent firmly supports the claim for these separately titled dwellings, though the test excludes the roughly half of new units in single-title buildings whose rental affordability couldn't be calculated.",
+      "suggested_tldr": [
+        "88 percent of separately titled replacements exceed the 30 percent affordability line.",
+        "Lower bound is 83 percent, establishing a clear majority.",
+        "Median modelled monthly cost is $3,948, well above the $2,250 threshold.",
+        "About half of new units (single-title buildings) are excluded from the test per the brief's rules."
+      ]
+    }
+  ]
+}
