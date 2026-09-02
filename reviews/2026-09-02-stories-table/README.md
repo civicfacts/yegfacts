@@ -19,6 +19,7 @@ verdicts."
 | 1 | codex-review_1.md | codex-output_1.md: four P3s: tables had no caption naming their story; the component doc comment overstated the old page and the column rule; "badge" for the pending-review label; formatting churn in findings.ts | APPROVED |
 | 2 | codex-review_2.md | codex-output_2.md: after the founder's preview note, the 3px story rule and larger title; one wording nit in the comment | APPROVED |
 | 3 | codex-review_3.md | codex-output_3.md: one link per story, kicker above the title, claims unlinked; two wording nits and one redundant class | APPROVED |
+| 4 | codex-review_4.md | codex-output_4.md (reviewed at 5c6c679, which also carries the marker under the badge): bars one per row, headers for screen readers, panel agreement only when contested; no findings | APPROVED |
 
 Round 1, all four adopted before commit: a visually hidden caption per
 table, the doc comment rewritten to the component's contract, "label",
@@ -40,6 +41,17 @@ on the story page; the claim questions are plain text with their badges,
 since the story page's verdict strip carries the claim anchors and search
 is the route to a single claim. Round 3 approved it; its three nits were
 applied.
+
+Then three more from the founder: the Claim | Finding column heads, the
+verdict bars fusing into one line (on the home page too), and whether the
+boards need "Unanimous panel" at all ("I would drop it"). Adopted: the
+header row is for screen readers only; the bar sits on the content
+inside the row's padding so each row keeps its own, on the stories table
+and on FindingsBoard (home and search); panel agreement prints only when
+it is not Unanimous, under the badge it qualifies (the founder's
+placement). Stew kept the contested marker rather than dropping the
+line entirely: a Split verdict on the front page must not look as firm
+as a unanimous one. Round 4 approved it with no findings.
 
 ## Also checked by Stew before the critique
 
