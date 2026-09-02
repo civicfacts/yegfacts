@@ -73,7 +73,54 @@ const structuredData = (jsonLd === undefined ? [] : [jsonLd].flat()).map((entry)
  */
 const hasMasthead = Astro.slots.has('masthead');
 
-const pageTitle = title === SITE.name ? title : `${title} — ${SITE.name}`;
+/**
+ * What a search result shows: about 60 characters of title and about 160 of
+ * description, the rest cut mid-word by the engine. Titles are mostly short
+ * names, but a source page is named after its source and a candidate page
+ * after the claim as it reached us, either of which can run past 150
+ * characters. Both are cut here at a word instead, so what shows is ours.
+ *
+ * A description is cut at a sentence end, not a word: a one-sentence answer
+ * stays whole even when it runs a little long, because the answer is the
+ * point; a paragraph (a source's `establishes`, a topic overview) keeps as
+ * many whole sentences as fit. The page that already carries the site name in
+ * its title is the home page, which is the only one that names the site itself.
+ */
+const TITLE_MAX = 70;
+const DESCRIPTION_MAX = 160;
+
+function cutAtWord(text: string, max: number): string {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max - 1).replace(/\s+\S*$/, '');
+  return `${cut}…`;
+}
+
+function cutAtSentence(text: string, max: number): string {
+  if (text.length <= max) return text;
+  let end = 0;
+  for (const match of text.matchAll(/[.!?]+(?=\s|$)/g)) {
+    // A full stop after a single letter or dotted letters is an initial or a
+    // citation ("R.S.A. 2000, c. M-26"), not the end of a sentence.
+    const word = text.slice(0, match.index).split(/\s+/).at(-1) ?? '';
+    if (/^[A-Za-z](?:\.[A-Za-z])*$/.test(word)) continue;
+    const at = match.index + match[0].length;
+    if (at <= max) {
+      end = at;
+      continue;
+    }
+    // The first sentence alone is over the limit. It stays whole if it is a
+    // sentence a reader holds in one go, which the story schema puts at thirty
+    // words (`one_line`); a longer one is cut at a word like a title.
+    if (end === 0 && text.slice(0, at).split(/\s+/).length <= 30) end = at;
+    break;
+  }
+  return end > 0 ? text.slice(0, end) : cutAtWord(text, max);
+}
+
+const pageTitle = title.includes(SITE.name)
+  ? title
+  : `${cutAtWord(title, TITLE_MAX)} — ${SITE.name}`;
+const metaDescription = cutAtSentence(description, DESCRIPTION_MAX);
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
 const ogImage = new URL(og.src, Astro.site ?? SITE.url).href;
@@ -100,7 +147,7 @@ const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
-    <meta name="description" content={description} />
+    <meta name="description" content={metaDescription} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={symbol.src} type="image/png" />
 
@@ -116,7 +163,7 @@ const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:locale" content="en_CA" />
     <meta property="og:title" content={pageTitle} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={metaDescription} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     {article && <meta property="article:published_time" content={article.published} />}
