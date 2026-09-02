@@ -14,9 +14,9 @@ Gate stage 7, release-check portion. Audit date: 2026-09-01.
 
 **Finding 1, blocking.** `reviews/infill-prices/2026-09-01-rerun2/faithfulness/gpt-2.md:22` publishes three absolute paths:
 
-- `/Users/iabdulin/Sites/yegfacts/evidence/private/YF-EV-0101-...`
-- `/Users/iabdulin/Sites/yegfacts/evidence/private/YF-EV-0049-...`
-- `/Users/iabdulin/Sites/yegfacts/evidence/private/YF-EV-0050-...`
+- `evidence/private/YF-EV-0101-...`
+- `evidence/private/YF-EV-0049-...`
+- `evidence/private/YF-EV-0050-...`
 
 These expose the operator's local username, repository location, and private-archive paths.
 
