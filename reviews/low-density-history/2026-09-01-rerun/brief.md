@@ -5,7 +5,8 @@ synthesis of the first run, reviews/low-density-history/2026-09-02
 (this directory's framing/panel-concern.md; that first directory is named for an intended freeze
 date one day after the actual date); Revision 1 after framing check 1
 (framing/check-1.md, verdict REVISE; response in framing/response-1.md);
-frozen before round 1. Methodology: v1.8
+FROZEN 2026-09-01, commit 2b0c404, on framing check 2 FRAME OK
+(framing/check-2.md). Methodology: v1.8
 
 Drafted by Stew under D-0019, revising the v1 brief of the first run.
 
