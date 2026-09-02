@@ -414,3 +414,35 @@ events:
       brief and fresh round 1 in reviews/infill-prices/2026-09-01-rerun2.
     notes: >
       round1/gemini.json interpretation_notes; errata.md.
+  # --- infill prices, second rerun 2026-09-01-rerun2 (methodology v1.9) ---
+  - date: "2026-09-01"
+    story: infill-prices
+    run: reviews/infill-prices/2026-09-01-rerun2
+    stage: round2
+    seat: GPT-5.6 Sol
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      Documented against the Claude seat that the figures "286 built, 387
+      demolished, net loss 101" do not appear in the 2024 Redeveloping Area
+      Infill Report, which states a net loss of 294. The figures had been
+      transcribed into the registry's establishes line for YF-EV-0101 at
+      ingest from the 2023 report. Registry line corrected at drafting;
+      the draft, calcs and claim corrected.
+    notes: >
+      round2/gpt.json errors_in_other_reviews; errata.md "Registry
+      corrections at drafting"; faithfulness/gemini-1.md item 1.
+  - date: "2026-09-01"
+    story: infill-prices
+    run: reviews/infill-prices/2026-09-01-rerun2
+    stage: drafting
+    seat: Gemini 3.1 Pro
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      Faithfulness check 1 traced the draft's 286/387/101 figures to the
+      wrong report and to the erroneous registry line, and identified the
+      2024 report's actual figure. The GPT seat's faithfulness check
+      flagged the same item among fourteen. Both applied before the gate.
+    notes: >
+      faithfulness/gemini-1.md; faithfulness/gpt-1.md.
