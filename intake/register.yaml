@@ -3,7 +3,17 @@
 # Every claim the site has considered checking, whether or not it reached
 # triage, with where the wording came from and what happened. The
 # pre-registered launch slate (docs/DESIGN.md section 7) is not repeated
-# here; everything else is. A candidate that never reached triage says so.
+# here as a whole; a slate claim appears once it has been through triage
+# or a framing check and did not go to a panel as registered. Everything
+# else is here. A candidate that never reached triage says so.
+#
+# One entry per proposition, not per post. When a new suggestion makes a
+# claim already on this list (the same thing asserted in other words, in
+# other units, or as an example of the same pattern), it is added to that
+# entry's intake record as another captured form, with its source, rather
+# than registered again; the triage reader is not asked to de-duplicate.
+# Two claims that answer different questions stay separate even when they
+# come from the same argument, and may share a story.
 #
 # origin: captured (a post we hold with a URL or screenshot) |
 #         supplied (wording passed to us by a person, provenance not
@@ -93,3 +103,99 @@ candidates:
     triage: intake/candidates/oilers-held-back/triage.md
     intake: intake/candidates/oilers-held-back/intake.md
     note: the triage found fan posts alleging biased officiating; a narrower claim about penalty or review rates versus other teams could be triaged on its own if captured
+  - id: at-100m-a-year
+    recorded: "2026-08-31"
+    origin: editor
+    wording: "Edmonton spends $100 million a year on bike lanes."
+    supplied_by: the founder and the assistant that drafted the design document, as the pre-registered launch-slate wording (docs/DESIGN.md section 7)
+    context: the launch slate, registered before any panel ran; not captured from a post
+    outcome: PARK
+    story: active-transportation
+    reason: "No captured post or statement makes the claim as an annual amount; every captured form says \"$100 million on bike lanes\" with no period attached, so the story checks the comparisons holders actually make with the figure instead. Reopens if the annual wording is captured from a holder."
+    triage: reviews/active-transportation/2026-09-02/triage-1.md
+    intake: reviews/active-transportation/2026-09-02/intake.md
+    note: triage said GO on the figure; framing check 1 (reviews/active-transportation/2026-09-02/framing/check-1.md) found the annual form uncaptured, and the brief was re-framed around the captured comparisons
+  - id: at-congestion-reduced
+    recorded: "2026-08-31"
+    origin: editor
+    wording: "The active-transportation network has reduced congestion."
+    supplied_by: the founder and the assistant that drafted the design document, as the pre-registered launch-slate wording (docs/DESIGN.md section 7)
+    context: the launch slate, registered before any panel ran; the City asserts the benefit on its project page and in council reports, the Province asserts the reverse ahead of legislation, neither as a measured Edmonton result; on 2026-09-02 a captured Facebook thread (intake/captures/2026-09-02-yegscoop-bike-lanes.md) holds both forms verbatim ("Bike infrastructure reduces traffic congestion"; "Now instead of 2 lanes you now have one. Now you have more cars backed up"), which settles provenance but not the missing Edmonton measurement
+    outcome: PARK
+    story: active-transportation
+    reason: "No published Edmonton evaluation joins the bike-lane expansion to before-and-after travel times with a basis for attributing the change to the lanes, so no verdict but Not established is reachable; reopens when the City publishes a traffic evaluation of the expansion, or route opening dates can be joined to comparable before-and-after traffic data."
+    triage: reviews/active-transportation/2026-09-02/triage-1.md
+    intake: reviews/active-transportation/2026-09-02/intake.md
+    note: the editor overruled the PARK in writing, framing check 1 reached the same conclusion independently, and the overrule was withdrawn (reviews/active-transportation/2026-09-02/triage-decision.md)
+  - id: bike-lanes-nobody-rides
+    recorded: "2026-09-02"
+    origin: supplied
+    wording: "Nobody rides the bike lanes."
+    supplied_by: founder, as one of the forms he sees the bike-lane argument take
+    context: Edmonton's bike-lane argument in 2026, ahead of provincial legislation; platform, author and URL not captured
+    outcome: GO
+    reason: "Residents do ask whether the lanes are used, and the City's automated bike counters can answer it at the monitored locations, so long as the brief says plainly that counters detect passes, not people, and cannot see unmonitored routes."
+    triage: intake/candidates/bike-lanes-nobody-rides/triage.md
+    intake: intake/candidates/bike-lanes-nobody-rides/intake.md
+    note: triage GO 2026-09-02; captured forms from a Facebook thread of the same day added to the intake record afterwards, including the mode-share forms ("87% of Edmontonians commute in cars. Less than 1% on bikes", "2.3% of the populations usage") first registered as their own candidate and merged here the same day at the founder's direction, since every form makes one claim in different units, that almost nobody cycles; brief to follow
+  - id: bike-100m-one-percent-of-roads
+    recorded: "2026-09-02"
+    origin: captured
+    wording: "$100 million is over the 4 year budget cycle, and is around 1% of the capital expansion budget for roads."
+    supplied_by: the founder, who pasted a Facebook post and its comments in full (public page Yegscoop, post on the 2026-08-26 committee decision); wording verbatim from a commenter
+    context: "captured thread at intake/captures/2026-09-02-yegscoop-bike-lanes.md, post https://www.facebook.com/yegscoop/posts/pfbid02aKkokbtnxq3dsDhfWgbGsEamfiNRUncwnff4ES8N11qVZBg5W4aDxZaPF3frYymVl"
+    outcome: GO
+    reason: "A resident made the comparison, Edmonton's published budget can test it once the brief names the denominator, and the result could surprise either side of a live transportation-spending debate."
+    triage: intake/candidates/bike-100m-one-percent-of-roads/triage.md
+    intake: intake/candidates/bike-100m-one-percent-of-roads/intake.md
+    note: triage GO 2026-09-02; brief to follow
+
+  - id: fifty-street-181m-600m
+    recorded: "2026-09-02"
+    origin: captured
+    wording: "We spend $181 million on grade separating 600m of 50th Street. That's nearly double the cost for 600m of road compared to the entire 4 year investment in active transportation."
+    supplied_by: the founder, who pasted a Facebook post and its comments in full (public page Yegscoop, post on the 2026-08-26 committee decision); wording verbatim from a commenter
+    context: "captured thread at intake/captures/2026-09-02-yegscoop-bike-lanes.md, post https://www.facebook.com/yegscoop/posts/pfbid02aKkokbtnxq3dsDhfWgbGsEamfiNRUncwnff4ES8N11qVZBg5W4aDxZaPF3frYymVl"
+    outcome: GO
+    reason: "A resident made a concrete comparison, and City project and budget records can test both sides, including whether $181 million fairly describes 600 metres of road."
+    triage: intake/candidates/fifty-street-181m-600m/triage.md
+    intake: intake/candidates/fifty-street-181m-600m/intake.md
+    note: triage GO 2026-09-02; brief to follow
+
+  - id: lanes-removed-citywide
+    recorded: "2026-09-02"
+    origin: captured
+    wording: "The city is removing traffic lanes all throughout the city for bike lanes."
+    supplied_by: the founder, who pasted a Facebook post and its comments in full (public page Yegscoop, post on the 2026-08-26 committee decision); wording verbatim from a commenter
+    context: "captured thread at intake/captures/2026-09-02-yegscoop-bike-lanes.md, post https://www.facebook.com/yegscoop/posts/pfbid02aKkokbtnxq3dsDhfWgbGsEamfiNRUncwnff4ES8N11qVZBg5W4aDxZaPF3frYymVl"
+    outcome: GO
+    reason: "Residents are arguing about a concrete use of public road space, and City route records can answer a defined, reader-relevant version once permanent lane removals are separated from parking changes, traffic calming, and construction closures."
+    triage: intake/candidates/lanes-removed-citywide/triage.md
+    intake: intake/candidates/lanes-removed-citywide/intake.md
+    note: triage GO 2026-09-02; brief to follow
+
+  - id: rice-50m-motions-and-review
+    recorded: "2026-09-02"
+    origin: captured
+    wording: "Councillor Karen Principe and I brought forward two motions, twice, to cut it to $50M and redirect the rest to core priorities. Council did not support them. City Administration recommended freezing 14 future routes to reassess; that review was also not supported by Council."
+    supplied_by: the founder, who pasted a Facebook post and its comments in full (public page Yegscoop, post on the 2026-08-26 committee decision); wording verbatim from a commenter who is a sitting councillor
+    context: "captured thread at intake/captures/2026-09-02-yegscoop-bike-lanes.md, post https://www.facebook.com/yegscoop/posts/pfbid02aKkokbtnxq3dsDhfWgbGsEamfiNRUncwnff4ES8N11qVZBg5W4aDxZaPF3frYymVl"
+    outcome: GO
+    reason: "A councillor made a specific account of budget motions and a route review, and Edmonton’s published motions, reports and votes can test the parts residents care about without a bespoke data exercise."
+    triage: intake/candidates/rice-50m-motions-and-review/triage.md
+    intake: intake/candidates/rice-50m-motions-and-review/intake.md
+    note: triage GO 2026-09-02; brief to follow
+
+  - id: fifteen-minute-city-agreement
+    recorded: "2026-09-02"
+    origin: captured
+    wording: "They signed an agreement to make Edmonton a 15 minute city."
+    supplied_by: the founder, who pasted a Facebook post and its comments in full (public page Yegscoop, post on the 2026-08-26 committee decision); wording verbatim from a commenter
+    context: "captured thread at intake/captures/2026-09-02-yegscoop-bike-lanes.md, post https://www.facebook.com/yegscoop/posts/pfbid02aKkokbtnxq3dsDhfWgbGsEamfiNRUncwnff4ES8N11qVZBg5W4aDxZaPF3frYymVl"
+    story: fifteen-minute-districts
+    outcome: GO
+    reason: "A resident made a concrete claim, permanent City records can test it, and finding either a binding agreement or a comprehensive absence would surprise part of the audience."
+    triage: intake/candidates/fifteen-minute-city-agreement/triage.md
+    intake: intake/candidates/fifteen-minute-city-agreement/intake.md
+    note: triage GO 2026-09-02; at the founder's suggestion it runs as a second claim on the published fifteen-minute-districts story, since it is a different proposition (that an agreement was signed) about the same argument; brief to follow
+

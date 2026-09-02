@@ -208,7 +208,7 @@ Pinned reviewer commands (methodology v1.6, 2026-09-01; `scripts/panel/run-revie
 |---|---|
 | Claude Fable 5.1 | `claude -p --model claude-fable-5-1 --effort high` |
 | GPT-5.6 Sol | `codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check` |
-| Gemini 3.1 Pro | `agy -p --effort high` |
+| Gemini 3.1 Pro | `agy --effort high --sandbox --dangerously-skip-permissions --print-timeout 45m -p` (v1.14; before that without the permissions flag, which made the headless seat return nothing on PDF-heavy briefs) |
 
 Every seat runs at its vendor's `high` reasoning setting — the highest level the
 three CLIs share, since `agy` stops there — and the runner records it in

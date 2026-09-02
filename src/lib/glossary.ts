@@ -31,6 +31,15 @@ const STAGES = '/methodology#stages';
 const STORIES = '/methodology#stories';
 
 export const glossary: Record<string, GlossaryEntry> = {
+  'frozen brief': {
+    definition:
+      'The written question each story\u2019s panel answers: the exact claims, definitions, dates and cutoffs, fixed and published before any reviewer runs, so the framing cannot move after the answers arrive.',
+    href: STAGES,
+  },
+  'capital profile': {
+    definition:
+      'The City of Edmonton\u2019s unit of capital budgeting: one numbered project or program with an approved amount by year. Approval is permission to spend, not spending.',
+  },
   Proterra: {
     definition:
       'Proterra Inc. — the U.S. manufacturer that built Edmonton’s 60 battery-electric buses. It filed for bankruptcy in August 2023.',
@@ -116,7 +125,7 @@ export const glossary: Record<string, GlossaryEntry> = {
   },
   'three-model AI panel': {
     definition:
-      'Three AI reviewers from different vendors research each claim independently, and blind to each other. Which models ran is recorded with every run and shown in the AI review section of every story.',
+      'Three AI reviewers from different vendors research each claim independently in a first round that is blind to the other two, then read one another\u2019s findings in a second round that documents errors. Which models ran is recorded with every run and shown in the AI review section of every story.',
     href: STAGES,
   },
   'published rule': {

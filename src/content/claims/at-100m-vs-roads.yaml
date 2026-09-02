@@ -1,0 +1,62 @@
+id: at-100m-vs-roads
+question: Does the 2023-2026 capital budget authorize $1.8 billion for roads, about eighteen times the $100 million for bike lanes? The quotation says 180 times; its own figures imply 18, and that is what was tested.
+story: active-transportation
+finding: Supported
+evidence_basis: Edmonton budget documents
+panel_agreement: Unanimous
+methodology_version: "1.14"
+review_run: reviews/active-transportation/2026-09-02-rerun
+evidence: [YF-EV-0114, YF-EV-0117, YF-EV-0118, YF-EV-0119, YF-EV-0120, YF-EV-0121, YF-EV-0129, YF-EV-0130, YF-EV-0131, YF-EV-0132, YF-EV-0134, YF-EV-0135, YF-EV-0137, YF-EV-0138, YF-EV-0140]
+key_facts:
+  - text: "Global News reported Councillor Michael Janz saying, during the December 2022 budget debate: \"Only $100 million is going to bike lanes but $1.8 billion, 180 times as much, is going towards roads.\" $1.8 billion is 18 times $100 million, not 180; no other record of the remark was found, and the council minutes record motions and votes, not speech."
+    sources: [YF-EV-0121, YF-EV-0131]
+  - text: "The adopted 2023-2026 Capital Budget publishes no roads-only total. Its Table 8 gives one combined line, \"Active Pathways and Roads Service\", at $1,794.0 million for 2023 to 2026 ($622.8 million growth, $1,171.2 million renewal), which includes the $100 million bike program and other active-pathway funding."
+    sources: [YF-EV-0114]
+  - text: "On the City's own labels, the capital profiles whose sheets carry the Service Category \"Roads\" (less a pedestrian bridge and a parking-technology profile) total $1,116.532 million; the \"Neighbourhood Renewal\" profiles $722.289 million; and three vehicle-carrying bridge profiles whose sheets carry no label $106.882 million: $1,945.703 million in all, 19.5 times the $100 million. All three seats reached the same total; two of them reproduced it profile by profile."
+    sources: [YF-EV-0114]
+  - text: "The roads-only total exceeds the City's combined service line because the profile labels capture road work the City's Table 8 presents elsewhere, including the four Yellowhead Trail freeway conversion profiles ($493.4 million) under transformational projects. Without those four the roads-only total is about $1.45 billion; with only the \"Roads\"-labelled profiles it is $1.117 billion."
+    sources: [YF-EV-0114]
+  - text: "The councillor's own web page puts the same comparison differently: \"The $100M represents half a percent of the $1.8 Billion dollar capital budget over the same period.\" $100 million is 5.6 per cent of $1.8 billion."
+    sources: [YF-EV-0134]
+  - text: "The $100 million is 1.4 per cent of the $7,192.5 million adopted 2023-2026 capital budget and 4.4 per cent of its $2,256.0 million \"Movement of People and Goods\" group; the City's own project page and its 2025 Infrastructure Report say the program is about 2 per cent of approximately $5 billion in transportation projects."
+    sources: [YF-EV-0114, YF-EV-0132, YF-EV-0137]
+  - text: "Cumulative spending remains below the approved amount. The City's capital updates put CM-20-0330's cumulative actuals at $0.807 million at the end of 2023, $10.496 million at the end of 2024 and $39.984 million at the end of 2025, against a current approved budget of $99.570 million after a $430,000 transfer out in the spring 2025 adjustment."
+    sources: [YF-EV-0119, YF-EV-0120, YF-EV-0129, YF-EV-0130]
+  - text: "Administration reported to the Infrastructure Committee on 2026-08-26 that approximately 35 km of new routes were installed through 2024 and 2025, with an additional 24 km estimated to be complete in 2026, and recommended that 14 named routes not yet under construction be re-evaluated; the minutes record no decision on that recommendation, a motion to continue under the approved scope having been defeated on a tie."
+    sources: [YF-EV-0118, YF-EV-0140, YF-EV-0135]
+aliases:
+  - roads-get-180-times-bike-lanes
+  - 1-8-billion-roads-100-million-bike-lanes
+limitations:
+  - "The roads-only total is a construction under a predeclared rule (the City's own Service Category labels plus a named exception list), not a figure the City publishes. The City's published line is the combined $1,794.0 million, which the brief required as the alternative and which is not a roads total. Both readings clear the frozen Supported threshold of $1.5 billion; the narrowest reading, \"Roads\"-labelled profiles only, does not."
+  - "The verdict is on the two dollar figures the councillor gave and the ratio they imply. The quotation's \"180 times\" is an arithmetic error in the record; the brief did not test it as a separate claim."
+  - "Capital budgets are approvals, not spending. Both the $1.8 billion and the $100 million are approved amounts as of December 2022; the roads profiles' actual spending by year was not compiled by the panel."
+  - "Later adjustments changed the whole capital budget (increases in 2024 and 2025, and on 2026-06-16 a $126.6 million net increase to an $11.56 billion budget, per the City's budget page, YF-EV-0138) and took $430,000 from CM-20-0330 in 2025; no roads-only as-amended total could be computed, so the effect on the roads side is unknown. The verdict uses the December 2022 approval both holders compared."
+unknowns:
+  - "Whether the councillor said 18 or 180; the reviewers found only one record of the remark, and the minutes do not carry debate."
+  - "Actual road capital spending by year for 2023 to 2025 on the same profile set, which would let the two programs be compared on spending rather than approval."
+missing_evidence:
+  - "A City-published roads-only capital total for the 2023-2026 cycle, or a published mapping of profiles to the Table 8 service lines (City of Edmonton Financial and Corporate Services; moderate)."
+review:
+  agreement: Unanimous
+  reviewers:
+    - model: Claude Fable 5.1
+      verdict: Supported
+      confidence: High
+      key_findings:
+        - "Parsed the Service Category field on all 161 profile sheets; the membership matches the brief's list exactly and sums to $1,945.703 million, 19.46 times."
+        - "The councillor's $1.8 billion matches the City's combined Active Pathways and Roads line, which contains the bike money; the 180 should be 18."
+      changed_between_rounds: "No change. Documented the other seats' page-number and citation slips and that the City's own project page states a 2 per cent share."
+    - model: GPT-5.6 Sol
+      verdict: Supported
+      confidence: High
+      key_findings:
+        - "The prescribed sum is $1,945.703 million; the required alternative is $1,794.0 million; both are Supported under both cutoff sets, and the narrowest reading of $1,116.5 million is not."
+        - "The combined service line must not be called a roads total; it includes active-pathway funding."
+      changed_between_rounds: "Verdict and confidence unchanged; took the complete per-profile membership and the widest-reading total from the cross-review."
+    - model: Gemini 3.1 Pro
+      verdict: Supported
+      confidence: High
+      key_findings:
+        - "The primary boundary yields $1.946 billion, above the $1.5 billion threshold; the statement's 180 times is a mathematical error for 18."
+      changed_between_rounds: "No change."

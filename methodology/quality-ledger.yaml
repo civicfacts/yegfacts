@@ -468,3 +468,59 @@ events:
     notes: >
       framing/check-1.md to check-4.md of the first run and the editor's
       escalation.md; story changelog entry of 2026-09-02.
+  # --- active transportation, published claims at-100m-vs-snow and at-100m-vs-roads (2026-09-02) ---
+  - date: "2026-09-02"
+    story: active-transportation
+    run: reviews/active-transportation/2026-09-02-rerun
+    stage: framing
+    seat: Framing check (GPT-5.6 Sol via codex exec)
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      The rerun brief, drafted after the first panel's MATERIAL FRAMING
+      CONCERN, told the supposedly blind rerun panel what the first panel
+      had found: that the candidate denominators straddle a cutoff, which
+      seat objected, and what the seats had cited. Check 1 caught all
+      three leaks; the sentences were removed before the brief was frozen
+      on check 2. Recorded against the editor.
+    notes: >
+      framing/check-1.md and framing/response-1.md of the rerun.
+  - date: "2026-09-02"
+    story: active-transportation
+    run: reviews/active-transportation/2026-09-02-rerun
+    stage: drafting
+    seat: Gemini 3.1 Pro
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      Faithfulness check 2 caught an arithmetic error in the draft: the
+      story said only the narrowest roads reading fell short of the $1.5
+      billion Supported line, when the Yellowhead-excluded reading of
+      $1.45 billion also does. Corrected before the gate. Recorded against
+      the editor.
+    notes: >
+      faithfulness/gemini-2.md.
+  - date: "2026-09-02"
+    story: active-transportation
+    run: reviews/active-transportation/2026-09-02-rerun
+    stage: gate
+    seat: Source verification (Claude audit session, separate from drafting)
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      The story said the Infrastructure Committee of 2026-08-26 declined
+      administration's recommendation to re-evaluate 14 routes. The
+      archived minutes show the recommendation was never put and a
+      substitute motion was defeated on a tie, so the committee decided
+      nothing; the "14" had no archived source. The error entered through
+      the frozen brief's selection rationale, drawn from news coverage at
+      intake, and survived a framing check and two panel rounds because
+      no seat had reason to test it. Attachment 5 was archived, the
+      sentence rewritten to the minutes, and the rule recorded: a brief's
+      framing and rationale prose is not evidence. The same audit also
+      caught the vote dated to the minutes' adjournment day rather than
+      the deliberations. Recorded against the editor.
+    notes: >
+      gate/source-verification.md, passes 1 to 3; errata.md "Found at
+      the gate".
+

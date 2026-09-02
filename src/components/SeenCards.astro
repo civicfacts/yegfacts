@@ -2,18 +2,24 @@
 import type { CollectionEntry } from 'astro:content';
 
 /**
- * "Common forms of the claim" — the arguments actually in circulation, written
- * out as composite paraphrases (methodology v1.2).
+ * "Common forms of the claim" — the arguments in circulation.
  *
- * These are NOT captured posts. Nothing here is quoted from a real account, so
- * the component renders no platform chrome, no avatar, no handle and no link to
- * an "original": there is no original. Platform-native styling was dropped
- * because a fact-checking site rendering fabricated-quote-shaped cards is the
- * exact artifact that circulates as a screenshot with its disclaimer stripped
- * off. The "Paraphrase — not a real post" label therefore sits INSIDE each card,
- * where a screenshot has to take it along.
+ * Two kinds of card. A **paraphrase** (`paraphrased: true`, the only kind that
+ * existed until 2026-09-02) is written by us as a composite of how the claim is
+ * put: nothing is quoted from a real account, so the card renders no platform
+ * chrome, no avatar, no handle and no link to an "original", and the
+ * "Paraphrase — not a real post" label sits INSIDE the card, where a screenshot
+ * has to take it along. Platform-native styling was dropped because a
+ * fact-checking site rendering fabricated-quote-shaped cards is the exact
+ * artifact that circulates with its disclaimer stripped off.
  *
- * `platform` and `context` may stay in a story's frontmatter as authoring
+ * A **captured** card (`paraphrased: false`) is a verbatim quotation from a
+ * post the site holds, with its URL in the frontmatter. It carries a "Quoted
+ * from a captured post" label, a link to the post, and, only when the speaker
+ * is a public official speaking in that capacity, the attribution the
+ * frontmatter gives; private individuals are never named.
+ *
+ * `platform` and `context` stay in a story's frontmatter as authoring
  * provenance; neither is rendered.
  */
 interface Props {
@@ -21,6 +27,8 @@ interface Props {
 }
 
 const { seen } = Astro.props;
+const anyCaptured = seen.some((card) => !card.paraphrased);
+const anyParaphrased = seen.some((card) => card.paraphrased);
 ---
 
 {
@@ -28,17 +36,30 @@ const { seen } = Astro.props;
     <section id="claims-we-are-seeing" class="mt-14">
       <h2 class="section-heading">Common forms of the claim</h2>
       <p class="mt-1.5 max-w-prose text-sm leading-relaxed text-muted">
-        Composite paraphrases written by us to show the shapes the claim takes; not captured posts,
-        not quotations, not a measure of how common each is.
+        {anyCaptured && anyParaphrased
+          ? 'Some cards quote captured posts, linked; the rest are composite paraphrases written by us. Each card says which. None is a measure of how common the claim is.'
+          : anyCaptured
+            ? 'Quoted verbatim from captured posts, linked; private individuals are not named. Not a measure of how common the claim is.'
+            : 'Composite paraphrases written by us to show the shapes the claim takes; not captured posts, not quotations, not a measure of how common each is.'}
       </p>
 
       <ul class="mt-5 grid gap-3.5 sm:grid-cols-2">
         {seen.map((card) => (
           <li class="border-l-2 border-gold bg-wash px-4 py-3.5">
             <p class="text-[0.625rem] font-semibold tracking-[0.11em] text-muted uppercase">
-              Paraphrase — not a real post
+              {card.paraphrased ? 'Paraphrase — not a real post' : 'Quoted from a captured post'}
             </p>
             <p class="mt-2 text-[0.9375rem] leading-relaxed text-ink">{card.text}</p>
+            {!card.paraphrased && (card.attribution || card.source_url) && (
+              <p class="mt-2 text-xs text-muted">
+                {card.attribution && <span>{card.attribution}. </span>}
+                {card.source_url && (
+                  <a class="underline decoration-rule underline-offset-2 hover:text-ink" href={card.source_url} rel="noopener nofollow">
+                    Source post
+                  </a>
+                )}
+              </p>
+            )}
           </li>
         ))}
       </ul>

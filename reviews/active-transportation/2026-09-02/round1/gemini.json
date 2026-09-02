@@ -1,0 +1,140 @@
+{
+  "reviewer": {
+    "provider": "google",
+    "model_self_reported": "Gemini 3.1 Pro",
+    "runner_model": "gemini-3.1-pro",
+    "runner_seat": "Gemini 3.1 Pro",
+    "runner_effort": "high"
+  },
+  "story": "active-transportation",
+  "round": 1,
+  "claims": [
+    {
+      "id": "at-100m-vs-snow",
+      "proposition_evaluated": "The $100 million approved for bike lanes is almost double the City's annual snow-clearing budget.",
+      "interpretation_notes": "The proposition compares the multi-year capital budget for bike lanes (CM-20-0330) against a single year's operating budget for snow clearing. The ratio is 1.76 against the 2022 approved gross snow budget of $56.6 million. The failing part is 'double' under the primary thresholds, which classify 1.76 as Partially supported. Under the alternative thresholds (>= 1.7), it is Supported.",
+      "verdict": "Partially supported",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "The 2023-2026 Capital Budget approved $100,000 (thousands) for profile CM-20-0330 (Active Transportation Implementation Acceleration - Approach 3) for 2023-2026.",
+          "source_title": "2023-2026 Capital Budget",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-2026CapitalBudget.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-12-16",
+          "source_type": "legal-audited",
+          "establishes": "The approved budget for the bike lanes program.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The 2022 Adjusted Budget gross expenditure for Snow and Ice Control was $56.6 million (Net expenditure + revenue). The 2023 approved gross budget was $57.4 million.",
+          "source_title": "2023-2026 Operating Budget",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-2026OperatingBudget.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-12-16",
+          "source_type": "legal-audited",
+          "establishes": "The approved 2022 and 2023 snow clearing budgets.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [],
+      "comparisons": [],
+      "limitations": [
+        "The comparison contrasts a 4-year capital commitment with a 1-year operating budget."
+      ],
+      "unknowns": [
+        "Actual expenditure for 2023-2025."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Actual expenditure for 2023-2025 year-end reports.",
+          "likely_holder": "City of Edmonton",
+          "importance": "high"
+        }
+      ],
+      "calculations_needed": [
+        "CM-20-0330: 2023 ($5,950), 2024 ($26,750), 2025 ($33,650), 2026 ($33,650) in thousands. Total $100M.",
+        "2022 Adjusted Budget Gross Expenditure: $56,648 (thousands) (Page 309). Net tax-levy: $56,585 (thousands).",
+        "2023 Approved Gross: $57,395 (thousands) (Page 309). Net tax-levy: $57,332 (thousands).",
+        "Primary Ratio: $100M / $56.6M = 1.76 (Partially supported).",
+        "Alternative Ratio: $100M / $57.4M = 1.74 (Partially supported).",
+        "Like-for-like (1 year): $25M (average per year) / $57.4M = 0.44.",
+        "Like-for-like (4 years): $100M / $232.8M (sum of 2023-2026 snow budgets) = 0.43."
+      ],
+      "what_would_change_my_verdict": [
+        "If a different primary denominator was specified (e.g. the one-time enhanced budget of $61.3M from the council attachment), the ratio could shift the verdict."
+      ],
+      "suggested_one_line": "The $100 million for bike lanes is 1.76 times the $56.6 million 2022 snow budget; 'almost double' is slightly overstated.",
+      "suggested_short_answer": "The $100 million approved for bike lanes over four years is 1.76 times the city's 2022 annual snow-clearing budget of $56.6 million. While it is significantly larger than a single year's snow budget, it falls short of being double.",
+      "suggested_tldr": [
+        "Bike lanes get $100 million over 4 years.",
+        "The 2022 annual snow budget was $56.6 million.",
+        "The bike lane total is 1.76 times the annual snow budget."
+      ]
+    },
+    {
+      "id": "at-100m-vs-roads",
+      "proposition_evaluated": "In the City's 2023-2026 capital budget, roads get $1.8 billion, about eighteen times the $100 million for bike lanes.",
+      "interpretation_notes": "The primary roads boundary yields $1.95 billion, which supports the claim's magnitude. The quotation states '180 times as much' alongside '$1.8 billion' and '$100 million'. The '180 times' ratio is a mathematical error as 1.8 billion is 18 times 100 million, not 180 times. This discrepancy is noted as a fact about the quotation.",
+      "verdict": "Supported",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "The sum of the 2023-2026 approved amounts for capital profiles under 'Roads' and 'Neighbourhood Renewal' (with declared exceptions and additions) is $1.95 billion.",
+          "source_title": "2023-2026 Capital Budget",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-2026CapitalBudget.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-12-16",
+          "source_type": "legal-audited",
+          "establishes": "The total capital budget for roads.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Table 8 shows a combined 'Active Pathways and Roads Service' total of $1,794.0 million for 2023-2026.",
+          "source_title": "2023-2026 Capital Budget",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-2026CapitalBudget.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-12-16",
+          "source_type": "legal-audited",
+          "establishes": "The required alternative combined service allocation.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [],
+      "comparisons": [],
+      "limitations": [
+        "The 'Roads' boundary includes Neighbourhood Renewal, which funds sidewalks and alleys alongside roads.",
+        "The $1.95 billion total does not match Table 8's combined total of $1.79 billion due to classification differences."
+      ],
+      "unknowns": [
+        "Actual expenditure for 2023-2025."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Actual expenditure for 2023-2025 year-end reports.",
+          "likely_holder": "City of Edmonton",
+          "importance": "high"
+        }
+      ],
+      "calculations_needed": [
+        "Primary boundary: 18-66-6503 ($94,202), 19-22-9006 ($161,021), 21-20-9301 ($54,634), 21-20-9302 ($54,597), 21-40-9031 ($12), 21-40-9032 ($10), 22-22-9700 ($10,056), 22-22-9701 ($5,094), CM-20-2020 ($9,007), CM-22-0000 ($64,843), CM-24-0000 ($209,836), CM-26-0000 ($9,308), CM-66-2194 ($720), CM-66-2525 ($16,000), CM-66-2585 ($25,875), CM-66-2596 ($17,148), CM-99-0060 ($7,914), CM-99-9600 ($376,255), 20-40-9017 ($4,658), 20-40-9019 ($721), 21-40-9023 ($14,652), 21-40-9024 ($22,047), 21-40-9025 ($9,780), 21-40-9026 ($2,100), 21-40-9027 ($464), 22-40-9028 ($17,130), 22-40-9029 ($23,710), CM-25-0000 ($545,717), CM-27-0000 ($81,310), 23-24-0300 ($97,000), 21-24-9301 ($9,832), 21-24-9302 ($50).",
+        "Primary boundary total (Roads + Neighbourhood Renewal + 3 bridges): $1,945,703 (thousands) = $1.946 billion. Ratio to $100M: 19.5.",
+        "Required alternative (Table 8): $1.794 billion. Ratio to $100M: 17.9.",
+        "Narrowest reading (Roads only): $1.117 billion. Ratio to $100M: 11.2.",
+        "Widest reading: $2.026 billion. Ratio to $100M: 20.3."
+      ],
+      "what_would_change_my_verdict": [
+        "If a narrower definition of 'roads' was used, the total would fall below $1.5 billion, changing the verdict."
+      ],
+      "suggested_one_line": "The City approved $1.95 billion for roads and neighbourhood renewal, supporting the claim that roads received around 18 times the $100 million for bike lanes.",
+      "suggested_short_answer": "Summing the capital profiles categorized as 'Roads' and 'Neighbourhood Renewal' yields $1.95 billion, which is roughly 19 times the $100 million approved for bike lanes. The quotation's '180 times' ratio is a mathematical error.",
+      "suggested_tldr": [
+        "Roads and neighbourhood renewal got $1.95 billion.",
+        "Bike lanes got $100 million.",
+        "Roads funding is approximately 19 times greater."
+      ]
+    }
+  ]
+}

@@ -55,6 +55,26 @@ export function jsonCandidates(text: string): string[] {
   return candidates.sort((a, b) => b.length - a.length);
 }
 
+/**
+ * A reviewer that echoes the schema's own `$schema` line at the root of its
+ * answer (the Gemini seat did, methodology v1.14) is packaging, not content:
+ * the key says nothing about the review and the schema forbids unknown keys.
+ * It is removed before validation; every other key is left for the validator
+ * to judge.
+ */
+function dropSchemaKey(candidate: string): string {
+  try {
+    const parsed = JSON.parse(candidate) as unknown;
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed) && '$schema' in parsed) {
+      const { $schema: _ignored, ...rest } = parsed as Record<string, unknown>;
+      return JSON.stringify(rest);
+    }
+  } catch {
+    // not JSON: the validator reports that itself
+  }
+  return candidate;
+}
+
 /** Strip fences and preamble, returning the first candidate that validates. */
 export function extractReview(raw: string): { ok: true; json: unknown } | { ok: false; errors: string[] } {
   const unfenced = raw.replace(/```[a-zA-Z]*\r?\n/g, '').replace(/```/g, '');
@@ -64,7 +84,7 @@ export function extractReview(raw: string): { ok: true; json: unknown } | { ok: 
   // whose schema errors are worth showing it on retry. Errors from a nested
   // fragment would just say "must have required property 'reviewer'".
   for (const candidate of [unfenced.trim(), ...jsonCandidates(unfenced)]) {
-    const result = validateReviewText(candidate);
+    const result = validateReviewText(dropSchemaKey(candidate));
     if (result.ok) return { ok: true, json: result.review };
     if (bestErrors === undefined && !result.errors[0]?.startsWith('not valid JSON')) {
       bestErrors = result.errors;

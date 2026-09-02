@@ -1,0 +1,55 @@
+story: active-transportation
+date: 2026-09-02
+methodology_version: "1.13"
+runs:
+  - provider: anthropic
+    round: 1
+    command: claude -p --model claude-fable-5-1 --effort high < package.md
+    cli_version: 2.1.258 (Claude Code)
+    model_id: claude-fable-5-1
+    seat: Claude Fable 5.1
+    reasoning_effort: high
+    prompt_sha256: e7c21f3e0e4c47de89f6f99a7e9f5b46a4cd325890fa9d8ee01b18bb8594baae
+    methodology_version: "1.14"
+    started_at: 2026-09-02T20:43:00Z
+    finished_at: 2026-09-02T21:09:00Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - reviewer.md
+      - review-schema.json
+  - provider: google
+    round: 1
+    command: agy --effort high --sandbox --dangerously-skip-permissions --print-timeout 45m -p "$(cat package.md)"
+    cli_version: 1.1.24
+    model_id: gemini-3.1-pro
+    seat: Gemini 3.1 Pro
+    reasoning_effort: high
+    prompt_sha256: 35476cc70765b0df21ce69cd951dc12f95d5e2f0981d965e263d48b6c69b2073
+    methodology_version: "1.14"
+    started_at: 2026-09-02T21:07:08Z
+    finished_at: 2026-09-02T21:31:05Z
+    attempts: 2
+    status: ok
+    package_files:
+      - brief.md
+      - reviewer.md
+      - review-schema.json
+  - provider: openai
+    round: 1
+    command: codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check < package.md
+    cli_version: codex-cli 0.152.1
+    model_id: gpt-5.6-sol
+    seat: GPT-5.6 Sol
+    reasoning_effort: high
+    prompt_sha256: e7c21f3e0e4c47de89f6f99a7e9f5b46a4cd325890fa9d8ee01b18bb8594baae
+    methodology_version: "1.13"
+    started_at: 2026-09-02T20:42:52Z
+    finished_at: 2026-09-02T20:55:45Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - reviewer.md
+      - review-schema.json

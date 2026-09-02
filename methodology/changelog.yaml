@@ -1,6 +1,32 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.14"
+  date: "2026-09-02"
+  scope: panel-seat-tooling
+  summary: >
+    The Gemini seat's pinned command now approves its own tool calls inside
+    its sandbox, because in headless mode it returned nothing whenever a
+    brief named PDF sources.
+  highlights:
+    - "scripts/panel/run-reviewer.sh: the Gemini seat runs `agy --effort high --sandbox --dangerously-skip-permissions --print-timeout 45m -p`. Headless agy auto-denies any tool that needs a permission prompt; the seat reaches for a shell (curl, wget, python3) whenever a brief names PDF sources its URL tool cannot read, and then returns nothing."
+    - "On the active-transportation brief the seat failed four times under the previous command and twice more with the brief's documents pre-fetched as text files and a note that it had no shell. Its earlier failure on the low-density-history rerun (six attempts) was the same fault."
+    - "The other two seats already run with a shell (the Claude seat's Bash tool, the Codex seat's read-only sandbox), so this levels the seats rather than loosening one. Blindness still comes from the scratch directory, which holds only the package, and repo paths are never passed to a seat."
+    - "Founder decision, recorded in the board record; the pre-fetched packet remains the better long-term fix and stays open."
+    - "scripts/panel/extract-review.ts: a `$schema` key echoed at the root of a reviewer's answer is dropped before validation. The Gemini seat's first complete review under the new command failed only on that key; it was extracted by hand with the key removed and recorded in the run manifest and the run's errata."
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: Active transportation investment
+      href: /facts/active-transportation
+  note: >
+    A seat that cannot read the documents a brief names is not an
+    independent reviewer of them. Six empty returns on one brief, four
+    under the pinned command and two with the documents supplied as
+    text, showed the fault was the headless permission model, not the
+    package. The change is to the seat's own command, is recorded in
+    every run manifest from here on, and does not touch the package the
+    three seats receive.
 - version: "1.13"
   date: "2026-09-02"
   scope: findings-board
