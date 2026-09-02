@@ -13,8 +13,9 @@ describe('active-transportation calcs', () => {
     expect(results.snowRatioJulyAdditionOnly).toBe(1.446);
     expect(results.snowRatioYearEndAdjusted2022).toBe(1.258);
     expect(results.snowRatioNet2022).toBe(1.571);
-    expect(results.snowRatioLikeForLike2023Allocation).toBe(0.092);
-    expect(results.snowRatioLikeForLikeAverageYear).toBe(0.388);
+    expect(results.snowLikeForLike2023Pct).toBe(9.8);
+    expect(results.snowLikeForLike2023to2025Pct).toBe(33.5);
+    expect(results.cm200330Allocated2023to2025Millions).toBe(66.35);
   });
 
   it('the primary ratio sits inside the frozen Partially supported band and the amended one below it', () => {

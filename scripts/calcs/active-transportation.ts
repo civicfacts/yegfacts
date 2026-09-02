@@ -123,6 +123,14 @@ export const figures = {
    */
   cm200330CurrentApprovedThousands: 99_570,
 
+  /**
+   * YF-EV-0133 — the City's 2023-2026 budget engagement fact sheet: "$60.9
+   * million for snow clearing", printed without a year; the panel reconciled
+   * it in cross-review to the 2023 approved total (a $56.9 million base plus
+   * the December 2022 amendment).
+   */
+  snow2023FactSheetMillions: 60.9,
+
   /** The figure in both captured claims: the program total, in $ millions. */
   claimedProgramMillions: 100,
   /** The councillor's stated roads figure, in $ millions. */
@@ -179,16 +187,22 @@ export const results = {
   snowRatioYearEndAdjusted2022: round(figures.claimedProgramMillions / snowYearEndAdjustedMillions, 3),
   /** Context only: the net operating requirement instead of the gross cell. */
   snowRatioNet2022: round(figures.claimedProgramMillions / snowNetMillions, 3),
-  /** Like for like: the program's 2023 allocation over the 2022 gross cell. */
-  snowRatioLikeForLike2023Allocation: round(
-    thousandsToMillions(byYear[2023]) / snowPrimaryMillions,
-    3,
+  /** Same year against same year: the program's 2023 allocation over the 2023 snow figure, in per cent. */
+  snowLikeForLike2023Pct: round(
+    (thousandsToMillions(byYear[2023]) / figures.snow2023FactSheetMillions) * 100,
+    1,
   ),
-  /** Like for like: the average approved year of the program over the 2022 gross cell. */
-  snowRatioLikeForLikeAverageYear: round(
-    thousandsToMillions(approvedTotalThousands / 4) / snowPrimaryMillions,
-    3,
+  /** The program's 2023 to 2025 allocations over the adjusted snow budgets for the same years, in per cent. */
+  snowLikeForLike2023to2025Pct: round(
+    ((byYear[2023] + byYear[2024] + byYear[2025]) /
+      (figures.snowYearEndThousands[2023].adjustedBudget +
+        figures.snowYearEndThousands[2024].adjustedBudget +
+        figures.snowYearEndThousands[2025].adjustedBudget)) *
+      100,
+    1,
   ),
+  /** Allocated to 2023 to 2025 ($ millions), the figure spending is compared against. */
+  cm200330Allocated2023to2025Millions: thousandsToMillions(byYear[2023] + byYear[2024] + byYear[2025]),
 
   /** Claim B, primary: the roads-only profile set, in $ millions, and its ratio. */
   roadsPrimaryMillions: round(thousandsToMillions(roadsPrimaryThousands), 3),
