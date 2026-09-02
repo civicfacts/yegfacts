@@ -39,6 +39,23 @@ From the Yegscoop Facebook thread captured the same day
   2026, Edmonton recorded nearly 1.3 million cycling trips across its
   automated counters."
 
+Mode-share forms of the same claim, merged here from the candidate
+first registered as `commute-87-cars-1-bikes` (its triage report is
+kept at intake/candidates/commute-87-cars-1-bikes/triage.md, GO):
+
+- Commenter 2: "87% of Edmontonians commute in cars. Less than 1% on
+  bikes."
+- Commenter 15: "huge expenditures for only 2.3% of the populations
+  usage."
+- Commenter 20, on the other side: the City's $100M "is close to
+  proportional to cyclist numbers."
+
+The founder's direction on 2026-09-02: "1% cycles", "2% cycles", "5
+people ride bikes", "nobody rides bikes" and "bike lanes are empty" are
+one claim in different units, and the brief fixes which reading carries
+the verdict (a published mode share) and which is reported beside it
+(counter data on the lanes).
+
 The triage reader read this record before these forms existed and said
 the wording was then the founder's paraphrase; it is now captured on
 both sides.

@@ -13,6 +13,7 @@
     - "On the active-transportation brief the seat failed four times under the previous command and twice more with the brief's documents pre-fetched as text files and a note that it had no shell. Its earlier failure on the low-density-history rerun (six attempts) was the same fault."
     - "The other two seats already run with a shell (the Claude seat's Bash tool, the Codex seat's read-only sandbox), so this levels the seats rather than loosening one. Blindness still comes from the scratch directory, which holds only the package, and repo paths are never passed to a seat."
     - "Founder decision, recorded in the board record; the pre-fetched packet remains the better long-term fix and stays open."
+    - "scripts/panel/extract-review.ts: a `$schema` key echoed at the root of a reviewer's answer is dropped before validation. The Gemini seat's first complete review under the new command failed only on that key; it was extracted by hand with the key removed and recorded in the run manifest and the run's errata."
   links:
     - label: How a finding is produced
       href: /methodology#stages

@@ -21,17 +21,17 @@ runs:
       - review-schema.json
   - provider: google
     round: 1
-    command: agy --effort high --sandbox --print-timeout 45m -p "$(cat package.md)"
+    command: agy --effort high --sandbox --dangerously-skip-permissions --print-timeout 45m -p "$(cat package.md)"
     cli_version: 1.1.24
     model_id: gemini-3.1-pro
     seat: Gemini 3.1 Pro
     reasoning_effort: high
-    prompt_sha256: 5216215b1bc0a90fbf7ff3de1df41c1b303ae6282e445a8a8dd329392e58a3db
-    methodology_version: "1.13"
-    started_at: 2026-09-02T20:43:51Z
-    finished_at: 2026-09-02T20:44:29Z
+    prompt_sha256: 35476cc70765b0df21ce69cd951dc12f95d5e2f0981d965e263d48b6c69b2073
+    methodology_version: "1.14"
+    started_at: 2026-09-02T21:07:08Z
+    finished_at: 2026-09-02T21:31:05Z
     attempts: 2
-    status: failed
+    status: ok
     package_files:
       - brief.md
       - reviewer.md
