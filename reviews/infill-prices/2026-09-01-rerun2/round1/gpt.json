@@ -1,0 +1,287 @@
+{
+  "reviewer": {
+    "provider": "openai",
+    "model_self_reported": "GPT-5",
+    "runner_model": "gpt-5.6-sol",
+    "runner_seat": "GPT-5.6 Sol",
+    "runner_effort": "high"
+  },
+  "story": "infill-prices",
+  "round": 1,
+  "claims": [
+    {
+      "id": "ip-teardown-price-gap",
+      "proposition_evaluated": "Among replacement dwelling units on Edmonton lots where one dwelling was demolished under a 2016-2025 residential demolition permit, more than 50 percent had a higher constant-dollar assessed value on the first full roll after completion than the demolished dwelling's total assessed value on the roll in force in the year before demolition. I applied the brief's own-total-value rule to separately titled dwellings and its building-total-divided-by-dwelling-count rule to units in single-title buildings.",
+      "interpretation_notes": "The circulating $350,000-to-$1,000,000 example is not testable without an address or source and was not treated as a threshold. Aggregate title and lot values do not test the proposition. The closest published Edmonton analysis uses lot totals and a different cohort, and its result cannot be converted into the required unit-level share.",
+      "verdict": "Not established",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "A non-government analysis matched Edmonton permits to assessments and found a median gross lot-level assessed-value uplift of $1.7 million across 67 completed, 2024-permitted mature-area lots containing five or more replacement units. It found $1.1 million for 27 five-to-six-unit lots and $1.9 million for 40 lots with seven or more units.",
+          "source_title": "Edmonton's $15M infill property tax dividend",
+          "source_url": "https://www.jacobdawang.com/blog/2026/property-tax-uplift/",
+          "source_publisher": "Jacob Dawang",
+          "source_date": "2026-08-04",
+          "source_type": "advocacy",
+          "establishes": "Selected aggregate lot assessments often rose after redevelopment. It does not establish the required replacement-dwelling-unit share because it uses lot totals, a 2024 RS-zone cohort, a mature-area geography, and different matching and inclusion rules.",
+          "strength": "weak"
+        },
+        {
+          "finding": "The City estimates each property's open-market value annually as of July 1 of the preceding year and records physical condition as of December 31.",
+          "source_title": "Assessment of Properties",
+          "source_url": "https://www.edmonton.ca/residential_neighbourhoods/property-assessment",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026",
+          "source_type": "city-webpage",
+          "establishes": "The City's assessments are market-value estimates and support the brief's July valuation-date convention. They do not identify which roll was the first full roll for each replacement.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The 2024 City infill report says 286 new single-detached houses were built while 387 were demolished in the redeveloping area, a net loss of 101, and concludes that other built forms were replacing demolished detached houses.",
+          "source_title": "2024 Redeveloping Area Infill Report",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2024-Redeveloping-Area-Infill-Report.pdf?cb=1761690193",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025",
+          "source_type": "analytical-report",
+          "establishes": "Multi-unit replacement is material, so an increase in a whole lot's value cannot be assumed to mean that each replacement unit exceeds the demolished dwelling's value. The report contains no matched price comparison.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The General Building Permits dataset lacks a parcel identifier and publishes residential occupancy dates only for permits finalized from 2022 onward. The historical assessment dataset reports total assessed value but not title structure or dwelling count within a title.",
+          "source_title": "General Building Permits and Historical Property Assessment Data",
+          "source_url": "https://dev.socrata.com/foundry/data.edmonton.ca/24uj-dj8v",
+          "source_publisher": "City of Edmonton Open Data",
+          "source_date": "2026",
+          "source_type": "observed-data",
+          "establishes": "The public permit data alone cannot reliably identify the first full post-completion roll for much of the cohort or calculate building-average value per dwelling without another source.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The historical assessment dataset covers 2012-2025 and includes account number, assessment year, address, legal description, coordinates, year built, lot size and total assessed value. It does not publish land and improvement components, self-contained dwelling counts, or an explicit separately-titled versus single-title classification.",
+          "source_title": "Property Assessment Data (Historical)",
+          "source_url": "https://dev.socrata.com/foundry/data.edmonton.ca/qi6a-xuwt",
+          "source_publisher": "City of Edmonton Open Data",
+          "source_date": "2026",
+          "source_type": "observed-data",
+          "establishes": "Several fields required to construct the verdict measure are absent from the public assessment table.",
+          "strength": "strong"
+        }
+      ],
+      "limitations": [
+        "No source reports the required city-wide unit-level numerator, denominator, bounds, median ratio, quartiles or range.",
+        "No source reports the same result for the frozen 2023-12-31 Mature Neighbourhood Overlay boundary or the City Plan redeveloping-area sensitivity.",
+        "Completion dates before 2022 are generally absent from the public permit dataset, preventing consistent identification of the first full assessment roll.",
+        "Legal descriptions, addresses, assessment accounts and title boundaries can change when lots are split or consolidated. The public data do not provide a verified historical parcel crosswalk.",
+        "The closest published Edmonton analysis uses lot totals and divides old baselines among split child lots. Both choices differ from the frozen proposition.",
+        "No complete reporting was found for fire-order and safety-order demolitions, multiple-dwelling demolitions, tenure changes, prior rents, displacement, sale-to-sale sensitivity or missing-data attrition.",
+        "The required CPI and New Housing Price Index series exist, but no property-level series was available to adjust."
+      ],
+      "unknowns": [
+        "How many 2016-2025 residential demolition permits involved exactly one existing dwelling.",
+        "How many permits can be matched reliably to completed replacement housing and the correct pre-demolition assessment.",
+        "The number of self-contained replacement dwellings on each title.",
+        "Whether more than half of all eligible replacement units exceed the full demolished-dwelling value after inflation adjustment.",
+        "Whether the result differs city-wide, inside the historical Mature Neighbourhood Overlay, or under the five-year cohort.",
+        "How unmatched and unclassified cases affect the lower and upper bounds."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A verified crosswalk linking every eligible demolition to replacement parcels, titles and assessment accounts through address changes, subdivisions and consolidations.",
+          "likely_holder": "City of Edmonton Development Services and Assessment and Taxation, supplemented by Alberta Land Titles or AltaLIS",
+          "importance": "critical"
+        },
+        {
+          "description": "Completion and occupancy dates before 2022 sufficient to identify each replacement's first full assessment roll.",
+          "likely_holder": "City of Edmonton permit and inspection systems",
+          "importance": "critical"
+        },
+        {
+          "description": "Verified self-contained dwelling count and title structure for every replacement, including secondary suites.",
+          "likely_holder": "City of Edmonton permit records, Alberta Land Titles and property owners",
+          "importance": "critical"
+        },
+        {
+          "description": "Fire-order and safety-order status, prior tenure, prior rent and recorded tenant displacement.",
+          "likely_holder": "City of Edmonton Fire Rescue Services, Development Services, property owners and tenants",
+          "importance": "high"
+        }
+      ],
+      "calculations_needed": [
+        "Build the 2016-2025 residential demolition frame and report attrition at every matching step.",
+        "Exclude lots with more than one demolished dwelling from the verdict denominator while reporting them separately.",
+        "Identify each replacement title and dwelling count, then calculate own total value or building-average value per dwelling as prescribed.",
+        "Adjust both assessment dates to July 2025 dollars with Edmonton monthly all-items CPI and repeat with annual CPI and Edmonton New Housing Price Index.",
+        "Calculate the unit-level share and bounds, ratio distribution, every-replacement lot share and at-least-one-replacement lot share.",
+        "Repeat for the historical Mature Neighbourhood Overlay, City Plan redeveloping area, five-year cohort and fire-order-excluded sensitivity."
+      ],
+      "what_would_change_my_verdict": [
+        "A reproducible complete-frame analysis showing that the lower bound exceeds 50 percent would change the verdict to Supported.",
+        "A reproducible analysis showing that the upper bound is 50 percent or less would change the verdict to Contradicted.",
+        "Publication of the missing parcel crosswalk, completion dates and dwelling-per-title counts could make either threshold calculation possible."
+      ],
+      "suggested_one_line": "Public Edmonton data make a partial reconstruction possible, but they do not establish whether more than half of replacement dwelling units exceed the demolished dwelling's inflation-adjusted assessment.",
+      "suggested_short_answer": "Not established. A selected 2024 analysis found large increases in whole-lot assessments, but the frozen claim requires a 2016-2025 city-wide comparison for every replacement dwelling unit, including building-average values for units held on one title. That distribution has not been published and cannot be completed reliably from the open tables alone.",
+      "suggested_tldr": [
+        "Whole-lot value often rises, but whole-lot value is not the verdict measure.",
+        "The public datasets lack reliable older completion dates and dwelling counts per title.",
+        "No source reports the required unit-level majority share or bounds."
+      ]
+    },
+    {
+      "id": "ip-infill-affordable",
+      "proposition_evaluated": "Among separately titled replacement dwellings in the same matched 2016-2025 Edmonton teardown set, more than 50 percent would require shelter costs equal to or greater than 30 percent of monthly before-tax income for a hypothetical household earning the 2021 Census City of Edmonton median household income of $90,000 in 2020, using each dwelling's first arm's-length post-completion sale or first-full-roll total assessment and the brief's 20 percent down payment, price-month mortgage rate, 25-year amortization, property tax, utility and condominium-fee rules.",
+      "interpretation_notes": "This is a hypothetical purchase model, not evidence about actual occupants, purchaser incomes or rent affordability. Aggregate new-home and benchmark-price evidence is directionally informative but cannot replace the matched separately titled dwelling denominator. Single-title multi-unit dwellings were treated as excluded, not as affordable or unaffordable.",
+      "verdict": "Not established",
+      "confidence": "High",
+      "evidence_basis": "modelled-uncertain",
+      "supporting_evidence": [
+        {
+          "finding": "The 2021 Census reports a median total household income of $90,000 in 2020 for the City of Edmonton and $96,000 for the Edmonton census metropolitan area.",
+          "source_title": "Profile table, 2021 Census of Population: Edmonton City and Edmonton CMA",
+          "source_url": "https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/page.cfm?DGUIDlist=2021A00054811061%2C2021S0503835&GENDERlist=1%2C2%2C3&HEADERlist=0&Lang=E&STATISTIClist=1%2C4&SearchText=edmonton",
+          "source_publisher": "Statistics Canada",
+          "source_date": "2022",
+          "source_type": "observed-data",
+          "establishes": "The primary and CMA income inputs specified by the brief.",
+          "strength": "strong"
+        },
+        {
+          "finding": "For 411 absorbed homeowner and condominium units in the City of Edmonton in 2025, CMHC reports a first-quintile price of $514,000, median of $592,500, fourth-quintile price of $725,000 and average of $617,939.",
+          "source_title": "Average, Median and Price Percentiles for Absorbed Homeowner and Condominium Units by Census Subdivision",
+          "source_url": "https://www03.cmhc-schl.gc.ca/hmip-pimh/en/TableMapChart/TableMatchingCriteria?CategoryLevel1=New+Housing+Construction&CategoryLevel2=Absorbed+Unit+Prices+%28%24%29&GeographyId=0340&GeographyType=MetropolitanMajorArea&RowField=22",
+          "source_publisher": "Canada Mortgage and Housing Corporation",
+          "source_date": "2025",
+          "source_type": "observed-data",
+          "establishes": "Most absorbed new homeowner and condominium units in Edmonton in 2025 sold well above the declared $90,000 household income. It is a strong directional comparator, but it does not isolate teardown replacements, separately titled dwellings or the full cohort.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The City's 2024 market-housing report placed the Edmonton single- and semi-detached benchmark price at $431,100 and concluded it was likely out of reach for households earning less than $105,000.",
+          "source_title": "2024 Monitoring Market Housing Affordability Report",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2024-Monitoring-Market-Housing-Affordability-Report.pdf?cb=1751470945",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025",
+          "source_type": "analytical-report",
+          "establishes": "A City analysis using different financing assumptions found that the declared $90,000 income was below its estimated income needed for the benchmark detached and semi-detached product. It does not establish the matched-cohort majority.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Statistics Canada's standard classifies households spending 30 percent or more of total income on shelter costs in the claimed direction.",
+          "source_title": "Classification of shelter cost to income ratio",
+          "source_url": "https://www23.statcan.gc.ca/imdb/p3VD.pl?CLV=1&CPV=2&CST=10022026&CVD=1584158&Function=getVD&MLV=2&TVD=1584157",
+          "source_publisher": "Statistics Canada",
+          "source_date": "2026-05-07",
+          "source_type": "observed-data",
+          "establishes": "The 30-percent classification in force on the freeze date.",
+          "quote": "This category includes households who spend 30% or more of household total income on shelter costs.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The same City report lists 2024 benchmark prices of $246,600 for townhouses and row houses and $181,200 for apartments, and says households earning more than $60,000 should be able to afford those benchmark types under its mortgage-qualification method.",
+          "source_title": "2024 Monitoring Market Housing Affordability Report",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2024-Monitoring-Market-Housing-Affordability-Report.pdf?cb=1751470945",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025",
+          "source_type": "analytical-report",
+          "establishes": "Lower-priced housing types could fall below an affordability threshold for a $90,000 household. The share of those types in the separately titled teardown-replacement cohort therefore matters.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The Bank of Canada discontinued its monthly chartered-bank interest-rate publication effective October 1, 2019. It states that historical monthly five-year conventional mortgage data remain under series V122521 and that weekly posted rates continue separately.",
+          "source_title": "Changes to publication of interest rate statistics",
+          "source_url": "https://www.bankofcanada.ca/2019/08/changes-to-publication-interest-rate/",
+          "source_publisher": "Bank of Canada",
+          "source_date": "2019-08-01",
+          "source_type": "observed-data",
+          "establishes": "The brief's price-month mortgage-rate input is not directly published as a monthly Bank of Canada series after September 2019. A predeclared rule for deriving a monthly value from weekly data is needed for later purchases.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Statistics Canada Table 11-10-0222-01 publishes provincial household spending and a water, fuel and electricity category, with 2023 as the latest reference year released before the freeze date.",
+          "source_title": "Household spending, Canada, regions and provinces",
+          "source_url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110022201&request_locale=en",
+          "source_publisher": "Statistics Canada",
+          "source_date": "2025-05-21",
+          "source_type": "observed-data",
+          "establishes": "A provincial average utility allowance can be calculated, but it is not a cost observed for any replacement dwelling and could move cases near the threshold.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "No public source identifies the complete set of separately titled replacement dwellings linked to eligible demolitions.",
+        "No open dataset supplies each dwelling's first arm's-length post-completion sale price and arm's-length status.",
+        "The City assessment data do not identify title form or publish the dwelling counts needed to separate the Claim 2 denominator from excluded single-title units.",
+        "No source reports the required city-wide or historical-Mature-Neighbourhood-Overlay numerator, denominator, bounds, bedroom breakdown or lot sensitivities.",
+        "The CMHC absorbed-price distribution covers all qualifying new homeowner and condominium units, not teardown-linked replacements.",
+        "The City's affordability report uses benchmark prices, income bands and a mortgage-qualification method rather than the frozen shelter-cost model.",
+        "Tenure, actual purchaser income, actual utilities and actual occupant shelter costs are unavailable. The model cannot describe what any occupant paid.",
+        "Property-level condominium fees are not available for a complete cohort.",
+        "CMHC survey rents may include or exclude utilities and cannot test rent affordability for the excluded single-title units.",
+        "The post-September-2019 monthly mortgage-rate input requires an aggregation choice not fixed in the brief."
+      ],
+      "unknowns": [
+        "The number and share of replacement units that are separately titled.",
+        "The first qualifying sale price or first-full-roll assessed value for each separately titled replacement.",
+        "The number of condominiums and the condominium fee for each.",
+        "The complete price-year distribution and applicable mortgage and tax rates.",
+        "How many separately titled dwellings are unclassified and whether the resulting lower bound exceeds 50 percent.",
+        "Whether the conclusion differs in the mature-neighbourhood subset, five-year cohort, 30-year-amortization sensitivity or no-utility sensitivity.",
+        "The affordability of renting units excluded because they are held in single-title buildings."
+      ],
+      "missing_evidence": [
+        {
+          "description": "First arm's-length sale prices and dates for every separately titled replacement dwelling, linked to completion and title history.",
+          "likely_holder": "Alberta Land Titles, the REALTORS Association of Edmonton, property owners and purchasers",
+          "importance": "critical"
+        },
+        {
+          "description": "Title form and verified dwelling count for every replacement building.",
+          "likely_holder": "Alberta Land Titles and City of Edmonton Development Services",
+          "importance": "critical"
+        },
+        {
+          "description": "Property-level condominium fees for all condominium replacements.",
+          "likely_holder": "Condominium corporations, property owners, developers and listing services",
+          "importance": "high"
+        },
+        {
+          "description": "Prior and replacement tenure, contract rents and recorded tenant displacement.",
+          "likely_holder": "Property owners, tenants, developers and City of Edmonton program records",
+          "importance": "high"
+        },
+        {
+          "description": "A predeclared method for deriving price-month five-year conventional mortgage rates after the Bank ended the monthly series.",
+          "likely_holder": "YEGFacts editors using the Bank of Canada weekly series",
+          "importance": "critical"
+        }
+      ],
+      "calculations_needed": [
+        "Construct the complete separately titled dwelling denominator from the matched Claim 1 frame and count excluded single-title dwelling units.",
+        "Select the first arm's-length sale after completion or first-full-roll total assessment for each tested dwelling.",
+        "For each price date, apply the declared five-year mortgage rate, 20 percent down payment and 25-year Canadian mortgage calculation.",
+        "Apply the City residential tax rate for the price year to the applicable assessed value.",
+        "Calculate the Alberta utility allowance from the latest Table 11-10-0222-01 categories and add published condominium fees.",
+        "Compare total monthly shelter cost with $2,250, which is 30 percent of the declared $90,000 annual income divided by 12.",
+        "Calculate the complete-denominator lower and upper bounds, unit and lot shares, bedroom breakdowns, and city-wide and mature-area results.",
+        "Repeat using the CMA income, regulatory-minimum down payment, 30-year amortization and no-utility sensitivities."
+      ],
+      "what_would_change_my_verdict": [
+        "A reproducible complete-frame model showing that the lower bound exceeds 50 percent would change the verdict to Supported.",
+        "A reproducible model showing that the upper bound is 50 percent or less would change the verdict to Contradicted.",
+        "A linked transaction and title dataset, complete condominium-fee data and a fixed post-2019 mortgage-rate rule would permit the required calculation."
+      ],
+      "suggested_one_line": "New-home price evidence points toward a purchase-affordability problem for a $90,000 household, but the required matched, separately titled infill calculation and majority bounds are not available.",
+      "suggested_short_answer": "Not established. Edmonton's 2025 new-unit prices and the City's benchmark analysis support the claimed direction, but neither identifies the separately titled dwellings built on matched teardown lots. Missing title, sale, fee and mortgage-rate inputs prevent the required majority test.",
+      "suggested_tldr": [
+        "The declared City median income is $90,000, making the modelled 30-percent limit $2,250 per month.",
+        "Recent new-home prices are directionally consistent with many dwellings failing that test.",
+        "The exact teardown-linked denominator and shelter-cost calculations have not been published."
+      ]
+    }
+  ]
+}
