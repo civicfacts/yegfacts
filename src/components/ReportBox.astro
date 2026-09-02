@@ -18,15 +18,9 @@ interface Props {
   path: string;
   /** Human title of the page, used in the mail subject. */
   title: string;
-  /**
-   * `stack` is the rail's narrow column. `row` is the home page's foot, where
-   * the box has the full measure and reads as one horizontal panel rather than
-   * a stray sidebar that lost its sidebar.
-   */
-  layout?: 'stack' | 'row';
 }
 
-const { path, title, layout = 'stack' } = Astro.props;
+const { path, title } = Astro.props;
 
 const pageUrl = new URL(path, Astro.site ?? SITE.url).href;
 
@@ -38,43 +32,17 @@ const issue = issueUrl(
 const email = mailto(`Correction: ${title}`, `Page: ${pageUrl}\n\nWhat is wrong:\n`);
 ---
 
-{
-  layout === 'row' ? (
-    <div class="flex flex-wrap items-baseline gap-x-6 gap-y-2 border border-rule p-5">
-      <p class="font-display text-[1.125rem] font-semibold">Something wrong on this page?</p>
-      <p class="text-[0.9375rem]">
-        <a href={issue} rel="noopener" class="link">
-          Open a GitHub issue
-        </a>
-        <span class="text-muted"> · </span>
-        <a href={email} class="link">
-          {SITE.email}
-        </a>
-      </p>
-      <p class="text-[0.8125rem] text-muted sm:ml-auto">
-        <a href="/about#corrections" class="link">Corrections are published</a>, never quietly
-        edited.
-      </p>
-    </div>
-  ) : (
-    <div class="border-t border-rule pt-4">
-      <p class="font-display text-[1rem] font-semibold text-ink">Something wrong on this page?</p>
-      <ul class="mt-2 space-y-1 text-[0.8125rem]">
-        <li>
-          <a href={issue} rel="noopener" class="link">
-            Open a GitHub issue
-          </a>
-        </li>
-        <li>
-          <a href={email} class="link">
-            {SITE.email}
-          </a>
-        </li>
-      </ul>
-      <p class="mt-2.5 text-[0.75rem] leading-relaxed text-muted">
-        <a href="/about#corrections" class="link">Corrections are published</a>, never quietly
-        edited.
-      </p>
-    </div>
-  )
-}
+<div class="border-t border-rule pt-4">
+  <p class="font-display text-[1rem] font-semibold text-ink">Something wrong on this page?</p>
+  <ul class="mt-2 space-y-1 text-[0.8125rem]">
+    <li>
+      <a href={issue} rel="noopener" class="link">Open a GitHub issue</a>
+    </li>
+    <li>
+      <a href={email} class="link">{SITE.email}</a>
+    </li>
+  </ul>
+  <p class="mt-2.5 text-[0.75rem] leading-relaxed text-muted">
+    <a href="/about#corrections" class="link">Corrections are published</a>, never quietly edited.
+  </p>
+</div>

@@ -1,8 +1,10 @@
 ---
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 
+import stew from '../assets/stew.png';
 import Base from '../layouts/Base.astro';
 import FindingsBoard from '../components/FindingsBoard.astro';
 import ReportBox from '../components/ReportBox.astro';
@@ -164,22 +166,26 @@ const slateTitle = 'font-display text-[1.125rem] leading-snug font-semibold';
   }
 
   {/*
-    The front page: the record on the left, the way in on the right. Source
-    order is topics then recently checked, which is the order a phone reads
-    them in; at `lg` the grid puts each in its column without moving either.
+    The front page: the record on the left across both rows, the way in on the
+    right — topics top-right, then Stew and the report box under them. Source
+    order is topics, the record, then the aside, which is the order a phone
+    reads them in; at `lg` the grid puts each in its cell without moving any.
+    Row 1 is `auto` and row 2 takes the rest, so the height the record has over
+    the right-hand column falls below the aside rather than opening a gap above
+    it.
   */}
   <div
-    class="lg:grid lg:grid-cols-[minmax(0,62fr)_minmax(0,34fr)] lg:items-start lg:gap-x-12"
+    class="lg:grid lg:grid-cols-[minmax(0,62fr)_minmax(0,34fr)] lg:grid-rows-[auto_1fr] lg:items-start lg:gap-x-12"
   >
     <section class="lg:col-start-2 lg:row-start-1">
       <div class={head}><h2 class={headText}>Browse by topic</h2></div>
       <p class={lead}>
         Each claim is filed under one topic, so the counts add up to the total above.
       </p>
-      <ul class="mt-5 border-t border-rule">
+      <ul class="mt-4">
         {
           topics.map((topic) => (
-            <li class="flex items-baseline justify-between gap-4 border-b border-rule py-2.5">
+            <li class="flex items-baseline justify-between gap-4 py-1.5">
               {topic.count > 0 ? (
                 <Fragment>
                   <a href={`/topics/${topic.slug}`} class:list={['link', topicName]}>
@@ -205,7 +211,7 @@ const slateTitle = 'font-display text-[1.125rem] leading-snug font-semibold';
 
     {
       claimCount > 0 && (
-        <section class="mt-11 lg:col-start-1 lg:row-start-1 lg:mt-0">
+        <section class="mt-11 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:mt-0">
           <div class={head}>
             <h2 class={headText}>Recently checked</h2>
           </div>
@@ -234,6 +240,33 @@ const slateTitle = 'font-display text-[1.125rem] leading-snug font-semibold';
         </section>
       )
     }
+
+    <aside
+      class="mt-11 lg:col-start-2 lg:row-start-2 lg:mt-10"
+      aria-label="About the site"
+      data-pagefind-ignore
+    >
+      <div class="border-t border-stew pt-5">
+        {/* Resized at build time: the front page should not ship the full PNG for a 96px face. */}
+        <Image
+          src={stew}
+          alt="Stew, a geometric magpie — the AI Project Steward of YEGFacts"
+          width={96}
+          height={96}
+          densities={[1, 2]}
+          format="webp"
+          class="h-24 w-24 rounded-full border border-rule bg-paper"
+        />
+        <p class="mt-4 text-[0.9375rem] leading-relaxed text-muted">
+          Built by <a href="/about" class="link-stew">Stew</a>, an AI steward: the research runs,
+          the code, the evidence archive and most of the words on this site. Self-funded, no ads,
+          no political money: <a href="/support" class="link">what it costs and who pays</a>.
+        </p>
+      </div>
+      <div class="mt-8">
+        <ReportBox path="/" title={SITE.name} />
+      </div>
+    </aside>
   </div>
 
   <section id="how-a-verdict-is-made" class="mt-14">
@@ -391,18 +424,4 @@ const slateTitle = 'font-display text-[1.125rem] leading-snug font-semibold';
     )
   }
 
-  {/*
-    The correction route, at the foot of the front page rather than in a rail
-    the home page does not have. One horizontal panel: the invitation, the two
-    routes, and what happens to what you send.
-  */}
-  <div class="mt-14">
-    <ReportBox path="/" title={SITE.name} layout="row" />
-  </div>
-
-  <p class="mt-9 max-w-[90ch] border-t border-rule pt-5 text-[0.875rem] leading-relaxed text-muted">
-    Built by <a href="/about" class="link">Stew</a>, an AI steward. Ildar Abdulin is
-    the named human accountable for everything published. Self-funded, no ads, no political money:{' '}
-    <a href="/support" class="link">what it costs and who pays</a>.
-  </p>
 </Base>
