@@ -9,7 +9,8 @@ import { findingEdge } from '../lib/findings';
  * table of the claims checked on it: Claim on the left, Finding on the right.
  *
  * The table is the FindingsBoard idiom used on / and /search, at the tighter
- * type size a dense index wants: a 5px verdict-coloured left edge on the row,
+ * type size a dense index wants: a 5px verdict-coloured bar on the question,
+ * inside the row's padding so each row's bar stands alone,
  * the question in the display face, the filled badge in its own column so the
  * verdicts read down one column. It holds at every width; on a phone it
  * shrinks to the widest badge.
@@ -36,8 +37,6 @@ const { stories, claimsByStory, showTopics = true, headingLevel = 'h3' } = Astro
 
 const Heading = headingLevel;
 
-/** The header cells share one label style; a transparent edge keeps Claim over the questions' text. */
-const th = 'border-b border-rule pb-2 text-left font-sans text-xs font-semibold tracking-[0.09em] text-muted uppercase';
 /** Shrinks to the widest badge on a phone, a fixed 11rem column from sm up, like the search board. */
 const findingColumn = 'w-px whitespace-nowrap sm:w-44';
 ---
@@ -72,23 +71,25 @@ const findingColumn = 'w-px whitespace-nowrap sm:w-44';
           <p class="mt-3 text-[0.9375rem] leading-relaxed text-muted">{story.data.one_line}</p>
 
           {claims.length > 0 && (
-            <table class="mt-5 w-full border-collapse">
+            <table class="mt-4 w-full border-collapse border-t border-rule">
               <caption class="sr-only">Claims checked on {story.data.title}</caption>
-              <thead>
+              {/* The badge says what its column is, so the header is for screen readers only. */}
+              <thead class="sr-only">
                 <tr>
-                  <th scope="col" class:list={[th, 'border-l-[5px] border-l-transparent pl-4']}>
-                    Claim
-                  </th>
-                  <th scope="col" class:list={[th, findingColumn]}>
-                    Finding
-                  </th>
+                  <th scope="col">Claim</th>
+                  <th scope="col">Finding</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-rule">
                 {claims.map((claim) => (
                   <tr>
-                    <td class:list={['border-l-[5px] py-3 pr-4 pl-4 align-top', findingEdge(claim.data.finding)]}>
-                      <span class="font-display text-[1.0625rem] leading-snug font-semibold text-ink">
+                    <td class="py-3 pr-4 align-top">
+                      <span
+                        class:list={[
+                          'block border-l-[5px] pl-4 font-display text-[1.0625rem] leading-snug font-semibold text-ink',
+                          findingEdge(claim.data.finding),
+                        ]}
+                      >
                         {claim.data.question}
                       </span>
                     </td>
