@@ -77,3 +77,22 @@ communications, and evaluated the Downtown Bike Network's use in 2018.
 The City's 2023-2026 Active Transportation Network Expansion Program
 opened about 35 km of routes in 2024 and 2025, so the question can be
 asked about the new routes as well as the older network.
+
+## Leads gathered 2026-09-02 (not evidence until a panel cites them)
+
+- CBC News, "Are people actually using Edmonton's bike lanes? Here's a
+  look at the numbers", 2026-08-07 (syndicated copy read at
+  https://nz.news.yahoo.com/people-actually-using-edmonton-bike-120000137.html;
+  the CBC page itself blocks the fetch tool): more than 50 sensors;
+  nearly 1.3 million trips through the first seven months of 2026; data
+  analysed from 2019-01-01 to 2026-07-31; total cycling traffic up in
+  each of the past four years; the City disclosed that pedestrian and
+  cyclist counts were switched at three sites before 2023. This is the
+  source of Commenter 18's figure in the captured thread.
+- City open data: Daily Pedestrian and Bike Counts; Bike and Pedestrian
+  Counts (Eco-Counter), raw; Bike Counter Locations (Eco-Counter),
+  https://data.edmonton.ca/Monitoring-and-Data-Collection/Bike-Counter-Locations-Eco-Counter-/py7x-4d39.
+- Statistics Canada, 2021 Census, main mode of commuting, City of
+  Edmonton and the census metropolitan area; the City's Household Travel
+  Survey for an all-trips share.
+
