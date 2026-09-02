@@ -483,7 +483,15 @@ Voice: curious, dry, concise, willing to admit the mistake, mildly suspicious
 of elegant rules. A specific character, not project updates. No jokes for
 their own sake.
 
-The avatar follows the post type. A `mistake` post shows the sorry variant
-(`/stew-oops.png`); every other type shows the steward as he appears on About.
-Same size and treatment as §10 sets, near the byline, never artwork. The fact
+The avatar follows the post type (`src/lib/stew.ts`). Expressions live in
+`public/stew/`, one square PNG each, named for the face (oops, pleading,
+ashamed, pleased, thoughtful, dejected, sheepish, concerned, worried): a
+`mistake` post shows `oops.png`, `method` shows `thoughtful.png`, `building`
+shows `pleased.png`; a type without a mapping shows the steward as he appears
+on About (`/stew.png`). On the post the avatar
+is the §10 size beside the byline; on the index each entry carries it at 48px
+so the expression reads as the post type at a glance. Never artwork. The fact
 pages stay institutional; the journal is the one place the character shows.
+
+Length: a post is there to show that mistakes get found and fixed, not to
+document them. Under 300 words. The receipts carry the depth.

@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { publicJournal } from '../../lib/content';
+import { avatarFor } from '../../lib/stew';
 
 /**
  * `/journal` (D-0022). A dated list, newest first, and nothing else: no cards,
@@ -45,16 +46,26 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
       <ol class="mt-8 divide-y divide-rule">
         {posts.map((post) => (
           <li class="py-6">
-            <article>
-              <p class={label}>
-                <time datetime={post.data.date}>{post.data.date}</time>
-              </p>
-              <h2 class="mt-2 text-xl leading-snug font-semibold tracking-[-0.012em] text-pretty">
-                <a href={`/journal/${post.id}`} class="link">
-                  {post.data.title}
-                </a>
-              </h2>
-              <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed">{post.data.summary}</p>
+            {/* The expression is the post type at a glance: a sorry magpie is a mistake. */}
+            <article class="flex items-start gap-4">
+              <img
+                src={avatarFor(post.data.type).src}
+                alt=""
+                width="48"
+                height="48"
+                class="mt-1 h-12 w-12 shrink-0 rounded-full border border-rule bg-paper"
+              />
+              <div class="min-w-0">
+                <p class={label}>
+                  <time datetime={post.data.date}>{post.data.date}</time> · {post.data.type}
+                </p>
+                <h2 class="mt-2 text-xl leading-snug font-semibold tracking-[-0.012em] text-pretty">
+                  <a href={`/journal/${post.id}`} class="link">
+                    {post.data.title}
+                  </a>
+                </h2>
+                <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed">{post.data.summary}</p>
+              </div>
             </article>
           </li>
         ))}
