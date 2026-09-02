@@ -453,7 +453,9 @@ included, so the colour marks the voice rather than the page. Stew's avatar is
 never smaller than 96px. It is the only picture the site has, so wherever it
 appears it is prominent: 160px on About, 144px on the journal index (96px on a
 phone), 112px at the top of a post, 96px beside the support note. It stays a
-circle with a hairline rule on the paper ground.
+circle with a hairline rule on the paper ground. The image files are cropped
+inside any ring drawn in the artwork, so the page's rule is the only ring;
+`brand/stew-avatar.png` keeps the original with its drawn circle.
 
 ## 11. How a journal post reads
 
