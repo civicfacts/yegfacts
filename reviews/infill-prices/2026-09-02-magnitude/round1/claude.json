@@ -1,0 +1,171 @@
+{
+  "reviewer": {
+    "provider": "anthropic",
+    "model_self_reported": "claude-fable-5-1",
+    "runner_model": "claude-fable-5-1",
+    "runner_seat": "Claude Fable 5.1",
+    "runner_effort": "high"
+  },
+  "story": "infill-prices",
+  "round": 1,
+  "claims": [
+    {
+      "id": "ip-teardown-price-gap",
+      "proposition_evaluated": "On Edmonton lots where one house was demolished for infill (demolition permits 2016-2025, matched to replacements recorded by 2026-09-02), the median ratio of each replacement dwelling unit's assessed value on its first full roll after completion to the demolished house's total assessed value on the roll in force the year before demolition, both in constant July-2025 dollars (StatCan CPI all-items Edmonton CMA, July values), is at least 2.5 (primary; alternative 2.0), AND more than 50 percent of matched replacement dwelling units have a ratio of at least 2.0 (primary; alternative 1.5). Denominator: replacement dwelling units, each counted once; separately titled dwellings at their own total assessed value, units in single-title multi-unit buildings at the building-average assessed value per unit.",
+      "interpretation_notes": "No published source carries the matched, unit-level ratio series the proposition is stated in, and I did not build the full population series. I tested whether the public record can support it. It can, with work: Edmonton open data holds house demolition permits with legal descriptions (5,672 single-detached-house demolition permits 2016-2025 in the General Building Permits dataset, 5,668 with a legal description), and annual assessed values by legal description for rolls 2012-2025. Two pipeline findings matter for anyone running it. First, the permit dataset's classification changed in 2019: demolitions before 2019 sit under job category 'Other Miscellaneous Building' with work type '(99) Demolition', and from 2019 they sit under 'Home Improvement' identified only by a job description beginning 'To demolish', and some of those rows carry building type 'Single Detached House' while describing a garage-only demolition, so the frame must be built from the job description text, not the category. Second, exact legal-description matching finds the demolished house on the prior roll but loses subdivided replacements: in a 40-permit probe of January 2019 house demolitions, 35 matched the 2018 roll by exact legal description but only 17 matched the 2025 roll, and address lookup on three of the unmatched lots found each on the 2025 roll as two separately titled dwellings under new plan numbers (for example Plan 2938HW Blk 13 Lot 17 became Plan 1821663 Lots 17A and 17B). A legal-description-only join would therefore drop most two-dwelling skinny-lot redevelopments, which are the product the circulating claim most often describes, and bias any result toward single large replacement houses. Address or coordinate fallback recovers them. The cases I did match are reported below as cases only, in nominal dollars from the 2025 roll rather than the first full roll after completion, and in an approximate constant-dollar form flagged as arithmetic; they cannot supply a median or a share. On the closest existing analysis (Jacob Dawang, August 2026), the 2024 RS-zone cohort shows large per-lot uplift but a median net uplift of only $0.2M per home added for 5+ unit rowhomes, which is a different measure (uplift, not ratio; 2024 and 2026 rolls; mature-neighbourhood RS zone only) and enters as context. Both predeclared thresholds are undetermined because the verdict series does not exist in the public record as consulted, so the predeclared mapping gives Not established. Lot-level sensitivities, the mature-neighbourhood subset, the sale-to-sale series, the tenure and rent series, and the by-year distributions are all unreported for the same reason.",
+      "verdict": "Not established",
+      "confidence": "Moderate",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Matched cases from the open-data probe (demolished house on the 2018 roll; replacement dwellings on the 2025 roll, not the first full roll after completion; nominal CAD; constant-dollar ratio approximated by deflating 2018-roll values with July 2017 CPI 136.8 and 2025-roll values with July 2024 CPI 169.0). Single replacement dwelling, one title: Parkview, Plan 6054HW Blk 2 Lot 7, $520,500 (built 1954) to $1,655,000 (built 2019), nominal ratio 3.18, constant about 2.57; Westbrook Estates, Plan 5508MC Blk 6 Lot 4, $759,500 to $3,697,500 (built 2020), nominal 4.87, constant about 3.94; Hazeldean, Plan 1763HW Blk 28 Lot 8, $335,000 to $939,500 (built 2019), nominal 2.80, constant about 2.27; McCauley, Plan ND Blk 35 Lot 17, $149,500 to $580,500 (built 2020), nominal 3.88, constant about 3.14; Calder, Plan 8382AI Blk 11 Lot 2, $213,500 to $450,000 (built 2019), nominal 2.11, constant about 1.71. Two separately titled replacement dwellings on a subdivided lot: Belgravia, Plan 2938HW Blk 13 Lot 17, $508,000 (built 1951) to Lot 17A $903,500 and Lot 17B $904,000 (built 2019), nominal 1.78 each, constant about 1.44 each; Pleasantview, Plan 4722NY Blk 35 Lot 7, $437,000 (built 1947) to Lot 7A $992,000 (built 2020) and Lot 7B $1,018,500 (built 2022), nominal 2.27 and 2.33, constant about 1.84 and 1.89; Gold Bar, Plan 3878KS Blk 73 Lot 2, $385,000 (built 1958) to Lot 51 $651,000 (built 2020) and Lot 52 $726,500 (built 2023), nominal 1.69 and 1.89, constant about 1.37 and 1.53.",
+          "source_title": "Property Assessment Data (Historical), City of Edmonton Open Data (dataset qi6a-xuwt), queried 2026-09-02 for assessment years 2018 and 2025",
+          "source_url": "https://data.edmonton.ca/City-Administration/Property-Assessment-Data-Historical-/qi6a-xuwt",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-09-02",
+          "source_type": "observed-data",
+          "establishes": "Individual cases only. They show that the per-dwelling ratio can exceed 2.5 where one large house replaces one house, and falls below 2.0 in constant dollars in the three split-lot cases, but the 40-permit probe was a convenience sample of January 2019 permits, the replacement values are from the 2025 roll rather than the first full roll after completion, and no population median or share can be inferred.",
+          "strength": "weak"
+        },
+        {
+          "finding": "The General Building Permits dataset records single-detached-house demolition permits with legal descriptions for the whole primary window. Counts by permit year, building type 'Single Detached House (110)' with demolition work type or 'demolish' in the job description: 2016 541; 2017 660; 2018 446; 2019 451; 2020 516; 2021 590; 2022 622; 2023 511; 2024 645; 2025 690; total 5,672, of which 5,668 carry a legal description. Five-year sensitivity window 2021-2025: 3,058. From 2019 these rows sit under job category 'Home Improvement' and some describe garage-only demolitions, so the frame needs text parsing of the job description.",
+          "source_title": "General Building Permits, City of Edmonton Open Data (dataset 24uj-dj8v), queried 2026-09-02",
+          "source_url": "https://data.edmonton.ca/Urban-Planning-Economy/General-Building-Permits/24uj-dj8v",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-09-02",
+          "source_type": "observed-data",
+          "establishes": "The demolition-permit frame the brief specifies exists in the public record with a legal-description key, and its approximate size. It does not establish any value.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Edmonton's 2025 residential methodology states: 'Valuation Date refers to the legislated date of July 1, 2024' and that assessments estimate value 'as the property existed on December 31, 2024' and 'as if the property had been sold on July 1, 2024', under the Municipal Government Act, R.S.A. 2000, c. M-26 and the Matters Relating to Assessment and Taxation Regulation, 2018, Alta Reg 203/17. The City FAQ adds: 'If your property was only partially complete as of December 31, your assessment notice will reflect the value of the land plus the value of the building, based on its completion percentage.'",
+          "source_title": "2025 Assessment Methodology, Residential Improved Properties (updated January 31, 2025); Assessment Frequently Asked Questions",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2025_RES_Improved.pdf?cb=1737210374",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025-01-31",
+          "source_type": "policy-document",
+          "establishes": "That the brief's July 1 value-date rule matches the City's legislated valuation date, and that a roll can carry a partially complete replacement, which is why the brief's 'first full roll after completion' rule requires checking the year-built and completion status rather than taking the first roll on which the new account appears.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Statistics Canada CPI all-items, Edmonton, Alberta, monthly, 2002=100 (vector v41692918), July values: 2015 134.1; 2016 135.3; 2017 136.8; 2018 142.0; 2019 143.8; 2020 145.2; 2021 149.9; 2022 161.3; 2023 165.0; 2024 169.0; 2025 171.0; 2026 177.8. Table released 2026-08-17. New Housing Price Index, Edmonton, total (house and land), monthly (vector v111955547), July values: 2015 100.4; 2016 100.3; 2017 99.8; 2018 99.8; 2019 97.8; 2020 97.2; 2021 104.3; 2022 110.5; 2023 107.3; 2024 109.4; 2025 107.0; 2026 106.0. Table released 2026-08-20.",
+          "source_title": "Table 18-10-0004-01 Consumer Price Index, monthly, not seasonally adjusted; Table 18-10-0205-01 New housing price index, monthly (retrieved through the StatCan Web Data Service)",
+          "source_url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1810000401",
+          "source_publisher": "Statistics Canada",
+          "source_date": "2026-08-20",
+          "source_type": "observed-data",
+          "establishes": "The deflators the brief names exist for Edmonton on July value dates across the whole window. Between the July 2017 and July 2024 value dates the CPI rose 23.5 percent while the NHPI rose 9.6 percent, so a nominal ratio across that gap overstates the constant-dollar ratio by roughly a fifth under the primary adjustment.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Section 814 of Zoning Bylaw 12800 (online consolidation, last amendment shown on the section: Charter Bylaw 18967, August 26, 2019): '814.1 General Purpose: The purpose of this Overlay is to regulate residential development in Edmonton's mature residential neighbourhoods, while responding to the context of surrounding development...' and '814.2 Area of Application: This Overlay applies to all Sites zoned RF1, RF2, RF3, RF4 and RF5 within the areas shown on the Appendix to this Overlay.' The City's zoning page states: 'Zoning Bylaw 12800 was repealed on January 1, 2024, and replaced with Zoning Bylaw 20001' and links the archived 'Former Zoning Bylaw 12800' consolidation and its overlay maps.",
+          "source_title": "814 Mature Neighbourhood Overlay, Edmonton Zoning Bylaw 12800 (webdocs consolidation); Zoning Bylaw page, City of Edmonton",
+          "source_url": "https://webdocs.edmonton.ca/zoningbylaw/ZoningBylaw/Part2/Overlays/814_Mature_Neighbourhood_Overlay.htm",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2024-01-01",
+          "source_type": "legal-audited",
+          "establishes": "The frozen historical boundary the brief specifies is documented and retrievable (the Appendix map to Section 814 in the archived consolidation), and that no mature-neighbourhood overlay is in force on the freeze date. I could not open the 65 MB archived PDF to confirm its consolidation date, so the version reviewed is the webdocs online consolidation.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "Independent analysis of 2024 building permits in the RS zone matched to 2024 (baseline) and 2026 (completed) assessment rolls by legal description, 25 m proximity and address: 1,492 permits consolidated to 1,242 lots, 1,182 (95 percent) with both values. For 5+ unit rowhomes in the measured cohort (67 lots) the median gross uplift per lot was $1.7M and median net uplift $1.6M after a 1.19x control-group appreciation adjustment, but 'per home added' median net uplift was $0.2M. Lot splits are handled by assigning an equal share of the original value to each child parcel; a garden suite 'is almost always assessed as part of its host property'. The author notes late-2024 completions show much smaller uplift, 'probably because their assessments still reflect an unfinished state'.",
+          "source_title": "Edmonton's $15M infill property tax dividend, Jacob Dawang, 2026-08-04 (code linked on GitHub)",
+          "source_url": "https://www.jacobdawang.com/blog/2026/property-tax-uplift/",
+          "source_publisher": "Jacob Dawang (independent analyst)",
+          "source_date": "2026-08-04",
+          "source_type": "analytical-report",
+          "establishes": "That a lot-level join of these datasets is feasible at about 95 percent match rate, and that for multi-unit rowhome replacements the added assessed value per dwelling unit is far smaller than the per-lot total. It measures uplift, not the brief's ratio, on a 2024 mature-neighbourhood RS-zone cohort rather than the 2016-2025 city-wide frame, and gives no baseline house value, so no ratio can be derived from it. It is consistent with per-unit ratios for rowhome replacements sitting well below 2.5 and does not bear on single-dwelling or two-dwelling replacements.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The City's 2023 redeveloping-area infill report states: 'Demolitions that made way for infill housing included 387 single detached houses, 3 semi-detached units, 3 row housing units, and 131 apartment dwellings' and reports 2,931 net new units in the redeveloping area (about 30 percent of citywide net new units) in 2023. The 2024 report gives 3,535 net new units (about 23 percent citywide). Neither report contains any assessed-value, sale-price or price comparison between replacement housing and demolished housing.",
+          "source_title": "2023 Redeveloping Area Infill Annual Report and 2024 Redeveloping Area Infill Report, City of Edmonton",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-Redeveloping-Area-Infill-Annual-Report.pdf?cb=1763491086",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2024",
+          "source_type": "analytical-report",
+          "establishes": "That the City's own infill monitoring counts demolitions on the City Plan redeveloping-area boundary (a different boundary from the frozen Mature Neighbourhood Overlay) and publishes no value comparison, so the City has not published the series the claim needs.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "In the 40-permit probe, exact legal-description matching found 35 of 40 demolished houses on the 2018 roll but only 17 of 40 lots on the 2025 roll; address lookup on three unmatched lots found each as two separately titled new dwellings under new plan numbers (Plan 1922218 Lots 51 and 52; Plan 1821663 Lots 17A and 17B; Plan 1921134 Lots 7A and 7B). No lot in the probe showed more than one 2025 account under the original legal description.",
+          "source_title": "General Building Permits (24uj-dj8v) joined to Property Assessment Data (Historical) (qi6a-xuwt), City of Edmonton Open Data, queried 2026-09-02",
+          "source_url": "https://data.edmonton.ca/Urban-Planning-Economy/General-Building-Permits/24uj-dj8v",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-09-02",
+          "source_type": "observed-data",
+          "establishes": "That a parcel-key-only join systematically drops subdivided two-dwelling replacements, the product with the lowest per-dwelling ratios in the probe, so any result built on that key alone would be biased upward. It does not establish the population ratio.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "The verdict series was not computed over the population. I ran a feasibility probe on 40 permits, not the 5,672-permit frame, and report its cases as cases.",
+        "Probe replacement values are from the 2025 roll, not the first full roll after completion the brief requires, so they carry up to five years of post-completion market movement; the approximate constant-dollar ratios remove general CPI inflation only.",
+        "The demolition frame is defined from the building-permit dataset's job description text because its category coding changed in 2019; semi-detached and other dwelling demolitions were not counted, and some house-coded rows are garage-only demolitions.",
+        "The historical assessment dataset gives total assessed value only; land and improvement values are not separated, so that predeclared breakdown cannot be reported from it.",
+        "Dwelling-unit counts for single-title multi-unit replacements are not carried in the assessment dataset; they must come from the building permit 'units added' field or the City's unit-count records, and the probe did not test that link.",
+        "The mature-neighbourhood subset requires overlaying the Section 814 Appendix map, which I did not perform; the City Plan 'redeveloping area' used in City reports is a different boundary.",
+        "Sale-price, asking-price, rent, tenure, bedroom-count and displacement series were not found in any lot-level public dataset and are recorded as missing evidence."
+      ],
+      "unknowns": [
+        "The city-wide median ratio and the share of replacement dwelling units at or above 2.0 and 1.5, on either constant-dollar basis, and their bounds under the unclassified-case rule.",
+        "The distribution by demolition permit year, and whether the move toward 5+ unit rowhomes after Zoning Bylaw 20001 (2024) lowers the per-unit median for the 2024-2025 cohorts relative to 2016-2023.",
+        "The share of the frame whose replacement is a single-title multi-unit building versus separately titled dwellings, which drives whether the per-unit rule or the total-value rule dominates.",
+        "How many demolitions in the frame were fire-order or safety-order demolitions, and their demolished-house values.",
+        "The mature-neighbourhood subset result on the frozen Section 814 boundary."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A lot-matched series of demolished-house assessed value (roll in force the year before demolition) and each replacement dwelling unit's assessed value (first full roll after completion), with dwelling-unit counts per title, for all house demolition permits 2016-2025.",
+          "likely_holder": "City of Edmonton Assessment and Taxation Branch (account-level roll history with parcel lineage) together with Urban Planning and Economy (demolition and building permits); reproducible from the open data with an address or coordinate fallback join.",
+          "importance": "critical"
+        },
+        {
+          "description": "Dwelling-unit counts for single-title multi-unit replacement buildings, and land versus improvement split of assessed values.",
+          "likely_holder": "City of Edmonton Assessment and Taxation Branch; Alberta Land Titles for title structure.",
+          "importance": "high"
+        },
+        {
+          "description": "Arm's-length sale prices for the demolished house and for each separately titled replacement, with dates, to run the sale-to-sale sensitivity.",
+          "likely_holder": "Alberta Land Titles (Spatial Information System transfer records) and the REALTORS Association of Edmonton MLS sales records; the City's MyProperty portal shows sale history per property but not as a bulk dataset.",
+          "importance": "high"
+        },
+        {
+          "description": "Prior tenure, prior rent, prior unit count and any tenant-displacement record for demolished houses.",
+          "likely_holder": "No public holder identified; Alberta's Residential Tenancies regime does not register tenancies, and the City does not publish tenant notices for demolition permits.",
+          "importance": "moderate"
+        },
+        {
+          "description": "The Section 814 Appendix boundary as a GIS layer as of 2023-12-31 to delimit the mature-neighbourhood subset.",
+          "likely_holder": "City of Edmonton (archived Zoning Bylaw 12800 overlay maps, linked from the Zoning Bylaw page; open data 'Mature Neighbourhood Overlay' layer if retained).",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "Build the frame from General Building Permits (24uj-dj8v): rows with job description beginning 'To demolish' naming a house or dwelling, permit years 2016-2025, excluding garage-only and accessory demolitions; count entering and leaving at each filter.",
+        "Match each permit's legal description to the assessment roll for the year before the permit year (demolished-house value); fall back to address, then coordinates; report match counts per key.",
+        "Find replacement accounts by address and coordinate (new plan numbers on subdivided lots), take year built from the roll, and select the first full roll after completion (roll year at least year built plus one); report replacements not yet on a full roll as unmatched with their count.",
+        "Assign each replacement account a dwelling-unit count (1 for a separately titled house; permit 'units added' or City unit count for single-title buildings); compute building-average value per unit where needed and state building total and unit count.",
+        "Deflate both sides with the July CPI value for the roll's valuation year (July 2025 = 171.0 base), compute per-unit ratios, then deciles, quartiles, median, count, range, and the shares at 2.0 and 1.5 with numerators and denominators; apply the unclassified-case bounds.",
+        "Repeat with annual-average CPI (2025 base) and with the NHPI Edmonton July series; report both lot-level sensitivities, the mature-neighbourhood subset on the Section 814 boundary, the redeveloping-area sensitivity, the five-year window, and the by-permit-year table.",
+        "Report the same series in nominal dollars alongside, and for every pair state both roll years and the gap in years."
+      ],
+      "what_would_change_my_verdict": [
+        "A completed population series on the rules above showing a lower-bound median ratio of at least 2.5 and a lower-bound share at 2.0 above 50 percent would move this to Supported; meeting exactly one would move it to Partially supported.",
+        "A completed series with an upper-bound median below 1.5 and an upper-bound share at 1.5 below 50 percent would move this to Contradicted.",
+        "Publication by the City of a lot-matched before-and-after assessed-value series for teardown lots covering the window would replace the need for the reconstruction."
+      ],
+      "suggested_one_line": "The public record contains the pieces needed to test whether teardown replacements are typically worth about triple per dwelling, but no one has assembled them; matched cases show ratios from about 1.4 to 3.9 depending on how many dwellings went up.",
+      "suggested_short_answer": "No published source reports the matched, per-dwelling comparison the claim requires. Edmonton's open data can support it: about 5,700 house demolition permits from 2016 to 2025 carry legal descriptions, and annual assessed values are published back to 2012. A probe of 40 early-2019 permits found the demolished house on the prior roll in most cases, but exact parcel matching lost most subdivided lots, which reappear under new plan numbers as two separately titled dwellings. In the matched cases, one large house replacing one house produced constant-dollar ratios near or above 2.5, while each dwelling on a split lot came in below 2.0. Those are cases, not a distribution, so neither predeclared threshold can be called met or failed. The claim is not established, and not refuted, on the current public record.",
+      "suggested_tldr": [
+        "No public source publishes the lot-matched, per-dwelling assessed-value ratio the claim needs.",
+        "Edmonton open data holds the demolition permits and assessed values to build it; subdivided lots need address matching, not parcel keys.",
+        "Matched cases split: single replacement houses ran about 2.3 to 3.9 times the old house in constant dollars, split-lot dwellings about 1.4 to 1.9 each.",
+        "An independent 2024-cohort analysis finds only about $0.2M of added assessed value per home for 5+ unit rowhomes.",
+        "Verdict: Not established. Both predeclared thresholds are undetermined until the population series is computed."
+      ]
+    }
+  ]
+}
