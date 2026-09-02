@@ -75,6 +75,22 @@ Check, in this order:
    what it left out.
 7. **Scope traps.** Anything ruled out of scope that the claim depends
    on; anything in scope that belongs to a separate story.
+8. **Stakes.** The brief must state, for each verdict word, what it
+   would mean to a holder of the claim and to an opponent. Write out
+   what Supported and what Contradicted would change for each. If no
+   verdict would surprise either side, or if one verdict is impossible
+   on any evidence, the proposition is not the claim people are
+   arguing about and the brief is REVISE. This is the test the
+   published infill price-gap claim failed: Supported would have told
+   the opponent nothing and Contradicted could not happen.
+
+Two rules that override the others. A claim is tested as its holders
+assert it: when a post offers one example as evidence for a general
+pattern, the general pattern is the claim, and the brief tests it as a
+generalisation even though one example cannot support one. And the
+proposition may be made more precise than the claim as made, never
+weaker; if a definition drains the magnitude, the consequence or the
+generality out of the claim, that is a defect, not neutrality.
 
 Do not soften. A REVISE is normal.
 
