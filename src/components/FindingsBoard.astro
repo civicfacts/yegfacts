@@ -71,7 +71,7 @@ const { groups, showStory = true } = Astro.props;
                 </a>
               </p>
               {/* Answer directly under the question on phones; in its own column, all badges starting on one line, from sm up. */}
-              <p class="mt-2.5 sm:col-start-2 sm:row-start-1 sm:mt-0.5 sm:justify-self-start">
+              <p class="mt-2.5 sm:col-start-2 sm:row-start-1 sm:mt-0.5 sm:justify-self-end sm:text-right">
                 <Finding finding={claim.data.finding} size="md" />
                 {/* Unanimous stays silent; Adjacent and Split print under the badge they qualify, so a contested verdict is never taken for a firm one. */}
                 {claim.data.panel_agreement !== 'Unanimous' && (
@@ -95,7 +95,7 @@ const { groups, showStory = true } = Astro.props;
                   )}
                 </span>
                 <span class="text-muted sm:sr-only"> · </span>
-                <span class="font-semibold whitespace-nowrap sm:ml-auto sm:flex-[0_0_11rem]">
+                <span class="font-semibold whitespace-nowrap sm:ml-auto sm:flex-[0_0_11rem] sm:text-right">
                   Verified <time datetime={story.data.last_verified}>{story.data.last_verified}</time>
                 </span>
               </small>
