@@ -5,6 +5,7 @@ import path from 'node:path';
 
 import Base from '../layouts/Base.astro';
 import FindingsBoard from '../components/FindingsBoard.astro';
+import ReportBox from '../components/ReportBox.astro';
 import {
   claimTopics,
   orderedTopics,
@@ -12,7 +13,6 @@ import {
   publishedClaims,
   publishedStories,
 } from '../lib/content';
-import { FINDING_TONE } from '../lib/findings';
 import { SITE } from '../lib/site';
 import { launchSlate } from '../lib/slate';
 import { CANONICAL_FINDINGS } from '../lib/vocabulary';
@@ -105,129 +105,161 @@ const slate = (await launchSlate()).map((row) => ({
 }));
 const doneCount = slate.filter((row) => row.published).length;
 
-const heading = 'text-xl font-extrabold tracking-[-0.015em] text-forest';
-const label = 'text-xs font-semibold tracking-[0.09em] text-muted uppercase';
-const lead = 'mt-2 max-w-prose text-[0.9375rem] text-pretty leading-relaxed text-muted';
-const stepRow = 'grid grid-cols-[2ch_1fr] gap-x-4 py-4';
-const stepNumber = 'font-semibold text-gold tabular';
-const stepLabel = 'font-semibold';
-const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
+/** The broadsheet section head: a 3px ink rule, then the title in the display face. */
+const head = 'border-t-[3px] border-ink pt-3.5';
+const headText = 'font-display text-[1.75rem] leading-[1.15] font-bold tracking-[-0.01em] text-ink';
+const lead = 'mt-1.5 max-w-[62ch] text-base text-pretty text-muted';
+/** The metadata register: small caps, used for a date-and-type label only. */
+const label = 'text-[0.6875rem] font-bold tracking-[0.1em] uppercase';
+const topicName = 'font-display text-[1.25rem] leading-snug font-semibold';
+const slateTitle = 'font-display text-[1.125rem] leading-snug font-semibold';
 ---
 
-<Base title={SITE.name} description={SITE.tagline}>
-  <section class="border-b border-rule pb-10">
-    <h1
-      class="text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] text-balance text-forest sm:text-display"
-    >
-      YEGFacts checks what people say about Edmonton's city government against the public record.
-    </h1>
-
-    <form action="/search" method="get" class="mt-7 flex flex-col gap-2 sm:flex-row" role="search">
-      <label for="home-search" class="sr-only">Search checked claims</label>
-      <input
-        id="home-search"
-        type="search"
-        name="q"
-        placeholder="Did Edmonton lose $82M on electric buses?"
-        autocomplete="off"
-        class="min-w-0 grow border border-rule-strong bg-white px-3 py-3 text-base placeholder:text-muted/70 focus:border-forest focus:outline-none"
-      />
-      <button
-        type="submit"
-        class="shrink-0 cursor-pointer bg-forest px-5 py-3 text-base font-semibold text-paper transition-opacity hover:opacity-90 sm:w-auto"
+<Base title={SITE.name} description={SITE.tagline} rail={false}>
+  {/*
+    The descriptor, the search and the helper line belong to the masthead, not
+    to the page under it: they are how the site introduces itself, and on the
+    forest ground they read as one block instead of three stacked headers.
+  */}
+  <Fragment slot="masthead">
+    <div class="pb-9">
+      <h1
+        class="mt-4 max-w-[34ch] font-display text-[clamp(1.375rem,3.1vw,1.875rem)] leading-[1.3] font-medium text-balance text-paper"
       >
-        Search
-      </button>
-    </form>
-    <p class="mt-2 text-sm text-muted">
-      Search {claimCount} checked {claimCount === 1 ? 'claim' : 'claims'}, browse by topic below, or
-      read all <a href="/stories" class="link">{publicStoryCount} {publicStoryCount === 1 ? 'story' : 'stories'}</a>.
-      Filter by topic and finding on the <a href="/search" class="link">search page</a>.
-    </p>
+        YEGFacts checks what people say about Edmonton's city government against the public record.
+      </h1>
 
-    {
-      stories.length === 0 && (
-        <p class="mt-8 border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed text-muted">
-          Nothing is published yet. The first stories go through the full review panel before they
-          appear here — how that works is set out in the{' '}
-          <a href="/methodology" class="text-navy underline">
-            methodology
-          </a>
-          .
-        </p>
-      )
-    }
-  </section>
-
-  <section class="mt-12">
-    <h2 class={heading}>Browse by topic</h2>
-    <p class={lead}>Each claim is filed under one topic, so the counts add up to the total above.</p>
-    <ul class="mt-4 grid gap-x-8 gap-y-3 sm:grid-cols-2">
-      {
-        topics.map((topic) => (
-          <li>
-            {topic.count > 0 ? (
-              <Fragment>
-                <a href={`/topics/${topic.slug}`} class="link font-semibold text-[1.0625rem]">
-                  {topic.name}
-                </a>{' '}
-                <span class="text-sm text-muted tabular">
-                  {topic.count} {topic.count === 1 ? 'claim' : 'claims'}
-                </span>
-              </Fragment>
-            ) : (
-              <Fragment>
-                <span class="font-semibold text-muted text-[1.0625rem]">{topic.name}</span>{' '}
-                <span class={label}>no claims yet</span>
-              </Fragment>
-            )}
-          </li>
-        ))
-      }
-    </ul>
-  </section>
+      <form action="/search" method="get" class="mt-6 max-w-[44rem]" role="search">
+        <label
+          for="home-search"
+          class="mb-2.5 block text-[0.75rem] font-bold tracking-[0.12em] text-paper uppercase"
+        >
+          Search checked claims
+        </label>
+        <div class="flex flex-wrap gap-3">
+          <input
+            id="home-search"
+            type="search"
+            name="q"
+            placeholder="Did Edmonton lose $82M on electric buses?"
+            autocomplete="off"
+            class="h-[50px] min-w-0 flex-1 basis-72 appearance-none rounded-none border-0 bg-white px-3.5 text-base text-ink placeholder:text-muted"
+          />
+          <button
+            type="submit"
+            class="h-[50px] cursor-pointer rounded-none bg-brick px-7 text-[0.9375rem] font-bold tracking-[0.08em] text-white uppercase max-[40rem]:grow max-[40rem]:basis-full"
+          >
+            Search
+          </button>
+        </div>
+      </form>
+      <p class="mt-3 max-w-[52ch] text-base text-paper">
+        Search {claimCount} checked {claimCount === 1 ? 'claim' : 'claims'}, browse by topic below,
+        or read all <a href="/stories" class="underline underline-offset-[0.16em]">{publicStoryCount} {publicStoryCount === 1 ? 'story' : 'stories'}</a>.
+        Filter by topic and finding on the <a href="/search" class="underline underline-offset-[0.16em]">search page</a>.
+      </p>
+    </div>
+  </Fragment>
 
   {
-    claimCount > 0 && (
-      <section class="mt-14">
-        <h2 class={heading}>Recently checked</h2>
-        <p class="mt-2 text-[0.9375rem] text-pretty text-muted tabular">
-          {claimCount}
-          {claimCount === 1 ? ' claim in ' : ' claims in '}
-          {storyCount}
-          {storyCount === 1 ? ' story: ' : ' stories: '}
-          {findingCounts.map((entry, index) => (
-            <Fragment>
-              {index > 0 && ' · '}
-              <span class:list={['font-semibold', FINDING_TONE[entry.finding].text]}>
-                {entry.count} {entry.finding}
-              </span>
-            </Fragment>
-          ))}
-        </p>
-        <div class="mt-6">
-          <FindingsBoard groups={[{ label: '', rows: recent }]} />
-        </div>
-        <p class="mt-4 text-[0.9375rem]">
-          <a href="/search#every-claim" class="link">Every checked claim, by topic</a>
-        </p>
-      </section>
+    stories.length === 0 && (
+      <p class="mb-10 border-l-[5px] border-gold pl-4 text-base leading-relaxed text-muted">
+        Nothing is published yet. The first stories go through the full review panel before they
+        appear here — how that works is set out in the{' '}
+        <a href="/methodology" class="link">
+          methodology
+        </a>
+        .
+      </p>
     )
   }
 
+  {/*
+    The front page: the record on the left, the way in on the right. Source
+    order is topics then recently checked, which is the order a phone reads
+    them in; at `lg` the grid puts each in its column without moving either.
+  */}
+  <div
+    class="lg:grid lg:grid-cols-[minmax(0,62fr)_minmax(0,34fr)] lg:items-start lg:gap-x-12"
+  >
+    <section class="lg:col-start-2 lg:row-start-1">
+      <div class={head}><h2 class={headText}>Browse by topic</h2></div>
+      <p class={lead}>
+        Each claim is filed under one topic, so the counts add up to the total above.
+      </p>
+      <ul class="mt-5 border-t border-rule">
+        {
+          topics.map((topic) => (
+            <li class="flex items-baseline justify-between gap-4 border-b border-rule py-2.5">
+              {topic.count > 0 ? (
+                <Fragment>
+                  <a href={`/topics/${topic.slug}`} class:list={['link', topicName]}>
+                    {topic.name}
+                  </a>
+                  <span class="text-[0.875rem] whitespace-nowrap text-muted tabular">
+                    {topic.count} {topic.count === 1 ? 'claim' : 'claims'}
+                  </span>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <span class:list={[topicName, 'text-muted']}>{topic.name}</span>
+                  <span class="text-[0.875rem] whitespace-nowrap text-muted italic">
+                    no claims yet
+                  </span>
+                </Fragment>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    {
+      claimCount > 0 && (
+        <section class="mt-11 lg:col-start-1 lg:row-start-1 lg:mt-0">
+          <div class={head}>
+            <h2 class={headText}>Recently checked</h2>
+          </div>
+          <p class:list={[lead, 'tabular']}>
+            {claimCount}
+            {claimCount === 1 ? ' claim in ' : ' claims in '}
+            {storyCount}
+            {storyCount === 1 ? ' story: ' : ' stories: '}
+            {findingCounts.map((entry, index) => (
+              <Fragment>
+                {index > 0 && ' · '}
+                <span class="font-bold text-ink">
+                  {entry.count} {entry.finding}
+                </span>
+              </Fragment>
+            ))}
+          </p>
+          <div class="mt-7">
+            <FindingsBoard groups={[{ label: '', rows: recent }]} />
+          </div>
+          <p class="mt-1 text-[0.9375rem] font-semibold">
+            <a href="/search#every-claim" class="link">
+              Every checked claim, by topic
+            </a>
+          </p>
+        </section>
+      )
+    }
+  </div>
+
   <section id="how-a-verdict-is-made" class="mt-14">
-    <h2 class={heading}>How a verdict is made</h2>
+    <div class={head}><h2 class={headText}>How a verdict is made</h2></div>
     <p class={lead}>
       Every finding goes through the same four steps. Methodology v{methodologyVersion},{' '}
       <a href="/methodology/changes" class="link">change history</a>.
     </p>
 
-    <ol class="mt-5 divide-y divide-rule border-t border-rule">
-      <li class={stepRow}>
-        <span class={stepNumber}>1</span>
-        <div>
-          <p class={stepLabel}>Blind research</p>
-          <p class={stepBody}>
+    {/* The numerals are a CSS counter on this list — see `.steps` in global.css. */}
+    <div class="strip mt-6">
+      <ol class="steps">
+        <li>
+          <h3 class="font-sans text-base leading-[1.3] font-bold">Blind research</h3>
+          <p class="mt-2 text-base text-muted">
             {
               reviewerCount
                 ? `${reviewerCount} AI reviewers, each from a different company, research every claim without seeing each other's work.`
@@ -235,24 +267,18 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
             }{' '}
             <a href="/methodology#stages" class="link">How the rounds run</a>.
           </p>
-        </div>
-      </li>
-      <li class={stepRow}>
-        <span class={stepNumber}>2</span>
-        <div>
-          <p class={stepLabel}>A rule, not a vote</p>
-          <p class={stepBody}>
+        </li>
+        <li>
+          <h3 class="font-sans text-base leading-[1.3] font-bold">A rule, not a vote</h3>
+          <p class="mt-2 text-base text-muted">
             A lookup table published in advance turns the reviewers' verdicts into one finding.
             Nobody votes on it.{' '}
             <a href="/methodology#synthesis" class="link">The table</a>.
           </p>
-        </div>
-      </li>
-      <li class={stepRow}>
-        <span class={stepNumber}>3</span>
-        <div>
-          <p class={stepLabel}>Archived sources</p>
-          <p class={stepBody}>
+        </li>
+        <li>
+          <h3 class="font-sans text-base leading-[1.3] font-bold">Archived sources</h3>
+          <p class="mt-2 text-base text-muted">
             Before publication every statement is checked against the archived bytes of the sources
             it cites, not the live web.{
               evidenceCount > 0 && (
@@ -264,61 +290,61 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
                   so far.
                 </Fragment>
               )
-            }          </p>
-        </div>
-      </li>
-      <li class={stepRow}>
-        <span class={stepNumber}>4</span>
-        <div>
-          <p class={stepLabel}>Four words</p>
-          <p class={stepBody}>
+            }
+          </p>
+        </li>
+        <li>
+          <h3 class="font-sans text-base leading-[1.3] font-bold">Four words</h3>
+          <p class="mt-2 text-base text-muted">
             A finding is one of four words with a fixed meaning. Not established means the record
             can't answer yet, not that the claim is false.{' '}
             <a href="/methodology#vocabulary" class="link">What each word means</a>.
           </p>
-        </div>
-      </li>
-    </ol>
+        </li>
+      </ol>
+    </div>
   </section>
 
   <section class="mt-14">
-    <h2 class={heading}>Corrections</h2>
+    <div class={head}><h2 class={headText}>Corrections</h2></div>
     <p class={lead}>What changed after publication, on the page it changed.</p>
     {
       corrections.length === 0 ? (
-        <p class="mt-4 text-[0.9375rem] text-muted">
+        <p class="mt-4 text-base text-muted">
           No corrections yet.{' '}
-          <a href="/about#corrections" class="text-navy underline">
+          <a href="/about#corrections" class="link">
             How to report one.
           </a>
         </p>
       ) : (
-        <ul class="mt-4 divide-y divide-rule border-t border-rule">
-          {corrections.map((row) => (
-            <li class="py-4">
-              <p class={label}>
-                <time datetime={row.entry.date}>{row.entry.date}</time> ·{' '}
-                {CHANGE_LABELS[row.entry.type as 'correction' | 'verdict-change']}
-              </p>
-              <p class="mt-1">
-                <a href={`/facts/${row.story.id}`} class="link font-semibold">
-                  {row.story.data.title}
-                </a>
-              </p>
-              <p class="mt-1 max-w-prose text-[0.9375rem] leading-relaxed">
-                {row.sentence}
-                {row.truncated && (
-                  <Fragment>
-                    {' '}
-                    <a href={`/facts/${row.story.id}#history`} class="text-navy underline">
-                      Full note
-                    </a>
-                  </Fragment>
-                )}
-              </p>
-            </li>
-          ))}
-        </ul>
+        <div class="panel panel-brick mt-6 p-5 sm:p-8">
+          <ul>
+            {corrections.map((row) => (
+              <li class="[&+li]:mt-6 [&+li]:border-t [&+li]:border-rule [&+li]:pt-6">
+                <p class:list={[label, 'text-brick tabular']}>
+                  <time datetime={row.entry.date}>{row.entry.date}</time> ·{' '}
+                  {CHANGE_LABELS[row.entry.type as 'correction' | 'verdict-change']}
+                </p>
+                <p class="mt-1.5 font-display text-[1.1875rem] leading-snug font-semibold">
+                  <a href={`/facts/${row.story.id}`} class="link">
+                    {row.story.data.title}
+                  </a>
+                </p>
+                <p class="mt-2 max-w-[78ch] text-base text-muted">
+                  {row.sentence}
+                  {row.truncated && (
+                    <Fragment>
+                      {' '}
+                      <a href={`/facts/${row.story.id}#history`} class="link">
+                        Full note
+                      </a>
+                    </Fragment>
+                  )}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
       )
     }
   </section>
@@ -326,7 +352,9 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
   {
     doneCount < slate.length && (
       <section class="mt-14">
-        <h2 class={heading}>Nine stories, committed in advance</h2>
+        <div class={head}>
+          <h2 class={headText}>Nine stories, committed in advance</h2>
+        </div>
         <p class={lead}>
           The list was fixed in writing before any panel ran, so it cannot be trimmed to the answers.{' '}
           {doneCount} of {slate.length} checked.{' '}
@@ -335,27 +363,31 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
           </a>
           .
         </p>
-        <ol class="mt-4 divide-y divide-rule border-t border-rule">
+        <ol class="mt-6 border-t border-rule">
           {slate.map((row) => (
-            <li class="py-3 sm:grid sm:grid-cols-[14rem_1fr] sm:gap-x-6">
+            <li class="grid gap-x-12 border-b border-rule py-3.5 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] sm:items-baseline">
               {row.published ? (
                 <Fragment>
-                  <span class="block">
-                    <a href={`/facts/${row.published.id}`} class="link font-semibold">
+                  <span class="sm:col-start-1 sm:row-start-1">
+                    <a href={`/facts/${row.published.id}`} class:list={['link', slateTitle]}>
                       {row.published.data.title}
                     </a>
                   </span>
-                  <span class="mt-0.5 block text-[0.9375rem] text-muted sm:mt-0">
+                  <span class="mt-0.5 block text-[0.9375rem] text-muted tabular sm:col-start-2 sm:row-start-1 sm:mt-0">
                     Published <time datetime={row.publishedOn}>{row.publishedOn}</time>
                   </span>
                 </Fragment>
               ) : (
                 <Fragment>
-                  <span class="block">
-                    <span class="block font-semibold">{row.story}</span>
-                    <span class:list={['block', label]}>Not yet checked</span>
+                  <span class:list={[slateTitle, 'block text-ink sm:col-start-1 sm:row-start-1']}>
+                    {row.story}
                   </span>
-                  <span class="mt-0.5 block text-[0.9375rem] leading-relaxed text-muted sm:mt-0">
+                  <span
+                    class:list={[label, 'mt-0.5 block text-muted sm:col-start-1 sm:row-start-2']}
+                  >
+                    Not yet checked
+                  </span>
+                  <span class="mt-1 block font-display text-[1.125rem] leading-[1.4] text-muted italic sm:col-start-2 sm:row-span-2 sm:row-start-1 sm:mt-0">
                     “{row.claims}”
                   </span>
                 </Fragment>
@@ -367,9 +399,18 @@ const stepBody = 'mt-1 text-[0.9375rem] leading-relaxed';
     )
   }
 
-  <p class="mt-14 border-t border-rule pt-5 text-sm leading-relaxed text-muted">
-    Built by <a href="/about" class="text-navy underline">Stew</a>, an AI steward. Ildar Abdulin is
+  {/*
+    The correction route, at the foot of the front page rather than in a rail
+    the home page does not have. One horizontal panel: the invitation, the two
+    routes, and what happens to what you send.
+  */}
+  <div class="mt-14">
+    <ReportBox path="/" title={SITE.name} layout="row" />
+  </div>
+
+  <p class="mt-9 max-w-[90ch] border-t border-rule pt-5 text-[0.875rem] leading-relaxed text-muted">
+    Built by <a href="/about" class="link">Stew</a>, an AI steward. Ildar Abdulin is
     the named human accountable for everything published. Self-funded, no ads, no political money:{' '}
-    <a href="/support" class="text-navy underline">what it costs and who pays</a>.
+    <a href="/support" class="link">what it costs and who pays</a>.
   </p>
 </Base>

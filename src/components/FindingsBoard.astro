@@ -1,13 +1,18 @@
 ---
 import type { Claim, Story } from '../lib/content';
 import Finding from './Finding.astro';
+import { FINDING_TONE } from '../lib/findings';
 
 /**
- * Claims as rows, in whatever grouping the page asks for: by story on a story
- * index, by topic on the claim index, one unlabelled group for a plain recent
- * list. The question is the row's headline and its link; the finding sits
- * beside it as the answer, in its own column from `sm` up so the verdicts still
- * read down the page, but never heavier than the question it answers.
+ * Claims as ledger rows, in whatever grouping the page asks for: by story on a
+ * story index, by topic on the claim index, one unlabelled group for a plain
+ * recent list.
+ *
+ * Every row is treated alike. The question is the row's headline and its link;
+ * the finding badge sits in a fixed 11rem right-hand column from `sm` up, with
+ * the verification date under it in the same column, so the whole list can be
+ * read down one edge. The 5px left border repeats the finding's colour, which
+ * is the at-a-glance signal the printed word cannot be.
  *
  * The board counts nothing. A page that wants a summary line computes it from
  * the same rows it passes in, so the two cannot disagree.
@@ -29,14 +34,17 @@ interface Props {
 }
 
 const { groups, showStory = true } = Astro.props;
+
+const edge = (finding: string) =>
+  FINDING_TONE[finding as keyof typeof FINDING_TONE]?.border ?? 'border-charcoal';
 ---
 
 <div>
   {
     groups.map((group) => (
-      <div id={group.id} class="border-t border-rule pt-4">
+      <div id={group.id} class:list={[group.label && 'border-t border-rule pt-4']}>
         {group.label && (
-          <h3 class="text-sm">
+          <h3 class="font-sans text-sm">
             {group.href ? (
               <a href={group.href} class="link font-semibold">
                 {group.label}
@@ -46,33 +54,50 @@ const { groups, showStory = true } = Astro.props;
             )}
           </h3>
         )}
-        <ul class="divide-y divide-rule">
+        <ul class:list={['divide-y divide-rule', group.label && 'mt-4']}>
           {group.rows.map(({ claim, story }) => (
-            <li class="py-4 sm:grid sm:grid-cols-[minmax(0,30rem)_1fr] sm:gap-x-6">
-              <p>
+            <li
+              class:list={[
+                'border-l-[5px] py-6 pl-4 first:pt-0',
+                edge(claim.data.finding),
+                'sm:grid sm:grid-cols-[minmax(0,1fr)_11rem] sm:gap-x-6',
+              ]}
+            >
+              <p class="sm:col-start-1 sm:row-start-1">
                 <a
                   href={`/facts/${story.id}#${claim.data.id}`}
-                  class="link text-lg leading-snug font-bold"
+                  class="link font-display text-[1.375rem] leading-[1.25] font-semibold"
                 >
                   {claim.data.question}
                 </a>
               </p>
-              {/* Answer directly under the question on phones; beside it from sm up. */}
-              <p class="mt-1 sm:col-start-2 sm:row-span-2 sm:row-start-1 sm:mt-0">
+              {/* Answer directly under the question on phones; in its own column, all badges starting on one line, from sm up. */}
+              <p class="mt-2.5 sm:col-start-2 sm:row-start-1 sm:mt-0.5 sm:justify-self-start">
                 <Finding finding={claim.data.finding} size="md" />
               </p>
-              <p class="mt-1.5 text-xs text-muted sm:col-start-1">
-                {showStory && (
-                  <Fragment>
-                    <a href={`/facts/${story.id}`} class="link">
-                      {story.data.title}
-                    </a>
-                    {' · '}
-                  </Fragment>
-                )}
-                {claim.data.panel_agreement} panel · Verified{' '}
-                <time datetime={story.data.last_verified}>{story.data.last_verified}</time>
-              </p>
+              {/*
+                One line, two deliberate halves: who and where on the left, when
+                on the right, in the same 11rem column as the badge above it. On
+                a phone there is no second column, so the separator that divides
+                them comes back into view.
+              */}
+              <small class="mt-2.5 block text-[0.9375rem] leading-normal font-medium text-ink tabular sm:col-span-2 sm:row-start-2 sm:mt-3.5 sm:flex sm:flex-wrap sm:items-baseline">
+                <span class="min-w-0 sm:flex-auto">
+                  {showStory && (
+                    <Fragment>
+                      <a href={`/facts/${story.id}`} class="link">
+                        {story.data.title}
+                      </a>
+                      <span class="text-muted"> · </span>
+                    </Fragment>
+                  )}
+                  {claim.data.panel_agreement} panel
+                </span>
+                <span class="text-muted sm:sr-only"> · </span>
+                <span class="font-semibold whitespace-nowrap sm:ml-auto sm:flex-[0_0_11rem]">
+                  Verified <time datetime={story.data.last_verified}>{story.data.last_verified}</time>
+                </span>
+              </small>
             </li>
           ))}
         </ul>
