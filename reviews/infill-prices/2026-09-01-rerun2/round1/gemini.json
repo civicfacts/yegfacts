@@ -1,0 +1,96 @@
+{
+  "reviewer": {
+    "provider": "google",
+    "model_self_reported": "Gemini 3.1 Pro",
+    "runner_model": "gemini-3.1-pro",
+    "runner_seat": "Gemini 3.1 Pro",
+    "runner_effort": "high"
+  },
+  "story": "infill-prices",
+  "round": 1,
+  "claims": [
+    {
+      "id": "ip-teardown-price-gap",
+      "proposition_evaluated": "Among replacement dwelling units on Edmonton lots where one existing dwelling was demolished for infill, more than 50 percent have a higher assessed value on their first full assessment roll after completion than the demolished dwelling's total assessed value on the assessment roll in force in the year before demolition, compared in constant dollars on the specified valuation rules.",
+      "interpretation_notes": "The public record does not currently contain a pre-joined dataset of matched teardown-and-replacement assessment values in Edmonton. While the city publishes property assessments and permit data separately, answering this claim requires a custom data join across a 10-year cohort that is not publicly available as a completed report.",
+      "verdict": "Not established",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [],
+      "challenging_evidence": [],
+      "limitations": [
+        "The required matched lot pair dataset combining demolition permits, building permits, and historical property assessments for Edmonton does not exist as a pre-compiled public report.",
+        "Without the ability to execute database joins against the raw Edmonton open data portal across the specified 10-year cohort, the specific unit-level assessed value comparisons cannot be calculated."
+      ],
+      "unknowns": [
+        "The exact share of replacement dwelling units that have a higher assessed value than the demolished dwelling.",
+        "The median replacement-to-demolished assessed-value ratio for the declared cohort."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A cross-matched dataset of Edmonton demolition permits, building permits, and historical property assessment rolls linking demolished dwelling values to replacement dwelling values.",
+          "likely_holder": "City of Edmonton",
+          "importance": "critical"
+        }
+      ],
+      "calculations_needed": [
+        "Match Edmonton residential demolition permits to subsequent building permits by address or parcel identifier.",
+        "Retrieve the demolished dwelling's total assessed value from the roll in force the year prior to demolition.",
+        "Retrieve the replacement dwelling unit's assessed value on its first full assessment roll after completion.",
+        "Adjust figures to constant dollars using the Edmonton CMA Consumer Price Index."
+      ],
+      "what_would_change_my_verdict": [
+        "Publication of a study or dataset by the City of Edmonton linking demolition and replacement assessed values over the cohort.",
+        "Access to a database environment containing the raw Edmonton open data tables to perform the requested join."
+      ],
+      "suggested_one_line": "Publicly available reports do not contain the cross-matched property assessment records required to determine if replacement infill housing is systematically assessed higher than the demolished dwellings.",
+      "suggested_short_answer": "The City of Edmonton publishes building permits and property assessments, but does not provide a pre-linked dataset tracking the assessed value of demolished homes against their specific replacements. Without joining and analyzing these raw datasets, it is impossible to confirm the circulating claim's 50 percent threshold.",
+      "suggested_tldr": [
+        "The City of Edmonton tracks property assessments and demolition permits separately.",
+        "No public report links demolished homes to their replacements to calculate the price gap.",
+        "An original data analysis joining these records is required to answer the claim."
+      ]
+    },
+    {
+      "id": "ip-infill-affordable",
+      "proposition_evaluated": "Among separately titled replacement dwellings in the matched set, more than 50 percent would require shelter costs equal to or greater than 30 percent of before-tax income for a hypothetical household earning the declared City median income that purchased the dwelling at its first arm's-length sale price or total assessed value on its first full assessment roll.",
+      "interpretation_notes": "The required denominator (separately titled replacement dwellings in the matched set) cannot be identified without the missing joined dataset from Claim 1. Furthermore, first arm's-length sale prices or first full assessment values for this specific matched set are unavailable in aggregate public reports.",
+      "verdict": "Not established",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [],
+      "challenging_evidence": [],
+      "limitations": [
+        "The matched set of separately titled replacement dwellings cannot be identified from aggregate public reports.",
+        "The test requires calculating shelter costs for every unit in the matched set, which is impossible without the underlying micro-data establishing the purchase price of each unit."
+      ],
+      "unknowns": [
+        "The first arm's-length sale price or first full assessment value of each separately titled replacement dwelling in the matched set.",
+        "The resulting share of these dwellings that exceed the 30 percent shelter-cost-to-income threshold for the median household."
+      ],
+      "missing_evidence": [
+        {
+          "description": "The matched dataset of separately titled replacement dwellings with their first arm's-length sale price or first full assessment value.",
+          "likely_holder": "City of Edmonton",
+          "importance": "critical"
+        }
+      ],
+      "calculations_needed": [
+        "Identify the matched set of separately titled replacement dwellings.",
+        "Retrieve the Edmonton median total before-tax household income.",
+        "Calculate owner shelter cost for each dwelling using Bank of Canada 5-year mortgage rates, City property tax rates, and Statistics Canada utility allowances.",
+        "Determine the percentage of these dwellings where shelter costs exceed 30 percent of the median income."
+      ],
+      "what_would_change_my_verdict": [
+        "Access to the joined dataset of replacement dwellings and their initial sale or assessed prices to perform the required shelter-cost calculations."
+      ],
+      "suggested_one_line": "It is not possible to determine if replacement infill housing is affordable for the median household because the specific prices of these replacement units are not publicly tracked as a matched dataset.",
+      "suggested_short_answer": "While Edmonton's median household income and standard shelter cost variables are public, the required dataset of matched replacement dwelling prices is not. Without knowing the individual prices of the infill housing that replaced demolished homes, the affordability model cannot be run.",
+      "suggested_tldr": [
+        "The affordability test requires the prices of the specific infill homes built on demolished lots.",
+        "No public dataset links replacement homes to their initial sale or assessed prices in this manner.",
+        "Without this matched micro-data, the shelter-cost-to-income test cannot be completed."
+      ]
+    }
+  ]
+}
