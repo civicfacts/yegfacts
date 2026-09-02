@@ -2,8 +2,12 @@
 import { FINDING_TONE } from '../lib/findings';
 
 /**
- * A finding is carried by the word, not by a badge. Colour is a whisper: a
- * 2px leading rule and a slight hue shift. No traffic lights (spec §6).
+ * A finding as a filled badge in its own colour, with the word printed in full.
+ *
+ * The word is never abbreviated to a colour: "Not established" says something a
+ * grey tile cannot, and the whole vocabulary rests on four words with fixed
+ * meanings. The fill is what lets a page of findings be scanned as a column
+ * (founder decision 2026-09-01, DESIGN.md §10).
  */
 interface Props {
   finding: string;
@@ -13,19 +17,19 @@ interface Props {
 const { finding, size = 'sm' } = Astro.props;
 
 const sizes = {
-  sm: 'text-sm',
-  md: 'text-base',
-  lg: 'text-lg',
-  xl: 'text-xl sm:text-2xl',
+  sm: 'text-[0.75rem]',
+  md: 'text-[0.8125rem]',
+  lg: 'text-[0.9375rem]',
+  xl: 'text-[1.0625rem]',
 } as const;
 
 const t = FINDING_TONE[finding as keyof typeof FINDING_TONE];
-const classes = t ? `${t.text} ${t.border}` : 'text-ink border-rule-strong';
+const classes = t ? `${t.bg} ${t.text}` : 'bg-charcoal text-white';
 ---
 
 <span
   class:list={[
-    'inline-block border-l-2 pl-2 font-semibold',
+    'inline-block rounded-none px-[10px] py-[6px] font-sans leading-[1.2] font-bold tracking-[0.06em] whitespace-nowrap uppercase',
     classes,
     sizes[size],
   ]}>{finding}</span

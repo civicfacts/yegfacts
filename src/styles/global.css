@@ -1,27 +1,31 @@
 @import 'tailwindcss';
 
 /* ---------------------------------------------------------------------------
-   YEGFacts visual system (design spec §6). Locked palette, light theme only,
-   typography-led and editorial: thin rules, generous measure, no cards-and-
-   shadows SaaS furniture. Findings are carried by words; colour is a whisper.
+   YEGFacts visual system — broadsheet ledger (design spec §10). Locked palette,
+   light theme only: ink on paper, one saturated forest ground, filled verdict
+   badges. Zero border-radius, no shadows, no animation. A finding is printed in
+   full and filled in its own colour, so a list of them reads down one edge.
 --------------------------------------------------------------------------- */
 
 @theme {
-  --color-paper: #faf9f6;
+  --color-paper: #f7f5f0;
   --color-forest: #123f35;
   --color-navy: #123b5d;
   --color-gold: #c3a35e;
-  --color-ink: #20272b;
+  --color-ink: #1c2124;
+
+  /* The two verdict colours that carry no other job. */
+  --color-brick: #8a2f22;
+  --color-charcoal: #4a5258;
 
   /* Derived, used only for rules, quiet text and washes. */
-  --color-rule: #ded9cf;
-  --color-rule-strong: #c7c0b3;
-  --color-muted: #5d6469;
-  --color-wash: #f2efe8;
+  --color-rule: #cfc9bd;
+  --color-rule-strong: #b8b09f;
+  --color-muted: #5a6166;
+  --color-wash: #efece4;
 
-  --font-sans:
-    'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
-    sans-serif;
+  --font-display: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Libre Franklin', Helvetica, Arial, sans-serif;
 
   --text-display: 2.5rem;
   --text-display--line-height: 1.1;
@@ -40,9 +44,22 @@ body {
   background-color: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  font-feature-settings: 'cv05' 1;
+  font-size: 1.0625rem;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/*
+ * Headings are the display face; the sans is for body, metadata and labels.
+ * A heading that is deliberately a label — the footer's column heads, the step
+ * titles in the verdict strip — asks for `font-sans` back.
+ */
+h1,
+h2,
+h3,
+.section-heading {
+  font-family: var(--font-display);
 }
 
 ::selection {
@@ -50,8 +67,20 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-forest);
+  outline: 3px solid var(--color-navy);
   outline-offset: 2px;
+}
+
+/*
+ * On the forest masthead the navy ring disappears into the ground, and so does
+ * a navy link. Nothing inside the dark block can go navy by accident.
+ */
+.masthead :focus-visible {
+  outline-color: #ffffff;
+}
+
+.masthead a {
+  color: var(--color-paper);
 }
 
 /* ---------------------------------------------------------------------------
@@ -159,18 +188,21 @@ time,
 .prose h2 {
   margin-top: 2.2em;
   margin-bottom: 0.6em;
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: -0.015em;
-  color: var(--color-forest);
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
 }
 
 .prose h3 {
   margin-top: 1.9em;
   margin-bottom: 0.45em;
-  font-size: 1.125rem;
+  font-family: var(--font-display);
+  font-size: 1.1875rem;
   font-weight: 600;
-  letter-spacing: -0.012em;
+  line-height: 1.25;
   color: var(--color-ink);
   text-wrap: balance;
 }
@@ -178,12 +210,12 @@ time,
 .prose a {
   color: var(--color-navy);
   text-decoration: underline;
-  text-decoration-color: #123b5d4d;
-  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
 }
 
 .prose a:hover {
-  text-decoration-color: var(--color-navy);
+  text-decoration-thickness: 2px;
 }
 
 .prose strong {
@@ -283,10 +315,10 @@ time,
  * uppercase grey style is reserved for metadata.
  */
 .section-heading {
-  font-size: 1.375rem;
-  line-height: 1.375;
+  font-size: 1.5rem;
+  line-height: 1.2;
   font-weight: 700;
-  letter-spacing: -0.018em;
+  letter-spacing: -0.01em;
   color: var(--color-ink);
 }
 
@@ -294,10 +326,107 @@ time,
   color: var(--color-navy);
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-decoration-color: #123b5d4d;
-  text-underline-offset: 0.18em;
+  text-underline-offset: 0.16em;
 }
 
 .link:hover {
-  text-decoration-color: var(--color-navy);
+  text-decoration-thickness: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+   Panels and strips. Both are white on the paper ground with a 3px top edge
+   that says what kind of thing they are — ink for the site talking about
+   itself, brick for a correction, forest for the method. They live here rather
+   than as utility stacks because a shorthand `border` and a longhand
+   `border-top-color` in the same class list depend on emission order to
+   resolve, and the top edge is the whole point of the element.
+--------------------------------------------------------------------------- */
+
+.panel {
+  background-color: #ffffff;
+  border: 1px solid var(--color-rule);
+  border-top-width: 3px;
+  border-top-color: var(--color-ink);
+}
+
+.panel-brick {
+  border-top-color: var(--color-brick);
+}
+
+/* A strip, not a box: rule over, hairline under, cells flush to the edges. */
+.strip {
+  background-color: #ffffff;
+  border-top: 3px solid var(--color-forest);
+  border-bottom: 1px solid var(--color-rule);
+}
+
+/* ---------------------------------------------------------------------------
+   "How a verdict is made" — the four-cell strip. The numerals are a CSS
+   counter on the existing `<ol>`, so the markup stays an ordered list and the
+   numbers cannot drift from the order they are read in. The cell dividers are
+   nth-child rules because which edge a cell carries depends on how many cells
+   share its row, which is a stylesheet's job, not the template's.
+--------------------------------------------------------------------------- */
+
+.steps {
+  counter-reset: step;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.steps > li {
+  counter-increment: step;
+  padding: 1.25rem 1.125rem;
+}
+
+.steps > li + li {
+  border-top: 1px solid var(--color-rule);
+}
+
+.steps > li::before {
+  content: counter(step);
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 2.25rem;
+  line-height: 1;
+  color: var(--color-forest);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 0.35rem;
+}
+
+@media (width >= 37.5rem) {
+  .steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .steps > li {
+    padding: 1.5rem;
+  }
+
+  .steps > li + li {
+    border-top: 0;
+  }
+
+  .steps > li:nth-child(even) {
+    border-left: 1px solid var(--color-rule);
+  }
+
+  .steps > li:nth-child(n + 3) {
+    border-top: 1px solid var(--color-rule);
+  }
+}
+
+@media (width >= 56.25rem) {
+  .steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .steps > li:nth-child(n + 3) {
+    border-top: 0;
+  }
+
+  .steps > li + li {
+    border-left: 1px solid var(--color-rule);
+  }
 }

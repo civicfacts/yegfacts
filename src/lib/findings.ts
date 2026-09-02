@@ -34,13 +34,23 @@ export const PANEL_AGREEMENT_GLOSS: Record<PanelAgreement, string> = {
 };
 
 /**
- * Subtle semantic tone per finding. The word carries the meaning; colour is a
- * whisper (spec §6). One map, so every component that colours a finding agrees.
+ * The colour a finding is filled in, as Tailwind class names.
+ *
+ * `bg` and `text` are the badge — a filled tile carrying the word in full —
+ * and `border` is the verdict-coloured left edge of a ledger row, so a list of
+ * findings can be read down a single column. One map, so the badge and the row
+ * edge can never disagree about what colour a verdict is.
+ *
+ * `text` is the badge's foreground, not a colour for the word on paper: only
+ * Mixed takes ink, because white on gold fails AA.
  */
-export const FINDING_TONE: Record<CanonicalFinding, { text: string; border: string }> = {
-  Supported: { text: 'text-forest', border: 'border-forest' },
-  'Partially supported': { text: 'text-navy', border: 'border-navy' },
-  'Not established': { text: 'text-muted', border: 'border-rule-strong' },
-  Contradicted: { text: 'text-[#7a2f22]', border: 'border-[#7a2f22]' },
-  Mixed: { text: 'text-gold', border: 'border-gold' },
+export const FINDING_TONE: Record<
+  CanonicalFinding,
+  { text: string; bg: string; border: string }
+> = {
+  Supported: { text: 'text-white', bg: 'bg-forest', border: 'border-forest' },
+  'Partially supported': { text: 'text-white', bg: 'bg-navy', border: 'border-navy' },
+  'Not established': { text: 'text-white', bg: 'bg-charcoal', border: 'border-charcoal' },
+  Contradicted: { text: 'text-white', bg: 'bg-brick', border: 'border-brick' },
+  Mixed: { text: 'text-ink', bg: 'bg-gold', border: 'border-gold' },
 };

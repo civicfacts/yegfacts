@@ -18,9 +18,28 @@ interface Props {
    * table of contents and leaves the single-column measure untouched.
    */
   sections?: TocSection[];
+  /**
+   * The rail carries the report box, and the outline when the page has one.
+   * The home page sets its own front-page grid across the full container and
+   * puts the report box at its foot, so it turns the rail off.
+   */
+  rail?: boolean;
 }
 
-const { title, description = SITE.tagline, indexable = true, sections = [] } = Astro.props;
+const {
+  title,
+  description = SITE.tagline,
+  indexable = true,
+  sections = [],
+  rail = true,
+} = Astro.props;
+
+/**
+ * A page that fills the `masthead` slot is extending the forest block itself,
+ * which is also the page that wants the front-page wordmark. One signal, so the
+ * two cannot be set inconsistently.
+ */
+const hasMasthead = Astro.slots.has('masthead');
 
 const pageTitle = title === SITE.name ? title : `${title} — ${SITE.name}`;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
@@ -66,20 +85,20 @@ const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&display=swap"
     />
   </head>
   <body class="flex min-h-screen flex-col">
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-10 focus:bg-paper focus:px-3 focus:py-2 focus:text-sm focus:text-forest"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-10 focus:bg-white focus:px-4 focus:py-3 focus:font-semibold focus:text-navy"
     >
       Skip to content
     </a>
     {
       isPreview && (
         <div
-          class="border-b border-[#7a2f22] bg-paper px-4 py-2 text-center text-[0.75rem] font-semibold text-[#7a2f22]"
+          class="border-b border-brick bg-paper px-4 py-2 text-center text-[0.75rem] font-semibold text-brick"
           data-pagefind-ignore
         >
           Preview build from branch {import.meta.env.DEPLOY_BRANCH} — not the published site.{' '}
@@ -89,12 +108,16 @@ const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY
         </div>
       )
     }
-    <Header />
+    <Header wordmark={hasMasthead ? 'masthead' : 'compact'}>
+      <slot name="masthead" />
+    </Header>
 
     <div
       class:list={[
-        'mx-auto w-full max-w-3xl grow px-5 py-6 sm:py-10',
-        'lg:grid lg:max-w-[66rem] lg:grid-cols-[minmax(0,1fr)_13rem] lg:gap-x-12',
+        'mx-auto w-full max-w-3xl grow px-5 lg:max-w-[66rem]',
+        rail
+          ? 'py-6 sm:py-10 lg:grid lg:grid-cols-[minmax(0,1fr)_13rem] lg:gap-x-12'
+          : 'pt-9 pb-10',
       ]}
     >
       <main id="main" data-pagefind-body={indexable ? '' : undefined}>
@@ -138,6 +161,7 @@ const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY
         <slot />
       </main>
 
+      {rail && (
       <aside
         class="sticky top-8 hidden max-h-[calc(100vh-4rem)] self-start overflow-y-auto lg:block"
         aria-label={hasToc ? 'On this page' : 'Report a problem'}
@@ -159,6 +183,7 @@ const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY
           <ReportBox path={path} title={title} />
         </div>
       </aside>
+      )}
     </div>
 
     <Footer />

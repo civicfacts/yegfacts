@@ -4,11 +4,23 @@ import Wordmark from './Wordmark.astro';
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 
 /**
+ * The full-bleed forest masthead, on every page. The header row is the same
+ * everywhere; the default slot renders inside the forest block under it, so the
+ * home page can extend its own masthead — deck, search, helper line — without a
+ * second dark band or a seam between two greens.
+ *
  * `narrowHidden` drops a link below `md`, which is where six labels plus the
  * wordmark stop sharing a row. Search is the one that goes: it is the first
  * item in the footer's site column and the whole of the home page's search
  * field, so it is never more than one tap away from where it was.
  */
+interface Props {
+  /** The home page's mark is the front-page size; every other page is compact. */
+  wordmark?: 'compact' | 'masthead';
+}
+
+const { wordmark = 'compact' } = Astro.props;
+
 const links: { href: string; label: string; narrowHidden?: boolean }[] = [
   { href: '/stories', label: 'Stories' },
   { href: '/commitments', label: 'Commitments' },
@@ -19,36 +31,36 @@ const links: { href: string; label: string; narrowHidden?: boolean }[] = [
 ];
 ---
 
-<header class="border-b border-rule" data-pagefind-ignore>
-  <div
-    class:list={[
-      'mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-x-3 gap-y-1 px-5 py-2',
-      'sm:gap-x-6 sm:gap-y-3 sm:py-4',
-      'lg:max-w-[66rem]',
-    ]}
-  >
-    <a href="/" class="no-underline" aria-label="YEGFacts.ca home">
-      <Wordmark />
-    </a>
-    <nav aria-label="Primary">
-      <ul class="flex items-center gap-x-3 text-[0.6875rem] sm:gap-x-5 sm:text-sm">
-        {
-          links.map((link) => (
-            <li class:list={[link.narrowHidden && 'hidden md:block']}>
-              <a
-                href={link.href}
-                aria-current={path === link.href ? 'page' : undefined}
-                class:list={[
-                  'text-muted transition-colors hover:text-forest',
-                  path === link.href && 'text-forest font-semibold',
-                ]}
-              >
-                {link.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
+<div class="masthead bg-forest text-paper" data-pagefind-ignore>
+  <div class="mx-auto w-full max-w-3xl px-5 pt-4 lg:max-w-[66rem]">
+    <div
+      class="flex flex-wrap items-center justify-between gap-x-7 gap-y-3 pb-4"
+    >
+      <a href="/" class="no-underline" aria-label="YEGFacts.ca home">
+        <Wordmark size={wordmark} />
+      </a>
+      {/* Below 640px the nav wraps under the mark and reads from the left. */}
+      <nav aria-label="Primary">
+        <ul class="flex flex-wrap gap-x-7 gap-y-2 sm:justify-end">
+          {
+            links.map((link) => (
+              <li class:list={[link.narrowHidden && 'hidden md:block']}>
+                <a
+                  href={link.href}
+                  aria-current={path === link.href ? 'page' : undefined}
+                  class:list={[
+                    'text-[0.875rem] tracking-[0.1em] text-paper uppercase underline underline-offset-[0.16em] hover:decoration-2',
+                    path === link.href ? 'font-bold' : 'font-semibold',
+                  ]}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+    <slot />
   </div>
-</header>
+</div>

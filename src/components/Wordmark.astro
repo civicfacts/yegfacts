@@ -1,21 +1,30 @@
 ---
 /**
- * Symbol + styled-text wordmark. The wordmark is never an image: "YEGFacts" in
- * deep forest, ".ca" in muted gold (spec §6).
+ * Symbol + styled-text wordmark, set on the forest masthead: "YEGFacts" in
+ * paper, ".ca" in gold (4.88:1 on forest, so it passes AA rather than being
+ * decoration a reader has to guess at).
+ *
+ * `masthead` is the home page's front-page size; `compact` is what every inner
+ * page carries, where the mark identifies the site rather than announcing it.
  */
 interface Props {
-  size?: 'sm' | 'lg';
+  size?: 'compact' | 'masthead';
 }
 
-const { size = 'sm' } = Astro.props;
+const { size = 'compact' } = Astro.props;
 
-const symbol = size === 'lg' ? 'h-10 sm:h-12' : 'h-7';
-const text = size === 'lg' ? 'text-2xl sm:text-3xl' : 'text-lg';
+const symbol =
+  size === 'masthead' ? 'h-[clamp(2.5rem,9vw,4rem)]' : 'h-8';
+const text =
+  size === 'masthead'
+    ? 'text-[clamp(2rem,7.75vw,3.625rem)]'
+    : 'text-[1.375rem]';
+const gap = size === 'masthead' ? 'gap-5' : 'gap-2.5';
 ---
 
-<span class="inline-flex items-center gap-2.5">
+<span class:list={['inline-flex items-center', gap]}>
   <img src="/symbol.png" alt="" width="480" height="400" class={`${symbol} w-auto shrink-0`} />
-  <span class={`${text} font-extrabold tracking-[-0.025em] text-forest`}>
+  <span class={`${text} font-display leading-none font-bold tracking-[-0.015em] text-paper`}>
     YEGFacts<span class="text-gold">.ca</span>
   </span>
 </span>

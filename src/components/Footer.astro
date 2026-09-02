@@ -9,6 +9,9 @@ import { SITE, issueUrl } from '../lib/site';
  */
 const commitSha = import.meta.env.COMMIT_SHA ?? 'dev';
 
+/** Small caps, the one label register the site uses for a column head. */
+const heading = 'font-sans text-[0.75rem] font-bold tracking-[0.12em] text-muted uppercase';
+
 
 const columns = [
   {
@@ -33,19 +36,17 @@ const columns = [
 ];
 ---
 
-<footer class="mt-20 border-t border-rule" data-pagefind-ignore>
-  <div class:list={['mx-auto max-w-3xl px-5 py-10', 'lg:max-w-[66rem]']}>
+<footer class="mt-16 border-t-[3px] border-ink bg-paper" data-pagefind-ignore>
+  <div class:list={['mx-auto max-w-3xl px-5 pt-10 pb-14', 'lg:max-w-[66rem]']}>
     <div class="grid gap-8 sm:grid-cols-3">
       {
         columns.map((column) => (
           <nav aria-label={column.heading}>
-            <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
-              {column.heading}
-            </h2>
-            <ul class="mt-3 space-y-1.5 text-sm">
+            <h2 class={heading}>{column.heading}</h2>
+            <ul class="mt-3 space-y-1.5 text-[0.9375rem]">
               {column.links.map((link) => (
                 <li>
-                  <a href={link.href} class="text-ink transition-colors hover:text-forest">
+                  <a href={link.href} class="link">
                     {link.label}
                   </a>
                 </li>
@@ -55,19 +56,15 @@ const columns = [
         ))
       }
       <div>
-        <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">Contact</h2>
-        <ul class="mt-3 space-y-1.5 text-sm">
+        <h2 class={heading}>Contact</h2>
+        <ul class="mt-3 space-y-1.5 text-[0.9375rem]">
           <li>
-            <a href={`mailto:${SITE.email}`} class="text-ink transition-colors hover:text-forest">
+            <a href={`mailto:${SITE.email}`} class="link">
               {SITE.email}
             </a>
           </li>
           <li>
-            <a
-              href={SITE.repo}
-              rel="noopener"
-              class="text-ink transition-colors hover:text-forest"
-            >
+            <a href={SITE.repo} rel="noopener" class="link">
               Source on GitHub
             </a>
           </li>
@@ -79,7 +76,7 @@ const columns = [
             <a
               href={issueUrl('Suggest a topic', 'What should YEGFacts check, and why?\n')}
               rel="noopener"
-              class="text-ink transition-colors hover:text-forest"
+              class="link"
             >
               Suggest a topic
             </a>
@@ -88,8 +85,8 @@ const columns = [
       </div>
     </div>
 
-    <p class="mt-9 border-t border-rule pt-5 text-xs leading-relaxed text-muted">
-      Built and maintained by <a href="/about" class="text-navy underline">Stew</a>. Non-partisan
+    <p class="mt-10 border-t border-rule pt-5 text-[0.8125rem] leading-relaxed text-muted">
+      Built and maintained by <a href="/about" class="link">Stew</a>. Non-partisan
       civic evidence for Edmonton — every finding shows its evidence, its model reviews, and its
       revision history.
       {
@@ -97,11 +94,7 @@ const columns = [
           <>
             {' '}
             Deployed from{' '}
-            <a
-              href={`${SITE.repo}/commit/${commitSha}`}
-              rel="noopener"
-              class="tabular underline transition-colors hover:text-forest"
-            >
+            <a href={`${SITE.repo}/commit/${commitSha}`} rel="noopener" class="link tabular">
               {commitSha}
             </a>
             .
