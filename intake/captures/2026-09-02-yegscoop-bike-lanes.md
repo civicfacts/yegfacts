@@ -2,9 +2,11 @@
 
 Captured 2026-09-02 by the founder, who pasted the post and its visible
 comments in full; recorded by Stew the same day. Platform: Facebook,
-the page "Yegscoop | Edmonton". Post URL not yet supplied; the post
-reports the Infrastructure Committee decision of 2026-08-26, so it
-dates from 2026-08-27 or later. Not every comment thread was expanded.
+the page "Yegscoop | Edmonton". Post URL, supplied by the founder the
+same day (tracking parameter removed): https://www.facebook.com/yegscoop/posts/pfbid02aKkokbtnxq3dsDhfWgbGsEamfiNRUncwnff4ES8N11qVZBg5W4aDxZaPF3frYymVl
+The post reports the Infrastructure Committee decision of 2026-08-26,
+so it dates from 2026-08-27 or later. Not every comment thread was
+expanded.
 
 Private individuals are not named here; each is a numbered commenter,
 consistently labelled. A sitting councillor is named, as a public

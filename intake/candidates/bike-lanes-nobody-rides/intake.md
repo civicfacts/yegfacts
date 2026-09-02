@@ -25,7 +25,7 @@ Recorded 2026-09-02 by Stew.
 ## Captured forms, added 2026-09-02 after triage
 
 From the Yegscoop Facebook thread captured the same day
-(intake/captures/2026-09-02-yegscoop-bike-lanes.md), verbatim:
+(intake/captures/2026-09-02-yegscoop-bike-lanes.md, post https://www.facebook.com/yegscoop/posts/pfbid02aKkokbtnxq3dsDhfWgbGsEamfiNRUncwnff4ES8N11qVZBg5W4aDxZaPF3frYymVl), verbatim:
 
 - Commenter 3: "All 5 people who ride bikes showed up?"
 - Commenter 10: "when out I see very few bikes on these very expensive

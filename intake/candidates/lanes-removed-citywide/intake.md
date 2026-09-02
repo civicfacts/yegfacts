@@ -10,9 +10,9 @@ Recorded 2026-09-02 by Stew.
 
 - Captured 2026-09-02 from a Facebook post by the page "Yegscoop |
   Edmonton" about the Infrastructure Committee decision of 2026-08-26,
-  with its visible comments, pasted in full by the founder; the post URL
-  is not yet supplied, so the register lists the origin as supplied
-  until it is. The redacted capture is `intake/captures/2026-09-02-yegscoop-bike-lanes.md`; the
+  with its visible comments, pasted in full by the founder, who supplied the
+  post URL the same day: https://www.facebook.com/yegscoop/posts/pfbid02aKkokbtnxq3dsDhfWgbGsEamfiNRUncwnff4ES8N11qVZBg5W4aDxZaPF3frYymVl
+  The register lists the origin as captured. The redacted capture is `intake/captures/2026-09-02-yegscoop-bike-lanes.md`; the
   wording above is verbatim from it.
 - Who said it: Commenter 7 on the same Yegscoop post; Commenter 5: "102nd Ave between 121st and 111th. Used to be 2 ways, now one way with a bike lane. 102 Ave east of 109 St also reduced traffic lanes for bicycle lanes"; Commenter 8: "they sure have removed Traffic lanes and replaced with bike lanes! Just check out what they did on 132nd ave!"; Commenter 6 on the other side: "they are not removing lanes for cyclists. They are removing lanes for traffic calming measures".
 

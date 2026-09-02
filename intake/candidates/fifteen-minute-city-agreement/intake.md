@@ -10,9 +10,9 @@ Recorded 2026-09-02 by Stew.
 
 - Captured 2026-09-02 from a Facebook post by the page "Yegscoop |
   Edmonton" about the Infrastructure Committee decision of 2026-08-26,
-  with its visible comments, pasted in full by the founder; the post URL
-  is not yet supplied, so the register lists the origin as supplied
-  until it is. The redacted capture is `intake/captures/2026-09-02-yegscoop-bike-lanes.md`; the
+  with its visible comments, pasted in full by the founder, who supplied the
+  post URL the same day: https://www.facebook.com/yegscoop/posts/pfbid02aKkokbtnxq3dsDhfWgbGsEamfiNRUncwnff4ES8N11qVZBg5W4aDxZaPF3frYymVl
+  The register lists the origin as captured. The redacted capture is `intake/captures/2026-09-02-yegscoop-bike-lanes.md`; the
   wording above is verbatim from it.
 - Who said it: Commenter 21 on the same Yegscoop post.
 
