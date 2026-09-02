@@ -79,6 +79,10 @@ export const glossary: Record<string, GlossaryEntry> = {
     definition:
       'A convenience copy of a bylaw with all its later amendments merged into one document. The original bylaws on file with the City Clerk govern if the two ever differ.',
   },
+  'webdocs consolidation': {
+    definition:
+      'The City’s own web copy of a bylaw section, served from its webdocs site with the amendments made up to that point merged in. It carries the section text only, so any map or appendix it points at has to be found elsewhere.',
+  },
 
   // The five canonical findings. Wording is imported, never retyped, so the
   // popover and the methodology page cannot drift apart.

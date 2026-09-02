@@ -119,6 +119,19 @@ bytes, hashes and every other field are untouched.
   with both values, and the `establishes` line carried only 1,242 lots
   and 95 percent. The archived bytes contain both 1492 and 1182, so the
   line now carries all four figures. The claim and the story keep theirs.
+- `evidence/registry/YF-EV-0044.yaml` (General Building Permits portal
+  page). Raised by the gate source-verification audit rather than the
+  faithfulness check. The `establishes` line asserted that house
+  demolitions largely drop out of the stream after 2018 and that the
+  brief's 2016 to 2025 frame cannot be reconstructed from it. The
+  archived bytes carry a schema, a dataset description and cardinality
+  lists and no annual demolition counts at all, and this run's own record
+  contradicts the fall-off. The line now says only what the page carries:
+  records from January 1, 2009, the field list a demolition frame can be
+  built from including units added, demolition as a work type and in the
+  job description text, and the absence of any parcel or title
+  identifier. Nothing in the claim or the story rested on the removed
+  assertion.
 
 Not a registry correction, recorded here because the same check raised
 it: the $4,532 Alberta annual utilities figure was attributed in
@@ -127,3 +140,4 @@ carries the Canada geography only. It is the affordability run's own read
 of Statistics Canada table 11-10-0222-01 and is now sourced to
 `reviews/infill-prices/2026-09-01-rerun2/round1/claude.json`, with the
 story saying so.
+- YF-EV-0094: the establishes line asserted that recorded house demolitions collapse after 2018; that is one seat's tabulation, not something the dataset page carries. Reworded (2026-09-02).
