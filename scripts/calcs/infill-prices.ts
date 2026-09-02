@@ -24,10 +24,14 @@
 // ---------------------------------------------------------------------------
 
 export const figures = {
-  /** YF-EV-0101 — 2024 Redeveloping Area Infill Report: new single-detached houses built. */
-  singleDetachedBuilt2024: 286,
-  /** YF-EV-0101 — 2024 Redeveloping Area Infill Report: single-detached houses demolished. */
-  singleDetachedDemolished2024: 387,
+  /**
+   * YF-EV-0101 - 2024 Redeveloping Area Infill Report: the net change in
+   * single-detached houses in the redeveloping area, a net loss of 294. The
+   * built and demolished counts are not carried by the archived report, and
+   * the 286/387/101 figures the registry previously recorded for it were a
+   * transcription error corrected at drafting (see the run's errata.md).
+   */
+  netSingleDetachedChange2024: -294,
   /** YF-EV-0103 — Zoning Bylaw 20001 one-year review: dwelling units approved in 2024. */
   dwellingUnitsApproved2024: 16_511,
 
@@ -82,10 +86,6 @@ export const figures = {
 
 const pct1 = (x: number) => Math.round(x * 1000) / 10;
 
-/** YF-EV-0101 — net change in single-detached houses in the redeveloping area, 2024. */
-export const netSingleDetachedChange2024 =
-  figures.singleDetachedBuilt2024 - figures.singleDetachedDemolished2024;
-
 /** The fixed monthly utility allowance: the Alberta annual average over twelve. */
 export const utilityAllowanceMonthlyCAD =
   Math.round((figures.utilitiesAlbertaAnnualCAD / 12) * 100) / 100;
@@ -119,12 +119,17 @@ export const affordabilityClassifiedSharePct = pct1(
 /** Claim 2, complete verdict denominator: classified dwellings plus unclassified. */
 export const affordabilityDenominator = figures.dwellingsClassified + figures.dwellingsUnclassified;
 
-/** Claim 2 lower bound: every unclassified dwelling treated as meeting the threshold. */
+/**
+ * Claim 2 lower bound: every unclassified dwelling treated as below the 30
+ * percent line. The numerator excludes all 225 of them. The run labels this
+ * bound "225 unclassified treated as meeting the threshold"; the arithmetic is
+ * the lower bound and the label is reversed, which one seat documented.
+ */
 export const affordabilityLowerBoundPct = pct1(
   figures.dwellingsOverThreshold / affordabilityDenominator,
 );
 
-/** Claim 2 upper bound: every unclassified dwelling treated as failing it. */
+/** Claim 2 upper bound: every unclassified dwelling treated as at or above the line. */
 export const affordabilityUpperBoundPct = pct1(
   (figures.dwellingsOverThreshold + figures.dwellingsUnclassified) / affordabilityDenominator,
 );
@@ -132,13 +137,13 @@ export const affordabilityUpperBoundPct = pct1(
 /**
  * Why the reported median shelter cost is not the sum of the reported medians.
  * Each component median is taken over its own distribution, so they do not add
- * to the median of the total. The gap is reported, never reconciled away.
+ * to the median of the total: the components sum to $3,941.67 against a
+ * reported median total of $3,948. The gap is reported, never reconciled away.
  */
 export const medianComponentSumCAD =
   figures.medianPrincipalInterestCAD + figures.medianPropertyTaxCAD + utilityAllowanceMonthlyCAD;
 
 export const calculations = {
-  netSingleDetachedChange2024,
   utilityAllowanceMonthlyCAD,
   shelterCostLimitMonthlyCAD,
   priceGapClassifiedSharePct,
