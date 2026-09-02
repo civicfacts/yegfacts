@@ -139,3 +139,10 @@ each; no `sha256`, `path`, `url`, rights or date was touched.
   covering homeowner and condominium units. The captured table's type selector
   is single- and semi-detached only, so the line now states that scope and
   that the table carries nothing about new row or apartment prices.
+- YF-EV-0048 (2023 Redeveloping Area Infill Annual Report), caught in drafting
+  review rather than by the stage-6 checks: the line said the report
+  establishes that the City holds the demolition-for-infill frame this claim
+  needs. It publishes aggregate 2023 counts by dwelling type, on the order of
+  390 house demolitions in redeveloping areas, with no permit-level cohort, no
+  property identifiers and no values or prices, which is what the line now
+  says.
