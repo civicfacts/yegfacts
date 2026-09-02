@@ -34,8 +34,8 @@
  * appears as one finding rather than a dozen sliding windows.
  */
 import path from 'node:path';
-import { readdirSync, readFileSync, existsSync } from 'node:fs';
-import { REPO_ROOT, repoPath } from './lib/repo.ts';
+import { readFileSync, existsSync } from 'node:fs';
+import { REPO_ROOT, builtPages, builtPageUrl, repoPath } from './lib/repo.ts';
 
 const IN_PAGE_MIN = 10;
 const PAGE_FOOTER_MIN = 8;
@@ -57,21 +57,6 @@ const findings: Finding[] = [];
 // ---------------------------------------------------------------------------
 // Reading the built pages
 // ---------------------------------------------------------------------------
-
-function htmlFiles(dir: string): string[] {
-  const out: string[] = [];
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    if (entry.isDirectory()) {
-      // Pagefind's bundle is generated, and its fragments are copies of page
-      // text by design.
-      if (entry.name === 'pagefind') continue;
-      out.push(...htmlFiles(path.join(dir, entry.name)));
-    } else if (entry.name.endsWith('.html')) {
-      out.push(path.join(dir, entry.name));
-    }
-  }
-  return out.sort();
-}
 
 const ENTITIES: Record<string, string> = {
   amp: '&',
@@ -244,12 +229,9 @@ const strict = process.argv.includes('--strict');
  */
 const NARRATIVE = /^\/(facts\/|methodology|about|support)/;
 
-const pages = htmlFiles(DIST).map((file) => {
+const pages = builtPages(DIST).map((file) => {
   const html = readFileSync(file, 'utf8');
-  const url = `/${path.relative(DIST, file)}`
-    .replace(/index\.html$/, '')
-    .replace(/\.html$/, '')
-    .replace(/\/+/g, '/');
+  const url = builtPageUrl(DIST, file);
   return { url, main: words(section(html, 'main')), footer: words(section(html, 'footer')) };
 });
 

@@ -53,6 +53,29 @@ export function listDirectories(dir: string): string[] {
     .sort();
 }
 
+/**
+ * Every page the build wrote under `dist/`, sorted. Pagefind's bundle is
+ * skipped: it is generated, and its fragments are copies of page text by design.
+ */
+export function builtPages(dist: string): string[] {
+  const out: string[] = [];
+  for (const entry of readdirSync(dist, { withFileTypes: true })) {
+    if (entry.isDirectory()) {
+      if (entry.name === 'pagefind') continue;
+      out.push(...builtPages(path.join(dist, entry.name)));
+    } else if (entry.name.endsWith('.html')) {
+      out.push(path.join(dist, entry.name));
+    }
+  }
+  return out.sort();
+}
+
+/** `dist/facts/electric-buses/index.html` → `/facts/electric-buses`; `dist/index.html` → `/`. */
+export function builtPageUrl(dist: string, file: string): string {
+  const relative = `/${path.relative(dist, file).split(path.sep).join('/')}`;
+  return relative.replace(/\/index\.html$/, '').replace(/\.html$/, '') || '/';
+}
+
 export type Loaded<T> = { file: string; data: T };
 
 export function loadYaml<T = unknown>(absolute: string): T {

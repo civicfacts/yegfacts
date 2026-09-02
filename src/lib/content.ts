@@ -66,6 +66,23 @@ export async function publishedStories(): Promise<Story[]> {
   return (await allPublishedStories()).filter((story) => !isWithdrawn(story));
 }
 
+/**
+ * The day the story first went up, for the feed and for the structured data.
+ *
+ * The changelog is the only record of it — `as_of` is the date the evidence
+ * speaks to, not the date of publication — so the `published` entry is the
+ * answer, and the earliest one at that, because a story republished after a
+ * withdrawal would carry two. `as_of` is the fallback for a `pending-review`
+ * story, which has been written but has no publication entry yet.
+ */
+export function firstPublished(story: Story): string {
+  const dates = story.data.changelog
+    .filter((entry) => entry.type === 'published')
+    .map((entry) => entry.date)
+    .sort();
+  return dates[0] ?? story.data.as_of;
+}
+
 async function claimsOf(stories: Story[]): Promise<Claim[]> {
   const visible = new Set(stories.map((story) => story.id));
   const claims = await getCollection('claims');

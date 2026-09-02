@@ -29,7 +29,12 @@ const { Content } = await render(post);
 const avatar = avatarFor(post.data.type);
 ---
 
-<Base title={post.data.title} description={post.data.summary} report={false}>
+<Base
+  title={post.data.title}
+  description={post.data.summary}
+  report={false}
+  article={{ published: post.data.date }}
+>
   <article>
     <header class="border-b border-stew pb-7">
       {/*
