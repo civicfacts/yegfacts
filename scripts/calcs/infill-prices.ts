@@ -29,7 +29,7 @@ export const figures = {
    * single-detached houses in the redeveloping area, a net loss of 294. The
    * built and demolished counts are not carried by the archived report, and
    * the 286/387/101 figures the registry previously recorded for it were a
-   * transcription error corrected at drafting (see the run's errata.md).
+   * wrong-year attribution corrected at drafting (see the run's errata.md).
    */
   netSingleDetachedChange2024: -294,
   /** YF-EV-0103 — Zoning Bylaw 20001 one-year review: dwelling units approved in 2024. */

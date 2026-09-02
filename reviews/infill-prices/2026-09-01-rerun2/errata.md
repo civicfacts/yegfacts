@@ -119,7 +119,10 @@ each; no `sha256`, `path`, `url`, rights or date was touched.
 - YF-EV-0101 (2024 Redeveloping Area Infill Report): the line recorded 286
   built, 387 demolished and a net loss of 101. A seat extracted the archived
   report, searched for all three and found none of them, reading a net loss of
-  294 single detached houses instead. The line now reports the net loss of 294
+  294 single detached houses instead. Those three figures are the 2023 report's real
+  ones, sitting verbatim in YF-EV-0048; they were filed against the 2024
+  report at ingest, a wrong-year attribution rather than a garbled
+  transcription. The line now reports the net loss of 294
   and states that the report does not carry 286/387/101. The story, the claim
   key fact and `scripts/calcs/infill-prices.ts` were corrected with it. The
   "on the order of 390" demolition count for 2023 stays with YF-EV-0048.
