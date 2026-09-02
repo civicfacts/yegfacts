@@ -53,3 +53,63 @@ runs:
       - brief.md
       - reviewer.md
       - review-schema.json
+  - provider: anthropic
+    round: 2
+    command: claude -p --model claude-fable-5-1 --effort high < package.md
+    cli_version: 2.1.258 (Claude Code)
+    model_id: claude-fable-5-1
+    seat: Claude Fable 5.1
+    reasoning_effort: high
+    prompt_sha256: f6400f6903ded4737d1752c058f036ab42e4acc7f2ae06cd145f39c001b54e32
+    methodology_version: "1.8"
+    started_at: 2026-09-01T23:04:29Z
+    finished_at: 2026-09-01T23:12:20Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - cross-review.md
+      - review-schema.json
+      - combined-evidence.json
+      - other-review-gemini.json
+      - other-review-gpt.json
+  - provider: google
+    round: 2
+    command: agy --effort high --sandbox --print-timeout 45m -p "$(cat package.md)"
+    cli_version: 1.1.23
+    model_id: gemini-3.1-pro
+    seat: Gemini 3.1 Pro
+    reasoning_effort: high
+    prompt_sha256: 88037af5f3412695871c42f5631aaef4cff611e40742fd17cb60b379595d9441
+    methodology_version: "1.8"
+    started_at: 2026-09-01T23:16:38Z
+    finished_at: 2026-09-01T23:18:04Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - cross-review.md
+      - review-schema.json
+      - combined-evidence.json
+      - other-review-claude.json
+      - other-review-gpt.json
+  - provider: openai
+    round: 2
+    command: codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check < package.md
+    cli_version: codex-cli 0.152.0
+    model_id: gpt-5.6-sol
+    seat: GPT-5.6 Sol
+    reasoning_effort: high
+    prompt_sha256: 7b131859979bfeafd89a82a13e713839339bb73c1e8aa2ecbc183585e97deabc
+    methodology_version: "1.8"
+    started_at: 2026-09-01T23:12:25Z
+    finished_at: 2026-09-01T23:16:33Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - cross-review.md
+      - review-schema.json
+      - combined-evidence.json
+      - other-review-claude.json
+      - other-review-gemini.json

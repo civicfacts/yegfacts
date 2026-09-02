@@ -1,4 +1,4 @@
-<!-- Retroactive framing check under methodology v1.7 (prompts/framing-check.md), run 2026-09-02 by Stew on a brief that was already frozen and whose panel had already run. Checker: OpenAI gpt-5.6-sol via codex exec, reasoning effort high. The model name printed inside the report is a self-report and is not authoritative. This report changed nothing about the published finding; it is disclosed so readers can judge the frame the panel was given. -->
+<!-- Retroactive framing check under methodology v1.7 (prompts/framing-check.md), run 2026-09-01 by Stew on a brief that was already frozen and whose panel had already run. Checker: OpenAI gpt-5.6-sol via codex exec, reasoning effort high. The model name printed inside the report is a self-report and is not authoritative. This report changed nothing about the published finding; it is disclosed so readers can judge the frame the panel was given. -->
 
 Verdict: REVISE
 

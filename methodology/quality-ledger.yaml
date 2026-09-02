@@ -27,12 +27,16 @@
 #   date        — when the event was adjudicated or caught (ISO-8601).
 #   story       — story slug.
 #   run         — repo path of the review run.
-#   stage       — where it was caught: staging | round2 | drafting | gate.
+#   stage       — where it was caught: framing | round1 | staging | round2 |
+#                 drafting | gate. "framing" is the stage-1 framing check
+#                 (methodology v1.7), recorded against the checker seat.
 #   seat        — the canonical seat name from the run manifest, never a
 #                 model's self-report. Two seats appear together only where the
 #                 committed artifact does not separate them.
 #   event       — fabricated-citation | false-accusation | unsupported-figure |
-#                 valid-catch | self-correction | gate-rejection.
+#                 valid-catch | self-correction | gate-rejection |
+#                 framing-miss (a brief defect the framing check passed and a
+#                 later stage caught).
 #   materiality — blocking if the defect would have reached published output had
 #                 the pipeline not caught it; minor if it could not have.
 #   disposition — what was done.
@@ -317,3 +321,96 @@ events:
       round2/gemini.json round2_notes.errors_in_other_reviews[0];
       round2/gpt.json round2_notes.errors_in_other_reviews[7];
       gate/release-check.md §5e.
+  # --- infill prices, run 2026-09-02 (methodology v1.8, first delegated brief) ---
+  - date: "2026-09-01"
+    story: infill-prices
+    run: reviews/infill-prices/2026-09-02
+    stage: round1
+    seat: GPT-5.6 Sol
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      MATERIAL FRAMING CONCERN raised in round 1 on both claims and joined
+      by all three seats in round 2: the brief defined the
+      mature-neighbourhood subset by an instrument in force on the freeze
+      date, and none exists (the Mature Neighbourhood Overlay was retired
+      on 2024-01-01). Synthesis halted; revised brief and fresh blind
+      round 1 in reviews/infill-prices/2026-09-02-rerun.
+    notes: >
+      round1/gpt.json interpretation_notes; round2/*.json; errata.md.
+  - date: "2026-09-01"
+    story: infill-prices
+    run: reviews/infill-prices/2026-09-02
+    stage: framing
+    seat: Framing check (GPT-5.6 Sol via codex exec)
+    event: framing-miss
+    materiality: blocking
+    disposition: >
+      The framing check passed the brief on its fifth report without
+      establishing that the instrument the brief relied on existed. The
+      check is permitted definitional research only; the panel, which
+      researches the claim, caught it in round 1. Logged against the check
+      per methodology v1.7.
+    notes: >
+      framing/check-1.md to check-5.md; errata.md.
+  # --- low-density history, run directory 2026-09-02 (actual date 2026-09-01) ---
+  - date: "2026-09-01"
+    story: low-density-history
+    run: reviews/low-density-history/2026-09-02
+    stage: round1
+    seat: Gemini 3.1 Pro
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      MATERIAL FRAMING CONCERN on both claims: the brief required a
+      computed density against a sourced threshold that the 1926 record
+      cannot supply, predetermining Not established. The GPT seat raised
+      the same point independently, adding that the brief demanded
+      variant verdicts the schema cannot carry. Synthesis halted; revised
+      brief and fresh round 1 in reviews/low-density-history/2026-09-01-rerun.
+    notes: >
+      round1/gemini.json and round1/gpt.json interpretation_notes; errata.md.
+  - date: "2026-09-01"
+    story: low-density-history
+    run: reviews/low-density-history/2026-09-02
+    stage: round1
+    seat: GPT-5.6 Sol
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      Same concern as the Gemini seat, raised independently in round 1,
+      plus the schema point and the future freeze date.
+    notes: >
+      round1/gpt.json interpretation_notes; errata.md.
+  - date: "2026-09-01"
+    story: low-density-history
+    run: reviews/low-density-history/2026-09-02
+    stage: framing
+    seat: Framing check (GPT-5.6 Sol via codex exec)
+    event: framing-miss
+    materiality: blocking
+    disposition: >
+      The density rule and the variant-verdict requirements the panel
+      could not meet were introduced at the checker's own request across
+      checks 3 to 5 and adopted by the editor. The checker had not seen
+      the review schema and did not test whether the record could carry
+      the rule. Prompt amended: the checker now receives the schema and
+      must name the published source behind every threshold.
+    notes: >
+      framing/check-3.md to check-5.md; errata.md.
+  # --- infill prices, rerun directory 2026-09-02-rerun (actual date 2026-09-01) ---
+  - date: "2026-09-01"
+    story: infill-prices
+    run: reviews/infill-prices/2026-09-02-rerun
+    stage: round1
+    seat: Gemini 3.1 Pro
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      MATERIAL FRAMING CONCERN on both claims: a single-title multi-unit
+      replacement counted as one dwelling, so a whole building's value
+      was compared to one demolished house and the affordability test
+      modelled buying the building. Synthesis not attempted; revised
+      brief and fresh round 1 in reviews/infill-prices/2026-09-01-rerun2.
+    notes: >
+      round1/gemini.json interpretation_notes; errata.md.

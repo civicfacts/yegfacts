@@ -1,4 +1,4 @@
-<!-- Framing check 4 (confirmation re-check of revision 3, after the editor resolution in escalation.md). Checker: OpenAI gpt-5.6-sol via codex exec, reasoning effort high, prompt prompts/framing-check.md (v1.8). Run 2026-09-02 by Stew. Model names inside the report are self-reports and not authoritative. -->
+<!-- Framing check 4 (confirmation re-check of revision 3, after the editor resolution in escalation.md). Checker: OpenAI gpt-5.6-sol via codex exec, reasoning effort high, prompt prompts/framing-check.md (v1.8). Run 2026-09-01 by Stew. Model names inside the report are self-reports and not authoritative. -->
 
 Verdict: FRAME OK
 

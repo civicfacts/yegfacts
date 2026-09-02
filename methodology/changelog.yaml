@@ -1,8 +1,40 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.9"
+  date: "2026-09-01"
+  scope: framing-check-checkability-and-first-use
+  summary: >
+    First use of delegated briefs: both panels halted on framing concerns
+    the check had passed. The check now sees the output schema, must name
+    a published source for every threshold, and must verify that every
+    instrument a brief relies on exists.
+  highlights:
+    - "Both first briefs passed the framing check, then the research panel halted synthesis on a MATERIAL FRAMING CONCERN. Infill: the brief relied on a mature-neighbourhood instrument in force on the freeze date, and none exists since the overlay was retired on 2024-01-01. Low-density history: a density rule the check itself had demanded could not be computed from the 1926 record, and the brief demanded variant verdicts the schema cannot carry."
+    - "The framing checker now receives prompts/review-schema.json and may not ask for outputs it cannot carry; must name the published source a reviewer would compute any threshold from, or drop it; and must verify that every instrument, boundary, dataset or definition exists as described on the as-of date."
+    - "The reviewer prompt says to write MATERIAL FRAMING CONCERN only to raise one; the synthesis script ignores a negated mention, since a seat wrote 'no MATERIAL FRAMING CONCERN' and a plain text match would have halted on it."
+    - "The panel quality ledger gains a framing stage and a framing-miss event; six events from the two first runs are recorded, four valid catches by seats and two misses by the check."
+    - "Both stories are being rerun under revised briefs: infill with the dwelling unit as the verdict unit and a frozen historical overlay boundary, low-density history with classification by each era's own terminology and documented housing form, counts from published neighbourhood records. Evidence from the halted runs stays in the registry."
+    - "Date erratum: the first run directories and the v1.7 and v1.8 entries were dated 2026-09-02; the actual date was 2026-09-01. Entry dates are corrected; committed directory names are kept and each run's errata records it. The runner's pinned Gemini command could not run as written and is corrected."
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: Panel quality record
+      href: /methodology#panel-quality
+  note: >
+    The framing check was designed to keep a brief fair; on first use it
+    kept the brief fair and made it unresearchable, because the checker
+    optimised definitions without knowing what the output schema carries
+    or what the historical record can supply. The panel caught both
+    cases in round one, which is the method working as designed, and
+    the cost was two halted runs. Three changes follow: the checker sees
+    the schema, the checker must name the published source behind every
+    threshold it asks for, and the checker must confirm that the
+    instruments a brief relies on exist. The halted runs, their
+    concerns, the revised briefs and every check report are committed
+    beside each other so a reader can see the loop.
 - version: "1.8"
-  date: "2026-09-02"
+  date: "2026-09-01"
   scope: framing-check-escalation-and-bound
   summary: >
     Framing-check disputes now resolve with Stew as editor, on the
@@ -29,7 +61,7 @@
     one. One identified standard, or one alternative with results
     under both, is now enough.
 - version: "1.7"
-  date: "2026-09-02"
+  date: "2026-09-01"
   scope: delegated-briefs-and-framing-check
   summary: >
     Stew, the AI steward, now writes review briefs; a second model from a

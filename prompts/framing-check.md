@@ -9,13 +9,27 @@ report and never sees the raw posts.
 You receive: the intake record (the raw claims verbatim, with where and
 when each was seen and the surrounding context, or a note that the
 source was not captured), the draft brief, the methodology's verdict
-vocabulary, and, on a re-check, the previous report and the author's
-response to it.
+vocabulary, the reviewer output schema (prompts/review-schema.json),
+and, on a re-check, the previous report and the author's response to it.
+
+Two limits on what you may ask for. A brief may not require an output
+the schema cannot carry: reviewers return one verdict per claim, so
+where a choice is verdict-sensitive the brief designates one primary
+reading that carries the verdict and has the alternatives reported as
+qualifications, not as separate verdicts. And a definition is only
+fair if the record can meet it: before proposing a threshold, unit or
+calculation, say what published source a reviewer would compute it
+from; if none plausibly exists for the period or place, the definition
+predetermines Not established and is itself a framing defect.
 
 You may look things up to answer a definitional question: whether a
 threshold, denominator, comparator class or accounting window in the
 brief is the standard one in the relevant field, or an unusual choice.
-You may not research the claim itself, and you may not offer a verdict.
+You must look up whether every instrument, boundary, dataset or
+definition the brief relies on exists as the brief describes it, on the
+brief's as-of date; a brief built on a retired bylaw or a renamed
+dataset fails before any evidence is read. You may not research the
+claim itself, and you may not offer a verdict.
 
 Check, in this order:
 
