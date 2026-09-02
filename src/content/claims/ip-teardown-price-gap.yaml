@@ -73,7 +73,7 @@ unknowns:
   - "How many teardown lots a point-proximity match misses, and whether the missed lots differ from the matched ones. No miss analysis was run, so that larger consolidated sites are the likelier misses is an untested hypothesis."
   - "Whether the demolished dwellings were owner occupied or rented, what rent they carried, and whether any tenants were displaced."
 missing_evidence:
-  - "The matched teardown-to-replacement dataset the proposition is stated in. It does not exist as a published series anywhere in the public record: no City report, no open dataset and no third-party study links a demolished dwelling's assessed value to the value of each dwelling built on the same lot (City of Edmonton; critical)."
+  - "The matched teardown-to-replacement dataset the proposition is stated in. By its freeze date, 2026-09-01, the run had turned up no such join anywhere in print: no City report, no open dataset and no third-party study links a demolished dwelling's assessed value to the value of each dwelling built on the same lot (City of Edmonton; critical)."
   - "A complete residential demolition permit list for 2019 to 2025 with parcel identifiers. The open datasets capture only a fraction after 2018 (City of Edmonton Development Services and the Safety Codes permit system; critical)."
   - "A verified parcel crosswalk carrying every eligible demolition through address changes, subdivisions and consolidations to the replacement parcels, titles and assessment accounts (City of Edmonton Assessment and Taxation with Alberta Land Titles or AltaLIS; critical)."
   - "Completion and occupancy dates before 2022, sufficient to identify each replacement's first full assessment roll without an outcome-dependent heuristic (City of Edmonton permit and inspection systems; critical)."
@@ -89,7 +89,7 @@ review:
       confidence: Moderate
       key_findings:
         - "No published study matching the proposition exists, so the matched set had to be built from the City's open data, and the closest published lot-level work measures lot totals on a different cohort. House demolition records in the general building permit dataset fall from 370 in 2018 to under 30 a year from 2019, so the brief's permit frame cannot supply the ten-year cohort, and the frame departure is reported rather than hidden."
-        - "On the rebuilt set, 4,091 of 6,603 classified replacement dwelling units, 62.0 percent, were assessed higher than the house they replaced in constant July 2025 dollars, at a median ratio of 1.222. Undivided title totals point the other way at 93.2 percent, and lot totals at 99.6 percent: essentially every eight-unit row house is worth more than the house it replaced as a building and less per dwelling."
+        - "On the rebuilt set, 4,091 of 6,603 classified replacement dwelling units, 62.0 percent, were assessed higher than the house they replaced in constant July 2025 dollars, at a median ratio of 1.222. Undivided title totals show a stronger result in the same direction at 93.2 percent, and lot totals at 99.6 percent: essentially every eight-unit row house is worth more than the house it replaced as a building and less per dwelling."
         - "About 3,000 recent units could not be verified as complete, so the predeclared bounds run 42.6 to 73.8 percent. Neither Supported nor Contradicted is reached, and the share falls from 86 percent for 2016 teardowns to 37 percent for 2023 as row housing replaces skinny homes."
       changed_between_rounds: "Held Not established and raised its own confidence from Moderate to High, saying the cross-review changed nothing: the bounds still straddle the majority threshold."
     - model: GPT-5.6 Sol
@@ -98,7 +98,7 @@ review:
       key_findings:
         - "No source reports the city-wide unit-level numerator, denominator, bounds, median ratio, quartiles or range the brief predeclares, and none reports the same result on the frozen 2023-12-31 mature-neighbourhood boundary or the redeveloping-area sensitivity."
         - "Aggregate title and lot values do not test the proposition, and the closest published Edmonton analysis uses lot totals, a different cohort and different matching rules, so its result cannot be converted into the required unit-level share."
-        - "The circulating $350,000 to $1,000,000 example has no address or source, was not treated as a threshold, and remains unverified."
+        - "The $350,000 to $1,000,000 example supplied at intake has no address or source, was not treated as a threshold, and remains unverified."
       changed_between_rounds: "Held Not established, documenting that the reconstruction replaces the brief's permit frame with assessment-detected candidates, infers title structure, uses an outcome-dependent completion heuristic and produces fractional dwelling counts, so its 62.0 percent cannot carry the verdict."
     - model: Gemini 3.1 Pro
       verdict: Not established
