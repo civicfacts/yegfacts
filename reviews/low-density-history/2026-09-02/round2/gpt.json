@@ -1,0 +1,359 @@
+{
+  "reviewer": {
+    "provider": "openai",
+    "model_self_reported": "GPT-5",
+    "runner_model": "gpt-5.6-sol",
+    "runner_seat": "GPT-5.6 Sol",
+    "runner_effort": "high"
+  },
+  "story": "low-density-history",
+  "round": 2,
+  "round2_notes": {
+    "evidence_i_missed": [
+      "Claude located the 1926 Henderson directory, which directly corroborates occupied dwellings at Edmonton street addresses in 1926, although it does not supply the dwelling count, area or denominator needed to classify density.",
+      "Claude located the Highlands walking-tour history and Westmount history documenting detached houses built and occupied before 1926. These strengthen the housing-form and occupation evidence but still do not establish built dwellings per hectare.",
+      "Claude located the 2001 census neighbourhood profiles. They establish that dwellings constructed before 1946 remained occupied in 2001, but the broad construction-period category cannot isolate dwellings existing by 1926.",
+      "Claude supplied operative dimensional rules from the 1998 consolidation of Land Use Bylaw 5996 and the 2001 version of Zoning Bylaw 12800. Both permit one dwelling per 360 square metres in the ordinary RF1 case, or 27.8 dwellings per site hectare.",
+      "Claude supplied evidence of pre-zoning developer controls and restrictive covenants in Glenora, Groat Estate and Highlands. This establishes several deliberate planning examples but not the count, share or density classification required for Claim B.",
+      "Claude identified Hulchanski's account of Bylaws 35 and 30 and the large inventory of tax-forfeited vacant lots. This shows both that pre-1933 residential controls existed and that subdivision or residential designation cannot be treated as evidence of occupied housing.",
+      "Claude identified the Ellerslie NSP's explicit designation of low-density residential development at 25 units per net residential hectare. This is a usable sourced threshold when the measurement denominator matches, but it does not supply a 1926 measurement or a universal historical definition."
+    ],
+    "errors_in_other_reviews": [
+      "Claude's Supported verdict for Claim A does not follow the brief's fixed built-outcome rule. The review expressly admits that no 1926 dwelling count and matching land area were obtained, so detached housing forms and sparse development cannot substitute for the required dwellings-per-hectare classification.",
+      "Claude uses the continued legal permission of detached housing under the 2026 RS zone as continuity evidence for Claim A. That is the intention-versus-outcome error: permission in 2026 does not establish that built low-density housing remained in Edmonton's occupied stock throughout the century.",
+      "Claude describes the 2001 count of dwellings constructed 'Before 1946' as a lower bound on pre-1926 dwellings. It is not: the category also includes dwellings built from 1927 through 1945 and therefore cannot isolate the 1926 stock.",
+      "Claude's non-classifying calculations divide 2001 survivors in a broad pre-1946 construction category by present-day gross neighbourhood areas. The numerator period, boundary year and gross denominator do not describe 1926 built density and cannot establish even a reliable bound for it.",
+      "Claude treats the 2023 report's 'less than 30' map class as a second low-density threshold, but the cited material only establishes a density bin and separately defines LDR by housing form. It does not show that the report defines every development below 30 dwellings per net residential hectare as low density.",
+      "Claude asserts that site-area density is comparable to a net-residential-area threshold. Comparability was not demonstrated. A parcel-site denominator and a plan's net residential denominator may include different land classes, and the brief prohibits silent denominator substitution.",
+      "Claude's Supported cumulative-count verdict for Claim B is issued despite acknowledging that no compliant neighbourhood numerator, 50-percent coverage result, area-weighted result or contemporaneous-unit result was computed. Counts of plans in effect do not show that each plan passed the permitted-density and coverage rules.",
+      "Claude's Supported cumulative-share verdict is particularly unsupported because the review says the exact share and the required then-existing denominators were not computed. Qualitative statements about a majority of lots or many plans cannot supply either the 25-percent or one-third neighbourhood-share result.",
+      "Claude treats 71 NSPs or NASPs in effect as evidence for a low-density count. Plan existence alone does not establish that a plan designated low-density development, that the permitted maximum passed the density threshold, or that at least half of the relevant neighbourhood was covered.",
+      "Claude reports the current consolidation as viewed on 2026-09-02 even though the combined registry was generated on 2026-09-01. The registry therefore cannot verify the claimed endpoint observation; the September 1 evidence only establishes the version visible before the fixed endpoint.",
+      "The combined Alberta Municipalities/CBC item conflates claims from two publications under one principal URL and does not cite the registered caveat or judgment itself. It can corroborate that a covenant dispute exists, but not substitute for the operative instrument when classifying its permissions and coverage.",
+      "Gemini incorrectly says the method requires a contemporaneous 1926 definition of low density. The brief allows a named instrument, standard or published definition and requires denominator compatibility; the missing critical item is a compliant 1926 built-density measurement, not necessarily a threshold published in 1926.",
+      "Gemini labels the absence of accessible archival measurements a MATERIAL FRAMING CONCERN. The operational questions are demanding but answerable in principle through assessment, fire-insurance, subdivision, bylaw and boundary records. Data-access failure is an evidence limitation rather than proof that the framing predetermines a verdict.",
+      "Gemini treats the absence of comprehensive zoning from 1926 to 1933 as a decisive gap for Claim B, although the brief expressly admits subdivision design, developer controls, restrictive covenants, servicing standards and earlier non-zoning instruments as planning evidence."
+    ],
+    "verdict_changes": []
+  },
+  "claims": [
+    {
+      "id": "ldh-existed-century",
+      "proposition_evaluated": "Documented occupied housing inside Edmonton's boundary in force in 1926 met a sourced low-density threshold using a matching dwellings-per-hectare denominator at the start of the exact window on 1926-09-02 or during calendar year 1926, and built low-density housing remained in Edmonton's occupied stock through 2026-09-02.",
+      "interpretation_notes": "My round-1 verdict remains unchanged. The combined evidence materially strengthens the finding that occupied detached houses existed in Edmonton during 1926, including at least two residences whose stated occupation periods include 1926-09-02. It does not complete the separate density classification. Neither the exact-date variant nor the calendar-year variant has a dwelling count and matching site, net-residential or gross-area denominator for a defined occupied area. Both variants are therefore Not established under the fixed built-outcome rule. The Ellerslie NSP supplies an explicit 25-units-per-net-residential-hectare low-density threshold, but no matching 1926 net-residential measurement was produced. The evidence also does not trace continuous occupied low-density stock through every part of the window: survival of buildings, occupation in 2001, modern housing-form statistics and current legal permission are separate facts. This is an evidence limitation, not a material framing concern.",
+      "verdict": "Not established",
+      "confidence": "Moderate",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "The City states that the Hardisty Residence was occupied by George Smiley from 1925 to 1928.",
+          "source_title": "Hardisty Residence Statement of Historic Significance",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/historic-resource-hardisty-residence.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025",
+          "source_type": "analytical-report",
+          "establishes": "Directly establishes occupation of a detached Edmonton residence on 1926-09-02 and during calendar year 1926, but supplies no density denominator and no continuous-use record through 2026.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The Griffith Residence was occupied from 1924 to 1928, and the City describes Westmount as containing a large collection of single-detached houses built between 1911 and 1925.",
+          "source_title": "Griffith Residence Statement of Significance",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/historic-resource-griffith-residence.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026",
+          "source_type": "analytical-report",
+          "establishes": "Provides a second residence occupied at the exact cutoff and evidence that detached housing was not an isolated form, but no dwelling count, area or density calculation.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The 1926 Henderson directory contains a street-directory section and householder entries tied to Edmonton street addresses.",
+          "source_title": "Henderson's Edmonton City Directory (1926)",
+          "source_url": "https://archive.org/details/P002962-20",
+          "source_publisher": "Henderson Directories, digitized by Internet Archive and the University of Alberta Peel collection",
+          "source_date": "1926",
+          "source_type": "observed-data",
+          "establishes": "Corroborates occupied dwellings in Edmonton during 1926 using an occupation-record class accepted by the brief; it does not classify their density.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Highlands developers constructed houses before 1926, and the historical account identifies houses occupied from 1912 through the early 1920s while also noting that some houses had been divided into suites by the 1920s.",
+          "source_title": "Highlands Edmonton Historical Walking Tour, Centennial Edition 1912-2012",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/HighlandsWalkingTour.pdf",
+          "source_publisher": "City of Edmonton with the Highlands Historical Society",
+          "source_date": "2012",
+          "source_type": "city-webpage",
+          "establishes": "Documents pre-1926 built and occupied residential forms and warns that houses cannot automatically be counted as single dwelling units.",
+          "strength": "moderate"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The City warns that Henderson directories may omit occupants, and its research guide identifies 1925 fire-insurance maps rather than providing a completed dwelling-and-area dataset.",
+          "source_title": "Resources for Researching Your Building",
+          "source_url": "https://www.edmonton.ca/city_government/edmonton_archives/resources-for-researching-your-building",
+          "source_publisher": "City of Edmonton",
+          "source_date": "accessed 2026-09-01",
+          "source_type": "city-webpage",
+          "establishes": "Shows that the available occupation source is incomplete and that archival reconstruction is still needed for a compliant 1926 density calculation.",
+          "quote": "Henderson's may not list every occupant, spouse, occupation or ownership status.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Edmonton took possession of approximately 70,000 tax-forfeited lots from 1918 to 1920 after far more land had been subdivided than occupied.",
+          "source_title": "The Origins of Urban Land Use Planning in Alberta, 1900-1945",
+          "source_url": "https://utoronto.scholaris.ca/bitstream/1807/92488/1/Origins%20Land%20Use%20Planning%20Alberta_TSpace.pdf",
+          "source_publisher": "Centre for Urban and Community Studies, University of Toronto",
+          "source_date": "1981-01",
+          "source_type": "analytical-report",
+          "establishes": "Demonstrates why subdivision plans and sparse detached-house examples cannot supply the occupied dwelling density of an area.",
+          "quote": "Between 1918 and 1920 Edmonton took possession of some 70,000 lots",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The City's historic-resources register lists surviving pre-1926 residences but does not state that they remained occupied residential dwellings continuously through the endpoint.",
+          "source_title": "Historic Resources: Register and Inventory",
+          "source_url": "https://www.edmonton.ca/city_government/edmonton_archives/historic-resources-inventory-register",
+          "source_publisher": "City of Edmonton",
+          "source_date": "accessed 2026-09-01",
+          "source_type": "city-webpage",
+          "establishes": "Building survival corroborates historical form but does not prove continuous occupied low-density stock.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "No evidence item supplies both the number of dwellings in use and the matching land area for a defined Edmonton residential area in 1926.",
+        "No 1926 measurement was produced using the net residential denominator attached to the explicit 25-units-per-hectare threshold.",
+        "House counts cannot be treated as dwelling counts because some houses contained suites.",
+        "The 2001 'Before 1946' construction category cannot isolate dwellings built by 1926.",
+        "No source traces an identified low-density occupied area continuously from 1926-09-02 through 2026-09-02.",
+        "Legal permission for detached housing at the endpoint is not evidence of built outcome or continuity."
+      ],
+      "unknowns": [
+        "The number of occupied dwelling units, including suites, in a defined Edmonton residential area on 1926-09-02.",
+        "The corresponding site, net residential or gross area and the exact land classes included in that denominator.",
+        "The resulting 1926 dwellings-per-hectare figure against a sourced threshold.",
+        "Whether an identified area remained occupied and below that threshold throughout the full century."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A 1926 assessment roll, street-directory reconstruction or census table providing dwelling units in use for a geographically defined Edmonton area.",
+          "likely_holder": "City of Edmonton Archives, Library and Archives Canada, Statistics Canada or University of Alberta Peel collection",
+          "importance": "critical"
+        },
+        {
+          "description": "The 1925 fire-insurance sheets, registered plans and parcel areas needed to construct a matching residential-land denominator.",
+          "likely_holder": "City of Edmonton Archives, Alberta Land Titles or University of Waterloo Geospatial Centre",
+          "importance": "critical"
+        },
+        {
+          "description": "Longitudinal occupancy or stock records establishing that an identified low-density area remained part of Edmonton's occupied housing stock throughout the window.",
+          "likely_holder": "City of Edmonton assessment and permit records",
+          "importance": "high"
+        }
+      ],
+      "calculations_needed": [
+        "For a defined 1926 area, count all dwellings in use, including suites, and divide by land area measured using the same denominator as the selected threshold.",
+        "Apply the calculation separately to the exact-date evidence and calendar-year evidence if their occupied-dwelling counts differ."
+      ],
+      "what_would_change_my_verdict": [
+        "A reproducible 1926 dwelling-unit count and matching land-area measurement below an identified low-density threshold would change the exact-date or calendar-year variant to Supported.",
+        "A source-backed longitudinal record showing that qualifying built low-density housing remained occupied through the endpoint would resolve the continuity requirement.",
+        "A compliant calculation above every reasonable sourced threshold would move the relevant variant toward Contradicted."
+      ],
+      "suggested_one_line": "Occupied detached houses are documented in Edmonton in 1926, including on September 2, but the record supplied does not provide the matching dwelling count and land area required to establish that the built outcome was low density or continuous for the full century.",
+      "suggested_short_answer": "Edmonton unquestionably had occupied detached houses in 1926. The claim is nevertheless not established under the brief's fixed rule because no source supplies a 1926 dwelling-unit count and matching land-area denominator for a defined occupied area, and the evidence does not demonstrate continuous qualifying built stock through 2026.",
+      "suggested_tldr": [
+        "Occupation and detached housing in 1926 are directly supported.",
+        "Low density cannot be classified without a matching dwellings-per-hectare calculation.",
+        "Surviving buildings and current zoning permission do not establish century-long built continuity."
+      ]
+    },
+    {
+      "id": "ldh-planned-around",
+      "proposition_evaluated": "Many neighbourhoods within Edmonton's boundary in force in each era were deliberately planned around development that met a sourced low-density threshold under the permitted-development rule, tested at 2026-09-02 and cumulatively across the exact century under both neighbourhood units, both then-existing denominators, both coverage calculations, and the prescribed count and share cutoffs.",
+      "interpretation_notes": "My round-1 verdict remains unchanged. The combined evidence makes the historical premise plausible and documents deliberate low-density planning at substantial scale, but it does not produce any complete result under the brief's mandated combinations. The pre-1933 registry contains three deliberate examples, below the count cutoffs of 5 and 10, but the search is not exhaustive and no share denominator is available. For later eras, neither present-day polygons nor contemporaneous units were overlaid with qualifying instruments; no exact 50-percent or area-weighted coverage numerator was computed; and the occupied and planned-or-approved denominators were not constructed within historical boundaries. The 2014 report's 73 NSPs and low-density lot totals establish scale but use a form-based category rather than the permitted-density rule. The 2021 report's twelve neighbourhoods at or below 25 dwellings per net residential hectare support the cumulative count premise under a broad plan-average reading, but overall planned density is not maximum permitted site density and does not establish covered-area share. Consequently the endpoint and cumulative results, count cutoffs 5 and 10, share cutoffs 25 percent and one third, both neighbourhood units, both denominators and both coverage methods all remain Not established from the supplied registry. The RS zone's 133.3 dwellings per site hectare strongly challenges an endpoint result based only on the city-wide zoning instrument, but it cannot by itself contradict the broader proposition because neighbourhood-specific plans and earlier planning remain relevant. No material framing concern is warranted.",
+      "verdict": "Not established",
+      "confidence": "Moderate",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "The City's 2014 report counted 83 planned or developing neighbourhoods in approved Area Structure Plans, including 73 with approved Neighbourhood Structure Plans; it reported 40 neighbourhoods under development and 33 that were 95 to 100 percent complete for low-density residential lots.",
+          "source_title": "Edmonton's Developing and Planned Neighbourhoods: Low Density Residential Lot Registrations",
+          "source_url": "https://www.edmonton.ca/public-files/assets/document?path=PDF%2F2014-Residential-Low-Density-Lot-Registrations.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2014",
+          "source_type": "observed-data",
+          "establishes": "Strongly establishes that low-density housing was deliberately incorporated into dozens of approved plans, but its form-based lot category does not satisfy the permitted-density or neighbourhood-coverage rules.",
+          "quote": "A total of eighty three neighbourhoods (planned and developing) are in approved Area Structure Plans.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The 2021 density report lists twelve developing neighbourhoods with overall planned net residential density at or below 25 dwellings per net residential hectare.",
+          "source_title": "Redeveloping/Developing Area Net Residential Density Report, 2021 Annual Report",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/DevelopingAreas-Net-Residential-Density-Report.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "updated July 2023",
+          "source_type": "analytical-report",
+          "establishes": "Supplies a direct Edmonton count above the primary count cutoff under a broad plan-average interpretation, but not the required maximum permitted density or covered-area calculation.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Land Use Bylaw 5996's RF1 district had a stated purpose of primarily providing single-detached housing, ordinarily allowed one dwelling per lot, and required 360 square metres per dwelling.",
+          "source_title": "Edmonton Land Use Bylaw 5996, office consolidation version 7, section 110",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/1998_LUB_5996_Consolidation_Aug_24_1998.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "1998-08-24 consolidation of bylaw adopted 1980-07-03",
+          "source_type": "legal-audited",
+          "establishes": "Establishes operative RF1 forms and a permitted density of 27.8 dwellings per site hectare for the ordinary case; it is below 30 but above 25 and does not establish geographic coverage.",
+          "quote": "the minimum site area shall be 360 m2 (3,875.0 sq. ft.) per Dwelling",
+          "strength": "strong"
+        },
+        {
+          "finding": "The Ellerslie NSP designated low-density residential development at 25 units per net residential hectare, predominantly in single- and semi-detached forms.",
+          "source_title": "Ellerslie Neighbourhood Structure Plan, Office Consolidation June 2023",
+          "source_url": "https://webdocs.edmonton.ca/infraplan/plans_in_effect/Ellerslie_NSP_Consolidation.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "approved 2001-05-01; consolidation June 2023",
+          "source_type": "policy-document",
+          "establishes": "Provides one explicit Edmonton low-density threshold and a direct statutory-planning example, but not a cross-city count or coverage result.",
+          "quote": "Residential densities of 25 units per net residential hectare for low density residential and 50 units per hectare for medium density residential",
+          "strength": "strong"
+        },
+        {
+          "finding": "The Starling plan designates 46.23 hectares as Low Density Residential 1 at approximately 25 units per hectare, mostly for single- and semi-detached housing.",
+          "source_title": "Starling Neighbourhood Structure Plan",
+          "source_url": "https://www.edmonton.ca/public-files/assets/document?path=PDF%2FStarling_NSP_Consolidation.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "office consolidation accessed 2026-09-01",
+          "source_type": "policy-document",
+          "establishes": "Provides another direct planning-intent example with density and land allocation. Its 79.2-percent share of residential land is not the brief's required share of total neighbourhood land.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Glenora, Groat Estate and Highlands have documented pre-zoning covenants, developer controls or subdivision design oriented toward detached or semi-detached houses.",
+          "source_title": "Glenora - Edmonton Historical Board and Highlands Edmonton Historical Walking Tour",
+          "source_url": "https://www.edmontonhistoricalboard.com/neighbourhoods/glenora",
+          "source_publisher": "Edmonton Historical Board and City of Edmonton",
+          "source_date": "n.d. and 2012",
+          "source_type": "city-webpage",
+          "establishes": "Establishes at least three deliberate pre-1933 planning examples, but not a qualifying density, exhaustive count, covered share or denominator.",
+          "strength": "moderate"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The RS Small Scale Residential Zone permits up to eight dwellings on an interior site with a minimum 75 square metres of site area per dwelling.",
+          "source_title": "Zoning Bylaw 20001, Section 2.10 RS - Small Scale Residential Zone",
+          "source_url": "https://zoningbylaw.edmonton.ca/part-2-standard-zones-and-overlays/residential-zones/210-rs-small-scale-residential-zone",
+          "source_publisher": "City of Edmonton",
+          "source_date": "consolidation accessed 2026-09-01",
+          "source_type": "legal-audited",
+          "establishes": "The principal current small-scale zone permits 133.3 dwellings per site hectare and therefore does not qualify under the identified 25-unit threshold; it challenges but does not alone decide the endpoint neighbourhood result.",
+          "quote": "The maximum number of Dwellings on an Interior Site is 8.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City's historical resource guide records incomplete map holdings, including only the east side of the 1961 and 1971 maps and portions of some 1980s maps.",
+          "source_title": "Resource Guide - Historical Land Use Bylaws",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/ResourceGuide-HistoricalLandUseBylaws.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2024-08-15",
+          "source_type": "city-webpage",
+          "establishes": "Documents source gaps preventing a complete geographic overlay from the consulted record.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The 2014 report defines low-density development through single- and semi-detached lots and does not incorporate all secondary suites, garden suites, row housing or small apartment permissions.",
+          "source_title": "Edmonton's Developing and Planned Neighbourhoods: Low Density Residential Lot Registrations",
+          "source_url": "https://www.edmonton.ca/public-files/assets/document?path=PDF%2F2014-Residential-Low-Density-Lot-Registrations.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2014",
+          "source_type": "observed-data",
+          "establishes": "Prevents the report's neighbourhood count from directly supplying the brief's permitted-development classification.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City's 2021 report says newer NSPs generally have planned densities above 35 dwellings per net residential hectare and a more balanced range of dwelling types.",
+          "source_title": "Redeveloping/Developing Area Net Residential Density Report, 2021 Annual Report",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/DevelopingAreas-Net-Residential-Density-Report.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "updated July 2023",
+          "source_type": "analytical-report",
+          "establishes": "Shows that low-density planning cannot be generalized to every era or every neighbourhood plan.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The open-data zoning-history series begins in May 2019 and does not supply digital zoning polygons for the earlier bylaw eras.",
+          "source_title": "Zoning Bylaw Map - History",
+          "source_url": "https://data.edmonton.ca/Thematic-Features/Zoning-Bylaw-Map-History/67p2-r285",
+          "source_publisher": "City of Edmonton",
+          "source_date": "first published 2019-05-17",
+          "source_type": "observed-data",
+          "establishes": "Explains why the required historical neighbourhood overlays and exact coverage shares were not produced from the digital dataset.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "No era has a complete list of qualifying instruments overlaid with both present-day neighbourhood polygons and contemporaneous planning units.",
+        "No exact neighbourhood numerator was computed under either the 50-percent rule or the area-weighted method.",
+        "Neither required then-existing denominator was constructed for each historical city boundary.",
+        "Counts of NSPs, low-density lots or low planned average density do not equal counts passing the permitted-maximum-density and coverage rules.",
+        "The text and dimensional schedules of the 1933 and 1961 bylaws were not produced, leaving important early districts unclassified.",
+        "The 1998 Land Use Bylaw consolidation does not necessarily reproduce the rules in force when the bylaw was adopted in 1980.",
+        "The current consolidation visible on September 1 cannot conclusively establish the version in force on the September 2 endpoint.",
+        "Pre-annexation planning has not been comprehensively separated from post-annexation Edmonton planning in an era-by-era calculation."
+      ],
+      "unknowns": [
+        "How many neighbourhoods met the permitted-density threshold and at least 50-percent coverage in each era.",
+        "The corresponding area-weighted numerator and count of neighbourhoods with nonzero coverage below 50 percent.",
+        "The occupied and planned-or-approved neighbourhood denominators within each historical boundary.",
+        "The cumulative count after deduplicating neighbourhoods under each required unit.",
+        "Whether the cumulative and endpoint shares exceed 25 percent or one third.",
+        "The permitted density of the 1933 B district and 1961 R-1 district after counting every residential form.",
+        "The consolidation actually in force on 2026-09-02."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Operative texts and dimensional schedules for Zoning Bylaw 26, Zoning Bylaw 2135 and Land Use Bylaw 5996 as adopted.",
+          "likely_holder": "Edmonton Tower Resource Centre, Office of the City Clerk or City of Edmonton Archives",
+          "importance": "critical"
+        },
+        {
+          "description": "Historical zoning, subdivision, planning-unit and city-boundary maps suitable for overlay against present-day neighbourhood polygons.",
+          "likely_holder": "City of Edmonton Archives, Edmonton Tower Resource Centre and Alberta Land Titles",
+          "importance": "critical"
+        },
+        {
+          "description": "Per-plan land-use tables and operative residential permissions for every neighbourhood plan included in the endpoint and cumulative numerators.",
+          "likely_holder": "City of Edmonton Urban Planning and Economy",
+          "importance": "critical"
+        },
+        {
+          "description": "The official Zoning Bylaw 20001 consolidation in force on 2026-09-02.",
+          "likely_holder": "City of Edmonton and Office of the City Clerk",
+          "importance": "high"
+        }
+      ],
+      "calculations_needed": [
+        "Classify each instrument by maximum permitted dwellings per site hectare while counting every permitted residential form and documenting borderline interpretations.",
+        "Overlay qualifying instruments with both present-day neighbourhood polygons and contemporaneous units inside the city boundary applicable at each date.",
+        "For each unit and denominator, calculate the exact covered-area share, binary count at 50 percent, area-weighted numerator and count with partial coverage below 50 percent.",
+        "Test count results against 5 and 10 and share results against 25 percent and one third, separately at the endpoint and cumulatively across the century.",
+        "Calculate residential-land coverage separately without substituting it for the prescribed neighbourhood count or share."
+      ],
+      "what_would_change_my_verdict": [
+        "A reproducible cumulative result identifying at least 5 or 10 qualifying neighbourhoods under a mandated unit, denominator and coverage method would support the corresponding count variant.",
+        "A reproducible numerator and then-existing denominator exceeding 25 percent or one third would support the corresponding share variant.",
+        "Endpoint overlays showing that qualifying neighbourhood-specific plans cover the required number or share despite the RS zone would support an endpoint variant.",
+        "Complete calculations below the relevant cutoff would move a variant toward Contradicted rather than merely Not established."
+      ],
+      "suggested_one_line": "Edmonton records show low-density planning in numerous subdivisions, zones and neighbourhood plans, but the supplied evidence does not complete the permitted-density, historical-boundary and neighbourhood-coverage calculations needed to establish any prescribed count or share variant.",
+      "suggested_short_answer": "There is substantial direct evidence that Edmonton deliberately planned low-density housing in many places over the century. The claim is still not established under the brief's rules because plan counts and housing-form labels do not supply the required maximum permitted density, covered-area share, historical boundary, neighbourhood unit and denominator calculations.",
+      "suggested_tldr": [
+        "The historical premise is plausible and supported by numerous direct planning examples.",
+        "No mandated neighbourhood count or share calculation is complete.",
+        "The current RS zone exceeds the identified low-density threshold but does not alone decide the broader endpoint question."
+      ]
+    }
+  ]
+}
