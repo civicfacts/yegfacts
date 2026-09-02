@@ -83,6 +83,15 @@ Check, in this order:
    arguing about and the brief is REVISE. This is the test the
    published infill price-gap claim failed: Supported would have told
    the opponent nothing and Contradicted could not happen.
+9. **Who asks this.** The brief must state, in plain words, the
+   question a resident or a reporter would actually type or ask, and
+   the proposition must answer that question, not a measurable cousin
+   of it. A proposition stated in the units the record happens to
+   publish, when nobody would ask it in those units, fails this check
+   even if every other check passes. Where the record cannot answer
+   the question people ask at the level they ask it, the brief says
+   so and tests the nearest level the record does answer, and the
+   proposition names that level in words a reader would use.
 
 Two rules that override the others. A claim is tested as its holders
 assert it: when a post offers one example as evidence for a general

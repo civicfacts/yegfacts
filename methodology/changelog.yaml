@@ -1,6 +1,28 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.11"
+  date: "2026-09-02"
+  scope: framing-check-who-asks-this
+  summary: >
+    A brief must name the question a resident or reporter would actually
+    ask, and the proposition must answer it, not a measurable cousin of it.
+  highlights:
+    - "Check 9 in prompts/framing-check.md: the brief states the question people actually ask; a proposition stated in the units the record happens to publish, when nobody would ask it in those units, fails even if every other check passes."
+    - "Where the record cannot answer at the level people ask, the brief says so and tests the nearest level the record does answer, in words a reader would use."
+    - "Prompted by the founder's read of the published infill story: its two claims were shaped by what the record could compute (a lot-matched value ratio; a purchase model on separately titled dwellings) and answered questions nobody asks. The story is being re-briefed around the questions people do ask: were the demolished houses more affordable than what replaced them, is new infill luxury housing, and can a median-income household afford infill."
+  links:
+    - label: Infill teardown prices
+      href: /facts/infill-prices
+    - label: How a finding is produced
+      href: /methodology#stages
+  note: >
+    v1.10 stopped a claim from being neutralised into a truism. This
+    entry closes the neighbouring gap: a claim can be fair, checkable
+    and precise and still be a question nobody asked, because the
+    framing loop optimises toward what the record can compute. The
+    check now starts from the reader's question and works back to the
+    record, instead of the other way round.
 - version: "1.10"
   date: "2026-09-02"
   scope: framing-check-truism-test
