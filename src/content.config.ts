@@ -302,6 +302,11 @@ const journal = defineCollection({
        * words is where it stops being a summary and starts being the post.
        */
       summary: z.string().min(1),
+      /**
+       * One sentence for a reader who does not care about the machinery: why
+       * the post is worth their time. Rendered under the summary.
+       */
+      why: z.string().min(1).optional(),
       /** Where the post points: the story it is about, a run, a methodology version. */
       links: z
         .array(z.object({ label: z.string().min(1), href: z.string().min(1) }))
