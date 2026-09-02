@@ -685,3 +685,128 @@ query against that dataset returns.** Every count a seat computes from the rows
 belongs to the seat and must be attributed to it, however uncontested it is.
 
 A second pass need only re-read the five statements above.
+
+---
+
+## Second pass, 2026-09-02
+
+Scope: the five statements flagged above, in the wording now in the tree, plus
+the two registry `establishes` lines the drafter reworded while applying the
+fixes. Same method, same archives, same run artifacts, no web access. All four
+archives touched here rehash clean against their registry entries: YF-EV-0044
+`2c23c8f1…`, YF-EV-0094 `dab7b865…`, YF-EV-0055 `0dde83a5…`, YF-EV-0113
+`02e06211…`.
+
+### KF-4, `ip-teardown-price-gap` key fact 4 — **VERIFIED**
+
+The two clauses that were asserted as properties of YF-EV-0044 now carry their
+seat. "One seat found that the dataset's coding of demolitions changed in 2019
+and built its candidate frame out of the job description text instead" matches
+`round1/claude.json` in substance and in the direction of the finding, and the
+5,672 / 5,668 pair is that seat's own count. "The dataset page records that
+residential occupancy dates begin with permits finalized on or after 1 January
+2022" is verbatim page text — "Residential: Permits finalized on or after
+January 1, 2022." — and is now the only occupancy fact laid at the page's door.
+The 3,167 and 247 are attributed to "the seat that built the frame re-queried
+the endpoint", which is right: `round2/claude.json` records the 2026-09-02
+re-query, and it is the same seat as the round-one frame. The schema half and
+the blanked permit-number column verify against the page's embedded column
+payload as before.
+
+### KF-8, key fact 8 — **VERIFIED**
+
+The permit window is now the archive's own. "2024 to 2026
+small-scale-residential-zone building permits" matches the post's subtitle
+("Matching 2024–2026 building permits to City assessment data"), its key number
+("in the RS Zone from 2024–2026") and its consolidation note ("spanning the full
+2024–2026 timeframe"). The three counts stay verbatim — "Consolidating collapses
+1492 permits into 1242 distinct lots… Altogether, 1182 lots (95%) end up with
+both a 2024 baseline and a 2026 completed value." The uplift clause is correctly
+pinned to the narrower cohort: Table 2 is titled "measured from the completed
+2024 cohort" and its row reads "Per home added 67 $0.2M $0.2M", so "a median
+near $0.2 million per home added on rowhomes of five units or more" holds for
+net as well as gross. The non-convertibility sentence is `round2/gpt.json`
+verbatim in substance ("cannot be converted into one without the missing
+baseline and denominator").
+
+### Missing evidence 8 — **VERIFIED**
+
+"The run identified no complete public registry or source for these" is the
+artifacts' own scope: `round2/gpt.json` "no complete public registry was
+identified", `round1/claude.json` "No public holder identified." The universal
+negative is gone, and the holder parenthesis matches both seats' holder fields.
+This closes `faithfulness/gpt-2.md` item 11.
+
+### Story, the "Why it is unbuilt" bullet — **VERIFIED**
+
+Now "One seat found that the permit stream changed how it labels a demolition in
+2019… and that some rows filed under a house turn out to describe a garage" —
+the attribution the claim carries, in the same seat's voice, matching
+`round1/claude.json`. The bullet's second sentence, that occupancy dates thin
+out badly before 2021, sits inside that seat's bullet and is that seat's
+re-query result; it reads as attributed in place. Nothing in this bullet is now
+laid at the dataset page's door.
+
+### Story, the webdocs sentence and the mirrored Dawang sentence — **VERIFIED**
+
+The section 814 sentence reads "the archived webdocs consolidation of that
+section", and the `<Term>` gloss it carries is now `webdocs consolidation`,
+defined in `src/lib/glossary.ts` as the City's own web copy of a bylaw section
+served from webdocs, carrying the section text only. That matches the registry
+title, `round2/claude.json` ("the webdocs online consolidation"), and the
+archived bytes, which carry the 814.1 purpose, the 814.2 RF1-to-RF5 area of
+application and two bare references to an Appendix with no map. The wrong
+document type is gone; YF-EV-0102 is no longer implicated.
+
+The Dawang sentence in the story no longer asserts a permit window at all — "an
+independent August 2026 analysis that matched 1,242 lots and got values at both
+ends on 1,182 of them" — so the narrowing that failed the claim's version cannot
+recur here. "August 2026" matches "Published August 4, 2026", and "a median near
+$0.2 million per home added on the larger rowhomes" is Table 2's 5+ unit rowhome
+row, on the completed 2024 cohort the sentence names.
+
+### Registry lines
+
+**YF-EV-0044 — VERIFIED.** The `establishes` line now claims only schema,
+coverage and a correct negative: "All records start from January 1, 2009" is
+verbatim; WORK_TYPE, JOB_CATEGORY, JOB_DESCRIPTION, UNITS_ADDED, ADDRESS,
+LEGAL_DESCRIPTION and YEAR are all in the embedded column list; "To demolish a
+Single Detached House." is a top JOB_DESCRIPTION value at 1,476; and no LINC,
+title number or assessment account appears anywhere in the payload. It asserts
+no count and no query result.
+
+**YF-EV-0094 — VERIFIED.** Same page, second capture. The field list, the 2009
+coverage note and the page's update stamp are all in the bytes, as are
+BUILDING_TYPE, UNITS_ADDED and the Occupancy Date note. The added clause —
+"whether recorded house demolitions thin out after 2018 is a seat's tabulation
+of the data, not something the page carries" — is a correct negative: the page
+carries JOB_CATEGORY and YEAR cardinalities separately and never crossed, and no
+demolition series by year. "The archived bytes are the portal page, not the
+permit rows" is exactly right.
+
+### Counts
+
+| | Claim | Story | Total |
+|---|---|---|---|
+| Statements graded | 38 | 24 | **62** |
+| VERIFIED | 38 | 24 | **62** |
+| IMPRECISE | 0 | 0 | **0** |
+| UNSUPPORTED | 0 | 0 | **0** |
+| Skipped (affordability, gated 2026-09-01) | — | 4 | **4** |
+
+Registry lines re-read: 2 of 2 verified.
+
+`npm run validate` passes: 5 stories, 8 claims, 1 commitment, 6 topics, 113
+evidence entries.
+
+### Verdict
+
+**GATE PASS.**
+
+All five imprecisions are repaired at the source rather than papered over, and
+the two repairs that changed a fact rather than an attribution — the Dawang
+permit window and the document type behind section 814 — moved toward the
+archive, not away from it. The rule the first pass named holds in the reworded
+registry lines: YF-EV-0044 and YF-EV-0094 now establish the dataset's schema,
+description and cardinalities and nothing about what a query returns, and every
+count computed off the rows is carried by the seat that computed it.
