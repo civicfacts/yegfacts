@@ -50,7 +50,7 @@ const sections = toc(ladder.map((group) => ({ id: anchor(group.status), label: g
       <div class="mt-9 space-y-10">
         {ladder.map((group) => (
           <section id={anchor(group.status)}>
-            <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
+            <h2 class="font-sans text-xs font-semibold tracking-[0.09em] text-muted uppercase">
               {group.status}
             </h2>
             <ul class="mt-3 divide-y divide-rule border-t border-rule">
