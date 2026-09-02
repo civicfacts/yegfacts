@@ -6,7 +6,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PageToc from '../components/PageToc.astro';
 import ReportBox from '../components/ReportBox.astro';
-import { SITE } from '../lib/site';
+import { SITE, servedPath } from '../lib/site';
 import type { TocSection } from '../lib/toc';
 
 interface Props {
@@ -121,8 +121,8 @@ const pageTitle = title.includes(SITE.name)
   ? title
   : `${cutAtWord(title, TITLE_MAX)} — ${SITE.name}`;
 const metaDescription = cutAtSentence(description, DESCRIPTION_MAX);
-const path = Astro.url.pathname.replace(/\/$/, '') || '/';
-const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
+const path = servedPath(Astro.url.pathname);
+const canonical = new URL(path, Astro.site ?? SITE.url).href;
 const ogImage = new URL(og.src, Astro.site ?? SITE.url).href;
 
 /**
@@ -227,7 +227,20 @@ const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY
           : 'pt-9 pb-10',
       ]}
     >
-      <main id="main" data-pagefind-body={indexable ? '' : undefined}>
+      {/*
+        Pagefind takes a result's URL from the path of the file it indexed,
+        which under `build.format: 'file'` is `dist/about.html` — so a result
+        would link to `/about.html`. A `url` key in the page's metadata
+        overrides it, for the result link and for its sub-result anchors alike.
+        The served path, not the absolute canonical: Pagefind passes an
+        absolute URL through untouched, so every result on a preview build
+        would jump the reader to production.
+      */}
+      <main
+        id="main"
+        data-pagefind-body={indexable ? '' : undefined}
+        data-pagefind-meta={indexable ? `url:${path}` : undefined}
+      >
         {
           hasToc && (
             <details class="toc-disclosure mb-5 border-y border-rule lg:hidden" data-pagefind-ignore>

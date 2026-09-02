@@ -27,6 +27,17 @@ function commitSha() {
 export default defineConfig({
   site: 'https://yegfacts.ca',
   trailingSlash: 'never',
+  /*
+   * One HTML file per route — `dist/about.html`, not `dist/about/index.html`.
+   * Cloudflare Pages serves `about.html` at `/about` with no redirect and sends
+   * `/about/` back to `/about`; with the default directory layout it does the
+   * opposite, 308-ing every clean URL to the trailing-slash form. Every
+   * canonical tag, sitemap entry, feed link and ClaimReview url on this site is
+   * written without the slash, so the directory layout made all of them
+   * redirects and pointed each served page's canonical at a URL that bounced
+   * back to it. This is what makes `trailingSlash: 'never'` true on Pages.
+   */
+  build: { format: 'file' },
   integrations: [mdx()],
   vite: {
     plugins: [tailwindcss()],
