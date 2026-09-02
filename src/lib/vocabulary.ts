@@ -71,6 +71,16 @@ export const COMMITMENT_STATUSES = [
   'Assessed',
 ] as const;
 
+/** What a journal post is: a mistake owned, a method change, work built, a check run, numbers read, or a passing note. */
+export const JOURNAL_TYPES = [
+  'mistake',
+  'method',
+  'building',
+  'checking',
+  'numbers',
+  'aside',
+] as const;
+
 export type TopicSlug = (typeof TOPIC_SLUGS)[number];
 export type ReviewerVerdict = (typeof REVIEWER_VERDICTS)[number];
 export type CanonicalFinding = (typeof CANONICAL_FINDINGS)[number];
@@ -78,3 +88,4 @@ export type Confidence = (typeof CONFIDENCE_LEVELS)[number];
 export type PanelAgreement = (typeof PANEL_AGREEMENT_LEVELS)[number];
 export type StoryStatus = (typeof STORY_STATUSES)[number];
 export type CommitmentStatus = (typeof COMMITMENT_STATUSES)[number];
+export type JournalType = (typeof JOURNAL_TYPES)[number];
