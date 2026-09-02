@@ -53,13 +53,15 @@ const { groups, showStory = true } = Astro.props;
         )}
         <ul class:list={['divide-y divide-rule', group.label && 'mt-4']}>
           {group.rows.map(({ claim, story }) => (
-            <li
-              class:list={[
-                'border-l-[5px] py-6 pl-4 first:pt-0',
-                findingEdge(claim.data.finding),
-                'sm:grid sm:grid-cols-[minmax(0,1fr)_11rem] sm:gap-x-6',
-              ]}
-            >
+            <li class="py-6 first:pt-0">
+              {/* The bar sits on the content, inside the row's padding, so each row's bar stands alone. */}
+              <div
+                class:list={[
+                  'border-l-[5px] pl-4',
+                  findingEdge(claim.data.finding),
+                  'sm:grid sm:grid-cols-[minmax(0,1fr)_11rem] sm:gap-x-6',
+                ]}
+              >
               <p class="sm:col-start-1 sm:row-start-1">
                 <a
                   href={`/facts/${story.id}#${claim.data.id}`}
@@ -81,20 +83,24 @@ const { groups, showStory = true } = Astro.props;
               <small class="mt-2.5 block text-[0.9375rem] leading-normal font-medium text-ink tabular sm:col-span-2 sm:row-start-2 sm:mt-3.5 sm:flex sm:flex-wrap sm:items-baseline">
                 <span class="min-w-0 sm:flex-auto">
                   {showStory && (
+                    <a href={`/facts/${story.id}`} class="link">
+                      {story.data.title}
+                    </a>
+                  )}
+                  {/* Unanimous is the default and stays silent; Adjacent and Split are printed so a contested verdict is never taken for a firm one. */}
+                  {claim.data.panel_agreement !== 'Unanimous' && (
                     <Fragment>
-                      <a href={`/facts/${story.id}`} class="link">
-                        {story.data.title}
-                      </a>
-                      <span class="text-muted"> · </span>
+                      {showStory && <span class="text-muted"> · </span>}
+                      {claim.data.panel_agreement} panel
                     </Fragment>
                   )}
-                  {claim.data.panel_agreement} panel
                 </span>
                 <span class="text-muted sm:sr-only"> · </span>
                 <span class="font-semibold whitespace-nowrap sm:ml-auto sm:flex-[0_0_11rem]">
                   Verified <time datetime={story.data.last_verified}>{story.data.last_verified}</time>
                 </span>
               </small>
+              </div>
             </li>
           ))}
         </ul>
