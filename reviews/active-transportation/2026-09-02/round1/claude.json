@@ -1,0 +1,345 @@
+{
+  "reviewer": {
+    "provider": "anthropic",
+    "model_self_reported": "Claude Fable 5.1 (claude-fable-5-1)",
+    "runner_model": "claude-fable-5-1",
+    "runner_seat": "Claude Fable 5.1",
+    "runner_effort": "high"
+  },
+  "story": "active-transportation",
+  "round": 1,
+  "claims": [
+    {
+      "id": "at-100m-vs-snow",
+      "proposition_evaluated": "The $100 million approved for capital profile CM-20-0330 (Active Transportation Implementation Acceleration - Approach 3, 2023-2026) is almost double (ratio at least 1.8) the City of Edmonton's annual Snow and Ice Control gross expenditure budget, primary denominator the approved 2022 gross budget, alternative the approved 2023 gross budget.",
+      "interpretation_notes": "MATERIAL FRAMING CONCERN. The brief fixes the primary denominator as 'the approved 2022 gross Snow and Ice Control expenditure budget, the annual budget in force when the statement was captured'. The public record holds two different 'approved 2022' gross figures and the verdict word flips between them. (1) The base annual budget: the Approved 2019-2022 Operating Budget, Parks and Roads Services branch summary by program (PDF p.209, printed p.205, $000s), shows Snow and Ice Control net expenditure and transfers of 63,666 for 2022 (revenue and transfers 13). Ratio 100,000/63,666 = 1.571, Partially supported under both cutoff sets. (2) The budget in force on 2022-12-12 as amended in-year: the Operating Financial Update - December 31, 2022 (FCS01656, Attachment 1, supplemental table p.38 of 45, $000s) prints Snow and Ice Control Budget: Revenue 23,108, Expense 79,474, Net Position (56,366), with no COVID adjustment column entries; the 2022 Budget Highlights (p.101) records that Council added $14.3 million one-time from the Financial Stabilization Reserve at the Spring 2022 adjustment for the enhanced snow-clearing pilot, and CO01733 records a further one-time $4.7 million on 2022-07-04. So about $19 million of the 79,474 is one-time reserve-funded top-up after a severe winter, which is why the 2022 revenue line (23,108) is ten times the 2023-2025 revenue lines (2,401; 2,143; 967). Ratio 100,000/79,474 = 1.258: Contradicted under the primary cutoffs, Partially supported under the alternative cutoffs (1.25 threshold, by 0.008). 'In force' points to reading (2); 'the City's annual snow-clearing budget' in ordinary speech points to reading (1). The framing I would use: the base approved annual budget excluding one-time in-year additions (reading 1), with the amended figure and the net tax-levy figure reported beside it; or the brief should say explicitly that in-year one-time additions count. I answer under reading (1) because it is the 'approved' annual budget a resident would find in the budget book and because the amended figure is dominated by one-time money; the classification under reading (2) is reported here so synthesis can substitute it. Alternative denominator, 2023 approved gross: the Parks and Roads Services Annual Service Plan 2022/2023, Appendix A Financial Summary, '2023 BUDGET (000s)': Snow and Ice Control Expenses 62,288, Recovery (1,128), Revenue (63), Net 61,097. Ratio 1.605, Partially supported under both cutoff sets. The Operating Financial Update - December 31, 2023 (FCS02229, Attachment 1 supplemental table) prints the 2023 year-end budget as Expense 63,574, Revenue 2,401, Net (61,173); ratio 1.573, also Partially supported. Net tax-levy 2022 (56,366): ratio 1.774, Partially supported under primary cutoffs, Supported under alternative cutoffs (at least 1.7). Under every reading the failing part of the proposition is the word 'double': no published annual figure gives a ratio of 1.8 or more, and the highest (1.77) is the 2022 net figure. The holder's page gives no figure and no source, so nothing establishes that it used the proposed 2023 figure. The CM-20-0330 figure is confirmed from the profile sheet (Capital Budget p.540-543, $000s: 5,950 / 26,750 / 33,650 / 33,650 = 100,000, Tax-Supported Debt, Service Category blank) and the council minutes (Capital Budget Amendment 7 as re-stated, Carried 9 to 4). No constant-dollar restatement was applied.",
+      "verdict": "Partially supported",
+      "confidence": "Moderate",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Capital profile CM-20-0330 is approved at $100,000 thousand for 2023-2026: 5,950 (2023), 26,750 (2024), 33,650 (2025), 33,650 (2026), funded by Tax-Supported Debt; Service Category field is blank; profile type Composite; estimated completion December 2030.",
+          "source_title": "City of Edmonton 2023-2026 Capital Budget (adopted), Appendix A capital profile CM-20-0330, pp.540-543, and List of Capital Profiles by Asset Category p.103",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-2026CapitalBudget.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2023-02-09 (printed date on profile sheets; budget adopted 2022-12-16)",
+          "source_type": "policy-document",
+          "establishes": "The approved amount, its years and per-year allocation, printed in $000s.",
+          "quote": "Current Approved Budget - - 5,950 26,750 33,650 33,650 - - - - - 100,000",
+          "strength": "strong"
+        },
+        {
+          "finding": "Council approved Capital Budget Amendment 7, re-stated by the Mayor, creating profile CM-20-0330 for $100,000,000 ($5,950,000 in 2023, $26,750,000 in 2024, $33,650,000 in 2025, $33,650,000 in 2026) from Tax-Supported Debt; Carried 9 to 4 (Hamilton, Cartmell, Rice, Principe opposed). Alternative amendments for $30M (Cartmell), $50M (Tang), $95.766M (Wright) and $201M to 2030 (Janz) were withdrawn. Operating impacts of the profile ($432K 2023, $315K 2024, $550K 2025, $499K 2026 Parks and Roads; $111K 2026 Fleet) were approved 10 to 3.",
+          "source_title": "City Council Non-Statutory Public Hearing - Budget, Post-Meeting Minutes (November 28 to December 16, 2022), items 12.9 and 13.84",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Id=215a3a89-60c7-4eff-8533-cf94079fabd2&Agenda=PostMinutes&lang=English",
+          "source_publisher": "City of Edmonton, Office of the City Clerk",
+          "source_date": "2022-12-16",
+          "source_type": "legal-audited",
+          "establishes": "That the $100 million program was approved by council in December 2022 with the stated cash flow; agenda page https://pub-edmonton.escribemeetings.com/Meeting.aspx?Id=215a3a89-60c7-4eff-8533-cf94079fabd2&Agenda=Agenda&lang=English&Item=34&Tab=attachments",
+          "quote": "for $100,000,000 ($5,950,000 in 2023, $26,750,000 in 2024, $33,650,000 in 2025, and $33,650,000 in 2026) ... Carried (9 to 4)",
+          "strength": "strong"
+        },
+        {
+          "finding": "The Approved 2019-2022 Operating Budget, Parks and Roads Services 'Branch Summary by Program' ($000), lists Snow and Ice Control net expenditure and transfers of 65,032 (2019), 64,666 (2020), 64,166 (2021) and 63,666 (2022), with revenue and transfers of 13 per year. $100 million is 1.571 times the 2022 figure.",
+          "source_title": "City of Edmonton Approved 2019-2022 Operating Budget, Parks and Roads Services branch summary by program (PDF p.209, printed p.205)",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/assets/APPROVED_2019-2022_OPERATING_BUDGET.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2018-12 (budget approved December 2018)",
+          "source_type": "policy-document",
+          "establishes": "The base approved annual Snow and Ice Control budget for 2022 before in-year one-time additions; $100 million is well above it but not double.",
+          "quote": "Snow and Ice Control 50,852 65,766 65,032 64,666 64,166 63,666",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The 2023 Snow and Ice Control budget as published by the branch: Expenses $62,288 thousand, Recovery $(1,128), Revenue $(63), Net $61,097. $100 million is 1.605 times the gross figure and 1.637 times the net.",
+          "source_title": "Parks and Roads Services Annual Service Plan 2022/2023, Appendix A Financial Summary, '2023 BUDGET (000s)' (printed p.44, PDF p.46)",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2022-2023-Parks-and-Roads-Services-Annual-Service-Plan.pdf",
+          "source_publisher": "City of Edmonton, City Operations",
+          "source_date": "2023 (plan for 2022/2023)",
+          "source_type": "policy-document",
+          "establishes": "The 2023 approved gross and net Snow and Ice Control budget (alternative denominator).",
+          "quote": "Snow and Ice Control $ 62,288 $ (1,128) $ (63) $ 61,097",
+          "strength": "moderate"
+        },
+        {
+          "finding": "In December 2022 council funded the Enhanced Snow and Ice Control Service Standards package at 20 per cent: 2023 $274,600 (Community Standards) plus $3,768,000 (Parks and Roads); 2024 $3,724,800; 2025 $2,476,800; 2026 $721,400, Carried 12 to 1 (Janz opposed). The Operating Budget document prints the package at $4,043K (2023), $3,725K (2024), $2,477K (2025), $721K (2026) and summarises it as '$11.0 million for enhanced snow and ice control'.",
+          "source_title": "Budget minutes item 13.18 (Operating Budget Amendment 18); 2023-2026 Operating Budget and Plans pp.23 and 105-106",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-2026OperatingBudget.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-12-16",
+          "source_type": "policy-document",
+          "establishes": "The 2023-2026 snow enhancement approved in the same deliberations; the Operating Budget document itself publishes Snow and Ice Control only inside the Parks and Roads Services branch totals, not as a program line.",
+          "quote": "$11.0 million for enhanced snow and ice control.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The advocacy page, captured by the Wayback Machine on 2022-12-12 and still live on 2026-09-02, says: 'spending $100 million on more bike lanes'; 'the $100 million he wants to spend on Bike Lanes is almost 5 times the amount he wants to spend on affordable housing'; 'In fact, it's almost double the City's annual snow-clearing budget!' It gives no snow figure and no source, and describes the $100 million as 'approved as an amendment to the budget by a 9-4 vote on Friday'.",
+          "source_title": "Common Sense Edmonton, 'Stop The Bike Lane Boondoggle' (Wayback capture 2022-12-12 05:58:23 and live page)",
+          "source_url": "https://web.archive.org/web/20221212055823/https://www.commonsenseedmonton.com/stop_the_bike_lane_boondoggle",
+          "source_publisher": "Common Sense Edmonton",
+          "source_date": "2022-12-12 (capture); live at https://www.commonsenseedmonton.com/stop_the_bike_lane_boondoggle on 2026-09-02",
+          "source_type": "advocacy",
+          "establishes": "The holder's exact wording and that no denominator was stated; nothing establishes use of the proposed 2023 figure. The page lists petition signers' names, which are not reproduced here.",
+          "quote": "In fact, it's almost double the City's annual snow-clearing budget!",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The City's year-end report for 2022 prints Snow and Ice Control 2022 Budget: Revenue 23,108; Expense 79,474; Net Position (56,366); Actual: Revenue 22,964; Expense 97,571; Net (74,607); variance (18,241), explained as $13.0 million January-April and $5.0 million October-December over budget 'in addition to the Council approved one-time funding for the enhanced residential snow removal pilot'. $100 million is 1.258 times the 79,474 gross budget in force at year-end 2022 and 1.025 times 2022 actual expenditure.",
+          "source_title": "Operating Financial Update - December 31, 2022, Attachment 1 (FCS01656), supplemental table p.38 of 45 and narrative p.11",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=178634",
+          "source_publisher": "City of Edmonton, Financial and Corporate Services",
+          "source_date": "2023-03-14",
+          "source_type": "analytical-report",
+          "establishes": "The 2022 gross and net Snow and Ice Control budget as amended in-year, and 2022 actual expenditure; under this gross figure the ratio falls below 1.5. Agenda page: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=6211ce95-0dbd-439c-8cf1-42eb46ca3e50&Item=28&Tab=attachments&lang=English",
+          "quote": "Snow and Ice Control Revenue 23,108 - 23,108 22,964 (144) (0.6) Expense 79,474 - 79,474 97,571 (18,097) (22.8)",
+          "strength": "strong"
+        },
+        {
+          "finding": "Council's Spring 2022 Supplemental Operating Budget Adjustment added $14,300 thousand one-time to Parks and Roads Services for 'Enhanced Snow Clearing Pilot costs (total costs of $16.6 M, less $2.3M from 2021 program surplus approved by Council on March 14, 2022)', funded by transfer from the Financial Stabilization Reserve; CO01733 records a further one-time $4.7 million approved 2022-07-04. These one-time additions explain most of the gap between the base 2022 budget (63,666) and the amended year-end budget (79,474).",
+          "source_title": "2022 Budget Highlights, '2022 Operating Budget Changes' (PDF p.101, printed p.98); CO01733 Snow and Ice Control 2022-23 Winter Season Results, p.3",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2022BudgetHighlights.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022 (Spring 2022 adjustment); CO01733 dated 2023-06-19",
+          "source_type": "policy-document",
+          "establishes": "That the 2022 budget in force in December 2022 included roughly $19 million of one-time, reserve-funded snow money, so the 'in force' and 'base approved' readings of the primary denominator differ.",
+          "quote": "Enhanced Snow Clearing Pilot costs (total costs of $16.6 M, less $2.3M from 2021 program surplus ...) ( 14,300)",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Administration reported that as part of the 2022 budget deliberations Council increased the Snow and Ice Control budget by $4 million (2023), $3.7 million (2024), $2.5 million (2025) and $0.72 million (2026), 'This results in a $68.5 million Snow and Ice Control budget in 2026, which includes operational funding for Parks and Roads Services and Community Standards and Neighbourhoods.' Attachment 2 is a stacked bar chart by winter season (2022-23 to 2025-26) with no printed values; it shows a base budget a little under $60 million with the approved increments on top and an unfavourable variance for 2022-23.",
+          "source_title": "CO01733 Snow and Ice Control 2022-23 Winter Season Results, council report p.5, and Attachment 2 Snow and Ice Control Budget (2022-26)",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=189920",
+          "source_publisher": "City of Edmonton, City Operations",
+          "source_date": "2023-06-19",
+          "source_type": "analytical-report",
+          "establishes": "The approved 2026 snow budget ($68.5M) and the annual increments; $100 million is 1.46 times the 2026 figure. Attachment 2 at https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=189922 cannot supply exact yearly figures because the chart has no data labels and is by season, not calendar year. Agenda page: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=e47d4d08-6ac8-485a-a99a-8e8111148e93&Item=23&Tab=attachments&lang=English",
+          "quote": "This results in a $68.5 million Snow and Ice Control budget in 2026",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Year-end reports print Snow and Ice Control budget and actual ($000s): 2023 Budget Expense 63,574 / Revenue 2,401 / Net (61,173), Actual Expense 54,917 / Net (52,555); 2024 Budget Expense 67,090 / Revenue 2,143 / Net (64,947), Actual Expense 72,086; 2025 Budget Expense 67,554 / Revenue 967 / Net (66,587), Actual Expense 76,648. $100 million is 1.49 times the 2024 and 1.48 times the 2025 gross budget.",
+          "source_title": "Operating Financial Update Attachment 1 for December 31, 2023 (FCS02229, supplemental table), December 31, 2024 (FCS02841, p.18 and p.59) and December 31, 2025 (FCS03314, p.16 and p.55)",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=252517",
+          "source_publisher": "City of Edmonton, Financial and Corporate Services",
+          "source_date": "2024-03-12; 2025-03-18; 2026-03-17",
+          "source_type": "analytical-report",
+          "establishes": "Annual snow budgets and actuals for 2023-2025 (2023: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=215334 ; 2025: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=291514 ). No year's gross budget yields a ratio of 1.8.",
+          "quote": "Snow and Ice Control Revenue 2,143 2,116 (27) (1.3) Expense 67,090 72,086 (4,996) (7.4) Net Position (64,947) (69,970) (5,023) (7.7)",
+          "strength": "strong"
+        },
+        {
+          "finding": "Media at the time reported the snow budget in net terms close to the City's net figures: Global News (2022-12-20) 'base snow and ice funding, $63.6 million' plus $4.7 million for 2022 and 'The total amount of money going towards snow and ice removal in 2023 will be $60.9 million'; CBC (2022-12-20) 'The total budget for snow clearing was just under $62 million' for 2022 and $56.9 million set for 2023 before the $4 million increase.",
+          "source_title": "Global News, 'Major changes to Edmonton snow clearing not expected following budget cut: city'; CBC News, 'What got funded, and what didn't, in Edmonton city council's budget debate'",
+          "source_url": "https://globalnews.ca/news/9359815/edmonton-snow-budget-changes",
+          "source_publisher": "Global News; CBC News",
+          "source_date": "2022-12-20",
+          "source_type": "media",
+          "establishes": "Only that contemporaneous reporting put the annual snow budget at roughly $57-64 million, consistent with the base figures above and inconsistent with any denominator near $50 million that 'almost double' would need (CBC: https://www.cbc.ca/news/canada/edmonton/what-got-funded-and-what-didn-t-in-edmonton-city-council-s-budget-debate-1.6691557).",
+          "quote": "The total amount of money going towards snow and ice removal in 2023 will be $60.9 million.",
+          "strength": "weak"
+        }
+      ],
+      "limitations": [
+        "Verdict figure and classifications ($000s, nominal): primary denominator, base approved 2022 gross 63,666 -> ratio 1.571 -> Partially supported (primary cutoffs) / Partially supported (alternative cutoffs). Same denominator read as the 2022 budget in force at year-end, 79,474 -> 1.258 -> Contradicted (primary) / Partially supported (alternative). Alternative denominator, approved 2023 gross 62,288 -> 1.605 -> Partially supported / Partially supported; 2023 year-end budget 63,574 -> 1.573 -> Partially supported / Partially supported. The finding is definition-sensitive only if the amended 2022 figure is used.",
+        "Net tax-levy ratio (qualification 3): 2022 net budget 56,366 -> 1.774 -> Partially supported (primary) / Supported (alternative); 2023 net 61,097 -> 1.637 -> Partially supported under both.",
+        "Like-for-like (qualification 1a), approved CM-20-0330 allocation against the same year's snow budget: 2023 5,950 / 62,288 = 0.096; 2024 26,750 / 67,090 = 0.399; 2025 33,650 / 67,554 = 0.498; 2026 33,650 / 68,500 (CO01733 figure) = 0.491. Approved average 25,000 per year against snow budgets of 62,288-68,500 = about 0.37-0.40.",
+        "Like-for-like (qualification 1b), whole $100,000 against four years of snow budgets 62,288 + 67,090 + 67,554 + 68,500 = 265,432 -> 0.377 (using the 2023 year-end budget 63,574 instead: 266,718 -> 0.375). The 2024 and 2025 figures are year-end budgets after in-year adjustments; the 2026 figure is the December 2022 approval as stated in CO01733, since the 2026 Approved Operating Budget document prints no Snow and Ice Control line.",
+        "Actuals (qualification 2), from cumulative CM-20-0330 'To-Date Actuals' in the Capital Financial Updates: 807 at 2023-12-31; 10,496 at 2024-12-31; 25,093 at 2025-09-30; 39,984 at 2025-12-31. Yearly: 2023 = 807; 2024 = 10,496 - 807 = 9,689; 2025 = 39,984 - 10,496 = 29,488; total spent to 2025-12-31 = 39,984 (40.2 per cent of the amended 99,570; 40.0 per cent of 100,000); actual average 2023-2025 = 13,328 per year. Against snow actual expenditure: 2023 807 / 54,917 = 0.015; 2024 9,689 / 72,086 = 0.134; 2025 29,488 / 76,648 = 0.385. 2022 snow actual (context only) 97,571 -> $100M is 1.025 times it.",
+        "The 2019-2022 budget's 2022 column was set in December 2018 and could have been altered by the Fall 2021 adjustment that fixed the 2022 budget; the 2022 Budget Highlights show only branch-level changes, so a small difference from 63,666 in the budget approved in December 2021 cannot be excluded. The 2022 year-end 'Budget' column shows no adjustment entries for Snow and Ice Control, so the 79,474 figure is the in-force budget including the one-time additions.",
+        "The 2023 Snow and Ice Control figure in the service plan (62,288) is labelled '2023 BUDGET' but the plan's publication date is not printed; the year-end 2023 budget (63,574) includes any 2023 in-year adjustments. Either gives the same classification.",
+        "Attachment 2 to CO01733 (the brief's named source) is an unlabelled chart by winter season; its approximate bar heights (about $57-58M base, rising to about $67M by 2025-26) are consistent with the figures used but were not used for any ratio.",
+        "The 2023-2026 Operating Budget document publishes Snow and Ice Control only inside the Parks and Roads Services branch totals (2022 adjusted expenditure 227,146; 2023 232,498, $000s) and in the enhancement service package; it does not print a program-level snow budget, so the operative figures come from the branch service plan and the City's year-end financial updates.",
+        "No constant-dollar restatement applied (qualification 4).",
+        "The affordable-housing comparison on the same page was not tested; for context, council's minutes record Amendment 6 increasing profile 19-90-4100 Affordable Housing Land Acquisition by $91,700,000 (2023-2026) and CBC/Global reported $22.9 million for 2023; the page does not say which figure it compared against."
+      ],
+      "unknowns": [
+        "Which figure, if any, the holder used as 'the City's annual snow-clearing budget'; the page names none. A denominator of about $52-55 million would be needed for 'almost double' at the 1.8 threshold, and no published annual budget figure is that low except the 2022 net tax-levy figure (56,366) at 1.77.",
+        "The exact Snow and Ice Control budget for 2022 as approved in December 2021 (program level), and how much of the 2022 year-end revenue line of 23,108 is reserve transfer versus recoveries.",
+        "Whether any 2026 in-year adjustment changed the 2026 Snow and Ice Control budget from the $68.5 million approved in December 2022 (the Spring 2026 adjustment was not located)."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Program-level Snow and Ice Control gross expenditure budget for 2022 as approved in December 2021 and as amended at each 2022 adjustment (spring, July, fall), reconciling 63,666 to 79,474.",
+          "likely_holder": "City of Edmonton Financial and Corporate Services (Budget Office)",
+          "importance": "high"
+        },
+        {
+          "description": "The 2026 Snow and Ice Control budget as currently approved (after Fall 2025 and Spring 2026 adjustments).",
+          "likely_holder": "City of Edmonton Financial and Corporate Services",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "All ratios above use $000s from the City documents divided into 100,000; the article should state which 2022 figure it uses (base 63,666 or in-force 79,474) because the classification differs.",
+        "Actual CM-20-0330 spending by year is derived by differencing cumulative 'To-Date Actuals' (807; 10,496; 39,984); the City does not print yearly actuals for the profile."
+      ],
+      "what_would_change_my_verdict": [
+        "A City document showing the 2022 approved gross Snow and Ice Control budget at or below 55,556 ($000s) would make the ratio at least 1.8 and the verdict Supported.",
+        "A ruling by the brief that the primary denominator is the 2022 budget as amended in-year (79,474) would make the verdict Contradicted under the primary cutoffs (ratio 1.258).",
+        "Evidence that the holder used the 2022 net tax-levy figure (56,366) together with the alternative cutoffs would make the verdict Supported (ratio 1.774)."
+      ],
+      "suggested_one_line": "$100 million is about 1.5 to 1.6 times a year's approved snow-and-ice budget (roughly $62-64 million in 2022 and 2023), well above it but not 'almost double'; only the 2022 net tax-levy figure gets close (1.77), and against the 2022 budget as topped up after that winter it is only 1.26 times.",
+      "suggested_short_answer": "Council approved $100 million for the bike-network program (profile CM-20-0330) over 2023-2026. The City's approved Snow and Ice Control budget was $63.7 million for 2022 (base budget) and $62.3 million for 2023, so $100 million is about 1.6 times one year of snow clearing, not double. The 2022 budget actually in force by December 2022 had been topped up with about $19 million of one-time money, to $79.5 million, which makes the ratio 1.26. On the 2022 net tax-levy figure ($56.4 million) the ratio is 1.77. Like for like, the program's average $25 million a year is about 0.4 of a year's snow budget, and its actual spending was $0.8 million in 2023, $9.7 million in 2024 and $29.5 million in 2025 against snow spending of $54.9 million, $72.1 million and $76.6 million.",
+      "suggested_tldr": [
+        "$100 million approved for bike-network profile CM-20-0330, 2023-2026, approved 2022-12-09 by a 9-4 vote.",
+        "Approved snow-and-ice budget: $63.7M (2022 base), $62.3M (2023); ratio about 1.6, not 1.8.",
+        "2022 budget as amended in-year was $79.5M (ratio 1.26); 2022 net tax levy $56.4M (ratio 1.77).",
+        "Per year, the program averages $25M against $62-69M of snow budget; spent $40.0M by end of 2025."
+      ]
+    },
+    {
+      "id": "at-100m-vs-roads",
+      "proposition_evaluated": "In the City's 2023-2026 capital budget as adopted in December 2022, roads get $1.8 billion, about eighteen times the $100 million for bike lanes; verdict figure is the 2023-2026 approved total of profiles with Service Category 'Roads' or 'Neighbourhood Renewal' plus the three vehicle-carrying bridge profiles, less the two predeclared exclusions.",
+      "interpretation_notes": "Quotation discrepancy: the Global News report of 2022-12-12 quotes Councillor Janz as saying 'Only $100 million is going to bike lanes but $1.8 billion, 180 times as much, is going towards roads.' $1.8 billion is 18 times $100 million, not 180. No other record of the statement was found: the council minutes record motions and votes, not debate speech; Global News's 2022-12-09 article, CBC's 2022-12-09 article and Taproot's 2022-12-12 article do not carry the quotation; council meeting video was not reviewed. The figure appears only as '180' in the one record found. Source of the $1.8 billion: Table 8 of the adopted Capital Budget gives 'Active Pathways and Roads Service' at $1,794.0 million for 2023-2026, which rounds to $1.8 billion; that line includes CM-20-0330 itself and the other active-pathway profiles, so the councillor's figure appears to be the combined service line, not a roads-only total. Membership check against the profile sheets: every profile in the editor's reading carries the stated label (18 'Roads' profiles, 11 'Neighbourhood Renewal' profiles); the three bridges (23-24-0300, 21-24-9301, 21-24-9302) carry no Service Category; the two exclusions 21-20-2100 and 14-66-2570 do carry 'Roads' as the brief says. One label differs from the brief's description of the widest reading: 21-50-9100 103A Avenue Pedway carries Service Category 'Economic Development', not a blank; the other five widest-reading profiles are blank. CM-20-0330's own sheet has a blank Service Category. Two blank-category transportation profiles sit outside every reading: CM-29-0000 Transportation - Minor Renewal Program (15,000) and 21-31-9100 Rundle Park Road and Parking Lot Renewal (181). Results ($000s): primary roads-only total 1,945,703 = $1.946 billion, ratio 19.46 -> Supported under both cutoff sets (at least 1.5B; at least 1.62B). Required alternative, 'Active Pathways and Roads Service' 1,794.0 million, ratio 17.94 -> Supported under both, reported as the combined service allocation, not a roads total. Widest 2,025,848 (ratio 20.26) -> Supported; narrowest (Service Category 'Roads' only) 1,116,532 (ratio 11.17) -> Partially supported under both sets. The finding is not definition-sensitive between the primary and the required alternative; it becomes Partially supported only on the narrowest reading, which drops Neighbourhood Renewal (722,289) and the bridges (106,882).",
+      "verdict": "Supported",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Sum of 2023-2026 approved amounts (Appendix A, $000s) for the primary boundary = 1,945,703. Service Category 'Roads' (sheet page in brackets): 18-66-6503 50 Street CPR Grade Separation 94,202 (p.537); 19-22-9006 Terwillegar Drive Expressway Upgrades 119,200 + 41,821 = 161,021 (p.600, two lines); 21-20-9301 Yellowhead Trail 156 St to St Albert Trail 54,634 (p.645); 21-20-9302 Yellowhead Trail Fort Road Widening 54,597 (p.647); 21-40-9031 Winterburn Industrial Road Upgrading 12 (p.643); 21-40-9032 Mistatim and Southeast Industrial Road Upgrading 10 (p.589); 22-22-9700 124 Street 109-118 Avenue 10,056 (p.532); 22-22-9701 Gateway Blvd Renewal 5,094 (p.561); CM-20-2020 Transportation Planning and Design Growth 9,007 (p.628); CM-22-0000 Goods Movement Arterial Renewal 64,843 (p.619); CM-24-0000 Bridges and Auxiliary Structures Renewal 209,836 (p.613); CM-26-0000 Traffic Systems Renewal 9,308 (p.636); CM-66-2194 Regulated Safety Upgrades at Railway Crossings 720 (p.594); CM-66-2525 Traffic Signals Developer and ARA Funded 16,000 (p.603); CM-66-2585 Safe Crossings 25,875 (p.434); CM-66-2596 Safe and Livable Community Streets 17,148 (p.430); CM-99-0060 Yellowhead Freeway Conversion Project Development 7,914 (p.653); CM-99-9600 Yellowhead Freeway Conversion Project Delivery 376,255 (p.650); subtotal 1,116,532. Service Category 'Neighbourhood Renewal': 20-40-9017 Eastwood/Elmwood Park 4,658 (p.412); 20-40-9019 Lorelei 721 (p.424); 21-40-9023 Beaumaris 14,652 (p.421); 21-40-9024 Calder 22,047 (p.409); 21-40-9025 Garneau 9,780 (p.415); 21-40-9026 Malmo Plains 2,100 (p.418); 21-40-9027 North Glenora Alleys 464 (p.406); 22-40-9028 Killarney 17,130 (p.403); 22-40-9029 Pleasantview 23,710 (p.427); CM-25-0000 Transportation: Neighbourhoods Renewal 545,717 (p.443); CM-27-0000 Neighbourhood Alley Renewal 81,310 (p.438); subtotal 722,289. Bridges (no Service Category): 23-24-0300 High Level Bridge Rehabilitation 97,000 (p.567); 21-24-9301 Latta Bridge Replacement 9,832 (p.573); 21-24-9302 Glenora Bridge Renewal 50 (p.564); subtotal 106,882. Amounts are from the List of Capital Profiles by Asset Category, pp.97-105 (Neighbourhoods section pp.100-101, Transportation section pp.102-104).",
+          "source_title": "City of Edmonton 2023-2026 Capital Budget (adopted), Appendix A: List of Capital Profiles by Asset Category ($000's) pp.97-105 and individual profile sheets",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-2026CapitalBudget.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-12-16 (adopted); sheets printed 2023-02-09",
+          "source_type": "policy-document",
+          "establishes": "The roads-only approved total under the City's own labels: $1,945.7 million, 19.5 times $100 million.",
+          "quote": "Service Category: Roads   Major Initiative:",
+          "strength": "strong"
+        },
+        {
+          "finding": "Table 8, Adopted Capital Budget by Service ($millions), Movement of People and Goods: 'Active Pathways and Roads Service' Growth 622.8, Renewal 1,171.2, Total 2023-2026 1,794.0, 2027 and beyond 108.6, overall 1,902.6; Transit Service 446.5; Parking Service 15.5; total Movement of People and Goods 2,256.0. Transformational projects: LRT Expansion 2,374.9; Yellowhead Trail Freeway Conversion 493.4. Grand Total 2023-2026 7,192.5 (matches the Appendix A total 7,192,540 thousand).",
+          "source_title": "City of Edmonton 2023-2026 Capital Budget (adopted), Table 8 - Adopted Capital Budget by Service, pp.56-57",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-2026CapitalBudget.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-12-16",
+          "source_type": "policy-document",
+          "establishes": "The required alternative (combined service line) and the denominators for the share calculations; the $1.8 billion figure matches this combined line, which includes active pathways.",
+          "quote": "Active Pathways and Roads Service 622.8 1,171.2 1,794.0 5.6 103.0 108.6 1,902.6",
+          "strength": "strong"
+        },
+        {
+          "finding": "Global News quoted Councillor Michael Janz on 2022-12-12: 'Only $100 million is going to bike lanes but $1.8 billion, 180 times as much, is going towards roads.' The same outlet reported on 2022-12-09 that council approved $100 million for bike infrastructure over four years by a 9-4 vote.",
+          "source_title": "Global News, 'City council hearing mixed reaction on $100 million to Edmonton bike plan' (Stephanie Swensrude)",
+          "source_url": "https://globalnews.ca/news/9343735/edmonton-bike-plan-100-million-reaction/",
+          "source_publisher": "Global News",
+          "source_date": "2022-12-12",
+          "source_type": "media",
+          "establishes": "The circulating form and that the record has '180', not '18' (2022-12-09 article: https://globalnews.ca/news/9338993/edmonton-city-council-100-million-bike-lanes).",
+          "quote": "Only $100 million is going to bike lanes but $1.8 billion, 180 times as much, is going towards roads.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Council created CM-20-0330 at $100,000,000 over 2023-2026 by Capital Budget Amendment 7 (re-stated), Carried 9 to 4, during the budget hearing continued to 2022-12-16.",
+          "source_title": "City Council Non-Statutory Public Hearing - Budget, Post-Meeting Minutes, item 12.9",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Id=215a3a89-60c7-4eff-8533-cf94079fabd2&Agenda=PostMinutes&lang=English",
+          "source_publisher": "City of Edmonton, Office of the City Clerk",
+          "source_date": "2022-12-16",
+          "source_type": "legal-audited",
+          "establishes": "The $100 million numerator as approved.",
+          "quote": "In Favour (9) A. Knack, A. Paquette, A. Sohi, A. Salvador, M. Janz, K. Tang, E. Rutherford, A. Stevenson, and J. Wright Opposed (4) S. Hamilton, T. Cartmell, J. Rice, and K. Principe Carried (9 to 4)",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "On the narrowest reading (Service Category 'Roads' only, without Neighbourhood Renewal and without the bridges) the total is 1,116,532 thousand, 11.2 times $100 million, below the $1.5 billion threshold. Neighbourhood Renewal profiles (722,289) fund whole-neighbourhood reconstruction including sidewalks, alleys and streetlights, and CM-25-0000 alone is 545,717; whether all of that is 'roads' is a labelling choice.",
+          "source_title": "City of Edmonton 2023-2026 Capital Budget (adopted), Appendix A pp.100-101 and profile sheets pp.403-443",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-2026CapitalBudget.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-12-16",
+          "source_type": "policy-document",
+          "establishes": "That the Supported classification depends on counting Neighbourhood Renewal as roads; excluding it gives Partially supported.",
+          "quote": "Service Category: Neighbourhood Renewal",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The $1,794.0 million 'Active Pathways and Roads Service' line that matches the councillor's '$1.8 billion' contains CM-20-0330 (100,000) and the other active-pathway and streetscape profiles (for example Missing and Enhanced Sidewalk Connections 13,615; Edmonton-Strathcona County Pedestrian Bridge 30,205; 103A Avenue Pedway 25,400; 170 Street Pedestrian Bridge 471), so as a 'roads' figure it double counts the bike money it is being compared with.",
+          "source_title": "City of Edmonton 2023-2026 Capital Budget (adopted), Table 8 p.56 and Appendix A pp.102-104",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/2023-2026CapitalBudget.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2022-12-16",
+          "source_type": "policy-document",
+          "establishes": "That the combined service line is not a roads-only total; the roads-only total under the City's labels is nonetheless higher (1,945.7 million) because the bridges and Neighbourhood Renewal profiles listed under other asset categories are included.",
+          "quote": "Included within the Active Pathways and Roads Service are projects under the Neighbourhood and",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The profile budgets have moved since adoption. The Spring 2025 Supplemental Capital Budget Adjustment (approved 2025-06-10) transferred $430,000 of Tax-Supported Debt ($20,000 in 2025, $410,000 in 2026) out of CM-20-0330 into the new standalone profile 25-25-9506 Dunluce Neighbourhood and Alley Renewal, reducing CM-20-0330 to 99,570; the Capital Financial Updates for 2025-09-30 and 2025-12-31 show its Current Approved Budget at 99,570. No other amendment to CM-20-0330 was found in the Spring 2023, Fall 2023, Spring 2024, Fall 2024, Spring 2025 or Fall 2025 adjustments. Roads profiles changed more: the Capital Financial Update as of 2025-12-31 shows Terwillegar Drive (19-22-9006) with a total profile budget of 327,220 against an original 102,700, and 50 Street CPR Grade Separation (18-66-6503) 181,508 against 86,600 (total-profile figures, not 2023-2026 only), while composite renewal profiles show smaller current budgets (CM-22-0000 29,492; CM-24-0000 56,078; CM-25-0000 48,522) because work was split into standalone profiles.",
+          "source_title": "FCS02852 Attachment 4 Spring 2025 SCBA Budget Adjustments (p.1); FCS03313 Attachment 2 Significant Capital Project Update as of December 31, 2025",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=261605",
+          "source_publisher": "City of Edmonton, Financial and Corporate Services",
+          "source_date": "2025-06-10; 2026-03-17",
+          "source_type": "analytical-report",
+          "establishes": "The only amendment to CM-20-0330 (-$430K, 2025-06-10) and that a roads-only 2023-2026 total as amended cannot be rebuilt from the published summaries because composite profiles were split and multi-cycle profiles are reported life-to-date. Agenda pages: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Id=22126c13-fd9b-48d2-b130-51a3fc7e10d0&Agenda=Agenda&lang=English&Item=23&Tab=attachments and https://pub-edmonton.escribemeetings.com/Meeting.aspx?Id=86bee574-31e8-424f-abbb-978f946337f3&Agenda=Agenda&lang=English&Item=30&Tab=attachments ; Dec 2025 update attachment: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=291480",
+          "quote": "CM-20-0330 Active Transportation Implementation Acceleration - Approach 3 IIS - Infrastructure Planning and Design Tax-Supported Debt (20,000) (410,000) - - - (430,000)",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Whole-budget amendments to the as-of date ($ millions, tax-supported, 2023-2026 column unless stated): Fall 2023 SCBA +89 (approved November 2023; adjusted total 9,083 including 1,985 carried forward from 2019-2022); Spring 2024 SCBA +219 (2023-2026) and +263 overall (2024-06-11), which is the 2024 increase; Fall 2024 SCBA +31 (2023-2026), +152 overall (2024-11-13); Spring 2025 SCBA -290 (2023-2026), +75 overall (2025-06-10); Fall 2025 SCBA +8 (2023-2026), +98 overall (2025-11-24), leaving a total adjusted tax-supported budget of 8,992 for 2023-2026 and 11,301 overall. The Capital Financial Update as of 2025-12-31 reports a total adjusted approved budget of 11,705.3 including utilities and enterprises, with 2023-2026 expenditures of 5,006.1.",
+          "source_title": "Capital Budget Summary attachments: FCS02053 Att.1 (Fall 2023), FCS02362 Att.1 (Spring 2024), FCS02530 Att.1 (Fall 2024), FCS02852 Att.1 (Spring 2025), FCS03159 Att.1 (Fall 2025); FCS03313 Att.1 Capital Results as of December 31, 2025",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=224916",
+          "source_publisher": "City of Edmonton, Financial and Corporate Services",
+          "source_date": "2023-11-07 to 2026-03-17",
+          "source_type": "analytical-report",
+          "establishes": "The dated capital budget amendments (qualification 2) at whole-budget level; the City does not publish a roads-only subtotal in these summaries. Other attachments: Fall 2023 https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=205376 ; Fall 2024 https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=242229 ; Spring 2025 https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=261602 ; Fall 2025 https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=278860 ; Dec 2025 results https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=291479 ; agenda pages e.g. https://pub-edmonton.escribemeetings.com/Meeting.aspx?Id=d00dd968-b0ff-4b3a-a89b-d9e6d97f5cce&Agenda=Agenda&lang=English&Item=25&Tab=attachments",
+          "quote": "Spring 2024 SCBA Recommendations - (8) 145 82 219 44 263",
+          "strength": "moderate"
+        },
+        {
+          "finding": "CM-20-0330 cumulative actuals ($000s): 807 at 2023-12-31 (planning underway, construction anticipated 2024); 10,496 at 2024-12-31 (about 17 km began construction in 2024, 9 km completed); 25,093 at 2025-09-30; 39,984 at 2025-12-31 (23 km under construction in 2025, about 6 km carrying into 2026; 17 routes, about 29 km, planned for 2026/27 in design). The August 2026 committee report says about 35 km of new routes were installed in 2024 and 2025 with 24 km estimated for 2026, and that its recommendation 'would not result in any changes required to the existing capital profile CM-20-0330'.",
+          "source_title": "Capital Financial Update Attachment 2 (Significant Capital Project Update) as of 2023-12-31 (FCS02228), 2024-12-31 (FCS02842), 2025-09-30 (FCS03234), 2025-12-31 (FCS03313); IS03688 Active Transportation Implementation Acceleration Program Update",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=215340",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2024-03-12; 2025-03-18; 2025-12-08; 2026-03-17; 2026-08-26",
+          "source_type": "analytical-report",
+          "establishes": "Actual spending on the program by year (qualification 3) and that approved is not spent: 40 per cent of the profile was spent by end-2025. Other documents: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=252513 ; https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=294159 ; https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304024 (agenda https://pub-edmonton.escribemeetings.com/Meeting.aspx?Id=55300824-2d70-4b6a-a504-df43ace1c6b4&Agenda=Agenda&lang=English&Item=29&Tab=attachments)",
+          "quote": "CM-20-0330 - Active Transportation Implementation Acceleration - Approach 3 99,570 39,984 99,570",
+          "strength": "strong"
+        }
+      ],
+      "limitations": [
+        "Classifications ($000s, nominal, 2023-2026 approved December 2022): primary roads-only 1,945,703, ratio 19.46 -> Supported (primary cutoffs) / Supported (alternative cutoffs). Required alternative 'Active Pathways and Roads Service' 1,794,000, ratio 17.94 -> Supported / Supported (combined service allocation, not a roads total). Widest 1,945,703 + 560 (21-50-9101) + 25,400 (21-50-9100) + 265 (17-74-4103) + 10,100 (CM-20-3102) + 13,615 (CM-20-3100) + 30,205 (20-20-2024) = 2,025,848, ratio 20.26 -> Supported / Supported. Narrowest 1,116,532, ratio 11.17 -> Partially supported / Partially supported.",
+        "Shares (qualification 4), on approved figures: CM-20-0330 100,000 is 1.39 per cent of the 7,192,540 2023-2026 capital budget; 5.57 per cent of the Active Pathways and Roads Service line (1,794,000); 4.43 per cent of Movement of People and Goods (2,256,000); 1.95 per cent of Movement of People and Goods plus LRT Expansion and Yellowhead Trail Freeway Conversion (5,124,300); 4.89 per cent of the primary roads-only total plus itself (2,045,703).",
+        "Qualification 3 (actual roads capital expenditure by year) cannot be answered as posed: the Capital Financial Updates report cumulative actuals for 'significant' profiles only and the Capital Results summaries break spending down by transformational project and department, not by service. Cumulative actuals published for roads profiles as of 2025-12-31 ($000s): 19-22-9006 Terwillegar 209,132; 18-66-6503 50 Street 144,281; 23-24-0300 High Level Bridge 4,635; CM-22-0000 16,841; CM-24-0000 26,360; CM-25-0000 28,029; CM-66-2585 17,897.",
+        "Qualification 2 is answered at whole-budget level with dates; a roads-only total as amended to 2026-09-02 was not computed because the City publishes no roads subtotal after adoption and composite profiles have since been split into standalone profiles. The Spring 2026 adjustment, if any, was not located.",
+        "No mixed profile was apportioned; Neighbourhood Renewal and bridge profiles are included in full as the brief predeclares, and Table 8 confirms the City itself groups them under 'Active Pathways and Roads Service'.",
+        "Council minutes do not record the councillor's words; the quotation rests on a single media report."
+      ],
+      "unknowns": [
+        "Whether the councillor said '18' or '180' (or the reporter transcribed it); council video was not reviewed.",
+        "Which figure the councillor drew the $1.8 billion from; it matches Table 8's combined 'Active Pathways and Roads Service' line to the tenth of a billion but this is inference.",
+        "The as-amended 2023-2026 roads-only total on the as-of date."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Council meeting video or transcript for 2022-12-09 to 2022-12-12 to confirm the spoken figure.",
+          "likely_holder": "City of Edmonton, Office of the City Clerk (council webcast archive)",
+          "importance": "moderate"
+        },
+        {
+          "description": "Profile-by-profile current approved 2023-2026 budgets and actuals for all roads and neighbourhood renewal profiles as of 2025-12-31 or later.",
+          "likely_holder": "City of Edmonton Financial and Corporate Services / Integrated Infrastructure Services",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "Roads-only sum: 1,116,532 (Roads) + 722,289 (Neighbourhood Renewal) + 106,882 (bridges) = 1,945,703 thousand; divided by 100,000 = 19.46.",
+        "The councillor's arithmetic: $1.8 billion / $100 million = 18, not 180; the article should say so."
+      ],
+      "what_would_change_my_verdict": [
+        "A demonstration that Neighbourhood Renewal profiles are not roads spending under the City's own classification would drop the total to about $1.22 billion (Roads plus bridges), Partially supported.",
+        "A reading confined to Service Category 'Roads' (1,116,532) would give Partially supported; nothing in the record supports Contradicted."
+      ],
+      "suggested_one_line": "On the City's own profile labels, roads and neighbourhood-renewal profiles total about $1.95 billion in the adopted 2023-2026 capital budget, about 19 times the $100 million bike program; the councillor's '$1.8 billion' matches the combined 'Active Pathways and Roads' line, which itself contains the bike money, and '180 times' should be 18.",
+      "suggested_short_answer": "Adding every 2023-2026 capital profile the City labels 'Roads' or 'Neighbourhood Renewal', plus three vehicle bridges, gives $1,945.7 million, 19.5 times the $100 million for profile CM-20-0330. The combined 'Active Pathways and Roads Service' line in Table 8 is $1,794.0 million (17.9 times), but it includes the bike program and other pathway projects. Counting only profiles labelled 'Roads' gives $1,116.5 million, 11.2 times. The councillor's '180 times' is an arithmetic slip; $1.8 billion is 18 times $100 million. Since adoption the bike profile has been cut by $430,000 (June 2025) and had spent $40.0 million by the end of 2025; several road profiles have grown, so the ratio today would differ.",
+      "suggested_tldr": [
+        "Roads-only profiles (City labels, incl. Neighbourhood Renewal and three bridges): $1,945.7M, 19.5 times $100M.",
+        "Combined 'Active Pathways and Roads Service' line: $1,794.0M, includes the bike program itself.",
+        "Narrowest reading ('Roads' label only): $1,116.5M, 11.2 times.",
+        "Quote says '180 times'; $1.8B is 18 times $100M. CM-20-0330 amended to $99.57M in June 2025; $40.0M spent to end-2025."
+      ]
+    }
+  ]
+}
