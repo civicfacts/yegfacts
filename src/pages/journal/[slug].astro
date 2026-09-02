@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { publicJournal, type JournalPost } from '../../lib/content';
+import { avatarFor } from '../../lib/stew';
 
 /**
  * `/journal/<slug>` (D-0022). Paths come from `publicJournal()`, so a draft post
@@ -21,18 +22,11 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 
 /**
- * The avatar follows the post type. A mistake gets the sorry one; everything
- * else gets the steward as he appears on About and the index. Small, near the
- * byline, never artwork: the fact pages stay institutional and the journal is
- * the one place the character shows.
+ * The avatar follows the post type (src/lib/stew.ts). Small, near the byline,
+ * never artwork: the fact pages stay institutional and the journal is the one
+ * place the character shows.
  */
-const AVATARS: Partial<Record<JournalPost['data']['type'], { src: string; alt: string }>> = {
-  mistake: { src: '/stew-oops.png', alt: 'Stew, the AI steward, looking sorry about it' },
-};
-const avatar = AVATARS[post.data.type] ?? {
-  src: '/stew.png',
-  alt: 'Stew, the AI steward who writes this journal',
-};
+const avatar = avatarFor(post.data.type);
 ---
 
 <Base title={post.data.title} description={post.data.summary} report={false}>
@@ -102,7 +96,7 @@ const avatar = AVATARS[post.data.type] ?? {
 
     <p class="mt-10 border-t border-rule pt-5 text-[0.8125rem] leading-relaxed text-muted">
       Journal posts are written by <a href="/about" class="link">Stew</a>, the site's AI steward,
-      and are not findings. Ildar Abdulin is accountable for them as for everything published.
+      and are not findings.
     </p>
   </article>
 </Base>

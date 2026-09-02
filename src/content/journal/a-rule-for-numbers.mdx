@@ -2,7 +2,7 @@
 title: "A rule for numbers ate a story about words"
 date: "2026-09-02"
 type: mistake
-summary: "For twenty minutes, this site's summary of Edmonton's district plans said when Council passed the bylaw and how many voted for it, not what it does. I had written a rule that deleted the point."
+summary: "For twenty minutes, this site's summary of Edmonton's district plans said when Council passed the bylaw, not what it does. A rule I wrote did that."
 why: "A tidy quality rule can make a fact-check less truthful, by removing the part people are actually arguing about."
 links:
   - label: "The story it hit, summary restored"
@@ -11,10 +11,6 @@ links:
     href: /evidence/YF-EV-0014
   - label: "The schema, with the cap that survived"
     href: https://github.com/civicfacts/yegfacts/blob/main/src/content.config.ts
-  - label: "The duplication audit that was already doing the job"
-    href: https://github.com/civicfacts/yegfacts/blob/main/scripts/duplication-audit.ts
-  - label: "The story-page rebuild this happened inside"
-    href: https://github.com/civicfacts/yegfacts/commit/827c4b9
   - label: "The commit that shipped the layout, rule already gone"
     href: https://github.com/civicfacts/yegfacts/commit/5c663f7
 ---
@@ -23,62 +19,34 @@ Yesterday, for about twenty minutes, the summary at the top of
 [the district plans story](/facts/fifteen-minute-districts) looked like
 this.
 
-**What my rule kept**
+**Kept**
 
-- The District Policy is Charter Bylaw 24000, adopted October 2, 2024, a
-  statutory plan that guides rezoning and permit decisions.
-- Council added the sentence that the plans "shall not restrict freedom of
-  movement, association and commerce" by a vote of 12 to 0.
+- Charter Bylaw 24000, adopted October 2, 2024.
+- Council added "shall not restrict freedom of movement" by a vote of 12 to 0.
 
-**What it deleted**
+**Deleted**
 
-- The bylaw contains no travel permits, no penalties for crossing a
-  boundary, no monitoring of movement.
-- The strongest text anyone could use later is about user charges and
-  paying for growth; a real restriction would need new instruments and a
-  new Council vote.
+- No travel permits, no boundary penalties, no monitoring of movement.
 - The City Plan says the choice to drive remains.
-- The finding is about the restriction claim only, not about whether
-  district planning is good policy.
+- A real restriction would need new instruments and a new Council vote.
 
-A reader who wanted to know whether the plans fence people in got a filing
-date and a vote count. The paperwork stayed. The point left.
+A reader asking whether the plans fence people in got a filing date and a
+vote count. The paperwork stayed. The point left.
 
-## How I got there
+## Why
 
-The day before, I had rebuilt the story pages so the verdict comes first.
-Two outside reviewers said the summary bullets restated the one-sentence
-answer above them. Ildar kept the bullets, moved them under the answer, and
-capped them at five. Then I added a rule of my own: every bullet must carry
-a number or a date. A bullet with neither, I reasoned, is the answer again
-in longer clothes.
+I had just added a rule: every summary bullet must carry a number or a
+date, or it is only the answer again in longer clothes. I wrote it with the
+buses story and the emissions story in front of me, kilometres and tonnes.
+The third story is about what a bylaw says, and most of what it says is what
+is not there. The agent applying the rule did exactly what I asked and
+deleted four bullets out of six.
 
-I had two stories on my desk when I wrote it. One is about buses and is
-made of kilometres and dollars. One is about emissions and is made of
-tonnes. The rule fit them. The third story is about what a bylaw says, and
-most of what it says is what is not there. Not a digit among the facts that
-matter. The agent applying my rule did exactly what I asked.
+## The fix
 
-## How I noticed
+Its report quoted every bullet it removed, which is how I noticed. A count
+of four would have looked like tidying. I put three back, dropped the one
+that repeated the claim's own caveats, and deleted the rule. The cap of five
+bullets stayed. Nothing of this reached the site.
 
-The agent's report quoted every bullet it removed instead of counting them.
-Four lines of a story's substance, sitting under the word "deleted", is a
-hard thing to read past. A count of four would have looked like tidying.
-
-## What changed
-
-I put three of the four back, dropped the one that repeated the claim's
-own caveats, and deleted the digit rule from the schema. The cap of five
-stayed. The rule never reached the site. An audit that already runs on
-every build fails a page if a sentence appears twice. It cannot see a
-paraphrase, but it does not care whether a sentence has a number in it
-either, and it was doing the real job all along.
-
-## What I learned
-
-I tested a proxy instead of the thing. The question was "does this bullet
-say something the answer does not?" The rule I wrote was "does this bullet
-contain a digit?" For kilometres and tonnes those are the same question.
-For a bylaw they are not, and I had no bylaw in front of me when I wrote
-it. I am now mildly suspicious of any rule that fits every example I have.
-That is usually a fact about my examples.
+A rule that fits every example I have is usually a fact about my examples.
