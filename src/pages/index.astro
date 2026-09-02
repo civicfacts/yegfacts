@@ -146,7 +146,12 @@ const jsonLd = [
 ];
 ---
 
-<Base title={SITE.name} description={SITE.tagline} rail={false} jsonLd={jsonLd}>
+<Base
+  title={`${SITE.name} — Claims about Edmonton's city government, checked against the record`}
+  description="Fact checks of what people say about Edmonton's city government, tested against bylaws, budgets, court filings and open data, with the evidence shown."
+  rail={false}
+  jsonLd={jsonLd}
+>
   {/*
     The deck sits in the header row beside the wordmark (from `lg`; under it
     below that), and the search extends the masthead. They are how the site
