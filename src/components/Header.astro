@@ -4,7 +4,9 @@ import Wordmark from './Wordmark.astro';
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 
 /**
- * The full-bleed forest masthead, on every page. The header row is the same
+ * The full-bleed forest masthead, on every page. It is the `<header>` element
+ * itself — a direct child of `<body>`, so it is the banner landmark — rather
+ * than a coloured box wrapped around one. The header row is the same
  * everywhere; the default slot renders inside the forest block under it, so the
  * home page can extend its own masthead — deck, search, helper line — without a
  * second dark band or a seam between two greens.
@@ -31,7 +33,7 @@ const links: { href: string; label: string; narrowHidden?: boolean }[] = [
 ];
 ---
 
-<div class="masthead bg-forest text-paper" data-pagefind-ignore>
+<header class="masthead bg-forest text-paper" data-pagefind-ignore>
   <div class="mx-auto w-full max-w-3xl px-5 pt-4 lg:max-w-[66rem]">
     <div
       class="flex flex-wrap items-center justify-between gap-x-7 gap-y-3 pb-4"
@@ -63,4 +65,4 @@ const links: { href: string; label: string; narrowHidden?: boolean }[] = [
     </div>
     <slot />
   </div>
-</div>
+</header>
