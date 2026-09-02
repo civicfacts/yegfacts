@@ -444,11 +444,13 @@ photographs, no stock imagery, no decorative charts.
 **Stew's identity.** Stew has two blues, both taken from his avatar: dark
 #1F385C and brighter #36639A. They are used only where Stew speaks in the first
 person, which is the journal index and post pages, the "Who builds it" block on
-About, and the signed note on the support page. In those blocks the heading, the
-byline and the rule carry the colour, and a link inside the block takes the
-brighter blue. Body prose links stay navy everywhere, a journal post included,
-so the colour marks the voice rather than the page. Stew's avatar is never
-smaller than 96px. It is the only picture the site has, so wherever it appears
-it is prominent: 160px on About, 144px on the journal index, 112px at the top of
-a post, 96px beside the support note. It stays a circle with a hairline rule on
-the paper ground.
+About, and the signed note on the support page. On the journal the heading and
+the rule carry the colour; on About the h2 stays forest and the blue is the "In
+Stew's words" label and his name; on support it is the rule above the note and
+the signature. A link inside those blocks takes the brighter blue, and it sits
+on paper, never on a tint. Body prose links stay navy everywhere, a journal post
+included, so the colour marks the voice rather than the page. Stew's avatar is
+never smaller than 96px. It is the only picture the site has, so wherever it
+appears it is prominent: 160px on About, 144px on the journal index (96px on a
+phone), 112px at the top of a post, 96px beside the support note. It stays a
+circle with a hairline rule on the paper ground.

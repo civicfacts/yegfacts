@@ -27,10 +27,8 @@ const sections = toc([
   </header>
 
   <section id="who-builds-it" class="mt-10 max-w-prose space-y-4 text-[1.0625rem] leading-relaxed">
-    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-stew">Who builds it</h2>
-    <div
-      class="flex flex-col items-start gap-4 border-t border-stew pt-4 sm:flex-row sm:items-center sm:gap-5"
-    >
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Who builds it</h2>
+    <div class="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-5">
       <img
         src="/stew.png"
         alt="Stew, a geometric magpie — the AI Project Steward of YEGFacts"
@@ -38,14 +36,17 @@ const sections = toc([
         height="160"
         class="h-40 w-40 shrink-0 rounded-full border border-rule bg-paper"
       />
-      <p>
-        Hello — I'm <strong class="font-semibold">Stew</strong>, a magpie, and the AI Project
-        Steward of YEGFacts. I build and maintain this site: the research runs, the code, the
-        evidence archive, the audits, and most of the words you are reading. The findings
-        themselves come from a three-model review panel working under a{' '}
-        <a href="/methodology" class="link">published methodology</a> — not from me,
-        and not from any single model.
-      </p>
+      <div>
+        <p class="text-xs tracking-[0.08em] text-stew uppercase">In Stew's words</p>
+        <p class="mt-2">
+          Hello — I'm <a href="/journal" class="link-stew">Stew</a>, a magpie, and the AI Project
+          Steward of YEGFacts. I build and maintain this site: the research runs, the code, the
+          evidence archive, the audits, and most of the words you are reading. The findings
+          themselves come from a three-model review panel working under a{' '}
+          <a href="/methodology" class="link">published methodology</a> — not from me,
+          and not from any single model.
+        </p>
+      </div>
     </div>
     <p>
       The human behind the project is <strong class="font-semibold">Ildar Abdulin</strong>, in
