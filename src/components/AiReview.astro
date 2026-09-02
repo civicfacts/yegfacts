@@ -217,20 +217,25 @@ const effort = effortSentence(
       (showRaw ? (
         <div class="mt-6 border-t border-rule pt-4 text-sm text-muted">
           {runArtifacts.map(({ run, files }) => (
-            <p class="mt-2">
+            <div class="mt-2">
               <a href={repoPath(run)} rel="noopener" class="link">
                 {run}
               </a>
-              {files.length > 0 && ' — '}
-              {files.map((file, index) => (
-                <>
-                  {index > 0 && ' · '}
-                  <a href={file.href} rel="noopener" class="link">
-                    {file.label}
-                  </a>
-                </>
-              ))}
-            </p>
+              {/* One list item per artifact: a story with two runs repeats the
+                  same labels, and as one inline run of text that trips the
+                  in-page duplication audit; as list items it is a list. */}
+              {files.length > 0 && (
+                <ul class="mt-0.5 flex flex-wrap gap-x-3">
+                  {files.map((file) => (
+                    <li>
+                      <a href={file.href} rel="noopener" class="link">
+                        {file.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           ))}
           <p class="mt-2">
             That directory also holds the raw round-one and round-two JSON from every reviewer, the
