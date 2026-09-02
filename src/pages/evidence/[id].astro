@@ -76,7 +76,7 @@ const rows = [
   </header>
 
   <section class="mt-8">
-    <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
+    <h2 class="font-sans text-xs font-semibold tracking-[0.09em] text-muted uppercase">
       What this source can establish
     </h2>
     <p class="mt-2.5 border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed">
@@ -85,7 +85,7 @@ const rows = [
   </section>
 
   <section class="mt-8">
-    <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">Record</h2>
+    <h2 class="font-sans text-xs font-semibold tracking-[0.09em] text-muted uppercase">Record</h2>
     <dl class="mt-3 grid gap-x-6 gap-y-2 text-[0.9375rem] sm:grid-cols-[9rem_1fr]">
       {
         rows.map((row) => (
@@ -108,7 +108,7 @@ const rows = [
   {
     entry.data.excerpts.length > 0 && (
       <section class="mt-8">
-        <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
+        <h2 class="font-sans text-xs font-semibold tracking-[0.09em] text-muted uppercase">
           Permitted excerpts
         </h2>
         <p class="mt-2 max-w-prose text-sm leading-relaxed text-muted">
@@ -133,7 +133,7 @@ const rows = [
   {
     isPrivate && (
       <section class="mt-8">
-        <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
+        <h2 class="font-sans text-xs font-semibold tracking-[0.09em] text-muted uppercase">
           Verify independently
         </h2>
         <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed">
@@ -156,7 +156,7 @@ const rows = [
   }
 
   <section class="mt-8">
-    <h2 class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">Used by</h2>
+    <h2 class="font-sans text-xs font-semibold tracking-[0.09em] text-muted uppercase">Used by</h2>
     {
       usedBy.length > 0 ? (
         <ul class="mt-3 space-y-2 text-[0.9375rem]">

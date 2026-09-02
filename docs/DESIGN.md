@@ -379,12 +379,28 @@ second city; a nonprofit spin-out; a newsletter and active social accounts.
 
 ## 10. How a story page reads
 
-The palette is locked and light-only: paper #FAF9F6, forest #123F35, navy
-#123B5D, gold #C3A35E used sparingly, ink #20272B, Inter, thin rules. A finding
-is carried by the word, never by a badge or a traffic light, and hierarchy comes
-from type rather than decoration: a section heading is a heading, and the 12px
-uppercase grey label is reserved for metadata — dates, "Limitations", the
-sub-labels inside a claim.
+The visual system is the broadsheet ledger, locked and light-only: paper
+#F7F5F0, ink #1C2124, muted #5A6166, hairline rules #CFC9BD, forest #123F35,
+navy #123B5D, gold #C3A35E, brick #8A2F22 and charcoal #4A5258. Newsreader sets
+the wordmark, headings, questions and slate quotes; Libre Franklin sets body,
+metadata, labels and buttons. Zero border-radius, no shadows, no animation. A
+finding is a filled badge in its own colour — forest Supported, navy Partially
+supported, charcoal Not established, brick Contradicted, gold Mixed — with the
+word always printed in full, and a claim list is a run of ledger rows each
+carrying a 5px left edge in the same colour, so the verdicts read down one
+column. Every page opens with the full-bleed forest masthead, and the home page
+extends it with the descriptor, the search field and the helper line. Hierarchy
+still comes from type rather than decoration: a section heading is a heading
+over a 3px ink rule, and the 11px uppercase label is reserved for metadata —
+dates, "Limitations", the sub-labels inside a claim.
+
+This supersedes the earlier rule that a finding is carried by the word and never
+by a badge, and that colour is a whisper (founder decision, 2026-09-01). The
+page as built under that rule was judged too bland, and the verdict — the thing
+the site exists to publish — did not scan as a column: a reader had to read
+every row to find out what had been found. The word is not weakened by the
+change; it is still printed in full, never abbreviated to a colour, because
+"Not established" says something no tile can.
 
 Order, top to bottom: topics, title, verdict strip, one-line summary, dates,
 "Common forms of the claim", TL;DR, what actually happened, claims checked, what
