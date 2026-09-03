@@ -393,24 +393,31 @@ tree: a change to a claim's finding or panel agreement requires a story
 changelog entry, and a change under `prompts/`, `scripts/merge*`, `scripts/synthesize*`
 or `methodology/` requires a methodology changelog entry.
 
-## 7. Launch slate
+## 7. Launch slate (dropped 2026-09-03, D-0027)
 
-The site is deployed before it is launched. Launch — meaning promotion — happens
-only when all nine stories (fourteen claims) across six topic hubs have
-`status: published`, and the verdict spread visibly cuts in multiple political
-directions. Stories in `pending-review` never count toward that bar.
+The slate is no longer part of the method. The record of it is kept here, table
+included, because a pre-registration that vanishes without a trace is worth less
+than one that was never made.
 
-Claims are pre-registered here, before any panel runs. Expected findings are
-deliberately not recorded in this table or anywhere on the public site: naming a
-hypothesis next to a claim prejudges it.
+What it was. Nine stories, fourteen claims, six topic hubs, written down in this
+document before the first panel ran. Promotion of the site was to wait until
+every one of them carried `status: published` and the verdict spread visibly cut
+in multiple political directions; `pending-review` never counted toward it.
+Expected findings were deliberately left out of the table and off the public
+site, because naming a hypothesis next to a claim prejudges it.
 
-Under methodology v1.15 the wordings in this table are registered wordings, not
-captured forms: they were written here rather than said by anyone in a source we
-hold. The slate stands as pre-registration of the topics, and nothing is dropped
-from it, but a claim cannot go to a panel on this table's wording alone. The
-launch bar above is therefore under review and will be restated after a
-retro-triage of the claims already published. It is open; this note does not
-settle it.
+What it was for. One charge, and one only: that the site tests what suits it. A
+set named in advance cannot be trimmed to the results it turns out to produce.
+
+Why it went. Whole-source intake (v1.15, v1.16) meets that charge on every
+source instead of once at the outset, and prints the disposition of everything
+it declines. And under v1.15 a wording written here is not a captured form, so
+no row below could reach a panel until somebody was shown saying it; two of them
+are parked on `/considered` for exactly that reason. A bar the method forbids
+the site to clear is worse than no bar.
+
+What replaces it as a promotion gate: nothing yet. Timing is an open question in
+the board record, not a rule in this document.
 
 | Story | Topics | Pre-registered claims |
 |---|---|---|
@@ -424,12 +431,14 @@ settle it.
 | Vision Zero | transportation | Edmonton is making steady progress toward Vision Zero |
 | Downtown | downtown, city-finances | Downtown is dead and nobody goes there any more |
 
-Production order is electric buses first, as the end-to-end gate on the whole
+Production order was electric buses first, as the end-to-end gate on the whole
 workflow, then winter cycling as the gate on comparative evidence and
-transferability, then parallel batches. Expected findings are hypotheses; the
-panel decides, and whatever it finds is published.
+transferability, then parallel batches. The stories that ran under that order
+before the slate came off keep their pages and their findings; nothing in this
+section touches them.
 
-Editorial rule for v1: no named-individual allegations in the launch set.
+Editorial rule for v1, unaffected by the above: no allegations about named
+individuals.
 
 ## 8. Stack
 

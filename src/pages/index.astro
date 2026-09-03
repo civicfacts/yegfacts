@@ -10,13 +10,11 @@ import ReportBox from '../components/ReportBox.astro';
 import StewByline from '../components/StewByline.astro';
 import {
   claimTopics,
-  firstPublished,
   orderedTopics,
   publishedClaims,
   publishedStories,
 } from '../lib/content';
 import { SITE } from '../lib/site';
-import { launchSlate } from '../lib/slate';
 import { CANONICAL_FINDINGS } from '../lib/vocabulary';
 import { loadRunManifest } from '../../scripts/lib/review-schema.ts';
 import { highestMethodologyVersion } from '../../scripts/lib/repo.ts';
@@ -98,12 +96,6 @@ const corrections = stories
     return { ...row, sentence, truncated: sentence !== row.entry.note.trim() };
   });
 
-const slate = (await launchSlate()).map((row) => ({
-  ...row,
-  publishedOn: row.published && firstPublished(row.published),
-}));
-const doneCount = slate.filter((row) => row.published).length;
-
 /** The broadsheet section head: a 3px ink rule, then the title in the display face. */
 const head = 'border-t-[3px] border-ink pt-3.5';
 const headText = 'font-display text-[1.75rem] leading-[1.15] font-bold tracking-[-0.01em] text-ink';
@@ -111,7 +103,6 @@ const lead = 'mt-1.5 max-w-[62ch] text-base text-pretty text-muted';
 /** The metadata register: small caps, used for a date-and-type label only. */
 const label = 'text-[0.6875rem] font-bold tracking-[0.1em] uppercase';
 const topicName = 'font-display text-[1.25rem] leading-snug font-semibold';
-const slateTitle = 'font-display text-[1.125rem] leading-snug font-semibold';
 
 /**
  * Who the site is and how to search it, said once in a machine-readable form.
@@ -399,55 +390,5 @@ const jsonLd = [
       )
     }
   </section>
-
-  {
-    doneCount < slate.length && (
-      <section class="mt-14">
-        <div class={head}>
-          <h2 class={headText}>Nine stories, committed in advance</h2>
-        </div>
-        <p class={lead}>
-          The list was fixed in writing before any panel ran, so it cannot be trimmed to the answers.{' '}
-          {doneCount} of {slate.length} checked.{' '}
-          <a href="/methodology#launch-slate" class="link">
-            Why the list came first
-          </a>
-          .
-        </p>
-        <ol class="mt-6 border-t border-rule">
-          {slate.map((row) => (
-            <li class="grid gap-x-12 border-b border-rule py-3.5 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] sm:items-baseline">
-              {row.published ? (
-                <Fragment>
-                  <span class="sm:col-start-1 sm:row-start-1">
-                    <a href={`/facts/${row.published.id}`} class:list={['link', slateTitle]}>
-                      {row.published.data.title}
-                    </a>
-                  </span>
-                  <span class="mt-0.5 block text-[0.9375rem] text-muted tabular sm:col-start-2 sm:row-start-1 sm:mt-0">
-                    Published <time datetime={row.publishedOn}>{row.publishedOn}</time>
-                  </span>
-                </Fragment>
-              ) : (
-                <Fragment>
-                  <span class:list={[slateTitle, 'block text-ink sm:col-start-1 sm:row-start-1']}>
-                    {row.story}
-                  </span>
-                  <span
-                    class:list={[label, 'mt-0.5 block text-muted sm:col-start-1 sm:row-start-2']}
-                  >
-                    Not yet checked
-                  </span>
-                  <span class="mt-1 block font-display text-[1.125rem] leading-[1.4] text-muted italic sm:col-start-2 sm:row-span-2 sm:row-start-1 sm:mt-0">
-                    “{row.claims}”
-                  </span>
-                </Fragment>
-              )}
-            </li>
-          ))}
-        </ol>
-      </section>
-    )
-  }
 
 </Base>
