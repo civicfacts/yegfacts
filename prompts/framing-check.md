@@ -103,11 +103,29 @@ generality out of the claim, that is a defect, not neutrality.
 
 Do not soften. A REVISE is normal.
 
+Label every finding `[framing]` or `[defect]` (methodology v1.20). A
+**defect finding** is one where you state the correction and the
+correction is verifiable without judgement. Only three kinds qualify:
+verdict bands that overlap or leave a gap, a stated rule whose direction
+contradicts its own arithmetic, and a coverage or completeness rule that
+lets an unclassified remainder decide a verdict. Internal consistency
+and arithmetic, nothing else. A finding you call a defect must carry the
+exact replacement wording, because otherwise there is nothing to verify.
+Everything else is a **framing finding**: what the claim tests, whose
+reading of it, the value of a cutoff, whether a source is adequate,
+whether a verdict is reachable, whether the brief leaks an expectation.
+If a finding can be argued about, it is a framing finding, because the
+test for a defect is that there is nothing left to argue about. The
+labels change what happens next, so label honestly in both directions:
+calling a framing objection a defect does not buy the brief another
+pass, it ends the brief.
+
 Output, in Markdown:
 
 - First line: `Verdict: FRAME OK` or `Verdict: REVISE`.
 - For each check above: `OK` or a finding with the quoted brief text and
-  the replacement wording you propose.
+  the replacement wording you propose. Every finding carries `[framing]`
+  or `[defect]`.
 - One paragraph: how a holder of the view would react to this brief,
   and how an opponent would.
 - On a re-check: for each earlier finding, `RESOLVED`, `WEAKENED` (the
@@ -127,7 +145,18 @@ writing any finding still OPEN or WEAKENED, stating what you objected
 to, and the brief is revised once more. Your third report is a
 confirmation: FRAME OK freezes the brief with the editor's resolution
 beside it; REVISE parks the brief, and it reopens only on new intake
-evidence, never on a further revision of the same brief. Ildar Abdulin remains accountable for the
+evidence, never on a further revision of the same brief.
+
+One narrow exception (methodology v1.20). A defect finding still
+standing after your third report does not park the brief. The editor
+corrects it using the replacement wording you supplied, records the
+correction in the run record against the finding it answers, and the
+brief comes back to you once as a **defect confirmation**. That fourth
+report may only confirm the corrections or name further defects. If it
+raises a framing finding, whether new or revived, the brief is parked
+and no further round exists. Nothing in this exception touches the bound
+above: the value of a cutoff is a framing question, capped at three, and
+is not reopened in a defect round. Ildar Abdulin remains accountable for the
 result and can revert it. Every report, the author's responses and the
 resolution are committed beside the brief, and a framing defect found
 later by the panel, the publication gate or a correction is logged

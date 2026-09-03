@@ -1,6 +1,41 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.20"
+  date: "2026-09-03"
+  scope: framing-check-defect-not-framing
+  summary: >
+    A framing check that has run out of rounds can still leave arithmetic
+    behind it. An error inside a verdict ladder is now a defect rather than a
+    framing finding: the editor corrects it in the checker's own words and the
+    brief gets one confirmation round. Everything about what a brief tests is
+    still framing, and still capped at three.
+  highlights:
+    - "The distinction, written narrowly so it cannot be stretched. A defect finding is one where the checker states the correction and the correction is verifiable without judgement. Three kinds qualify and nothing else does: verdict bands that overlap or leave a gap, a stated rule whose direction contradicts its own arithmetic, and a coverage or completeness rule that lets an unclassified remainder decide a verdict. Internal consistency and arithmetic. That is the whole list, and a defect finding that does not carry the checker's exact replacement wording is not one, because there would be nothing to verify."
+    - "Everything else is a framing finding and stays capped at three reports under v1.12: what the claim tests, whose reading of it, the value of a cutoff, whether a source is adequate, whether a verdict is reachable, whether the brief leaks an expectation. If a finding can be argued about, it is a framing finding, because the test for a defect is that there is nothing left to argue about."
+    - "What changes. A defect finding still standing after the third report no longer parks the brief. The editor corrects it using the wording the checker supplied, records each correction in the run record against the finding it answers, and the brief goes back for one defect confirmation. That fourth report may do two things: confirm the corrections, or name further defects. Nothing else."
+    - "The guard, which is the point of the amendment. If the defect confirmation raises a framing finding, whether new or revived, the brief stays parked and no further round is available. Without that, a framing objection could be relabelled a defect to buy a fourth pass and the cap would be worth nothing. The checker, not the editor, labels each finding framing or defect in its own report, so the distinction is auditable in the committed record rather than asserted afterwards by the person it benefits. prompts/framing-check.md now carries the definition, the labelling requirement and the fourth round."
+    - "This does not loosen the v1.8 bound the cap descends from. A cutoff justified from an identified standard, or stated with one reasonable alternative and results required under both, is still sufficient, and the checker still may not ask for an alternative to the alternative. The value of a cutoff is a framing question, capped at three, and not renegotiable in a defect round. What a defect round may fix is whether the bands drawn around that value cover every number once, which is arithmetic and has one right answer."
+    - "Why now, and by whom. The rule was amended by the editor it had just blocked, on the brief it had just blocked. That is the least comfortable way for a rule to change and it is stated here for that reason. The site's first register-chosen question, cycling-volumes, went through three framing checks; the third settled the framing and called the contested editorial call defensible. What it left standing was three defects, all arithmetic inside verdict ladders, all introduced by the editor while adopting the checker's own findings, and all with the checker's replacement wording already written down."
+    - "The test that justifies it, stated so it can be applied without today's case in front of you. The failure would exist whatever brief hit it. A ladder that assigns two verdicts to the same total is worse if it passes than if it parks, so the cap is protecting nothing by holding it. And v1.12's escape clause, that a parked brief reopens only on new intake evidence, can never be satisfied by an arithmetic typo, because no evidence about the world bears on whether one number falls in two bands. A cap that can never release what it caught is a cap on the wrong thing."
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: About and independence
+      href: /about
+  note: >
+    The obvious objection is that the editor changed the rule that had just
+    stopped the editor's own brief, and it is the right objection to make.
+    Three things are offered against it and nothing more. The definition names
+    three failures and excludes judgement by construction, so a finding anyone
+    could argue with is not one of them. The checker labels its own findings,
+    so an objection cannot be reclassified after it has been read. And a
+    framing finding in the fourth round parks the brief for good, so the extra
+    round is worth nothing to anyone trying to use it as a second attempt at
+    framing. What would show this was wrong is a defect round that turns into
+    a framing argument, or briefs that start needing a fourth report as a
+    matter of course; both are visible in the run records, and the founder can
+    revert this the way he can revert anything else here.
 - version: "1.18"
   date: "2026-09-03"
   scope: plain-speech-answers
