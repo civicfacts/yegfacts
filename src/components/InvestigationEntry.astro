@@ -1,0 +1,188 @@
+---
+import {
+  accountSplit,
+  arguedBy,
+  claimText,
+  outcomeHeading,
+  sideLabel,
+  sourceKind,
+  type Candidate,
+  type Investigation,
+  type Source,
+} from '../lib/intake';
+
+/**
+ * One investigation, published: the question, the decision on it, and every
+ * claim checked under it in the words it was said in.
+ *
+ * This is the page the decision actually belongs to. A claim's page can only
+ * point up here, because the triage read the question, the brief will ask the
+ * question, and one panel run will answer it for every claim below.
+ *
+ * The claims carry their captured wordings, which is what makes the page worth
+ * reading rather than a table of contents: somebody who commented on the
+ * original post can find the words they typed, under a pseudonym, beside the
+ * words somebody arguing the other way typed about the same question.
+ */
+interface Props {
+  investigation: Investigation;
+  claims: Candidate[];
+  source: Source | null;
+  /** Claims for the source's argument and claims against it, under one question. */
+  twoSided: boolean;
+}
+
+const { investigation, claims, source, twoSided } = Astro.props;
+
+const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
+---
+
+<article>
+  <header class="border-b border-rule pb-7">
+    <div class="text-xs text-muted" data-crossref>
+      <a href="/considered" class="link">Every claim we've considered</a>
+    </div>
+
+    <h1
+      class="mt-3 font-display text-[1.5rem] leading-[1.2] font-semibold text-pretty sm:text-[1.875rem]"
+    >
+      {investigation.question}
+    </h1>
+
+    {/* Straight out of the register: when the grouping was recorded, how many
+        accounts argued the question and on which sides, and how many claims sit
+        under it. The split is printed with the total everywhere, because a bare
+        total reads as corroboration on a question both sides are arguing. */}
+    <p class={`mt-4 ${label}`}>
+      <span data-record>
+        <time datetime={investigation.recorded}>{investigation.recorded}</time>
+        {` · ${accountSplit(investigation.accounts)}`}
+        {` · ${claims.length} ${claims.length === 1 ? 'claim' : 'claims'}`}
+      </span>
+      {twoSided && ' · asked from both sides'}
+    </p>
+  </header>
+
+  <section id="outcome" class="mt-10 scroll-mt-6">
+    {/* The outcome is a heading here, as it is on the entries `/considered`
+        links to, not a badge: this page is the decision, not a row in a column
+        of them. */}
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
+      {outcomeHeading(investigation.outcome)}
+    </h2>
+
+    {
+      investigation.reason && (
+        <p
+          class="mt-3.5 max-w-prose border-l-2 border-gold pl-3.5 text-[1.0625rem] leading-relaxed text-pretty"
+          data-record
+        >
+          {investigation.reason}
+        </p>
+      )
+    }
+
+    {
+      /*
+        Why these claims are one investigation, in the register's own words. It
+        is the answer to the obvious objection: that grouping claims is where a
+        fact-checker could quietly drop the inconvenient half of an argument.
+      */
+      investigation.grouping_note && (
+        <p class="mt-4 max-w-prose text-[0.9375rem] leading-relaxed text-muted" data-record>
+          {investigation.grouping_note}
+        </p>
+      )
+    }
+
+    {
+      twoSided && (
+        <p class="mt-4 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+          Both sides of the argument are below, and each claim gets its own finding.
+        </p>
+      )
+    }
+
+    <p class="mt-5 text-sm" data-crossref>
+      <a href="/considered#outcomes" class="link">What the outcomes mean</a>
+    </p>
+  </section>
+
+  {
+    source && (
+      <section id="source" class="mt-14 scroll-mt-6">
+        <h2 class="section-heading">Where it came from</h2>
+        <p class="mt-3 max-w-prose text-[1.0625rem] leading-relaxed text-pretty">
+          Taken from{' '}
+          <a href={`/considered#${source.id}`} class="link">
+            {source.title}
+          </a>
+          , read end to end. Every factual claim in it was extracted and merged, so this question is
+          listed whatever became of it.
+        </p>
+        <p class={`mt-3 ${label}`} data-record>
+          {sourceKind(source)}
+          {' · captured '}
+          <time datetime={source.captured}>{source.captured}</time>
+          {source.comments !== undefined && ` · ${source.comments} comments`}
+        </p>
+        <p class="mt-3 max-w-prose text-sm leading-relaxed text-muted">
+          The names below are pseudonyms, one to a commenter within this source; the number is the
+          comment's place in the captured thread.
+        </p>
+        <p class="mt-3 text-sm" data-crossref>
+          <a href={source.url} class="link" rel="noopener nofollow">
+            The original post
+          </a>
+        </p>
+      </section>
+    )
+  }
+
+  <section id="claims" class="mt-14 scroll-mt-6">
+    <h2 class="section-heading">
+      {claims.length === 1 ? 'The claim under it' : 'The claims under it'}
+    </h2>
+
+    <ol class="mt-6">
+      {
+        claims.map((claim) => (
+          <li id={claim.id} class="scroll-mt-6 border-t border-rule py-6">
+            <h3 class="font-display text-[1.0625rem] leading-snug font-semibold text-pretty">
+              <a href={`/considered/${claim.id}`} class="link" data-record>
+                {claimText(claim)}
+              </a>
+            </h3>
+
+            {(claim.side || claim.accounts !== undefined) && (
+              <p class={`mt-1.5 ${label}`} data-record>
+                {claim.side && sideLabel(claim.side)}
+                {claim.accounts !== undefined &&
+                  `${claim.side ? ' · ' : ''}${arguedBy(claim.accounts)}`}
+              </p>
+            )}
+
+            {/* Emptied by the loader for a withheld claim, so the page cannot
+                print what it never received. */}
+            <ul class="mt-4 space-y-3.5">
+              {(claim.forms ?? []).map((form) => (
+                <li>
+                  <blockquote
+                    class="max-w-prose border-l-2 border-gold pl-4 text-[0.9375rem] leading-relaxed text-pretty"
+                    data-record
+                  >
+                    {form.quote}
+                  </blockquote>
+                  <p class={`mt-1 pl-4 ${label}`} data-record>
+                    <span class="normal-case tracking-normal">{form.commenter}</span>
+                    {` · comment ${form.comment}`}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+</article>
