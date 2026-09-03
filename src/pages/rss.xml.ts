@@ -1,6 +1,6 @@
 import rss from '@astrojs/rss';
 import type { APIContext } from 'astro';
-import { firstPublished, publishedStories, standfirst } from '../lib/content';
+import { firstPublished, publishedClaims, standfirst } from '../lib/content';
 import { SITE } from '../lib/site';
 
 /**
@@ -15,9 +15,14 @@ import { SITE } from '../lib/site';
  * `pubDate` is the day it was published, not the day it was last verified: a
  * re-verification is not a new item, and dating it as one would put an
  * unchanged finding back at the top of every reader's list.
+ *
+ * The items come off the claims rather than off the story list, because since
+ * methodology v1.19 a question can be published and hold no claim that still
+ * stands as a finding. A feed of findings does not carry it.
  */
 export async function GET(context: APIContext) {
-  const stories = await publishedStories();
+  const rows = await publishedClaims();
+  const stories = [...new Map(rows.map((row) => [row.story.id, row.story])).values()];
   return rss({
     title: 'YEGFacts findings',
     description: 'Edmonton civic claims checked against the public record.',

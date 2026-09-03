@@ -29,7 +29,13 @@ import { methodologyChanges } from '../lib/methodology';
 const stories = await publishedStories();
 const rows = await publishedClaims();
 const claimCount = rows.length;
-const questionCount = stories.length;
+/**
+ * Questions counted through the rows, not through the story list, so the two
+ * halves of "N claims under M questions" are the same set. Since methodology
+ * v1.19 a claim can leave the board on its own, and a question whose every
+ * claim has left it is not a question this sentence is counting.
+ */
+const questionCount = new Set(rows.map((row) => row.story.id)).size;
 
 /** The most recent claims, in the record's own order. */
 const recent = rows.slice(0, 8);
