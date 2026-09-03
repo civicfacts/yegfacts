@@ -4,7 +4,7 @@ import type { Loader } from 'astro/loaders';
 import { questionRegister, reportsFor } from './intake';
 
 /**
- * The intake records and triage reports behind `/considered/<id>`.
+ * The intake records and triage reports behind `/questions/<id>`.
  *
  * They are Markdown files that live where the intake process put them —
  * `intake/candidates/<id>/` for a question registered on its own, a review

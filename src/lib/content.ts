@@ -11,7 +11,7 @@ export type JournalPost = CollectionEntry<'journal'>;
  * The single visibility gate (build plan, Phase 1A item 3).
  *
  * `draft` stories are excluded from every public route, from the search index,
- * from the homepage and from topic hubs. Because `/facts/[slug]` builds its
+ * from the homepage and from topic hubs. Because `/questions/[id]` builds its
  * paths from this function, a draft story has no page at all — which is what
  * keeps it out of Pagefind too, with no separate exclusion rule to forget.
  */

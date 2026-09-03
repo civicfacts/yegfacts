@@ -126,7 +126,7 @@ const stories = defineCollection({
        * `status` stays `published` — the panel did run, the corrections history
        * is still the history of a published page, and the page keeps its URL.
        * What changes is listing: `src/lib/content.ts` keeps a withdrawn story
-       * off every board, and `/considered` lists its claims instead.
+       * off every board, and `/questions` lists its claims instead.
        */
       withdrawn: z
         .object({
@@ -355,7 +355,7 @@ const journal = defineCollection({
 });
 
 /**
- * The intake records and triage reports behind `/considered/<id>`, rendered
+ * The intake records and triage reports behind `/questions/<id>`, rendered
  * from Markdown at build time. The loader explains why they cannot be a plain
  * `glob()`: the register, not a directory, is what says which files exist.
  */
