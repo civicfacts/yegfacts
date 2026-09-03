@@ -70,10 +70,15 @@
 #                claim with an investigation carries no outcome of its own; it
 #                inherits the investigation's. The older hand-registered
 #                entries below carry their own outcome and no investigation.
-# accounts:      how many distinct accounts in the source asserted it. Accounts,
-#                not people: these are pseudonyms, and an account counted under
-#                a claim may have been arguing against it, so /considered never
-#                prints a total without the sides it was argued on.
+# accounts:      how many distinct people in the source took part in it. One
+#                pseudonym is one person within a source, so the count is exact
+#                there; across sources the same person would count twice, and
+#                no page sums across sources. Someone counted under a claim may
+#                have been arguing against it, which is why /considered says a
+#                claim was discussed by so many and never that it was agreed.
+#                An investigation's `accounts` keeps its for/against/neither
+#                split in the file even though the page prints the total alone:
+#                the split is what the validator checks the total against.
 # variations:    the other wordings of the same assertion folded into this
 #                claim, when there is more than one. A restatement and a flat
 #                denial are variations; a different predicate, scope, period or

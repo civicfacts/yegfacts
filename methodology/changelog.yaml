@@ -1,6 +1,39 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.16"
+  date: "2026-09-03"
+  scope: claims-grouped-into-investigations
+  summary: >
+    Propositions from a source are now grouped twice. Claims that one
+    investigation would settle share a brief and a panel run; only claims that
+    are the same assertion share a finding.
+  highlights:
+    - "The founder read the register the previous version produced and found what was still wrong with it: several separate claims per argument, each of which would cost its own panel run. Four of them turned on who pays for Edmonton's roads. Checked one at a time that is four briefs, four panels and four near-identical findings, and it had already produced an incoherent result, three of the four cleared for checking and the fourth declined as undisputed inside a thread that is an argument about exactly that."
+    - "prompts/intake-group.md groups at two levels because they do different work. An investigation is one question, one brief, one body of evidence, one panel run, and propositions belong in the same one when a reviewer reading the same documents would settle both. A claim gets one finding, so it is one assertion: the same wording again, or a flat denial, is a variation of a claim, while a different predicate, scope, period or quantifier is a different claim in the same investigation."
+    - "Opposite claims share an investigation and never share a finding. Whether concrete barriers delay emergency vehicles and whether responders ride down the lanes to pass traffic are one question and two claims. A single finding over the pair would state nothing, and it would label everybody quoted under it with a verdict about the other side's argument."
+    - "scripts/intake-groups.ts refuses a grouping that would do that. Every proposition is placed exactly once, a claim whose variations argue different ways fails, and a claim's wording has to be copied verbatim from one of its propositions rather than composed, so a reader comparing a claim with the quotes under it finds the same sentence. Whether a two-sided question is framed so it can be answered either way is a judgement, so the script prints those questions for a person to read instead of guessing at them."
+    - "Triage now rules on investigations. On the first source that is 34 decisions rather than 112, and the two readers agreed on 30 of 34 where the same two readers had agreed on 78 of 112 ruling claim by claim."
+    - "An accusation against a named person is declined even when the question around it goes ahead. Grouping keyed that decision off the investigation at first, and the readers quite reasonably cleared the question of what city hall pays and what councillors have filed, so the accusation sitting inside it was published in full. The decline belongs to the claim: it carries its own refusal, and the register file may not hold the wording either, since a slug is as public as a sentence."
+    - "The register grows a level to match. An investigation carries the question, the outcome and the reason; a claim says which investigation it is checked under and carries no outcome of its own. /considered lists investigations, ordered by how many people discussed each, so a question dozens of people are arguing about sits above one raised by a single commenter and cost is spent in that order. Cost still decides when a question is checked, never whether."
+    - "Counts say a question or a claim was discussed by so many people, never that it was agreed with: somebody counted under a claim may have been arguing against it. One pseudonym is one person within one source, so the count is exact there; nothing sums a person across sources."
+    - "Two specialist board reads rejected the first version of this, in which the group itself carried one finding, and both were right. What one of them called the hostile reading is the sentence to keep: that this site would harvest real quotes to build a consolidated strawman, knock it down with a single verdict, and make everyone quoted look like they were lying."
+  links:
+    - label: Every claim we've considered
+      href: /considered
+    - label: How a claim gets in
+      href: /methodology#intake
+  note: >
+    The previous version stopped the editor choosing which claims to check. It
+    did not stop the same argument arriving as five claims, and five checks of
+    one argument is both a waste and a worse answer than one check would be. So
+    the grouping is the fix, and the care in it is all about where a finding
+    attaches. Group for work and you save panel runs. Group for verdict and you
+    produce a finding that answers none of the claims under it while labelling
+    the people quoted beneath it. Those are different operations on the same
+    list, and the method now does them separately: the investigation is the unit
+    of work, the claim is the unit of judgement, and a question both camps are
+    asking is one investigation with claims pointing in both directions.
 - version: "1.15"
   date: "2026-09-02"
   scope: whole-source-intake
