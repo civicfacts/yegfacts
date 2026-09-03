@@ -1,36 +1,105 @@
 ---
-import { getEntry, render, type CollectionEntry } from 'astro:content';
+import { getEntry, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import ClaimEntry from '../../components/ClaimEntry.astro';
+import InvestigationEntry from '../../components/InvestigationEntry.astro';
+import { publishedClaims } from '../../lib/content';
 import {
   candidatesWithPages,
-  outcomeHeading,
-  provenance,
-  storyLinkLabel,
+  claimText,
+  claimsOf,
+  investigationRegister,
+  reportAnchor,
+  sourceRegister,
   type Candidate,
+  type Investigation,
+  type Source,
 } from '../../lib/intake';
-import { repoFile } from '../../lib/site';
 import { toc } from '../../lib/toc';
 
 type Report = CollectionEntry<'candidateReports'>;
 
 /**
- * `/considered/<id>` — one candidate, with the records behind its outcome.
+ * `/considered/<id>` — one entry in the register, at either level.
  *
- * `/considered` publishes the decision; this publishes the working. Until now
- * the intake record and the triage report were links into GitHub, which asks a
- * reader to leave the site and read a repository to find out why their claim
- * was not checked, and left the claim's wording out of the search index
- * entirely.
+ * `/considered` publishes the decisions; this publishes the working. Both
+ * levels of the register live under this one route because both are things a
+ * reader arrives at from the list: an investigation is the question and the
+ * decision on it, with every claim under it in the words it was said in; a
+ * claim is one assertion, its captured wordings, and a line up to the question
+ * it is checked under.
  *
- * A candidate with neither record has nothing to show and gets no page, so
- * `/considered` links only the ones that do.
+ * The two id spaces share a URL namespace, so the validator refuses a register
+ * where an investigation and a claim have the same id.
+ *
+ * A claim extracted from a source gets a page even with no report behind it,
+ * because it has something a report cannot give: every wording the claim was
+ * actually said in, under the pseudonyms the capture uses. That is what lets
+ * somebody who commented on the original post find their own words here.
  */
 export async function getStaticPaths() {
-  return Promise.all(
-    candidatesWithPages().map(async ({ candidate, reports }) => ({
+  const sources = new Map(sourceRegister().map((source) => [source.id, source]));
+  const investigations = new Map(
+    investigationRegister().map((investigation) => [investigation.id, investigation]),
+  );
+
+  /**
+   * Where a `variation_of` points. A published claim lives on its story page;
+   * a register entry is either a page of its own or a row on `/considered`.
+   */
+  const pages = candidatesWithPages();
+  const targets = new Map<string, { href: string; label: string }>();
+  for (const { candidate } of pages) {
+    targets.set(candidate.id, {
+      href: `/considered/${candidate.id}`,
+      label: 'Read what happened to it',
+    });
+  }
+  for (const { claim, story } of await publishedClaims()) {
+    targets.set(claim.data.id, {
+      href: `/facts/${story.id}#${claim.data.id}`,
+      label: 'Read the check',
+    });
+  }
+
+  const investigationPages = investigationRegister().map((investigation) => {
+    const claims = claimsOf(investigation.id);
+    const sides = new Set(claims.map((claim) => claim.side));
+    return {
+      params: { id: investigation.id },
+      props: {
+        investigation,
+        claims,
+        twoSided: sides.has('for') && sides.has('against'),
+        source: sources.get(investigation.source) ?? null,
+        candidate: null,
+        variation: null,
+        reports: [] as Array<{ label: string; path: string; entry: Report }>,
+      },
+    };
+  });
+
+  const claimPages = await Promise.all(
+    pages.map(async ({ candidate, reports }) => ({
       params: { id: candidate.id },
       props: {
         candidate,
+        investigation:
+          candidate.investigation === undefined
+            ? null
+            : (investigations.get(candidate.investigation) ?? null),
+        claims: [] as Candidate[],
+        twoSided: false,
+        source: candidate.source ? (sources.get(candidate.source) ?? null) : null,
+        variation: candidate.variation_of
+          ? {
+              id: candidate.variation_of,
+              ...(targets.get(candidate.variation_of) ?? {
+                href: `/considered#${candidate.variation_of}`,
+                label: 'Read what happened to it',
+              }),
+            }
+          : null,
         reports: (
           await Promise.all(
             reports.map(async ({ label, path }) => ({
@@ -46,151 +115,71 @@ export async function getStaticPaths() {
       },
     })),
   );
+
+  return [...investigationPages, ...claimPages];
 }
 
 interface Props {
-  candidate: Candidate;
+  /** Set on an investigation's page; null on a claim's. */
+  investigation: Investigation | null;
+  /** Set on a claim's page; null on an investigation's. */
+  candidate: Candidate | null;
+  claims: Candidate[];
+  twoSided: boolean;
+  source: Source | null;
+  variation: { id: string; href: string; label: string } | null;
   reports: Array<{ label: string; path: string; entry: Report }>;
 }
 
-const { candidate, reports } = Astro.props;
+const { investigation, candidate, claims, twoSided, source, variation, reports } = Astro.props;
 
-const rendered = await Promise.all(
-  reports.map(async (report) => ({
-    label: report.label,
-    /** The section id is the record's kind, so the outline reads as the page does. */
-    id: report.label === 'Triage' ? 'triage' : 'intake',
-    reader: report.entry.data.reader,
-    run: report.entry.data.run,
-    Content: (await render(report.entry)).Content,
-  })),
-);
+/**
+ * An investigation's page is the question and the decision on it; a claim's is
+ * the claim, whose own outcome, when it has one, is the heading.
+ */
+const isInvestigation = candidate === null && investigation !== null;
 
-const sections = toc([
-  { id: 'outcome', label: 'Outcome' },
-  ...rendered.map((report) => ({ id: report.id, label: report.label })),
-]);
+const sections = isInvestigation
+  ? toc([
+      { id: 'outcome', label: 'Outcome' },
+      source && { id: 'source', label: 'Where it came from' },
+      { id: 'claims', label: claims.length === 1 ? 'The claim' : 'The claims' },
+    ])
+  : toc([
+      candidate?.investigation
+        ? { id: 'investigation', label: 'The question' }
+        : { id: 'outcome', label: 'Outcome' },
+      source && { id: 'source', label: 'Where it came from' },
+      (candidate?.forms ?? []).length > 0 && { id: 'forms', label: 'How it was said' },
+      ...reports.map((report) => ({ id: reportAnchor(report.label), label: report.label })),
+    ]);
 
-const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
+const title = isInvestigation ? investigation.question : claimText(candidate!);
+
+const description = isInvestigation
+  ? (investigation.reason ?? 'A question YEGFacts considered checking, with every claim under it.')
+  : (candidate!.reason ??
+    investigation?.reason ??
+    'A claim YEGFacts considered, with the record behind the decision.');
 ---
 
-<Base
-  sections={sections}
-  title={candidate.wording}
-  description={candidate.reason ??
-    'A claim YEGFacts considered, with the intake record and triage behind the decision.'}
->
-  <article>
-    <header class="border-b border-rule pb-7">
-      <div class="text-xs text-muted" data-crossref>
-        <a href="/considered" class="link">Every claim we've considered</a>
-      </div>
-
-      {/*
-        The claim in its own words is the title, quoted, because this page is
-        about a sentence somebody said rather than about a subject we named.
-      */}
-      <h1
-        class="mt-3 text-[1.5rem] leading-[1.2] font-extrabold tracking-[-0.02em] text-pretty sm:text-[1.875rem]"
-      >
-        “{candidate.wording}”
-      </h1>
-
-      {/* Straight out of the register, in the words `/considered` uses. */}
-      <p class={`mt-4 ${label}`} data-record>
-        <time datetime={candidate.recorded}>{candidate.recorded}</time>
-        {' · '}
-        <span class="normal-case tracking-normal">{provenance(candidate)}</span>
-      </p>
-    </header>
-
-    <section id="outcome" class="mt-10 scroll-mt-6">
-      {/* The outcome is a heading, as it is on `/considered`, not a badge. */}
-      <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
-        {outcomeHeading(candidate.outcome)}
-      </h2>
-      {
-        (candidate.reason ?? candidate.note) && (
-          <p class="mt-3.5 max-w-prose border-l-2 border-gold pl-3.5 text-[1.0625rem] leading-relaxed text-pretty">
-            {candidate.reason ?? candidate.note}
-          </p>
-        )
-      }
-      {
-        candidate.story && (
-          <p class="mt-4 text-sm" data-crossref>
-            <a href={`/facts/${candidate.story}`} class="link">
-              {storyLinkLabel(candidate)}
-            </a>
-          </p>
-        )
-      }
-    </section>
-
-    {
-      rendered.map(({ id, label: heading, reader, run, Content }) => (
-        <section id={id} class="mt-14 scroll-mt-6">
-          <h2 class="section-heading">{heading}</h2>
-          {/*
-            The triage is somebody else's reading, and it has to be unmistakable
-            which. A byline naming the model read as if the model had reviewed
-            the site's work, and left the report's judgements available to be
-            taken for the site's own. The notice says both things instead: whose
-            reading this is, and that the decision above is ours. The intake
-            record needs none of it — that one is Stew's.
-          */}
-          {id === 'triage' && (
-            <aside
-              class="mt-4 border-t-2 border-b border-t-gold border-b-rule bg-wash px-4 py-3.5"
-              role="note"
-            >
-              <p class="text-sm leading-relaxed text-forest">
-                What follows is the triage read, written by a model from another vendor and
-                published as written. The site's decision is the outcome above.
-              </p>
-              {(reader || run) && (
-                <p class="mt-1 text-xs text-muted" data-record>
-                  {reader}
-                  {reader && run && ' · '}
-                  {run && (
-                    <>
-                      run <time datetime={run}>{run}</time>
-                    </>
-                  )}
-                </p>
-              )}
-            </aside>
-          )}
-          {/*
-            `data-record` for the same reason the register's meta line carries
-            it: this is a stored record rendered verbatim, not the site writing
-            prose. One triage report covers three candidates, so its words
-            legitimately appear on three pages.
-          */}
-          <div class="prose mt-4" data-record>
-            <Content />
-          </div>
-        </section>
-      ))
-    }
-
-    <footer class="mt-14 border-t border-rule pt-5">
-      {/*
-        Each source names the record it is: the site footer already carries a
-        "Source on GitHub" pointing at the repository, and a page with both an
-        intake record and a triage report would otherwise offer two links with
-        the same words and different destinations.
-      */}
-      <p class="flex flex-wrap gap-x-5 gap-y-1 text-sm" data-crossref>
-        <a href="/considered" class="link">Every claim we've considered</a>
-        {
-          reports.map((report) => (
-            <a href={repoFile(report.path)} rel="noopener" class="link">
-              {report.label} on GitHub
-            </a>
-          ))
-        }
-      </p>
-    </footer>
-  </article>
+<Base sections={sections} title={title} description={description}>
+  {
+    isInvestigation ? (
+      <InvestigationEntry
+        investigation={investigation}
+        claims={claims}
+        source={source}
+        twoSided={twoSided}
+      />
+    ) : (
+      <ClaimEntry
+        candidate={candidate!}
+        investigation={investigation}
+        source={source}
+        variation={variation}
+        reports={reports}
+      />
+    )
+  }
 </Base>

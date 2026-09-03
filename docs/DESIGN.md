@@ -144,6 +144,77 @@ and panel agreement are separate dimensions and all three are shown.
 
 ## 4. How a finding is produced
 
+### Stage 0: intake (methodology v1.15)
+
+The unit of intake is a whole source: a post with all of its comments, an
+article, a discussion. Not a claim someone picked out of one. Anyone may submit
+a source, and every materially factual claim inside it is extracted and
+dispositioned. Nothing is selected for interest at any point, by anyone, which
+is the property the rest of §4 rests on.
+
+Captures live in `intake/captures/<slug>/`, extraction and merge artifacts in
+`reviews/intake/<slug>/`, and the candidate register in `intake/register.yaml`,
+published at `/considered`.
+
+1. **Extraction.** Three cheap seats, one per panel vendor, each read the whole
+   thread as rendered by `scripts/intake-render-thread.ts`, under
+   `prompts/intake-extract.md`, and list every materially factual claim with a
+   verbatim quote and the comment index it came from. Seats do no research, do
+   not judge truth, and do not choose.
+2. **Quote check.** Before the merge sees them, forms are checked against the
+   capture: the quote must be one unbroken run of the comment it cites, and the
+   index must exist. Failures are discarded and the discards recorded. A wrong
+   quote is a false attribution to a real person, which is worse than a missed
+   claim.
+3. **Merge.** One strong seat (`prompts/intake-merge.md`) folds the three lists
+   into propositions and carries every surviving form onto the proposition it
+   belongs to.
+4. **Coverage check.** `scripts/intake-coverage.ts` exits non-zero unless every
+   extractor claim id from every seat is accounted for exactly once: under some
+   proposition's `from`, or in `dropped` with one of three permitted reasons
+   (not a claim, duplicate quote, not about Edmonton civic government). This is
+   the guarantee the arrangement exists to provide.
+5. **Triage.** `prompts/intake-triage-batch.md` goes to two readers, both from
+   a different vendor than the editor, neither seeing the other. Each rules on
+   every proposition in one batch, GO, PARK or NO, with a reason written for a
+   reader. They combine so that GO takes both, or one GO and one PARK; NO takes
+   both; everything else parks, a GO set against a NO included. Throwing out a
+   real claim costs the reader more than holding one too long, which is the
+   lean D-0011 takes on verdicts, applied to selection. Only a GO reaches stage
+   1 below, and where the readers split the published reason says so.
+
+Three rules hang off this:
+
+- **No invented claims.** A wording the editor or the founder proposed is
+  registered with `origin: editor` and held at PARK until a captured form of it
+  exists in a real source. Registered wording is not captured wording, and only
+  captured wording goes to a panel.
+- **Named individuals.** A proposition accusing an identifiable person of
+  wrongdoing, dishonesty or an improper motive is extracted like any other, so
+  it is counted rather than hidden, and flagged `names_person` at the merge.
+  Triage declines it under one standing public reason: checking what one person
+  says about another needs a way for that person to answer, and v1 builds none.
+  `/considered` keeps the row, its outcome and its reason and prints neither
+  the accusation nor the name. The id is neutral too, because a slug is
+  published as surely as a paragraph. The wording and the comments go to the
+  private board record so the decision stays auditable.
+  What an office-holder did in office is not in this class. A motion brought, a
+  vote cast, a lane built: council minutes settle those, the site names
+  office-holders when it reports them, and those claims are triaged on the
+  ordinary tests. Withholding follows a decline, not the presence of a name.
+- **Pseudonyms.** Commenters are replaced by a stable "Adjective + Edmonton
+  animal + initial" label ("Snowy Hare F.") derived from a hash of the name, so
+  a re-export of the same source yields the same labels. Magpie is excluded, it
+  being Stew's bird. Public office-holders keep their names. The mapping from
+  label to name is held privately and is never committed. Quotes stay verbatim,
+  so a person who commented can find their own words on the site.
+
+Run once, on one source. Nothing has yet shown the triage step to be
+reproducible on a re-read of the same proposition list; that is open in the
+board record.
+
+### The seven stages
+
 Seven stages per story. One run covers all of a story's claims. State lives in
 `reviews/<story-slug>/state.yaml` so any session can resume where the last one
 stopped.
@@ -206,7 +277,7 @@ Pinned reviewer commands (methodology v1.6, 2026-09-01; `scripts/panel/run-revie
 
 | Panel seat | Command |
 |---|---|
-| Claude Fable 5.1 | `claude -p --model claude-fable-5-1 --effort high` |
+| Claude Opus 5 | `claude -p --model opus --effort high` (v1.15; Fable 5.1 before that, pinned in v1.5 and given its effort setting in v1.6). The move is a cost decision, not a judgement about review quality: the founder's Fable allowance on his subscription is nearly exhausted. Runs already published under Fable 5.1 keep the model their manifests record. |
 | GPT-5.6 Sol | `codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check` |
 | Gemini 3.1 Pro | `agy --effort high --sandbox --dangerously-skip-permissions --print-timeout 45m -p` (v1.14; before that without the permissions flag, which made the headless seat return nothing on PDF-heavy briefs) |
 
@@ -332,6 +403,14 @@ directions. Stories in `pending-review` never count toward that bar.
 Claims are pre-registered here, before any panel runs. Expected findings are
 deliberately not recorded in this table or anywhere on the public site: naming a
 hypothesis next to a claim prejudges it.
+
+Under methodology v1.15 the wordings in this table are registered wordings, not
+captured forms: they were written here rather than said by anyone in a source we
+hold. The slate stands as pre-registration of the topics, and nothing is dropped
+from it, but a claim cannot go to a panel on this table's wording alone. The
+launch bar above is therefore under review and will be restated after a
+retro-triage of the claims already published. It is open; this note does not
+settle it.
 
 | Story | Topics | Pre-registered claims |
 |---|---|---|

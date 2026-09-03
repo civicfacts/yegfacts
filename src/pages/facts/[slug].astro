@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import AiReview from '../../components/AiReview.astro';
+import AlsoSaidAs from '../../components/AlsoSaidAs.astro';
 import CopyButton from '../../components/CopyButton.astro';
 import Finding from '../../components/Finding.astro';
 import Gloss from '../../components/Gloss.astro';
@@ -408,6 +409,15 @@ const claimReviews =
                     </ul>
                   </details>
                 )}
+
+                {/*
+                  The wordings this claim was actually said in, gathered from
+                  the register entries merged into it. Under the facts, because
+                  the check is what the page is for; on the page, because a
+                  person who said it should be able to find their own words
+                  beside the answer.
+                */}
+                <AlsoSaidAs claimId={claim.data.id} />
 
                 {claim.data.limitations.length > 0 && (
                   <div class="mt-4">

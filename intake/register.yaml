@@ -1,4 +1,4 @@
-# Candidate register (methodology v1.12).
+# Candidate register (methodology v1.12, regrouped under v1.16).
 #
 # Every claim the site has considered checking, whether or not it reached
 # triage, with where the wording came from and what happened. The
@@ -13,13 +13,32 @@
 # entry's intake record as another captured form, with its source, rather
 # than registered again; the triage reader is not asked to de-duplicate.
 # Two claims that answer different questions stay separate even when they
-# come from the same argument, and may share a story.
+# come from the same argument, and belong to the same investigation.
+#
+# Three keys, in this order:
+#
+#   investigations:  the unit of work. One question, one brief, one body of
+#                    evidence, one panel run. Triage rules here, so the
+#                    outcome and its reason live here.
+#   sources:         where claims came from.
+#   candidates:      the claims. Each gets one finding when it is checked, so
+#                    each is one assertion, and each belongs to exactly one
+#                    investigation.
+#
+# Several claims to an investigation is normal. Claims that contradict each
+# other belong to the SAME investigation: whether barriers delay emergency
+# vehicles and whether responders ride down the lanes to pass traffic are one
+# question, investigated once, and each still gets its own finding. A single
+# finding over both would state nothing and would label each side with a
+# verdict about the other.
 #
 # origin: captured (a post we hold with a URL or screenshot) |
 #         supplied (wording passed to us by a person, provenance not
 #         captured) | editor (a hypothesis the editor or founder proposed)
-# outcome: GO | PARK | NO | not-triaged | pre-triage (checked before
-#          v1.12 existed)
+# outcome: GO | PARK | NO | variation (the same claim as another entry, in
+#          other words; requires variation_of) | not-a-claim (opinion,
+#          prediction or value judgement, so never sent to triage) |
+#          not-triaged | pre-triage (checked before v1.12 existed)
 #
 # reason:  one sentence, written for readers, saying why the outcome is what
 #          it is. Required on PARK and NO — /considered publishes it, so a
@@ -29,8 +48,2850 @@
 #          one exists. Validated to exist on disk; /considered links it.
 # story:   slug of the story that carries the claim, when one does. Linked as
 #          /facts/<slug> only if that story is published.
+#
+# Whole-source intake
+# -------------------
+#
+# A source is where claims came from: one post, article, discussion or video,
+# captured whole with every comment on it, read end to end by three extractor
+# seats and merged by a strong model into propositions. Nothing is picked out
+# and nothing is left out, so every proposition the merge produced is registered
+# below with its disposition, and /considered publishes the lot.
+#
+# A candidate extracted from a source carries, in addition to the fields above:
+#
+# source:        the id of the `sources` entry it came from.
+# proposition:   what would have to be true, in one plain sentence. When it is
+#                present this is what the site shows as the claim, and `wording`
+#                stays as the representative captured quote.
+# side:          for | against | neither — which side of the source's argument
+#                the proposition serves.
+# investigation: the id of the `investigations` entry it is checked under. A
+#                claim with an investigation carries no outcome of its own; it
+#                inherits the investigation's. The older hand-registered
+#                entries below carry their own outcome and no investigation.
+# accounts:      how many distinct people in the source took part in it. One
+#                pseudonym is one person within a source, so the count is exact
+#                there; across sources the same person would count twice, and
+#                no page sums across sources. Someone counted under a claim may
+#                have been arguing against it, which is why /considered says a
+#                claim was discussed by so many and never that it was agreed.
+#                An investigation's `accounts` keeps its for/against/neither
+#                split in the file even though the page prints the total alone:
+#                the split is what the validator checks the total against.
+# variations:    the other wordings of the same assertion folded into this
+#                claim, when there is more than one. A restatement and a flat
+#                denial are variations; a different predicate, scope, period or
+#                quantifier is a different claim.
+# seats:         which extractor seats found it.
+# forms:         every captured wording, each {commenter, quote, comment}.
+#                `commenter` is the source's stable pseudonym, `quote` is the
+#                verbatim words, `comment` is the index in the capture. The
+#                validator checks every quote is an exact substring of the
+#                comment it cites, so a quote attributed to a person is that
+#                person's words.
+# ground:        why a claim carries its own decline inside an investigation
+#                that is going ahead. `right-of-reply` is the only value: the
+#                claim accuses a named person and the site has no way to put
+#                that to them. Such a claim keeps its row, its outcome and its
+#                reason, and carries no proposition, wording or forms at all,
+#                because a slug and a paragraph are published alike.
+# names_person:  the proposition names an identifiable individual. What is
+#                withheld is an accusation, not the public record: a claim about
+#                a motion brought or a lane installed is published in full. Only
+#                where the resolved outcome is NO does the site print a neutral
+#                label in place of the claim and print no forms, because that
+#                decline can only be one the site has no way to put to the
+#                person. The register may hold the wording; the site may not.
+# variation_of:  register id or published claim id this is the same claim as.
+#
+# Investigations and claims are generated from a completed run rather than
+# typed:
+#
+#   npx tsx scripts/intake-register.ts reviews/intake/<slug>
+
+investigations:
+  - id: cycling-volumes
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "How many people in Edmonton cycle, and how much do the bike lanes get used?"
+    outcome: GO
+    reason: "City counters, census commute data and trip surveys can show how often Edmonton’s bike lanes are used and why counts, riders and trip shares are different measures."
+    grouping_note: "The automated counter data, the census commute figures and the City's ridership reporting settle every count, share and denominator here at once."
+    accounts:
+      total: 25
+      for: 5
+      against: 21
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: who-cycles
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Who cycles in Edmonton?"
+    outcome: GO
+    reason: "Census and transportation survey data can show cyclists’ occupations, incomes, education and vehicle ownership rather than relying on anecdotes about who rides."
+    grouping_note: "Survey data on cyclists' occupations, income, education and car ownership answers all three."
+    accounts:
+      total: 4
+      for: 4
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: winter-cycling
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Can people cycle through an Edmonton winter, and do they?"
+    outcome: GO
+    reason: "Monthly counter totals and weather records can show how many people ride through winter, under what conditions and whether winter cycling has grown."
+    grouping_note: "Winter counter data and the weather record answer both directions."
+    accounts:
+      total: 16
+      for: 4
+      against: 12
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: snow-clearing
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "How does Edmonton clear snow from its streets and bike lanes?"
+    outcome: GO
+    reason: "The snow policy, service schedules and council reports can show when bike lanes and streets are cleared, where snow is placed and what changes are proposed."
+    grouping_note: "The snow and ice policy, the clearing schedules and the proposals going to council settle the order of clearing, the windrows and what changes next."
+    accounts:
+      total: 5
+      against: 4
+      neither: 1
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: lanes-and-congestion
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Do Edmonton's bike lanes ease traffic congestion or make it worse?"
+    outcome: GO
+    reason: "Before-and-after traffic counts and travel times on converted corridors can show whether reallocating lanes changed congestion, while the general claim about roads carrying services adds nothing checkable."
+    grouping_note: "The City's record of which lanes it reallocated, plus traffic counts and travel times on those corridors, answers both directions and shows what else the road carries."
+    accounts:
+      total: 24
+      for: 7
+      against: 16
+      neither: 2
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: converted-roadway
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "What is left of the roadway for drivers, buses and delivery vehicles where a lane became a bike lane?"
+    outcome: GO
+    reason: "Design drawings, lane-width standards and pavement-condition records can show what space remains for vehicles and whether the street developed the problems residents describe."
+    grouping_note: "The design drawings for the converted streets, with their lane widths and the pavement records for them, settle all three."
+    accounts:
+      total: 2
+      against: 1
+      neither: 1
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: bike-vs-road-spending
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "How does the money for bike lanes compare with what Edmonton spends on roads?"
+    outcome: GO
+    reason: "Capital budgets and project cost sheets can put the active-transportation allocation beside road spending and test each percentage and project comparison on the same basis."
+    grouping_note: "The four-year capital budget and the project cost sheets for road jobs like 50 Street settle the phasing, the share and every comparison drawn from them."
+    accounts:
+      total: 5
+      for: 4
+      against: 1
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: hundred-million-approval
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Did Edmonton City Council approve $100 million for bike lane expansion?"
+    outcome: NO
+    reason: "The $100 million approval is common ground throughout this source, so checking the council vote would only restate an undisputed budget fact."
+    accounts:
+      total: 17
+      against: 17
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: infrastructure-deficit
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Is Edmonton letting roads, alleys and drainage go while it funds bike lanes?"
+    outcome: GO
+    reason: "Infrastructure-condition reports and budgets can show the size of Edmonton’s renewal shortfall, what was funded and whether money was actually redirected from the cited services."
+    grouping_note: "The City's infrastructure deficit reporting and its renewal and operating budgets cover both the condition of the basics and what was funded instead."
+    accounts:
+      total: 15
+      against: 15
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: property-taxes
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "How much have Edmonton property taxes gone up?"
+    outcome: GO
+    reason: "City tax-rate and typical-property records can show the general increase, although the two anonymous residents’ dollar amounts cannot be verified without their assessment and tax notices."
+    accounts:
+      total: 2
+      against: 2
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: council-pause-vote
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Did council pause the future bike routes when its own administration recommended it?"
+    outcome: GO
+    reason: "Administration’s report and recorded votes can show what pause was recommended, which motions were made and how each councillor voted, without examining the allegation about councillors’ motives."
+    grouping_note: "The committee report and the recorded council votes settle the recommendation, the motions and who voted which way."
+    accounts:
+      total: 6
+      against: 6
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: council-hearing
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Who showed up to speak on the bike lanes at council, and who organized them?"
+    outcome: GO
+    reason: "The hearing record can establish the speaker balance and time limit, but the claim that supporters were paid or organized should be dropped unless the lobbyist registry links them directly."
+    grouping_note: "The speakers list from the hearing, the lobbyist registry and the meeting's own procedural record settle all of it."
+    accounts:
+      total: 11
+      for: 5
+      against: 6
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: routes-already-committed
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "How far along are the bike routes council was asked to stop?"
+    outcome: GO
+    reason: "Contracts, purchase records and the tender calendar can show which routes were already committed and whether they could still have been tendered for 2026."
+    grouping_note: "The signed design contracts and the 2026 tender calendar answer both."
+    accounts:
+      total: 3
+      for: 2
+      against: 1
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: consultation-and-opposition
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Did the City consult the affected neighbourhoods, and do residents oppose the bike lanes?"
+    outcome: GO
+    reason: "Project engagement records can show whom the City consulted and what participants said, while the claim about most Edmontonians should be dropped unless a representative citywide survey exists."
+    grouping_note: "The engagement record for these routes, including the City's own report on the data and consultation behind them, settles both."
+    accounts:
+      total: 14
+      against: 14
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: council-mandate
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "What mandate does this city council have, and can voters recall it?"
+    outcome: GO
+    reason: "Election results, candidates’ published positions and provincial recall law can show turnout and recall rules, though they cannot establish what every voter knew when voting."
+    grouping_note: "The election results and turnout figures, plus the recall rules in provincial law, cover the lot."
+    accounts:
+      total: 4
+      for: 1
+      neither: 3
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: councillors-own-commute
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Do Edmonton's councillors bike to work, and do they get a vehicle allowance?"
+    outcome: GO
+    reason: "The remuneration rules can settle the vehicle-allowance claim, while the blanket claim that councillors never bike should be dropped unless their own disclosures provide a complete answer."
+    grouping_note: "The councillor remuneration bylaw and councillors' own accounts of how they get to work answer both."
+    accounts:
+      total: 6
+      against: 6
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: city-hall-pay-and-interests
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "What do city hall salaries and councillors' disclosed interests look like?"
+    outcome: GO
+    reason: "Salary disclosures and filed interest statements can show the relevant pay and declared interests, without treating either as proof of an improper motive."
+    grouping_note: "The public salary disclosure and councillors' filed disclosure statements settle both."
+    accounts:
+      total: 2
+      against: 2
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: who-pays-for-roads
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Who pays for Edmonton's roads, drivers or everybody?"
+    outcome: GO
+    reason: "Municipal budgets and intergovernmental funding records can show how much road money comes from property taxes, fuel-tax transfers and other sources shared by drivers and cyclists."
+    grouping_note: "The revenue sources behind the City's road capital and operating budgets settle every version of this."
+    accounts:
+      total: 15
+      for: 7
+      against: 8
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: on-street-parking
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "What do bike lanes do to on-street parking, and what does that parking cost the city?"
+    outcome: GO
+    reason: "Project parking inventories and parking-program accounts can show how many spaces each lane removed and what providing those spaces costs the City."
+    grouping_note: "The parking inventory before and after each project, and what the on-street parking program costs the City, settle both sides."
+    accounts:
+      total: 10
+      for: 1
+      against: 9
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: zoning-and-infill
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Is Edmonton's infill and zoning push trading trees and parking for density?"
+    outcome: GO
+    reason: "The zoning bylaw and infill permit records answer questions about parking minimums, tree removal, and density. The two readers split GO and PARK."
+    grouping_note: "The zoning bylaw and the infill permit record cover the parking minimums, the multiplexes and the housing mix."
+    accounts:
+      total: 4
+      for: 1
+      against: 3
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: city-plan-commitments
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Has Edmonton committed to becoming a 15 minute city or to banning cars downtown?"
+    outcome: GO
+    reason: "Council-approved plans and agreements can show whether Edmonton committed to 15-minute planning or a year-round downtown car ban and what those commitments actually require."
+    grouping_note: "Council-approved agreements and the City Plan show what has actually been signed and planned."
+    accounts:
+      total: 3
+      against: 3
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: emergency-access
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Do Edmonton's bike lanes help or hinder emergency vehicles?"
+    outcome: GO
+    reason: "Response-time records and emergency access design standards show whether bike lanes delay or assist emergency vehicles. The two readers split GO and PARK."
+    grouping_note: "Response-time records and the City's design standards for emergency access settle both directions at once."
+    accounts:
+      total: 5
+      for: 1
+      against: 4
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: access-across-barriers
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Do the barriers around bike lanes block access to homes and disabled residents, or widen it?"
+    outcome: GO
+    reason: "Route drawings and accessibility standards can show where barriers, loading areas, driveways and alleys preserve access and where a design creates the cited detour or obstacle."
+    grouping_note: "The design standards for barrier gaps, DATS loading and driveway and alley access, together with the drawings for the streets being described, settle both directions."
+    accounts:
+      total: 7
+      for: 3
+      against: 4
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: transit-alternative
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Is Edmonton transit and the LRT a workable alternative to driving?"
+    outcome: GO
+    reason: "Published schedules, trip planners, service histories, ridership and collision records can compare transit with driving and test the specific claims about LRT and removed routes."
+    grouping_note: "ETS travel times, ridership and service change records, plus the LRT's own ridership and collision data, settle these together."
+    accounts:
+      total: 6
+      for: 1
+      against: 5
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: cycling-safety
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Do bike lanes make cycling safer in Edmonton, and where do cyclists actually ride?"
+    outcome: GO
+    reason: "City collision records and the traffic bylaw answer whether bike lanes improve safety and who is at fault in collisions. The two readers split GO and PARK."
+    grouping_note: "Edmonton's collision records and the traffic bylaw cover whether the lanes reduce harm, who is at fault and who is riding where."
+    accounts:
+      total: 10
+      for: 4
+      against: 6
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: street-types-and-design
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "What kinds of streets does Edmonton put bike lanes on, and who signs off on the design?"
+    outcome: GO
+    reason: "Road-classification maps, route inventories, design files and professional sign-offs can show which street types receive bike lanes and how their designs were approved."
+    grouping_note: "The City's road classification map, its network inventory and the design standards behind each route settle the classification disputes and the design history together."
+    accounts:
+      total: 6
+      for: 2
+      against: 2
+      neither: 2
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: network-connections
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Do Edmonton's bike routes connect to anything?"
+    outcome: GO
+    reason: "The City’s network map can show where routes connect, where they terminate and whether gaps remain along the LRT."
+    grouping_note: "The network map shows both the routes that end nowhere and the gaps along the LRT."
+    accounts:
+      total: 3
+      for: 1
+      against: 2
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: 83-avenue-lane
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Where is the bike lane near Whyte Avenue, and has it drawn complaints since it went in?"
+    outcome: GO
+    reason: "Project records and the street-level complaint log can establish the lane’s location, installation date and whether complaints were recorded after it opened."
+    grouping_note: "The lane's location and the City's complaint record for that street answer both."
+    accounts:
+      total: 1
+      for: 1
+      neither: 1
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: 132-avenue
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "What is being built on 132 Avenue, and what sits along it?"
+    outcome: GO
+    reason: "Design drawings and school-location records can show exactly what is being built on each side of 132 Avenue and how many schools sit along the affected stretch."
+    grouping_note: "The 132 Avenue design drawings and the land use along the corridor settle both."
+    accounts:
+      total: 5
+      against: 5
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: provincial-direction
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Has the province ordered Edmonton to stop building bike lanes?"
+    outcome: GO
+    reason: "Written provincial directives and tabled legislation can show whether Edmonton was ordered to stop building bike lanes and whether legislation was actually proposed."
+    grouping_note: "Whatever direction the province has issued in writing, and the legislation it has tabled, settle both directions."
+    accounts:
+      total: 4
+      for: 1
+      against: 3
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: holyrood-school-lane
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "What was planned for the bike lane outside the Holyrood school, and what stopped it?"
+    outcome: GO
+    reason: "The design file, approval history and correspondence can show what was proposed outside the school, the councillor’s official role and why the design stopped."
+    grouping_note: "The Holyrood design file and the correspondence about it answer both."
+    accounts:
+      total: 1
+      against: 1
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: 189-street-lane
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "What happened to the 189 Street bike lane?"
+    outcome: GO
+    reason: "The project record can show when the 189 Street lane was installed and removed, which official decisions authorized it and what removal cost."
+    grouping_note: "The 189 Street project record shows who put it in and what it cost to take out."
+    accounts:
+      total: 1
+      against: 1
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: other-cities
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Are other Canadian cities removing their bike lanes?"
+    outcome: GO
+    reason: "Municipal project and council records can identify Canadian cities that have removed bike lanes and distinguish isolated removals from a broader trend."
+    accounts:
+      total: 1
+      against: 1
+    run: reviews/intake/yegscoop-2026-08-26
+  - id: downtown-business
+    recorded: "2026-09-03"
+    source: yegscoop-2026-08-26
+    question: "Are downtown Edmonton businesses closing because customers cannot get to them?"
+    outcome: PARK
+    reason: "Reopen this when business closures can be linked to customer-access changes through location-level records or owner evidence, because closure counts alone cannot establish why businesses failed. The two readers split NO and PARK."
+    accounts:
+      total: 1
+      against: 1
+    run: reviews/intake/yegscoop-2026-08-26
+
+sources:
+  - id: yegscoop-2026-08-26
+    kind: facebook-post
+    url: "https://www.facebook.com/yegscoop/posts/pfbid02aKkokbtnxq3dsDhfWgbGsEamfiNRUncwnff4ES8N11qVZBg5W4aDxZaPF3frYymVl"
+    title: "Yegscoop post on council's 2026-08-26 bike lane decision"
+    captured: "2026-09-02"
+    captured_by: founder
+    comments: 621
+    commenters: 389
+    capture: intake/captures/yegscoop-2026-08-26
+    run: reviews/intake/yegscoop-2026-08-26
+    extracted_by: [haiku, luna, flash]
+    merged_by: opus
+    claims_found: 230
+    propositions: 112
 
 candidates:
+  - id: bike-lanes-look-empty
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: cycling-volumes
+    proposition: "Edmonton's bike lanes carry little or no bicycle traffic when residents observe them."
+    wording: "when out I see very few bikes on these very expensive bike lanes."
+    side: against
+    variation_of: bike-lanes-nobody-rides
+    accounts: 10
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Rustic Hare L."
+        quote: "when out I see very few bikes on these very expensive bike lanes."
+        comment: 21
+      - commenter: "Hardy Grouse D."
+        quote: "i have seen bike lanes summer and winter with little or no bike traffic on them."
+        comment: 35
+      - commenter: "Snowy Crow C."
+        quote: "These are for a few people while the major don't bike"
+        comment: 75
+      - commenter: "Snowy Crow C."
+        quote: "I drive daily all over this city and hardly ever see bikers and sure don't see them in winter."
+        comment: 80
+      - commenter: "Chilly Squirrel O."
+        quote: "We have had one for the last year on 119 ave and no one uses it. In a week there may be 1 rider on the lane."
+        comment: 320
+      - commenter: "Boreal Chickadee M."
+        quote: "there are almost no pedestrian or cyclists using it."
+        comment: 383
+      - commenter: "Misty Jackrabbit D."
+        quote: "Driving over to whyte ave, peak bike season time mid August, not one bike to be seen"
+        comment: 403
+      - commenter: "Quiet Marmot J."
+        quote: "I see a cyclist very rarely."
+        comment: 415
+      - commenter: "Granite Bluejay B."
+        quote: "They aren’t even that busy."
+        comment: 430
+      - commenter: "Sunny Grebe K."
+        quote: "The vast majority of cyclists don't even use the lanes still"
+        comment: 440
+      - commenter: "Icy Bluejay C."
+        quote: "Thousands of vehicles vs 10 bikes maybe."
+        comment: 589
+  - id: one-to-two-percent-of-population-rides
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: cycling-volumes
+    proposition: "Only about 1 to 2 percent of Edmonton's population rides bikes or uses the bike lanes."
+    wording: "we are talking about huge expenditures for only 2.3% of the populations usage."
+    side: against
+    variation_of: bike-lanes-nobody-rides
+    accounts: 8
+    seats:
+      - flash
+      - haiku
+    forms:
+      - commenter: "Bright Bluejay K."
+        quote: "we are talking about huge expenditures for only 2.3% of the populations usage."
+        comment: 60
+      - commenter: "Willow Nuthatch C."
+        quote: "2% of constituents ride bikes! What about the other 98%?"
+        comment: 186
+      - commenter: "Wintry Raven B."
+        quote: "1 percent of population to use."
+        comment: 330
+      - commenter: "Bright Woodpecker B."
+        quote: "500 people using the bike lanes 4 months of the year."
+        comment: 363
+      - commenter: "Snowy Grouse D."
+        quote: "The 1%"
+        comment: 368
+      - commenter: "Sunny Sparrow M."
+        quote: "bike lanes for the .001% of the population"
+        comment: 399
+      - commenter: "Misty Sparrow P."
+        quote: "The whole 1-2%"
+        comment: 426
+      - commenter: "Chilly Beaver B."
+        quote: "Waste of money on 1% of population"
+        comment: 433
+  - id: cycling-trips-1-3-million-2026
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: cycling-volumes
+    proposition: "Edmonton recorded nearly 1.3 million cycling trips across its automated counters through the first seven months of 2026."
+    wording: "Through the first seven months of 2026, Edmonton recorded nearly 1.3 million cycling trips across its automated counters."
+    side: for
+    accounts: 3
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Boreal Hare I."
+        quote: "Through the first seven months of 2026, Edmonton recorded nearly 1.3 million cycling trips across its automated counters."
+        comment: 2
+      - commenter: "Boreal Hare I."
+        quote: "Through the first seven months of 2026, Edmonton recorded nearly 1.3 million cycling trips across its automated counters."
+        comment: 81
+      - commenter: "Boreal Hare I."
+        quote: "Through the first seven months of 2026, Edmonton recorded nearly 1.3 million cycling trips across its automated counters"
+        comment: 111
+      - commenter: "Boreal Hare I."
+        quote: "Through the first seven months of 2026, Edmonton recorded nearly 1.3 million cycling trips across its automated counters."
+        comment: 121
+      - commenter: "Boreal Hare I."
+        quote: "Through the first seven months of 2026, Edmonton recorded nearly 1.3 million cycling trips across its automated counters."
+        comment: 213
+      - commenter: "Boreal Hare I."
+        quote: "Through the first seven months of 2026, Edmonton recorded nearly 1.3 million cycling trips across its automated counters."
+        comment: 369
+      - commenter: "Snowy Hare F."
+        quote: "that never happened"
+        comment: 4
+      - commenter: "Misty Jackrabbit D."
+        quote: "The numbers must be fudged"
+        comment: 403
+  - id: riders-are-recreational-not-commuters
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: cycling-volumes
+    proposition: "The people using Edmonton's bike lanes are mostly recreational or short-distance riders, not commuters."
+    wording: "Lots of recreational riders.. commuters not so much."
+    side: against
+    accounts: 2
+    seats:
+      - luna
+    forms:
+      - commenter: "Wintry Raven B."
+        quote: "Lots of recreational riders.. commuters not so much."
+        comment: 338
+      - commenter: "Bright Elk G."
+        quote: "usually within a short distance, or for recreational purposes."
+        comment: 375
+  - id: under-one-percent-of-commuters-cycle
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: cycling-volumes
+    proposition: "City reports and 2021 census figures show fewer than 1 percent of Edmonton commuters travel by bicycle."
+    wording: "City reports have census numbers in 2021 less than 1 percent."
+    side: against
+    variation_of: bike-lanes-nobody-rides
+    accounts: 2
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Wintry Raven B."
+        quote: "City reports have census numbers in 2021 less than 1 percent."
+        comment: 338
+      - commenter: "Amber Merlin A."
+        quote: "Less than 1% on bikes."
+        comment: 456
+  - id: two-percent-of-trips-by-bike
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: cycling-volumes
+    proposition: "About 2 percent of all trips in Edmonton are made by bicycle."
+    wording: "*2% of trips are done by bicycle, although it's higher in neighborhoods with bike infrastructure."
+    side: for
+    variation_of: bike-lanes-nobody-rides
+    accounts: 1
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Cedar Pelican C."
+        quote: "*2% of trips are done by bicycle, although it's higher in neighborhoods with bike infrastructure."
+        comment: 187
+      - commenter: "Cedar Pelican C."
+        quote: "transportation that includes >2% of trips"
+        comment: 295
+      - commenter: "Cedar Pelican C."
+        quote: "considering 2% of all trips are by bicycle"
+        comment: 333
+      - commenter: "Cedar Pelican C."
+        quote: "stats Canada document titled \"Main mode of commuting for the 10 largest census metropolitan areas\""
+        comment: 335
+      - commenter: "Cedar Pelican C."
+        quote: "the 2% figure is corroborated by \"2015 Edmonton and Region Household Travel Survey\"."
+        comment: 337
+  - id: 87-percent-commute-by-car
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: cycling-volumes
+    proposition: "87 percent of Edmontonians commute by car."
+    wording: "87% of Edmontonians commute in cars."
+    side: against
+    variation_of: bike-lanes-nobody-rides
+    accounts: 1
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Amber Merlin A."
+        quote: "87% of Edmontonians commute in cars."
+        comment: 456
+  - id: one-percent-year-round-users
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: cycling-volumes
+    proposition: "Only 1 percent of Edmonton's population uses the bike lanes year-round and fewer than 15 percent use them the rest of the year."
+    wording: "only 1% of the pop use them year round and less than 15% the rest of the year."
+    side: against
+    variation_of: bike-lanes-nobody-rides
+    accounts: 1
+    seats:
+      - haiku
+      - luna
+    forms:
+      - commenter: "Dusty Marmot K."
+        quote: "only 1% of the pop use them year round and less than 15% the rest of the year."
+        comment: 179
+  - id: heritage-days-bike-arrivals
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: cycling-volumes
+    proposition: "More than five people rode bikes to Heritage Days within an hour of opening on the Saturday."
+    wording: "Looks like more than 5 rode to Heritage Days (this was within an hour of opening on the Saturday)."
+    side: for
+    accounts: 1
+    seats:
+      - flash
+      - haiku
+    forms:
+      - commenter: "Mossy Beaver J."
+        quote: "Looks like more than 5 rode to Heritage Days (this was within an hour of opening on the Saturday)."
+        comment: 70
+  - id: blue-collar-workers-bike-to-work
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: who-cycles
+    proposition: "People working blue collar jobs in Edmonton bike to work."
+    wording: "I actually do know people who work blue collar jobs who bike to work."
+    side: for
+    accounts: 2
+    seats:
+      - flash
+    forms:
+      - commenter: "Granite Vole D."
+        quote: "I actually do know people who work blue collar jobs who bike to work."
+        comment: 59
+      - commenter: "Bright Bluejay K."
+        quote: "Not one person building our infrastructure bikes to work."
+        comment: 57
+  - id: cyclists-higher-income-and-education
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: who-cycles
+    proposition: "Cyclists typically have higher paying jobs and more education than people who do not cycle."
+    wording: "cyclist are taxpayers and typically have higher paying jobs are more education than those who don't!"
+    side: for
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Aurora Muskrat P."
+        quote: "cyclist are taxpayers and typically have higher paying jobs are more education than those who don't!"
+        comment: 43
+  - id: most-cyclists-also-drive
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: who-cycles
+    proposition: "Most people who bike are also drivers who pay fuel taxes."
+    wording: "Most bikers are also drivers and pay fuel taxes too."
+    side: for
+    accounts: 1
+    seats:
+      - luna
+    forms:
+      - commenter: "Granite Beaver P."
+        quote: "Most bikers are also drivers and pay fuel taxes too."
+        comment: 366
+  - id: winter-too-cold-for-cycling
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: winter-cycling
+    proposition: "Edmonton's winter is too long and too cold for cycling to work as everyday transportation."
+    wording: "Edmontonians cannot convert to bike as primary tranportation. Be realistic winter cycling is a fantasy."
+    side: against
+    variation_of: wc-too-cold
+    accounts: 12
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Bright Goose S."
+        quote: "Edmontonians cannot convert to bike as primary tranportation. Be realistic winter cycling is a fantasy."
+        comment: 19
+      - commenter: "Mossy Chickadee B."
+        quote: "See how many of you are riding your bikes in the winter months!"
+        comment: 71
+      - commenter: "Dusty Marmot K."
+        quote: "not effectual for a winter city"
+        comment: 179
+      - commenter: "Chilly Nuthatch V."
+        quote: "Who rides a bike in the winter maybe all 10 of them"
+        comment: 212
+      - commenter: "Aurora Bluejay G."
+        quote: "In a city that spends most of the year battling winter they are expanding bike lanes."
+        comment: 283
+      - commenter: "Rustic Nuthatch F."
+        quote: "winter is 75% of the year here"
+        comment: 407
+      - commenter: "Granite Bluejay B."
+        quote: "Bike lanes that get used for less than half the year."
+        comment: 430
+      - commenter: "Brisk Otter S."
+        quote: "lines that get covered in the winter which last 7 months or more a year"
+        comment: 445
+      - commenter: "Aurora Hare J."
+        quote: "winter for 6 months of the year"
+        comment: 447
+      - commenter: "Golden Waxwing S."
+        quote: "a city that has a two month summer"
+        comment: 466
+      - commenter: "Copper Beaver S."
+        quote: "we may have 4 or 5 months for bikes."
+        comment: 494
+      - commenter: "Golden Bluejay G."
+        quote: "a city that’s winter 6-8 months of the year"
+        comment: 576
+  - id: winter-cycling-has-grown
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: winter-cycling
+    proposition: "Winter cycling in Edmonton has grown, with people commuting by bike in snow and at -30."
+    wording: "I have no issues riding in -30."
+    side: for
+    accounts: 4
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Quiet Hare C."
+        quote: "I have no issues riding in -30."
+        comment: 133
+      - commenter: "Icy Muskrat A."
+        quote: "There’s been an impressive increase in winter riders over the past few years and I’m no longer the only one riding to work in the snow at -30. I’m seeing continuous bike traffic on all my routes and a steady increase in the new lanes as people learn about them."
+        comment: 135
+      - commenter: "Golden Crow L."
+        quote: "rides every single day, rain, shine, or blizzard"
+        comment: 165
+      - commenter: "Golden Elk C."
+        quote: "Yes, I am riding my bike in January. People ski in January. Biking in winter is no more difficult than skiing in winter."
+        comment: 260
+      - commenter: "Golden Elk C."
+        quote: "More and more people are making that choice"
+        comment: 258
+  - id: bike-lanes-plowed-before-streets
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: snow-clearing
+    proposition: "The City plows bike lanes in winter before it plows the streets."
+    wording: "bike lanes get plowed in the winter before the streets do"
+    side: against
+    accounts: 3
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Frosty Raven J."
+        quote: "bike lanes get plowed in the winter before the streets do"
+        comment: 280
+      - commenter: "Silver Raven G."
+        quote: "They plow the bike lanes every winter for the 1 or 2 bikes you see going down them"
+        comment: 487
+      - commenter: "Snowy Heron C."
+        quote: "They have snow and cleaning of their street and bike lanes"
+        comment: 559
+  - id: whyte-avenue-narrow-in-winter
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: snow-clearing
+    proposition: "Whyte Avenue becomes very narrow and dangerous in winter because of the snow budget and clearing."
+    wording: "have you been down whyte ave in winter knacks no snow budget,no proper snow removal makes whyte ave very narrow and dangerous in winter"
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Sunny Bluejay W."
+        quote: "have you been down whyte ave in winter knacks no snow budget,no proper snow removal makes whyte ave very narrow and dangerous in winter"
+        comment: 405
+  - id: snow-windrowed-into-parking-spaces
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: snow-clearing
+    proposition: "Plows windrow the snow into the few on-street parking spaces left beside the bike lanes."
+    wording: "guess where they wind row the snow in winter,right into the few parking spaces that we have left"
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Sunny Bluejay W."
+        quote: "guess where they wind row the snow in winter,right into the few parking spaces that we have left"
+        comment: 371
+  - id: two-snow-removal-proposals-need-more-money
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: snow-clearing
+    proposition: "Administration has already put two snow removal proposals to council, both requiring spending increases."
+    wording: "administration has already put 2 different proposals to council for snow removal and of course both will require spending increases."
+    side: neither
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Windy Heron J."
+        quote: "administration has already put 2 different proposals to council for snow removal and of course both will require spending increases."
+        comment: 510
+  - id: calcium-chloride-debate-coming
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: snow-clearing
+    proposition: "Council will soon debate bringing back calcium chloride as an anti-icer on the roads."
+    wording: "Council will be debating soon about bringing back calcium chloride to use as anti icing on the roads"
+    side: neither
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Windy Heron J."
+        quote: "Council will be debating soon about bringing back calcium chloride to use as anti icing on the roads"
+        comment: 510
+  - id: lane-removal-increases-congestion
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: lanes-and-congestion
+    proposition: "Taking traffic lanes for bike lanes increases congestion, slows traffic and causes idling and emissions."
+    wording: "Removing traffic lanes for cyclists and increasing the number of crossings increase congestion."
+    side: against
+    variation_of: at-congestion-reduced
+    accounts: 13
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Granite Hare D."
+        quote: "Removing traffic lanes for cyclists and increasing the number of crossings increase congestion."
+        comment: 11
+      - commenter: "Bright Goose S."
+        quote: "nope, it causes it."
+        comment: 19
+      - commenter: "Rustic Hare L."
+        quote: "they force traffic into one lane not two, impede turns, slow the flow of traffic significantly causing idling which creates more emissions."
+        comment: 21
+      - commenter: "Windy Bison C."
+        quote: "Now instead of 2 lanes you now have one. Now you have more cars backed up and more carbon"
+        comment: 32
+      - commenter: "Riverside Bluejay S."
+        quote: "turn a two lane each way into a one lane each way so that cyclist feel safe, how exactly are you reducing congestion? Now that one lane is permanently unuseable for cars"
+        comment: 36
+      - commenter: "Rustic Moose R."
+        quote: "not have them idoling while bike lanes are not being used."
+        comment: 108
+      - commenter: "Misty Heron R."
+        quote: "It will also increase congestion in some areas."
+        comment: 147
+      - commenter: "Prairie Waxwing D."
+        quote: "what was once 2 lanes of moving traffic is now one."
+        comment: 192
+      - commenter: "Amber Marmot E."
+        quote: "there design does nothing but hinder traffic flow."
+        comment: 194
+      - commenter: "Bright Chickadee P."
+        quote: "taking away from roadways (both in driving lanes and in roadside parking) adds to the congestion you see."
+        comment: 302
+      - commenter: "Dusty Bluejay G."
+        quote: "without contesting our streets more?"
+        comment: 325
+      - commenter: "Foggy Crow C."
+        quote: "lanes that obstruct traffic"
+        comment: 551
+      - commenter: "Bright Grebe R."
+        quote: "there's year round maintenance, huge traffic congestion and related pollution"
+        comment: 582
+  - id: bike-infra-reduces-congestion
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: lanes-and-congestion
+    proposition: "Cycling infrastructure reduces motor-vehicle congestion because every person who bikes is one less car on the road."
+    wording: "Using a bicycle helps reduce traffic congestion."
+    side: for
+    variation_of: at-congestion-reduced
+    accounts: 6
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Quiet Goose B."
+        quote: "Using a bicycle helps reduce traffic congestion."
+        comment: 7
+      - commenter: "Riverside Merlin T."
+        quote: "Bike infrastructure reduces traffic congestion"
+        comment: 56
+      - commenter: "Granite Vole D."
+        quote: "The more cycling infrastructure there is, the fewer people there are driving in cars. The fewer people driving, the better Edmonton's traffic situation gets."
+        comment: 64
+      - commenter: "Misty Hare K."
+        quote: "if you want less traffic congestion then start biking."
+        comment: 110
+      - commenter: "Cedar Pelican C."
+        quote: "And every person who takes the bike lane is one less car, reducing congestion."
+        comment: 193
+      - commenter: "Cedar Pelican C."
+        quote: "every person who chooses to bike is one less car. The more comfortable and safe cycling is, the fewer cars we have on the road"
+        comment: 195
+      - commenter: "Cedar Pelican C."
+        quote: "giving people viable alternatives to driving reduces traffic congestion"
+        comment: 292
+      - commenter: "Cedar Pelican C."
+        quote: "fewer cars on the road resulting in less congestion, less pollution(noise and air), and a healthier population reducing health care costs"
+        comment: 295
+      - commenter: "Granite Beaver P."
+        quote: "every person on a bike is one less car in front of you!"
+        comment: 339
+      - commenter: "Granite Beaver P."
+        quote: "drivers also benefit from bike lanes as every person on a bike is one less person in front of you in traffic in a car!"
+        comment: 366
+      - commenter: "Cedar Pelican C."
+        quote: "the better they are the more people will choose them instead of driving"
+        comment: 530
+  - id: city-removed-traffic-lanes
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: lanes-and-congestion
+    proposition: "The City has removed motor-vehicle traffic lanes across Edmonton and replaced them with bike lanes."
+    wording: "102nd Ave between 121st and 111th. Used to be 2 ways, now one way with a bike lane. 102 Ave east of 109 St also reduced traffic lanes for bicycle lanes."
+    side: against
+    accounts: 4
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Granite Hare D."
+        quote: "102nd Ave between 121st and 111th. Used to be 2 ways, now one way with a bike lane. 102 Ave east of 109 St also reduced traffic lanes for bicycle lanes."
+        comment: 13
+      - commenter: "Boreal Crow K."
+        quote: "they absolutely have removed traffic lanes all throughout the city"
+        comment: 15
+      - commenter: "Boreal Crow K."
+        quote: "The city is removing traffic lanes all throughout the city for bike lanes"
+        comment: 17
+      - commenter: "Golden Sparrow J."
+        quote: "they sure have removed Traffic lanes and replaced with bike lanes! Just check out what they did on 132nd ave!"
+        comment: 18
+      - commenter: "Prairie Waxwing D."
+        quote: "remove a vehicle lane for a bike lane"
+        comment: 192
+  - id: roads-carry-goods-and-services
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: lanes-and-congestion
+    proposition: "Roads carry the goods, services, buses and emergency vehicles society depends on."
+    wording: "Roads also move the goods and services need by society"
+    side: neither
+    accounts: 2
+    seats:
+      - luna
+    forms:
+      - commenter: "Granite Hare D."
+        quote: "Roads also move the goods and services need by society"
+        comment: 301
+      - commenter: "Bright Elk G."
+        quote: "service vehicles to move products; bus transportation to move people; ambulances to save lives; fire trucks to do the same"
+        comment: 375
+  - id: 79-street-relieves-75-street
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: lanes-and-congestion
+    proposition: "79 Street carries traffic that would otherwise use 75 Street and is a school-run route for parents."
+    wording: "It is an important street for alleviating traffic from 75 St and for people to navigate & drive their kids to school before work."
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Hardy Vole C."
+        quote: "It is an important street for alleviating traffic from 75 St and for people to navigate & drive their kids to school before work."
+        comment: 393
+  - id: lanes-removed-for-traffic-calming
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: lanes-and-congestion
+    proposition: "Edmonton is removing lanes for traffic calming, not for cyclists, and adding bike lanes where that work is already happening."
+    wording: "they are not removing lanes for cyclists. They are removing lanes for traffic calming measures and in places where applicable putting bike Lanes there to save money combining the two."
+    side: for
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Riverside Muskrat A."
+        quote: "they are not removing lanes for cyclists. They are removing lanes for traffic calming measures and in places where applicable putting bike Lanes there to save money combining the two."
+        comment: 12
+      - commenter: "Riverside Muskrat A."
+        quote: "Even if they had never planned bike lanes for hermatige road they are still getting traffic calming measures"
+        comment: 16
+  - id: remaining-lane-too-narrow-to-pass
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: converted-roadway
+    proposition: "The remaining lane is too narrow to safely pass school buses or delivery vans that have stopped."
+    wording: "the lane is too narrow when the school buses or vans are delivering to business there is not enough room to pass safely you have to wait until they move"
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Sunny Bluejay W."
+        quote: "the lane is too narrow when the school buses or vans are delivering to business there is not enough room to pass safely you have to wait until they move"
+        comment: 371
+  - id: road-surface-breaking-from-one-lane
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: converted-roadway
+    proposition: "The road surface is breaking up because traffic is concentrated into one lane."
+    wording: "and the road is breaking up from the increased traffi,c in one lane"
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Sunny Bluejay W."
+        quote: "and the road is breaking up from the increased traffi,c in one lane"
+        comment: 371
+  - id: proposal-does-not-widen-road
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: converted-roadway
+    proposition: "The bike lane proposal does not increase the width of the road."
+    wording: "The proposal doesn't increase the road width"
+    side: neither
+    accounts: 1
+    seats:
+      - luna
+    forms:
+      - commenter: "Misty Heron R."
+        quote: "The proposal doesn't increase the road width"
+        comment: 147
+  - id: bike-share-one-percent-of-road-budget
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: bike-vs-road-spending
+    proposition: "The $100 million is around 1 percent of Edmonton's capital budget for roads, with 99 percent going to roads for cars."
+    wording: "we currently spend 99% of our road budget on roads for cars so spending is on track"
+    side: for
+    variation_of: bike-100m-one-percent-of-roads
+    accounts: 2
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Cedar Pelican C."
+        quote: "we currently spend 99% of our road budget on roads for cars so spending is on track"
+        comment: 187
+      - commenter: "Riverside Muskrat A."
+        quote: "why should those 2% of riders pay for the 98% road infrastructure when drivers cry about paying 2% to keep cyclists safe?"
+        comment: 189
+      - commenter: "Cedar Pelican C."
+        quote: "spending 1% of our budget on transportation that includes >2% of trips is a great investment."
+        comment: 295
+      - commenter: "Cedar Pelican C."
+        quote: "100 million is less than 1% of the road budget so it's proportionally well spent"
+        comment: 331
+      - commenter: "Cedar Pelican C."
+        quote: "we are getting a great deal spending only 1% of the budget on it"
+        comment: 333
+      - commenter: "Cedar Pelican C."
+        quote: "is around 1% of the capital expansion budget for roads."
+        comment: 450
+  - id: 100-million-over-four-years
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: bike-vs-road-spending
+    proposition: "The $100 million for active transportation is spread over a four-year budget cycle."
+    wording: "It's 100 million over 4 years"
+    side: for
+    variation_of: bike-100m-one-percent-of-roads
+    accounts: 2
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Granite Beaver P."
+        quote: "It's 100 million over 4 years"
+        comment: 266
+      - commenter: "Granite Beaver P."
+        quote: "It's $100 million over 4 years."
+        comment: 339
+      - commenter: "Granite Beaver P."
+        quote: "It's $100 million over 4 years"
+        comment: 364
+      - commenter: "Cedar Pelican C."
+        quote: "You should know that $100 million is over the 4 year budget cycle"
+        comment: 450
+  - id: 181-million-for-600m-of-50-street
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: bike-vs-road-spending
+    proposition: "The City is spending $181 million to grade separate 600 metres of 50 Street."
+    wording: "We spend $181 million on grade separating 600m of 50th Street."
+    side: for
+    variation_of: fifty-street-181m-600m
+    accounts: 1
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Cedar Pelican C."
+        quote: "We spend $181 million on grade separating 600m of 50th Street."
+        comment: 450
+  - id: 50-street-costs-double-active-transport
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: bike-vs-road-spending
+    proposition: "That 600 metres of 50 Street costs nearly double the entire four-year active transportation investment."
+    wording: "That's nearly double the cost for 600m of road compared to the entire 4 year investment in active transportation"
+    side: for
+    variation_of: fifty-street-181m-600m
+    accounts: 1
+    seats:
+      - luna
+    forms:
+      - commenter: "Cedar Pelican C."
+        quote: "That's nearly double the cost for 600m of road compared to the entire 4 year investment in active transportation"
+        comment: 450
+  - id: billions-spent-on-road-building
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: bike-vs-road-spending
+    proposition: "Edmonton spends billions on road building, including the Yellowhead."
+    wording: "the billions for road building."
+    side: for
+    accounts: 1
+    seats:
+      - luna
+    forms:
+      - commenter: "Granite Beaver P."
+        quote: "the billions for road building."
+        comment: 266
+      - commenter: "Granite Beaver P."
+        quote: "the billions for the Yellowhead and other road projects"
+        comment: 364
+  - id: spending-proportional-to-cyclist-numbers
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: bike-vs-road-spending
+    proposition: "The City's $100 million for the active transportation network is close to proportional to the number of cyclists."
+    wording: "the City's 100M for the active transportation network is close to proportional to cyclist numbers"
+    side: for
+    accounts: 1
+    seats:
+      - haiku
+    forms:
+      - commenter: "Amber Grebe B."
+        quote: "the City's 100M for the active transportation network is close to proportional to cyclist numbers"
+        comment: 26
+  - id: bike-lane-maintenance-cost-per-year
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: bike-vs-road-spending
+    proposition: "Maintaining Edmonton's bike lanes costs about three quarters of a million dollars a year."
+    wording: "it costs around three quarters of a million to maintain them every year"
+    side: against
+    accounts: 1
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Rustic Merlin K."
+        quote: "it costs around three quarters of a million to maintain them every year"
+        comment: 513
+  - id: council-approved-100-million
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: hundred-million-approval
+    proposition: "Edmonton City Council approved $100 million for bike lane expansion."
+    wording: "the City’s 100M for the active transportation network"
+    side: against
+    variation_of: at-100m-a-year
+    accounts: 17
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Amber Grebe B."
+        quote: "the City’s 100M for the active transportation network"
+        comment: 26
+      - commenter: "Bright Bluejay K."
+        quote: "divide the 100 million between them."
+        comment: 49
+      - commenter: "Willow Muskrat G."
+        quote: "spending 100 miiion dollars on bike lanes"
+        comment: 125
+      - commenter: "Snowy Squirrel J."
+        quote: "SPEND 100 million on BIKE LAES"
+        comment: 126
+      - commenter: "Sturdy Squirrel B."
+        quote: "100. Million WOW!!!"
+        comment: 180
+      - commenter: "Sunny Grouse G."
+        quote: "Spend the 100 million on fixing some of the road damage out there."
+        comment: 228
+      - commenter: "Bright Marmot S."
+        quote: "100 million for a population of just over 1 million"
+        comment: 265
+      - commenter: "Nimble Hare E."
+        quote: "NO ..$100 MILLION IS NOT AFFORDABLE!!!!"
+        comment: 270
+      - commenter: "Dusty Bluejay G."
+        quote: "put a $100M towards without contesting our streets more?"
+        comment: 325
+      - commenter: "Wintry Raven B."
+        quote: "100 million to be spent."
+        comment: 330
+      - commenter: "Bright Woodpecker B."
+        quote: "Spending 100M for the 500 people using the bike lanes"
+        comment: 363
+      - commenter: "Nimble Coyote M."
+        quote: "$100,000,000 could be far better spent than wasting it on bike lanes."
+        comment: 408
+      - commenter: "Rustic Bluejay S."
+        quote: "$100 million on bike lanes"
+        comment: 409
+      - commenter: "Councillor Jennifer Rice"
+        quote: "Council approved $100M for rapid bike lane expansion."
+        comment: 449
+      - commenter: "Riverside Pelican A."
+        quote: "100 million dollars surely could have been spent on improving rail lines and roads"
+        comment: 458
+      - commenter: "Foggy Crow C."
+        quote: "100 million for lanes that obstruct traffic"
+        comment: 551
+      - commenter: "Bright Grebe R."
+        quote: "flushing away $100 Million"
+        comment: 582
+  - id: basic-services-in-poor-condition
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: infrastructure-deficit
+    proposition: "Edmonton's roads, alleys and basic services are in poor condition, with potholes unfixed and snow and grass left uncut."
+    wording: "The city can’t even cut the grass or remove snow"
+    side: against
+    accounts: 10
+    seats:
+      - luna
+    forms:
+      - commenter: "Mossy Chickadee B."
+        quote: "The city can’t even cut the grass or remove snow"
+        comment: 67
+      - commenter: "Chilly Nuthatch V."
+        quote: "fix pot holes you haven’t done anything all summer! Snow removal would be good!"
+        comment: 212
+      - commenter: "Chilly Muskrat T."
+        quote: "Try removing the snow."
+        comment: 345
+      - commenter: "Sunny Crow C."
+        quote: "Roads are a complete mess"
+        comment: 348
+      - commenter: "Snowy Chickadee C."
+        quote: "roads that need paving ,back alleys that desperately need attention."
+        comment: 352
+      - commenter: "Icy Moose N."
+        quote: "some pot holes could swallow a tire...."
+        comment: 402
+      - commenter: "Rustic Marmot S."
+        quote: "Fix the roads. They’re horrendous!"
+        comment: 423
+      - commenter: "Copper Beaver S."
+        quote: "FIX the bloody POTHOLES FIRST!!!"
+        comment: 494
+      - commenter: "Aurora Jackrabbit D."
+        quote: "Our roads are a mess and need to be maintained."
+        comment: 547
+      - commenter: "Councillor Jennifer Rice"
+        quote: "What you DID tell me: Fix our roads and sidewalks. Improve snow clearing. Community safety. Quality of life."
+        comment: 449
+  - id: spending-100-million-despite-deficit
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: infrastructure-deficit
+    proposition: "The City is spending $100 million on bike lanes while claiming a huge infrastructure deficit."
+    wording: "the city claims they have a huge infestructure deficit. . Yet spending 100 miiion dollars on bike lanes"
+    side: against
+    accounts: 2
+    seats:
+      - flash
+    forms:
+      - commenter: "Willow Muskrat G."
+        quote: "the city claims they have a huge infestructure deficit. . Yet spending 100 miiion dollars on bike lanes"
+        comment: 125
+      - commenter: "Prairie Bison R."
+        quote: "Funding these bike lanes in already crowded areas while whining about a deficit"
+        comment: 540
+  - id: rec-centre-money-diverted
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: infrastructure-deficit
+    proposition: "Council took money away from a free-standing west end recreation centre and spent $100 million on bike lanes."
+    wording: "Take money away from a free standing recreation centre on the west end name it some unpronounceable First Nations name and then SPEND 100 million on BIKE LAES"
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Snowy Squirrel J."
+        quote: "Take money away from a free standing recreation centre on the west end name it some unpronounceable First Nations name and then SPEND 100 million on BIKE LAES"
+        comment: 126
+  - id: drainage-damage-to-homeowners
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: infrastructure-deficit
+    proposition: "Drainage problems in Edmonton cause millions of dollars of damage to homeowners."
+    wording: "drainage issues which cause millions of dollars in damage to home owners"
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Sunny Sparrow M."
+        quote: "drainage issues which cause millions of dollars in damage to home owners"
+        comment: 399
+  - id: new-streetlights-added-costs
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: infrastructure-deficit
+    proposition: "The new streetlights added costs for Edmonton taxpayers."
+    wording: "Please remember the new streetlights that added costs for taxpayers."
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Nimble Grouse M."
+        quote: "Please remember the new streetlights that added costs for taxpayers."
+        comment: 340
+  - id: property-taxes-rising-sharply
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: property-taxes
+    proposition: "Edmonton property taxes have risen sharply, by $1,500 in three years for one resident and $6,000 a year for another."
+    wording: "Glad I am paying $6,000 a year in property tax for this!"
+    side: against
+    accounts: 2
+    seats:
+      - flash
+    forms:
+      - commenter: "Rustic Bluejay S."
+        quote: "Glad I am paying $6,000 a year in property tax for this!"
+        comment: 409
+      - commenter: "Dusty Raven M."
+        quote: "my taxes have gone up $ 1500 in the last 3 years."
+        comment: 448
+  - id: council-rejected-pause
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: council-pause-vote
+    proposition: "Council did not support the recommended pause and review of the future bike routes."
+    wording: "That review was also not supported by Council."
+    side: against
+    variation_of: rice-50m-motions-and-review
+    accounts: 5
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Councillor Jennifer Rice"
+        quote: "That review was also not supported by Council."
+        comment: 449
+      - commenter: "Boreal Crow K."
+        quote: "The city’s recommendation was to PAUSE the bike lines until more information was obtained to continue it in a thoughtful way that worked for residents that it affects as well as drivers and bikers. Council chose to ignore that."
+        comment: 406
+      - commenter: "Amber Coyote T."
+        quote: "Typical city council, ignore a committee's decision and go thier own route."
+        comment: 441
+      - commenter: "Snowy Bluejay M."
+        quote: "They already ignore the citizens, might as well ignore their own committees too."
+        comment: 356
+      - commenter: "Boreal Marmot L."
+        quote: "The motion was not to scrap the routes, but rather to not rapidly push them through without a second look."
+        comment: 200
+  - id: administration-recommended-freezing-14-routes
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: council-pause-vote
+    proposition: "City Administration recommended freezing 14 future bike routes to reassess them."
+    wording: "Yesterday, City Administration recommended freezing 14 future routes to reassess"
+    side: against
+    variation_of: rice-50m-motions-and-review
+    accounts: 1
+    seats:
+      - haiku
+      - luna
+    forms:
+      - commenter: "Councillor Jennifer Rice"
+        quote: "Yesterday, City Administration recommended freezing 14 future routes to reassess"
+        comment: 449
+  - id: motions-to-cut-budget-to-50-million-failed
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: council-pause-vote
+    proposition: "Councillor Karen Principe and Councillor Jennifer Rice brought two motions to cut the bike lane budget to $50 million and redirect the rest, and Council did not support them."
+    wording: "Councillor Karen Principe and I brought forward two motions — twice — to cut it to $50M and redirect the rest to core priorities. Council didn’t support them."
+    side: against
+    variation_of: rice-50m-motions-and-review
+    accounts: 1
+    seats:
+      - flash
+      - haiku
+    names_person: true
+    forms:
+      - commenter: "Councillor Jennifer Rice"
+        quote: "Councillor Karen Principe and I brought forward two motions — twice — to cut it to $50M and redirect the rest to core priorities. Council didn’t support them."
+        comment: 449
+  - id: same-seven-councillors-vote-together
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: council-pause-vote
+    proposition: "The same seven councillors vote together to keep the bike lane expansion going."
+    wording: "the core 7 councillors never had an intention of pausing it."
+    side: against
+    accounts: 1
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Icy Grebe A."
+        quote: "the core 7 councillors never had an intention of pausing it."
+        comment: 39
+      - commenter: "Icy Grebe A."
+        quote: "The same old 7 councillors who are in a corrupt clique voted for it."
+        comment: 577
+  - id: more-speakers-in-favour-at-hearing
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: council-hearing
+    proposition: "More people spoke in favour of the bike lanes at the council hearing than against them."
+    wording: "more people for the bike lanes showed up, then those who didn't want it."
+    side: for
+    accounts: 5
+    seats:
+      - flash
+    forms:
+      - commenter: "Mossy Crow K."
+        quote: "more people for the bike lanes showed up, then those who didn't want it."
+        comment: 38
+      - commenter: "Silver Moose D."
+        quote: "because the taxpayers were at WORK at the time"
+        comment: 42
+      - commenter: "Willow Nuthatch C."
+        quote: "great turnout for people that don’t work"
+        comment: 177
+      - commenter: "Windy Otter P."
+        quote: "all twelve of them"
+        comment: 178
+      - commenter: "Boreal Grouse K."
+        quote: "10 people show up in support but thousands and thousands are opposed."
+        comment: 303
+  - id: hearing-supporters-and-lobby-groups
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: council-hearing
+    proposition: "The pro bike lane people at the council meeting were paid or organized by special interest groups and lobbyists."
+    wording: "special interest groups.. crazies!"
+    side: against
+    accounts: 5
+    seats:
+      - flash
+    forms:
+      - commenter: "Icy Grebe A."
+        quote: "special interest groups.. crazies!"
+        comment: 39
+      - commenter: "Boreal Marmot L."
+        quote: "This City Council is bowing to special interest groups."
+        comment: 200
+      - commenter: "Quiet Moose J."
+        quote: "The rich people in Edmonton (lobbyists) asked for bike lanes!"
+        comment: 281
+      - commenter: "Wintry Raven B."
+        quote: "Special interest gets our dollars."
+        comment: 330
+      - commenter: "Sunny Moose J."
+        quote: "Those pro bike lane people were orivably paid to be,at that meeting."
+        comment: 416
+      - commenter: "Icy Grebe A."
+        quote: "They had their crazy special interest groups show up"
+        comment: 577
+  - id: speaking-time-cut-to-three-minutes
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: council-hearing
+    proposition: "Council cut speakers from five minutes to three because of the volume of complaints, with 70 still in the queue."
+    wording: "limiting concerns to 3min from 5min due to a high volume of complaints from all over the city and 70 is in the current cue."
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Golden Pelican H."
+        quote: "limiting concerns to 3min from 5min due to a high volume of complaints from all over the city and 70 is in the current cue."
+        comment: 601
+  - id: designs-paid-and-contracts-signed
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: routes-already-committed
+    proposition: "The City has already paid for the design and signed contracts for the planned routes."
+    wording: "We've already paid for the design, and many contracts"
+    side: for
+    accounts: 2
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Cedar Pelican C."
+        quote: "We've already paid for the design, and many contracts"
+        comment: 183
+      - commenter: "Windy Porcupine C."
+        quote: "designs were already paid for right"
+        comment: 210
+  - id: too-late-to-tender-for-2026
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: routes-already-committed
+    proposition: "The routes being pushed through are too late to tender for the 2026 construction season anyway."
+    wording: "The routes in question are too late to tender for 2026 anyway!"
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Boreal Marmot L."
+        quote: "The routes in question are too late to tender for 2026 anyway!"
+        comment: 200
+  - id: most-residents-oppose-lanes
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: consultation-and-opposition
+    proposition: "Most residents in the affected neighbourhoods, and most Edmontonians, oppose the bike lanes."
+    wording: "whole neighborhoods have voted no and they still went ahead."
+    side: against
+    accounts: 10
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Golden Owl D."
+        quote: "whole neighborhoods have voted no and they still went ahead."
+        comment: 86
+      - commenter: "Willow Nuthatch C."
+        quote: "This was not fair to 98% of the residents in Holyrood and Idylwylde areas"
+        comment: 177
+      - commenter: "Prairie Waxwing D."
+        quote: "There are literal petitions in our neighborhood to keep them out"
+        comment: 192
+      - commenter: "Boreal Fox D."
+        quote: "what 99 % of tab payers in Edmonton want"
+        comment: 223
+      - commenter: "Bright Hare J."
+        quote: "Thought 80% of Edmontonians said no"
+        comment: 262
+      - commenter: "Willow Sparrow D."
+        quote: "Over 90% of the residents in my area were against them, and I'm willing to bet that it's the same all across this city."
+        comment: 411
+      - commenter: "Willow Muskrat G."
+        quote: "spending 100 miiion dollars on bike lanes that most residents dont want nor use"
+        comment: 125
+      - commenter: "Bright Woodpecker B."
+        quote: "Most people do not support bike lanes but as usual council does not listen."
+        comment: 363
+      - commenter: "Golden Beaver E."
+        quote: "No one wants it!!"
+        comment: 478
+      - commenter: "Willow Elk M."
+        quote: "NOBODY wants!"
+        comment: 555
+  - id: fast-tracked-without-consultation
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: consultation-and-opposition
+    proposition: "The City fast-tracked bike routes on old data and without consulting the affected communities."
+    wording: "relying on old data and zero community consultation (admitted to in the City's report)"
+    side: against
+    accounts: 4
+    seats:
+      - flash
+      - haiku
+      - luna
+    names_person: true
+    forms:
+      - commenter: "Boreal Marmot L."
+        quote: "relying on old data and zero community consultation (admitted to in the City's report)"
+        comment: 200
+      - commenter: "Chilly Squirrel O."
+        quote: "They don't do enough talking to the residents"
+        comment: 320
+      - commenter: "Dusty Crow K."
+        quote: "they blatantly ignored hermitage area"
+        comment: 321
+      - commenter: "Hardy Vole C."
+        quote: "none of the residents were actually informed by Ashley Salvador of the proposed bike plan in 2020. Many of us are aware of it in 2026."
+        comment: 393
+      - commenter: "Hardy Vole C."
+        quote: "Stakeholder engagement fail as they did not engage parents with school kids."
+        comment: 224
+  - id: last-election-turnout-under-40
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: council-mandate
+    proposition: "Turnout in Edmonton's last municipal election was under 40 percent."
+    wording: "Voter turnout in the last election was less than 40%"
+    side: neither
+    accounts: 2
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Granite Grebe K."
+        quote: "Voter turnout in the last election was less than 40%"
+        comment: 412
+      - commenter: "Cedar Chickadee J."
+        quote: "30% turn out is not responsible democratic participation."
+        comment: 489
+  - id: voters-elected-pro-bike-council
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: council-mandate
+    proposition: "A majority of voters elected the current city council knowing it was pro bike lane."
+    wording: "the majority of voters elected the current city council knowing they were pro bike lane."
+    side: for
+    accounts: 1
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Cedar Pelican C."
+        quote: "the majority of voters elected the current city council knowing they were pro bike lane."
+        comment: 207
+  - id: council-recall-timing
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: council-mandate
+    proposition: "A recall of city council is allowed 18 months after the election and one is already in the works."
+    wording: "18 months after the election is the when it’s allowed. It’s already in the works"
+    side: neither
+    accounts: 1
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Dusty Crow K."
+        quote: "18 months after the election is the when it’s allowed. It’s already in the works"
+        comment: 238
+      - commenter: "Dusty Crow K."
+        quote: "recall election coming in April"
+        comment: 236
+  - id: councillors-dont-bike-to-work
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: councillors-own-commute
+    proposition: "Edmonton's mayor and councillors do not bike to work themselves."
+    wording: "I don't see city council riding their bikes all the time."
+    side: against
+    accounts: 4
+    seats:
+      - flash
+    names_person: true
+    forms:
+      - commenter: "Granite Squirrel J."
+        quote: "I don't see city council riding their bikes all the time."
+        comment: 175
+      - commenter: "Windy Squirrel T."
+        quote: "Any north Enders see ERIN RUTHERFORD bike to work ??"
+        comment: 278
+      - commenter: "Brisk Grebe G."
+        quote: "is the mayor riding bike ?????"
+        comment: 279
+      - commenter: "Snowy Heron C."
+        quote: "Our fricking mayor and councillors don’t bike"
+        comment: 559
+  - id: councillors-get-vehicle-allowance
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: councillors-own-commute
+    proposition: "Edmonton city councillors receive a vehicle allowance."
+    wording: "Our city councillors, who vote for stupidity to continue, get a very generous vehicle allowance."
+    side: against
+    accounts: 2
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Riverside Bluejay S."
+        quote: "Our city councillors, who vote for stupidity to continue, get a very generous vehicle allowance."
+        comment: 58
+      - commenter: "Nimble Deer R."
+        quote: "Why are city councilors given vehicle allowance if they're promoting biking to work?"
+        comment: 566
+  - id: staff-paid-over-100k-plus-pension
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: city-hall-pay-and-interests
+    proposition: "City administration staff pushing these policies are paid over $100,000 plus pension."
+    wording: "They are unveiled get paid over 100k and pension and push their climate, women and anti car ideaologies"
+    side: against
+    accounts: 1
+    seats:
+      - flash
+      - haiku
+    forms:
+      - commenter: "Chilly Fox J."
+        quote: "They are unveiled get paid over 100k and pension and push their climate, women and anti car ideaologies"
+        comment: 8
+  - id: withheld-yegscoop-2026-08-26-1
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: city-hall-pay-and-interests
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    names_person: true
+    outcome: NO
+    ground: right-of-reply
+    reason: "One commenter accused a named person of an undisclosed private interest. The question around it, what city hall pay and councillors' filed disclosures actually show, is going ahead; this claim is not."
+  - id: drivers-pay-for-roads-via-fuel-taxes
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: who-pays-for-roads
+    proposition: "Drivers already pay for Edmonton's roads through fuel taxes, registration fees and other vehicle taxes."
+    wording: "there is already a road tax on fuel for that very purpose."
+    side: against
+    accounts: 8
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Riverside Bluejay S."
+        quote: "there is already a road tax on fuel for that very purpose."
+        comment: 52
+      - commenter: "Amber Coyote T."
+        quote: "people that drive cars pay for roads partially via the fuel tax"
+        comment: 190
+      - commenter: "Prairie Waxwing D."
+        quote: "car drivers pay taxes like vehicle registration and fuel tax to pay for those roads"
+        comment: 192
+      - commenter: "Granite Hare D."
+        quote: "I do pay gas taxes, tire taxes and various consumption taxes on vehicles, repairs and parts that help pay for the road."
+        comment: 301
+      - commenter: "Bright Woodpecker B."
+        quote: "drivers pay the fuel tax to maintain the roads"
+        comment: 365
+      - commenter: "Aurora Heron D."
+        quote: "just like we pay road tax."
+        comment: 373
+      - commenter: "Riverside Pelican A."
+        quote: "at least vehicles and rail pay many different kinds of taxes"
+        comment: 458
+      - commenter: "Quiet Muskrat J."
+        quote: "Right now it's a free ride."
+        comment: 439
+  - id: roads-funded-by-property-taxes
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: who-pays-for-roads
+    proposition: "Edmonton's municipal roads are paid for predominantly out of property and general taxes, not fuel taxes or vehicle registration."
+    wording: "municipal roads are predominantly funded through property tax."
+    side: for
+    accounts: 4
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Cedar Pelican C."
+        quote: "municipal roads are predominantly funded through property tax."
+        comment: 191
+      - commenter: "Cedar Pelican C."
+        quote: "The majority of municipal roads are funded through property tax."
+        comment: 193
+      - commenter: "Granite Beaver P."
+        quote: "most of the funds for building and maintaining roads come from general taxes, property taxes in the case of municipal spending on road maintenance."
+        comment: 366
+      - commenter: "Riverside Merlin T."
+        quote: "They are already paying property taxes like drivers do. Your car payment, insurance and gas doesn’t pay for roads: taxes do."
+        comment: 56
+      - commenter: "Mossy Beaver J."
+        quote: "Do you really think your insurance goes to road fees?"
+        comment: 73
+  - id: cyclists-pay-property-taxes
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: who-pays-for-roads
+    proposition: "Cyclists pay the property and general taxes that fund roads."
+    wording: "cyclists pay property taxes"
+    side: for
+    accounts: 3
+    seats:
+      - luna
+    forms:
+      - commenter: "Misty Squirrel C."
+        quote: "cyclists pay property taxes"
+        comment: 27
+      - commenter: "Boreal Hare I."
+        quote: "Every adult cyclist is a taxpayer, genius"
+        comment: 45
+      - commenter: "Boreal Hare I."
+        quote: "every adult pays taxes which is where the money for roads come from. It’s not just drivers"
+        comment: 54
+      - commenter: "Mossy Beaver J."
+        quote: "Cyclists also pay taxes…"
+        comment: 68
+      - commenter: "Mossy Beaver J."
+        quote: "people without cars still pay taxes in other ways that help to fund roads"
+        comment: 73
+      - commenter: "Boreal Hare I."
+        quote: "Every adult cyclist is a taxpayer, genius"
+        comment: 145
+  - id: taxes-fund-services-you-dont-use
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: who-pays-for-roads
+    proposition: "Edmontonians pay taxes for services and infrastructure they do not personally use."
+    wording: "We all pay taxes. We may not use all of the services our taxes fund."
+    side: for
+    accounts: 2
+    seats:
+      - luna
+    forms:
+      - commenter: "Mossy Beaver J."
+        quote: "We all pay taxes. We may not use all of the services our taxes fund."
+        comment: 70
+      - commenter: "Mossy Beaver J."
+        quote: "We all pay for things we don’t use with our taxes because we are part of a society and municipality."
+        comment: 73
+      - commenter: "Icy Muskrat A."
+        quote: "I am also paying for paved freeways that I don’t use"
+        comment: 167
+  - id: bike-lanes-remove-street-parking
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: on-street-parking
+    proposition: "Installing bike lanes takes away on-street parking from residents and businesses."
+    wording: "Holyrood and Idylwylde areas who are paying taxes for parking."
+    side: against
+    accounts: 8
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Willow Nuthatch C."
+        quote: "Holyrood and Idylwylde areas who are paying taxes for parking."
+        comment: 177
+      - commenter: "Windy Porcupine C."
+        quote: "loosing their parking?? What about their safety, or their kids safety having to find alternative parking that may require lugging kids and groceries a fair distance, or maybe just not being able to plug their vehicle for the winter."
+        comment: 210
+      - commenter: "Boreal Jackrabbit S."
+        quote: "taking away my street parking"
+        comment: 282
+      - commenter: "Bright Chickadee P."
+        quote: "interfere with both parking"
+        comment: 291
+      - commenter: "Sunny Bluejay W."
+        quote: "the loss of parking"
+        comment: 371
+      - commenter: "Prairie Muskrat D."
+        quote: "taking away parking from in front of someone's house."
+        comment: 374
+      - commenter: "Snowy Waxwing K."
+        quote: "132 ave you lose alot of street parking"
+        comment: 395
+      - commenter: "Frosty Heron G."
+        quote: "on street parking is being taken away from tax paying residents."
+        comment: 420
+      - commenter: "Willow Nuthatch C."
+        quote: "98% of the residents need parking!"
+        comment: 506
+  - id: business-lost-customer-parking
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: on-street-parking
+    proposition: "A business could not use its street for customer parking all summer, and the City had put up no parking signs."
+    wording: "Cannot use my street for my customers. All summer. Phoned city. We do not have parking signs there."
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Copper Marmot R."
+        quote: "Cannot use my street for my customers. All summer. Phoned city. We do not have parking signs there."
+        comment: 501
+  - id: free-parking-is-a-subsidy
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: on-street-parking
+    proposition: "Free on-street parking for vehicles is a subsidy paid for by taxpayers."
+    wording: "Subsidizing free parking for vehicles is a waste of mine."
+    side: for
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Quiet Hare C."
+        quote: "Subsidizing free parking for vehicles is a waste of mine."
+        comment: 99
+  - id: infill-removes-trees-and-parking
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: zoning-and-infill
+    proposition: "Infill and multiplex development in mature neighbourhoods is taking down mature trees and street parking."
+    wording: "continue to build more and more infills in our old neighborhoods that are taking so many of our beautiful mature trees down."
+    side: against
+    accounts: 2
+    seats:
+      - flash
+    forms:
+      - commenter: "Aurora Grebe L."
+        quote: "continue to build more and more infills in our old neighborhoods that are taking so many of our beautiful mature trees down."
+        comment: 274
+      - commenter: "Northern Otter K."
+        quote: "multiplexes that are replacing affordable single family homes and robbing good homes of light...street parking"
+        comment: 382
+  - id: sprawl-unsustainable-as-population-grows
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: zoning-and-infill
+    proposition: "Edmonton's population has exploded while the city is still predominantly single family homes, so continued sprawl is unsustainable."
+    wording: "Edmonton is still predominantly single family homes but our population has exploded and it's unsustainable for the city to continue to sprawl out"
+    side: for
+    accounts: 1
+    seats:
+      - luna
+    forms:
+      - commenter: "Cedar Pelican C."
+        quote: "Edmonton is still predominantly single family homes but our population has exploded and it's unsustainable for the city to continue to sprawl out"
+        comment: 530
+  - id: no-minimum-parking-requirements
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: zoning-and-infill
+    proposition: "The City no longer requires minimum parking for developments."
+    wording: "The city doesn't require minimum parking anymore, take it up with them."
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Granite Hare D."
+        quote: "The city doesn't require minimum parking anymore, take it up with them."
+        comment: 104
+  - id: 15-minute-city-agreement
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: city-plan-commitments
+    proposition: "The City signed an agreement to make Edmonton a 15 minute city."
+    wording: "The signed a agreement to make Edmonton a 15 minute city...Google it it's true."
+    side: against
+    accounts: 2
+    seats:
+      - flash
+    forms:
+      - commenter: "Wintry Marmot M."
+        quote: "The signed a agreement to make Edmonton a 15 minute city...Google it it's true."
+        comment: 90
+      - commenter: "Prairie Woodpecker T."
+        quote: "So the 15 min city agenda moves forward."
+        comment: 164
+  - id: downtown-car-ban-plan
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: city-plan-commitments
+    proposition: "The City is planning to ban cars year round in the downtown core to push transit and bike lane use."
+    wording: "I heard they are planning on banning cars year round in the downtown core to increase transit and bike lane usage."
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Sunny Owl R."
+        quote: "I heard they are planning on banning cars year round in the downtown core to increase transit and bike lane usage."
+        comment: 313
+  - id: barriers-delay-emergency-vehicles
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: emergency-access
+    proposition: "Bike lanes and their concrete barriers delay or block emergency vehicles reaching homes."
+    wording: "that one lane is permanently unuseable for cars and emergency vehicles"
+    side: against
+    accounts: 4
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Riverside Bluejay S."
+        quote: "that one lane is permanently unuseable for cars and emergency vehicles"
+        comment: 36
+      - commenter: "Nimble Chickadee D."
+        quote: "how do bike lanes- with concrete barriers- allow emergency vehicles/ ambulances etc direct access to homes?"
+        comment: 244
+      - commenter: "Bright Marmot S."
+        quote: "Experienced delays in a medical incident, fire or accident because of single lanes created by bike lanes?"
+        comment: 269
+      - commenter: "Sunny Bluejay W."
+        quote: "Just ask fire ambulance and any emergency vehicles how they like bike lanes"
+        comment: 371
+  - id: responders-use-lanes-to-pass-traffic
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: emergency-access
+    proposition: "Emergency services can drive down two-way protected bike lanes to bypass traffic queues."
+    wording: "for two-way protected bike lanes, emergency services can actually travel down the bike lanes, bypassing queues if they exist."
+    side: for
+    accounts: 1
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Aurora Coyote T."
+        quote: "for two-way protected bike lanes, emergency services can actually travel down the bike lanes, bypassing queues if they exist."
+        comment: 253
+  - id: barriers-block-disabled-access
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: access-across-barriers
+    proposition: "Concrete bike lane barriers and curbs block access for disabled residents and DATS pickups."
+    wording: "How do disabled people easily access DATS if a concrete barrier prevents accessibility?"
+    side: against
+    accounts: 3
+    seats:
+      - flash
+    forms:
+      - commenter: "Nimble Chickadee D."
+        quote: "How do disabled people easily access DATS if a concrete barrier prevents accessibility?"
+        comment: 244
+      - commenter: "Bright Marmot S."
+        quote: "Ever broken a limb or been handicapped and had to struggle over windrows in winter or bike lane curbs?"
+        comment: 269
+      - commenter: "Snowy Waxwing K."
+        quote: "if by chance your handicapped you now have to go over two sets of sidewalks to get to your home."
+        comment: 395
+  - id: lanes-can-be-designed-accessible
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: access-across-barriers
+    proposition: "Protected bike lanes can be designed so wheelchairs can use them and accessible vans can load and unload."
+    wording: "If the barrier is the height of a sidewalk, the protected bike lane can be laterally shifted and/or reduced in width to provide space for accessible van loading/unloading."
+    side: for
+    accounts: 2
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Aurora Coyote T."
+        quote: "If the barrier is the height of a sidewalk, the protected bike lane can be laterally shifted and/or reduced in width to provide space for accessible van loading/unloading."
+        comment: 253
+      - commenter: "Snowy Jackrabbit C."
+        quote: "wheelchairs can use the lanes, it's great for the disabled"
+        comment: 248
+  - id: 119-avenue-alley-access-detour
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: access-across-barriers
+    proposition: "The 119 Avenue bike lane forces a resident to drive around to 120 Avenue to reach the alley behind their house."
+    wording: "I have to drive to 120ave now to get to the back of my house instead of turning on 119 ave"
+    side: against
+    accounts: 1
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Chilly Squirrel O."
+        quote: "I have to drive to 120ave now to get to the back of my house instead of turning on 119 ave"
+        comment: 320
+  - id: lanes-add-accessibility-and-health
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: access-across-barriers
+    proposition: "Cycling infrastructure adds accessibility for people who don't or can't drive and improves health for active commuters."
+    wording: "adds accessibility for those who don’t or can’t drive, in addition to improving health for active commuters."
+    side: for
+    accounts: 1
+    seats:
+      - luna
+    forms:
+      - commenter: "Riverside Merlin T."
+        quote: "adds accessibility for those who don’t or can’t drive, in addition to improving health for active commuters."
+        comment: 56
+  - id: transit-takes-far-longer-than-driving
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: transit-alternative
+    proposition: "Commuting by transit in the Edmonton region takes several times as long as driving the same trip."
+    wording: "Takes 18 mins to drive to work, which is in Leduc but that takes close to 3 hours via public transit"
+    side: against
+    accounts: 2
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Frosty Squirrel S."
+        quote: "Takes 18 mins to drive to work, which is in Leduc but that takes close to 3 hours via public transit"
+        comment: 524
+      - commenter: "Mossy Merlin C."
+        quote: "Driving to work 15min, busing to work 1 hour 45 minutes, biking to work 1 hour 5 minutes."
+        comment: 531
+  - id: lrt-slow-and-deadly
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: transit-alternative
+    proposition: "Edmonton's ground-level LRT travels slower than a bike and kills more people every year."
+    wording: "ground level LRT, that travels slower then a bike, and kills more and more people every year"
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Granite Deer C."
+        quote: "ground level LRT, that travels slower then a bike, and kills more and more people every year"
+        comment: 290
+  - id: lrt-barely-functions
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: transit-alternative
+    proposition: "The LRT barely functions except for large events and people who live near its limited stations."
+    wording: "That barely functions beyond large events or the die hards that happen to.live close to the limited LRT stations .."
+    side: against
+    accounts: 1
+    seats:
+      - luna
+    forms:
+      - commenter: "Riverside Crow J."
+        quote: "That barely functions beyond large events or the die hards that happen to.live close to the limited LRT stations .."
+        comment: 381
+  - id: ets-community-routes-removed
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: transit-alternative
+    proposition: "The City took out the ETS community bus routes."
+    wording: "It would be a different story if ETS community buses weren’t taken out."
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Hardy Vole C."
+        quote: "It would be a different story if ETS community buses weren’t taken out."
+        comment: 224
+  - id: transit-more-efficient-than-cars
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: transit-alternative
+    proposition: "Transit is a more efficient method of moving people than private cars."
+    wording: "Since transit is a more efficient method of moving people"
+    side: for
+    accounts: 1
+    seats:
+      - luna
+    forms:
+      - commenter: "Golden Elk C."
+        quote: "Since transit is a more efficient method of moving people"
+        comment: 258
+  - id: lanes-keep-riders-out-of-traffic
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: cycling-safety
+    proposition: "Bike lanes keep riders, including children and families, out of traffic."
+    wording: "where the riders will be more likely to get injured"
+    side: for
+    accounts: 3
+    seats:
+      - luna
+    forms:
+      - commenter: "Mossy Beaver J."
+        quote: "where the riders will be more likely to get injured"
+        comment: 70
+      - commenter: "Copper Deer C."
+        quote: "He’s not going into traffic"
+        comment: 444
+      - commenter: "Misty Bluejay J."
+        quote: "a family wants a safe place to ride."
+        comment: 505
+  - id: cyclists-ride-on-sidewalks
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: cycling-safety
+    proposition: "Cyclists and scooter riders in Edmonton ride on the sidewalks instead of the bike lanes."
+    wording: "Most dangerous encounters I have daily are cyclists and scooter riders on downtown sidewalks, and the Mayor and Council seem unworried that there is no enforcement of that."
+    side: against
+    accounts: 3
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Granite Hare D."
+        quote: "Most dangerous encounters I have daily are cyclists and scooter riders on downtown sidewalks, and the Mayor and Council seem unworried that there is no enforcement of that."
+        comment: 13
+      - commenter: "Hardy Pelican S."
+        quote: "cyclist use the bike lanes not the sidewalks. Just walk down the Victoria Promenade and see for yourself"
+        comment: 328
+      - commenter: "Quiet Marmot J."
+        quote: "On 40th Ave between Hermitage and 137 st., there is a bike lane, but cyclists still ride on the sidewalk."
+        comment: 415
+  - id: cyclists-have-right-to-the-road
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: cycling-safety
+    proposition: "Cyclists have the same legal right to ride on the road as drivers, with or without a bike lane."
+    wording: "when I’ve been riding lawfully on roads without bike lanes or shared paths."
+    side: for
+    accounts: 2
+    seats:
+      - flash
+    forms:
+      - commenter: "Mossy Beaver J."
+        quote: "when I’ve been riding lawfully on roads without bike lanes or shared paths."
+        comment: 70
+      - commenter: "Nimble Fox M."
+        quote: "Cyclist have the same legal right to be on the road as you do. Remove bike lanes and they will be cycling right down the middle of your lane."
+        comment: 446
+  - id: bike-lanes-dont-improve-safety
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: cycling-safety
+    proposition: "It is a myth that bike lanes make cycling safer."
+    wording: "it is a myth that bike lanes make it safer"
+    side: against
+    accounts: 1
+    seats:
+      - luna
+    forms:
+      - commenter: "Misty Goose C."
+        quote: "it is a myth that bike lanes make it safer"
+        comment: 459
+  - id: bike-collision-fault-share
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: cycling-safety
+    proposition: "About 90 percent of the reported collisions involving bikes happened because the cyclist was in the wrong."
+    wording: "They had on the news how many accident's there has been with bike's and I can bet that 90 percent are because the biker's were in the wrong."
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Mossy Fox K."
+        quote: "They had on the news how many accident's there has been with bike's and I can bet that 90 percent are because the biker's were in the wrong."
+        comment: 288
+  - id: cyclists-harassed-on-roads-without-lanes
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: cycling-safety
+    proposition: "Cyclists riding lawfully on roads without bike lanes get honked at, passed too closely and veered at."
+    wording: "I’ve been honked at, buzzed by too closely and veered at when I’ve been riding lawfully on roads without bike lanes or shared paths."
+    side: for
+    accounts: 1
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Mossy Beaver J."
+        quote: "I’ve been honked at, buzzed by too closely and veered at when I’ve been riding lawfully on roads without bike lanes or shared paths."
+        comment: 70
+  - id: street-labs-no-safety-value
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: cycling-safety
+    proposition: "Edmonton's Vision Zero Street Labs hinder normal street traffic and have no safety value for pedestrians."
+    wording: "\"vision zero - Street Labs \" that hinder normal street traffic and have no safety value for pedestrians what so ever."
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Cedar Elk B."
+        quote: "\"vision zero - Street Labs \" that hinder normal street traffic and have no safety value for pedestrians what so ever."
+        comment: 184
+  - id: downtown-network-safe-family-route
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: cycling-safety
+    proposition: "The downtown network lets a family ride safely from 104 Street to 124 Street."
+    wording: "Once he starts Mortising, we can go from 104 street to 124 … SAFELY."
+    side: for
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Copper Deer C."
+        quote: "Once he starts Mortising, we can go from 104 street to 124 … SAFELY."
+        comment: 444
+  - id: lane-on-provincially-arterial-road
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: street-types-and-design
+    proposition: "A bike lane is being built between 102 Avenue and 107 Avenue on a road the province deems arterial."
+    wording: "one is getting built as we speak on from 102ave to 107ave, it was deemed by the province as arterial to a future connecting one on 107ave."
+    side: against
+    accounts: 2
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Golden Pelican H."
+        quote: "one is getting built as we speak on from 102ave to 107ave, it was deemed by the province as arterial to a future connecting one on 107ave."
+        comment: 601
+      - commenter: "Cedar Elk B."
+        quote: "bike lanes in the middle of major road travel lanes."
+        comment: 184
+  - id: routes-approved-by-engineers
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: street-types-and-design
+    proposition: "Bike routes are approved for safety by professional engineers before they are built."
+    wording: "routes are approved for safety by professional engineers before they are constructed"
+    side: for
+    accounts: 2
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Cedar Pelican C."
+        quote: "routes are approved for safety by professional engineers before they are constructed"
+        comment: 201
+      - commenter: "Aurora Coyote T."
+        quote: "created by transportation engineers (a specialization of civil engineering)."
+        comment: 253
+  - id: no-lanes-on-arterial-roads
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: street-types-and-design
+    proposition: "Edmonton does not put bike lanes on arterial roads; they are on side streets."
+    wording: "All bike lanes in the city are on side streets. For example 113st, 83ave, 103ave."
+    side: for
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Cedar Pelican C."
+        quote: "All bike lanes in the city are on side streets. For example 113st, 83ave, 103ave."
+        comment: 185
+      - commenter: "Cedar Pelican C."
+        quote: "there are none on arterial roads"
+        comment: 600
+      - commenter: "Cedar Pelican C."
+        quote: "The city also has the foresight to not put bike lanes on arterial roads."
+        comment: 193
+  - id: 50-street-is-collector-not-arterial
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: street-types-and-design
+    proposition: "The stretch of 50 Street with a planted bike lane functions as a collector road, not an arterial road."
+    wording: "the portion of the road with a planted bike lane functions as a collector road, not an arterial road."
+    side: for
+    accounts: 1
+    seats:
+      - haiku
+      - luna
+    forms:
+      - commenter: "Cedar Pelican C."
+        quote: "the portion of the road with a planted bike lane functions as a collector road, not an arterial road."
+        comment: 602
+  - id: 95-percent-network-shared-paths
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: street-types-and-design
+    proposition: "95 percent of Edmonton's cycling network is shared pathways or wide sidewalks, with the rest on low-traffic side roads."
+    wording: "95% of the cycling network is shared pathways or wide sidewalks. The rest is on low traffic side roads like 76 Ave, 83 Ave, 103 Axe, 113 St , 110st."
+    side: for
+    accounts: 1
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Cedar Pelican C."
+        quote: "95% of the cycling network is shared pathways or wide sidewalks. The rest is on low traffic side roads like 76 Ave, 83 Ave, 103 Axe, 113 St , 110st."
+        comment: 193
+  - id: design-escalated-from-paint-to-rebuilds
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: street-types-and-design
+    proposition: "Edmonton's bike lane design has gone from painted lines to small jersey curb barriers to full redesigns of sidewalks, lanes and roads."
+    wording: "The city went to painted on lines to small jersey curb barriers to full redesign of sidewalks, bike lane and roads."
+    side: neither
+    accounts: 1
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Willow Moose B."
+        quote: "The city went to painted on lines to small jersey curb barriers to full redesign of sidewalks, bike lane and roads."
+        comment: 127
+  - id: shared-30-kmh-streets-exist
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: street-types-and-design
+    proposition: "Edmonton has single-file 30 km/h shared roads such as 92 Street."
+    wording: "single file 30km/h shared roads like 92st"
+    side: neither
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Riverside Muskrat A."
+        quote: "single file 30km/h shared roads like 92st"
+        comment: 16
+  - id: routes-go-nowhere
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: network-connections
+    proposition: "Bike routes are being built that go nowhere and don't connect to the existing network."
+    wording: "So many paths to nowhere"
+    side: against
+    accounts: 2
+    seats:
+      - luna
+    forms:
+      - commenter: "Hardy Deer T."
+        quote: "So many paths to nowhere"
+        comment: 10
+      - commenter: "Northern Otter K."
+        quote: "they go nowhere or hook up to an existing bike lane"
+        comment: 382
+  - id: missing-connections-along-lrt
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: network-connections
+    proposition: "There are missing cycling connections along Edmonton's LRT line."
+    wording: "There are missing connections along the LRT line."
+    side: for
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Willow Moose B."
+        quote: "There are missing connections along the LRT line."
+        comment: 127
+  - id: 83-avenue-decade-no-complaints
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: 83-avenue-lane
+    proposition: "83 Avenue has had its bike lane for over a decade with no complaints."
+    wording: "It's been like this on 83 Ave for over a decade and there have been no complaints."
+    side: for
+    accounts: 1
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Cedar Pelican C."
+        quote: "It's been like this on 83 Ave for over a decade and there have been no complaints."
+        comment: 247
+  - id: no-bike-lane-on-whyte-avenue
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: 83-avenue-lane
+    proposition: "There is no bike lane on Whyte Avenue; it is on 83 Avenue."
+    wording: "there is no bike lane on Whyte Ave. It's on 83 Ave"
+    side: neither
+    accounts: 1
+    seats:
+      - flash
+      - haiku
+      - luna
+    forms:
+      - commenter: "Cedar Pelican C."
+        quote: "there is no bike lane on Whyte Ave. It's on 83 Ave"
+        comment: 404
+  - id: 132-avenue-lanes-both-sides
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: 132-avenue
+    proposition: "Bike lanes have been put in on both sides of 132 Avenue."
+    wording: "the people that have had these put in on both sides of the road talking about 132 ave"
+    side: against
+    accounts: 4
+    seats:
+      - haiku
+      - luna
+    forms:
+      - commenter: "Snowy Waxwing K."
+        quote: "the people that have had these put in on both sides of the road talking about 132 ave"
+        comment: 395
+      - commenter: "Golden Sparrow J."
+        quote: "Just check out what they did on 132nd ave!"
+        comment: 18
+      - commenter: "Chilly Crow L."
+        quote: "132 Ave on the Northside is ridiculous"
+        comment: 206
+      - commenter: "Willow Otter D."
+        quote: "what they did to 132 ave"
+        comment: 437
+  - id: seven-schools-on-132-avenue
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: 132-avenue
+    proposition: "There are seven schools on the stretch of 132 Avenue getting bike lanes."
+    wording: "132 Ave with 7 schools on the Ave is insane !"
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Northern Grouse J."
+        quote: "132 Ave with 7 schools on the Ave is insane !"
+        comment: 361
+  - id: province-ordered-stop-and-will-legislate
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: provincial-direction
+    proposition: "The province has directed Edmonton to stop future bike lanes and will legislate on them in the fall."
+    wording: "What happened to the Province’s direction to stop future bike lanes from proceeding until they have a plan where traffic will be able to get through the city"
+    side: against
+    accounts: 3
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Nimble Otter M."
+        quote: "What happened to the Province’s direction to stop future bike lanes from proceeding until they have a plan where traffic will be able to get through the city"
+        comment: 221
+      - commenter: "Golden Pelican H."
+        quote: "perhaps you should be following provincial stop orders as you've been given prior notifications of upcoming legislation that do not support a lot of your current plans."
+        comment: 451
+      - commenter: "Golden Pelican H."
+        quote: "in contempt of provincial orders to stop the destruction of our infrastructure. Come fall they will be ordered to remove bike lanes including previously built ones off all arterial roads"
+        comment: 599
+      - commenter: "Windy Chickadee B."
+        quote: "the province will bring in legislation to restrict bike lanes in the fall"
+        comment: 467
+  - id: no-written-provincial-direction
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: provincial-direction
+    proposition: "The province has given nothing in writing about upcoming bike lane legislation."
+    wording: "the province has given nothing in writing about upcoming bike lane legislation."
+    side: for
+    accounts: 1
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Cedar Pelican C."
+        quote: "the province has given nothing in writing about upcoming bike lane legislation."
+        comment: 452
+  - id: holyrood-school-bike-lane-proposal
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: holyrood-school-lane
+    proposition: "Councillor Ashley Salvador wanted bike lanes in front of Holyrood school with the yellow buses moved across the street."
+    wording: "Ashley Salvatore wanted to put bike lanes in front of Holyrood school and move the yellow buses across the street."
+    side: against
+    accounts: 1
+    seats:
+      - flash
+      - haiku
+      - luna
+    names_person: true
+    forms:
+      - commenter: "Icy Grebe A."
+        quote: "Ashley Salvatore wanted to put bike lanes in front of Holyrood school and move the yellow buses across the street."
+        comment: 202
+  - id: holyrood-design-approved-then-stopped
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: holyrood-school-lane
+    proposition: "The Holyrood school bike lane design was approved and was stopped after the school principal objected."
+    wording: "it was approved. It was the principal of the school that caused a commotion and had it stopped."
+    side: against
+    accounts: 1
+    seats:
+      - haiku
+      - luna
+    forms:
+      - commenter: "Icy Grebe A."
+        quote: "it was approved. It was the principal of the school that caused a commotion and had it stopped."
+        comment: 204
+  - id: 189-street-lane-removed-later
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: 189-street-lane
+    proposition: "The bike lane put in on 189 Street had to be removed a couple of years later at taxpayers' expense."
+    wording: "removing them two years from now at our expense. Just like knackle head did on 189 st when he was our councillor."
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Mossy Hare D."
+        quote: "removing them two years from now at our expense. Just like knackle head did on 189 st when he was our councillor."
+        comment: 428
+  - id: former-councillor-installed-189-street-lane
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: 189-street-lane
+    proposition: "Former councillor Andrew Knack put in the 189 Street bike lane while he represented the ward."
+    wording: "Just like knackle head did on 189 st when he was our councillor."
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    names_person: true
+    forms:
+      - commenter: "Mossy Hare D."
+        quote: "Just like knackle head did on 189 st when he was our councillor."
+        comment: 428
+  - id: other-cities-removing-bike-lanes
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: other-cities
+    proposition: "Other Canadian cities are now removing their bike lanes."
+    wording: "other Canadian cities are now removing them."
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    forms:
+      - commenter: "Willow Nuthatch C."
+        quote: "other Canadian cities are now removing them."
+        comment: 317
+  - id: downtown-businesses-closing
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    investigation: downtown-business
+    proposition: "Downtown restaurants and businesses are closing because people cannot get to them."
+    wording: "restaurants and businesses will and are failing downtown already - closing doors because no one can get to them"
+    side: against
+    accounts: 1
+    seats:
+      - flash
+      - luna
+    forms:
+      - commenter: "Willow Nuthatch C."
+        quote: "restaurants and businesses will and are failing downtown already - closing doors because no one can get to them"
+        comment: 315
   - id: infill-teardown-350k-1m
     recorded: "2026-09-01"
     origin: supplied
@@ -162,18 +3023,6 @@ candidates:
     intake: intake/candidates/fifty-street-181m-600m/intake.md
     note: triage GO 2026-09-02; brief to follow
 
-  - id: lanes-removed-citywide
-    recorded: "2026-09-02"
-    origin: captured
-    wording: "The city is removing traffic lanes all throughout the city for bike lanes."
-    supplied_by: the founder, who pasted a Facebook post and its comments in full (public page Yegscoop, post on the 2026-08-26 committee decision); wording verbatim from a commenter
-    context: "captured thread at intake/captures/2026-09-02-yegscoop-bike-lanes.md, post https://www.facebook.com/yegscoop/posts/pfbid02aKkokbtnxq3dsDhfWgbGsEamfiNRUncwnff4ES8N11qVZBg5W4aDxZaPF3frYymVl"
-    outcome: GO
-    reason: "Residents are arguing about a concrete use of public road space, and City route records can answer a defined, reader-relevant version once permanent lane removals are separated from parking changes, traffic calming, and construction closures."
-    triage: intake/candidates/lanes-removed-citywide/triage.md
-    intake: intake/candidates/lanes-removed-citywide/intake.md
-    note: triage GO 2026-09-02; brief to follow
-
   - id: rice-50m-motions-and-review
     recorded: "2026-09-02"
     origin: captured
@@ -185,17 +3034,19 @@ candidates:
     triage: intake/candidates/rice-50m-motions-and-review/triage.md
     intake: intake/candidates/rice-50m-motions-and-review/intake.md
     note: triage GO 2026-09-02; brief to follow
-
+  - id: lanes-removed-citywide
+    recorded: "2026-09-02"
+    origin: captured
+    source: yegscoop-2026-08-26
+    wording: "The city is removing traffic lanes all throughout the city for bike lanes."
+    outcome: variation
+    variation_of: city-removed-traffic-lanes
+    reason: "Registered on its own on 2026-09-02. The same claim now sits inside the investigation into what Edmonton has done to its traffic lanes, where it is checked alongside the other claims about that question."
   - id: fifteen-minute-city-agreement
     recorded: "2026-09-02"
     origin: captured
+    source: yegscoop-2026-08-26
     wording: "They signed an agreement to make Edmonton a 15 minute city."
-    supplied_by: the founder, who pasted a Facebook post and its comments in full (public page Yegscoop, post on the 2026-08-26 committee decision); wording verbatim from a commenter
-    context: "captured thread at intake/captures/2026-09-02-yegscoop-bike-lanes.md, post https://www.facebook.com/yegscoop/posts/pfbid02aKkokbtnxq3dsDhfWgbGsEamfiNRUncwnff4ES8N11qVZBg5W4aDxZaPF3frYymVl"
-    story: fifteen-minute-districts
-    outcome: GO
-    reason: "A resident made a concrete claim, permanent City records can test it, and finding either a binding agreement or a comprehensive absence would surprise part of the audience."
-    triage: intake/candidates/fifteen-minute-city-agreement/triage.md
-    intake: intake/candidates/fifteen-minute-city-agreement/intake.md
-    note: triage GO 2026-09-02; at the founder's suggestion it runs as a second claim on the published fifteen-minute-districts story, since it is a different proposition (that an agreement was signed) about the same argument; brief to follow
-
+    outcome: variation
+    variation_of: 15-minute-city-agreement
+    reason: "Registered on its own on 2026-09-02. The same claim now sits inside the investigation into the 15-minute-city agreement, where it is checked alongside the other claims about that question."

@@ -6,11 +6,45 @@ import { SITE, repoPath } from '../../lib/site';
 import { PANEL_AGREEMENT_LEVELS } from '../../lib/vocabulary';
 import { toc } from '../../lib/toc';
 
+/**
+ * Stage zero, and the reason the seven stages below can be trusted at all: the
+ * claims that reach them were not picked out by anyone. Written as its own list
+ * because a reader's first question is how a claim gets in, not how it is
+ * checked (methodology v1.15, grouped into questions in v1.16).
+ */
+const intake = [
+  {
+    n: '1',
+    name: 'A source arrives',
+    body: 'The unit is a whole source: a post and every comment under it, an article, a discussion someone sends us. Anyone can send one, and you do not have to say which part of it you think is wrong. The whole thing is captured, with its address and the date it was taken, and kept.',
+  },
+  {
+    n: '2',
+    name: 'Every claim in it is written down',
+    body: 'Three inexpensive models read that capture separately. Each lists every factual assertion in it: numbers, counts, dates, what somebody says a document said, and the factual premise sitting inside an opinion. They are told not to work out whether any of it is true, and not to decide which parts are interesting. Each one is recorded with the exact words that carry it and the comment those words came from.',
+  },
+  {
+    n: '3',
+    name: 'The three lists become one',
+    body: 'A stronger model folds them into propositions, one for each thing a record could settle, keeping every version of the wording underneath. A script then audits that step: whatever any of the three wrote down has to appear once in the merged list, or on a dropped list under one of three allowed reasons. If something goes missing the merge fails and runs again. This is the point of the whole arrangement, because the failure it exists to catch is a claim quietly disappearing.',
+  },
+  {
+    n: '4',
+    name: 'The same argument is gathered into one question',
+    body: 'One argument arrives as many claims, and checking each on its own would spend a panel run on every one and answer the same question several times over. So propositions a single investigation would settle are gathered under one question: the same figure in different units, a general claim and an instance of it, and a claim together with the claim that contradicts it. Each of them still gets its own finding. Take the argument about emergency vehicles: one side says the concrete barriers hold responders up, the other says responders use the lanes to get past queues. That is one question, answered by the same response-time records, and two claims, because a single finding across the pair would settle neither and would tar each side with a ruling about the other.',
+  },
+  {
+    n: '5',
+    name: 'Triage rules on the questions',
+    body: 'The questions go to two readers, one pass each, and neither reader sees the other. Each returns GO, PARK or NO on every one, with a reason short enough to show the person who raised it. Where they disagree the question is kept rather than dropped, because throwing out a real question costs a reader more than holding one too long. Only a GO reaches stage 1 below. The rest are listed anyway, with their reasons beside them, and the questions most people are arguing about are the ones checked first.',
+  },
+];
+
 const stages = [
   {
     n: '1',
     name: 'Framing',
-    body: 'A written brief fixes the scope of the story and states each claim precisely before any model runs. This is where the arguable words get pinned down — what “lost” means, gross versus net, whose money, and the as-of date that closes the accounting window. Any calculation the verdict depends on is named here. Since v1.7 the brief is written by Stew, the AI steward, from an intake record that says where each circulating form came from, and it is checked before the freeze by a model from a different vendor whose only question is whether the brief tests the claim people actually make, at its strongest fair reading, with definitions both sides would accept before seeing the result. That report is committed beside the brief. The brief is frozen only once the check passes, so nobody can move the goalposts once the answers start arriving.',
+    body: 'A written brief fixes the scope of the story and states each claim precisely before any model runs. This is where the arguable words get pinned down — what “lost” means, gross versus net, whose money, and the as-of date that closes the accounting window. Any calculation the verdict depends on is named here. Since v1.7 the brief is written by Stew, the AI steward, from the intake record above, which carries the wordings the extraction captured and where each of them came from, and it is checked before the freeze by a model from a different vendor whose only question is whether the brief tests the claim people actually make, at its strongest fair reading, with definitions both sides would accept before seeing the result. That report is committed beside the brief. The brief is frozen only once the check passes, so nobody can move the goalposts once the answers start arriving.',
   },
   {
     n: '2',
@@ -84,6 +118,8 @@ const findings = [
   },
 ];
 const sections = toc([
+  { id: 'intake', label: 'How a claim gets in' },
+  { id: 'pseudonyms', label: 'Names and quotes' },
   { id: 'stages', label: 'Seven stages' },
   { id: 'vocabulary', label: 'The words we use' },
   { id: 'synthesis', label: 'Panel agreement' },
@@ -97,7 +133,7 @@ const sections = toc([
 <Base
   sections={sections}
   title="Methodology"
-  description="How YEGFacts produces a finding: a frozen brief, three models researching blind, a deterministic merge, a cross-review round, and a publication gate before anything is published."
+  description="How YEGFacts produces a finding: a whole source in and every claim in it listed, then a frozen brief, three models researching blind, a deterministic merge, a cross-review round, and a publication gate before anything is published."
 >
   <header class="border-b border-rule pb-6">
     <h1 class="text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
@@ -105,7 +141,8 @@ const sections = toc([
     </h1>
     <p class="mt-3 max-w-prose text-base leading-relaxed text-muted">
       AI does the research labour here. It does not carry the authority. Authority comes from a
-      public, auditable process: what was asked, which sources answered it, what three independent
+      public, auditable process: which claims arrived and what became of each of them, what was
+      asked, which sources answered it, what three independent
       models each concluded, how those conclusions were combined by a rule written in advance, and
       what the publication audit checked — against archived source bytes — before it was
       published. A named human, Ildar Abdulin, remains accountable for all of it.
@@ -116,15 +153,76 @@ const sections = toc([
     </p>
   </header>
 
-  <section id="stages" class="mt-11">
+  <section id="intake" class="mt-11">
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
+      How a claim gets in
+    </h2>
+    <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+      Nobody here decides which claims are worth an argument. Until v1.15 somebody did, and it
+      showed: the site was checking things nobody disputes while the actual fight went past it. So
+      the choosing stopped. Whatever comes in comes in whole, and everything factual inside it is
+      dealt with.
+    </p>
+
+    <ol class="mt-6 divide-y divide-rule border-t border-rule">
+      {
+        intake.map((step) => (
+          <li class="grid gap-x-5 gap-y-1 py-5 sm:grid-cols-[2rem_1fr]">
+            <span class="text-lg font-extrabold text-forest tabular">{step.n}</span>
+            <div>
+              <h3 class="font-semibold tracking-[-0.012em] text-forest">{step.name}</h3>
+              <p class="mt-1.5 text-[0.9375rem] leading-relaxed">{step.body}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <p class="mt-5 max-w-prose text-[0.9375rem] leading-relaxed">
+      Two rules fall out of this, and both bind us rather than you. We do not check a claim that
+      nobody has been recorded making: a wording one of us thought up is registered and then waits,
+      unrun, until it shows up in something a real person wrote. And an assertion that names a real
+      person and accuses them of something is written down with the rest, so no count can hide it,
+      and is then turned down; the reason is under <a href="#limits" class="link">Limits</a> below.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      One source has been through this so far. What has not been shown is that the triage step
+      returns the same answers twice on the same list, and until it has, the claim to make for it is
+      narrow: the choosing is gone from intake, not from everything.{' '}
+      <a href="/considered" class="link">Every claim we have considered</a> is listed with what
+      triage decided about it.
+    </p>
+  </section>
+
+  <section id="pseudonyms" class="mt-14 scroll-mt-6">
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
+      Names, and why the quotes are exact
+    </h2>
+    <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed">
+      Somebody who comments under a public post is not thereby a public figure. Every commenter in a
+      capture is given a label in place of a name: an adjective, an Edmonton animal and an initial,
+      like Snowy Hare F. It is picked by hashing the real name, so the same person gets the same
+      label every time that source is exported and replies still line up with what they answer.
+      Magpie is left out of the list, that one being Stew. Anyone holding public office keeps their
+      own name. What matches a label to a person is held privately and is not in the repository.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      The words themselves are treated the other way round. A quotation is the comment as typed,
+      misspellings included, and a script discards any that is not a single unbroken run of the
+      comment it is pinned to, or that points at a comment number the capture does not contain.
+      Nothing is stitched, tidied or corrected. Someone who commented in a thread we captured can
+      find their own sentence here and see that it was not reworded on the way in.
+    </p>
+  </section>
+
+  <section id="stages" class="mt-14">
     <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
       Seven stages, per story
     </h2>
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
       One run covers all of a story’s claims. The state of every run lives in the repo, so any
-      session can pick up where the last one stopped, and so can you. Before stage 1 a claim has to
-      survive triage, and <a href="/considered" class="link">every claim we have considered</a> is
-      listed with what triage decided.
+      session can pick up where the last one stopped, and so can you. These seven begin once a claim
+      has come through the four steps above and triage has said go.
     </p>
 
     <ol class="mt-6 divide-y divide-rule border-t border-rule">
@@ -234,6 +332,14 @@ const sections = toc([
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed">
       Version 1 of YEGFacts publishes no allegations about named individuals. The claims we check
       are about policies, programs, budgets and outcomes.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      Captured sources carry such allegations all the time, so the rule has to say what happens to
+      them rather than pretend they do not arrive. They are extracted and counted like anything
+      else, because a rule enforced by looking away is not a rule. Then triage declines them, always
+      for the same published reason: checking what one person says about another needs a way for the
+      second person to answer, and this version of the site has none. The decline is public, the
+      allegation and the name are not.
     </p>
     <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
       Reproducibility has a real limit and we would rather state it than paper over it. The panel

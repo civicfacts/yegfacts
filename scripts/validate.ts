@@ -30,7 +30,7 @@
  *
  * Exit code is 1 if any rule failed, 0 otherwise; warnings never set it.
  */
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import {
   asDateString,
@@ -45,6 +45,12 @@ import {
   sha256File,
 } from './lib/repo.ts';
 import { validateReviewFile, loadRunManifest } from './lib/review-schema.ts';
+import {
+  readComments,
+  registerProblems,
+  type Register,
+  type RegisterWorld,
+} from './lib/register-checks.ts';
 import {
   CANONICAL_FINDINGS,
   CHANGELOG_TYPES,
@@ -674,27 +680,46 @@ function checkReviewRuns(): void {
   }
 }
 
-const CANDIDATE_OUTCOMES = ['GO', 'PARK', 'NO', 'not-answered', 'not-triaged', 'pre-triage'];
-const CANDIDATE_ORIGINS = ['captured', 'supplied', 'editor'];
-
-/** Outcomes that owe the reader a sentence saying why. */
-const OUTCOMES_NEEDING_REASON = ['PARK', 'NO', 'not-answered'];
-
-/** The candidates, or `null` when the register is absent or unreadable. */
-function loadCandidateRegister(file: string): Record_[] | null {
+/** The register, or `null` when it is absent or unreadable. */
+function loadCandidateRegister(file: string): Register | null {
   if (!existsSync(file)) return null;
   try {
-    const data = loadYaml<{ candidates?: unknown }>(file);
+    const data = loadYaml<Register>(file);
     if (!Array.isArray(data?.candidates)) {
       fail(file, 'must contain a `candidates` list');
       return null;
     }
-    return data.candidates as Record_[];
+    return data;
   } catch (error) {
     fail(file, `unreadable YAML: ${(error as Error).message}`);
     return null;
   }
 }
+
+/**
+ * What `registerProblems` needs from outside the register file: the filesystem,
+ * the capture each source was read from, and the published claim ids a
+ * `variation_of` may point at.
+ */
+const registerWorld: RegisterWorld = {
+  exists: (value) => existsSync(repoPath(value)),
+  isDirectory: (value) => {
+    const absolute = repoPath(value);
+    return existsSync(absolute) && statSync(absolute).isDirectory();
+  },
+  comments: (capture) => {
+    const file = repoPath(capture, 'comments.jsonl');
+    if (!existsSync(file)) return undefined;
+    try {
+      return readComments(readFileSync(file, 'utf8'));
+    } catch {
+      return undefined;
+    }
+  },
+  claimIds: new Set(
+    claims.map(({ data }) => String(data.id ?? '')).filter((id) => id !== ''),
+  ),
+};
 
 /**
  * A `withdrawn` story and its `not-answered` register entry have to point at
@@ -753,55 +778,23 @@ function checkWithdrawals(file: string, candidates: Record_[]): void {
 /**
  * The candidate register, which `/considered` publishes verbatim.
  *
- * The rule that matters to readers is the reason one: a claim we declined,
- * parked or checked without an answer must carry a public sentence saying why,
- * because the whole point of the page is that nobody has to wonder.
+ * The rules themselves are in `lib/register-checks.ts`, as a pure function over
+ * the parsed file, so they can be tested against fixtures; this reads the file,
+ * hands over a view of the world, and reports what comes back. The withdrawal
+ * pairing stays here because it needs the stories, which that module does not.
  */
 function checkCandidateRegister(): void {
   const file = repoPath('intake', 'register.yaml');
-  const candidates = loadCandidateRegister(file);
-  if (candidates === null) {
+  const register = loadCandidateRegister(file);
+  if (register === null) {
     // A withdrawn story with no register at all still has to be caught.
     checkWithdrawals(file, []);
     return;
   }
 
-  const seen = new Set<string>();
-  for (const [index, candidate] of candidates.entries()) {
-    if (typeof candidate !== 'object' || candidate === null) {
-      fail(file, `candidate ${index + 1} must be a mapping`);
-      continue;
-    }
-    const id = typeof candidate.id === 'string' ? candidate.id : '';
-    const where = id === '' ? `candidate ${index + 1}` : id;
-    if (id === '') fail(file, `${where}: needs an id`);
-    else if (seen.has(id)) fail(file, `id "${id}" appears more than once`);
-    seen.add(id);
+  for (const problem of registerProblems(register, registerWorld)) fail(file, problem);
 
-    checkEnum(file, `${where} outcome`, candidate.outcome, CANDIDATE_OUTCOMES);
-    checkEnum(file, `${where} origin`, candidate.origin, CANDIDATE_ORIGINS);
-    checkIsoDate(file, `${where} recorded`, candidate.recorded);
-
-    if (OUTCOMES_NEEDING_REASON.includes(candidate.outcome as string)) {
-      if (typeof candidate.reason !== 'string' || candidate.reason.trim() === '') {
-        fail(file, `${where}: outcome ${String(candidate.outcome)} needs a public reason sentence`);
-      }
-    }
-
-    // Both paths are rendered at `/considered/<id>`, so a path that does not
-    // resolve is a page that silently loses a section.
-    for (const field of ['triage', 'intake'] as const) {
-      const value = candidate[field];
-      if (value === undefined) continue;
-      if (typeof value !== 'string' || value.trim() === '') {
-        fail(file, `${where}: ${field} must be a repo-relative path`);
-      } else if (!existsSync(repoPath(value))) {
-        fail(file, `${where}: ${field} record "${value}" does not exist`);
-      }
-    }
-  }
-
-  checkWithdrawals(file, candidates);
+  checkWithdrawals(file, register.candidates as Record_[]);
 }
 
 // ---------------------------------------------------------------------------

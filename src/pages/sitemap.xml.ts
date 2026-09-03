@@ -6,7 +6,7 @@ import {
   publicJournal,
   publishedStories,
 } from '../lib/content';
-import { candidatesWithPages } from '../lib/intake';
+import { candidatesWithPages, investigationRegister } from '../lib/intake';
 import { methodologyChanges } from '../lib/methodology';
 import { SITE } from '../lib/site';
 
@@ -92,6 +92,11 @@ export async function GET(context: APIContext): Promise<Response> {
 
     { path: '/commitments' },
     { path: '/considered' },
+    // Both levels of the register have a page: the question with the decision
+    // on it, and each claim checked under it.
+    ...investigationRegister().map((investigation) => ({
+      path: `/considered/${investigation.id}`,
+    })),
     ...candidatesWithPages().map(({ candidate }) => ({ path: `/considered/${candidate.id}` })),
 
     { path: '/about' },
