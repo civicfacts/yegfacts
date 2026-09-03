@@ -1,15 +1,15 @@
 ---
-import { formsForVariationTarget, sourceRegister } from '../lib/intake';
+import { sourceRegister, variationsFrom } from '../lib/intake';
 
 /**
  * "Also said as" — the captured wordings of a claim, on the page that checked it.
  *
- * When a source is read end to end, several of its propositions turn out to be
- * one published claim in other words. The register records each as a variation
- * of that claim; this brings their wordings back to the claim itself, so a
- * person who commented on the original post can find the words they typed on
- * the page that answers them. The quotes are exact and the names are the
- * source's pseudonyms — never a real name, on any page, ever.
+ * When a source is read end to end, a register claim inside it turns out to be
+ * a claim this site has already published. The published claim names that
+ * register claim in `register_claims`; this brings its captured wordings back
+ * to the claim itself, so a person who commented on the original post can find
+ * the words they typed on the page that answers them. The quotes are exact and
+ * the names are the source's pseudonyms — never a real name, on any page, ever.
  *
  * Collapsed, like the extra key facts above it: a claim can carry twenty
  * wordings, and the verdict is what the reader came for. Every one still
@@ -17,23 +17,23 @@ import { formsForVariationTarget, sourceRegister } from '../lib/intake';
  * own words lands here.
  */
 interface Props {
-  /** The published claim id a register entry may name in `variation_of`. */
-  claimId: string;
+  /** The register claim ids this published claim was grouped from. */
+  registerClaims: readonly string[];
 }
 
-const { claimId } = Astro.props;
+const { registerClaims } = Astro.props;
 
 const sources = new Map(sourceRegister().map((source) => [source.id, source]));
 
 /**
- * `formsForVariationTarget` reads the register through the loader that redacts
- * named-individual entries, so a withheld entry arrives here with no forms and
- * contributes nothing.
+ * `variationsFrom` reads the register through the loader that redacts
+ * named-individual claims, so a withheld claim arrives here with no variations
+ * and contributes nothing.
  */
-const said = formsForVariationTarget(claimId).map(({ candidate, form }) => ({
-  form,
-  candidate,
-  source: candidate.source ? sources.get(candidate.source) : undefined,
+const said = variationsFrom(registerClaims).map(({ claim, variation }) => ({
+  variation,
+  claim,
+  source: sources.get(variation.source_id),
 }));
 
 const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
@@ -50,18 +50,18 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
         source.
       </p>
       <ul class="space-y-3.5 pb-1">
-        {said.map(({ form, candidate, source }) => (
+        {said.map(({ variation, claim, source }) => (
           <li>
             <blockquote
               class="max-w-prose border-l-2 border-rule pl-3.5 text-[0.9375rem] leading-relaxed"
               data-record
             >
-              {form.quote}
+              {variation.wording}
             </blockquote>
             <p class={`mt-1 pl-3.5 ${label}`} data-record>
-              <span class="normal-case tracking-normal">{form.commenter}</span>
-              {` · comment ${form.comment} · `}
-              <a href={`/considered/${candidate.id}`} class="link normal-case tracking-normal">
+              <span class="normal-case tracking-normal">{variation.author_name}</span>
+              {' · '}
+              <a href={`/considered/${claim.id}`} class="link normal-case tracking-normal">
                 in the register
               </a>
               {source && (

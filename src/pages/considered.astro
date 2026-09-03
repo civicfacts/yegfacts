@@ -1,20 +1,21 @@
 ---
 import Base from '../layouts/Base.astro';
-import Outcome from '../components/Outcome.astro';
+import TriageBadge from '../components/TriageBadge.astro';
 import { allPublishedStories } from '../lib/content';
 import {
-  REGISTER_SECTIONS,
-  candidateRegister,
+  TRIAGE_SECTIONS,
+  claimRegister,
   claimText,
   discussedBy,
-  investigationsForSource,
-  outcomeEdge,
   provenance,
+  questionRegister,
+  questionsForSource,
   registerKey,
   reportsFor,
   sourceKind,
   sourceRegister,
   storyLinkLabel,
+  triageEdge,
 } from '../lib/intake';
 import { toc } from '../lib/toc';
 
@@ -27,7 +28,7 @@ import { toc } from '../lib/toc';
  * those propositions is listed here with what happened to it. So the page is
  * organised by source, because that is the unit the promise is made about.
  *
- * Inside a source it is organised by investigation, because that is the unit
+ * Inside a source it is organised by question, because that is the unit
  * the decision is made about: one question, one brief, one panel run, with the
  * claims checked under it beneath it. Listing the claims flat, as this page did
  * first, made four claims about who pays for Edmonton's roads read as four
@@ -39,7 +40,7 @@ import { toc } from '../lib/toc';
  * Edmonton is actually having are at the top and the hyper-specific ones sink.
  *
  * The claims that arrived one at a time, before there were sources, keep the
- * shape they had: outcome as a section heading, one entry to a row.
+ * shape they had: the triage answer as a section heading, one entry to a row.
  *
  * Before any of it comes the key, because the words in the outcome column are
  * the page's own vocabulary and a first-time reader has no way to know that
@@ -47,7 +48,8 @@ import { toc } from '../lib/toc';
  * it. The key defines every label the page can print, and says how two readers'
  * dispositions combine into the one on the row.
  */
-const candidates = candidateRegister();
+const claims = claimRegister();
+const questions = questionRegister();
 const sources = sourceRegister();
 
 /**
@@ -59,15 +61,15 @@ const published = new Set((await allPublishedStories()).map((story) => story.id)
 
 const bySource = sources.map((source) => ({
   source,
-  investigations: investigationsForSource(source.id),
+  questions: questionsForSource(source.id),
 }));
 
-/** Everything registered before the source was the unit, grouped by outcome. */
-const unsourced = candidates.filter((candidate) => candidate.source === undefined);
+/** Everything registered before the source was the unit, grouped by triage. */
+const unsourced = questions.filter((question) => question.source === undefined);
 
-const sections = REGISTER_SECTIONS.map((section) => ({
+const sections = TRIAGE_SECTIONS.map((section) => ({
   ...section,
-  entries: unsourced.filter((candidate) => candidate.outcome === section.outcome),
+  entries: unsourced.filter((question) => question.triage === section.triage),
 })).filter((section) => section.entries.length > 0);
 
 /**
@@ -75,7 +77,7 @@ const sections = REGISTER_SECTIONS.map((section) => ({
  * from the register, so the page defines what it shows and nothing else.
  */
 const key = registerKey();
-const withholding = candidates.some((candidate) => candidate.withheld);
+const withholding = claims.some((claim) => claim.withheld);
 
 const outline = toc([
   { id: 'outcomes', label: 'What the outcomes mean' },
@@ -118,7 +120,7 @@ const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-
       Every proposition is below.
     </p>
     <p class="mt-4 max-w-prose text-base leading-relaxed">
-      Those propositions are then grouped into investigations, and an investigation is what the
+      Those propositions are then grouped into questions, and a question is what the
       decision below is made about: one question, one brief, one body of evidence, one panel. Several
       claims to a question is normal, and claims that contradict each other belong to the same
       question. Whether barriers delay emergency vehicles and whether responders ride down the lanes
@@ -149,7 +151,7 @@ const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-
         key.map((entry) => (
           <div class="py-3 sm:flex sm:gap-5">
             <dt class="sm:w-40 sm:shrink-0">
-              <Outcome outcome={entry.outcome} />
+              <TriageBadge triage={entry.triage} />
             </dt>
             <dd class="mt-1.5 max-w-prose text-[0.9375rem] leading-relaxed sm:mt-0">
               {entry.definition}
@@ -160,7 +162,7 @@ const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-
     </dl>
 
     <p class="mt-6 max-w-prose text-[0.9375rem] leading-relaxed">
-      Two readers rule on every investigation, one call each, written GO, PARK or NO. Those are the
+      Two readers rule on every question, one call each, written GO, PARK or NO. Those are the
       words some of the reasons below use. Going ahead takes both readers at GO, or one GO and one
       PARK. Declined takes two NOs. Everything else parks, a GO set against a NO included, because
       throwing out a real question costs the reader more than holding one too long. So a question
@@ -173,7 +175,7 @@ const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-
         <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
           Some rows read “Withheld claim”. Those are propositions about an identifiable person,
           which this site does not repeat while it has no right of reply to offer them. The row
-          keeps its place under the question it was checked under, that question keeps its outcome
+          keeps its place under the question it was checked under, that question keeps its answer
           and its reason, and the entry behind the row says more.
         </p>
       )
@@ -181,7 +183,7 @@ const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-
   </section>
 
   {
-    bySource.map(({ source, investigations }) => (
+    bySource.map(({ source, questions: sourceQuestions }) => (
       <section id={source.id} class="mt-14 scroll-mt-6">
         <h2 class="border-t-[3px] border-ink pt-3.5 font-display text-[1.5rem] leading-[1.2] font-semibold text-pretty">
           {source.title}
@@ -215,7 +217,7 @@ const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-
           .
         </p>
 
-        {investigations.length === 0 ? (
+        {sourceQuestions.length === 0 ? (
           <p class="mt-4 border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed text-muted">
             The source has been read and merged; the dispositions are not registered yet.
           </p>
@@ -225,12 +227,12 @@ const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-
 
             {/*
               The ledger idiom /stories uses, carrying the register's two
-              levels: a 5px left edge in the outcome's colour on the question,
+              levels: a 5px left edge in the triage answer's colour on the question,
               the counts and the filled badge in columns of their own, so the
               dispositions read down one side of the page. One tbody to a
               question, with the claims checked under it as rows beneath it, so
               a claim is attached to its question by the table's own structure.
-              A claim row prints no badge, because the outcome on the row above
+              A claim row prints no badge, because the answer on the row above
               is the one decision made and repeating it on each claim would put
               four decisions where there was one.
 
@@ -247,35 +249,35 @@ const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-
                   <th scope="col">Outcome</th>
                 </tr>
               </thead>
-              {investigations.map(({ investigation, claims }) => (
+              {sourceQuestions.map(({ question, claims }) => (
                 <tbody class="block border-t border-rule md:table-row-group">
-                  <tr id={investigation.id} class="block scroll-mt-6 md:table-row">
+                  <tr id={question.id} class="block scroll-mt-6 md:table-row">
                     <td class="block pt-4 md:table-cell md:py-4 md:pr-4 md:align-top">
                       <span
                         class:list={[
                           'block border-l-[5px] pl-4',
-                          outcomeEdge(investigation.outcome),
+                          triageEdge(question.triage),
                         ]}
                       >
                         <a
-                          href={`/considered/${investigation.id}`}
+                          href={`/considered/${question.id}`}
                           class="link font-display text-[1.1875rem] leading-snug font-semibold text-pretty"
                           data-record
                         >
-                          {investigation.question}
+                          {question.question}
                         </a>
-                        {investigation.reason && (
+                        {question.reason && (
                           <span
                             class="mt-2 block max-w-prose text-[0.9375rem] leading-relaxed text-muted"
                             data-record
                           >
-                            {investigation.reason}
+                            {question.reason}
                           </span>
                         )}
                       </span>
                     </td>
                     <td class:list={['block pt-2 pl-5 md:py-4', countColumn]} data-record>
-                      {discussedBy(investigation.accounts.total)}
+                      {question.accounts && discussedBy(question.accounts.total)}
                     </td>
                     <td
                       class:list={['block pt-1 pl-5 whitespace-nowrap md:py-4', countColumn]}
@@ -284,7 +286,7 @@ const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-
                       {`${claims.length} ${claims.length === 1 ? 'claim' : 'claims'}`}
                     </td>
                     <td class:list={['pt-3 pb-4 pl-5 md:py-4', badgeColumn]}>
-                      <Outcome outcome={investigation.outcome} />
+                      <TriageBadge triage={question.triage} />
                     </td>
                   </tr>
 
@@ -334,8 +336,8 @@ const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-
         </h2>
         <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
           Claims that reached us singly rather than inside a source we hold: a reader's suggestion,
-          a wording the founder passed on, a hypothesis of our own. The outcomes are the ones in the
-          key above, set as headings here rather than badges.
+          a wording the founder passed on, a hypothesis of our own. The triage answers are the ones
+          in the key above, set as headings here rather than badges.
         </p>
 
         {sections.map((section) => (
@@ -343,12 +345,12 @@ const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-
             <h3 class="text-lg font-extrabold tracking-[-0.015em] text-forest">{section.heading}</h3>
 
             <ol class="mt-5 divide-y divide-rule border-t border-rule">
-              {section.entries.map((candidate) => {
-                const reports = reportsFor(candidate);
+              {section.entries.map((question) => {
+                const reports = reportsFor(question);
                 return (
                   /* The register id is the anchor, so a story that was withdrawn can
                      send a reader to the entry that says why. */
-                  <li id={candidate.id} class="scroll-mt-6 py-7">
+                  <li id={question.id} class="scroll-mt-6 py-7">
                     <article>
                       {/* The claim in the words it reached us in. `data-record` for the
                           same reason the meta line below carries it: one wording can be
@@ -359,37 +361,37 @@ const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-
                         class="max-w-prose border-l-2 border-gold pl-4 text-[1.0625rem] leading-relaxed text-pretty"
                         data-record
                       >
-                        {candidate.wording}
+                        {question.registered_as ?? question.question}
                       </blockquote>
 
-                      {/* Straight out of the register: two candidates sharing a date and a
+                      {/* Straight out of the register: two questions sharing a date and a
                           provenance is the register's business, not this page repeating itself. */}
                       <p class={`mt-3 ${label}`} data-record>
-                        <time datetime={candidate.recorded}>{candidate.recorded}</time>
+                        <time datetime={question.recorded}>{question.recorded}</time>
                         {' · '}
-                        <span class="normal-case tracking-normal">{provenance(candidate)}</span>
+                        <span class="normal-case tracking-normal">{provenance(question)}</span>
                       </p>
 
-                      {(candidate.reason ?? candidate.note) && (
+                      {(question.reason ?? question.note) && (
                         <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
-                          {candidate.reason ?? candidate.note}
+                          {question.reason ?? question.note}
                         </p>
                       )}
 
                       {(reports.length > 0 ||
-                        (candidate.story && published.has(candidate.story))) && (
+                        (question.story && published.has(question.story))) && (
                         <p class="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm">
                           {/* The reports are on the site now, so the reader is sent
                               there rather than to GitHub; the repository copy is
-                              linked at the foot of the candidate's own page. */}
+                              linked at the foot of the question's own page. */}
                           {reports.length > 0 && (
-                            <a href={`/considered/${candidate.id}`} class="link">
-                              {candidate.triage ? 'Read the triage' : 'Read the intake record'}
+                            <a href={`/considered/${question.id}`} class="link">
+                              {question.triage_report ? 'Read the triage' : 'Read the intake record'}
                             </a>
                           )}
-                          {candidate.story && published.has(candidate.story) && (
-                            <a href={`/facts/${candidate.story}`} class="link">
-                              {storyLinkLabel(candidate)}
+                          {question.story && published.has(question.story) && (
+                            <a href={`/facts/${question.story}`} class="link">
+                              {storyLinkLabel(question)}
                             </a>
                           )}
                         </p>
@@ -406,7 +408,7 @@ const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-
   }
 
   {
-    candidates.length === 0 && sources.length === 0 && (
+    questions.length === 0 && sources.length === 0 && (
       <p class="mt-8 border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed text-muted">
         Nothing has been recorded yet. The first entry lands with the first claim someone sends us.
       </p>

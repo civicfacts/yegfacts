@@ -417,7 +417,7 @@ const claimReviews =
                   person who said it should be able to find their own words
                   beside the answer.
                 */}
-                <AlsoSaidAs claimId={claim.data.id} />
+                <AlsoSaidAs registerClaims={claim.data.register_claims} />
 
                 {claim.data.limitations.length > 0 && (
                   <div class="mt-4">
