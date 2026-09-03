@@ -82,6 +82,22 @@ propositions — keep them apart.
     character for character; do not tidy spelling, punctuation, or capitals.
     Quote the claim, not the whole comment: keep it under 60 words.
 
+Two rules about quotes are checked by a script after you finish, and a form
+that fails either is thrown out:
+
+1. **The quote must be one unbroken run of the comment.** If the words you
+   want are split by a sentence you do not want, either quote the shorter run
+   or give two forms. Never stitch two parts together, with or without an
+   ellipsis, and never repair a typo: "The signed a agreement" stays exactly
+   that.
+2. **The index must be the comment the words are in.** Comment indexes run
+   from 1 to the last comment in the thread and no further. Copy the index
+   from the line you are quoting rather than reconstructing it, and never
+   cite an index the thread does not have.
+
+Getting a claim right and its quote wrong is worse than not finding the
+claim: a wrong quote is a false attribution to a real person.
+
 ## Output
 
 First, one short text block stating your model name and version.

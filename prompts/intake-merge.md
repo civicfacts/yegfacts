@@ -112,3 +112,22 @@ A single JSON object, and nothing else — no markdown fence, no commentary:
 that found nothing for that proposition.
 
 Order the propositions by how many seats found them, most first.
+
+## Quotes you carry forward
+
+A form's `quote` must be an unbroken run of the comment it cites, copied
+character for character, and its `index` must be a comment that exists in the
+capture. The extractions you are given have already been through that check, so
+carrying a quote across unchanged is always safe. The two ways to break it are
+to trim a quote to a run that is not contiguous in the original, and to stitch
+two seats' quotes of the same comment into one longer quote. Do neither. When
+in doubt keep one seat's quote exactly as it stands.
+
+## A claim that names a private individual or accuses someone
+
+Some threads carry claims that name a person and allege wrongdoing. Merge them
+like any other claim and do not soften the proposition; the disposition is
+decided later, in triage, not here. Set `"names_person": true` on any
+proposition that names an identifiable individual, whether or not it alleges
+anything, so triage can find them without re-reading every form. Public bodies
+and offices are not individuals; a named councillor is.
