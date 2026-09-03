@@ -286,6 +286,58 @@ const claims = defineCollection({
         reviewers: z.array(panelReviewer).min(1),
       })
       .optional(),
+    /**
+     * Set when the finding stands and the question was not worth asking
+     * (methodology v1.19).
+     *
+     * This is not a correction and it is not a retraction. Nothing about the
+     * finding changed; what changed is the site's own judgement about whether
+     * the question was worth a panel run. The claim keeps its page, its
+     * finding, its evidence and its history, and `src/lib/content.ts` takes it
+     * off every board and out of the search index.
+     *
+     * Shaped like the story-level `withdrawn` block from v1.13, minus the
+     * `register` pointer: a story left the board because a register question
+     * was withdrawn with it, and this one is a judgement about a single claim
+     * on a question that is otherwise unchanged.
+     */
+    board_withdrawn: z
+      .object({
+        date: isoDate,
+        /** Shown to readers in the dated note on this claim and its question. */
+        reason: z.string().min(1),
+      })
+      .optional(),
+    /**
+     * The id of the claim, on the same question, that this claim is the
+     * established premise of (methodology v1.19).
+     *
+     * A claim nobody disputes but which is the ground a contested claim stands
+     * on. It comes off the boards like `board_withdrawn` and additionally
+     * renders on its question's page underneath the claim it supports, as
+     * background rather than as a headline finding. The two claims keep their
+     * two findings: one finding over both would state neither.
+     *
+     * `scripts/validate.ts` checks the target is a claim on the same question
+     * and that no two claims point at each other, since both rules need to see
+     * more than one file.
+     */
+    context_for: z.string().min(1).optional(),
+  }).superRefine((claim, ctx) => {
+    if (claim.board_withdrawn && claim.context_for) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['context_for'],
+        message: 'a claim is either off the board or background under another, never both',
+      });
+    }
+    if (claim.context_for === claim.id) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['context_for'],
+        message: 'context_for must name another claim, not this one',
+      });
+    }
   }),
 });
 

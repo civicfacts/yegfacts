@@ -465,6 +465,62 @@ function checkClaims(): void {
   }
 }
 
+/**
+ * The two claim-level dispositions of methodology v1.19, checked across files.
+ *
+ * `board_withdrawn` is self-contained and only its shape is checked here.
+ * `context_for` is a pointer, and the two rules worth having are the ones a
+ * single file cannot see: the premise and the claim it supports have to be
+ * under the same question, because the whole presentation is one rendered
+ * beneath the other on that question's page; and no two claims may name each
+ * other, which would leave the page with no headline claim to hang either on.
+ */
+function checkClaimDispositions(): void {
+  const claimById = new Map<string, Record_>();
+  for (const { data } of claims) {
+    if (typeof data.id === 'string') claimById.set(data.id, data);
+  }
+
+  for (const { file, data } of claims) {
+    const withdrawal = data.board_withdrawn;
+    if (withdrawal !== undefined) {
+      const record = withdrawal as Record_;
+      checkIsoDate(file, 'board_withdrawn.date', record.date);
+      if (typeof record.reason !== 'string' || record.reason.trim() === '') {
+        fail(file, 'board_withdrawn.reason is required: say why the question was not worth asking');
+      }
+    }
+
+    const target = data.context_for;
+    if (target === undefined) continue;
+    if (typeof target !== 'string' || target.trim() === '') {
+      fail(file, 'context_for must name a claim id');
+      continue;
+    }
+    if (withdrawal !== undefined) {
+      fail(file, 'a claim is either off the board or background under another, never both');
+    }
+    if (target === data.id) {
+      fail(file, 'context_for must name another claim, not this one');
+      continue;
+    }
+    const supported = claimById.get(target);
+    if (!supported) {
+      fail(file, `context_for: "${target}" has no claim file`);
+      continue;
+    }
+    if (supported.story !== data.story) {
+      fail(
+        file,
+        `context_for: "${target}" is on question "${String(supported.story)}", not "${String(data.story)}"`,
+      );
+    }
+    if (supported.context_for === data.id) {
+      fail(file, `context_for: "${target}" already names this claim as its background`);
+    }
+  }
+}
+
 /** A published claim's run directory must exist and carry its manifest (spec §8). */
 function checkPublishedReviewRun(claimFile: string, reviewRun: string): void {
   const runDir = repoPath(reviewRun);
@@ -1095,6 +1151,7 @@ checkMethodologyChangelog();
 checkTopicFiles();
 checkStories();
 checkClaims();
+checkClaimDispositions();
 checkPlainSpeech();
 checkCommitments();
 checkEvidence();
