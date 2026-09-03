@@ -5,7 +5,7 @@
  * between the seats and the merged list — the failure mode it exists to
  * prevent is a claim disappearing because no one chose it. So the arithmetic
  * is checked rather than asserted: every `e-NNN` id emitted by every seat must
- * turn up in merged.json, either under a proposition's `from` or in the
+ * turn up in merged.json, either under a merged claim's `from` or in the
  * `dropped` list with a reason.
  *
  * What this proves is narrow, and worth stating narrowly: no claim the seats
@@ -23,16 +23,21 @@ import { REPO_ROOT } from './lib/repo.ts';
 
 type Form = { index: number; commenter: string; quote: string; seats?: string[] };
 type Extraction = { claims: { id: string; proposition: string; side: string; forms: Form[] }[] };
-type Proposition = {
+type MergedClaim = {
   id: string;
-  proposition: string;
+  /** `claim` since D-0029; `proposition` in runs merged before it. */
+  claim?: string;
+  proposition?: string;
   side: string;
-  relation: unknown;
   commenters?: number;
   from?: Record<string, string[]>;
   forms: Form[];
 };
-type Merged = { propositions: Proposition[]; dropped: { seat: string; id: string; reason: string }[] };
+type Merged = {
+  claims?: MergedClaim[];
+  propositions?: MergedClaim[];
+  dropped: { seat: string; id: string; reason: string }[];
+};
 
 const arg = process.argv[2];
 if (!arg) {
@@ -47,6 +52,8 @@ if (!existsSync(mergedFile)) {
   process.exit(1);
 }
 const merged = JSON.parse(readFileSync(mergedFile, 'utf8')) as Merged;
+/** Either spelling: `propositions` before D-0029, `claims` after it. */
+const mergedClaims = merged.claims ?? merged.propositions ?? [];
 
 /** Seats are whatever extract-*.json files are present, not a list kept here. */
 const seats = readdirSync(dir)
@@ -65,11 +72,11 @@ for (const seat of seats) {
   emitted.set(seat, new Set(extraction.claims.map((claim) => claim.id)));
 }
 
-// Where each id was accounted for: proposition slugs, or "dropped".
+// Where each id was accounted for: merged-claim slugs, or "dropped".
 //
 // A seat often raises one claim that is really two ("very few people cycle,
 // only 1 to 2 percent"), and the merge is required to split those, so one id
-// landing on several propositions is correct and is reported as a split rather
+// landing on several merged claims is correct and is reported as a split rather
 // than counted as a defect. What is a defect: an id nowhere at all, an id both
 // kept and dropped, and an id the merge cites that no seat emitted.
 const accounted = new Map<string, string[]>();
@@ -81,9 +88,9 @@ function account(seat: string, id: string, where: string) {
   else accounted.set(key(seat, id), [where]);
 }
 
-for (const proposition of merged.propositions) {
-  for (const [seat, ids] of Object.entries(proposition.from ?? {})) {
-    for (const id of ids) account(seat, id, proposition.id);
+for (const claim of mergedClaims) {
+  for (const [seat, ids] of Object.entries(claim.from ?? {})) {
+    for (const id of ids) account(seat, id, claim.id);
   }
 }
 for (const entry of merged.dropped ?? []) account(entry.seat, entry.id, 'dropped');
@@ -117,7 +124,7 @@ for (const [composite, where] of accounted) {
 // Every form quotes the comment it cites
 // ---------------------------------------------------------------------------
 //
-// Counting is not enough: a proposition is only usable if the words attributed
+// Counting is not enough: a merged claim is only usable if the words attributed
 // to a commenter are the words in the capture, under the index given. Seats
 // reword lightly (a dropped sentence stitched without an ellipsis, a corrected
 // typo) and one seat invented comment numbers outright, so both are checked.
@@ -137,8 +144,8 @@ if (existsSync(captureFile)) {
   const normalised = new Map([...comments].map(([index, text]) => [index, normalise(text)]));
 
   let quotesChecked = 0;
-  for (const proposition of merged.propositions) {
-    for (const form of proposition.forms ?? []) {
+  for (const claim of mergedClaims) {
+    for (const form of claim.forms ?? []) {
       quotesChecked += 1;
       const quote = normalise(form.quote ?? '');
       const cited = normalised.get(form.index);
@@ -152,7 +159,7 @@ if (existsSync(captureFile)) {
           : found.length > 0
             ? `not in comment ${form.index}; these words are in ${found.join(', ')}`
             : `not in comment ${form.index}, and nowhere in the capture`;
-      problems.push(`quote  ${proposition.id} — ${where}: "${(form.quote ?? '').slice(0, 60)}"`);
+      problems.push(`quote  ${claim.id} — ${where}: "${(form.quote ?? '').slice(0, 60)}"`);
     }
   }
   console.log(`intake-coverage: checked ${quotesChecked} quotes against ${comments.size} captured comments\n`);
@@ -163,8 +170,8 @@ if (existsSync(captureFile)) {
 // ---------------------------------------------------------------------------
 
 const bySeatCount = new Map<number, number>();
-for (const proposition of merged.propositions) {
-  const found = Object.keys(proposition.from ?? {}).length;
+for (const claim of mergedClaims) {
+  const found = Object.keys(claim.from ?? {}).length;
   bySeatCount.set(found, (bySeatCount.get(found) ?? 0) + 1);
 }
 
@@ -173,13 +180,13 @@ for (const seat of seats) {
   console.log(`  ${seat.padEnd(8)} ${String(emitted.get(seat)!.size).padStart(4)} claims`);
 }
 console.log(`  ${'total'.padEnd(8)} ${String([...emitted.values()].reduce((n, s) => n + s.size, 0)).padStart(4)} extractor claims\n`);
-console.log(`  propositions        ${merged.propositions.length}`);
+console.log(`  merged claims       ${mergedClaims.length}`);
 for (const count of [...bySeatCount.keys()].sort((a, b) => b - a)) {
   console.log(`    found by ${count} seat${count === 1 ? ' ' : 's'}   ${bySeatCount.get(count)}`);
 }
 console.log(`  dropped             ${(merged.dropped ?? []).length}`);
 if (splits.length > 0) {
-  console.log(`  split across propositions  ${splits.length}`);
+  console.log(`  split across merged claims  ${splits.length}`);
   for (const split of splits) console.log(`    ${split}`);
 }
 

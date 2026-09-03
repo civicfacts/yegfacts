@@ -1,11 +1,15 @@
 /**
- * The step between a run and the public register. A hundred-odd propositions is
- * where hand-copying starts producing a register that disagrees with the run it
- * came from, so what the conversion does with each field is pinned here.
+ * The step between a run and the public register. A hundred-odd claims is where
+ * hand-copying starts producing a register that disagrees with the run it came
+ * from, so what the conversion does with each field is pinned here.
  *
  * The account counts get the most attention because they are the only numbers
  * here that are derived rather than copied, and a derived number that is wrong
  * misstates how many people are arguing a question.
+ *
+ * The run's own JSON is read in either spelling — `propositions`/`stories`
+ * before D-0029, `claims`/`questions` after it — because dropping the old names
+ * would make every archived run unreproducible. Both are exercised below.
  */
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
@@ -20,12 +24,11 @@ import {
 const source = { id: 'thread', run: 'reviews/intake/thread' };
 
 const merged: Merged = {
-  propositions: [
+  claims: [
     {
       id: 'lanes-removed',
-      proposition: 'Edmonton is removing traffic lanes across the city to build bike lanes.',
+      claim: 'Edmonton is removing traffic lanes across the city to build bike lanes.',
       side: 'against',
-      relation: 'new',
       from: { haiku: ['e-001'], luna: ['e-004', 'e-005'] },
       forms: [
         { index: 3, commenter: 'Snowy Hare F.', quote: 'removing traffic lanes', seats: ['haiku'] },
@@ -34,12 +37,12 @@ const merged: Merged = {
     },
     {
       id: 'lanes-removed-everywhere',
-      proposition: 'Traffic lanes have been taken out on streets all over Edmonton.',
+      claim: 'Traffic lanes have been taken out on streets all over Edmonton.',
       side: 'against',
-      relation: 'new',
       from: { flash: ['e-011'] },
-      // The first repeats a form of `lanes-removed` exactly; the third quotes
-      // the same words out of a different comment.
+      // The first repeats a form of `lanes-removed` exactly; the third is the
+      // same person saying the same words in a different comment, which the
+      // register cannot tell apart once the comment index is gone.
       forms: [
         { index: 3, commenter: 'Snowy Hare F.', quote: 'removing traffic lanes' },
         { index: 12, commenter: 'Bright Goose S.', quote: 'they took a lane off my street' },
@@ -48,26 +51,16 @@ const merged: Merged = {
     },
     {
       id: 'congestion-eased',
-      proposition: 'Edmonton bike lanes reduce traffic congestion.',
+      claim: 'Edmonton bike lanes reduce traffic congestion.',
       side: 'for',
-      relation: { 'variation-of': 'at-congestion-reduced' },
       from: { flash: ['e-002'] },
-      // The same account that argued the other way above.
+      // The same person who argued the other way above.
       forms: [{ index: 7, commenter: 'Quiet Goose B.', quote: 'bikes cut congestion' }],
     },
     {
-      id: 'lanes-gone-again',
-      proposition: 'Another Edmonton street lost a traffic lane.',
-      side: 'against',
-      relation: { 'variation-of': 'lanes-removed' },
-      from: { luna: ['e-020'] },
-      forms: [{ index: 20, commenter: 'Snowy Hare F.', quote: 'gone again' }],
-    },
-    {
       id: 'councillor-allegation',
-      proposition: 'A named councillor did something wrong.',
+      claim: 'A named councillor did something wrong.',
       side: 'neither',
-      relation: 'new',
       names_person: true,
       from: { haiku: ['e-009'] },
       forms: [{ index: 40, commenter: 'Granite Hare D.', quote: 'he did it' }],
@@ -77,7 +70,7 @@ const merged: Merged = {
 };
 
 const groups: Groups = {
-  stories: [
+  questions: [
     {
       id: 'road-space',
       question: 'What happened to the traffic lanes?',
@@ -85,18 +78,13 @@ const groups: Groups = {
       claims: [
         {
           id: 'lanes-removed',
-          proposition: merged.propositions[0]!.proposition,
-          variations: ['lanes-removed', 'lanes-removed-everywhere'],
+          claim: merged.claims![0]!.claim,
+          merged_from: ['lanes-removed', 'lanes-removed-everywhere'],
         },
         {
           id: 'congestion-eased',
-          proposition: merged.propositions[2]!.proposition,
-          variations: ['congestion-eased'],
-        },
-        {
-          id: 'lanes-gone-again',
-          proposition: merged.propositions[3]!.proposition,
-          variations: ['lanes-gone-again'],
+          claim: merged.claims![2]!.claim,
+          merged_from: ['congestion-eased'],
         },
       ],
     },
@@ -106,8 +94,8 @@ const groups: Groups = {
       claims: [
         {
           id: 'councillor-allegation',
-          proposition: merged.propositions[4]!.proposition,
-          variations: ['councillor-allegation'],
+          claim: merged.claims![3]!.claim,
+          merged_from: ['councillor-allegation'],
         },
       ],
     },
@@ -131,21 +119,28 @@ const run = (t: Triage | undefined) => registerEntries(merged, groups, t, source
 
 const claim = (id: string) => run(triage).claims.find((entry) => entry.id === id)!;
 
-describe('investigation entries', () => {
-  it('is one entry per story, in groups.json’s order', () => {
-    expect(run(triage).investigations.map((entry) => entry.id)).toEqual([
+describe('question entries', () => {
+  it('is one entry per question, in groups.json’s order', () => {
+    expect(run(triage).questions.map((entry) => entry.id)).toEqual([
       'road-space',
       'who-sits-on-council',
     ]);
   });
 
-  it('carries the triage outcome, its reason and the grouping note', () => {
-    expect(run(triage).investigations[0]).toEqual({
+  /**
+   * Three state fields, never one. A freshly registered question is registered,
+   * triaged and unpublished, and the generator says so rather than leaving a
+   * later reader to infer two of the three from the third.
+   */
+  it('carries the three state fields, the reason and the grouping note', () => {
+    expect(run(triage).questions[0]).toEqual({
       id: 'road-space',
       recorded: '2026-09-03',
       source: 'thread',
       question: 'What happened to the traffic lanes?',
-      outcome: 'GO',
+      lifecycle: 'registered',
+      triage: 'go',
+      publication: 'unpublished',
       reason: 'City route records can answer a defined version.',
       grouping_note: 'The City’s own conversion record answers all of it at once.',
       accounts: { total: 3, for: 1, against: 3 },
@@ -153,12 +148,16 @@ describe('investigation entries', () => {
     });
   });
 
-  it('omits the grouping note when the story has none', () => {
-    expect('grouping_note' in run(triage).investigations[1]!).toBe(false);
+  it('maps the triage reader’s PARK onto the register’s vocabulary', () => {
+    expect(run(triage).questions[1]!.triage).toBe('park');
   });
 
-  it('counts an account that argued both ways on both sides, so the sides can outsum the total', () => {
-    const { accounts } = run(triage).investigations[0]!;
+  it('omits the grouping note when the question has none', () => {
+    expect('grouping_note' in run(triage).questions[1]!).toBe(false);
+  });
+
+  it('counts somebody who argued both ways on both sides, so the sides can outsum the total', () => {
+    const { accounts } = run(triage).questions[0]!;
     // Snowy Hare F., Quiet Goose B. and Bright Goose S. argued the question;
     // Quiet Goose B. argued it both ways.
     expect(accounts.total).toBe(3);
@@ -166,36 +165,36 @@ describe('investigation entries', () => {
   });
 
   it('omits a side nobody argued', () => {
-    expect(run(triage).investigations[0]!.accounts.neither).toBeUndefined();
-    expect(run(triage).investigations[1]!.accounts).toEqual({ total: 1, neither: 1 });
+    expect(run(triage).questions[0]!.accounts.neither).toBeUndefined();
+    expect(run(triage).questions[1]!.accounts).toEqual({ total: 1, neither: 1 });
   });
 });
 
 describe('claim entries', () => {
-  it('is one entry per claim, in story order', () => {
+  it('is one entry per claim, in question order', () => {
     expect(run(triage).claims.map((entry) => entry.id)).toEqual([
       'lanes-removed',
       'congestion-eased',
-      'lanes-gone-again',
       'councillor-allegation',
     ]);
   });
 
-  it('says which investigation rules on it and never carries an outcome of its own', () => {
+  it('says which question rules on it and never carries state of its own', () => {
     for (const entry of run(triage).claims) {
-      expect(entry.investigation).toBeTruthy();
-      expect('outcome' in entry).toBe(false);
-      expect('reason' in entry).toBe(false);
+      expect(entry.question).toBeTruthy();
+      for (const field of ['triage', 'lifecycle', 'publication', 'reason']) {
+        expect(field in entry).toBe(false);
+      }
     }
   });
 
-  it('shows the canonical plain sentence as the proposition and the first captured quote as the wording', () => {
+  it('shows the canonical plain sentence as the proposition and the first wording as the wording', () => {
     expect(claim('lanes-removed')).toMatchObject({
       recorded: '2026-09-03',
       origin: 'captured',
       source: 'thread',
-      investigation: 'road-space',
-      proposition: merged.propositions[0]!.proposition,
+      question: 'road-space',
+      proposition: merged.claims![0]!.claim,
       wording: 'removing traffic lanes',
       side: 'against',
       accounts: 3,
@@ -203,31 +202,28 @@ describe('claim entries', () => {
     });
   });
 
-  it('lists the other wordings when the claim folds in more than one proposition', () => {
+  /**
+   * The register keeps no comment index, so the same words from the same person
+   * are one wording however many comments they appear in — printing them six
+   * times under one pseudonym would misrepresent the thread. The same words
+   * from two people stay two.
+   */
+  it('collapses a wording repeated by one person and keeps two people saying the same thing', () => {
     expect(claim('lanes-removed').variations).toEqual([
-      'Traffic lanes have been taken out on streets all over Edmonton.',
+      { wording: 'removing traffic lanes', source_id: 'thread', author_name: 'Snowy Hare F.' },
+      { wording: 'a lane gone on every street', source_id: 'thread', author_name: 'Quiet Goose B.' },
+      {
+        wording: 'they took a lane off my street',
+        source_id: 'thread',
+        author_name: 'Bright Goose S.',
+      },
     ]);
   });
 
-  it('omits variations when the claim is a single proposition', () => {
-    expect('variations' in claim('congestion-eased')).toBe(false);
-  });
-
-  it('de-duplicates forms on the comment and the quote, and keeps the same words said twice', () => {
-    expect(claim('lanes-removed').forms).toEqual([
-      { commenter: 'Snowy Hare F.', quote: 'removing traffic lanes', comment: 3 },
-      { commenter: 'Quiet Goose B.', quote: 'a lane gone on every street', comment: 9 },
-      { commenter: 'Bright Goose S.', quote: 'they took a lane off my street', comment: 12 },
-      { commenter: 'Snowy Hare F.', quote: 'removing traffic lanes', comment: 15 },
-    ]);
-  });
-
-  it('carries a variation_of that points at something already registered', () => {
-    expect(claim('congestion-eased').variation_of).toBe('at-congestion-reduced');
-  });
-
-  it('drops a variation_of that points inside the run, which the grouping has already settled', () => {
-    expect('variation_of' in claim('lanes-gone-again')).toBe(false);
+  it('names the source on every wording, since a claim may hold wordings from several', () => {
+    for (const variation of claim('lanes-removed').variations ?? []) {
+      expect(variation.source_id).toBe('thread');
+    }
   });
 
   it('passes names_person through, so the site can withhold the entry', () => {
@@ -235,13 +231,13 @@ describe('claim entries', () => {
     expect('names_person' in claim('lanes-removed')).toBe(false);
   });
 
-  it('throws on a claim citing a proposition the merge does not have', () => {
+  it('throws on a claim citing a merged claim the merge does not have', () => {
     const invented: Groups = {
-      stories: [
+      questions: [
         {
           id: 'road-space',
           question: 'What happened to the traffic lanes?',
-          claims: [{ id: 'nowhere', proposition: 'Nothing.', variations: ['not-in-merged'] }],
+          claims: [{ id: 'nowhere', claim: 'Nothing.', merged_from: ['not-in-merged'] }],
         },
       ],
     };
@@ -251,11 +247,53 @@ describe('claim entries', () => {
   });
 });
 
+/**
+ * A run merged and grouped before D-0029 says `propositions`, `proposition`,
+ * `stories` and `variations`. It has to produce exactly what the new spelling
+ * produces, or the archived runs stop reproducing the register they built.
+ */
+describe('a run written in the old vocabulary', () => {
+  const oldMerged: Merged = {
+    propositions: merged.claims!.map(({ claim: text, ...rest }) => ({
+      ...rest,
+      proposition: text,
+    })),
+  };
+  const oldGroups: Groups = {
+    stories: groups.questions!.map((question) => ({
+      ...question,
+      claims: question.claims.map(({ claim: text, merged_from, ...rest }) => ({
+        ...rest,
+        proposition: text,
+        variations: merged_from,
+      })),
+    })),
+  };
+
+  it('produces the same questions and claims as the new spelling', () => {
+    expect(registerEntries(oldMerged, oldGroups, triage, source, '2026-09-03')).toEqual(
+      run(triage),
+    );
+  });
+});
+
 describe('registerEntries without a triage', () => {
-  it('records every investigation as not-triaged, with no reason', () => {
-    const { investigations } = run(undefined);
-    expect(investigations.map((entry) => entry.outcome)).toEqual(['not-triaged', 'not-triaged']);
-    expect(investigations.every((entry) => !('reason' in entry))).toBe(true);
+  /**
+   * An untriaged run is working, not a record. The generator prints the
+   * question with no triage answer at all, which the register's validator
+   * rejects — the failure is the point.
+   */
+  it('leaves every question with no triage answer and no reason', () => {
+    const { questions } = run(undefined);
+    expect(questions.every((entry) => !('triage' in entry))).toBe(true);
+    expect(questions.every((entry) => !('reason' in entry))).toBe(true);
+  });
+
+  it('still records the lifecycle and the publication state', () => {
+    for (const entry of run(undefined).questions) {
+      expect(entry.lifecycle).toBe('registered');
+      expect(entry.publication).toBe('unpublished');
+    }
   });
 
   it('reports nothing as untriaged, because nothing was triaged', () => {
@@ -267,9 +305,9 @@ describe('registerEntries without a triage', () => {
   });
 });
 
-describe('registerEntries with a triage that missed a story', () => {
-  it('names it on the way to not-triaged', () => {
-    const { investigations, untriaged } = registerEntries(
+describe('registerEntries with a triage that missed a question', () => {
+  it('names it, and leaves it with no triage answer', () => {
+    const { questions, untriaged } = registerEntries(
       merged,
       groups,
       { decisions: triage.decisions.filter((decision) => decision.id !== 'road-space') },
@@ -277,7 +315,7 @@ describe('registerEntries with a triage that missed a story', () => {
       '2026-09-03',
     );
     expect(untriaged).toEqual(['road-space']);
-    expect(investigations[0]!.outcome).toBe('not-triaged');
+    expect('triage' in questions[0]!).toBe(false);
   });
 });
 
@@ -285,7 +323,7 @@ describe('toYamlBlock', () => {
   it('indents to sit under a top-level key and parses back to the entries', () => {
     const block = toYamlBlock(run(triage).claims);
     expect(block.startsWith('  - id: lanes-removed')).toBe(true);
-    expect(parse(`candidates:\n${block}`).candidates).toEqual(run(triage).claims);
+    expect(parse(`claims:\n${block}`).claims).toEqual(run(triage).claims);
   });
 
   it('quotes the prose and the dates and leaves ids, sides and seats plain', () => {
@@ -296,8 +334,21 @@ describe('toYamlBlock', () => {
     expect(block).toContain('      - flash');
   });
 
-  it('parses an investigations block back to the entries too', () => {
-    const block = toYamlBlock(run(triage).investigations);
-    expect(parse(`investigations:\n${block}`).investigations).toEqual(run(triage).investigations);
+  /**
+   * `question` is prose on a question and a slug on a claim, so the questions
+   * block asks for it to be quoted and the claims block does not. Quoting a
+   * claim's question would make every regenerated block differ from the
+   * register in style rather than content.
+   */
+  it('quotes a question’s prose and leaves a claim’s question id plain', () => {
+    expect(toYamlBlock(run(triage).questions, 'question')).toContain(
+      '    question: "What happened to the traffic lanes?"',
+    );
+    expect(toYamlBlock(run(triage).claims)).toContain('    question: road-space');
+  });
+
+  it('parses a questions block back to the entries too', () => {
+    const block = toYamlBlock(run(triage).questions, 'question');
+    expect(parse(`questions:\n${block}`).questions).toEqual(run(triage).questions);
   });
 });

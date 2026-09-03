@@ -6,25 +6,31 @@
  * Reads `merged.json`, `groups.json` and, when it is there,
  * `triage-stories.json` from the run directory, matches the run to its
  * `sources` entry in `intake/register.yaml`, and prints the two YAML blocks to
- * paste under `investigations:` and under `candidates:`. It prints; it does not
- * write. The register is a public record and a script that edits it in place is
- * a script that can quietly rewrite one.
+ * paste under `questions:` and under `claims:`. It prints; it does not write.
+ * The register is a public record and a script that edits it in place is a
+ * script that can quietly rewrite one.
  *
- * A hundred-odd propositions is where hand-copying starts producing a register
- * that disagrees with the run it came from — a quote off by a word, a comment
- * index off by one — and the whole promise of whole-source intake is that the
- * two agree. So the copying is mechanical and the validator checks the result.
+ * A hundred-odd claims is where hand-copying starts producing a register that
+ * disagrees with the run it came from — a wording off by a word, a pseudonym
+ * mistyped — and the whole promise of whole-source intake is that the two
+ * agree. So the copying is mechanical and the validator checks the result.
  *
  * The register has two levels and they are printed separately because they
- * paste under two different keys. Triage rules on the question, so an
- * investigation carries the outcome and its reason; a claim belongs to one
- * investigation, gets one finding, and carries no outcome at all.
+ * paste under two different keys. Triage rules on the question, so a question
+ * carries the three state fields; a claim belongs to one question, gets one
+ * finding, and carries no state at all.
  *
  * The account counts are the one thing here that is derived rather than copied.
- * A claim's count is the accounts that gave it a form; an investigation's are
- * those counts unioned across its claims, per side and overall. An account that
- * argued both ways is counted on both sides, so the sides can sum to more than
- * the total.
+ * A claim's count is the people who gave it a wording; a question's are those
+ * counts unioned across its claims, per side and overall. Somebody who argued
+ * both ways is counted on both sides, so the sides can sum to more than the
+ * total.
+ *
+ * The run's own JSON keeps the words it was written with where they still fit,
+ * and this reads both spellings: a run merged before D-0029 says `propositions`
+ * and `stories`, one merged after says `claims` and `questions`. Dropping the
+ * old names would make every archived run unreproducible, which is the one
+ * thing this script exists to prevent.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -35,9 +41,6 @@ import { REPO_ROOT, loadYaml, relative, repoPath } from './lib/repo.ts';
 // The shapes on disk
 // ---------------------------------------------------------------------------
 
-/** `"new"`, or `{"variation-of": "<id>"}`. */
-type Relation = 'new' | { 'variation-of': string };
-
 interface MergedForm {
   index: number;
   commenter: string;
@@ -45,40 +48,47 @@ interface MergedForm {
   seats?: string[];
 }
 
-export interface Proposition {
+/** One merged claim in `merged.json`, with every wording it was said in. */
+export interface MergedClaim {
   id: string;
-  proposition: string;
+  /** `claim` since D-0029; `proposition` in runs merged before it. */
+  claim?: string;
+  proposition?: string;
   side: string;
-  relation: Relation;
   names_person?: boolean;
   from?: Record<string, string[]>;
   forms?: MergedForm[];
 }
 
 export interface Merged {
-  propositions: Proposition[];
+  claims?: MergedClaim[];
+  propositions?: MergedClaim[];
   dropped?: Array<{ seat: string; id: string; reason: string }>;
 }
 
-/** A claim in `groups.json`: one assertion, as one or more propositions. */
-export interface Claim {
+/** A claim in `groups.json`: one assertion, as one or more merged claims. */
+export interface GroupedClaim {
   id: string;
-  proposition: string;
-  variations: string[];
+  claim?: string;
+  proposition?: string;
+  /** `merged_from` since D-0029; `variations` in runs grouped before it. */
+  merged_from?: string[];
+  variations?: string[];
 }
 
-export interface Story {
+export interface GroupedQuestion {
   id: string;
   question: string;
   note?: string;
-  claims: Claim[];
+  claims: GroupedClaim[];
 }
 
 export interface Groups {
-  stories: Story[];
+  questions?: GroupedQuestion[];
+  stories?: GroupedQuestion[];
 }
 
-/** `triage-stories.json`: one decision per investigation, not per claim. */
+/** `triage-stories.json`: one decision per question, not per claim. */
 export interface Triage {
   decisions: Array<{ id: string; outcome: string; reason?: string }>;
 }
@@ -101,13 +111,21 @@ export interface Accounts {
   neither?: number;
 }
 
-/** An investigation entry, with the keys in the order the register writes them. */
-export interface InvestigationEntry {
+/** A question entry, with the keys in the order the register writes them. */
+export interface QuestionEntry {
   id: string;
   recorded: string;
   source: string;
   question: string;
-  outcome: string;
+  /**
+   * Registered and nothing more: the run has been grouped and triaged, no brief
+   * has been written, and nothing is on the site. `triage` is left off when the
+   * run has no decision for the question, which the validator rejects — an
+   * untriaged run is working, not a record.
+   */
+  lifecycle: 'registered';
+  triage?: string;
+  publication: 'unpublished';
   reason?: string;
   grouping_note?: string;
   accounts: Accounts;
@@ -120,16 +138,14 @@ export interface ClaimEntry {
   recorded: string;
   origin: 'captured';
   source: string;
-  investigation: string;
+  question: string;
   proposition: string;
   wording: string;
   side: string;
-  variation_of?: string;
   accounts: number;
-  variations?: string[];
   seats?: string[];
   names_person?: true;
-  forms?: Array<{ commenter: string; quote: string; comment: number }>;
+  variations?: Array<{ wording: string; source_id: string; author_name: string }>;
 }
 
 /** The sides, in the order the register prints them. */
@@ -139,36 +155,31 @@ const SIDES = ['for', 'against', 'neither'] as const;
 // The conversion
 // ---------------------------------------------------------------------------
 
-/**
- * The already-registered entry this claim is the same claim as, when the merge
- * named one.
- *
- * Only when it points out of the run. Inside the run, sameness is what the
- * grouping expresses — two propositions in one claim — so a relation naming
- * another proposition of the same merge is either that grouping restated or the
- * grouping overruled, and either way it is not a register id. The merge also
- * writes the occasional relation pointing a proposition at itself, which this
- * drops for the same reason.
- */
-const variationOf = (
-  relation: Relation,
-  propositions: ReadonlyMap<string, Proposition>,
-): string | undefined => {
-  const target =
-    typeof relation === 'object' && relation !== null ? relation['variation-of'] : undefined;
-  return target !== undefined && !propositions.has(target) ? target : undefined;
-};
+/** Old outcome to new triage answer. Triage has three values and only three. */
+const TRIAGE: Record<string, string> = { GO: 'go', PARK: 'park', NO: 'no' };
+
+/** The run's own key, whichever spelling it was written with. */
+const mergedClaims = (merged: Merged): MergedClaim[] =>
+  merged.claims ?? merged.propositions ?? [];
+
+const groupedQuestions = (groups: Groups): GroupedQuestion[] =>
+  groups.questions ?? groups.stories ?? [];
+
+const wording = (claim: MergedClaim | GroupedClaim): string =>
+  claim.claim ?? claim.proposition ?? '';
+
+const mergedFrom = (claim: GroupedClaim): string[] => claim.merged_from ?? claim.variations ?? [];
 
 /**
  * The seats that found the claim, sorted.
  *
- * A claim can hold several propositions and the merge listed each one's seats
- * in its own order, so an order taken from the first would depend on which
- * proposition the grouping happened to put first. Sorted is the same list
- * however the grouping is written.
+ * A claim can fold in several merged claims and the merge listed each one's
+ * seats in its own order, so an order taken from the first would depend on
+ * which the grouping happened to put first. Sorted is the same list however the
+ * grouping is written.
  */
-function seatsOf(propositions: Proposition[]): string[] | undefined {
-  const seats = new Set(propositions.flatMap((p) => Object.keys(p.from ?? {})));
+function seatsOf(merged: MergedClaim[]): string[] | undefined {
+  const seats = new Set(merged.flatMap((claim) => Object.keys(claim.from ?? {})));
   return seats.size > 0 ? [...seats].sort() : undefined;
 }
 
@@ -176,30 +187,29 @@ function seatsOf(propositions: Proposition[]): string[] | undefined {
  * Every captured wording under the claim, in the order the merge wrote them,
  * without repeats.
  *
- * Two propositions folded into one claim can cite the same words in the same
+ * Two merged claims folded into one can cite the same words in the same
  * comment, and printing that twice would show a reader one person saying a
- * thing twice. The same words in two different comments are two people, or one
- * person twice, and both stay.
+ * thing twice. The register keeps no comment index, so the key is the words and
+ * the person: the same sentence typed by two people is two wordings, and the
+ * same sentence typed twice by one person is one.
  */
-function formsOf(propositions: Proposition[]): ClaimEntry['forms'] {
+function variationsOf(merged: MergedClaim[], sourceId: string): ClaimEntry['variations'] {
   const seen = new Set<string>();
-  const forms: NonNullable<ClaimEntry['forms']> = [];
-  for (const proposition of propositions) {
-    for (const form of proposition.forms ?? []) {
-      const key = `${form.index} ${form.quote}`;
+  const variations: NonNullable<ClaimEntry['variations']> = [];
+  for (const claim of merged) {
+    for (const form of claim.forms ?? []) {
+      const key = `${form.commenter} ${form.quote}`;
       if (seen.has(key)) continue;
       seen.add(key);
-      forms.push({ commenter: form.commenter, quote: form.quote, comment: form.index });
+      variations.push({ wording: form.quote, source_id: sourceId, author_name: form.commenter });
     }
   }
-  return forms.length > 0 ? forms : undefined;
+  return variations.length > 0 ? variations : undefined;
 }
 
-/** The distinct accounts that gave any of these propositions a form. */
-function accountsOf(propositions: Proposition[]): Set<string> {
-  return new Set(
-    propositions.flatMap((p) => (p.forms ?? []).map((form) => form.commenter)),
-  );
+/** The distinct people who gave any of these merged claims a wording. */
+function accountsOf(merged: MergedClaim[]): Set<string> {
+  return new Set(merged.flatMap((claim) => (claim.forms ?? []).map((form) => form.commenter)));
 }
 
 /** Undefined keys would print as `null`, and an optional field means absent. */
@@ -211,12 +221,13 @@ function pruned<T extends object>(entry: T): T {
 }
 
 /**
- * One run's investigations and claims as register entries, in `groups.json`'s
- * order.
+ * One run's questions and claims as register entries, in `groups.json`'s order.
  *
- * `triage` is undefined when the run has not been triaged, which makes every
- * investigation `not-triaged` — an outcome the register's validator rejects on
- * an investigation, deliberately: an untriaged run is working, not a record.
+ * A question with no triage decision comes out with no `triage` field at all,
+ * which the register's validator rejects — deliberately: an untriaged run is
+ * working, not a record. Lifecycle and publication are fixed here because a
+ * freshly registered question is exactly that and nothing more; anything later
+ * is a state change somebody has to make on purpose.
  */
 export function registerEntries(
   merged: Merged,
@@ -224,33 +235,33 @@ export function registerEntries(
   triage: Triage | undefined,
   source: SourceEntry,
   recorded: string,
-): { investigations: InvestigationEntry[]; claims: ClaimEntry[]; untriaged: string[] } {
-  const propositions = new Map(merged.propositions.map((p) => [p.id, p]));
+): { questions: QuestionEntry[]; claims: ClaimEntry[]; untriaged: string[] } {
+  const byId = new Map(mergedClaims(merged).map((claim) => [claim.id, claim]));
   const decisions = new Map((triage?.decisions ?? []).map((d) => [d.id, d]));
   const untriaged: string[] = [];
-  const investigations: InvestigationEntry[] = [];
+  const questions: QuestionEntry[] = [];
   const claims: ClaimEntry[] = [];
   const run = source.run ?? '';
 
-  for (const story of groups.stories) {
+  for (const group of groupedQuestions(groups)) {
     const bySide = new Map<string, Set<string>>();
     const total = new Set<string>();
 
-    for (const claim of story.claims ?? []) {
-      const variations = (claim.variations ?? []).map((id) => {
-        const proposition = propositions.get(id);
-        if (!proposition) {
+    for (const grouped of group.claims ?? []) {
+      const parts = mergedFrom(grouped).map((id) => {
+        const found = byId.get(id);
+        if (!found) {
           throw new Error(
-            `claim ${claim.id} cites ${id}, which is not in merged.json — ` +
+            `claim ${grouped.id} cites ${id}, which is not in merged.json — ` +
               'run scripts/intake-groups.ts first',
           );
         }
-        return proposition;
+        return found;
       });
-      const canonical = variations[0];
-      if (!canonical) throw new Error(`claim ${claim.id} has no variations`);
+      const canonical = parts[0];
+      if (!canonical) throw new Error(`claim ${grouped.id} folds in nothing`);
 
-      const accounts = accountsOf(variations);
+      const accounts = accountsOf(parts);
       for (const account of accounts) {
         total.add(account);
         const side = bySide.get(canonical.side) ?? new Set<string>();
@@ -258,35 +269,30 @@ export function registerEntries(
         bySide.set(canonical.side, side);
       }
 
-      const forms = formsOf(variations);
+      const variations = variationsOf(parts, source.id);
       claims.push(
         pruned<ClaimEntry>({
-          id: claim.id,
+          id: grouped.id,
           recorded,
           origin: 'captured',
           source: source.id,
-          investigation: story.id,
-          proposition: canonical.proposition,
+          question: group.id,
+          proposition: wording(canonical),
           // The words somebody actually typed, kept beside the merge's plain
-          // sentence. The merge lists the form it built the proposition from
+          // sentence. The merge lists the wording it built the claim from
           // first, and the longest is as often a rebuttal as an assertion.
-          wording: forms?.[0]?.quote ?? canonical.proposition,
+          wording: variations?.[0]?.wording ?? wording(canonical),
           side: canonical.side,
-          variation_of: variationOf(canonical.relation, propositions),
           accounts: accounts.size,
-          // Only when there is more than one: a claim of one proposition would
-          // otherwise list its own wording as a variation of itself.
-          variations:
-            variations.length > 1 ? variations.slice(1).map((p) => p.proposition) : undefined,
-          seats: seatsOf(variations),
-          names_person: variations.some((p) => p.names_person === true) ? true : undefined,
-          forms,
+          seats: seatsOf(parts),
+          names_person: parts.some((part) => part.names_person === true) ? true : undefined,
+          variations,
         }),
       );
     }
 
-    const decision = decisions.get(story.id);
-    if (triage !== undefined && decision === undefined) untriaged.push(story.id);
+    const decision = decisions.get(group.id);
+    if (triage !== undefined && decision === undefined) untriaged.push(group.id);
 
     const accounts: Accounts = { total: total.size };
     for (const side of SIDES) {
@@ -294,22 +300,24 @@ export function registerEntries(
       if (counted !== undefined && counted.size > 0) accounts[side] = counted.size;
     }
 
-    investigations.push(
-      pruned<InvestigationEntry>({
-        id: story.id,
+    questions.push(
+      pruned<QuestionEntry>({
+        id: group.id,
         recorded,
         source: source.id,
-        question: story.question,
-        outcome: decision?.outcome ?? 'not-triaged',
+        question: group.question,
+        lifecycle: 'registered',
+        triage: decision === undefined ? undefined : (TRIAGE[decision.outcome] ?? decision.outcome),
+        publication: 'unpublished',
         reason: decision?.reason,
-        grouping_note: story.note,
+        grouping_note: group.note,
         accounts,
         run,
       }),
     );
   }
 
-  return { investigations, claims, untriaged };
+  return { questions, claims, untriaged };
 }
 
 // ---------------------------------------------------------------------------
@@ -319,28 +327,28 @@ export function registerEntries(
 /**
  * The fields the register writes in double quotes: the prose and the dates.
  *
- * Ids, sides, outcomes and seats are plain, so a diff of a regenerated block
+ * Ids, sides, states and seats are plain, so a diff of a regenerated block
  * against the committed register is a diff of content and not of style. Dates
- * are quoted because bare `2026-09-03` parses back as a timestamp.
+ * are quoted because bare `2026-09-03` parses back as a timestamp. `question`
+ * is passed in per block rather than listed here, because it is prose on a
+ * question and a slug on a claim.
  */
 const QUOTED = new Set([
   'recorded',
-  'question',
   'reason',
   'grouping_note',
   'proposition',
   'wording',
-  'variations',
-  'commenter',
-  'quote',
+  'author_name',
 ]);
 
 /** The entries as a YAML block, indented to sit under a top-level key. */
-export function toYamlBlock(entries: object[]): string {
+export function toYamlBlock(entries: object[], ...also: string[]): string {
+  const quoted = new Set([...QUOTED, ...also]);
   const doc = new YAML.Document(entries);
   YAML.visit(doc, {
     Pair(_index, pair) {
-      if (!YAML.isScalar(pair.key) || !QUOTED.has(String(pair.key.value))) return;
+      if (!YAML.isScalar(pair.key) || !quoted.has(String(pair.key.value))) return;
       const values = YAML.isSeq(pair.value) ? pair.value.items : [pair.value];
       for (const value of values) {
         if (YAML.isScalar(value) && typeof value.value === 'string') {
@@ -387,7 +395,7 @@ function main(): void {
   if (triage === undefined) {
     console.error(
       `intake-register: no triage-stories.json in ${runPath} — ` +
-        'every investigation is outcome: not-triaged',
+        'every question comes out with no triage answer at all',
     );
   }
 
@@ -405,7 +413,7 @@ function main(): void {
   }
 
   const recorded = new Date().toISOString().slice(0, 10);
-  const { investigations, claims, untriaged } = registerEntries(
+  const { questions, claims, untriaged } = registerEntries(
     merged,
     groups,
     triage,
@@ -414,18 +422,18 @@ function main(): void {
   );
 
   for (const id of untriaged) {
-    console.error(`intake-register: ${id} has no triage decision — recorded as not-triaged`);
+    console.error(`intake-register: ${id} has no triage decision — printed with no triage answer`);
   }
 
   // Two blocks, because they paste under two different keys. The markers are
   // YAML comments, so stdout stays a thing you can paste.
-  process.stdout.write('# ----- paste under `investigations:` -----\n');
-  process.stdout.write(`${toYamlBlock(investigations)}\n`);
-  process.stdout.write('# ----- paste under `candidates:` -----\n');
+  process.stdout.write('# ----- paste under `questions:` -----\n');
+  process.stdout.write(`${toYamlBlock(questions, 'question')}\n`);
+  process.stdout.write('# ----- paste under `claims:` -----\n');
   process.stdout.write(`${toYamlBlock(claims)}\n`);
 
   console.error(
-    `\nintake-register: ${investigations.length} investigations, ${claims.length} claims from ${runPath}`,
+    `\nintake-register: ${questions.length} questions, ${claims.length} claims from ${runPath}`,
   );
 }
 
