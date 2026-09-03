@@ -9,7 +9,9 @@ import {
   outcomeEdge,
   outcomeRank,
   provenance,
+  registerKey,
   reportsFor,
+  sideLabel,
   sourceKind,
   sourceRegister,
   storyLinkLabel,
@@ -31,6 +33,12 @@ import { toc } from '../lib/toc';
  *
  * The claims that arrived one at a time, before there were sources, keep the
  * shape they had: outcome as a section heading, one entry to a row.
+ *
+ * Before any of it comes the key, because the words in the outcome column are
+ * the page's own vocabulary and a first-time reader has no way to know that
+ * "Going ahead" is a decision to check a claim rather than a finding about it.
+ * The key defines every label the page can print, and says how two readers'
+ * dispositions combine into the one on the row.
  */
 const candidates = candidateRegister();
 const sources = sourceRegister();
@@ -57,7 +65,15 @@ const sections = REGISTER_SECTIONS.map((section) => ({
   entries: unsourced.filter((candidate) => candidate.outcome === section.outcome),
 })).filter((section) => section.entries.length > 0);
 
+/**
+ * The key, and whether the page has to explain the withheld rows: both come
+ * from the register, so the page defines what it shows and nothing else.
+ */
+const key = registerKey();
+const withholding = candidates.some((candidate) => candidate.withheld);
+
 const outline = toc([
+  { id: 'outcomes', label: 'What the outcomes mean' },
   ...bySource.map(({ source }) => ({ id: source.id, label: source.title })),
   unsourced.length > 0 && { id: 'one-at-a-time', label: 'Registered one at a time' },
 ]);
@@ -82,13 +98,58 @@ const outcomeColumn = 'w-px py-3 pl-4 text-right align-top whitespace-nowrap sm:
     <p class="mt-4 max-w-prose text-base leading-relaxed">
       This site checks factual claims about Edmonton that circulate. When we read a source — a post
       and every comment on it — we take out every factual claim in it, not the ones that suit us:
-      three models extract independently, a fourth merges what they found into one list, and every
-      proposition on that list is below with its outcome and the reason for it. A short
-      <a href="/methodology/changes" class="link">triage</a> is what decides the outcome, asking who
+      three models each read the whole thing and write down every claim they can find, then a fourth
+      folds those three lists into propositions, one for each thing a public record could settle.
+      Every proposition is below with its outcome and the reason for it.
+    </p>
+    <p class="mt-4 max-w-prose text-base leading-relaxed">
+      The outcome is an intake decision and nothing more: whether the claim is worth checking. It is
+      not a ruling on whether the claim is true, and none of these claims has been checked yet on
+      the strength of it. Finished checks are on <a href="/stories" class="link">the findings</a>. A
+      short <a href="/methodology/changes" class="link">triage</a> makes the intake call, asking who
       is asking the claim, whether the public record can answer it, and which answers would surprise
       anyone.
     </p>
   </header>
+
+  <section id="outcomes" class="mt-12 scroll-mt-6">
+    <h2 class="section-heading">What the outcomes mean</h2>
+
+    {/* The badge is the term, so a reader can match a row to its line by shape. */}
+    <dl class="mt-5 divide-y divide-rule border-t border-rule">
+      {
+        key.map((entry) => (
+          <div class="py-3 sm:flex sm:gap-5">
+            <dt class="sm:w-40 sm:shrink-0">
+              <Outcome outcome={entry.outcome} />
+            </dt>
+            <dd class="mt-1.5 max-w-prose text-[0.9375rem] leading-relaxed sm:mt-0">
+              {entry.definition}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <p class="mt-6 max-w-prose text-[0.9375rem] leading-relaxed">
+      Two readers rule on every proposition, one call each, written GO, PARK or NO. Those are the
+      words some of the reasons below use. Going ahead on a row takes both readers at GO, or one GO
+      and one PARK. Declined takes two NOs. Everything else parks, a GO set against a NO included,
+      because throwing out a real claim costs the reader more than holding one too long. So a row
+      marked going ahead can be one the two readers did not agree on, and where they split the
+      reason says so.
+    </p>
+
+    {
+      withholding && (
+        <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+          Some rows read “Withheld claim”. Those are propositions about an identifiable person,
+          which this site does not repeat while it has no right of reply to offer them. The row
+          keeps its outcome and its reason, and the entry behind it says more.
+        </p>
+      )
+    }
+  </section>
 
   {
     bySource.map(({ source, entries }) => (
@@ -97,7 +158,13 @@ const outcomeColumn = 'w-px py-3 pl-4 text-right align-top whitespace-nowrap sm:
           {source.title}
         </h2>
 
-        {/* Straight out of the register: what the source is, when we took it, how big it was. */}
+        {/*
+          Straight out of the register: what the source is, when we took it, how
+          big it was, and the two counts kept apart. The three extractions raise
+          claims; the merge is what turns those into propositions, and there are
+          fewer of the second because one proposition holds every wording of
+          itself that the three readings found.
+        */}
         <p class={`mt-2 ${label}`} data-record>
           {sourceKind(source)}
           {' · captured '}
@@ -105,6 +172,8 @@ const outcomeColumn = 'w-px py-3 pl-4 text-right align-top whitespace-nowrap sm:
           {source.captured_by && ` by the ${source.captured_by}`}
           {source.comments !== undefined && ` · ${source.comments} comments`}
           {source.commenters !== undefined && ` from ${source.commenters} people`}
+          {source.claims_found !== undefined && ` · ${source.claims_found} claims raised in extraction`}
+          {source.propositions !== undefined && ` · merged into ${source.propositions} propositions`}
         </p>
 
         <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
@@ -148,17 +217,20 @@ const outcomeColumn = 'w-px py-3 pl-4 text-right align-top whitespace-nowrap sm:
                       >
                         {claimText(candidate)}
                       </a>
-                      <span class={`mt-1.5 block ${label}`} data-record>
-                        {candidate.side && `${candidate.side} the argument`}
-                        {candidate.commenters !== undefined &&
-                          `${candidate.side ? ' · ' : ''}${candidate.commenters} ${
-                            candidate.commenters === 1 ? 'person' : 'people'
-                          }`}
-                      </span>
-                      {/* A withheld entry's claim line already IS its reason —
-                          the placeholder the redaction put there — so printing
-                          the reason under it would say the same sentence twice. */}
-                      {!candidate.withheld && (candidate.reason ?? candidate.note) && (
+                      {/* A withheld entry has neither: which side it served and
+                          how many people said it describe a claim this row is
+                          refusing to show, so the redaction keeps them off the
+                          site with the wording. */}
+                      {(candidate.side || candidate.commenters !== undefined) && (
+                        <span class={`mt-1.5 block ${label}`} data-record>
+                          {candidate.side && sideLabel(candidate.side)}
+                          {candidate.commenters !== undefined &&
+                            `${candidate.side ? ' · ' : ''}${candidate.commenters} ${
+                              candidate.commenters === 1 ? 'person' : 'people'
+                            }`}
+                        </span>
+                      )}
+                      {(candidate.reason ?? candidate.note) && (
                         <span
                           class="mt-1.5 block max-w-prose text-[0.9375rem] leading-relaxed text-muted"
                           data-record
@@ -188,7 +260,8 @@ const outcomeColumn = 'w-px py-3 pl-4 text-right align-top whitespace-nowrap sm:
         </h2>
         <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
           Claims that reached us singly rather than inside a source we hold: a reader's suggestion,
-          a wording the founder passed on, a hypothesis of our own.
+          a wording the founder passed on, a hypothesis of our own. The outcomes are the ones in the
+          key above, set as headings here rather than badges.
         </p>
 
         {sections.map((section) => (

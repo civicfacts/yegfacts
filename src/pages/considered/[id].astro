@@ -7,6 +7,7 @@ import {
   claimText,
   outcomeHeading,
   provenance,
+  sideLabel,
   sourceKind,
   sourceRegister,
   storyLinkLabel,
@@ -145,7 +146,10 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
 
       {/*
         The claim in its own words is the title, quoted, because this page is
-        about a sentence somebody said rather than about a subject we named.
+        about a sentence somebody said rather than about a subject we named. A
+        withheld entry has no words to print, so the redaction gives it a
+        literal heading instead: the page says what it is rather than dressing
+        its own reason up as something a commenter said.
       */}
       <h1
         class="mt-3 text-[1.5rem] leading-[1.2] font-extrabold tracking-[-0.02em] text-pretty sm:text-[1.875rem]"
@@ -153,14 +157,24 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
         {quoted ? `“${candidate.wording}”` : claimText(candidate)}
       </h1>
 
-      {/* Straight out of the register, in the words `/considered` uses. */}
+      {/*
+        Straight out of the register, in the words `/considered` uses. A
+        withheld entry reaches this page with no side and no commenter count:
+        both describe a claim the page is refusing to show. Its register id
+        stands in their place, because the id is what a later audit asks for.
+      */}
       <p class={`mt-4 ${label}`} data-record>
         <time datetime={candidate.recorded}>{candidate.recorded}</time>
         {' · '}
         <span class="normal-case tracking-normal">{provenance(candidate)}</span>
         {
+          candidate.withheld && (
+            <span class="normal-case tracking-normal">{` · entry ${candidate.id}`}</span>
+          )
+        }
+        {
           candidate.side && (
-            <span class="normal-case tracking-normal">{` · ${candidate.side} the argument`}</span>
+            <span class="normal-case tracking-normal">{` · ${sideLabel(candidate.side)}`}</span>
           )
         }
         {
@@ -180,12 +194,12 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
       </h2>
       {
         /*
-          Two entries do not print their reason here. A withheld one's title
-          already IS its reason — the placeholder the redaction put there. A
-          variation's reason says it merged into another entry, which the linked
-          sentence below says better, with somewhere to go.
+          A variation does not print its reason here: it says the entry merged
+          into another one, which the linked sentence below says better, with
+          somewhere to go. Every other entry prints it, a withheld one included
+          — the reason is the whole of what that page has to give.
         */
-        !candidate.withheld && !variation && (candidate.reason ?? candidate.note) && (
+        !variation && (candidate.reason ?? candidate.note) && (
           <p class="mt-3.5 max-w-prose border-l-2 border-gold pl-3.5 text-[1.0625rem] leading-relaxed text-pretty">
             {candidate.reason ?? candidate.note}
           </p>
@@ -194,18 +208,21 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
 
       {
         /*
-          v1 has no right-of-reply process, so a claim that names an identifiable
-          individual and did not go through the panel is not on this site at all
-          — not the proposition, not the words it was said in. The reason above
-          is written to stand on its own in their place. The note says so plainly
-          rather than leaving a reader to wonder what was cut.
+          What is missing from this page, said plainly, because a page that
+          declines to print something and does not say why reads as evasion.
+          Three things it must not get wrong: the site has chosen not to build a
+          right of reply, rather than being unable to; the wording is held in a
+          private record, not in this register, which is the public one; and the
+          decision is auditable later from that record.
         */
         candidate.withheld && (
           <p class="mt-4 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
-            This claim names an identifiable person. We have no way to put an allegation to someone
-            and publish their answer, so we do not repeat one we have not checked: neither the claim
-            itself nor the comments it was made in appear here. The register holds them; the site
-            does not.
+            A commenter in this source made an allegation about a named person. The site turns those
+            down: to publish one fairly it would have to put the allegation to the person named and
+            print their answer, and that process has not been built here. The wording and the
+            comments it was said in are kept in a private record, so the decision can be audited
+            later against what was actually said. In public the entry is its identifier, its outcome
+            and the reason for it.
           </p>
         )
       }
@@ -230,12 +247,27 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
       }
 
       {
+        /*
+          The seats raised claims; the merge wrote the proposition above out of
+          them. "Found by" read as though the models had produced the sentence
+          they are listed under, which is the one thing they do not do.
+        */
         candidate.seats && candidate.seats.length > 0 && (
           <p class={`mt-4 ${label}`} data-record>
-            {`Found by ${candidate.seats.join(', ')}`}
+            {`Raised in extraction by ${candidate.seats.join(', ')}`}
           </p>
         )
       }
+
+      {/*
+        The outcome is a decision about whether to check the claim, never a
+        verdict on it, and a reader who arrives here from a search has not read
+        the register's key. Rather than restate the key on every entry, the page
+        points at it, once.
+      */}
+      <p class="mt-5 text-sm" data-crossref>
+        <a href="/considered#outcomes" class="link">What the outcomes mean</a>
+      </p>
     </section>
 
     {

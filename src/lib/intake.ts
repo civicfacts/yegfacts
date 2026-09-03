@@ -145,9 +145,9 @@ function forms(value: unknown): CapturedForm[] | undefined {
  *
  * The redaction happens here, at the one point the register enters the site,
  * rather than in the pages: what a page never receives, a later edit to that
- * page cannot leak. The `reason` takes the proposition's place, which is why
- * the validator makes a reason mandatory on every outcome this can apply to;
- * it is written to stand on its own.
+ * page cannot leak. The entry keeps its id, its outcome and its `reason`, which
+ * the validator makes mandatory on every outcome this can apply to, so the row
+ * is still on `/considered` to be read and counted.
  */
 export function withholdsWording(entry: {
   names_person?: boolean;
@@ -156,16 +156,30 @@ export function withholdsWording(entry: {
   return entry.names_person === true && entry.outcome !== 'GO';
 }
 
-/** A candidate as the site may print it. Identity for everything else. */
+/**
+ * What a withheld entry is called wherever a claim would be printed.
+ *
+ * Literal and neutral on purpose. The reason used to stand in this place, which
+ * read as though a commenter had asserted the site's own policy; the reason
+ * belongs under the heading, saying why there is nothing above it.
+ */
+export const WITHHELD_LABEL = 'Withheld claim';
+
+/**
+ * A candidate as the site may print it. Identity for everything else.
+ *
+ * `side` and `commenters` go with the wording: "against the argument" and "one
+ * person said it" describe a claim this entry is refusing to show, so the site
+ * never receives them either.
+ */
 export function redact(candidate: Candidate): Candidate {
   if (!withholdsWording(candidate)) return candidate;
-  const placeholder =
-    candidate.reason ??
-    'A claim about a named individual, which this site does not repeat.';
   return {
     ...candidate,
-    wording: placeholder,
-    proposition: placeholder,
+    wording: WITHHELD_LABEL,
+    proposition: WITHHELD_LABEL,
+    side: undefined,
+    commenters: undefined,
     forms: [],
     withheld: true,
   };
@@ -256,6 +270,11 @@ export function sourceRegister(): Source[] {
  * publishing a whole source is that sixty-odd dispositions can be read down one
  * column. The list lives here because `/considered` and `/considered/<id>` must
  * call the same outcome the same thing.
+ *
+ * `definition` is the line `/considered` prints in its key. Every label a
+ * reader can see is defined there, so a badge is never a word the page expects
+ * the reader to already know, and none of the definitions may leave "going
+ * ahead" sounding like a verdict.
  */
 export const REGISTER_SECTIONS = [
   {
@@ -263,6 +282,7 @@ export const REGISTER_SECTIONS = [
     outcome: 'NO',
     heading: 'Declined',
     badge: 'Declined',
+    definition: 'Both readers turned it down for checking. Not a ruling that the claim is false.',
     fill: 'bg-brick text-white',
     edge: 'border-brick',
   },
@@ -271,6 +291,8 @@ export const REGISTER_SECTIONS = [
     outcome: 'PARK',
     heading: 'Parked',
     badge: 'Parked',
+    definition:
+      'Kept, not dropped. Either the readers disagreed, or the public record cannot answer it yet.',
     fill: 'bg-navy text-white',
     edge: 'border-navy',
   },
@@ -279,6 +301,8 @@ export const REGISTER_SECTIONS = [
     outcome: 'not-answered',
     heading: 'Checked, not answered',
     badge: 'Not answered',
+    definition:
+      'It went through a panel, and the public record could not answer it at the level people ask.',
     fill: 'bg-charcoal text-white',
     edge: 'border-charcoal',
   },
@@ -287,6 +311,7 @@ export const REGISTER_SECTIONS = [
     outcome: 'GO',
     heading: 'Going ahead',
     badge: 'Going ahead',
+    definition: 'Worth checking, so a check is coming. That is all it says: nothing is settled yet.',
     fill: 'bg-forest text-white',
     edge: 'border-forest',
   },
@@ -295,6 +320,7 @@ export const REGISTER_SECTIONS = [
     outcome: 'variation',
     heading: 'The same claim in other words',
     badge: 'Merged',
+    definition: 'The same claim as another entry, said differently. It is dealt with there.',
     fill: 'bg-charcoal text-white',
     edge: 'border-charcoal',
   },
@@ -303,6 +329,8 @@ export const REGISTER_SECTIONS = [
     outcome: 'not-a-claim',
     heading: 'Not a factual claim',
     badge: 'Not a claim',
+    definition:
+      'An opinion, a prediction or a value judgement, so no record could settle it either way.',
     fill: 'border border-rule-strong bg-wash text-muted',
     edge: 'border-rule-strong',
   },
@@ -311,6 +339,7 @@ export const REGISTER_SECTIONS = [
     outcome: 'pre-triage',
     heading: 'Checked before triage existed',
     badge: 'Pre-triage',
+    definition: 'Registered before there was a triage step, so no reader ever ruled on it.',
     fill: 'border border-rule-strong bg-wash text-muted',
     edge: 'border-rule-strong',
   },
@@ -319,6 +348,7 @@ export const REGISTER_SECTIONS = [
     outcome: 'not-triaged',
     heading: 'Not yet triaged',
     badge: 'Not triaged',
+    definition: 'Registered, and not yet put to the readers.',
     fill: 'border border-rule-strong bg-wash text-muted',
     edge: 'border-rule-strong',
   },
@@ -357,6 +387,19 @@ export const SOURCE_ORDER = ['GO', 'PARK', 'variation', 'NO', 'not-a-claim'] as 
 export function outcomeRank(outcome: string): number {
   const index = SOURCE_ORDER.indexOf(outcome as (typeof SOURCE_ORDER)[number]);
   return index === -1 ? SOURCE_ORDER.length : index;
+}
+
+/**
+ * The key `/considered` prints before the entries: every outcome the register
+ * actually uses, with its definition, in the order the entries themselves are
+ * read in. Built from the register rather than written out on the page, so the
+ * page cannot show a label it has not defined.
+ */
+export function registerKey(): Array<(typeof REGISTER_SECTIONS)[number]> {
+  const used = new Set(candidateRegister().map((candidate) => candidate.outcome));
+  return REGISTER_SECTIONS.filter((section) => used.has(section.outcome)).sort(
+    (a, b) => outcomeRank(a.outcome) - outcomeRank(b.outcome),
+  );
 }
 
 /**
@@ -401,6 +444,15 @@ function attribution(suppliedBy: string): string {
 export function provenance(candidate: Candidate): string {
   const origin = ORIGINS[candidate.origin] ?? candidate.origin;
   return candidate.supplied_by ? `${origin}, ${attribution(candidate.supplied_by)}` : origin;
+}
+
+/**
+ * Which side of the source's argument a proposition serves, in words. The
+ * register's third value is `neither`, and "neither the argument" is not a
+ * phrase, so that one takes a longer form.
+ */
+export function sideLabel(side: string): string {
+  return side === 'neither' ? 'neither side of the argument' : `${side} the argument`;
 }
 
 /** The label for the link to a candidate's story, when it has one. */
