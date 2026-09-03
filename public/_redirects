@@ -1,3 +1,11 @@
-# Cloudflare Pages redirects. Served before static files, so the browser keeps
-# any #fragment: /claims#transportation lands on /search#transportation.
+# Cloudflare Pages redirects. Served before static files, and a fragment never
+# reaches the server at all — the browser re-applies it to the target, so
+# /claims#transportation lands on /search#transportation. (Verified in Chromium
+# against a local 301 on 2026-09-03: the server logged the path without the
+# fragment, the browser finished on the target with the fragment intact.)
+#
+# `redirects.yaml` is the source of truth for where published addresses go
+# under D-0029, and this file is to be generated from it. The rule below is the
+# one address already live, kept as it stands because its D-0029 target
+# (/questions) does not exist yet.
 /claims /search 301
