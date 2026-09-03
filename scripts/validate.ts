@@ -46,11 +46,12 @@ import {
 } from './lib/repo.ts';
 import { validateReviewFile, loadRunManifest } from './lib/review-schema.ts';
 import {
-  readComments,
+  readCapture,
   registerProblems,
   type Register,
   type RegisterWorld,
 } from './lib/register-checks.ts';
+import { redirectProblems, type RedirectRow } from './lib/redirect-checks.ts';
 import {
   CANONICAL_FINDINGS,
   CHANGELOG_TYPES,
@@ -681,12 +682,12 @@ function checkReviewRuns(): void {
 }
 
 /** The register, or `null` when it is absent or unreadable. */
-function loadCandidateRegister(file: string): Register | null {
+function loadRegister(file: string): Register | null {
   if (!existsSync(file)) return null;
   try {
     const data = loadYaml<Register>(file);
-    if (!Array.isArray(data?.candidates)) {
-      fail(file, 'must contain a `candidates` list');
+    if (!Array.isArray(data?.claims)) {
+      fail(file, 'must contain a `claims` list');
       return null;
     }
     return data;
@@ -698,8 +699,8 @@ function loadCandidateRegister(file: string): Register | null {
 
 /**
  * What `registerProblems` needs from outside the register file: the filesystem,
- * the capture each source was read from, and the published claim ids a
- * `variation_of` may point at.
+ * and the capture each source was read from — the comments a wording has to be
+ * a substring of, and the commenter labels an `author_name` has to be one of.
  */
 const registerWorld: RegisterWorld = {
   exists: (value) => existsSync(repoPath(value)),
@@ -707,42 +708,39 @@ const registerWorld: RegisterWorld = {
     const absolute = repoPath(value);
     return existsSync(absolute) && statSync(absolute).isDirectory();
   },
-  comments: (capture) => {
-    const file = repoPath(capture, 'comments.jsonl');
+  capture: (directory) => {
+    const file = repoPath(directory, 'comments.jsonl');
     if (!existsSync(file)) return undefined;
     try {
-      return readComments(readFileSync(file, 'utf8'));
+      return readCapture(readFileSync(file, 'utf8'));
     } catch {
       return undefined;
     }
   },
-  claimIds: new Set(
-    claims.map(({ data }) => String(data.id ?? '')).filter((id) => id !== ''),
-  ),
 };
 
 /**
- * A `withdrawn` story and its `not-answered` register entry have to point at
- * each other (methodology v1.13).
+ * A `withdrawn` story and the register question it was withdrawn from have to
+ * point at each other (methodology v1.13).
  *
- * The story leaves the findings boards and `/considered` becomes the only place
+ * The story leaves the findings boards and the register becomes the only place
  * its claims are listed, so a half-made pair is a claim that has quietly
- * vanished: withdrawn with nowhere saying so, or a register entry promising a
- * story that still counts itself a finding.
+ * vanished: withdrawn with nowhere saying so, or a register question promising
+ * a story that still counts itself a finding.
  */
-function checkWithdrawals(file: string, candidates: Record_[]): void {
+function checkWithdrawals(file: string, questions: Record_[]): void {
   const byId = new Map(
-    candidates
-      .filter((candidate) => typeof candidate?.id === 'string')
-      .map((candidate) => [candidate.id as string, candidate]),
+    questions
+      .filter((question) => typeof question?.id === 'string')
+      .map((question) => [question.id as string, question]),
   );
 
-  for (const candidate of candidates) {
-    if (candidate?.outcome !== 'not-answered') continue;
-    const where = typeof candidate.id === 'string' ? candidate.id : 'candidate';
-    const slug = candidate.story;
+  for (const question of questions) {
+    if (question?.publication !== 'withdrawn') continue;
+    const where = typeof question.id === 'string' ? question.id : 'question';
+    const slug = question.story;
     if (typeof slug !== 'string' || slug.trim() === '') {
-      fail(file, `${where}: outcome not-answered must name the story it withdrew`);
+      fail(file, `${where}: publication withdrawn must name the story it withdrew`);
       continue;
     }
     const story = storyBySlug.get(slug);
@@ -751,10 +749,10 @@ function checkWithdrawals(file: string, candidates: Record_[]): void {
       continue;
     }
     const withdrawn = story.data.withdrawn as Record_ | undefined;
-    if (withdrawn?.register !== candidate.id) {
+    if (withdrawn?.register !== question.id) {
       fail(
         file,
-        `${where}: story "${slug}" must carry withdrawn.register: ${String(candidate.id)}`,
+        `${where}: story "${slug}" must carry withdrawn.register: ${String(question.id)}`,
       );
     }
   }
@@ -765,27 +763,27 @@ function checkWithdrawals(file: string, candidates: Record_[]): void {
     const register = withdrawn.register;
     const entry = typeof register === 'string' ? byId.get(register) : undefined;
     if (!entry) {
-      fail(story.file, `withdrawn.register "${String(register)}" is not in the candidate register`);
-    } else if (entry.outcome !== 'not-answered' || entry.story !== story.slug) {
+      fail(story.file, `withdrawn.register "${String(register)}" is not a register question`);
+    } else if (entry.publication !== 'withdrawn' || entry.story !== story.slug) {
       fail(
         story.file,
-        `withdrawn.register "${String(register)}" must be a not-answered entry naming this story`,
+        `withdrawn.register "${String(register)}" must be a withdrawn question naming this story`,
       );
     }
   }
 }
 
 /**
- * The candidate register, which `/considered` publishes verbatim.
+ * The register, which the site publishes verbatim.
  *
  * The rules themselves are in `lib/register-checks.ts`, as a pure function over
  * the parsed file, so they can be tested against fixtures; this reads the file,
  * hands over a view of the world, and reports what comes back. The withdrawal
  * pairing stays here because it needs the stories, which that module does not.
  */
-function checkCandidateRegister(): void {
+function checkRegister(): void {
   const file = repoPath('intake', 'register.yaml');
-  const register = loadCandidateRegister(file);
+  const register = loadRegister(file);
   if (register === null) {
     // A withdrawn story with no register at all still has to be caught.
     checkWithdrawals(file, []);
@@ -794,7 +792,78 @@ function checkCandidateRegister(): void {
 
   for (const problem of registerProblems(register, registerWorld)) fail(file, problem);
 
-  checkWithdrawals(file, register.candidates as Record_[]);
+  checkWithdrawals(file, (register.questions ?? []) as Record_[]);
+  checkRegisterClaims((register.claims ?? []) as Record_[]);
+  checkRedirects(register);
+}
+
+/**
+ * `redirects.yaml`, the source of truth for every published address that moved.
+ *
+ * A redirect file nobody checks is where a published address quietly stops
+ * resolving, so the targets are checked against the register the same way the
+ * register's own cross-references are. The rules are in
+ * `lib/redirect-checks.ts`, as a pure function; this reads the file and hands
+ * over the ids.
+ */
+function checkRedirects(register: Register): void {
+  const file = repoPath('redirects.yaml');
+  if (!existsSync(file)) {
+    fail(file, 'is missing — it is the source of truth for every address that moved');
+    return;
+  }
+  const ids = (key: 'questions' | 'claims') =>
+    new Set(
+      (Array.isArray(register[key]) ? (register[key] as Record_[]) : [])
+        .map((row) => row.id)
+        .filter((id): id is string => typeof id === 'string'),
+    );
+
+  let rows: RedirectRow[];
+  try {
+    const parsed = loadYaml<{ redirects?: unknown }>(file).redirects;
+    if (!Array.isArray(parsed)) {
+      fail(file, 'must contain a `redirects` list');
+      return;
+    }
+    rows = parsed.map((row) => {
+      const entry = (typeof row === 'object' && row !== null ? row : {}) as Record_;
+      return {
+        from: String(entry.from ?? '').trim(),
+        to: String(entry.to ?? '').trim(),
+        why: String(entry.why ?? '').trim(),
+        pending: entry.pending === true ? true : undefined,
+      };
+    });
+  } catch (error) {
+    fail(file, `unreadable YAML: ${(error as Error).message}`);
+    return;
+  }
+
+  for (const problem of redirectProblems(rows, {
+    questionIds: ids('questions'),
+    claimIds: ids('claims'),
+  })) {
+    fail(file, problem);
+  }
+}
+
+/**
+ * A published claim's `register_claims` name register claims that exist.
+ *
+ * That is what puts a commenter's own words on the page that answers them
+ * ("Also said as"), so a dangling id is captured wordings silently missing from
+ * a published page rather than a visible error.
+ */
+function checkRegisterClaims(registered: Record_[]): void {
+  const ids = new Set(
+    registered.map((claim) => claim.id).filter((id): id is string => typeof id === 'string'),
+  );
+  for (const { file, data } of claims) {
+    for (const id of stringArray(data.register_claims)) {
+      if (!ids.has(id)) fail(file, `register_claims: "${id}" is not a claim in the register`);
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -821,7 +890,7 @@ checkCommitments();
 checkEvidence();
 checkReviewRuns();
 checkCombinedEvidence();
-checkCandidateRegister();
+checkRegister();
 
 if (warnings.length > 0) {
   for (const warning of warnings) {

@@ -207,6 +207,16 @@ const claims = defineCollection({
       )
       .default([]),
     aliases: z.array(z.string()).default([]),
+    /**
+     * Register claim ids this published claim was grouped from.
+     *
+     * A whole-source read regularly turns up a claim the site has already
+     * published, in words nobody here wrote. Naming the register claim here —
+     * rather than having the register point back at this file, which is what
+     * `variation_of` did until D-0029 — is what puts those captured wordings on
+     * this claim's page under "Also said as". Validated against the register.
+     */
+    register_claims: z.array(z.string()).default([]),
     limitations: z.array(z.string().min(1)).default([]),
     unknowns: z.array(z.string().min(1)).default([]),
     missing_evidence: z.array(z.string().min(1)).default([]),
