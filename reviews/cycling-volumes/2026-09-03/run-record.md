@@ -268,9 +268,9 @@ loop.
 That question is not decided here, and the reason is the same reason the
 amendment itself was uncomfortable: the editor is the party who gains
 from deciding it one way, and deciding it now would be deciding it on the
-brief that would be released by the answer. It goes to the board record
-as an open question with the two readings written out, and the brief
-stays where the confirmation left it. What the first use of v1.20
+brief that would be released by the answer. It is written up as an open
+question in the board record, with both readings and a defensible middle
+set out, and the brief stays where the confirmation left it. What the first use of v1.20
 demonstrated is worth keeping separately from what it failed to settle:
 the checker labelled every finding, used the labels the rule defines,
 raised no framing objection when a framing objection would have ended the
