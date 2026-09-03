@@ -238,9 +238,51 @@ describe('registerProblems: investigations', () => {
 
 describe('registerProblems: the outcome sits on the investigation', () => {
   it('rejects a claim that carries an outcome as well', () => {
-    expect(grouped([claim({ outcome: 'GO' }), otherSide()])).toContain(
+    expect(grouped([claim({ outcome: 'GO' }), otherSide()]).join('\n')).toContain(
       'lanes-removed: triage ruled on its investigation, so it carries no outcome of its own',
     );
+  });
+
+  // The one exception, and it is the charter's: an accusation against a named
+  // person is declined even where the question around it is worth running.
+  it('allows a claim declined on the right-of-reply ground', () => {
+    expect(
+      grouped([
+        claim({
+          outcome: 'NO',
+          ground: 'right-of-reply',
+          names_person: true,
+          reason: 'The question around it is going ahead; this claim is not.',
+          proposition: undefined,
+          wording: undefined,
+          forms: undefined,
+        }),
+        otherSide(),
+      ]),
+    ).toEqual([]);
+  });
+
+  it('refuses a withheld claim that still carries the wording', () => {
+    expect(
+      grouped([
+        claim({
+          outcome: 'NO',
+          ground: 'right-of-reply',
+          names_person: true,
+          reason: 'A reason.',
+        }),
+        otherSide(),
+      ]).join('\n'),
+    ).toContain('must carry no proposition');
+  });
+
+  it('refuses a right-of-reply ground on anything but a decline', () => {
+    expect(
+      grouped([
+        claim({ outcome: 'PARK', ground: 'right-of-reply', names_person: true, reason: 'A reason.' }),
+        otherSide(),
+      ]).join('\n'),
+    ).toContain('only ever accompanies an outcome of NO');
   });
 
   it('rejects a claim with neither an outcome nor an investigation', () => {
