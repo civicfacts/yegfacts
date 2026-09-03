@@ -52,6 +52,7 @@ import {
   type RegisterWorld,
 } from './lib/register-checks.ts';
 import { redirectProblems, type RedirectRow } from './lib/redirect-checks.ts';
+import { allRedirects, redirectFileText } from './lib/redirect-file.ts';
 import {
   CANONICAL_FINDINGS,
   CHANGELOG_TYPES,
@@ -842,11 +843,37 @@ function checkRedirects(register: Register): void {
     return;
   }
 
-  for (const problem of redirectProblems(rows, {
-    questionIds: ids('questions'),
-    claimIds: ids('claims'),
-  })) {
+  const questionIds = ids('questions');
+  const claimIds = ids('claims');
+  for (const problem of redirectProblems(rows, { questionIds, claimIds })) {
     fail(file, problem);
+  }
+
+  checkRedirectFile(rows, questionIds, claimIds);
+}
+
+/**
+ * `public/_redirects`, which Cloudflare serves before static files.
+ *
+ * It is generated from `redirects.yaml` and the register (`npm run redirects`)
+ * and committed, so the routing table can be read in a diff. Generated files
+ * that nothing checks go stale silently, and a stale one here is a published
+ * address that has quietly stopped resolving — so the bytes are regenerated in
+ * memory and compared.
+ */
+function checkRedirectFile(
+  rows: RedirectRow[],
+  questionIds: ReadonlySet<string>,
+  claimIds: ReadonlySet<string>,
+): void {
+  const file = repoPath('public', '_redirects');
+  const expected = redirectFileText(allRedirects(rows, [...questionIds], [...claimIds]));
+  if (!existsSync(file)) {
+    fail(file, 'is missing — run `npm run redirects`');
+    return;
+  }
+  if (readFileSync(file, 'utf8') !== expected) {
+    fail(file, 'is out of date with redirects.yaml and the register — run `npm run redirects`');
   }
 }
 

@@ -1,11 +1,192 @@
-# Cloudflare Pages redirects. Served before static files, and a fragment never
-# reaches the server at all — the browser re-applies it to the target, so
-# /claims#transportation lands on /search#transportation. (Verified in Chromium
-# against a local 301 on 2026-09-03: the server logged the path without the
-# fragment, the browser finished on the target with the fragment intact.)
+# Cloudflare Pages redirects. GENERATED — do not edit by hand.
 #
-# `redirects.yaml` is the source of truth for where published addresses go
-# under D-0029, and this file is to be generated from it. The rule below is the
-# one address already live, kept as it stands because its D-0029 target
-# (/questions) does not exist yet.
-/claims /search 301
+# Source of truth: redirects.yaml, plus one rule per register id derived from
+# intake/register.yaml. Regenerate with `npm run redirects`; `npm run validate`
+# fails if this file and those two disagree.
+#
+# Served before static files, so no rule here may cover /questions/* or
+# /claims/* as a wildcard: it would swallow the real pages. Every rule below
+# matches one exact path.
+#
+# A fragment never reaches the server — a request for /facts/x#claim-1 arrives
+# as /facts/x — and the browser re-applies it to the target when the target
+# carries none of its own. So an old /facts/<slug>#<claim-id> link lands on
+# /questions/<slug> with the claim's anchor intact, and that page carries an
+# anchor per claim.
+
+/considered /questions 301
+/stories /questions 301
+/claims /questions 301
+/considered/bike-lanes-nobody-rides /questions/cycling-volumes 301
+/considered/at-congestion-reduced /questions/lanes-and-congestion 301
+/considered/at-100m-a-year /questions/hundred-million-approval 301
+/considered/bike-100m-one-percent-of-roads /questions/active-transportation 301
+/considered/fifty-street-181m-600m /questions/active-transportation 301
+/considered/rice-50m-motions-and-review /questions/council-pause-vote 301
+/considered/lanes-removed-citywide /claims/city-removed-traffic-lanes 301
+/considered/fifteen-minute-city-agreement /claims/15-minute-city-agreement 301
+/considered/infill-teardown-350k-1m /questions/infill-prices 301
+/considered/bike-vs-road-spending /questions/active-transportation 301
+/questions/bike-vs-road-spending /questions/active-transportation 301
+/facts/active-transportation /questions/active-transportation 301
+/facts/climate-targets /questions/climate-targets 301
+/facts/electric-buses /questions/electric-buses 301
+/facts/fifteen-minute-districts /questions/fifteen-minute-districts 301
+/facts/infill-prices /questions/infill-prices 301
+/facts/winter-cycling /questions/winter-cycling 301
+/considered/cycling-volumes /questions/cycling-volumes 301
+/considered/who-cycles /questions/who-cycles 301
+/considered/winter-cycling /questions/winter-cycling 301
+/considered/snow-clearing /questions/snow-clearing 301
+/considered/lanes-and-congestion /questions/lanes-and-congestion 301
+/considered/converted-roadway /questions/converted-roadway 301
+/considered/active-transportation /questions/active-transportation 301
+/considered/hundred-million-approval /questions/hundred-million-approval 301
+/considered/infrastructure-deficit /questions/infrastructure-deficit 301
+/considered/property-taxes /questions/property-taxes 301
+/considered/council-pause-vote /questions/council-pause-vote 301
+/considered/council-hearing /questions/council-hearing 301
+/considered/routes-already-committed /questions/routes-already-committed 301
+/considered/consultation-and-opposition /questions/consultation-and-opposition 301
+/considered/council-mandate /questions/council-mandate 301
+/considered/councillors-own-commute /questions/councillors-own-commute 301
+/considered/city-hall-pay-and-interests /questions/city-hall-pay-and-interests 301
+/considered/who-pays-for-roads /questions/who-pays-for-roads 301
+/considered/on-street-parking /questions/on-street-parking 301
+/considered/zoning-and-infill /questions/zoning-and-infill 301
+/considered/city-plan-commitments /questions/city-plan-commitments 301
+/considered/emergency-access /questions/emergency-access 301
+/considered/access-across-barriers /questions/access-across-barriers 301
+/considered/transit-alternative /questions/transit-alternative 301
+/considered/cycling-safety /questions/cycling-safety 301
+/considered/street-types-and-design /questions/street-types-and-design 301
+/considered/network-connections /questions/network-connections 301
+/considered/83-avenue-lane /questions/83-avenue-lane 301
+/considered/132-avenue /questions/132-avenue 301
+/considered/provincial-direction /questions/provincial-direction 301
+/considered/holyrood-school-lane /questions/holyrood-school-lane 301
+/considered/189-street-lane /questions/189-street-lane 301
+/considered/other-cities /questions/other-cities 301
+/considered/downtown-business /questions/downtown-business 301
+/considered/climate-targets /questions/climate-targets 301
+/considered/electric-buses /questions/electric-buses 301
+/considered/fifteen-minute-districts /questions/fifteen-minute-districts 301
+/considered/infill-prices /questions/infill-prices 301
+/considered/low-density-century /questions/low-density-century 301
+/considered/infill-teardown-more-affordable /questions/infill-teardown-more-affordable 301
+/considered/infill-luxury /questions/infill-luxury 301
+/considered/infill-not-affordable-median-household /questions/infill-not-affordable-median-household 301
+/considered/earth-flat /questions/earth-flat 301
+/considered/oilers-held-back /questions/oilers-held-back 301
+/considered/bike-lanes-look-empty /claims/bike-lanes-look-empty 301
+/considered/one-to-two-percent-of-population-rides /claims/one-to-two-percent-of-population-rides 301
+/considered/cycling-trips-1-3-million-2026 /claims/cycling-trips-1-3-million-2026 301
+/considered/riders-are-recreational-not-commuters /claims/riders-are-recreational-not-commuters 301
+/considered/under-one-percent-of-commuters-cycle /claims/under-one-percent-of-commuters-cycle 301
+/considered/two-percent-of-trips-by-bike /claims/two-percent-of-trips-by-bike 301
+/considered/87-percent-commute-by-car /claims/87-percent-commute-by-car 301
+/considered/one-percent-year-round-users /claims/one-percent-year-round-users 301
+/considered/heritage-days-bike-arrivals /claims/heritage-days-bike-arrivals 301
+/considered/blue-collar-workers-bike-to-work /claims/blue-collar-workers-bike-to-work 301
+/considered/cyclists-higher-income-and-education /claims/cyclists-higher-income-and-education 301
+/considered/most-cyclists-also-drive /claims/most-cyclists-also-drive 301
+/considered/winter-too-cold-for-cycling /claims/winter-too-cold-for-cycling 301
+/considered/winter-cycling-has-grown /claims/winter-cycling-has-grown 301
+/considered/bike-lanes-plowed-before-streets /claims/bike-lanes-plowed-before-streets 301
+/considered/whyte-avenue-narrow-in-winter /claims/whyte-avenue-narrow-in-winter 301
+/considered/snow-windrowed-into-parking-spaces /claims/snow-windrowed-into-parking-spaces 301
+/considered/two-snow-removal-proposals-need-more-money /claims/two-snow-removal-proposals-need-more-money 301
+/considered/calcium-chloride-debate-coming /claims/calcium-chloride-debate-coming 301
+/considered/lane-removal-increases-congestion /claims/lane-removal-increases-congestion 301
+/considered/bike-infra-reduces-congestion /claims/bike-infra-reduces-congestion 301
+/considered/city-removed-traffic-lanes /claims/city-removed-traffic-lanes 301
+/considered/roads-carry-goods-and-services /claims/roads-carry-goods-and-services 301
+/considered/79-street-relieves-75-street /claims/79-street-relieves-75-street 301
+/considered/lanes-removed-for-traffic-calming /claims/lanes-removed-for-traffic-calming 301
+/considered/remaining-lane-too-narrow-to-pass /claims/remaining-lane-too-narrow-to-pass 301
+/considered/road-surface-breaking-from-one-lane /claims/road-surface-breaking-from-one-lane 301
+/considered/proposal-does-not-widen-road /claims/proposal-does-not-widen-road 301
+/considered/bike-share-one-percent-of-road-budget /claims/bike-share-one-percent-of-road-budget 301
+/considered/100-million-over-four-years /claims/100-million-over-four-years 301
+/considered/181-million-for-600m-of-50-street /claims/181-million-for-600m-of-50-street 301
+/considered/50-street-costs-double-active-transport /claims/50-street-costs-double-active-transport 301
+/considered/billions-spent-on-road-building /claims/billions-spent-on-road-building 301
+/considered/spending-proportional-to-cyclist-numbers /claims/spending-proportional-to-cyclist-numbers 301
+/considered/bike-lane-maintenance-cost-per-year /claims/bike-lane-maintenance-cost-per-year 301
+/considered/council-approved-100-million /claims/council-approved-100-million 301
+/considered/basic-services-in-poor-condition /claims/basic-services-in-poor-condition 301
+/considered/spending-100-million-despite-deficit /claims/spending-100-million-despite-deficit 301
+/considered/rec-centre-money-diverted /claims/rec-centre-money-diverted 301
+/considered/drainage-damage-to-homeowners /claims/drainage-damage-to-homeowners 301
+/considered/new-streetlights-added-costs /claims/new-streetlights-added-costs 301
+/considered/property-taxes-rising-sharply /claims/property-taxes-rising-sharply 301
+/considered/council-rejected-pause /claims/council-rejected-pause 301
+/considered/administration-recommended-freezing-14-routes /claims/administration-recommended-freezing-14-routes 301
+/considered/motions-to-cut-budget-to-50-million-failed /claims/motions-to-cut-budget-to-50-million-failed 301
+/considered/same-seven-councillors-vote-together /claims/same-seven-councillors-vote-together 301
+/considered/more-speakers-in-favour-at-hearing /claims/more-speakers-in-favour-at-hearing 301
+/considered/hearing-supporters-and-lobby-groups /claims/hearing-supporters-and-lobby-groups 301
+/considered/speaking-time-cut-to-three-minutes /claims/speaking-time-cut-to-three-minutes 301
+/considered/designs-paid-and-contracts-signed /claims/designs-paid-and-contracts-signed 301
+/considered/too-late-to-tender-for-2026 /claims/too-late-to-tender-for-2026 301
+/considered/most-residents-oppose-lanes /claims/most-residents-oppose-lanes 301
+/considered/fast-tracked-without-consultation /claims/fast-tracked-without-consultation 301
+/considered/last-election-turnout-under-40 /claims/last-election-turnout-under-40 301
+/considered/voters-elected-pro-bike-council /claims/voters-elected-pro-bike-council 301
+/considered/council-recall-timing /claims/council-recall-timing 301
+/considered/councillors-dont-bike-to-work /claims/councillors-dont-bike-to-work 301
+/considered/councillors-get-vehicle-allowance /claims/councillors-get-vehicle-allowance 301
+/considered/staff-paid-over-100k-plus-pension /claims/staff-paid-over-100k-plus-pension 301
+/considered/withheld-yegscoop-2026-08-26-1 /claims/withheld-yegscoop-2026-08-26-1 301
+/considered/drivers-pay-for-roads-via-fuel-taxes /claims/drivers-pay-for-roads-via-fuel-taxes 301
+/considered/roads-funded-by-property-taxes /claims/roads-funded-by-property-taxes 301
+/considered/cyclists-pay-property-taxes /claims/cyclists-pay-property-taxes 301
+/considered/taxes-fund-services-you-dont-use /claims/taxes-fund-services-you-dont-use 301
+/considered/bike-lanes-remove-street-parking /claims/bike-lanes-remove-street-parking 301
+/considered/business-lost-customer-parking /claims/business-lost-customer-parking 301
+/considered/free-parking-is-a-subsidy /claims/free-parking-is-a-subsidy 301
+/considered/infill-removes-trees-and-parking /claims/infill-removes-trees-and-parking 301
+/considered/sprawl-unsustainable-as-population-grows /claims/sprawl-unsustainable-as-population-grows 301
+/considered/no-minimum-parking-requirements /claims/no-minimum-parking-requirements 301
+/considered/15-minute-city-agreement /claims/15-minute-city-agreement 301
+/considered/downtown-car-ban-plan /claims/downtown-car-ban-plan 301
+/considered/barriers-delay-emergency-vehicles /claims/barriers-delay-emergency-vehicles 301
+/considered/responders-use-lanes-to-pass-traffic /claims/responders-use-lanes-to-pass-traffic 301
+/considered/barriers-block-disabled-access /claims/barriers-block-disabled-access 301
+/considered/lanes-can-be-designed-accessible /claims/lanes-can-be-designed-accessible 301
+/considered/119-avenue-alley-access-detour /claims/119-avenue-alley-access-detour 301
+/considered/lanes-add-accessibility-and-health /claims/lanes-add-accessibility-and-health 301
+/considered/transit-takes-far-longer-than-driving /claims/transit-takes-far-longer-than-driving 301
+/considered/lrt-slow-and-deadly /claims/lrt-slow-and-deadly 301
+/considered/lrt-barely-functions /claims/lrt-barely-functions 301
+/considered/ets-community-routes-removed /claims/ets-community-routes-removed 301
+/considered/transit-more-efficient-than-cars /claims/transit-more-efficient-than-cars 301
+/considered/lanes-keep-riders-out-of-traffic /claims/lanes-keep-riders-out-of-traffic 301
+/considered/cyclists-ride-on-sidewalks /claims/cyclists-ride-on-sidewalks 301
+/considered/cyclists-have-right-to-the-road /claims/cyclists-have-right-to-the-road 301
+/considered/bike-lanes-dont-improve-safety /claims/bike-lanes-dont-improve-safety 301
+/considered/bike-collision-fault-share /claims/bike-collision-fault-share 301
+/considered/cyclists-harassed-on-roads-without-lanes /claims/cyclists-harassed-on-roads-without-lanes 301
+/considered/street-labs-no-safety-value /claims/street-labs-no-safety-value 301
+/considered/downtown-network-safe-family-route /claims/downtown-network-safe-family-route 301
+/considered/lane-on-provincially-arterial-road /claims/lane-on-provincially-arterial-road 301
+/considered/routes-approved-by-engineers /claims/routes-approved-by-engineers 301
+/considered/no-lanes-on-arterial-roads /claims/no-lanes-on-arterial-roads 301
+/considered/50-street-is-collector-not-arterial /claims/50-street-is-collector-not-arterial 301
+/considered/95-percent-network-shared-paths /claims/95-percent-network-shared-paths 301
+/considered/design-escalated-from-paint-to-rebuilds /claims/design-escalated-from-paint-to-rebuilds 301
+/considered/shared-30-kmh-streets-exist /claims/shared-30-kmh-streets-exist 301
+/considered/routes-go-nowhere /claims/routes-go-nowhere 301
+/considered/missing-connections-along-lrt /claims/missing-connections-along-lrt 301
+/considered/83-avenue-decade-no-complaints /claims/83-avenue-decade-no-complaints 301
+/considered/no-bike-lane-on-whyte-avenue /claims/no-bike-lane-on-whyte-avenue 301
+/considered/132-avenue-lanes-both-sides /claims/132-avenue-lanes-both-sides 301
+/considered/seven-schools-on-132-avenue /claims/seven-schools-on-132-avenue 301
+/considered/province-ordered-stop-and-will-legislate /claims/province-ordered-stop-and-will-legislate 301
+/considered/no-written-provincial-direction /claims/no-written-provincial-direction 301
+/considered/holyrood-school-bike-lane-proposal /claims/holyrood-school-bike-lane-proposal 301
+/considered/holyrood-design-approved-then-stopped /claims/holyrood-design-approved-then-stopped 301
+/considered/189-street-lane-removed-later /claims/189-street-lane-removed-later 301
+/considered/former-councillor-installed-189-street-lane /claims/former-councillor-installed-189-street-lane 301
+/considered/other-cities-removing-bike-lanes /claims/other-cities-removing-bike-lanes 301
+/considered/downtown-businesses-closing /claims/downtown-businesses-closing 301

@@ -4,11 +4,15 @@
 # carry them did not. Every address the site has published stays reachable, so
 # each one is listed here with where it goes now and why it moved.
 #
-# This file is the source of truth. `src/lib/redirects.ts` reads it and adds
-# the ones that can be derived from the register — every question id and every
-# claim id under `/considered/<id>` — so a question registered tomorrow keeps
-# its old-style address without anyone editing this file. `npm run validate`
-# checks both halves.
+# This file is the source of truth. `scripts/lib/redirect-file.ts` reads it and
+# adds the ones that can be derived from the register — every question id and
+# every claim id under `/considered/<id>` — so a question registered tomorrow
+# keeps its old-style address without anyone editing this file.
+#
+# `npm run redirects` writes the result to `public/_redirects`, which Cloudflare
+# Pages serves before static files; that file is committed so the routing table
+# can be read in a diff. `npm run validate` checks the rules here and fails if
+# the committed `_redirects` is not what this file and the register produce.
 #
 # Fields
 # ------
@@ -38,16 +42,14 @@
 # a separate decision about where a claim anchor should land, not a technical
 # necessity.
 #
-# Cloudflare Pages serves `public/_redirects` before static files. Whatever
-# consumes this file — a generated `_redirects`, or an Astro route in the shape
-# of `src/pages/[alias].astro` — the rule is the same: no wildcard may cover
-# `/questions/*` or `/claims/*`, or it swallows the real pages.
+# Cloudflare Pages serves `public/_redirects` before static files, and no rule
+# in it may be a wildcard covering `/questions/*` or `/claims/*`: it would
+# swallow the real pages. Every generated rule matches one exact path.
 #
-# Also to be rewired against this file: `src/pages/[alias].astro`, which
-# generates root-level alias redirects out of each published story's and each
-# published claim's `aliases`. Those still point at `/facts/<slug>` and
-# `/facts/<slug>#<claim-id>`; when the six stories become questions, they point
-# at `/questions/<id>` and `/claims/<id>`.
+# `src/pages/[alias].astro` is the other half, and is not generated from here:
+# it turns each published article's and each published claim's `aliases` — the
+# hostile or colloquial phrasings people actually search — into root-level
+# meta-refresh pages pointing at `/questions/<id>` and `/claims/<id>`.
 
 redirects:
   # ---------------------------------------------------------------------------
@@ -57,7 +59,7 @@ redirects:
     to: /questions
     why: "The register and the index are one page, and it is called what it lists."
 
-  # `/considered/<id>` is not listed entry by entry: `src/lib/redirects.ts`
+  # `/considered/<id>` is not listed entry by entry: `scripts/lib/redirect-file.ts`
   # derives one per question and one per claim from the register, so a row
   # added tomorrow is covered without an edit here.
 
@@ -65,17 +67,12 @@ redirects:
     to: /questions
     why: "The word story left the site; the findings are read off the questions."
 
-  # `/claims` was the findings list before it was retired into `/search`, and
-  # `public/_redirects` still carries that rule. It is now the claim namespace's
-  # index path, so bouncing it to search would tell a reader that claims are a
-  # search feature rather than the unit of judgement. It points at the register
-  # instead. The rule matches this exact path only; nothing here may redirect
-  # anything under `/claims/`, which the validator enforces.
-  #
-  # TO DO in the next batch, together: replace the `/claims /search 301` line in
-  # `public/_redirects` with whatever is generated from this file. Until
-  # `/questions` exists, the `_redirects` line is still the correct live rule
-  # and is deliberately left alone.
+  # `/claims` was the findings list before it was retired into `/search`, and it
+  # bounced there until this file took over the routing table. It is now the
+  # claim namespace's index path, so sending it to search would tell a reader
+  # that claims are a search feature rather than the unit of judgement. It points
+  # at the register instead. The rule matches this exact path only; nothing here
+  # may redirect anything under `/claims/`, which the validator enforces.
   - from: /claims
     to: /questions
     why: "The old findings list is the register, and /claims/<id> is now one claim each."
@@ -113,7 +110,7 @@ redirects:
     why: "Registered on its own, then merged into the claim grouped from the source."
   - from: /considered/infill-teardown-350k-1m
     to: /questions/infill-prices
-    why: "The row the withdrawn story was registered under; the story is that question now."
+    why: "The row the withdrawn finding was registered under; it is that question now."
 
   # ---------------------------------------------------------------------------
   # Questions merged into other questions
@@ -123,13 +120,13 @@ redirects:
   # ---------------------------------------------------------------------------
   - from: /considered/bike-vs-road-spending
     to: /questions/active-transportation
-    why: "The money-for-bike-lanes question is what the active-transportation story answers."
+    why: "The money-for-bike-lanes question is what the active-transportation check answers."
   - from: /questions/bike-vs-road-spending
     to: /questions/active-transportation
-    why: "The money-for-bike-lanes question is what the active-transportation story answers."
+    why: "The money-for-bike-lanes question is what the active-transportation check answers."
 
   # ---------------------------------------------------------------------------
-  # The six published stories
+  # The six published articles
   #
   # Each is a question under the slug it was published with, so every one of
   # these is a rename rather than a move. A fragment never reaches the server
@@ -139,19 +136,19 @@ redirects:
   # ---------------------------------------------------------------------------
   - from: /facts/active-transportation
     to: /questions/active-transportation
-    why: "The published story is the question it answered, at the slug it was published under."
+    why: "The published article is the question it answered, at the slug it was published under."
   - from: /facts/climate-targets
     to: /questions/climate-targets
-    why: "The published story is the question it answered, at the slug it was published under."
+    why: "The published article is the question it answered, at the slug it was published under."
   - from: /facts/electric-buses
     to: /questions/electric-buses
-    why: "The published story is the question it answered, at the slug it was published under."
+    why: "The published article is the question it answered, at the slug it was published under."
   - from: /facts/fifteen-minute-districts
     to: /questions/fifteen-minute-districts
-    why: "The published story is the question it answered, at the slug it was published under."
+    why: "The published article is the question it answered, at the slug it was published under."
   - from: /facts/infill-prices
     to: /questions/infill-prices
-    why: "The withdrawn story keeps its address; the tombstone is the question's page."
+    why: "The withdrawn finding keeps its address; the tombstone is the question's page."
   - from: /facts/winter-cycling
     to: /questions/winter-cycling
-    why: "The published story and the Yegscoop question are one question, under this slug."
+    why: "The published article and the Yegscoop question are one question, under this slug."
