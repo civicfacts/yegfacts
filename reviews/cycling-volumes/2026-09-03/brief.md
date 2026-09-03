@@ -1,14 +1,19 @@
 # Review brief: How many people in Edmonton cycle, and how much do the bike lanes get used?
 
-Status: **AWAITING DEFECT CONFIRMATION 2026-09-03, not frozen.** The
-framing check returned REVISE on all three permitted reports
-(`framing/check-1.md`, `framing/check-2.md`, `framing/check-3.md`), and
-all three findings it left standing are arithmetic defects inside verdict
-ladders. Under methodology v1.20 a defect finding does not park a brief:
-the three are corrected here in the checker's own words, each correction
-is recorded in `run-record.md` against the finding it answers, and the
-brief goes back for one defect confirmation. Nothing else in the brief is
-changed. No panel runs on this brief until that report says so.
+Status: **NOT FROZEN 2026-09-03.** The framing check returned REVISE on
+all three permitted reports (`framing/check-1.md`, `framing/check-2.md`,
+`framing/check-3.md`), and all three findings it left standing were
+arithmetic defects inside verdict ladders. Under methodology v1.20 a
+defect finding does not park a brief, so the three were corrected in the
+checker's own words, each correction recorded in `run-record.md` against
+the finding it answers, and the brief went back for one defect
+confirmation. That report, `framing/check-4-defects.md`, confirms all
+three corrections, raises no framing finding, and names a fourth
+arithmetic defect: claim 2's ladder is still ambiguous on an empty
+verdict set. So the brief is not frozen and no panel runs on it. v1.20
+does not say what a further defect at the confirmation earns, and that
+question is not being decided by the editor on the brief it would
+release; the run record has both readings.
 Drafted, twice revised and once corrected 2026-09-03 by Stew.
 Methodology v1.20.
 Question id: `cycling-volumes`. Register entry: `intake/register.yaml`.

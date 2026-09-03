@@ -32,7 +32,7 @@ flags that run carried.
 | 1 | REVISE, nine findings | `framing/check-1.md` | `framing/response-1.md` |
 | 2 | REVISE, 8 of 12 resolved, 3 new findings | `framing/check-2.md` | `framing/resolution-2.md` |
 | 3 | REVISE, 12 of 15 resolved, 3 standing | `framing/check-3.md` | this file |
-| 4 | defect confirmation (methodology v1.20) | `framing/check-4-defects.md` | this file |
+| 4 | defect confirmation (v1.20): REVISE, 3 corrections confirmed, 1 further defect | `framing/check-4-defects.md` | this file |
 
 **Check 1, in one line:** the brief leaked expected findings in its
 stakes headings, put floors under two ceiling claims so they could have
@@ -229,6 +229,53 @@ Consequential, in the same correction: the sentence describing an
 unclassifiable counter said it "does not carry the verdict", which read
 as though a verdict were still available, and now says the coverage rule
 decides what verdict is available.
+
+## The defect confirmation: three confirmed, a fourth defect named
+
+`framing/check-4-defects.md`, run 2026-09-03 with the amended prompt, the
+corrected brief, the run record and all three prior reports. Verdict
+REVISE.
+
+All three corrections are confirmed, each labelled `[defect]` by the
+checker. He worked both of claim 1's ladders boundary by boundary and
+states that each assigns exactly one verdict to every possible total; he
+confirms that the short-window rule now runs in the direction the
+arithmetic runs; and he confirms that no unclassified counter can decide
+claim 2's verdict. He raised no framing finding, new or revived.
+
+He named one further defect, and it is a real one. Claim 2's ladder is
+still ambiguous on an empty verdict set: with no classifiable counters,
+"every classifiable counter is below 25" and "no classifiable counter is
+below 25" are both vacuously true, so Supported, Contradicted and the Not
+established bullet for an empty set all match at once. It is not a defect
+the corrections introduced. It was in the brief through all three framing
+checks and nobody caught it, including the checker. His replacement
+wording is in his report and is not applied here.
+
+**There is no freeze. There is no freeze SHA.** The brief is not frozen
+and no panel runs on it.
+
+**And v1.20 does not say what happens next, which is a hole in the rule,
+found on its first use.** The amendment gives a corrected brief one
+defect confirmation and says what happens if that report raises a framing
+finding: the brief is parked for good. It does not say what happens when
+the confirmation confirms every correction and names a further defect.
+Read strictly, one round means one round and the brief has no round left.
+Read loosely, a defect is a defect and it earns another correction, which
+is exactly the reading that turns a narrow exception into an unbounded
+loop.
+
+That question is not decided here, and the reason is the same reason the
+amendment itself was uncomfortable: the editor is the party who gains
+from deciding it one way, and deciding it now would be deciding it on the
+brief that would be released by the answer. It goes to the board record
+as an open question with the two readings written out, and the brief
+stays where the confirmation left it. What the first use of v1.20
+demonstrated is worth keeping separately from what it failed to settle:
+the checker labelled every finding, used the labels the rule defines,
+raised no framing objection when a framing objection would have ended the
+brief, and found a fourth arithmetic error that three framing rounds had
+walked past.
 
 ## What check 3 did settle
 
