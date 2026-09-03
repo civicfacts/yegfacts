@@ -13,13 +13,16 @@ which claims in it to look at.
 | Claims raised by the three seats | 230 |
 | Forms thrown out by the quote gate | 7 |
 | Propositions after the merge | 112 |
+| Claims after grouping | 112 |
+| Investigations | 34 |
 | Captured wordings carried onto them | 309 |
 | Extractor claims unaccounted for | 0 |
 
 Propositions by how many seats found them: 26 by all three, 28 by two, 58 by
 one. By side of the argument: 65 against the spending, 38 for it, 9 neither.
 Nineteen restate claims the register or a published story already carries.
-Triage returned 85 GO, 15 PARK, 12 NO, the two readers agreeing on 78 of 112.
+Triage rules on investigations, not on single claims, and returned 32 GO, 1
+PARK and 1 NO, the two readers agreeing on 30 of 34.
 
 Twelve extractor claims were dropped in the merge, each with its reason. Most
 are policy preferences a seat had logged as claims: that cyclists should be
@@ -62,6 +65,41 @@ are now propositions, and so are the four separate rates people quoted at each
 other: 2 percent of trips, under 1 percent of commuters, 87 percent by car, 1
 to 2 percent of the population. The first merge had collapsed several of those
 into one compound claim; see below.
+
+## Grouping: 112 claims, 34 investigations
+
+The founder read this register on the preview and found what was still wrong
+with it: several claims per argument, each costing its own panel run. Four
+turned on who pays for Edmonton's roads.
+
+So propositions are grouped twice. An investigation is one brief, one body of
+evidence, one panel run; the claims inside it each keep their own finding. The
+saving is 34 panel runs instead of 112. Sixteen of the 34 carry claims from
+both camps.
+
+| accounts | claims | investigation |
+| ---: | ---: | --- |
+| 25 | 9 | How many people cycle, and how much do the lanes get used? |
+| 24 | 6 | Do the lanes ease congestion or make it worse? |
+| 17 | 1 | Did Council approve $100 million for bike lanes? |
+| 16 | 2 | Can people cycle through an Edmonton winter, and do they? |
+| 15 | 4 | Who pays for Edmonton's roads, drivers or everybody? |
+| 15 | 5 | Is the City neglecting basics while it funds this? |
+
+Two specialist reads rejected the first design, in which the group itself
+carried one finding. Both said the same thing from different directions: a
+finding over an umbrella holding opposite claims states nothing, and it labels
+everybody quoted under it with a verdict about the other side. The fix is that
+grouping for work and grouping for verdict are different operations. Opposite
+claims share an investigation and never a finding.
+
+The grouping caught a real fault in the earlier per-claim triage. Of the four
+road-funding claims, three were cleared and one was declined as undisputed,
+inside a thread that is an argument about exactly that. As one investigation it
+is a single clear go. Separately, "Council approved $100 million" now comes
+back declined, because it is common ground in the source: the site had been
+checking a thing nobody argues about, which is where this whole redesign
+started.
 
 ## Who found what
 

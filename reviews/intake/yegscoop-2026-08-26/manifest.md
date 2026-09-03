@@ -120,6 +120,45 @@ claim one reader would refuse does not jump the queue on the other reader's
 word, and one reader's refusal does not discard it either. This is the lean the
 verdict matrix takes (D-0011), applied to selection.
 
+## Grouping
+
+    cat $WORK/group-prompt.txt | claude -p --model opus --effort high \
+      --output-format stream-json --verbose
+    npx tsx scripts/intake-groups.ts reviews/intake/yegscoop-2026-08-26
+
+- Reported by the CLI: `Claude Opus 5`, effort high
+- 2026-09-03T15:49:30Z to 15:55:40Z (6m10s), exit 0
+- Prompt: `prompts/intake-group.md` with all 112 propositions appended
+- 34 investigations, 112 claims, every proposition placed once
+
+The pass wrote its own slugs into `variations` instead of the proposition ids it
+was given. Because the prompt requires a claim's wording to be copied verbatim,
+all 112 mapped back to their propositions by exact wording and the references
+were repaired deterministically rather than by another run; the check then
+passed. `groups.raw.txt` holds what the seat actually printed.
+
+An earlier version of this stage had the group itself carry one finding. Two
+specialist reads rejected that (board record, reviews/2026-09-03-claim-
+variations), so the prompt was rewritten to group twice and this run replaced
+it.
+
+## Story triage
+
+Two seats again, ruling on investigations rather than on single claims.
+
+    cat $WORK/triage-stories.txt | codex exec -m gpt-5.6-sol \
+      -c model_reasoning_effort=high --skip-git-repo-check
+    agy -p "<read $WORK/triage-stories.txt and follow it>" --model gemini-3.1-pro-high \
+      --add-dir $WORK --dangerously-skip-permissions --sandbox --print-timeout 30m
+
+- sol: `gpt-5.6-sol`, high, 34 decisions
+- gemini: `Gemini 3.1 Pro (High)`, 34 decisions
+- Agreed on 30 of 34. Combined: 32 GO, 1 PARK, 1 NO.
+
+The sol seat echoed the example from its own prompt before answering, so the
+combiner now takes the largest decisions array in a seat's output rather than
+the first, and matches pretty-printed JSON as well as compact.
+
 ## Register
 
     npx tsx scripts/intake-register.ts reviews/intake/yegscoop-2026-08-26
