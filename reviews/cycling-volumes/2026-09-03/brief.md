@@ -18,21 +18,21 @@ Claims in this question, reviewed and reported separately:
 - `cycling-trips-1-3-million-2026`: whether Edmonton's automated
   counters recorded nearly 1.3 million cycling trips in the first seven
   months of 2026.
-- `bike-lanes-look-empty`: whether Edmonton's bike lanes carry little or
-  no bicycle traffic.
-- `one-to-two-percent-of-population-rides`: whether only about 1 to 2
+- `bike-lanes-look-empty`: whether the bike lanes Edmonton meters carry
+  little or no bicycle traffic.
+- `one-to-two-percent-of-population-rides`: whether no more than about 2
   percent of Edmonton's population rides a bicycle.
-- `one-percent-year-round-users`: whether only 1 percent of the
-  population uses the lanes year-round and fewer than 15 percent the
-  rest of the year.
+- `one-percent-year-round-users`: whether no more than 1 percent of the
+  population rides year-round and fewer than 15 percent in the rest of
+  the year.
 - `two-percent-of-trips-by-bike`: whether about 2 percent of all trips
   in Edmonton are made by bicycle.
 - `under-one-percent-of-commuters-cycle`: whether fewer than 1 percent
   of Edmonton commuters travel by bicycle.
 - `87-percent-commute-by-car`: whether 87 percent of Edmontonians
   commute by car.
-- `riders-are-recreational-not-commuters`: whether the people using the
-  lanes are mostly recreational or short-distance riders.
+- `riders-are-recreational-not-commuters`: whether most cycling in
+  Edmonton is recreational rather than commuting.
 
 Each claim carries its own verdict, panel agreement and evidence-basis
 label. Reviewer confidence appears only beside the reviewer who gave it.
@@ -106,18 +106,27 @@ counts of participation and never of agreement.
 
 ## Who asks this
 
-A resident or a reporter would ask: "How many people in Edmonton
-actually ride, and are the bike lanes being used?" Behind it sits the
-argument the thread is having, which is that several people are quoting
-different percentages at each other and treating them as the same
-number.
+A resident or a reporter would ask: "How many Edmontonians actually ride,
+and are the bike lanes being used?" Behind it sits the argument the
+thread is having, which is that several people are quoting different
+percentages at each other and treating them as the same number.
 
-The record can answer the question, but only one measure at a time, and
-the measures are not interchangeable. So the brief tests each circulating
-figure against the instrument that measures the thing that figure names,
-and every claim's section says in plain words what is being counted and
-what it is being divided by. The reader's question is answered by the set
-of eight, not by any one of them.
+**The record does not answer that question directly, and the brief says
+so up front.** No published instrument counts the distinct people who use
+Edmonton's bike lanes. A counter records passages, not people and not
+lane users specifically. A travel survey records trips. The census
+records journeys to work. A participation survey records whether somebody
+rides, not whether they ride in a lane.
+
+So the brief does what the framing check requires where the record cannot
+answer at the level people ask: it tests the nearest levels the record
+does answer, and each claim's section names that level in words a reader
+would use. The eight claims test the counter figure, the corridor
+volumes, the participation shares, the trip share, the trip purpose and
+the two commuting shares, each against the instrument that measures that
+thing. The story will state plainly that none of them is a count of
+distinct bike-lane users, and that the reader's question is answered by
+the set of eight and by their limits, not by any one figure.
 
 ## The denominators, and which claims share a source
 
@@ -126,7 +135,7 @@ of eight, not by any one of them.
 | `cycling-trips-1-3-million-2026` | bicycle passages past the City's automated counters, Jan-Jul 2026 | nothing; a raw count | Eco-Counter open data |
 | `bike-lanes-look-empty` | bicycle passages per day past the counter on a named corridor | nothing; a daily rate per corridor | Eco-Counter open data |
 | `one-to-two-percent-of-population-rides` | residents who ride a bicycle at all in a reference period | all Edmonton residents | population survey |
-| `one-percent-year-round-users` | residents who ride year-round; residents who ride in the rest of the year | all Edmonton residents | population survey with a seasonal split |
+| `one-percent-year-round-users` | residents who ride a bicycle year-round; residents who ride in the rest of the year | all Edmonton residents | population survey with a seasonal split |
 | `two-percent-of-trips-by-bike` | trips whose main mode is bicycle | all trips by Edmonton residents | household travel survey |
 | `riders-are-recreational-not-commuters` | bicycle trips for recreation | all bicycle trips | household travel survey |
 | `under-one-percent-of-commuters-cycle` | commuters whose main mode is bicycle | employed Edmontonians with a usual workplace | 2021 Census, journey to work |
@@ -158,6 +167,18 @@ Where a reviewer's evidence for two claims is the same document, that is
 stated in each claim's `limitations`, so the reader is not shown two
 findings that are one finding twice.
 
+**Riding a bicycle and using a bike lane are not the same measure, and
+the brief keeps them apart.** Some captured wordings are about people who
+ride ("2% of constituents ride bikes"); others are about people who use
+the lanes ("only 1% of the pop use them year round"). No published
+Edmonton instrument measures the distinct residents who use bike lanes.
+Where a claim's holders said "use the lanes" and the only instrument
+measures riding, the substitution is made openly, named in the claim's
+normalized proposition, and reported in `limitations` as the difference
+between what was asserted and what was measured. It is never made
+silently, and a finding never describes a riding measure as a lane-use
+measure.
+
 ## Dates fixed in this brief
 
 **As-of date (freeze date):** 2026-09-03. Anything decided or published
@@ -165,10 +186,12 @@ after this date is out of scope.
 
 **Per-claim reference periods**, each fixed in the claim's own section
 below. In summary: the counter claim takes the window its holder stated
-(2026-01-01 to 2026-07-31); the corridor claim takes the most recent
-complete calendar year plus that same window; the census claims take the
-2021 Census reference week; the survey claims take the most recent
-Edmonton survey published by the as-of date, whose date reviewers state.
+(2026-01-01 to 2026-07-31); the corridor claim takes the 2025 calendar
+year, and inside it the July and January measures its section defines;
+the participation claims take the twelve months their instrument's
+question asks about; the census claims take the 2021 Census reference
+week; the travel-survey claims take the most recent Edmonton survey
+published by the as-of date, whose date reviewers state.
 
 **Currency of the record.** For every claim, reviewers state the
 publication date and the last-updated date of the dataset or report they
@@ -196,13 +219,14 @@ The proposition keeps all three as stated.
 **What is counted, fixed here.** The sum of bicycle counts recorded by
 the City of Edmonton's automated bicycle counters between 2026-01-01 and
 2026-07-31 inclusive, across every counter the City publishes in that
-window. The City publishes this on its open data portal as the
-Eco-Counter bike and pedestrian count data (the dataset at
-`data.edmonton.ca` identified as "Bike and Pedestrian Counts (Eco
-Counter)", with a locations map and a monthly-by-location view published
-beside it). Reviewers name the dataset they used, its portal
-identifier, its last update date, and the number of counters that
-reported in the window.
+window. The City publishes this on its open data portal at
+`data.edmonton.ca` as "Bike and Pedestrian Counts (Eco Counter)",
+dataset identifier `tq23-qn4m`, and publishes a separate counter-location
+dataset beside it. Reviewers name the dataset and location dataset they
+actually used, with their identifiers and their last update dates, and
+state how many counters reported in the window. No other view of the
+same data is relied on here; where a reviewer uses one, they name it and
+say how it relates to the base dataset.
 
 **What a counter count is, and is not.** A counter records a passage
 past a fixed point. It is not a person and it is not a journey. One
@@ -223,9 +247,21 @@ is the network total defined above.
   figure "nearly 1.3 million"; the counters record cycling at the order
   of magnitude the holder claimed.
 - **Contradicted** if the total is below 0.65 million.
-- **Not established** if the City's published counter data does not cover
-  January to July 2026, or does not permit a network total to be
-  computed.
+- **Not established** if the City's published counter data covers fewer
+  than five of the seven months, or does not permit a network total to be
+  computed at all.
+
+**If the published window is short, fixed here before the data is
+seen.** The dataset's last update may fall before 2026-07-31. If the
+published data covers at least five of the seven months but not all
+seven, the verdict is computed on the months actually published, the
+report names the exact first and last day it covers, and the shortfall is
+stated in `interpretation_notes` and in every place the figure appears. A
+short window can only lower the total, so a Supported or Contradicted
+verdict computed on a short window is reported with that direction named.
+The claim is not sent back and its verdict is not predesigned as Not
+established over a dataset refresh lag; that outcome is reserved for a
+record that cannot answer at all.
 
 Alternative cutoffs, results required under both: Supported from 1.17
 million to below 1.43 million (within a tenth of the stated figure);
@@ -258,34 +294,49 @@ which no counter can establish and which is reported as an unknown.
 
 ### Claim 2, id: `bike-lanes-look-empty`
 
-**Normalized proposition:** Edmonton's bike lanes carry little or no
-bicycle traffic.
+**Normalized proposition:** The Edmonton bike lanes that are metered,
+including the lanes residents named as empty, carry little or no bicycle
+traffic.
 
 **Why this reading, and why it is not tested as an observation.** Ten
 people each offered something they saw as evidence for a statement about
 the lanes in general. Under the standing rule that a claim is tested as
-its holders assert it, the general statement is the claim. It is not
-tested as a claim about what anyone saw, because nothing in the public
-record can establish what a person driving past noticed, and a
-proposition about that would be unanswerable in either direction. It is
-tested instead as a claim about how much traffic the lanes carry, on the
-lanes these holders named, measured by the instrument that measures
-exactly that.
+its holders assert it, the general statement is the claim, and it is not
+softened into a claim about four particular streets. It is not tested as
+a claim about what anyone saw, because nothing in the public record can
+establish what a person driving past noticed, and a proposition about
+that would be unanswerable in either direction. It is tested instead as a
+claim about how much traffic the lanes carry, measured by the instrument
+that measures exactly that.
 
-**Which lanes, fixed here.** The corridors named by holders of this claim
-in the captured source: 119 Avenue; 132 Avenue between 97 Street and 127
-Street; the Hermitage area lanes; and the Whyte Avenue area. Reviewers
-identify, from the City's published counter locations, which of these
-corridors has a City automated bicycle counter on or adjacent to it,
-name each counter, and say which named corridors have none.
+**What the counters can and cannot settle, fixed here.** The City's
+counters sit at monitoring locations it chose. They are not a random or
+representative sample of Edmonton's bike lanes, and no representative
+sample of Edmonton's lanes is published. So the proposition names the
+level the record answers, which is the metered lanes, and the verdict
+covers those lanes and no others. Reviewers state how many City
+automated bicycle counters exist, how many sit on on-street bike lanes,
+and what share of Edmonton's on-street bike-lane kilometres those
+counters sit on, where the City publishes a network length. Every
+statement of the finding, in the panel output and on the page, says it is
+about the lanes the City counts. A holder who means every lane in the
+city is told, beside the verdict, that the unmetered lanes were not
+measured and that nobody publishes a measure of them.
 
-**Predeclared fallback.** If fewer than two of the four named corridors
-have a City counter, the verdict falls to the full set of City automated
-bicycle counters sited on on-street bike lanes rather than on river
-valley or shared-use recreational paths, each reported individually.
-This fallback is fixed here, before any data is read, so that it cannot
-be chosen after the figures are seen. Reviewers state which set carried
-the verdict and why.
+**Which lanes, fixed here.** The verdict set is every City automated
+bicycle counter sited on an on-street bike lane rather than on a river
+valley or shared-use recreational path, each reported individually.
+Reviewers classify each counter from the City's published locations data
+and say how they classified it.
+
+**The named corridors, inside that set.** Holders of this claim named
+four corridors: 119 Avenue; 132 Avenue between 97 Street and 127 Street;
+the Hermitage area lanes; and the Whyte Avenue area. Reviewers say for
+each whether a City counter sits on or adjacent to it, name the counter
+if one does, and report its figures separately as well as inside the
+verdict set. A named corridor with no counter is reported as such. This
+membership is fixed before any data is read and may not be adjusted
+afterwards.
 
 **The measure, fixed here.** For each counter in the verdict set, the
 median daily bicycle count for July of the most recent complete calendar
@@ -299,12 +350,13 @@ because one event day would move a mean.
 carrying little or no traffic if its July median daily bicycle count is
 below 25.
 
-- **Supported** if every corridor in the verdict set is below 25.
-- **Partially supported** if at least one corridor is below 25 and at
+- **Supported** if every counter in the verdict set is below 25.
+- **Partially supported** if at least one counter is below 25 and at
   least one is at or above 25.
-- **Contradicted** if no corridor in the verdict set is below 25.
-- **Not established** if no corridor in either the named set or the
-  fallback set has published counter data covering July 2025.
+- **Contradicted** if no counter in the verdict set is below 25.
+- **Not established** if no counter in the verdict set has published data
+  covering July 2025, or if the City's locations data does not allow
+  on-street lanes to be told from recreational paths.
 
 Alternative cutoff, results required under both: 50 a day in place of
 25. Neither figure comes from an identified pre-existing standard.
@@ -316,7 +368,7 @@ may be changed after the figures are seen.
 
 **Qualifications reported, never carrying the verdict:**
 
-1. For each corridor in the verdict set: the July median, the busiest
+1. For each counter in the verdict set: the July median, the busiest
    single day, the January median, and the calendar-year total.
 2. For each named corridor with no counter, say so plainly. An absence
    of measurement is not a measurement of absence, and the story will
@@ -336,101 +388,156 @@ separate registered question; whether use is growing or falling.
 
 ### Claim 3, id: `one-to-two-percent-of-population-rides`
 
-**Normalized proposition:** Only about 1 to 2 percent of Edmonton's
+**Normalized proposition:** No more than about 2 percent of Edmonton's
 population rides a bicycle.
 
-**Why this reading.** Every wording of this claim divides by the
-population and contrasts riders with "the other 98%". So the claim is a
-participation rate: the share of people who ride at all. It is not a
-share of trips and not a share of commuters; those are claims 5 and 6,
-and they are tested separately against their own sources. Reading this
-one as a trips or commuting figure would be reading someone else's claim.
+**Why this reading, and why it is a ceiling.** Every wording of this
+claim divides by the population and contrasts riders with "the other
+98%". So the claim is a participation rate: the share of people who ride
+at all. It is not a share of trips and not a share of commuters; those
+are claims 5 and 6, tested separately against their own sources. Reading
+this one as a trips or commuting figure would be reading someone else's
+claim.
+
+The word every holder uses is "only", and the point being made is that
+the share is small. So the proposition is a ceiling, not a band. A
+holder who says only 1 to 2 percent ride would not treat a measured 0.4
+percent as refuting them, and a threshold that did so would let the claim
+fail in the direction its holders are arguing for. The thresholds below
+are therefore one-sided.
+
+**The forms this claim covers.** The merge folded eight captured wordings
+into this claim, running from ".001% of the population" through "1%",
+"1-2%", "2%" and "2.3% of the populations usage", plus "500 people using
+the bike lanes 4 months of the year". They are forms of one assertion,
+that the share is small, and the ceiling above is the level they cluster
+on. None is dropped: reviewers report the measured share against every
+one of them, converting "500 people" to a share of Edmonton's population
+on the City's published population figure and showing the arithmetic, so
+a reader can see which circulating figures the record supports and which
+it does not.
 
 **What is counted, fixed here.** The share of Edmonton residents who rode
-a bicycle at all within the reference period of the best available
-published measure. Reviewers name the instrument, its sampling frame,
-its sample size, its reference period and its exact question wording,
-and report the share as published.
+a bicycle at least once in the twelve months before the instrument's
+reference date. Twelve months is fixed here as the primary window,
+before any figure is read, because a day, a month, a season and a year
+give different participation rates and leaving the window to the reviewer
+would leave a verdict-sensitive choice open. A published measure over a
+shorter period is reported as an alternative and cannot carry the
+verdict. Reviewers name the instrument, its sampling frame, its sample
+size, its reference period and its exact question wording, and report the
+share as published.
 
-**Which instrument, and the order of preference, fixed here.** The
-primary source is a probability or representative sample of Edmonton
-residents that asks about any cycling over a stated period. Candidates
-reviewers should look for and rule in or out by name include the
-Edmonton and Region Household Travel Survey and its 2025 successor
-survey, Statistics Canada surveys carrying an Edmonton-level cycling or
-active-transportation estimate, and any City of Edmonton survey with a
-representative sample.
+**Which instrument, fixed here.** The primary source is a probability or
+otherwise representative sample of Edmonton residents that asks whether
+the respondent cycled over a stated period. Reviewers look for and rule
+in or out, by name:
+
+- Statistics Canada's Canadian Community Health Survey, which asks about
+  cycling in the past twelve months and is published for census
+  metropolitan areas including Edmonton in its public use microdata;
+- any other Statistics Canada survey carrying an Edmonton-level cycling
+  or active-transportation participation estimate;
+- the Edmonton and Region Household Travel Survey and its 2025 successor
+  survey, which measure trips rather than participation, and which
+  therefore serve this claim only if the published report states the
+  share of respondents who made a bicycle trip;
+- any City of Edmonton survey drawn from a representative sample.
 
 The City's Insight Community is an opt-in online panel, not a
-representative sample. Any figure from it is reported under that name,
-labelled as a panel result, and may not carry the verdict. If the only
-Edmonton measure available is a panel or another self-selected sample,
-the verdict is Not established and the panel figure is reported as a
-qualification.
+representative sample of Edmontonians. Any figure from it is reported
+under that name, labelled as a panel result, and cannot carry the
+verdict.
+
+**If no representative instrument publishes an Edmonton figure**, the
+verdict is Not established, the panel and self-selected figures are
+reported as qualifications under their own names, and the reviewer states
+what was searched, for what period, as of when. That outcome is not a
+technicality and the brief does not treat it as one: eight people in one
+thread quoted a population share at each other, and finding that no
+published Edmonton measure of it exists tells a reader something they
+cannot get anywhere else. It is a real result, reachable alongside the
+other three, not the result the definition forces.
 
 **Thresholds.** Let P be the published share.
 
-- **Supported** if P is at least 1.0 percent and at most 2.5 percent.
-- **Partially supported** if P is at least 0.5 percent and below 1.0
-  percent, or above 2.5 percent and at most 5.0 percent. The failing
-  part is the stated range; the order of magnitude holds.
-- **Contradicted** if P is below 0.5 percent or above 5.0 percent.
+- **Supported** if P is at most 2.5 percent.
+- **Partially supported** if P is above 2.5 percent and at most 5.0
+  percent. The failing part is the stated ceiling; the share is still a
+  small minority.
+- **Contradicted** if P is above 5.0 percent.
 - **Not established** if no representative published source measures
-  cycling participation among Edmonton residents.
+  cycling participation among Edmonton residents, as above.
 
-Alternative cutoffs, results required under both: Supported from 0.8
-percent to 3.0 percent; Partially supported from 0.4 to below 0.8
-percent, or above 3.0 percent to 6.0 percent; Contradicted outside those.
-Neither set comes from an identified pre-existing standard. The primary
-band takes the claim's own range and allows the quarter-point of slack
-"about" carries; five percent is where a figure is no longer the same
-order as one or two percent. No cutoff may be changed after the figures
-are seen.
+Alternative cutoffs, results required under both: Supported at most 3.0
+percent; Partially supported above 3.0 percent to 6.0 percent;
+Contradicted above 6.0 percent. Neither set comes from an identified
+pre-existing standard. The primary ceiling takes the highest circulating
+form, 2.3 percent, and allows the slack "about" carries; five percent is
+where a figure is no longer the same order as one or two percent. No
+cutoff may be changed after the figures are seen.
 
 **Qualifications reported, never carrying the verdict:**
 
 1. The reference period the instrument used, and the same instrument's
-   figure for a single day if it publishes one. The share of people who
-   ride in a year and the share who ride on a given day are different
+   figure for a shorter period if it publishes one. The share of people
+   who ride in a year and the share who ride on a given day are different
    numbers and the story will print both.
 2. Whether the instrument covers all ages or only adults, and what it
    counts as a bicycle.
 3. Any panel or self-selected figure, under its own name.
 4. The equivalent published figure for the census metropolitan area,
    where the City figure is not published separately.
+5. The measured share set against each circulating form, including the
+   "500 people" and ".001%" wordings, with the arithmetic shown.
 
 **What this claim does not test.** How often riders ride; whether riding
 is growing; whether a minority share justifies or condemns any spending;
-the "500 people" and ".001%" forms, which no instrument measures and
-which are reported as the range of the circulating figures, not tested.
+how many distinct people use a bike lane, which no instrument measures
+and which the brief says so plainly.
 
 ### Claim 4, id: `one-percent-year-round-users`
 
-**Normalized proposition:** Only 1 percent of Edmonton's population uses
-the bike lanes year-round, and fewer than 15 percent use them the rest of
-the year.
+**Normalized proposition:** No more than 1 percent of Edmonton's
+population rides a bicycle year-round, and fewer than 15 percent ride in
+the rest of the year.
 
 **Why this reading.** The holder made one statement with two quantities
 in it, and both are about the same population over the same year. They
 are kept together because separating them would leave two claims neither
 of which is what was said. The schema carries one verdict, so the verdict
 is defined over both parts below, and a Partially supported verdict must
-name which part fails.
+name which part fails. As in claim 3, "only" makes each part a ceiling
+rather than a band, and the thresholds are one-sided.
+
+**Rides, not uses the lanes, and why the proposition says so.** The
+holder wrote "use them year round", where "them" is the bike lanes. No
+published Edmonton instrument measures the distinct residents who use
+bike lanes, in any season. Under check 9 of the framing check, where the
+record cannot answer at the level people ask, the brief tests the nearest
+level it does answer and the proposition names that level in words a
+reader would use. So the proposition says "rides a bicycle". The
+substitution is stated in `limitations` on this claim, it is stated
+beside the verdict on the page, and no finding here may be described as a
+finding about lane use.
 
 **What is counted, fixed here.** From a published measure with a seasonal
-split: (A) the share of Edmonton residents who ride through the winter
-as well as the rest of the year, and (B) the share who ride during the
-non-winter part of the year. The same instrument-quality rule as claim 3
-applies: a representative sample carries the verdict; an opt-in panel is
-reported under its own name and cannot.
+split: (A) the share of Edmonton residents who ride through the winter as
+well as the rest of the year, and (B) the share who ride during the
+non-winter part of the year. The same instrument rule as claim 3 applies:
+a representative sample of Edmonton residents carries the verdict, the
+candidate instruments are the same ones claim 3 names, an opt-in panel is
+reported under its own name and cannot carry it, and if no representative
+instrument publishes a seasonal split for Edmonton the verdict is Not
+established with the search bounded and stated.
 
 Where the instrument reports frequency bands rather than a year-round
 share, reviewers state the band they read as year-round and why, and
 report the adjacent band as well.
 
-**Thresholds.** Part A holds if the published year-round share is at
-least 0.5 percent and at most 2.0 percent. Part B holds if the published
-non-winter share is below 15 percent.
+**Thresholds.** Part A holds if the published year-round share is at most
+2.0 percent. Part B holds if the published non-winter share is below 15
+percent.
 
 - **Supported** if both parts hold.
 - **Partially supported** if exactly one part holds. Name which.
@@ -438,11 +545,11 @@ non-winter share is below 15 percent.
 - **Not established** if no published source measures Edmonton cycling
   participation with a seasonal split.
 
-Alternative cutoff for Part A, results required under both: at least 0.25
-percent and at most 3.0 percent. Part B's threshold is the holder's own
-stated ceiling and is not varied. Neither set comes from an identified
-pre-existing standard. No cutoff may be changed after the figures are
-seen.
+Alternative cutoff for Part A, results required under both: at most 3.0
+percent. Part B's threshold is the holder's own stated ceiling and is not
+varied. Neither figure comes from an identified pre-existing standard;
+2.0 percent is where a measured share stops being a fair report of a
+stated 1 percent. No cutoff may be changed after the figures are seen.
 
 **Qualifications reported, never carrying the verdict:**
 
@@ -455,9 +562,10 @@ seen.
    not people, and may not be substituted for either part.
 3. The instrument's definition of winter or year-round, in its own words.
 
-**What this claim does not test.** Whether winter cycling is practical,
-which is a separate published finding; whether the lanes are cleared;
-whether year-round riding is growing.
+**What this claim does not test.** How many distinct people use a bike
+lane in either season, which no instrument measures; whether winter
+cycling is practical, which is a separate published finding; whether the
+lanes are cleared; whether year-round riding is growing.
 
 ### Claim 5, id: `two-percent-of-trips-by-bike`
 
@@ -709,46 +817,101 @@ arguing about. Sending it to a panel would spend a run to return Not
 established on a question nobody asked.
 
 The wording, its author's pseudonym and this reason stay in the record.
-`register-note.md` in this directory carries the same for the register,
-so the drop is visible on `/considered` rather than silent.
+`register-note.md` in this directory records the drop beside this brief
+and says what the register would need before `/considered` could display
+it, which it cannot today. The story for this question will state that
+one captured claim was dropped and why.
 
 ## Stakes
 
-**The pair that could surprise the "nobody rides them" side.** If the
-counters carry a very large number of trips, then Supported on claim 1
-means the volume argument fails on the City's own instrument, and the
-people saying "that never happened" and "the numbers must be fudged"
-would have to answer the dataset. Contradicted on claim 1 would mean a
-figure being repeated five times in a public thread is wrong, and the
-people repeating it would have to stop. On claim 2, Contradicted would
-mean the lanes people named carry real traffic and the observation
-argument fails where it is checkable; Supported would mean those lanes
-really are close to empty and the counters say so, which is the strongest
-thing the record could say for that side.
+What each verdict would change, for the person making the claim and for
+the person arguing against it. Stated per claim, and stated without any
+view of which way any of them comes out.
 
-**The pair that could surprise the "loads of people ride" side.**
-Supported on claim 6 or claim 5 means the shares are as small as their
-critics say, and the people citing the counter total would have to accept
-that a large raw count and a small share are both true at once.
-Contradicted on either means the small-share figures being quoted are
-wrong and the people quoting them would have to drop them.
+**Claim 1, the counter total.** Supported lets the holder cite a
+published counter total near the figure he posted, and requires the two
+commenters who answered "that never happened" and "the numbers must be
+fudged" to answer the dataset instead. Contradicted requires the holder
+to withdraw a figure he posted five times, and lets the other side say
+the City's own data does not carry it. Partially supported lets each side
+keep the part that held: the order of magnitude for him, the precision
+for them. Not established would mean the City publishes counter data a
+resident cannot total, which the story would report as a fact about the
+open data.
 
-**Both can hold at once, and neither verdict decides the other.** A
-million passages past a counter and a share of trips under one percent
-are not in conflict; they are different measures of different things.
-The stakes for a reader are therefore not only in the eight verdicts but
-in what each number counts. Whoever quotes one of these figures without
-its denominator is telling a reader something the figure does not say,
-and that is true of a figure from either side.
+**Claim 2, the metered lanes.** Supported lets the holders say the City's
+own counters record the lanes as close to empty at the height of the
+riding season, and requires the other side to answer the meters rather
+than the anecdote. Contradicted requires the holders to drop the low-use
+statement for the lanes that are measured, and lets the other side cite
+the meters against it. Partially supported means the metered lanes differ
+from each other, which would tell both sides that "the bike lanes" is not
+one thing. Under every verdict the finding covers the metered lanes only,
+and the story says which named lanes have no counter.
 
-**Every verdict is reachable on every claim.** For each of the eight, the
-instrument is published, the period is fixed, and the threshold is set in
+**Claim 3, the participation share.** Supported lets the holders cite a
+published participation share at or below the ceiling they assert.
+Contradicted requires them to drop it and lets the other side say
+substantially more Edmontonians ride than the figure being repeated.
+Partially supported means the share is larger than stated but still a
+minority. Not established would mean eight people quoted a population
+share that no published Edmonton instrument measures, which is a finding
+about the argument itself.
+
+**Claim 4, the seasonal shares.** Supported lets the holder cite both
+seasonal ceilings. Contradicted requires both to be withdrawn.
+Partially supported names which of the two failed, which matters because
+the two halves of the sentence are doing different work. Not established
+carries the same meaning as on claim 3.
+
+**Claim 5, the share of trips.** Supported lets the holder cite a
+published bicycle share of all trips near 2 percent, and requires those
+answering with a commuting figure to accept that the two measure
+different things. Contradicted requires the 2 percent figure to be
+withdrawn. Partially supported means the figure is in the right region
+and wrong in its value.
+
+**Claim 6, the share of commuters.** Supported lets the holders cite a
+census bicycle commuting share below 1 percent. Contradicted requires
+that figure to be withdrawn and lets the other side cite the census
+against it. Partially supported means the share is very small and the
+stated threshold is still wrong.
+
+**Claim 7, the share commuting by car.** Supported lets the holder cite
+87 percent as a fair report of the census. Contradicted requires the
+figure to be withdrawn. Partially supported means car commuting
+dominates and the number is off.
+
+**Claim 8, trip purpose.** Supported lets the holders say most cycling
+is recreational on the source's own categories, and requires the other
+side to answer it. Contradicted requires the recreational majority claim
+to be dropped and lets the other side cite the purpose breakdown against
+it. Partially supported means recreation is the largest purpose without
+being most of it. Not established would mean nobody publishes what
+Edmonton's bicycle trips are for.
+
+**On every claim,** Partially supported permits only the part that held
+to be repeated, and Not established means neither the claim nor its
+negation was established, not that the claim is false. No verdict here
+decides whether any bike lane, or any spending on one, was worth it.
+
+**Reachability, claim by claim.** On claims 1, 2, 5, 6 and 7 the
+instrument is published, the period is fixed and the threshold is set in
 advance, so Supported, Partially supported and Contradicted are all
-possible before any evidence is read. Not established is a real outcome
-only where a claim's instrument may not exist for Edmonton, which is
-claims 3, 4 and 8; those sections say what would have to be missing, and
-finding it missing would itself tell a reader something, namely that a
-figure many people repeat has no published Edmonton measure behind it.
+possible before any evidence is read. On claims 3, 4 and 8 those three
+are possible if a representative Edmonton instrument publishes the
+measure, and Not established is a genuine fourth outcome if none does;
+each of those sections says exactly what would have to be missing, and
+each says why finding it missing would itself tell a reader something.
+No claim here has a verdict that cannot happen.
+
+**Both kinds of number can hold at once, and neither decides the
+other.** A count of passages past a counter and a share of trips or of
+commuters are different measures of different things, and one being high
+or low implies nothing about the other. That is why the eight claims are
+briefed together and reported separately. Whoever quotes one of these
+figures without its denominator is telling a reader something the figure
+does not say, and that is true of a figure from either side.
 
 **Definition sensitivity.** Each verdict applies under the primary
 instrument, geography and threshold named in its own section. Where a
@@ -792,12 +955,17 @@ numbers:
 Claim 1: the network total for 2026-01-01 to 2026-07-31; the counter
 count and any gaps; the same window for the two preceding years.
 
-Claim 2: per corridor in the verdict set, the July 2025 median daily
-count, the busiest day, the January 2025 median and the 2025 total; the
-list of named corridors with no counter.
+Claim 2: per counter in the verdict set, the July 2025 median daily
+count, the busiest day, the January 2025 median and the 2025 total; how
+many counters exist, how many sit on on-street lanes, and what share of
+the City's on-street bike-lane length they sit on where it is published;
+the list of named corridors with no counter.
 
-Claim 3: the published participation share with its reference period and
-sampling frame; the single-day equivalent where published.
+Claim 3: the published twelve-month participation share with its
+instrument, sampling frame and question wording; any shorter-period
+figure beside it; the measured share set against each circulating form,
+including "500 people" converted to a share of the City's published
+population, with the arithmetic shown.
 
 Claim 4: the year-round share and the non-winter share, each with the
 instrument's own band definitions; the winter share of annual counter
