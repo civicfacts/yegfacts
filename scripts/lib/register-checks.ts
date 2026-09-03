@@ -1,0 +1,276 @@
+/**
+ * The rules `intake/register.yaml` has to satisfy, as a pure function.
+ *
+ * `scripts/validate.ts` owns the reporting and the filesystem; this module owns
+ * the judgement, so the rules can be tested against fixtures instead of against
+ * whatever the repository happens to contain today. Everything the rules need
+ * from outside the file arrives through `RegisterWorld`.
+ *
+ * The rule that matters most is the quote rule. Whole-source intake attributes
+ * verbatim words to a pseudonymous person, and a model that reworded a comment
+ * — dropped a clause, fixed a typo, stitched two sentences — has put words in
+ * that person's mouth. So every `forms[].quote` must be an exact substring of
+ * the comment it cites, after curly quotes and runs of whitespace are
+ * normalised and nothing else.
+ */
+import { isIsoDate } from './repo.ts';
+
+export type Record_ = Record<string, unknown>;
+
+export const CANDIDATE_OUTCOMES = [
+  'GO',
+  'PARK',
+  'NO',
+  'variation',
+  'not-a-claim',
+  'not-answered',
+  'not-triaged',
+  'pre-triage',
+] as const;
+
+export const CANDIDATE_ORIGINS = ['captured', 'supplied', 'editor'] as const;
+
+export const SOURCE_KINDS = ['facebook-post', 'article', 'discussion', 'video'] as const;
+
+/**
+ * Outcomes that owe the reader a sentence saying why. `variation` and
+ * `not-a-claim` are on the list for the same reason `PARK` and `NO` are —
+ * `/considered` publishes them — and for one more: a withheld named-individual
+ * entry prints its reason where its proposition would have gone, so the reason
+ * has to stand on its own.
+ */
+export const OUTCOMES_NEEDING_REASON = [
+  'PARK',
+  'NO',
+  'variation',
+  'not-a-claim',
+  'not-answered',
+] as const;
+
+/** What the checks need to know about the world outside the register file. */
+export interface RegisterWorld {
+  /** Does this repo-relative path exist at all? */
+  exists(path: string): boolean;
+  /** Does it exist and is it a directory? */
+  isDirectory(path: string): boolean;
+  /**
+   * The capture's comments by index, or undefined when the file is missing or
+   * unreadable — the missing-directory rule reports that, so the quote rule
+   * stays quiet rather than reporting the same defect a second time.
+   */
+  comments(capture: string): Map<number, string> | undefined;
+  /** The ids of claims that have been published. */
+  claimIds: ReadonlySet<string>;
+}
+
+/**
+ * Curly quotes and runs of whitespace normalised away; nothing else. A dropped
+ * word or a corrected typo must still fail, which is the whole point.
+ */
+export function normaliseQuote(value: string): string {
+  return value
+    .replace(/[‘’]/g, "'")
+    .replace(/[“”]/g, '"')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/** `comments.jsonl` as a map of index to text. Blank lines are skipped. */
+export function readComments(jsonl: string): Map<number, string> {
+  const comments = new Map<number, string>();
+  for (const line of jsonl.split('\n')) {
+    if (line.trim() === '') continue;
+    const row = JSON.parse(line) as { index?: unknown; text?: unknown };
+    if (typeof row.index === 'number' && typeof row.text === 'string') {
+      comments.set(row.index, row.text);
+    }
+  }
+  return comments;
+}
+
+export interface Register {
+  candidates: unknown;
+  sources?: unknown;
+}
+
+const isRecord = (value: unknown): value is Record_ =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+
+/**
+ * Every problem with the register, as sentences. Empty means it validates.
+ * Order is the file's own, so a diff of the output reads down the file.
+ */
+export function registerProblems(register: Register, world: RegisterWorld): string[] {
+  const problems: string[] = [];
+  const fail = (message: string) => problems.push(message);
+
+  const sources = Array.isArray(register.sources) ? register.sources : [];
+  const candidates = Array.isArray(register.candidates) ? register.candidates : [];
+
+  // -------------------------------------------------------------------------
+  // Sources
+  // -------------------------------------------------------------------------
+  const sourceById = new Map<string, Record_>();
+  for (const [index, source] of sources.entries()) {
+    if (!isRecord(source)) {
+      fail(`source ${index + 1} must be a mapping`);
+      continue;
+    }
+    const id = typeof source.id === 'string' ? source.id : '';
+    const where = id === '' ? `source ${index + 1}` : `source ${id}`;
+    if (id === '') fail(`${where}: needs an id`);
+    else if (sourceById.has(id)) fail(`source id "${id}" appears more than once`);
+    else sourceById.set(id, source);
+
+    if (!SOURCE_KINDS.includes(source.kind as (typeof SOURCE_KINDS)[number])) {
+      fail(`${where} kind: "${String(source.kind)}" is not one of ${SOURCE_KINDS.join(', ')}`);
+    }
+    if (!isIsoDate(asDate(source.captured))) {
+      fail(`${where} captured: "${String(source.captured)}" is not an ISO-8601 date`);
+    }
+    // The capture is the evidence the quotes are checked against and the run is
+    // the working behind the dispositions; a path that does not resolve makes
+    // both unauditable.
+    for (const field of ['capture', 'run'] as const) {
+      const value = source[field];
+      if (typeof value !== 'string' || value.trim() === '') {
+        fail(`${where}: ${field} must be a repo-relative directory`);
+      } else if (!world.isDirectory(value)) {
+        fail(`${where}: ${field} directory "${value}" does not exist`);
+      }
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Candidates
+  // -------------------------------------------------------------------------
+  const ids = new Set<string>();
+  for (const candidate of candidates) {
+    if (isRecord(candidate) && typeof candidate.id === 'string') ids.add(candidate.id);
+  }
+
+  const commentsFor = new Map<string, Map<number, string> | undefined>();
+
+  const seen = new Set<string>();
+  for (const [index, candidate] of candidates.entries()) {
+    if (!isRecord(candidate)) {
+      fail(`candidate ${index + 1} must be a mapping`);
+      continue;
+    }
+    const id = typeof candidate.id === 'string' ? candidate.id : '';
+    const where = id === '' ? `candidate ${index + 1}` : id;
+    if (id === '') fail(`${where}: needs an id`);
+    else if (seen.has(id)) fail(`id "${id}" appears more than once`);
+    seen.add(id);
+
+    const outcome = String(candidate.outcome);
+    if (!CANDIDATE_OUTCOMES.includes(outcome as (typeof CANDIDATE_OUTCOMES)[number])) {
+      fail(`${where} outcome: "${outcome}" is not one of ${CANDIDATE_OUTCOMES.join(', ')}`);
+    }
+    if (!CANDIDATE_ORIGINS.includes(candidate.origin as (typeof CANDIDATE_ORIGINS)[number])) {
+      fail(`${where} origin: "${String(candidate.origin)}" is not one of ${CANDIDATE_ORIGINS.join(', ')}`);
+    }
+    if (!isIsoDate(asDate(candidate.recorded))) {
+      fail(`${where} recorded: "${String(candidate.recorded)}" is not an ISO-8601 date`);
+    }
+
+    if (OUTCOMES_NEEDING_REASON.includes(outcome as (typeof OUTCOMES_NEEDING_REASON)[number])) {
+      if (typeof candidate.reason !== 'string' || candidate.reason.trim() === '') {
+        fail(`${where}: outcome ${outcome} needs a public reason sentence`);
+      }
+    }
+
+    // Both paths are rendered at `/considered/<id>`, so a path that does not
+    // resolve is a page that silently loses a section.
+    for (const field of ['triage', 'intake'] as const) {
+      const value = candidate[field];
+      if (value === undefined) continue;
+      if (typeof value !== 'string' || value.trim() === '') {
+        fail(`${where}: ${field} must be a repo-relative path`);
+      } else if (!world.exists(value)) {
+        fail(`${where}: ${field} record "${value}" does not exist`);
+      }
+    }
+
+    // A variation says "this was checked over there"; with nothing to point at,
+    // it says the claim was dropped and does not say where it went.
+    if (outcome === 'variation' && candidate.variation_of === undefined) {
+      fail(`${where}: outcome variation must name the entry it merged into (variation_of)`);
+    }
+    if (candidate.variation_of !== undefined) {
+      const target = candidate.variation_of;
+      if (typeof target !== 'string' || target.trim() === '') {
+        fail(`${where}: variation_of must be a register id or a published claim id`);
+      } else if (target === id) {
+        fail(`${where}: variation_of cannot point at itself`);
+      } else if (!ids.has(target) && !world.claimIds.has(target)) {
+        fail(`${where}: variation_of "${target}" is neither a register id nor a published claim id`);
+      }
+    }
+
+    // ----- the source, and the quotes it has to back up ---------------------
+    const source = candidate.source;
+    let comments: Map<number, string> | undefined;
+    if (source !== undefined) {
+      if (typeof source !== 'string' || !sourceById.has(source)) {
+        fail(`${where}: source "${String(source)}" is not in the sources list`);
+      } else {
+        if (!commentsFor.has(source)) {
+          const capture = sourceById.get(source)!.capture;
+          commentsFor.set(
+            source,
+            typeof capture === 'string' ? world.comments(capture) : undefined,
+          );
+        }
+        comments = commentsFor.get(source);
+      }
+    }
+
+    const forms = candidate.forms;
+    if (forms !== undefined) {
+      if (!Array.isArray(forms)) {
+        fail(`${where}: forms must be a list`);
+      } else {
+        if (source === undefined) {
+          fail(`${where}: forms are quotes out of a capture, so the entry needs a source`);
+        }
+        for (const [position, form] of forms.entries()) {
+          const at = `${where} forms[${position}]`;
+          if (!isRecord(form)) {
+            fail(`${at}: must be a mapping of commenter, quote and comment`);
+            continue;
+          }
+          if (typeof form.commenter !== 'string' || form.commenter.trim() === '') {
+            fail(`${at}: needs the commenter's pseudonym`);
+          }
+          if (typeof form.quote !== 'string' || form.quote.trim() === '') {
+            fail(`${at}: needs the quote`);
+            continue;
+          }
+          if (!Number.isInteger(form.comment)) {
+            fail(`${at}: comment must be the integer index of the comment in the capture`);
+            continue;
+          }
+          if (comments === undefined) continue;
+          const cited = comments.get(form.comment as number);
+          if (cited === undefined) {
+            fail(`${at}: comment ${String(form.comment)} is not in the capture`);
+            continue;
+          }
+          if (!normaliseQuote(cited).includes(normaliseQuote(form.quote))) {
+            fail(
+              `${at}: the quote is not in comment ${String(form.comment)}: "${form.quote.slice(0, 60)}"`,
+            );
+          }
+        }
+      }
+    }
+  }
+
+  return problems;
+}
+
+/** YAML turns a bare `2026-08-31` into a Date; both forms are authored. */
+function asDate(value: unknown): unknown {
+  return value instanceof Date ? value.toISOString().slice(0, 10) : value;
+}

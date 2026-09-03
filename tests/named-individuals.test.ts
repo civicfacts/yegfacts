@@ -1,0 +1,115 @@
+/**
+ * Named individuals (v1 excludes right-of-reply, docs/DESIGN.md §2).
+ *
+ * Some captured claims name a real person and allege wrongdoing. Checked and
+ * published, that is a finding. Parked, declined or merged, it is an unanswered
+ * allegation about a named person with no process behind it, so the site does
+ * not print the proposition or the words it was said in — the register may hold
+ * them, the site may not.
+ *
+ * The rule is enforced where the register enters the site rather than on the
+ * pages, so what a page never receives it cannot leak. These tests pin that: the
+ * redaction itself, the live register, and the structural fact that no page or
+ * component reaches around `src/lib/intake.ts` to read the file directly.
+ */
+import { readFileSync, readdirSync } from 'node:fs';
+import path from 'node:path';
+import { describe, expect, it } from 'vitest';
+import { REPO_ROOT } from '../scripts/lib/repo.ts';
+import { candidateRegister, redact, withholdsWording, type Candidate } from '../src/lib/intake.ts';
+
+function entry(overrides: Partial<Candidate> = {}): Candidate {
+  return {
+    id: 'named-individual-allegation',
+    recorded: '2026-09-02',
+    origin: 'captured',
+    wording: 'Councillor Someone took a bribe from a developer.',
+    proposition: 'Councillor Someone accepted a payment from a developer.',
+    outcome: 'PARK',
+    names_person: true,
+    reason: 'An allegation against a named individual, which this site has no process to put to them.',
+    forms: [{ commenter: 'Snowy Hare F.', quote: 'took a bribe', comment: 12 }],
+    ...overrides,
+  };
+}
+
+describe('withholdsWording', () => {
+  for (const outcome of ['PARK', 'NO', 'variation', 'not-a-claim', 'pre-triage'] as const) {
+    it(`withholds a named-individual claim on ${outcome}`, () => {
+      expect(withholdsWording(entry({ outcome }))).toBe(true);
+    });
+  }
+
+  it('does not withhold once the claim is going ahead', () => {
+    expect(withholdsWording(entry({ outcome: 'GO' }))).toBe(false);
+  });
+
+  it('does not withhold a claim that names nobody', () => {
+    expect(withholdsWording(entry({ names_person: false }))).toBe(false);
+  });
+});
+
+describe('redact', () => {
+  it('replaces the proposition and the wording with the public reason', () => {
+    const redacted = redact(entry());
+    expect(redacted.proposition).toBe(entry().reason);
+    expect(redacted.wording).toBe(entry().reason);
+    expect(redacted.withheld).toBe(true);
+  });
+
+  it('drops every captured wording, so no quote survives to be rendered', () => {
+    expect(redact(entry()).forms).toEqual([]);
+  });
+
+  it('leaves nothing of the allegation anywhere in the entry', () => {
+    const redacted = redact(entry());
+    expect(JSON.stringify(redacted)).not.toContain('bribe');
+  });
+
+  it('has a placeholder even when the entry somehow carries no reason', () => {
+    const redacted = redact(entry({ reason: undefined }));
+    expect(redacted.proposition).not.toContain('bribe');
+    expect(redacted.proposition).toBeTruthy();
+  });
+
+  it('passes a GO entry through untouched, allegation and quotes included', () => {
+    const going = entry({ outcome: 'GO' });
+    expect(redact(going)).toBe(going);
+  });
+
+  it('passes an entry that names nobody through untouched', () => {
+    const ordinary = entry({ names_person: false });
+    expect(redact(ordinary)).toBe(ordinary);
+  });
+});
+
+describe('the register as the site receives it', () => {
+  it('carries no proposition or quote for a withheld entry', () => {
+    for (const candidate of candidateRegister()) {
+      if (!candidate.names_person || candidate.outcome === 'GO') continue;
+      expect(candidate.withheld).toBe(true);
+      expect(candidate.forms ?? []).toEqual([]);
+      expect(candidate.proposition).toBe(candidate.reason);
+      expect(candidate.wording).toBe(candidate.reason);
+    }
+  });
+});
+
+/** Every `.astro` and `.ts` file under a directory, recursively. */
+function sourceFiles(dir: string): string[] {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((item) => {
+    const full = path.join(dir, item.name);
+    if (item.isDirectory()) return sourceFiles(full);
+    return /\.(astro|ts)$/.test(item.name) ? [full] : [];
+  });
+}
+
+describe('the register has one way in', () => {
+  it('is never read by a page or a component, only through the loader', () => {
+    const readers = ['pages', 'components']
+      .flatMap((dir) => sourceFiles(path.join(REPO_ROOT, 'src', dir)))
+      .filter((file) => readFileSync(file, 'utf8').includes('intake/register.yaml'))
+      .map((file) => path.relative(REPO_ROOT, file));
+    expect(readers).toEqual([]);
+  });
+});

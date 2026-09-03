@@ -18,8 +18,10 @@
 # origin: captured (a post we hold with a URL or screenshot) |
 #         supplied (wording passed to us by a person, provenance not
 #         captured) | editor (a hypothesis the editor or founder proposed)
-# outcome: GO | PARK | NO | not-triaged | pre-triage (checked before
-#          v1.12 existed)
+# outcome: GO | PARK | NO | variation (the same claim as another entry, in
+#          other words; requires variation_of) | not-a-claim (opinion,
+#          prediction or value judgement, so never sent to triage) |
+#          not-triaged | pre-triage (checked before v1.12 existed)
 #
 # reason:  one sentence, written for readers, saying why the outcome is what
 #          it is. Required on PARK and NO — /considered publishes it, so a
@@ -29,6 +31,57 @@
 #          one exists. Validated to exist on disk; /considered links it.
 # story:   slug of the story that carries the claim, when one does. Linked as
 #          /facts/<slug> only if that story is published.
+#
+# Whole-source intake
+# -------------------
+#
+# A source is where claims came from: one post, article, discussion or video,
+# captured whole with every comment on it, read end to end by three extractor
+# seats and merged by a strong model into propositions. Nothing is picked out
+# and nothing is left out, so every proposition the merge produced is registered
+# below with its disposition, and /considered publishes the lot.
+#
+# A candidate extracted from a source carries, in addition to the fields above:
+#
+# source:        the id of the `sources` entry it came from.
+# proposition:   what would have to be true, in one plain sentence. When it is
+#                present this is what the site shows as the claim, and `wording`
+#                stays as the representative captured quote.
+# side:          for | against | neither — which side of the source's argument
+#                the proposition serves.
+# commenters:    how many distinct people asserted it in the source.
+# seats:         which extractor seats found it.
+# forms:         every captured wording, each {commenter, quote, comment}.
+#                `commenter` is the source's stable pseudonym, `quote` is the
+#                verbatim words, `comment` is the index in the capture. The
+#                validator checks every quote is an exact substring of the
+#                comment it cites, so a quote attributed to a person is that
+#                person's words.
+# names_person:  the proposition names an identifiable individual. v1 has no
+#                right-of-reply process, so unless the outcome is GO the site
+#                prints the `reason` in place of the proposition and prints no
+#                forms at all. The register may hold them; the site may not.
+# variation_of:  register id or published claim id this is the same claim as.
+#
+# Entries are generated from a completed run rather than typed:
+#
+#   npx tsx scripts/intake-register.ts reviews/intake/<slug>
+
+sources:
+  - id: yegscoop-2026-08-26
+    kind: facebook-post
+    url: "https://www.facebook.com/yegscoop/posts/pfbid02aKkokbtnxq3dsDhfWgbGsEamfiNRUncwnff4ES8N11qVZBg5W4aDxZaPF3frYymVl"
+    title: "Yegscoop post on council's 2026-08-26 bike lane decision"
+    captured: "2026-09-02"
+    captured_by: founder
+    comments: 621
+    commenters: 389
+    capture: intake/captures/yegscoop-2026-08-26
+    run: reviews/intake/yegscoop-2026-08-26
+    extracted_by: [haiku, luna, flash]
+    merged_by: opus
+    claims_found: 230
+    propositions: 0
 
 candidates:
   - id: infill-teardown-350k-1m
