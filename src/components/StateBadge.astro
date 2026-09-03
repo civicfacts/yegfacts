@@ -1,0 +1,34 @@
+---
+import { QUESTION_STATES, triageBadge, triageFill } from '../lib/intake';
+
+/**
+ * What state a question is in, as a tile.
+ *
+ * Two vocabularies, drawn apart on purpose. A triage answer is filled in its own
+ * colour, the way a finding is, so the decisions read down one column. A
+ * publication state is outlined instead: it says what a reader can see, not what
+ * anybody judged, and a filled tile beside a filled finding badge would invite
+ * the two to be read as the same kind of thing.
+ */
+interface Props {
+  /** One of the ids in `QUESTION_STATES`. */
+  state: string;
+}
+
+const { state } = Astro.props;
+
+const publication = QUESTION_STATES.find(
+  (entry) => entry.id === state && (entry.id === 'published' || entry.id === 'withdrawn'),
+);
+
+const tile =
+  'inline-block px-[10px] py-[6px] font-sans text-[0.6875rem] leading-[1.2] font-bold tracking-[0.08em] whitespace-nowrap uppercase';
+---
+
+{
+  publication ? (
+    <span class:list={[tile, 'border border-ink text-ink']}>{publication.label}</span>
+  ) : (
+    <span class:list={[tile, triageFill(state)]}>{triageBadge(state)}</span>
+  )
+}

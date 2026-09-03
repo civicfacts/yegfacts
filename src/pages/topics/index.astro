@@ -1,0 +1,79 @@
+---
+import Base from '../../layouts/Base.astro';
+import { orderedTopics } from '../../lib/content';
+import { questionRows } from '../../lib/questions';
+
+/**
+ * `/topics` — the six labels, and how many questions are filed under each.
+ *
+ * A topic is a label with a page listing its questions and nothing else
+ * (D-0029). Broad and narrow are the same kind of thing at different grain, and
+ * a topic carries no conclusions: this page names them, says what each covers,
+ * and counts. It does not say what any of them found, because the finding
+ * belongs to a claim and a count of claims is not a finding about a subject.
+ *
+ * A question is filed under the topics of the article it produced, so a
+ * question nobody has written up yet is not on a topic page. That is the honest
+ * shape of the record rather than a gap to be filled by guessing: the register
+ * files questions under the source they came from, and the topic arrives with
+ * the article.
+ */
+const topics = await orderedTopics();
+const rows = await questionRows();
+
+const counts = topics.map((topic) => ({
+  ...topic.data,
+  count: rows.filter((row) => row.topics.includes(topic.data.slug)).length,
+}));
+
+const unfiled = rows.filter((row) => row.topics.length === 0).length;
+
+const topicName = 'font-display text-[1.375rem] leading-snug font-semibold';
+---
+
+<Base
+  title="Topics"
+  description="The six subjects YEGFacts files its questions under, each with the questions registered beneath it."
+>
+  <header class="border-b border-rule pb-6">
+    <h1 class="text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
+      Topics
+    </h1>
+    <p class="mt-4 max-w-prose text-base leading-relaxed">
+      A topic is a label, nothing more. Each one has a page listing the questions filed under it, so
+      a reader can find the argument they came for; none of them summarises what its questions
+      found, because a finding belongs to a single checked claim and a subject heading is two levels
+      above one.
+    </p>
+    <p class="mt-4 max-w-prose text-base leading-relaxed">
+      A question takes its topics from the article it produced, so a question we have not written up
+      yet is not filed under one. Every question is on{' '}
+      <a href="/questions" class="link">the register</a> whatever its state.
+      {unfiled > 0 && ` ${unfiled} of them are waiting on a check and carry no topic yet.`}
+    </p>
+  </header>
+
+  <ul class="mt-10 divide-y divide-rule border-t border-rule">
+    {
+      counts.map((topic) => (
+        <li class="py-5">
+          <div class="flex flex-wrap items-baseline justify-between gap-x-5 gap-y-1">
+            <h2 class={topicName}>
+              <a href={`/topics/${topic.slug}`} class="link">
+                {topic.name}
+              </a>
+            </h2>
+            <span class="text-[0.875rem] whitespace-nowrap text-muted tabular">
+              {topic.count === 0
+                ? 'no questions yet'
+                : `${topic.count} ${topic.count === 1 ? 'question' : 'questions'}`}
+            </span>
+          </div>
+          <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+            {topic.overview}
+          </p>
+        </li>
+      ))
+    }
+  </ul>
+</Base>

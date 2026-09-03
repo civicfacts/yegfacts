@@ -4,23 +4,21 @@ import {
   LIFECYCLE_LABELS,
   PUBLICATION_LABELS,
   claimText,
-  discussedBy,
+  commentsOn,
   provenance,
+  saidIn,
   reportAnchor,
   sourceKind,
-  storyLinkLabel,
   triageHeading,
-  type Claim,
-  type Question,
-  type Source,
 } from '../lib/intake';
+import type { QuestionRow } from '../lib/questions';
 import { repoFile } from '../lib/site';
 
 type Report = CollectionEntry<'candidateReports'>;
 
 /**
- * One question, published: what is being asked, where the work has got to, and
- * every claim checked under it in the words it was said in.
+ * One question that has not been written up: what is being asked, where the
+ * work has got to, and every claim under it in the words it was said in.
  *
  * This is the page the decision belongs to. A claim's page can only point up
  * here, because the triage read the question, the brief will ask the question,
@@ -36,17 +34,12 @@ type Report = CollectionEntry<'candidateReports'>;
  * and the records behind the decision instead.
  */
 interface Props {
-  question: Question;
-  claims: Claim[];
-  source: Source | null;
-  /** Claims for the source's argument and claims against it, under one question. */
-  twoSided: boolean;
+  row: QuestionRow;
   reports: Array<{ label: string; path: string; entry: Report }>;
-  /** Whether the story this question produced has a page to link to. */
-  storyPublished: boolean;
 }
 
-const { question, claims, source, twoSided, reports, storyPublished } = Astro.props;
+const { row, reports } = Astro.props;
+const { question, source, registered: claims } = row;
 
 const rendered = await Promise.all(
   reports.map(async (report) => ({
@@ -60,12 +53,29 @@ const rendered = await Promise.all(
 );
 
 const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
+
+/**
+ * The three state fields, each under the question it answers.
+ *
+ * They are printed as three rows rather than folded into one word because that
+ * is the whole of D-0029's state model: how far the work has got, whether it is
+ * worth doing, and whether anybody can read it are different facts, and one
+ * field standing for all three is what drifted.
+ */
+const states = [
+  { term: 'How far the work has got', value: LIFECYCLE_LABELS[question.lifecycle] ?? question.lifecycle },
+  { term: 'Whether it is worth checking', value: triageHeading(question.triage) },
+  {
+    term: 'What a reader can see',
+    value: PUBLICATION_LABELS[question.publication] ?? question.publication,
+  },
+];
 ---
 
 <article>
   <header class="border-b border-rule pb-7">
     <div class="text-xs text-muted" data-crossref>
-      <a href="/considered" class="link">Every claim we've considered</a>
+      <a href="/questions" class="link">Every question we've considered</a>
     </div>
 
     <h1
@@ -74,15 +84,13 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
       {question.question}
     </h1>
 
-    {/* Straight out of the register: when it was recorded, how far the work has
-        got, how many people discussed it, and how many claims sit under it. Who
-        argued which way is on the claims below, where a reader can see which
-        claim each person was discussing. */}
+    {/* Straight out of the register: when it was recorded, how many people
+        discussed it, and how many claims sit under it. Who argued which way is
+        on the claims below, where a reader can see which claim each person was
+        discussing. */}
     <p class={`mt-4 ${label}`} data-record>
       <time datetime={question.recorded}>{question.recorded}</time>
-      {` · ${LIFECYCLE_LABELS[question.lifecycle] ?? question.lifecycle}`}
-      {` · ${PUBLICATION_LABELS[question.publication] ?? question.publication}`}
-      {question.accounts && ` · ${discussedBy(question.accounts.total)}`}
+      {row.comments > 0 && ` · ${saidIn(row.comments)}`}
       {claims.length > 0 && ` · ${claims.length} ${claims.length === 1 ? 'claim' : 'claims'}`}
     </p>
 
@@ -109,8 +117,8 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
     }
   </header>
 
-  <section id="outcome" class="mt-10 scroll-mt-6">
-    {/* Triage is a heading here, not a badge: this page is the decision, not a
+  <section id="state" class="mt-10 scroll-mt-6">
+    {/* Triage is a heading here, not a tile: this page is the decision, not a
         row in a column of them. */}
     <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
       {triageHeading(question.triage)}
@@ -127,6 +135,19 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
       )
     }
 
+    <dl class="mt-6 divide-y divide-rule border-y border-rule">
+      {
+        states.map((state) => (
+          <div class="py-2.5 sm:flex sm:gap-5">
+            <dt class:list={[label, 'sm:w-64 sm:shrink-0']}>{state.term}</dt>
+            <dd class="mt-0.5 text-[0.9375rem] leading-relaxed sm:mt-0" data-record>
+              {state.value}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+
     {
       /*
         Why these claims are one question, in the register's own words. It is
@@ -134,7 +155,7 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
         fact-checker could quietly drop the inconvenient half of an argument.
       */
       question.grouping_note && (
-        <p class="mt-4 max-w-prose text-[0.9375rem] leading-relaxed text-muted" data-record>
+        <p class="mt-5 max-w-prose text-[0.9375rem] leading-relaxed text-muted" data-record>
           {question.grouping_note}
         </p>
       )
@@ -147,7 +168,7 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
         print on the index row: a question both camps are asking is this site's
         best evidence that it is not picking the claims that suit it.
       */
-      twoSided && (
+      row.twoSided && (
         <p class="mt-4 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
           People arguing in both directions raised this question, and every claim they made about it
           is checked, whichever way it points.
@@ -155,18 +176,8 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
       )
     }
 
-    {
-      question.story && storyPublished && (
-        <p class="mt-4 text-sm" data-crossref>
-          <a href={`/facts/${question.story}`} class="link">
-            {storyLinkLabel(question)}
-          </a>
-        </p>
-      )
-    }
-
     <p class="mt-5 text-sm" data-crossref>
-      <a href="/considered#outcomes" class="link">What the outcomes mean</a>
+      <a href="/questions#states" class="link">What the states mean</a>
     </p>
   </section>
 
@@ -176,7 +187,7 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
         <h2 class="section-heading">Where it came from</h2>
         <p class="mt-3 max-w-prose text-[1.0625rem] leading-relaxed text-pretty">
           Taken from{' '}
-          <a href={`/considered#${source.id}`} class="link">
+          <a href={`/sources/${source.id}`} class="link">
             {source.title}
           </a>
           , read end to end. Every factual claim in it was extracted and merged, so this question is
@@ -211,17 +222,17 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
           {claims.map((claim) => (
             <li id={claim.id} class="scroll-mt-6 border-t border-rule py-6">
               <h3 class="font-display text-[1.0625rem] leading-snug font-semibold text-pretty">
-                <a href={`/considered/${claim.id}`} class="link" data-record>
+                <a href={`/claims/${claim.id}`} class="link" data-record>
                   {claimText(claim)}
                 </a>
               </h3>
 
-              {/* A withheld claim has no count: the people who discussed it
-                  describe a claim this row is refusing to show, so the redaction
-                  keeps the number off the site along with the wording. */}
-              {claim.accounts !== undefined && (
+              {/* A withheld claim has no count: its wordings are what the count
+                  is of, and the redaction emptied them, so no number is left to
+                  print. */}
+              {commentsOn(claim) > 0 && (
                 <p class={`mt-1.5 ${label}`} data-record>
-                  {discussedBy(claim.accounts)}
+                  {saidIn(commentsOn(claim))}
                 </p>
               )}
 
@@ -268,7 +279,7 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
           >
             <p class="text-sm leading-relaxed text-forest">
               What follows is the triage read, written by a model from another vendor and published
-              as written. The site's decision is the outcome above.
+              as written. The site's decision is the state above.
             </p>
             {(reader || run) && (
               <p class="mt-1 text-xs text-muted" data-record>
@@ -296,26 +307,22 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
     ))
   }
 
-  {
-    reports.length > 0 && (
-      <footer class="mt-14 border-t border-rule pt-5">
-        {/*
-          Each record names what it is: the site footer already carries a
-          "Source on GitHub" pointing at the repository, and a page with both an
-          intake record and a triage report would otherwise offer two links with
-          the same words and different destinations.
-        */}
-        <p class="flex flex-wrap gap-x-5 gap-y-1 text-sm" data-crossref>
-          <a href="/considered" class="link">
-            Every claim we've considered
+  <footer class="mt-14 border-t border-rule pt-5">
+    {/*
+      Each record names what it is: the site footer already carries a "Source on
+      GitHub" pointing at the repository, and a page with both an intake record
+      and a triage report would otherwise offer two links with the same words
+      and different destinations.
+    */}
+    <p class="flex flex-wrap gap-x-5 gap-y-1 text-sm" data-crossref>
+      <a href="/questions" class="link">Every question we've considered</a>
+      {
+        reports.map((report) => (
+          <a href={repoFile(report.path)} rel="noopener" class="link">
+            {report.label} on GitHub
           </a>
-          {reports.map((report) => (
-            <a href={repoFile(report.path)} rel="noopener" class="link">
-              {report.label} on GitHub
-            </a>
-          ))}
-        </p>
-      </footer>
-    )
-  }
+        ))
+      }
+    </p>
+  </footer>
 </article>

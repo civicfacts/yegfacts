@@ -1,0 +1,189 @@
+---
+import Base from '../../layouts/Base.astro';
+import ClaimEntry from '../../components/ClaimEntry.astro';
+import ClaimFinding from '../../components/ClaimFinding.astro';
+import PendingBanner from '../../components/PendingBanner.astro';
+import {
+  allPublicClaims,
+  allPublicStories,
+  firstPublished,
+  type Claim as PublishedClaim,
+  type Story,
+} from '../../lib/content';
+import {
+  claimText,
+  claimsWithPages,
+  questionRegister,
+  sourceRegister,
+  type Claim as RegisterClaim,
+  type Question,
+  type Source,
+} from '../../lib/intake';
+import { SITE } from '../../lib/site';
+import { toc } from '../../lib/toc';
+
+/**
+ * `/claims/<id>` — one claim, answering on its own.
+ *
+ * THE UNIT OF JUDGEMENT (D-0029). Two kinds of claim share the route and the id
+ * space, because to a reader they are the same thing at different stages: one
+ * has been through the panel and carries a finding, the other has not and says
+ * so. Neither makes the reader click up to the question to find out which.
+ *
+ * The register's ids and the published claims' ids are checked for collisions
+ * by `scripts/validate.ts`, since one address cannot serve two pages.
+ */
+export async function getStaticPaths() {
+  const stories = new Map((await allPublicStories()).map((story) => [story.id, story]));
+  const questions = new Map(questionRegister().map((question) => [question.id, question]));
+  const sources = new Map(sourceRegister().map((source) => [source.id, source]));
+
+  /** The claims that came back with a finding. */
+  const findings = (await allPublicClaims())
+    .map((claim) => ({ claim, story: stories.get(claim.data.story) }))
+    .filter(
+      (row): row is { claim: PublishedClaim; story: Story } => row.story !== undefined,
+    )
+    .map(({ claim, story }) => ({
+      params: { id: claim.data.id },
+      props: {
+        claim,
+        story,
+        // A published claim's question is its story's slug: D-0029 gave each
+        // published story its question under the slug it was published with.
+        question: questions.get(story.id) ?? null,
+        registered: null,
+        source: null,
+      },
+    }));
+
+  /** The claims from the register, which carry no finding of their own. */
+  const registered = claimsWithPages().map((claim) => ({
+    params: { id: claim.id },
+    props: {
+      claim: null,
+      story: null,
+      question: questions.get(claim.question) ?? null,
+      registered: claim,
+      source: claim.source ? (sources.get(claim.source) ?? null) : null,
+    },
+  }));
+
+  return [...findings, ...registered];
+}
+
+interface Props {
+  /** Set on a checked claim's page; null on a register entry's. */
+  claim: PublishedClaim | null;
+  story: Story | null;
+  question: Question | null;
+  registered: RegisterClaim | null;
+  source: Source | null;
+}
+
+const { claim, story, question, registered, source } = Astro.props;
+
+const checked = claim !== null && story !== null && question !== null;
+const pageUrl = new URL(
+  `/claims/${checked ? claim.data.id : registered!.id}`,
+  Astro.site ?? SITE.url,
+).href;
+
+const withdrawn = story?.data.withdrawn;
+const published = story ? firstPublished(story) : undefined;
+
+const sections = checked
+  ? toc([
+      claim.data.key_facts.length > 0 && { id: 'facts', label: 'What it rests on' },
+      (claim.data.limitations.length > 0 ||
+        claim.data.unknowns.length > 0 ||
+        claim.data.missing_evidence.length > 0) && {
+        id: 'limits',
+        label: 'What this does not settle',
+      },
+      claim.data.comparisons.length > 0 && { id: 'comparisons', label: 'Comparable cities' },
+      claim.data.register_claims.length > 0 && { id: 'said', label: 'How it was said' },
+      { id: 'question', label: 'The question it answers' },
+    ])
+  : toc([
+      { id: 'finding', label: 'No finding yet' },
+      { id: 'question', label: 'The question' },
+      source && { id: 'source', label: 'Where it came from' },
+      (registered!.variations ?? []).length > 0 && { id: 'said', label: 'How it was said' },
+    ]);
+
+/**
+ * `ClaimReview` for a claim that is both through the panel and still standing
+ * as a finding: a `pending-review` claim has no verdict yet, and a withdrawn one
+ * has stopped asserting the one it had.
+ *
+ * It lives here rather than on the question's page because the claim is the
+ * unit of judgement and this is its address: one review, one URL, and the URL a
+ * search engine is offered is the page that answers on its own.
+ *
+ * Two omissions are deliberate. There is no numeric `ratingValue` — the comment
+ * on `PANEL_AGREEMENT_LEVELS` in `src/lib/vocabulary.ts` is the reason: the
+ * method never computes a probability that a claim is true, and a number here
+ * would publish one. And there is no `itemReviewed`: the "Common forms" cards
+ * are composite paraphrases we wrote, with no author to name.
+ */
+const claimReview =
+  checked && story.data.status === 'published' && withdrawn === undefined
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'ClaimReview',
+        url: pageUrl,
+        claimReviewed: claim.data.question,
+        datePublished: published,
+        dateModified: story.data.last_verified,
+        author: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+        reviewRating: { '@type': 'Rating', alternateName: claim.data.finding },
+      }
+    : undefined;
+
+const title = checked ? claim.data.question : claimText(registered!);
+
+const description = checked
+  ? `${claim.data.finding}. ${claim.data.evidence_basis}`
+  : (registered!.reason ??
+    question?.reason ??
+    'A claim YEGFacts has registered and not yet checked.');
+---
+
+{/*
+  A withdrawn finding keeps its page and loses its standing, so it loses its
+  place in the search index with the question that carried it.
+*/}
+<Base
+  title={title}
+  description={description}
+  sections={sections}
+  indexable={withdrawn === undefined}
+  jsonLd={claimReview}
+  article={published ? { published, modified: story?.data.last_verified } : undefined}
+>
+  {
+    checked ? (
+      <>
+        {story.data.status === 'pending-review' && <PendingBanner />}
+        {withdrawn && (
+          <aside
+            class="mb-8 border-t-2 border-b border-t-gold border-b-rule bg-wash px-4 py-3.5"
+            role="note"
+          >
+            <p class="text-sm font-semibold text-forest">
+              No longer a finding · <time datetime={withdrawn.date}>{withdrawn.date}</time>
+            </p>
+            <p class="mt-1 text-sm leading-relaxed text-muted">
+              {withdrawn.reason} The check happened and the record of it stays here; it is no longer
+              offered as a finding.
+            </p>
+          </aside>
+        )}
+        <ClaimFinding claim={claim} story={story} question={question} pageUrl={pageUrl} />
+      </>
+    ) : (
+      <ClaimEntry claim={registered!} question={question!} source={source} />
+    )
+  }
+</Base>

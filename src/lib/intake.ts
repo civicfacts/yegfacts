@@ -26,9 +26,12 @@ export type ClaimOrigin = 'captured' | 'supplied' | 'editor';
  * One pseudonym is one person within one source, so `total` is the distinct
  * people on the question. The three side counts are the distinct people on each
  * side, and somebody who argued both ways is in both, so the sides can come to
- * more than the total. The record keeps the split and the validator checks it;
- * the site prints the total alone, because a count beside a claim has to say
- * that people discussed it and never that they agreed with it.
+ * more than the total.
+ *
+ * Recorded and checked, and since D-0030 not printed: the site counts comments
+ * instead, because a people count stops being exact the moment a claim turns up
+ * in a second source. The record keeps the split at no cost, and the validator
+ * goes on checking it against the claims.
  */
 export interface Accounts {
   total: number;
@@ -432,46 +435,11 @@ export function questionOf(claim: Claim): Question | undefined {
   return questionRegister().find(({ id }) => id === claim.question);
 }
 
-/** One question with the claims checked under it. */
-export interface QuestionClaims {
-  question: Question;
-  claims: Claim[];
-  /**
-   * Claims for the source's argument and claims against it, under the one
-   * question. The site's best evidence that it is not picking sides, so the
-   * question's own page says it in a sentence rather than leaving it to be
-   * counted off the claims.
-   */
-  twoSided: boolean;
-}
-
 /** The claims checked under one question, in the register's order. */
 export function claimsOf(questionId: string): Claim[] {
   return claimRegister().filter((claim) => claim.question === questionId);
 }
 
-/**
- * A source's questions, most-argued question first.
- *
- * `accounts.total` is the sort key because it is the closest thing the register
- * has to "how many people are having this argument": it puts the questions
- * Edmonton is actually arguing over at the top and sinks the hyper-specific
- * ones, which is the order a reader checking for cherry-picking wants.
- */
-export function questionsForSource(sourceId: string): QuestionClaims[] {
-  return questionRegister()
-    .filter((question) => question.source === sourceId)
-    .map((question) => {
-      const claims = claimsOf(question.id);
-      const sides = new Set(claims.map((claim) => claim.side));
-      return { question, claims, twoSided: sides.has('for') && sides.has('against') };
-    })
-    .sort(
-      (a, b) =>
-        (b.question.accounts?.total ?? 0) - (a.question.accounts?.total ?? 0) ||
-        a.question.id.localeCompare(b.question.id),
-    );
-}
 
 /**
  * The triage answers, with the sentence each one is worth to a reader and the
@@ -574,16 +542,81 @@ export function triageRank(triage: string): number {
 }
 
 /**
- * The key the register prints before the entries: every triage answer the
- * register actually uses, with its definition, in the order the entries
- * themselves are read in. Built from the register rather than written out on
- * the page, so the page cannot show a label it has not defined.
+ * The two publication states a reader filters and reads the register by.
+ *
+ * `corrected` is folded into Published — a correction is a published finding
+ * that changed, and a reader looking for what the site has answered wants it in
+ * that list — and `unpublished` is not a state anybody filters for, because it
+ * is what the triage answer already says.
  */
-export function registerKey(): Array<(typeof TRIAGE_SECTIONS)[number]> {
-  const used = new Set(questionRegister().map((question) => question.triage));
-  return TRIAGE_SECTIONS.filter((entry) => used.has(entry.triage)).sort(
-    (a, b) => triageRank(a.triage) - triageRank(b.triage),
-  );
+const PUBLICATION_STATES = [
+  {
+    id: 'published',
+    label: 'Published',
+    definition: 'Checked, and the findings are on the site.',
+  },
+  {
+    id: 'withdrawn',
+    label: 'Withdrawn',
+    definition: 'Checked and published, then withdrawn as a finding. The page stays, saying why.',
+  },
+] as const;
+
+/** One state a question can be in, as the register's own page labels it. */
+export interface QuestionState {
+  id: string;
+  label: string;
+  definition: string;
+}
+
+/**
+ * Every state a question can be in, in the order the register reads them:
+ * answered first, then the three triage answers, then withdrawn.
+ *
+ * Two of the question's three state fields are here and the lifecycle is not:
+ * how far a run has got is worth printing on a question's own page and is not
+ * something anybody wants a list of. The triage half is built from
+ * `TRIAGE_SECTIONS` rather than restated, so a word cannot mean one thing in
+ * the key and another on the badge.
+ */
+export const QUESTION_STATES: QuestionState[] = [
+  PUBLICATION_STATES[0],
+  ...[...TRIAGE_SECTIONS]
+    .sort((a, b) => triageRank(a.triage) - triageRank(b.triage))
+    .map((entry) => ({
+      id: entry.triage,
+      label: entry.badge,
+      definition: entry.definition,
+    })),
+  PUBLICATION_STATES[1],
+];
+
+/**
+ * Every state one question is in. More than one, always: triage and publication
+ * are different facts, and a filter that made a reader choose between them would
+ * hide a published question from anybody looking at what is going ahead.
+ */
+export function statesOf(question: {
+  triage: string;
+  publication: string;
+}): string[] {
+  const states = [question.triage];
+  if (question.publication === 'published' || question.publication === 'corrected') {
+    states.push('published');
+  }
+  if (question.publication === 'withdrawn') states.push('withdrawn');
+  return states;
+}
+
+/**
+ * The key the register prints: every state the register actually puts a
+ * question in, with its definition, in the order the entries are read in. Built
+ * from the register rather than written out on the page, so the page cannot
+ * show a label it has not defined, and cannot define one it never shows.
+ */
+export function questionStateKey(): QuestionState[] {
+  const used = new Set(questionRegister().flatMap(statesOf));
+  return QUESTION_STATES.filter((state) => used.has(state.id));
 }
 
 /**
@@ -631,30 +664,56 @@ export function provenance(entry: { origin?: string; supplied_by?: string }): st
 }
 
 /**
- * How many people discussed a question or a claim, in words. The one phrase the
+ * How many comments carried a claim or a question, in words. The one phrase the
  * site prints for any of these counts, at either level of the register.
  *
- * "Discussed by" is doing the work a printed split used to do. A bare total
- * next to a claim reads as corroboration if the verb lets it, and a count is of
- * the people who argued the claim either way, not of the people who assert it:
- * a claim's captured wordings include the comments denying it. Discussed claims
- * no agreement, so the count is safe to print whole and the sides stay where
- * they belong, on each claim.
+ * Comments, not people (D-0030). A pseudonym is one person within one source,
+ * so a people count was exact there — but the moment a claim turns up in two
+ * sources the same person commenting on two threads is counted twice, and there
+ * is no honest way to correct that without resolving identities across
+ * platforms, which this site should not attempt even where it could. A comment
+ * count is exactly true whatever the number of sources. Measured against the
+ * first source, the two rank claims almost identically: the median ratio of
+ * wordings to people per claim is 1.00 and the overall ratio 1.14, so nothing is
+ * lost by taking the number that never needs a footnote. The per-person and
+ * per-side counts stay in the register at no cost; they are simply not printed.
  *
- * People, not accounts: a pseudonym is one person within its source by
- * construction, so the count undercounts nobody and overcounts only across
- * sources, which no page adds up.
+ * "Said in" is doing the work a printed split used to do. A bare total next to a
+ * claim reads as corroboration if the verb lets it, and the comments counted
+ * here include the ones denying the claim. Said claims no agreement, so the
+ * count is safe to print whole.
  */
-export function discussedBy(people: number): string {
-  return `Discussed by ${people} ${people === 1 ? 'person' : 'people'}`;
+export function saidIn(comments: number): string {
+  return `Said in ${comments} ${comments === 1 ? 'comment' : 'comments'}`;
 }
 
-/** The label for the link to a question's story, when it has one. */
-export function storyLinkLabel(question: Question): string {
-  return question.publication === 'withdrawn'
-    ? 'The story, kept for the record'
-    : 'Where it was checked';
+/** How many captured wordings a claim carries. Zero for a withheld one. */
+export function commentsOn(claim: Claim): number {
+  return (claim.variations ?? []).length;
 }
+
+/**
+ * How many captured wordings a published claim was grouped from.
+ *
+ * A checked claim keeps its wordings on the register claims it names, so its
+ * count has to be gathered the same way its quotes are. Without it a question's
+ * total would not add up to the rows under it, which is the one thing a count
+ * on a ledger has to do.
+ */
+export function commentsFrom(claimIds: readonly string[]): number {
+  return variationsFrom(claimIds).length;
+}
+
+/**
+ * How many comments carried a question: every wording under it, added up.
+ *
+ * Read off the claims rather than off the question, so the number on a question
+ * row and the numbers on the rows beneath it cannot disagree.
+ */
+export function commentsOnQuestion(questionId: string): number {
+  return claimsOf(questionId).reduce((running, claim) => running + commentsOn(claim), 0);
+}
+
 
 /**
  * The reports behind a question, in the order a page shows them.

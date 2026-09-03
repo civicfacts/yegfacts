@@ -1,0 +1,505 @@
+---
+import Base from '../layouts/Base.astro';
+import Finding from '../components/Finding.astro';
+import StateBadge from '../components/StateBadge.astro';
+import { orderedTopics } from '../lib/content';
+import {
+  claimText,
+  commentsFrom,
+  commentsOn,
+  saidIn,
+  sourceRegister,
+  triageEdge,
+} from '../lib/intake';
+import { questionRows, questionStateKey, statesOf } from '../lib/questions';
+import { toc } from '../lib/toc';
+
+/**
+ * `/questions` — the register and the index in one page.
+ *
+ * It is the standing answer to "why didn't you check X", so it lists every
+ * question whatever became of it: going ahead, parked, declined, published,
+ * withdrawn. Nothing sits behind a filter a reader would have to think to open.
+ * The filters narrow a list that is already complete in the HTML, which is also
+ * what keeps the page whole with scripting off.
+ *
+ * The order is how many comments carried each question, so the arguments
+ * Edmonton is actually having are at the top and the hyper-specific ones sink.
+ *
+ * The ledger idiom carries the register's two levels: a question is a row with
+ * a 5px left edge in its triage colour, and the claims checked under it are the
+ * rows beneath it. A claim under a published question prints the finding it
+ * came back with; a claim under it that has never been checked prints that it
+ * has not, because a published answer to a question is not an answer to
+ * everything anybody has since said about it.
+ */
+const rows = await questionRows();
+const topics = await orderedTopics();
+const sources = sourceRegister();
+
+/** Only the states, topics and sources the register actually uses are offered. */
+const stateFilters = questionStateKey();
+
+const topicFilters = topics
+  .map((topic) => ({
+    id: topic.data.slug,
+    label: topic.data.name,
+    count: rows.filter((row) => row.topics.includes(topic.data.slug)).length,
+  }))
+  .filter((topic) => topic.count > 0);
+
+const sourceFilters = sources
+  .map((source) => ({
+    id: source.id,
+    label: source.title,
+    count: rows.filter((row) => row.question.source === source.id).length,
+  }))
+  .filter((source) => source.count > 0);
+
+const withholding = rows.some((row) => row.registered.some((claim) => claim.withheld));
+
+/** Whether any published question is still carrying unchecked claims. */
+const unchecked = rows.some(
+  (row) => row.answered.length > 0 && row.registered.length > 0,
+);
+
+const outline = toc([
+  { id: 'filters', label: 'Filters' },
+  { id: 'states', label: 'What the states mean' },
+  { id: 'register', label: 'Every question' },
+]);
+
+const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
+
+/**
+ * The count and badge columns. From `md` up each shrinks to its own content so
+ * the question keeps every pixel the counts do not need; below that the row
+ * stacks, because four columns on a phone left the question wrapping in a
+ * ribbon a third of the screen wide with the rest of the row empty beside it.
+ */
+const countColumn = `md:table-cell md:w-px md:pl-4 md:text-right md:align-top md:whitespace-nowrap ${label}`;
+const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-top';
+
+const chip =
+  'inline-flex min-h-9 items-center border border-rule-strong px-3 py-1 text-[0.875rem] leading-none no-underline';
+---
+
+<Base
+  sections={outline}
+  title="Every question we've considered"
+  description="Every question that reached YEGFacts, with the claims under it and what happened to it, including the ones we parked and the ones we declined."
+>
+  <header class="border-b border-rule pb-6">
+    <h1 class="text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
+      Every question we've considered
+    </h1>
+    <p class="mt-4 max-w-prose text-base leading-relaxed">
+      A question is the unit of work here: one brief, one body of evidence, one panel run, and one
+      finding for each claim under it. Every question the site has considered is on this page,
+      whatever became of it, with the claims that sit under it and the reason behind the decision.
+    </p>
+    <p class="mt-4 max-w-prose text-base leading-relaxed">
+      When we read a source, a post and every comment on it, three models each write down every
+      factual claim they can find and a fourth folds those lists into one claim for each thing a
+      public record could settle. Those claims are grouped into questions, and the decision is made
+      about the question rather than about any claim on its own. Claims that contradict each other
+      belong to the same question: whether barriers delay emergency vehicles and whether responders
+      ride down the lanes to get past traffic are one question with two claims, investigated
+      together, each still getting its own finding.
+    </p>
+    <p class="mt-4 max-w-prose text-base leading-relaxed">
+      Going ahead, parked and declined are intake answers about whether a question is worth an
+      investigation. They are not rulings on whether anything under them is true. Published and
+      withdrawn say what a reader can see. Nothing is held back: the filters below only narrow a
+      list that is already complete on this page.
+    </p>
+    <p class="mt-4 max-w-prose text-base leading-relaxed">
+      The counts are of comments, not of people: one person can write more than one, and a comment
+      counted under a claim may have been arguing against it. That is why the count says said and
+      not agreed.
+    </p>
+  </header>
+
+  {/*
+    The filters. They are links carrying the query the page reads back, so the
+    view a reader is looking at is the view they can send somebody. The script
+    below intercepts the click and filters in place; with scripting off the link
+    still lands on this page with every question on it, which is the page's
+    standing promise either way.
+  */}
+  <section id="filters" class="mt-10 scroll-mt-6" data-filters>
+    <h2 class="sr-only">Filter these questions</h2>
+
+    <div class="divide-y divide-rule border-y border-rule">
+      <div class="py-3.5 sm:flex sm:gap-5">
+        <p class:list={[label, 'sm:w-28 sm:shrink-0 sm:pt-1.5']}>State</p>
+        <ul class="mt-2 flex flex-wrap gap-2 sm:mt-0">
+          <li>
+            <a href="/questions" class:list={[chip, 'link']} data-filter="state" data-value=""
+              >All</a
+            >
+          </li>
+          {
+            stateFilters.map((state) => (
+              <li>
+                <a
+                  href={`/questions?state=${state.id}`}
+                  class:list={[chip, 'link']}
+                  data-filter="state"
+                  data-value={state.id}
+                >
+                  {state.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      {
+        topicFilters.length > 0 && (
+          <div class="py-3.5 sm:flex sm:gap-5">
+            <p class:list={[label, 'sm:w-28 sm:shrink-0 sm:pt-1.5']}>Topic</p>
+            <ul class="mt-2 flex flex-wrap gap-2 sm:mt-0">
+              <li>
+                <a href="/questions" class:list={[chip, 'link']} data-filter="topic" data-value="">
+                  All
+                </a>
+              </li>
+              {topicFilters.map((topic) => (
+                <li>
+                  <a
+                    href={`/questions?topic=${topic.id}`}
+                    class:list={[chip, 'link']}
+                    data-filter="topic"
+                    data-value={topic.id}
+                  >
+                    {topic.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
+      {
+        sourceFilters.length > 0 && (
+          <div class="py-3.5 sm:flex sm:gap-5">
+            <p class:list={[label, 'sm:w-28 sm:shrink-0 sm:pt-1.5']}>Source</p>
+            <ul class="mt-2 flex flex-wrap gap-2 sm:mt-0">
+              <li>
+                <a href="/questions" class:list={[chip, 'link']} data-filter="source" data-value="">
+                  All
+                </a>
+              </li>
+              {sourceFilters.map((source) => (
+                <li>
+                  <a
+                    href={`/questions?source=${source.id}`}
+                    class:list={[chip, 'link']}
+                    data-filter="source"
+                    data-value={source.id}
+                  >
+                    {source.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </div>
+
+    <p class:list={['mt-3', label]} data-filter-count>
+      {rows.length} questions
+    </p>
+    <noscript>
+      <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+        Filtering needs scripting. Every question is listed below either way.
+      </p>
+    </noscript>
+  </section>
+
+  <section id="states" class="mt-12 scroll-mt-6">
+    <h2 class="section-heading">What the states mean</h2>
+
+    {/* The tile is the term, so a reader can match a row to its line by shape. */}
+    <dl class="mt-5 divide-y divide-rule border-t border-rule">
+      {
+        stateFilters.map((state) => (
+          <div class="py-3 sm:flex sm:gap-5">
+            <dt class="sm:w-40 sm:shrink-0">
+              <StateBadge state={state.id} />
+            </dt>
+            <dd class="mt-1.5 max-w-prose text-[0.9375rem] leading-relaxed sm:mt-0">
+              {state.definition}
+            </dd>
+          </div>
+        ))
+      }
+      {
+        unchecked && (
+          <div class="py-3 sm:flex sm:gap-5">
+            <dt class:list={['sm:w-40 sm:shrink-0', label]}>No finding yet</dt>
+            <dd class="mt-1.5 max-w-prose text-[0.9375rem] leading-relaxed sm:mt-0">
+              A claim under a question the site has already answered, which has not itself been
+              through the panel. The question was answered; this claim was not checked.
+            </dd>
+          </div>
+        )
+      }
+    </dl>
+
+    <p class="mt-6 max-w-prose text-[0.9375rem] leading-relaxed">
+      Two readers rule on every question, one call each, written GO, PARK or NO. Those are the words
+      some of the reasons below use. Going ahead takes both readers at GO, or one GO and one PARK.
+      Declined takes two NOs. Everything else parks, a GO set against a NO included, because
+      throwing out a real question costs the reader more than holding one too long. So a question
+      marked going ahead can be one the two readers did not agree on, and where they split the
+      reason says so.
+    </p>
+
+    {
+      withholding && (
+        <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+          Some rows read “Withheld claim”. Those are claims about an identifiable person, which this
+          site does not repeat while it has no right of reply to offer them. The row keeps its place
+          under the question it was checked under, that question keeps its answer and its reason,
+          and the claim's own page says more.
+        </p>
+      )
+    }
+  </section>
+
+  <section id="register" class="mt-14 scroll-mt-6">
+    <h2 class="section-heading">Every question</h2>
+    <p class={`mt-2 ${label}`}>The most-commented questions come first.</p>
+
+    {/*
+      One tbody to a question, with the claims checked under it as rows beneath
+      it, so a claim is attached to its question by the table's own structure.
+      The column heads say what each cell already says in words, so they are for
+      screen readers only.
+    */}
+    <table class="mt-4 block w-full border-collapse md:table">
+      <caption class="sr-only">Every question YEGFacts has considered</caption>
+      <thead class="sr-only">
+        <tr>
+          <th scope="col">Question or claim</th>
+          <th scope="col">Comments</th>
+          <th scope="col">Claims</th>
+          <th scope="col">State</th>
+        </tr>
+      </thead>
+      {
+        rows.map((row) => (
+          <tbody
+            class="block border-t border-rule md:table-row-group"
+            data-question
+            data-state={statesOf(row.question).join(' ')}
+            data-topic={row.topics.join(' ')}
+            data-source={row.question.source ?? ''}
+          >
+            <tr id={row.question.id} class="block scroll-mt-6 md:table-row">
+              <td class="block pt-4 md:table-cell md:py-4 md:pr-4 md:align-top">
+                <span class:list={['block border-l-[5px] pl-4', triageEdge(row.question.triage)]}>
+                  <a
+                    href={`/questions/${row.question.id}`}
+                    class="link font-display text-[1.1875rem] leading-snug font-semibold text-pretty"
+                    data-record
+                  >
+                    {row.question.question}
+                  </a>
+                  {row.question.reason && (
+                    <span
+                      class="mt-2 block max-w-prose text-[0.9375rem] leading-relaxed text-muted"
+                      data-record
+                    >
+                      {row.question.reason}
+                    </span>
+                  )}
+                </span>
+              </td>
+              <td class:list={['block pt-2 pl-5 md:py-4', countColumn]} data-record>
+                {row.comments > 0 && saidIn(row.comments)}
+              </td>
+              <td
+                class:list={['block pt-1 pl-5 whitespace-nowrap md:py-4', countColumn]}
+                data-record
+              >
+                {`${row.claimCount} ${row.claimCount === 1 ? 'claim' : 'claims'}`}
+              </td>
+              <td class:list={['pt-3 pb-4 pl-5 md:py-4', badgeColumn]}>
+                <span class="flex flex-wrap gap-1.5 md:justify-end">
+                  {statesOf(row.question).map((state) => (
+                    <StateBadge state={state} />
+                  ))}
+                </span>
+              </td>
+            </tr>
+
+            {row.answered.map((claim) => (
+              <tr class="block scroll-mt-6 border-t border-rule md:table-row">
+                <td class="block pt-2.5 pl-4 md:table-cell md:py-2.5 md:pr-4 md:align-top">
+                  <a
+                    href={`/claims/${claim.data.id}`}
+                    class="link text-[0.9375rem] leading-snug text-ink"
+                    data-record
+                  >
+                    {claim.data.question}
+                  </a>
+                </td>
+                <td
+                  class:list={[
+                    commentsFrom(claim.data.register_claims) === 0
+                      ? 'hidden'
+                      : 'block pt-1 pl-4',
+                    'md:py-2.5',
+                    countColumn,
+                  ]}
+                  data-record
+                >
+                  {commentsFrom(claim.data.register_claims) > 0 &&
+                    saidIn(commentsFrom(claim.data.register_claims))}
+                </td>
+                <td class="hidden md:table-cell md:py-2.5" />
+                <td class:list={['pt-2 pb-2.5 pl-4 md:py-2.5', badgeColumn]}>
+                  <Finding finding={claim.data.finding} />
+                </td>
+              </tr>
+            ))}
+
+            {row.registered.map((claim) => (
+              <tr id={claim.id} class="block scroll-mt-6 border-t border-rule md:table-row">
+                <td class="block pt-2.5 pl-4 md:table-cell md:py-2.5 md:pr-4 md:align-top">
+                  <a
+                    href={`/claims/${claim.id}`}
+                    class="link text-[0.9375rem] leading-snug text-ink"
+                    data-record
+                  >
+                    {claimText(claim)}
+                  </a>
+                </td>
+                {/* A withheld claim has no count either, and no empty line where one would have been. */}
+                <td
+                  class:list={[
+                    commentsOn(claim) === 0 ? 'hidden' : 'block pt-1 pb-2.5 pl-4',
+                    'md:py-2.5',
+                    countColumn,
+                  ]}
+                  data-record
+                >
+                  {commentsOn(claim) > 0 && saidIn(commentsOn(claim))}
+                </td>
+                <td class="hidden md:table-cell md:py-2.5" />
+                {/*
+                  Under a published question, a claim with no finding says so
+                  rather than sitting blank beside the ones that were checked.
+                  Everywhere else the question's own state above says it.
+                */}
+                <td class:list={['md:py-2.5', badgeColumn]}>
+                  {row.answered.length > 0 && (
+                    <span class:list={['block pb-2.5 pl-4 md:pl-0', label]}>No finding yet</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        ))
+      }
+    </table>
+  </section>
+</Base>
+
+<script>
+  /*
+   * Client-side filtering over the whole register, which is already in the HTML.
+   *
+   * The filters are links, so the URL is the state: a reader who has narrowed
+   * the page to the parked questions can send that page to somebody, and the
+   * page reads the query back on load. `replaceState` rather than a navigation,
+   * because the list never leaves the document and a history entry per chip
+   * would bury the page a reader arrived from.
+   */
+  const bar = document.querySelector<HTMLElement>('[data-filters]');
+  const rows = [...document.querySelectorAll<HTMLElement>('[data-question]')];
+  const count = document.querySelector<HTMLElement>('[data-filter-count]');
+
+  if (bar && rows.length > 0) {
+    const FILTERS = ['state', 'topic', 'source'] as const;
+    type Filter = (typeof FILTERS)[number];
+
+    const active: Record<Filter, string> = { state: '', topic: '', source: '' };
+
+    const matches = (row: HTMLElement, filter: Filter): boolean => {
+      const wanted = active[filter];
+      if (wanted === '') return true;
+      const values = (row.dataset[filter] ?? '').split(' ').filter(Boolean);
+      return values.includes(wanted);
+    };
+
+    const apply = () => {
+      let shown = 0;
+      for (const row of rows) {
+        const visible = FILTERS.every((filter) => matches(row, filter));
+        row.hidden = !visible;
+        if (visible) shown += 1;
+      }
+
+      for (const chip of bar.querySelectorAll<HTMLAnchorElement>('[data-filter]')) {
+        const filter = chip.dataset.filter as Filter;
+        const on = (chip.dataset.value ?? '') === active[filter];
+        chip.classList.toggle('is-filter-on', on);
+        if (on) chip.setAttribute('aria-current', 'true');
+        else chip.removeAttribute('aria-current');
+      }
+
+      if (count) {
+        const filtered = FILTERS.some((filter) => active[filter] !== '');
+        count.textContent = filtered
+          ? `Showing ${shown} of ${rows.length} questions`
+          : `${rows.length} questions`;
+      }
+    };
+
+    const read = () => {
+      const params = new URLSearchParams(window.location.search);
+      for (const filter of FILTERS) active[filter] = params.get(filter) ?? '';
+      apply();
+    };
+
+    bar.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const chip = target.closest<HTMLAnchorElement>('[data-filter]');
+      if (!chip) return;
+      event.preventDefault();
+
+      const filter = chip.dataset.filter as Filter;
+      const value = chip.dataset.value ?? '';
+      // Tapping the chip you are already on clears it, so there is always a way
+      // back to everything without hunting for the All chip.
+      active[filter] = active[filter] === value ? '' : value;
+
+      const params = new URLSearchParams();
+      for (const key of FILTERS) if (active[key] !== '') params.set(key, active[key]);
+      const query = params.toString();
+      window.history.replaceState(null, '', query === '' ? '/questions' : `/questions?${query}`);
+      apply();
+    });
+
+    window.addEventListener('popstate', read);
+    read();
+  }
+</script>
+
+<style>
+  .is-filter-on {
+    background-color: var(--color-forest);
+    border-color: var(--color-forest);
+    color: var(--color-paper);
+    font-weight: 600;
+    text-decoration: none;
+  }
+</style>

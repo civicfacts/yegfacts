@@ -1,24 +1,26 @@
 ---
-import TriageBadge from './TriageBadge.astro';
+import StateBadge from './StateBadge.astro';
 import {
   claimText,
-  discussedBy,
+  commentsOn,
+  saidIn,
   sourceKind,
+  triageHeading,
   type Claim,
   type Question,
   type Source,
 } from '../lib/intake';
 
 /**
- * One claim, and the question the decision on it was made about.
+ * One claim that has not been checked, and the question it is waiting on.
  *
  * A claim from a whole source was not decided on its own: triage ruled on the
  * question it belongs to, one panel run will answer that question, and this
- * claim will get one finding out of it. So the page prints the question's
- * triage answer, says whose answer it is, and sends the reader up to the
- * question. Printing the badge here as though the claim had been ruled on by
- * itself would misdescribe what happened, and would put four decisions on the
- * page where there was one.
+ * claim will get one finding out of it. So the page says plainly that it has no
+ * finding, names the question it is waiting on, and prints that question's
+ * state. Printing a state here as though the claim had been ruled on by itself
+ * would misdescribe what happened, and would put four decisions on the page
+ * where there was one.
  */
 interface Props {
   claim: Claim;
@@ -37,9 +39,8 @@ const { claim, question, source } = Astro.props;
 const variations = claim.variations ?? [];
 
 /**
- * A merged proposition is a sentence we wrote to say what would have to be
- * true, so it is set as a statement; a claim with only the words it arrived in
- * is quoted.
+ * A merged claim is a sentence we wrote to say what would have to be true, so
+ * it is set as a statement; a claim with only the words it arrived in is quoted.
  */
 const quoted = claim.proposition === undefined;
 
@@ -60,7 +61,7 @@ const declinedApart = claim.triage === 'no' && question.triage !== 'no';
 <article>
   <header class="border-b border-rule pb-7">
     <div class="text-xs text-muted" data-crossref>
-      <a href="/considered" class="link">Every claim we've considered</a>
+      <a href="/questions" class="link">Every question we've considered</a>
     </div>
 
     {/*
@@ -78,53 +79,47 @@ const declinedApart = claim.triage === 'no' && question.triage !== 'no';
 
     {/*
       Straight out of the register. A withheld claim reaches this page with no
-      side and no count of the people who discussed it: both describe a claim
-      the page is refusing to show, so neither is printed here either. Its
-      register id stands in their place, because the id is what a later audit
-      asks for.
+      wordings, so it has no comment count either: the count is of the comments
+      the page is refusing to show. Its register id stands in their place,
+      because the id is what a later audit asks for.
     */}
     <p class={`mt-4 ${label}`} data-record>
       <time datetime={claim.recorded}>{claim.recorded}</time>
       {claim.withheld && <span class="normal-case tracking-normal">{` · entry ${claim.id}`}</span>}
       {
-        claim.accounts !== undefined && (
-          <span class="normal-case tracking-normal">{` · ${discussedBy(claim.accounts)}`}</span>
+        commentsOn(claim) > 0 && (
+          <span class="normal-case tracking-normal">{` · ${saidIn(commentsOn(claim))}`}</span>
         )
       }
     </p>
   </header>
 
-  <section id="question" class="mt-10 scroll-mt-6">
-    <h2 class="section-heading">The question it is checked under</h2>
-
-    {/* The question, set as the question it is, so it is not a clause inside a
-        sentence about it. */}
-    <p
-      class="mt-3.5 max-w-prose font-display text-[1.1875rem] leading-snug font-semibold text-pretty"
-      data-crossref
-    >
-      <a href={`/considered/${question.id}`} class="link">{question.question}</a>
-    </p>
-
-    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+  {/*
+    The answer to the first thing a reader wants from a claim page, given
+    plainly and first: there isn't one yet. A page that leads with provenance
+    and leaves the reader to infer the absence of a finding is a page that
+    reads as though something had been decided.
+  */}
+  <section id="finding" class="mt-10 scroll-mt-6">
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">No finding yet</h2>
+    <p class="mt-3.5 max-w-prose text-[1.0625rem] leading-relaxed text-pretty">
       {
         declinedApart
-          ? 'That question is going ahead without this claim. One brief covers the other claims under it; this one was turned down on its own, for the reason below.'
-          : 'This claim is checked as part of that question. One brief covers every claim under it, and each claim still gets its own finding.'
+          ? 'This claim has not been checked and will not be. It is an allegation about a named person, and the site declines those; the reason is below.'
+          : question.triage === 'no'
+            ? 'This claim has not been checked. The question it belongs to was turned down at intake, for the reason below.'
+            : 'This claim has not been checked. It is waiting on the question below, which is what a brief, a body of evidence and a panel run are spent on.'
       }
     </p>
 
-    {/* Two badges only where the two decisions differ. Otherwise the badge
-        belongs to the question and the line beside it says so, so nobody reads
-        it as a decision made about this claim alone. */}
-    <p class="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-2">
-      <span class={label}>{declinedApart ? 'This claim' : "The question's triage"}</span>
-      <TriageBadge triage={declinedApart ? claim.triage! : question.triage} />
+    <p class="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-2">
+      <span class={label}>{declinedApart ? 'This claim' : 'Its question'}</span>
+      <StateBadge state={declinedApart ? claim.triage! : question.triage} />
       {
         declinedApart && (
           <>
             <span class={label}>The question around it</span>
-            <TriageBadge triage={question.triage} />
+            <StateBadge state={question.triage} />
           </>
         )
       }
@@ -164,25 +159,38 @@ const declinedApart = claim.triage === 'no' && question.triage !== 'no';
 
     {
       /*
-        The seats raised claims; the merge wrote the proposition above out of
-        them. "Found by" read as though the models had produced the sentence
-        they are listed under, which is the one thing they do not do.
+        The seats raised claims; the merge wrote the sentence above out of them.
+        "Found by" read as though the models had produced the sentence they are
+        listed under, which is the one thing they do not do.
       */
       claim.seats && claim.seats.length > 0 && (
-        <p class={`mt-4 ${label}`} data-record>
+        <p class={`mt-5 ${label}`} data-record>
           {`Raised in extraction by ${claim.seats.join(', ')}`}
         </p>
       )
     }
 
-    {/*
-      Triage is a decision about whether to check the question, never a verdict
-      on the claim, and a reader who arrives here from a search has not read the
-      register's key. Rather than restate the key on every entry, the page
-      points at it, once.
-    */}
     <p class="mt-5 text-sm" data-crossref>
-      <a href="/considered#outcomes" class="link">What the outcomes mean</a>
+      <a href="/questions#states" class="link">What the states mean</a>
+    </p>
+  </section>
+
+  <section id="question" class="mt-14 scroll-mt-6">
+    <h2 class="section-heading">The question it is checked under</h2>
+
+    {/* The question, set as the question it is, so it is not a clause inside a
+        sentence about it. */}
+    <p
+      class="mt-3.5 max-w-prose font-display text-[1.1875rem] leading-snug font-semibold text-pretty"
+      data-crossref
+    >
+      <a href={`/questions/${question.id}`} class="link">{question.question}</a>
+    </p>
+
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      {triageHeading(question.triage)}. One brief covers every claim under that question, and each
+      claim still gets its own finding. The question's page carries the reason, the grouping and the
+      other claims made about it.
     </p>
   </section>
 
@@ -192,7 +200,7 @@ const declinedApart = claim.triage === 'no' && question.triage !== 'no';
         <h2 class="section-heading">Where it came from</h2>
         <p class="mt-3 max-w-prose text-[1.0625rem] leading-relaxed text-pretty">
           Taken from{' '}
-          <a href={`/considered#${source.id}`} class="link">
+          <a href={`/sources/${source.id}`} class="link">
             {source.title}
           </a>
           , read end to end. Every factual claim in it was extracted and merged, so this one is
@@ -215,7 +223,7 @@ const declinedApart = claim.triage === 'no' && question.triage !== 'no';
 
   {
     variations.length > 0 && (
-      <section id="variations" class="mt-14 scroll-mt-6">
+      <section id="said" class="mt-14 scroll-mt-6">
         <h2 class="section-heading">How it was said</h2>
         <p class="mt-1.5 max-w-prose text-sm leading-relaxed text-muted">
           Every wording of this claim found in the source, quoted exactly. The names are pseudonyms,
@@ -242,7 +250,8 @@ const declinedApart = claim.triage === 'no' && question.triage !== 'no';
 
   <footer class="mt-14 border-t border-rule pt-5">
     <p class="flex flex-wrap gap-x-5 gap-y-1 text-sm" data-crossref>
-      <a href="/considered" class="link">Every claim we've considered</a>
+      <a href={`/questions/${question.id}`} class="link">The question it is under</a>
+      <a href="/questions" class="link">Every question we've considered</a>
     </p>
   </footer>
 </article>
