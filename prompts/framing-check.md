@@ -156,7 +156,21 @@ report may only confirm the corrections or name further defects. If it
 raises a framing finding, whether new or revived, the brief is parked
 and no further round exists. Nothing in this exception touches the bound
 above: the value of a cutoff is a framing question, capped at three, and
-is not reopened in a defect round. Ildar Abdulin remains accountable for the
+is not reopened in a defect round.
+
+That confirmation is the last report a brief gets. If it returns further
+defects and no framing finding, the editor corrects them in writing in
+the wording you supplied, records each against the finding it answers,
+and the brief freezes. There is no fifth report. So write the fourth
+report as the last one: every defect you can find, each with its exact
+replacement wording, because nothing you leave out will come back to
+you. The reason the round ends this way rather than in another park is
+that an unbounded defect round is a loophole and a bounded one that ends
+in parking is a rule that can never release what it caught; a brief
+parked on a known ladder bug is unusable and no intake evidence can free
+it. The check gets its rounds and then the editor is accountable in the
+record, which is the same shape v1.12 already uses after your second
+report. Ildar Abdulin remains accountable for the
 result and can revert it. Every report, the author's responses and the
 resolution are committed beside the brief, and a framing defect found
 later by the panel, the publication gate or a correction is logged
