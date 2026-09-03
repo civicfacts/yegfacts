@@ -5,17 +5,22 @@
  */
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
-import { registerEntries, toYamlBlock } from '../scripts/intake-register.ts';
+import {
+  registerEntries,
+  toYamlBlock,
+  type Merged,
+  type Triage,
+} from '../scripts/intake-register.ts';
 
 const source = { id: 'thread', run: 'reviews/intake/thread' };
 
-const merged = {
+const merged: Merged = {
   propositions: [
     {
       id: 'lanes-removed',
       proposition: 'Edmonton is removing traffic lanes across the city to build bike lanes.',
       side: 'against',
-      relation: 'new' as const,
+      relation: 'new',
       commenters: 12,
       from: { haiku: ['e-001'], luna: ['e-004', 'e-005'] },
       forms: [
@@ -36,7 +41,7 @@ const merged = {
       id: 'councillor-allegation',
       proposition: 'A named councillor did something wrong.',
       side: 'neither',
-      relation: 'new' as const,
+      relation: 'new',
       commenters: 3,
       names_person: true,
       from: { haiku: ['e-009'] },
@@ -46,7 +51,7 @@ const merged = {
   dropped: [{ seat: 'haiku', id: 'e-100', reason: 'not a claim' }],
 };
 
-const triage = {
+const triage: Triage = {
   decisions: [
     { id: 'lanes-removed', outcome: 'GO', reason: 'City route records can answer a defined version.' },
     { id: 'congestion', outcome: 'GO', reason: 'Triage would have taken it.' },
@@ -56,7 +61,7 @@ const triage = {
 
 /** A default parameter would swallow an explicit `undefined`, which is the case
  *  that matters most here, so the argument is always passed. */
-const run = (t: typeof triage | undefined) => registerEntries(merged, t, source, '2026-09-03');
+const run = (t: Triage | undefined) => registerEntries(merged, t, source, '2026-09-03');
 
 describe('registerEntries', () => {
   it('keeps merged.json’s order', () => {

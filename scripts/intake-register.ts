@@ -37,7 +37,7 @@ interface MergedForm {
   seats?: string[];
 }
 
-interface Proposition {
+export interface Proposition {
   id: string;
   proposition: string;
   side: string;
@@ -48,12 +48,12 @@ interface Proposition {
   forms?: MergedForm[];
 }
 
-interface Merged {
+export interface Merged {
   propositions: Proposition[];
   dropped?: Array<{ seat: string; id: string; reason: string }>;
 }
 
-interface Triage {
+export interface Triage {
   decisions: Array<{ id: string; outcome: string; reason: string }>;
 }
 
