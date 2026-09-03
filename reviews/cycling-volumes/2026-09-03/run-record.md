@@ -30,6 +30,7 @@ flags that run carried.
 | Report | Verdict | File | Response |
 | --- | --- | --- | --- |
 | 1 | REVISE, nine findings | `framing/check-1.md` | `framing/response-1.md` |
+| 2 | REVISE, 8 of 12 resolved, 3 new findings | `framing/check-2.md` | `framing/resolution-2.md` |
 
 **Check 1, in one line:** the brief leaked expected findings in its
 stakes headings, put floors under two ceiling claims so they could have
@@ -46,7 +47,22 @@ under the framing check's own rule that a general pattern offered with
 examples is tested as the pattern, and check 9's rule that the brief
 tests the nearest level the record answers.
 
-**Freeze:** pending.
+**Check 2, in one line:** eight of the twelve first-round findings
+resolved, four weakened or open, and three new ones: claim 1 had no upper
+Contradicted bound, claim 2 had no rule for partly-reporting counters,
+and claim 8's ladder had a gap.
+
+**What the editor did with it:** nine adopted, whole or in substance.
+One stands unresolved and is decided in writing under the v1.12 cap:
+`framing/resolution-2.md`. The checker would not send
+`one-to-two-percent-of-population-rides` or `one-percent-year-round-users`
+to the panel, because no verified representative Edmonton instrument has
+been identified for either. The editor's decision is that both go, with
+Not established predeclared as a real outcome and the editor's own
+bounded search written into the brief. The checker's objection stands on
+the record.
+
+**Freeze:** pending check 3, which is a confirmation.
 
 ## Editorial decisions taken before the check
 
