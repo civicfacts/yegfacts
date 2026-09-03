@@ -64,9 +64,14 @@ EFFORT="high"
 
 case "$PROVIDER_ARG" in
   claude|anthropic)
-    SLOT="claude"; CLI="claude"; MODEL_ID="claude-fable-5-1"
-    PROVIDER_CANONICAL="anthropic"; SEAT="Claude Fable 5.1"
-    CMD=(claude -p --model claude-fable-5-1 --effort "$EFFORT")
+    # v1.15 (2026-09-02): moved off Fable 5.1, whose allowance on the
+    # founder's subscription is nearly used up. A cost decision, not a
+    # finding about which model reviews better; nothing here measures that.
+    # Runs already published under Fable 5.1 keep the model their manifests
+    # record.
+    SLOT="claude"; CLI="claude"; MODEL_ID="claude-opus-5"
+    PROVIDER_CANONICAL="anthropic"; SEAT="Claude Opus 5"
+    CMD=(claude -p --model claude-opus-5 --effort "$EFFORT")
     ;;
   codex|gpt|openai)
     SLOT="gpt"; CLI="codex"; MODEL_ID="gpt-5.6-sol"
