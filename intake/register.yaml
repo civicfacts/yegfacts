@@ -33,6 +33,16 @@
 #                 intake existed.
 # run:            repo-relative directory holding the grouping and the triage.
 # question:       what the brief asks, as a reader would type it.
+# topics:         every topic the question is filed under, from the vocabulary
+#                 in `src/lib/vocabulary.ts` and the files under
+#                 `src/content/topics/`. Written by hand, not generated: a
+#                 topic is a reader's way in, and a question belongs under
+#                 every label that genuinely applies, broad and narrow alike.
+#                 Left off entirely — never an empty list — where none does,
+#                 which on a site about Edmonton civic government is what the
+#                 out-of-scope questions get. Where the question has an
+#                 article, this list and the article's `topics` must be the
+#                 same set; the validator checks it.
 # reason:         one public sentence saying why triage answered as it did.
 #                 Required on park and no — the register is published, so a
 #                 declined question never sits here unexplained.
@@ -90,6 +100,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "How many people in Edmonton cycle, and how much do the bike lanes get used?"
+    topics: [transportation, bike-lanes]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -104,6 +115,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Who cycles in Edmonton?"
+    topics: [transportation, bike-lanes]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -117,6 +129,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Can people cycle through an Edmonton winter, and do they?"
+    topics: [transportation, bike-lanes]
     lifecycle: gate-complete
     triage: go
     publication: published
@@ -132,6 +145,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "How does Edmonton clear snow from its streets and bike lanes?"
+    topics: [transportation, bike-lanes]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -146,6 +160,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Do Edmonton's bike lanes ease traffic congestion or make it worse?"
+    topics: [transportation, bike-lanes]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -161,6 +176,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "What is left of the roadway for drivers, buses and delivery vehicles where a lane became a bike lane?"
+    topics: [transportation, bike-lanes]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -175,6 +191,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "How does the money for bike lanes compare with what Edmonton spends on roads?"
+    topics: [transportation, bike-lanes, city-finances]
     lifecycle: gate-complete
     triage: go
     publication: published
@@ -190,6 +207,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Did Edmonton City Council approve $100 million for bike lane expansion?"
+    topics: [transportation, bike-lanes, city-hall, city-finances]
     lifecycle: registered
     triage: no
     publication: unpublished
@@ -202,6 +220,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Is Edmonton letting roads, alleys and drainage go while it funds bike lanes?"
+    topics: [transportation, bike-lanes, city-finances]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -215,6 +234,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "How much have Edmonton property taxes gone up?"
+    topics: [city-finances]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -227,6 +247,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Did council pause the future bike routes when its own administration recommended it?"
+    topics: [transportation, bike-lanes, city-hall]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -240,6 +261,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Who showed up to speak on the bike lanes at council, and who organized them?"
+    topics: [transportation, bike-lanes, city-hall]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -254,6 +276,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "How far along are the bike routes council was asked to stop?"
+    topics: [transportation, bike-lanes]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -268,6 +291,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Did the City consult the affected neighbourhoods, and do residents oppose the bike lanes?"
+    topics: [transportation, bike-lanes, city-hall]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -281,6 +305,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "What mandate does this city council have, and can voters recall it?"
+    topics: [city-hall]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -295,6 +320,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Do Edmonton's councillors bike to work, and do they get a vehicle allowance?"
+    topics: [transportation, bike-lanes, city-hall]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -308,6 +334,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "What do city hall salaries and councillors' disclosed interests look like?"
+    topics: [city-hall, city-finances]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -321,6 +348,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Who pays for Edmonton's roads, drivers or everybody?"
+    topics: [transportation, city-finances]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -335,6 +363,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "What do bike lanes do to on-street parking, and what does that parking cost the city?"
+    topics: [transportation, bike-lanes, city-finances]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -349,6 +378,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Is Edmonton's infill and zoning push trading trees and parking for density?"
+    topics: [housing-development, growth-planning]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -363,6 +393,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Has Edmonton committed to becoming a 15 minute city or to banning cars downtown?"
+    topics: [transportation, growth-planning, downtown]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -376,6 +407,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Do Edmonton's bike lanes help or hinder emergency vehicles?"
+    topics: [transportation, bike-lanes]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -390,6 +422,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Do the barriers around bike lanes block access to homes and disabled residents, or widen it?"
+    topics: [transportation, bike-lanes]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -404,6 +437,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Is Edmonton transit and the LRT a workable alternative to driving?"
+    topics: [transportation]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -418,6 +452,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Do bike lanes make cycling safer in Edmonton, and where do cyclists actually ride?"
+    topics: [transportation, bike-lanes]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -432,6 +467,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "What kinds of streets does Edmonton put bike lanes on, and who signs off on the design?"
+    topics: [transportation, bike-lanes]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -447,6 +483,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Do Edmonton's bike routes connect to anything?"
+    topics: [transportation, bike-lanes]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -461,6 +498,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Where is the bike lane near Whyte Avenue, and has it drawn complaints since it went in?"
+    topics: [transportation, bike-lanes]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -475,6 +513,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "What is being built on 132 Avenue, and what sits along it?"
+    topics: [transportation, bike-lanes]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -488,6 +527,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Has the province ordered Edmonton to stop building bike lanes?"
+    topics: [transportation, bike-lanes]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -502,6 +542,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "What was planned for the bike lane outside the Holyrood school, and what stopped it?"
+    topics: [transportation, bike-lanes]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -515,6 +556,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "What happened to the 189 Street bike lane?"
+    topics: [transportation, bike-lanes]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -528,6 +570,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Are other Canadian cities removing their bike lanes?"
+    topics: [transportation, bike-lanes]
     lifecycle: registered
     triage: go
     publication: unpublished
@@ -540,6 +583,7 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Are downtown Edmonton businesses closing because customers cannot get to them?"
+    topics: [downtown]
     lifecycle: registered
     triage: park
     publication: unpublished
@@ -551,6 +595,7 @@ questions:
   - id: climate-targets
     recorded: "2026-09-03"
     question: "Is Edmonton on track to meet its climate targets?"
+    topics: [climate-environment]
     lifecycle: gate-complete
     triage: go
     publication: published
@@ -558,6 +603,7 @@ questions:
   - id: electric-buses
     recorded: "2026-09-03"
     question: "What happened with Edmonton's electric buses?"
+    topics: [transportation, city-finances, climate-environment]
     lifecycle: gate-complete
     triage: go
     publication: published
@@ -565,6 +611,7 @@ questions:
   - id: fifteen-minute-districts
     recorded: "2026-09-03"
     question: "Do Edmonton's district plans restrict, or create a mechanism to restrict, where residents can travel within the city?"
+    topics: [growth-planning]
     lifecycle: gate-complete
     triage: go
     publication: published
@@ -572,6 +619,7 @@ questions:
   - id: infill-prices
     recorded: "2026-09-01"
     question: "What happens to the price of an Edmonton house when it is torn down and replaced?"
+    topics: [housing-development]
     lifecycle: gate-complete
     triage: go
     publication: withdrawn
@@ -587,6 +635,7 @@ questions:
   - id: low-density-century
     recorded: "2026-09-01"
     question: "How long has Edmonton had low-density housing, and were its neighbourhoods planned around it?"
+    topics: [housing-development, growth-planning]
     lifecycle: briefed
     triage: go
     publication: unpublished
@@ -600,6 +649,7 @@ questions:
   - id: infill-teardown-more-affordable
     recorded: "2026-09-02"
     question: "Were the houses torn down for infill more affordable than what replaced them?"
+    topics: [housing-development]
     lifecycle: registered
     triage: park
     publication: unpublished
@@ -613,6 +663,7 @@ questions:
   - id: infill-luxury
     recorded: "2026-09-02"
     question: "Is new infill housing in Edmonton luxury housing?"
+    topics: [housing-development]
     lifecycle: registered
     triage: no
     publication: unpublished
@@ -626,6 +677,7 @@ questions:
   - id: infill-not-affordable-median-household
     recorded: "2026-09-02"
     question: "Can a median-income Edmonton household afford new infill housing?"
+    topics: [housing-development]
     lifecycle: registered
     triage: park
     publication: unpublished

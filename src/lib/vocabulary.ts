@@ -9,8 +9,18 @@
  * them, which keeps every existing `from '../content.config'` import working.
  */
 
+/**
+ * The topics a question can be filed under.
+ *
+ * Broad and narrow are the same kind of thing here: `bike-lanes` sits inside
+ * `transportation` and a question about the lanes carries both, because the
+ * broad drawer is what someone browsing widely opens and the narrow one is
+ * what stops thirty questions filing under a label that then filters nothing.
+ */
 export const TOPIC_SLUGS = [
   'transportation',
+  'bike-lanes',
+  'city-hall',
   'housing-development',
   'city-finances',
   'growth-planning',
