@@ -1,0 +1,672 @@
+Reading prompt from stdin...
+OpenAI Codex v0.153.0
+--------
+workdir: /private/tmp/claude-501/-Users-iabdulin-Sites-yegfacts/5d3e596d-6a80-45d0-8b52-b85f7fe0f400/scratchpad/intake-work
+model: gpt-5.6-sol
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: high
+reasoning summaries: none
+session id: 01a06800-e1f6-7b03-a8aa-3cbacf1dfe2b
+--------
+user
+# Intake triage, one source at a time
+
+You are the triage reader. A whole source has been captured (a post and
+all its comments, an article, a discussion), three models have extracted
+every factual claim in it, and one model has merged those into a list of
+propositions. Your job is to decide, for each proposition, whether this
+site should check it.
+
+You are not the editor. You did not choose these claims and you are not
+being asked which ones would make a good story. You are deciding which
+ones deserve a panel, and giving a reason a reader could be shown.
+
+Do not research whether any claim is true. You may search to answer
+whether a public record exists and at what level it reports, and nothing
+else.
+
+## What you are given
+
+The merged propositions, each with an id, the proposition in plain
+words, which side of the argument it serves, how many distinct people
+asserted it, and every captured wording with its pseudonymous commenter
+label.
+
+## The test
+
+A proposition is worth a panel when all four hold:
+
+1. **Someone asks it.** You can write the question a resident or a
+   reporter would type, in their words. If you cannot, that is usually
+   the end.
+2. **The record can answer it at the level people ask it.** Name the
+   kind of published source a reviewer would use: a City budget, an
+   open dataset, a council report, a court filing, a bylaw. If the
+   record answers only a narrower or more abstract version, say what
+   that version is and whether a reader would still care about the
+   answer.
+3. **Some verdict would surprise someone.** Walk the four findings
+   briefly. If no verdict would surprise either side, or one side
+   cannot lose, it is not worth a panel. Arithmetic nobody disputes
+   fails here. So does a claim whose answer everyone already agrees on.
+4. **An argument in this source rests on it.** The people in this
+   source are arguing about something. A proposition that no one's
+   argument depends on is a detail, however checkable. This is the test
+   the site did not have, and it is why these claims are being read from
+   a real argument rather than chosen by an editor.
+
+## The three outcomes
+
+- `GO` — all four hold. Say in one sentence what a reader would learn.
+- `PARK` — worth checking, but something specific is missing. Name the
+  condition that would reopen it: a dataset that does not exist yet, a
+  linkage nobody has built, capacity. Cost decides when a claim is
+  scheduled, never whether it is worth checking. A costly claim that
+  matters is PARK, not NO.
+- `NO` — not worth a panel, ever, in this form. The permitted grounds:
+  it is not a factual proposition; no public record could settle it in
+  either direction; it is settled arithmetic or a truism no one
+  disputes; or it names an identifiable individual and alleges
+  wrongdoing.
+
+That last ground is a standing rule, not your judgement, and it is
+narrower than it sounds. This site has no right-of-reply process, so it
+does not adjudicate an accusation one person makes about another:
+wrongdoing, dishonesty, a corrupt or self-interested motive, a personal
+failing. A proposition flagged `names_person` that makes an accusation
+of that kind is `NO`, and your reason must stand on its own without
+repeating the accusation or the name, because the reason is published
+and the accusation is not.
+
+What an office-holder did in office is not an accusation, however
+unflattering, and is not covered by this rule. A motion a councillor
+brought, how they voted, a project they championed, a lane built or
+removed on their watch: these sit in council minutes and project
+records, they are the substance of civic accountability, and this site
+names office-holders when it reports them. Decide those on the four
+tests like any other claim. If you find yourself declining a claim that
+a public record would settle simply because a councillor is named in
+it, you have read this rule too widely.
+
+## Reasons
+
+One sentence, written for a reader who suggested the claim and wants to
+know what happened to it. Plain words. It is published next to the
+claim, so it must be true, specific to this claim, and not a template.
+"No public record links individual demolitions to what replaced them" is
+a reason. "Insufficient evidence" is not.
+
+## Output
+
+First, one short text block stating your model name and version, and
+every search you ran.
+
+Then a single JSON object and nothing else:
+
+```json
+{"decisions":[{"id":"cycling-trips-1-3-million","outcome":"GO","reason":"The City publishes its automated bicycle counter totals, so the number can be checked directly."}]}
+```
+
+Every proposition you were given gets exactly one decision. Do not add,
+drop, rename or merge any id.
+
+
+
+---
+
+# You are ruling on investigations, not on single claims
+
+Propositions from this source have been grouped twice. An **investigation** is
+one brief, one body of evidence and one panel run; the **claims** inside it each
+get their own finding. Your decision is whether this site should spend an
+investigation, so you rule once per investigation, on its question.
+
+Apply the four tests to the investigation's question. It goes ahead if the
+question is one somebody asks, the record can answer it at that level, some
+answer would surprise someone, and an argument in the source rests on it.
+
+Where one claim inside is uncheckable but the investigation is worth running,
+that is still GO; the brief stage drops the claim, not you. Name any such claim
+in your reason.
+
+The named-person rule works the same way. An investigation is not declined
+because a claim inside it names an office-holder doing something in office. It
+is declined only if the investigation itself is an accusation the site cannot
+put to the person.
+
+Use the investigation's id in your decisions.
+
+---
+
+# The investigations
+
+
+## `cycling-volumes`
+
+- Question: How many people in Edmonton cycle, and how much do the bike lanes get used?
+- 25 distinct accounts across 9 claim(s)
+- Grouping note: The automated counter data, the census commute figures and the City's ridership reporting settle every count, share and denominator here at once.
+- Claims:
+  - `bike-lanes-look-empty` (against, 10 people): Edmonton's bike lanes carry little or no bicycle traffic when residents observe them.
+      "when out I see very few bikes on these very expensive bike lanes."
+      "i have seen bike lanes summer and winter with little or no bike traffic on them."
+  - `one-to-two-percent-of-population-rides` (against, 8 people): Only about 1 to 2 percent of Edmonton's population rides bikes or uses the bike lanes.
+      "we are talking about huge expenditures for only 2.3% of the populations usage."
+      "2% of constituents ride bikes! What about the other 98%?"
+  - `cycling-trips-1-3-million-2026` (for, 3 people): Edmonton recorded nearly 1.3 million cycling trips across its automated counters through the first seven months of 2026.
+      "Through the first seven months of 2026, Edmonton recorded nearly 1.3 million cycling trips across it"
+      "Through the first seven months of 2026, Edmonton recorded nearly 1.3 million cycling trips across it"
+  - `riders-are-recreational-not-commuters` (against, 2 people): The people using Edmonton's bike lanes are mostly recreational or short-distance riders, not commuters.
+      "Lots of recreational riders.. commuters not so much."
+      "usually within a short distance, or for recreational purposes."
+  - `under-one-percent-of-commuters-cycle` (against, 2 people): City reports and 2021 census figures show fewer than 1 percent of Edmonton commuters travel by bicycle.
+      "City reports have census numbers in 2021 less than 1 percent."
+      "Less than 1% on bikes."
+  - `two-percent-of-trips-by-bike` (for, 1 people): About 2 percent of all trips in Edmonton are made by bicycle.
+      "*2% of trips are done by bicycle, although it's higher in neighborhoods with bike infrastructure."
+      "transportation that includes >2% of trips"
+  - `87-percent-commute-by-car` (against, 1 people): 87 percent of Edmontonians commute by car.
+      "87% of Edmontonians commute in cars."
+  - `one-percent-year-round-users` (against, 1 people): Only 1 percent of Edmonton's population uses the bike lanes year-round and fewer than 15 percent use them the rest of the year.
+      "only 1% of the pop use them year round and less than 15% the rest of the year."
+  - `heritage-days-bike-arrivals` (for, 1 people): More than five people rode bikes to Heritage Days within an hour of opening on the Saturday.
+      "Looks like more than 5 rode to Heritage Days (this was within an hour of opening on the Saturday)."
+
+## `who-cycles`
+
+- Question: Who cycles in Edmonton?
+- 4 distinct accounts across 3 claim(s)
+- Grouping note: Survey data on cyclists' occupations, income, education and car ownership answers all three.
+- Claims:
+  - `blue-collar-workers-bike-to-work` (for, 2 people): People working blue collar jobs in Edmonton bike to work.
+      "I actually do know people who work blue collar jobs who bike to work."
+      "Not one person building our infrastructure bikes to work."
+  - `cyclists-higher-income-and-education` (for, 1 people): Cyclists typically have higher paying jobs and more education than people who do not cycle.
+      "cyclist are taxpayers and typically have higher paying jobs are more education than those who don't!"
+  - `most-cyclists-also-drive` (for, 1 people): Most people who bike are also drivers who pay fuel taxes.
+      "Most bikers are also drivers and pay fuel taxes too."
+
+## `winter-cycling`
+
+- Question: Can people cycle through an Edmonton winter, and do they?
+- 16 distinct accounts across 2 claim(s)
+- Grouping note: Winter counter data and the weather record answer both directions.
+- Claims:
+  - `winter-too-cold-for-cycling` (against, 12 people): Edmonton's winter is too long and too cold for cycling to work as everyday transportation.
+      "Edmontonians cannot convert to bike as primary tranportation. Be realistic winter cycling is a fanta"
+      "See how many of you are riding your bikes in the winter months!"
+  - `winter-cycling-has-grown` (for, 4 people): Winter cycling in Edmonton has grown, with people commuting by bike in snow and at -30.
+      "I have no issues riding in -30."
+      "There’s been an impressive increase in winter riders over the past few years and I’m no longer the o"
+
+## `snow-clearing`
+
+- Question: How does Edmonton clear snow from its streets and bike lanes?
+- 5 distinct accounts across 5 claim(s)
+- Grouping note: The snow and ice policy, the clearing schedules and the proposals going to council settle the order of clearing, the windrows and what changes next.
+- Claims:
+  - `bike-lanes-plowed-before-streets` (against, 3 people): The City plows bike lanes in winter before it plows the streets.
+      "bike lanes get plowed in the winter before the streets do"
+      "They plow the bike lanes every winter for the 1 or 2 bikes you see going down them"
+  - `whyte-avenue-narrow-in-winter` (against, 1 people): Whyte Avenue becomes very narrow and dangerous in winter because of the snow budget and clearing.
+      "have you been down whyte ave in winter knacks no snow budget,no proper snow removal makes whyte ave "
+  - `snow-windrowed-into-parking-spaces` (against, 1 people): Plows windrow the snow into the few on-street parking spaces left beside the bike lanes.
+      "guess where they wind row the snow in winter,right into the few parking spaces that we have left"
+  - `two-snow-removal-proposals-need-more-money` (neither, 1 people): Administration has already put two snow removal proposals to council, both requiring spending increases.
+      "administration has already put 2 different proposals to council for snow removal and of course both "
+  - `calcium-chloride-debate-coming` (neither, 1 people): Council will soon debate bringing back calcium chloride as an anti-icer on the roads.
+      "Council will be debating soon about bringing back calcium chloride to use as anti icing on the roads"
+
+## `lanes-and-congestion`
+
+- Question: Do Edmonton's bike lanes ease traffic congestion or make it worse?
+- 24 distinct accounts across 6 claim(s)
+- Grouping note: The City's record of which lanes it reallocated, plus traffic counts and travel times on those corridors, answers both directions and shows what else the road carries.
+- Claims:
+  - `lane-removal-increases-congestion` (against, 13 people): Taking traffic lanes for bike lanes increases congestion, slows traffic and causes idling and emissions.
+      "Removing traffic lanes for cyclists and increasing the number of crossings increase congestion."
+      "nope, it causes it."
+  - `bike-infra-reduces-congestion` (for, 6 people): Cycling infrastructure reduces motor-vehicle congestion because every person who bikes is one less car on the road.
+      "Using a bicycle helps reduce traffic congestion."
+      "Bike infrastructure reduces traffic congestion"
+  - `city-removed-traffic-lanes` (against, 4 people): The City has removed motor-vehicle traffic lanes across Edmonton and replaced them with bike lanes.
+      "102nd Ave between 121st and 111th. Used to be 2 ways, now one way with a bike lane. 102 Ave east of "
+      "they absolutely have removed traffic lanes all throughout the city"
+  - `roads-carry-goods-and-services` (neither, 2 people): Roads carry the goods, services, buses and emergency vehicles society depends on.
+      "Roads also move the goods and services need by society"
+      "service vehicles to move products; bus transportation to move people; ambulances to save lives; fire"
+  - `79-street-relieves-75-street` (against, 1 people): 79 Street carries traffic that would otherwise use 75 Street and is a school-run route for parents.
+      "It is an important street for alleviating traffic from 75 St and for people to navigate & drive thei"
+  - `lanes-removed-for-traffic-calming` (for, 1 people): Edmonton is removing lanes for traffic calming, not for cyclists, and adding bike lanes where that work is already happening.
+      "they are not removing lanes for cyclists. They are removing lanes for traffic calming measures and i"
+      "Even if they had never planned bike lanes for hermatige road they are still getting traffic calming "
+
+## `converted-roadway`
+
+- Question: What is left of the roadway for drivers, buses and delivery vehicles where a lane became a bike lane?
+- 2 distinct accounts across 3 claim(s)
+- Grouping note: The design drawings for the converted streets, with their lane widths and the pavement records for them, settle all three.
+- Claims:
+  - `remaining-lane-too-narrow-to-pass` (against, 1 people): The remaining lane is too narrow to safely pass school buses or delivery vans that have stopped.
+      "the lane is too narrow when the school buses or vans are delivering to business there is not enough "
+  - `road-surface-breaking-from-one-lane` (against, 1 people): The road surface is breaking up because traffic is concentrated into one lane.
+      "and the road is breaking up from the increased traffi,c in one lane"
+  - `proposal-does-not-widen-road` (neither, 1 people): The bike lane proposal does not increase the width of the road.
+      "The proposal doesn't increase the road width"
+
+## `bike-vs-road-spending`
+
+- Question: How does the money for bike lanes compare with what Edmonton spends on roads?
+- 5 distinct accounts across 7 claim(s)
+- Grouping note: The four-year capital budget and the project cost sheets for road jobs like 50 Street settle the phasing, the share and every comparison drawn from them.
+- Claims:
+  - `bike-share-one-percent-of-road-budget` (for, 2 people): The $100 million is around 1 percent of Edmonton's capital budget for roads, with 99 percent going to roads for cars.
+      "we currently spend 99% of our road budget on roads for cars so spending is on track"
+      "why should those 2% of riders pay for the 98% road infrastructure when drivers cry about paying 2% t"
+  - `100-million-over-four-years` (for, 2 people): The $100 million for active transportation is spread over a four-year budget cycle.
+      "It's 100 million over 4 years"
+      "It's $100 million over 4 years."
+  - `181-million-for-600m-of-50-street` (for, 1 people): The City is spending $181 million to grade separate 600 metres of 50 Street.
+      "We spend $181 million on grade separating 600m of 50th Street."
+  - `50-street-costs-double-active-transport` (for, 1 people): That 600 metres of 50 Street costs nearly double the entire four-year active transportation investment.
+      "That's nearly double the cost for 600m of road compared to the entire 4 year investment in active tr"
+  - `billions-spent-on-road-building` (for, 1 people): Edmonton spends billions on road building, including the Yellowhead.
+      "the billions for road building."
+      "the billions for the Yellowhead and other road projects"
+  - `spending-proportional-to-cyclist-numbers` (for, 1 people): The City's $100 million for the active transportation network is close to proportional to the number of cyclists.
+      "the City's 100M for the active transportation network is close to proportional to cyclist numbers"
+  - `bike-lane-maintenance-cost-per-year` (against, 1 people): Maintaining Edmonton's bike lanes costs about three quarters of a million dollars a year.
+      "it costs around three quarters of a million to maintain them every year"
+
+## `hundred-million-approval`
+
+- Question: Did Edmonton City Council approve $100 million for bike lane expansion?
+- 17 distinct accounts across 1 claim(s)
+- Claims:
+  - `council-approved-100-million` (against, 17 people): Edmonton City Council approved $100 million for bike lane expansion.
+      "the City’s 100M for the active transportation network"
+      "divide the 100 million between them."
+
+## `infrastructure-deficit`
+
+- Question: Is Edmonton letting roads, alleys and drainage go while it funds bike lanes?
+- 15 distinct accounts across 5 claim(s)
+- Grouping note: The City's infrastructure deficit reporting and its renewal and operating budgets cover both the condition of the basics and what was funded instead.
+- Claims:
+  - `basic-services-in-poor-condition` (against, 9 people): Edmonton's roads, alleys and basic services are in poor condition, with potholes unfixed and snow and grass left uncut.
+      "The city can’t even cut the grass or remove snow"
+      "fix pot holes you haven’t done anything all summer! Snow removal would be good!"
+  - `spending-100-million-despite-deficit` (against, 2 people): The City is spending $100 million on bike lanes while claiming a huge infrastructure deficit.
+      "the city claims they have a huge infestructure deficit. . Yet spending 100 miiion dollars on bike la"
+      "Funding these bike lanes in already crowded areas while whining about a deficit"
+  - `rec-centre-money-diverted` (against, 1 people): Council took money away from a free-standing west end recreation centre and spent $100 million on bike lanes.
+      "Take money away from a free standing recreation centre on the west end name it some unpronounceable "
+  - `drainage-damage-to-homeowners` (against, 1 people): Drainage problems in Edmonton cause millions of dollars of damage to homeowners.
+      "drainage issues which cause millions of dollars in damage to home owners"
+  - `new-streetlights-added-costs` (against, 1 people): The new streetlights added costs for Edmonton taxpayers.
+      "Please remember the new streetlights that added costs for taxpayers."
+
+## `property-taxes`
+
+- Question: How much have Edmonton property taxes gone up?
+- 2 distinct accounts across 1 claim(s)
+- Claims:
+  - `property-taxes-rising-sharply` (against, 2 people): Edmonton property taxes have risen sharply, by $1,500 in three years for one resident and $6,000 a year for another.
+      "Glad I am paying $6,000 a year in property tax for this!"
+      "my taxes have gone up $ 1500 in the last 3 years."
+
+## `council-pause-vote`
+
+- Question: Did council pause the future bike routes when its own administration recommended it?
+- 6 distinct accounts across 4 claim(s)
+- Grouping note: The committee report and the recorded council votes settle the recommendation, the motions and who voted which way.
+- Contains a claim naming an identifiable individual.
+- Claims:
+  - `council-rejected-pause` (against, 5 people): Council did not support the recommended pause and review of the future bike routes.
+      "That review was also not supported by Council."
+      "The city’s recommendation was to PAUSE the bike lines until more information was obtained to continu"
+  - `administration-recommended-freezing-14-routes` (against, 1 people): City Administration recommended freezing 14 future bike routes to reassess them.
+      "Yesterday, City Administration recommended freezing 14 future routes to reassess"
+  - `motions-to-cut-budget-to-50-million-failed` (against, 1 people): Councillor Karen Principe and Councillor Jennifer Rice brought two motions to cut the bike lane budget to $50 million and redirect the rest, and Council did not support them.
+      "Councillor Karen Principe and I brought forward two motions — twice — to cut it to $50M and redirect"
+  - `same-seven-councillors-vote-together` (against, 1 people): The same seven councillors vote together to keep the bike lane expansion going.
+      "the core 7 councillors never had an intention of pausing it."
+      "The same old 7 councillors who are in a corrupt clique voted for it."
+
+## `council-hearing`
+
+- Question: Who showed up to speak on the bike lanes at council, and who organized them?
+- 11 distinct accounts across 3 claim(s)
+- Grouping note: The speakers list from the hearing, the lobbyist registry and the meeting's own procedural record settle all of it.
+- Claims:
+  - `more-speakers-in-favour-at-hearing` (for, 5 people): More people spoke in favour of the bike lanes at the council hearing than against them.
+      "more people for the bike lanes showed up, then those who didn't want it."
+      "because the taxpayers were at WORK at the time"
+  - `hearing-supporters-and-lobby-groups` (against, 5 people): The pro bike lane people at the council meeting were paid or organized by special interest groups and lobbyists.
+      "special interest groups.. crazies!"
+      "This City Council is bowing to special interest groups."
+  - `speaking-time-cut-to-three-minutes` (against, 1 people): Council cut speakers from five minutes to three because of the volume of complaints, with 70 still in the queue.
+      "limiting concerns to 3min from 5min due to a high volume of complaints from all over the city and 70"
+
+## `routes-already-committed`
+
+- Question: How far along are the bike routes council was asked to stop?
+- 3 distinct accounts across 2 claim(s)
+- Grouping note: The signed design contracts and the 2026 tender calendar answer both.
+- Claims:
+  - `designs-paid-and-contracts-signed` (for, 2 people): The City has already paid for the design and signed contracts for the planned routes.
+      "We've already paid for the design, and many contracts"
+      "designs were already paid for right"
+  - `too-late-to-tender-for-2026` (against, 1 people): The routes being pushed through are too late to tender for the 2026 construction season anyway.
+      "The routes in question are too late to tender for 2026 anyway!"
+
+## `consultation-and-opposition`
+
+- Question: Did the City consult the affected neighbourhoods, and do residents oppose the bike lanes?
+- 14 distinct accounts across 2 claim(s)
+- Grouping note: The engagement record for these routes, including the City's own report on the data and consultation behind them, settles both.
+- Contains a claim naming an identifiable individual.
+- Claims:
+  - `most-residents-oppose-lanes` (against, 10 people): Most residents in the affected neighbourhoods, and most Edmontonians, oppose the bike lanes.
+      "whole neighborhoods have voted no and they still went ahead."
+      "This was not fair to 98% of the residents in Holyrood and Idylwylde areas"
+  - `fast-tracked-without-consultation` (against, 5 people): The City fast-tracked bike routes on old data and without consulting the affected communities.
+      "relying on old data and zero community consultation (admitted to in the City's report)"
+      "They don't do enough talking to the residents"
+
+## `council-mandate`
+
+- Question: What mandate does this city council have, and can voters recall it?
+- 4 distinct accounts across 3 claim(s)
+- Grouping note: The election results and turnout figures, plus the recall rules in provincial law, cover the lot.
+- Claims:
+  - `last-election-turnout-under-40` (neither, 2 people): Turnout in Edmonton's last municipal election was under 40 percent.
+      "Voter turnout in the last election was less than 40%"
+      "30% turn out is not responsible democratic participation."
+  - `voters-elected-pro-bike-council` (for, 1 people): A majority of voters elected the current city council knowing it was pro bike lane.
+      "the majority of voters elected the current city council knowing they were pro bike lane."
+  - `council-recall-timing` (neither, 1 people): A recall of city council is allowed 18 months after the election and one is already in the works.
+      "18 months after the election is the when it’s allowed. It’s already in the works"
+      "recall election coming in April"
+
+## `councillors-own-commute`
+
+- Question: Do Edmonton's councillors bike to work, and do they get a vehicle allowance?
+- 6 distinct accounts across 2 claim(s)
+- Grouping note: The councillor remuneration bylaw and councillors' own accounts of how they get to work answer both.
+- Contains a claim naming an identifiable individual.
+- Claims:
+  - `councillors-dont-bike-to-work` (against, 4 people): Edmonton's mayor and councillors do not bike to work themselves.
+      "I don't see city council riding their bikes all the time."
+      "Any north Enders see ERIN RUTHERFORD bike to work ??"
+  - `councillors-get-vehicle-allowance` (against, 2 people): Edmonton city councillors receive a vehicle allowance.
+      "Our city councillors, who vote for stupidity to continue, get a very generous vehicle allowance."
+      "Why are city councilors given vehicle allowance if they're promoting biking to work?"
+
+## `city-hall-pay-and-interests`
+
+- Question: What do city hall salaries and councillors' disclosed interests look like?
+- 2 distinct accounts across 2 claim(s)
+- Grouping note: The public salary disclosure and councillors' filed disclosure statements settle both.
+- Contains a claim naming an identifiable individual.
+- Claims:
+  - `staff-paid-over-100k-plus-pension` (against, 1 people): City administration staff pushing these policies are paid over $100,000 plus pension.
+      "They are unveiled get paid over 100k and pension and push their climate, women and anti car ideaolog"
+  - `councillor-family-development-interest` (against, 1 people): Councillor Ashley Salvador's husband has an infill company.
+      "Can blame Ashley Salvador for this. What is she really up to? Husband has an infill company and it g"
+
+## `who-pays-for-roads`
+
+- Question: Who pays for Edmonton's roads, drivers or everybody?
+- 15 distinct accounts across 4 claim(s)
+- Grouping note: The revenue sources behind the City's road capital and operating budgets settle every version of this.
+- Claims:
+  - `drivers-pay-for-roads-via-fuel-taxes` (against, 8 people): Drivers already pay for Edmonton's roads through fuel taxes, registration fees and other vehicle taxes.
+      "there is already a road tax on fuel for that very purpose."
+      "people that drive cars pay for roads partially via the fuel tax"
+  - `roads-funded-by-property-taxes` (for, 4 people): Edmonton's municipal roads are paid for predominantly out of property and general taxes, not fuel taxes or vehicle registration.
+      "municipal roads are predominantly funded through property tax."
+      "The majority of municipal roads are funded through property tax."
+  - `cyclists-pay-property-taxes` (for, 3 people): Cyclists pay the property and general taxes that fund roads.
+      "cyclists pay property taxes"
+      "Every adult cyclist is a taxpayer, genius"
+  - `taxes-fund-services-you-dont-use` (for, 2 people): Edmontonians pay taxes for services and infrastructure they do not personally use.
+      "We all pay taxes. We may not use all of the services our taxes fund."
+      "We all pay for things we don’t use with our taxes because we are part of a society and municipality."
+
+## `on-street-parking`
+
+- Question: What do bike lanes do to on-street parking, and what does that parking cost the city?
+- 10 distinct accounts across 3 claim(s)
+- Grouping note: The parking inventory before and after each project, and what the on-street parking program costs the City, settle both sides.
+- Claims:
+  - `bike-lanes-remove-street-parking` (against, 8 people): Installing bike lanes takes away on-street parking from residents and businesses.
+      "Holyrood and Idylwylde areas who are paying taxes for parking."
+      "loosing their parking?? What about their safety, or their kids safety having to find alternative par"
+  - `business-lost-customer-parking` (against, 1 people): A business could not use its street for customer parking all summer, and the City had put up no parking signs.
+      "Cannot use my street for my customers. All summer. Phoned city. We do not have parking signs there."
+  - `free-parking-is-a-subsidy` (for, 1 people): Free on-street parking for vehicles is a subsidy paid for by taxpayers.
+      "Subsidizing free parking for vehicles is a waste of mine."
+
+## `zoning-and-infill`
+
+- Question: Is Edmonton's infill and zoning push trading trees and parking for density?
+- 4 distinct accounts across 3 claim(s)
+- Grouping note: The zoning bylaw and the infill permit record cover the parking minimums, the multiplexes and the housing mix.
+- Claims:
+  - `infill-removes-trees-and-parking` (against, 2 people): Infill and multiplex development in mature neighbourhoods is taking down mature trees and street parking.
+      "continue to build more and more infills in our old neighborhoods that are taking so many of our beau"
+      "multiplexes that are replacing affordable single family homes and robbing good homes of light...stre"
+  - `sprawl-unsustainable-as-population-grows` (for, 1 people): Edmonton's population has exploded while the city is still predominantly single family homes, so continued sprawl is unsustainable.
+      "Edmonton is still predominantly single family homes but our population has exploded and it's unsusta"
+  - `no-minimum-parking-requirements` (against, 1 people): The City no longer requires minimum parking for developments.
+      "The city doesn't require minimum parking anymore, take it up with them."
+
+## `city-plan-commitments`
+
+- Question: Has Edmonton committed to becoming a 15 minute city or to banning cars downtown?
+- 3 distinct accounts across 2 claim(s)
+- Grouping note: Council-approved agreements and the City Plan show what has actually been signed and planned.
+- Claims:
+  - `15-minute-city-agreement` (against, 2 people): The City signed an agreement to make Edmonton a 15 minute city.
+      "The signed a agreement to make Edmonton a 15 minute city...Google it it's true."
+      "So the 15 min city agenda moves forward."
+  - `downtown-car-ban-plan` (against, 1 people): The City is planning to ban cars year round in the downtown core to push transit and bike lane use.
+      "I heard they are planning on banning cars year round in the downtown core to increase transit and bi"
+
+## `emergency-access`
+
+- Question: Do Edmonton's bike lanes help or hinder emergency vehicles?
+- 5 distinct accounts across 2 claim(s)
+- Grouping note: Response-time records and the City's design standards for emergency access settle both directions at once.
+- Claims:
+  - `barriers-delay-emergency-vehicles` (against, 4 people): Bike lanes and their concrete barriers delay or block emergency vehicles reaching homes.
+      "that one lane is permanently unuseable for cars and emergency vehicles"
+      "how do bike lanes- with concrete barriers- allow emergency vehicles/ ambulances etc direct access to"
+  - `responders-use-lanes-to-pass-traffic` (for, 1 people): Emergency services can drive down two-way protected bike lanes to bypass traffic queues.
+      "for two-way protected bike lanes, emergency services can actually travel down the bike lanes, bypass"
+
+## `access-across-barriers`
+
+- Question: Do the barriers around bike lanes block access to homes and disabled residents, or widen it?
+- 7 distinct accounts across 4 claim(s)
+- Grouping note: The design standards for barrier gaps, DATS loading and driveway and alley access, together with the drawings for the streets being described, settle both directions.
+- Claims:
+  - `barriers-block-disabled-access` (against, 3 people): Concrete bike lane barriers and curbs block access for disabled residents and DATS pickups.
+      "How do disabled people easily access DATS if a concrete barrier prevents accessibility?"
+      "Ever broken a limb or been handicapped and had to struggle over windrows in winter or bike lane curb"
+  - `lanes-can-be-designed-accessible` (for, 2 people): Protected bike lanes can be designed so wheelchairs can use them and accessible vans can load and unload.
+      "If the barrier is the height of a sidewalk, the protected bike lane can be laterally shifted and/or "
+      "wheelchairs can use the lanes, it's great for the disabled"
+  - `119-avenue-alley-access-detour` (against, 1 people): The 119 Avenue bike lane forces a resident to drive around to 120 Avenue to reach the alley behind their house.
+      "I have to drive to 120ave now to get to the back of my house instead of turning on 119 ave"
+  - `lanes-add-accessibility-and-health` (for, 1 people): Cycling infrastructure adds accessibility for people who don't or can't drive and improves health for active commuters.
+      "adds accessibility for those who don’t or can’t drive, in addition to improving health for active co"
+
+## `transit-alternative`
+
+- Question: Is Edmonton transit and the LRT a workable alternative to driving?
+- 6 distinct accounts across 5 claim(s)
+- Grouping note: ETS travel times, ridership and service change records, plus the LRT's own ridership and collision data, settle these together.
+- Claims:
+  - `transit-takes-far-longer-than-driving` (against, 2 people): Commuting by transit in the Edmonton region takes several times as long as driving the same trip.
+      "Takes 18 mins to drive to work, which is in Leduc but that takes close to 3 hours via public transit"
+      "Driving to work 15min, busing to work 1 hour 45 minutes, biking to work 1 hour 5 minutes."
+  - `lrt-slow-and-deadly` (against, 1 people): Edmonton's ground-level LRT travels slower than a bike and kills more people every year.
+      "ground level LRT, that travels slower then a bike, and kills more and more people every year"
+  - `lrt-barely-functions` (against, 1 people): The LRT barely functions except for large events and people who live near its limited stations.
+      "That barely functions beyond large events or the die hards that happen to.live close to the limited "
+  - `ets-community-routes-removed` (against, 1 people): The City took out the ETS community bus routes.
+      "It would be a different story if ETS community buses weren’t taken out."
+  - `transit-more-efficient-than-cars` (for, 1 people): Transit is a more efficient method of moving people than private cars.
+      "Since transit is a more efficient method of moving people"
+
+## `cycling-safety`
+
+- Question: Do bike lanes make cycling safer in Edmonton, and where do cyclists actually ride?
+- 10 distinct accounts across 8 claim(s)
+- Grouping note: Edmonton's collision records and the traffic bylaw cover whether the lanes reduce harm, who is at fault and who is riding where.
+- Claims:
+  - `lanes-keep-riders-out-of-traffic` (for, 3 people): Bike lanes keep riders, including children and families, out of traffic.
+      "where the riders will be more likely to get injured"
+      "He’s not going into traffic"
+  - `cyclists-ride-on-sidewalks` (against, 3 people): Cyclists and scooter riders in Edmonton ride on the sidewalks instead of the bike lanes.
+      "Most dangerous encounters I have daily are cyclists and scooter riders on downtown sidewalks, and th"
+      "cyclist use the bike lanes not the sidewalks. Just walk down the Victoria Promenade and see for your"
+  - `cyclists-have-right-to-the-road` (for, 2 people): Cyclists have the same legal right to ride on the road as drivers, with or without a bike lane.
+      "when I’ve been riding lawfully on roads without bike lanes or shared paths."
+      "Cyclist have the same legal right to be on the road as you do. Remove bike lanes and they will be cy"
+  - `bike-lanes-dont-improve-safety` (against, 1 people): It is a myth that bike lanes make cycling safer.
+      "it is a myth that bike lanes make it safer"
+  - `bike-collision-fault-share` (against, 1 people): About 90 percent of the reported collisions involving bikes happened because the cyclist was in the wrong.
+      "They had on the news how many accident's there has been with bike's and I can bet that 90 percent ar"
+  - `cyclists-harassed-on-roads-without-lanes` (for, 1 people): Cyclists riding lawfully on roads without bike lanes get honked at, passed too closely and veered at.
+      "I’ve been honked at, buzzed by too closely and veered at when I’ve been riding lawfully on roads wit"
+  - `street-labs-no-safety-value` (against, 1 people): Edmonton's Vision Zero Street Labs hinder normal street traffic and have no safety value for pedestrians.
+      ""vision zero - Street Labs " that hinder normal street traffic and have no safety value for pedestri"
+  - `downtown-network-safe-family-route` (for, 1 people): The downtown network lets a family ride safely from 104 Street to 124 Street.
+      "Once he starts Mortising, we can go from 104 street to 124 … SAFELY."
+
+## `street-types-and-design`
+
+- Question: What kinds of streets does Edmonton put bike lanes on, and who signs off on the design?
+- 6 distinct accounts across 7 claim(s)
+- Grouping note: The City's road classification map, its network inventory and the design standards behind each route settle the classification disputes and the design history together.
+- Claims:
+  - `lane-on-provincially-arterial-road` (against, 2 people): A bike lane is being built between 102 Avenue and 107 Avenue on a road the province deems arterial.
+      "one is getting built as we speak on from 102ave to 107ave, it was deemed by the province as arterial"
+      "bike lanes in the middle of major road travel lanes."
+  - `routes-approved-by-engineers` (for, 2 people): Bike routes are approved for safety by professional engineers before they are built.
+      "routes are approved for safety by professional engineers before they are constructed"
+      "created by transportation engineers (a specialization of civil engineering)."
+  - `no-lanes-on-arterial-roads` (for, 1 people): Edmonton does not put bike lanes on arterial roads; they are on side streets.
+      "All bike lanes in the city are on side streets. For example 113st, 83ave, 103ave."
+      "there are none on arterial roads"
+  - `50-street-is-collector-not-arterial` (for, 1 people): The stretch of 50 Street with a planted bike lane functions as a collector road, not an arterial road.
+      "the portion of the road with a planted bike lane functions as a collector road, not an arterial road"
+  - `95-percent-network-shared-paths` (for, 1 people): 95 percent of Edmonton's cycling network is shared pathways or wide sidewalks, with the rest on low-traffic side roads.
+      "95% of the cycling network is shared pathways or wide sidewalks. The rest is on low traffic side roa"
+  - `design-escalated-from-paint-to-rebuilds` (neither, 1 people): Edmonton's bike lane design has gone from painted lines to small jersey curb barriers to full redesigns of sidewalks, lanes and roads.
+      "The city went to painted on lines to small jersey curb barriers to full redesign of sidewalks, bike "
+  - `shared-30-kmh-streets-exist` (neither, 1 people): Edmonton has single-file 30 km/h shared roads such as 92 Street.
+      "single file 30km/h shared roads like 92st"
+
+## `network-connections`
+
+- Question: Do Edmonton's bike routes connect to anything?
+- 3 distinct accounts across 2 claim(s)
+- Grouping note: The network map shows both the routes that end nowhere and the gaps along the LRT.
+- Claims:
+  - `routes-go-nowhere` (against, 2 people): Bike routes are being built that go nowhere and don't connect to the existing network.
+      "So many paths to nowhere"
+      "they go nowhere or hook up to an existing bike lane"
+  - `missing-connections-along-lrt` (for, 1 people): There are missing cycling connections along Edmonton's LRT line.
+      "There are missing connections along the LRT line."
+
+## `83-avenue-lane`
+
+- Question: Where is the bike lane near Whyte Avenue, and has it drawn complaints since it went in?
+- 1 distinct accounts across 2 claim(s)
+- Grouping note: The lane's location and the City's complaint record for that street answer both.
+- Claims:
+  - `83-avenue-decade-no-complaints` (for, 1 people): 83 Avenue has had its bike lane for over a decade with no complaints.
+      "It's been like this on 83 Ave for over a decade and there have been no complaints."
+  - `no-bike-lane-on-whyte-avenue` (neither, 1 people): There is no bike lane on Whyte Avenue; it is on 83 Avenue.
+      "there is no bike lane on Whyte Ave. It's on 83 Ave"
+
+## `132-avenue`
+
+- Question: What is being built on 132 Avenue, and what sits along it?
+- 5 distinct accounts across 2 claim(s)
+- Grouping note: The 132 Avenue design drawings and the land use along the corridor settle both.
+- Claims:
+  - `132-avenue-lanes-both-sides` (against, 4 people): Bike lanes have been put in on both sides of 132 Avenue.
+      "the people that have had these put in on both sides of the road talking about 132 ave"
+      "Just check out what they did on 132nd ave!"
+  - `seven-schools-on-132-avenue` (against, 1 people): There are seven schools on the stretch of 132 Avenue getting bike lanes.
+      "132 Ave with 7 schools on the Ave is insane !"
+
+## `provincial-direction`
+
+- Question: Has the province ordered Edmonton to stop building bike lanes?
+- 4 distinct accounts across 2 claim(s)
+- Grouping note: Whatever direction the province has issued in writing, and the legislation it has tabled, settle both directions.
+- Claims:
+  - `province-ordered-stop-and-will-legislate` (against, 3 people): The province has directed Edmonton to stop future bike lanes and will legislate on them in the fall.
+      "What happened to the Province’s direction to stop future bike lanes from proceeding until they have "
+      "perhaps you should be following provincial stop orders as you've been given prior notifications of u"
+  - `no-written-provincial-direction` (for, 1 people): The province has given nothing in writing about upcoming bike lane legislation.
+      "the province has given nothing in writing about upcoming bike lane legislation."
+
+## `holyrood-school-lane`
+
+- Question: What was planned for the bike lane outside the Holyrood school, and what stopped it?
+- 1 distinct accounts across 2 claim(s)
+- Grouping note: The Holyrood design file and the correspondence about it answer both.
+- Contains a claim naming an identifiable individual.
+- Claims:
+  - `holyrood-school-bike-lane-proposal` (against, 1 people): Councillor Ashley Salvador wanted bike lanes in front of Holyrood school with the yellow buses moved across the street.
+      "Ashley Salvatore wanted to put bike lanes in front of Holyrood school and move the yellow buses acro"
+  - `holyrood-design-approved-then-stopped` (against, 1 people): The Holyrood school bike lane design was approved and was stopped after the school principal objected.
+      "it was approved. It was the principal of the school that caused a commotion and had it stopped."
+
+## `189-street-lane`
+
+- Question: What happened to the 189 Street bike lane?
+- 1 distinct accounts across 2 claim(s)
+- Grouping note: The 189 Street project record shows who put it in and what it cost to take out.
+- Contains a claim naming an identifiable individual.
+- Claims:
+  - `189-street-lane-removed-later` (against, 1 people): The bike lane put in on 189 Street had to be removed a couple of years later at taxpayers' expense.
+      "removing them two years from now at our expense. Just like knackle head did on 189 st when he was ou"
+  - `former-councillor-installed-189-street-lane` (against, 1 people): Former councillor Andrew Knack put in the 189 Street bike lane while he represented the ward.
+      "Just like knackle head did on 189 st when he was our councillor."
+
+## `other-cities`
+
+- Question: Are other Canadian cities removing their bike lanes?
+- 1 distinct accounts across 1 claim(s)
+- Claims:
+  - `other-cities-removing-bike-lanes` (against, 1 people): Other Canadian cities are now removing their bike lanes.
+      "other Canadian cities are now removing them."
+
+## `downtown-business`
+
+- Question: Are downtown Edmonton businesses closing because customers cannot get to them?
+- 1 distinct accounts across 1 claim(s)
+- Claims:
+  - `downtown-businesses-closing` (against, 1 people): Downtown restaurants and businesses are closing because people cannot get to them.
+      "restaurants and businesses will and are failing downtown already - closing doors because no one can "
+
+
+---
+
+Decide all 34 investigations. Output the JSON object described above and nothing else.
+
+codex
+{"decisions":[{"id":"cycling-volumes","outcome":"GO","reason":"City counters, census commute data and trip surveys can show how often Edmonton’s bike lanes are used and why counts, riders and trip shares are different measures."},{"id":"who-cycles","outcome":"GO","reason":"Census and transportation survey data can show cyclists’ occupations, incomes, education and vehicle ownership rather than relying on anecdotes about who rides."},{"id":"winter-cycling","outcome":"GO","reason":"Monthly counter totals and weather records can show how many people ride through winter, under what conditions and whether winter cycling has grown."},{"id":"snow-clearing","outcome":"GO","reason":"The snow policy, service schedules and council reports can show when bike lanes and streets are cleared, where snow is placed and what changes are proposed."},{"id":"lanes-and-congestion","outcome":"GO","reason":"Before-and-after traffic counts and travel times on converted corridors can show whether reallocating lanes changed congestion, while the general claim about roads carrying services adds nothing checkable."},{"id":"converted-roadway","outcome":"GO","reason":"Design drawings, lane-width standards and pavement-condition records can show what space remains for vehicles and whether the street developed the problems residents describe."},{"id":"bike-vs-road-spending","outcome":"GO","reason":"Capital budgets and project cost sheets can put the active-transportation allocation beside road spending and test each percentage and project comparison on the same basis."},{"id":"hundred-million-approval","outcome":"NO","reason":"The $100 million approval is common ground throughout this source, so checking the council vote would only restate an undisputed budget fact."},{"id":"infrastructure-deficit","outcome":"GO","reason":"Infrastructure-condition reports and budgets can show the size of Edmonton’s renewal shortfall, what was funded and whether money was actually redirected from the cited services."},{"id":"property-taxes","outcome":"GO","reason":"City tax-rate and typical-property records can show the general increase, although the two anonymous residents’ dollar amounts cannot be verified without their assessment and tax notices."},{"id":"council-pause-vote","outcome":"GO","reason":"Administration’s report and recorded votes can show what pause was recommended, which motions were made and how each councillor voted, without examining the allegation about councillors’ motives."},{"id":"council-hearing","outcome":"GO","reason":"The hearing record can establish the speaker balance and time limit, but the claim that supporters were paid or organized should be dropped unless the lobbyist registry links them directly."},{"id":"routes-already-committed","outcome":"GO","reason":"Contracts, purchase records and the tender calendar can show which routes were already committed and whether they could still have been tendered for 2026."},{"id":"consultation-and-opposition","outcome":"GO","reason":"Project engagement records can show whom the City consulted and what participants said, while the claim about most Edmontonians should be dropped unless a representative citywide survey exists."},{"id":"council-mandate","outcome":"GO","reason":"Election results, candidates’ published positions and provincial recall law can show turnout and recall rules, though they cannot establish what every voter knew when voting."},{"id":"councillors-own-commute","outcome":"GO","reason":"The remuneration rules can settle the vehicle-allowance claim, while the blanket claim that councillors never bike should be dropped unless their own disclosures provide a complete answer."},{"id":"city-hall-pay-and-interests","outcome":"GO","reason":"Salary disclosures and filed interest statements can show the relevant pay and declared interests, without treating either as proof of an improper motive."},{"id":"who-pays-for-roads","outcome":"GO","reason":"Municipal budgets and intergovernmental funding records can show how much road money comes from property taxes, fuel-tax transfers and other sources shared by drivers and cyclists."},{"id":"on-street-parking","outcome":"GO","reason":"Project parking inventories and parking-program accounts can show how many spaces each lane removed and what providing those spaces costs the City."},{"id":"zoning-and-infill","outcome":"PARK","reason":"Reopen this when address-level infill permits can be linked to tree removals and before-and-after parking inventories, because the zoning bylaw alone cannot show what density displaced."},{"id":"city-plan-commitments","outcome":"GO","reason":"Council-approved plans and agreements can show whether Edmonton committed to 15-minute planning or a year-round downtown car ban and what those commitments actually require."},{"id":"emergency-access","outcome":"PARK","reason":"Reopen this when response records identify corridor-level delays or emergency use of bike lanes, because design standards alone cannot show whether the lanes help or hinder actual responses."},{"id":"access-across-barriers","outcome":"GO","reason":"Route drawings and accessibility standards can show where barriers, loading areas, driveways and alleys preserve access and where a design creates the cited detour or obstacle."},{"id":"transit-alternative","outcome":"GO","reason":"Published schedules, trip planners, service histories, ridership and collision records can compare transit with driving and test the specific claims about LRT and removed routes."},{"id":"cycling-safety","outcome":"PARK","reason":"Reopen this when collision records can be linked to route design and cyclist exposure, because raw crash totals cannot show whether bike lanes change risk."},{"id":"street-types-and-design","outcome":"GO","reason":"Road-classification maps, route inventories, design files and professional sign-offs can show which street types receive bike lanes and how their designs were approved."},{"id":"network-connections","outcome":"GO","reason":"The City’s network map can show where routes connect, where they terminate and whether gaps remain along the LRT."},{"id":"83-avenue-lane","outcome":"GO","reason":"Project records and the street-level complaint log can establish the lane’s location, installation date and whether complaints were recorded after it opened."},{"id":"132-avenue","outcome":"GO","reason":"Design drawings and school-location records can show exactly what is being built on each side of 132 Avenue and how many schools sit along the affected stretch."},{"id":"provincial-direction","outcome":"GO","reason":"Written provincial directives and tabled legislation can show whether Edmonton was ordered to stop building bike lanes and whether legislation was actually proposed."},{"id":"holyrood-school-lane","outcome":"GO","reason":"The design file, approval history and correspondence can show what was proposed outside the school, the councillor’s official role and why the design stopped."},{"id":"189-street-lane","outcome":"GO","reason":"The project record can show when the 189 Street lane was installed and removed, which official decisions authorized it and what removal cost."},{"id":"other-cities","outcome":"GO","reason":"Municipal project and council records can identify Canadian cities that have removed bike lanes and distinguish isolated removals from a broader trend."},{"id":"downtown-business","outcome":"PARK","reason":"Reopen this when business closures can be linked to customer-access changes through location-level records or owner evidence, because closure counts alone cannot establish why businesses failed."}]}
+tokens used
+37,193
+{"decisions":[{"id":"cycling-volumes","outcome":"GO","reason":"City counters, census commute data and trip surveys can show how often Edmonton’s bike lanes are used and why counts, riders and trip shares are different measures."},{"id":"who-cycles","outcome":"GO","reason":"Census and transportation survey data can show cyclists’ occupations, incomes, education and vehicle ownership rather than relying on anecdotes about who rides."},{"id":"winter-cycling","outcome":"GO","reason":"Monthly counter totals and weather records can show how many people ride through winter, under what conditions and whether winter cycling has grown."},{"id":"snow-clearing","outcome":"GO","reason":"The snow policy, service schedules and council reports can show when bike lanes and streets are cleared, where snow is placed and what changes are proposed."},{"id":"lanes-and-congestion","outcome":"GO","reason":"Before-and-after traffic counts and travel times on converted corridors can show whether reallocating lanes changed congestion, while the general claim about roads carrying services adds nothing checkable."},{"id":"converted-roadway","outcome":"GO","reason":"Design drawings, lane-width standards and pavement-condition records can show what space remains for vehicles and whether the street developed the problems residents describe."},{"id":"bike-vs-road-spending","outcome":"GO","reason":"Capital budgets and project cost sheets can put the active-transportation allocation beside road spending and test each percentage and project comparison on the same basis."},{"id":"hundred-million-approval","outcome":"NO","reason":"The $100 million approval is common ground throughout this source, so checking the council vote would only restate an undisputed budget fact."},{"id":"infrastructure-deficit","outcome":"GO","reason":"Infrastructure-condition reports and budgets can show the size of Edmonton’s renewal shortfall, what was funded and whether money was actually redirected from the cited services."},{"id":"property-taxes","outcome":"GO","reason":"City tax-rate and typical-property records can show the general increase, although the two anonymous residents’ dollar amounts cannot be verified without their assessment and tax notices."},{"id":"council-pause-vote","outcome":"GO","reason":"Administration’s report and recorded votes can show what pause was recommended, which motions were made and how each councillor voted, without examining the allegation about councillors’ motives."},{"id":"council-hearing","outcome":"GO","reason":"The hearing record can establish the speaker balance and time limit, but the claim that supporters were paid or organized should be dropped unless the lobbyist registry links them directly."},{"id":"routes-already-committed","outcome":"GO","reason":"Contracts, purchase records and the tender calendar can show which routes were already committed and whether they could still have been tendered for 2026."},{"id":"consultation-and-opposition","outcome":"GO","reason":"Project engagement records can show whom the City consulted and what participants said, while the claim about most Edmontonians should be dropped unless a representative citywide survey exists."},{"id":"council-mandate","outcome":"GO","reason":"Election results, candidates’ published positions and provincial recall law can show turnout and recall rules, though they cannot establish what every voter knew when voting."},{"id":"councillors-own-commute","outcome":"GO","reason":"The remuneration rules can settle the vehicle-allowance claim, while the blanket claim that councillors never bike should be dropped unless their own disclosures provide a complete answer."},{"id":"city-hall-pay-and-interests","outcome":"GO","reason":"Salary disclosures and filed interest statements can show the relevant pay and declared interests, without treating either as proof of an improper motive."},{"id":"who-pays-for-roads","outcome":"GO","reason":"Municipal budgets and intergovernmental funding records can show how much road money comes from property taxes, fuel-tax transfers and other sources shared by drivers and cyclists."},{"id":"on-street-parking","outcome":"GO","reason":"Project parking inventories and parking-program accounts can show how many spaces each lane removed and what providing those spaces costs the City."},{"id":"zoning-and-infill","outcome":"PARK","reason":"Reopen this when address-level infill permits can be linked to tree removals and before-and-after parking inventories, because the zoning bylaw alone cannot show what density displaced."},{"id":"city-plan-commitments","outcome":"GO","reason":"Council-approved plans and agreements can show whether Edmonton committed to 15-minute planning or a year-round downtown car ban and what those commitments actually require."},{"id":"emergency-access","outcome":"PARK","reason":"Reopen this when response records identify corridor-level delays or emergency use of bike lanes, because design standards alone cannot show whether the lanes help or hinder actual responses."},{"id":"access-across-barriers","outcome":"GO","reason":"Route drawings and accessibility standards can show where barriers, loading areas, driveways and alleys preserve access and where a design creates the cited detour or obstacle."},{"id":"transit-alternative","outcome":"GO","reason":"Published schedules, trip planners, service histories, ridership and collision records can compare transit with driving and test the specific claims about LRT and removed routes."},{"id":"cycling-safety","outcome":"PARK","reason":"Reopen this when collision records can be linked to route design and cyclist exposure, because raw crash totals cannot show whether bike lanes change risk."},{"id":"street-types-and-design","outcome":"GO","reason":"Road-classification maps, route inventories, design files and professional sign-offs can show which street types receive bike lanes and how their designs were approved."},{"id":"network-connections","outcome":"GO","reason":"The City’s network map can show where routes connect, where they terminate and whether gaps remain along the LRT."},{"id":"83-avenue-lane","outcome":"GO","reason":"Project records and the street-level complaint log can establish the lane’s location, installation date and whether complaints were recorded after it opened."},{"id":"132-avenue","outcome":"GO","reason":"Design drawings and school-location records can show exactly what is being built on each side of 132 Avenue and how many schools sit along the affected stretch."},{"id":"provincial-direction","outcome":"GO","reason":"Written provincial directives and tabled legislation can show whether Edmonton was ordered to stop building bike lanes and whether legislation was actually proposed."},{"id":"holyrood-school-lane","outcome":"GO","reason":"The design file, approval history and correspondence can show what was proposed outside the school, the councillor’s official role and why the design stopped."},{"id":"189-street-lane","outcome":"GO","reason":"The project record can show when the 189 Street lane was installed and removed, which official decisions authorized it and what removal cost."},{"id":"other-cities","outcome":"GO","reason":"Municipal project and council records can identify Canadian cities that have removed bike lanes and distinguish isolated removals from a broader trend."},{"id":"downtown-business","outcome":"PARK","reason":"Reopen this when business closures can be linked to customer-access changes through location-level records or owner evidence, because closure counts alone cannot establish why businesses failed."}]}
