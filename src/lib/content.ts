@@ -34,6 +34,25 @@ export function isWithdrawn(story: Story): boolean {
   return story.data.withdrawn !== undefined;
 }
 
+/**
+ * The third gate (methodology v1.19), and the first that works on a claim
+ * rather than a whole question.
+ *
+ * Two dispositions come off the boards for the same reason and neither is a
+ * correction. `board_withdrawn` is a finding that stands under a question the
+ * site decided was not worth asking. `context_for` is an established premise
+ * under the contested claim it supports, which belongs beside that claim rather
+ * than competing with it for a reader's attention.
+ *
+ * Both keep their page, their finding, their evidence and their history. What
+ * they lose is standing: a place on the findings board, a line in the home
+ * page's count, a row in the feed, and a listing in the search index as a
+ * current finding of the site.
+ */
+export function standsAsFinding(claim: Claim): boolean {
+  return claim.data.board_withdrawn === undefined && claim.data.context_for === undefined;
+}
+
 const byNewest = (stories: Story[]): Story[] =>
   stories.sort(
     (a, b) => b.data.last_verified.localeCompare(a.data.last_verified) || a.id.localeCompare(b.id),
@@ -167,12 +186,18 @@ export function claimAnchor(claim: Claim): string {
  * claims in the order that story lists them. Pages that show claims rather than
  * stories — the home page's recent rows, the full claim index — read this one
  * function, so what "newest" means cannot drift between them.
+ *
+ * Only claims that still stand as findings: a question whose every claim has
+ * left the board therefore contributes no rows, and so drops out of the counts
+ * and the feed that are computed from these rows.
  */
 export async function publishedClaims(): Promise<Array<{ claim: Claim; story: Story }>> {
   const stories = await publishedStories();
   const rows: Array<{ claim: Claim; story: Story }> = [];
   for (const story of stories) {
-    for (const claim of await claimsForStory(story)) rows.push({ claim, story });
+    for (const claim of await claimsForStory(story)) {
+      if (standsAsFinding(claim)) rows.push({ claim, story });
+    }
   }
   return rows;
 }

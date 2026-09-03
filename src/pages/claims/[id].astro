@@ -38,8 +38,12 @@ export async function getStaticPaths() {
   const questions = new Map(questionRegister().map((question) => [question.id, question]));
   const sources = new Map(sourceRegister().map((source) => [source.id, source]));
 
+  const checked = await allPublicClaims();
+  /** Claims by id, so a background claim can name the claim it stands under. */
+  const byId = new Map(checked.map((claim) => [claim.data.id, claim]));
+
   /** The claims that came back with a finding. */
-  const findings = (await allPublicClaims())
+  const findings = checked
     .map((claim) => ({ claim, story: stories.get(claim.data.story) }))
     .filter(
       (row): row is { claim: PublishedClaim; story: Story } => row.story !== undefined,
@@ -52,6 +56,7 @@ export async function getStaticPaths() {
         // A published claim's question is its story's slug: D-0029 gave each
         // published story its question under the slug it was published with.
         question: questions.get(story.id) ?? null,
+        supports: claim.data.context_for ? (byId.get(claim.data.context_for) ?? null) : null,
         registered: null,
         source: null,
       },
@@ -64,6 +69,7 @@ export async function getStaticPaths() {
       claim: null,
       story: null,
       question: questions.get(claim.question) ?? null,
+      supports: null,
       registered: claim,
       source: claim.source ? (sources.get(claim.source) ?? null) : null,
     },
@@ -77,11 +83,13 @@ interface Props {
   claim: PublishedClaim | null;
   story: Story | null;
   question: Question | null;
+  /** The claim this one is established background under (methodology v1.19). */
+  supports: PublishedClaim | null;
   registered: RegisterClaim | null;
   source: Source | null;
 }
 
-const { claim, story, question, registered, source } = Astro.props;
+const { claim, story, question, supports, registered, source } = Astro.props;
 
 const checked = claim !== null && story !== null && question !== null;
 const pageUrl = new URL(
@@ -90,6 +98,11 @@ const pageUrl = new URL(
 ).href;
 
 const withdrawn = story?.data.withdrawn;
+/** The claim's own dispositions (methodology v1.19), each with its own note. */
+const offTheBoard = claim?.data.board_withdrawn;
+const background = supports !== null;
+/** Every reason this page is no longer offered as a current finding. */
+const stands = withdrawn === undefined && offTheBoard === undefined && !background;
 const published = story ? firstPublished(story) : undefined;
 
 const sections = checked
@@ -114,8 +127,9 @@ const sections = checked
 
 /**
  * `ClaimReview` for a claim that is both through the panel and still standing
- * as a finding: a `pending-review` claim has no verdict yet, and a withdrawn one
- * has stopped asserting the one it had.
+ * as a finding: a `pending-review` claim has no verdict yet, a withdrawn one has
+ * stopped asserting the one it had, and a claim the site has taken off the board
+ * or keeps as background is no longer offering its finding as current work.
  *
  * It lives here rather than on the question's page because the claim is the
  * unit of judgement and this is its address: one review, one URL, and the URL a
@@ -128,7 +142,7 @@ const sections = checked
  * are composite paraphrases we wrote, with no author to name.
  */
 const claimReview =
-  checked && story.data.status === 'published' && withdrawn === undefined
+  checked && story.data.status === 'published' && stands
     ? {
         '@context': 'https://schema.org',
         '@type': 'ClaimReview',
@@ -154,14 +168,16 @@ const description = checked
 ---
 
 {/*
-  A withdrawn finding keeps its page and loses its standing, so it loses its
-  place in the search index with the question that carried it.
+  A finding that has lost its standing keeps its page and loses its place in the
+  search index, whether it went with the question that carried it (v1.13) or on
+  its own (v1.19). The page is still reachable from /questions and from its own
+  URL, which is the whole point of keeping it.
 */}
 <Base
   title={title}
   description={description}
   sections={sections}
-  indexable={withdrawn === undefined}
+  indexable={stands}
   jsonLd={claimReview}
   article={published ? { published, modified: story?.data.last_verified } : undefined}
 >
@@ -180,6 +196,52 @@ const description = checked
             <p class="mt-1 text-sm leading-relaxed text-muted">
               {withdrawn.reason} The check happened and the record of it stays here; it is no longer
               offered as a finding.
+            </p>
+          </aside>
+        )}
+        {/*
+          Off the board, and not a correction. A reader who sees a claim leave a
+          findings board will assume the finding was wrong, so the note says
+          first and plainly that it was not, and names what actually changed.
+        */}
+        {offTheBoard && (
+          <aside
+            class="mb-8 border-t-2 border-b border-t-gold border-b-rule bg-wash px-4 py-3.5"
+            role="note"
+          >
+            <p class="text-sm font-semibold text-forest">
+              Off the findings board · <time datetime={offTheBoard.date}>{offTheBoard.date}</time>
+            </p>
+            <p class="mt-1 text-sm leading-relaxed text-muted">
+              The answer below still stands. We have corrected nothing and the finding has not
+              changed. What changed is our own judgement about whether the question was worth
+              checking, and the plain version is that we should not have spent a panel run on it.
+              The page keeps its evidence, its panel and its history.
+            </p>
+            <p class="mt-2 text-sm leading-relaxed text-muted" data-record>
+              {offTheBoard.reason}
+            </p>
+          </aside>
+        )}
+        {/*
+          Established background. Not a wasted run: it is the premise that makes
+          the claim above it worth asking, which is why it sits under that claim
+          on the question's page rather than competing with it.
+        */}
+        {supports && (
+          <aside
+            class="mb-8 border-t-2 border-b border-t-navy border-b-rule bg-wash px-4 py-3.5"
+            role="note"
+          >
+            <p class="text-sm font-semibold text-forest">Established background</p>
+            <p class="mt-1 text-sm leading-relaxed text-muted">
+              Nobody disputes this one, so the site does not carry it as a current finding. It is
+              the premise under{' '}
+              <a href={`/claims/${supports.data.id}`} class="link" data-crossref>
+                {supports.data.question}
+              </a>{' '}
+              and it is shown there, under that question, as the ground it stands on. The answer
+              below still stands and nothing about it has changed.
             </p>
           </aside>
         )}
