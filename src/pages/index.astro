@@ -9,11 +9,11 @@ import FindingsBoard from '../components/FindingsBoard.astro';
 import ReportBox from '../components/ReportBox.astro';
 import StewByline from '../components/StewByline.astro';
 import {
-  claimTopics,
   orderedTopics,
   publishedClaims,
   publishedStories,
 } from '../lib/content';
+import { questionRows } from '../lib/questions';
 import { SITE } from '../lib/site';
 import { CANONICAL_FINDINGS } from '../lib/vocabulary';
 import { loadRunManifest } from '../../scripts/lib/review-schema.ts';
@@ -61,9 +61,21 @@ const evidenceCount = (await getCollection('evidence')).length;
 const methodologyVersion = highestMethodologyVersion(methodologyChanges());
 
 /** A topic's weight is how many checked claims sit under it, not how many questions. */
+/**
+ * Topics count questions, not checked claims.
+ *
+ * Counting checked claims made the biggest topic on the site read "no claims
+ * yet": bike lanes holds twenty-six questions and none of them has been
+ * checked, because the register filled up faster than the panel did. A
+ * navigation list that hides where the argument is because nobody has answered
+ * it yet is navigation pointed at the wrong thing. A question can carry several
+ * topics, so these do not sum to the total and the line above no longer says
+ * they do.
+ */
+const questions = await questionRows();
 const topics = (await orderedTopics()).map((topic) => ({
   ...topic.data,
-  count: rows.filter((row) => claimTopics(row.claim, row.story)[0] === topic.data.slug).length,
+  count: questions.filter((row) => row.topics.includes(topic.data.slug)).length,
 }));
 
 const CHANGE_LABELS: Record<'correction' | 'verdict-change', string> = {
@@ -206,7 +218,7 @@ const jsonLd = [
     <section class="lg:col-start-2 lg:row-start-1">
       <div class={head}><h2 class={headText}>Browse by topic</h2></div>
       <p class={lead}>
-        Each claim is filed under one topic, so the counts add up to the total above.
+        A question can sit under more than one topic, so these do not add up to the total above.
       </p>
       <ul class="mt-4">
         {
@@ -218,14 +230,14 @@ const jsonLd = [
                     {topic.name}
                   </a>
                   <span class="text-[0.875rem] whitespace-nowrap text-muted tabular">
-                    {topic.count} {topic.count === 1 ? 'claim' : 'claims'}
+                    {topic.count} {topic.count === 1 ? 'question' : 'questions'}
                   </span>
                 </Fragment>
               ) : (
                 <Fragment>
                   <span class:list={[topicName, 'text-muted']}>{topic.name}</span>
                   <span class="text-[0.875rem] whitespace-nowrap text-muted italic">
-                    no claims yet
+                    nothing yet
                   </span>
                 </Fragment>
               )}
