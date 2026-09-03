@@ -12,6 +12,13 @@
  * that person's mouth. So every `forms[].quote` must be an exact substring of
  * the comment it cites, after curly quotes and runs of whitespace are
  * normalised and nothing else.
+ *
+ * The register has two levels of grouping and the rules keep them apart. An
+ * investigation is one question, one brief, one panel run, and it carries the
+ * triage outcome. A claim belongs to exactly one investigation and gets exactly
+ * one finding, so it carries no outcome of its own — a claim with both would say
+ * it was ruled on twice, and a claim with neither would say it was never ruled
+ * on at all.
  */
 import { isIsoDate } from './repo.ts';
 
@@ -31,6 +38,18 @@ export const CANDIDATE_OUTCOMES = [
 export const CANDIDATE_ORIGINS = ['captured', 'supplied', 'editor'] as const;
 
 export const SOURCE_KINDS = ['facebook-post', 'article', 'discussion', 'video'] as const;
+
+/**
+ * Triage rules on investigations, and it has three answers. The dispositions a
+ * claim can be registered with on its own — a merge, an opinion, a check that
+ * came back unanswered — are not decisions triage makes about a question.
+ */
+export const INVESTIGATION_OUTCOMES = ['GO', 'PARK', 'NO'] as const;
+
+/** An investigation that parks or declines owes the reader a sentence saying why. */
+export const INVESTIGATION_OUTCOMES_NEEDING_REASON = ['PARK', 'NO'] as const;
+
+export const CLAIM_SIDES = ['for', 'against', 'neither'] as const;
 
 /**
  * Outcomes that owe the reader a sentence saying why. `variation` and
@@ -91,6 +110,7 @@ export function readComments(jsonl: string): Map<number, string> {
 export interface Register {
   candidates: unknown;
   sources?: unknown;
+  investigations?: unknown;
 }
 
 const isRecord = (value: unknown): value is Record_ =>
@@ -106,6 +126,10 @@ export function registerProblems(register: Register, world: RegisterWorld): stri
 
   const sources = Array.isArray(register.sources) ? register.sources : [];
   const candidates = Array.isArray(register.candidates) ? register.candidates : [];
+  if (register.investigations !== undefined && !Array.isArray(register.investigations)) {
+    fail('investigations must be a list');
+  }
+  const investigations = Array.isArray(register.investigations) ? register.investigations : [];
 
   // -------------------------------------------------------------------------
   // Sources
@@ -142,11 +166,104 @@ export function registerProblems(register: Register, world: RegisterWorld): stri
   }
 
   // -------------------------------------------------------------------------
+  // Investigations
+  //
+  // What a claim is checked under, so what a claim's outcome means. The claims
+  // are read first for the account counts, which are derived from them.
+  // -------------------------------------------------------------------------
+  const claimAccounts = new Map<string, number[]>();
+  for (const candidate of candidates) {
+    if (!isRecord(candidate) || typeof candidate.investigation !== 'string') continue;
+    const counts = claimAccounts.get(candidate.investigation) ?? [];
+    counts.push(typeof candidate.accounts === 'number' ? candidate.accounts : 0);
+    claimAccounts.set(candidate.investigation, counts);
+  }
+
+  const investigationById = new Map<string, Record_>();
+  for (const [index, investigation] of investigations.entries()) {
+    if (!isRecord(investigation)) {
+      fail(`investigation ${index + 1} must be a mapping`);
+      continue;
+    }
+    const id = typeof investigation.id === 'string' ? investigation.id : '';
+    const where = id === '' ? `investigation ${index + 1}` : `investigation ${id}`;
+    if (id === '') fail(`${where}: needs an id`);
+    else if (investigationById.has(id)) fail(`investigation id "${id}" appears more than once`);
+    else investigationById.set(id, investigation);
+
+    // The question is the brief's question, and an investigation without one is
+    // a panel run with nothing to answer.
+    if (typeof investigation.question !== 'string' || investigation.question.trim() === '') {
+      fail(`${where}: needs the question it asks`);
+    }
+    if (!isIsoDate(asDate(investigation.recorded))) {
+      fail(`${where} recorded: "${String(investigation.recorded)}" is not an ISO-8601 date`);
+    }
+
+    const outcome = String(investigation.outcome);
+    if (!INVESTIGATION_OUTCOMES.includes(outcome as (typeof INVESTIGATION_OUTCOMES)[number])) {
+      fail(`${where} outcome: "${outcome}" is not one of ${INVESTIGATION_OUTCOMES.join(', ')}`);
+    }
+    if (
+      INVESTIGATION_OUTCOMES_NEEDING_REASON.includes(
+        outcome as (typeof INVESTIGATION_OUTCOMES_NEEDING_REASON)[number],
+      ) &&
+      (typeof investigation.reason !== 'string' || investigation.reason.trim() === '')
+    ) {
+      fail(`${where}: outcome ${outcome} needs a public reason sentence`);
+    }
+
+    if (typeof investigation.source !== 'string' || !sourceById.has(investigation.source)) {
+      fail(`${where}: source "${String(investigation.source)}" is not in the sources list`);
+    }
+    // The run is the working behind the grouping and the triage call on it.
+    if (typeof investigation.run !== 'string' || investigation.run.trim() === '') {
+      fail(`${where}: run must be a repo-relative directory`);
+    } else if (!world.isDirectory(investigation.run)) {
+      fail(`${where}: run directory "${investigation.run}" does not exist`);
+    }
+
+    // The account counts are derived from the claims, and a derived number that
+    // is wrong misstates how many people are arguing the question. Distinct
+    // accounts on the question cannot be fewer than the accounts on any one of
+    // its claims, and cannot be more than every claim's accounts counted
+    // separately, which is what the same account arguing twice would give.
+    const counts = claimAccounts.get(id) ?? [];
+    const accounts = isRecord(investigation.accounts) ? investigation.accounts : undefined;
+    const total = accounts !== undefined ? accounts.total : undefined;
+    if (typeof total !== 'number' || !Number.isInteger(total) || total < 0) {
+      fail(`${where}: accounts.total must be the number of distinct accounts arguing the question`);
+    } else if (counts.length === 0) {
+      fail(`${where}: no claim is checked under it`);
+    } else {
+      const largest = Math.max(...counts);
+      const sum = counts.reduce((running, value) => running + value, 0);
+      if (total < largest || total > sum) {
+        fail(
+          `${where}: accounts.total ${total} is outside its claims' range ${largest} to ${sum}`,
+        );
+      }
+    }
+    for (const side of CLAIM_SIDES) {
+      const value = accounts?.[side];
+      if (value !== undefined && (!Number.isInteger(value) || (value as number) < 0)) {
+        fail(`${where}: accounts.${side} must be a whole number of accounts`);
+      }
+    }
+  }
+
+  // -------------------------------------------------------------------------
   // Candidates
   // -------------------------------------------------------------------------
   const ids = new Set<string>();
   for (const candidate of candidates) {
     if (isRecord(candidate) && typeof candidate.id === 'string') ids.add(candidate.id);
+  }
+
+  // Both levels are published at `/considered/<id>`, so a shared id is two
+  // pages fighting over one URL.
+  for (const id of investigationById.keys()) {
+    if (ids.has(id)) fail(`id "${id}" is both an investigation and a claim`);
   }
 
   const commentsFor = new Map<string, Map<number, string> | undefined>();
@@ -163,9 +280,64 @@ export function registerProblems(register: Register, world: RegisterWorld): stri
     else if (seen.has(id)) fail(`id "${id}" appears more than once`);
     seen.add(id);
 
-    const outcome = String(candidate.outcome);
-    if (!CANDIDATE_OUTCOMES.includes(outcome as (typeof CANDIDATE_OUTCOMES)[number])) {
+    // An outcome or an investigation, exactly one. A claim inside an
+    // investigation is ruled on there, once, for every claim under the question;
+    // a claim registered on its own was ruled on by itself. A claim with both
+    // would carry two decisions that can disagree, and a claim with neither has
+    // no decision at all.
+    const investigation = candidate.investigation;
+    const hasOutcome = candidate.outcome !== undefined;
+    if (investigation !== undefined) {
+      if (typeof investigation !== 'string' || !investigationById.has(investigation)) {
+        fail(
+          `${where}: investigation "${String(investigation)}" is not in the investigations list`,
+        );
+      }
+      if (hasOutcome) {
+        fail(`${where}: triage ruled on its investigation, so it carries no outcome of its own`);
+      }
+      // Both are printed beside the claim, and the account count is what the
+      // investigation's total is checked against.
+      if (candidate.side === undefined) {
+        fail(`${where}: needs the side of the argument it serves`);
+      }
+      if (candidate.accounts === undefined) {
+        fail(`${where}: needs the number of accounts that argued it`);
+      }
+    } else if (!hasOutcome) {
+      fail(`${where}: needs an investigation to be checked under, or an outcome of its own`);
+    }
+
+    const outcome = hasOutcome ? String(candidate.outcome) : '';
+    if (
+      hasOutcome &&
+      !CANDIDATE_OUTCOMES.includes(outcome as (typeof CANDIDATE_OUTCOMES)[number])
+    ) {
       fail(`${where} outcome: "${outcome}" is not one of ${CANDIDATE_OUTCOMES.join(', ')}`);
+    }
+    if (
+      candidate.side !== undefined &&
+      !CLAIM_SIDES.includes(candidate.side as (typeof CLAIM_SIDES)[number])
+    ) {
+      fail(`${where} side: "${String(candidate.side)}" is not one of ${CLAIM_SIDES.join(', ')}`);
+    }
+    if (
+      candidate.accounts !== undefined &&
+      (!Number.isInteger(candidate.accounts) || (candidate.accounts as number) < 1)
+    ) {
+      fail(`${where}: accounts must be the number of accounts that argued the claim`);
+    }
+    // Plain strings: a variation is another wording of the same assertion, and
+    // one that says something else belongs in its own claim, which is a
+    // judgement the grouping gate makes rather than a shape this can see.
+    if (
+      candidate.variations !== undefined &&
+      (!Array.isArray(candidate.variations) ||
+        candidate.variations.some(
+          (variation) => typeof variation !== 'string' || variation.trim() === '',
+        ))
+    ) {
+      fail(`${where}: variations must be a list of alternative wordings`);
     }
     if (!CANDIDATE_ORIGINS.includes(candidate.origin as (typeof CANDIDATE_ORIGINS)[number])) {
       fail(`${where} origin: "${String(candidate.origin)}" is not one of ${CANDIDATE_ORIGINS.join(', ')}`);

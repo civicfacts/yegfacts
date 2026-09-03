@@ -4,6 +4,11 @@
  * merged claim says what it merged into, every declined disposition carries the
  * sentence `/considered` prints, and — the one that matters most — a quote
  * attributed to a real person is that person's words, not a model's tidy-up.
+ *
+ * Since grouping, two more: the outcome sits on the investigation and only
+ * there, and an investigation's account counts are inside the range its own
+ * claims allow. Opposite claims under one question are deliberate and must
+ * validate; what must not is a claim ruled on twice, or ruled on nowhere.
  */
 import { describe, expect, it } from 'vitest';
 import {
@@ -57,10 +62,51 @@ function candidate(overrides: Record<string, unknown> = {}) {
   };
 }
 
+/** One question, with the triage call on it. What a claim is checked under. */
+function investigation(overrides: Record<string, unknown> = {}) {
+  return {
+    id: 'lanes-and-congestion',
+    recorded: '2026-09-02',
+    source: 'thread',
+    question: "Do Edmonton's bike lanes ease congestion or make it worse?",
+    outcome: 'GO',
+    reason: 'Before-and-after traffic counts on the converted corridors can answer it.',
+    accounts: { total: 2, against: 1, for: 1 },
+    run: 'reviews/intake/thread',
+    ...overrides,
+  };
+}
+
+/** A claim inside that investigation: no outcome of its own, ever. */
+function claim(overrides: Record<string, unknown> = {}) {
+  return {
+    id: 'lanes-removed',
+    recorded: '2026-09-02',
+    origin: 'captured',
+    source: 'thread',
+    investigation: 'lanes-and-congestion',
+    proposition: 'Edmonton is removing traffic lanes across the city to build bike lanes.',
+    wording: 'The city is removing traffic lanes all throughout the city for bike lanes.',
+    side: 'against',
+    accounts: 1,
+    ...overrides,
+  };
+}
+
+/** The other side of the same question, so the pair fills the fixture's total of 2. */
+const otherSide = (overrides: Record<string, unknown> = {}) =>
+  claim({ id: 'lanes-help', side: 'for', ...overrides });
+
 const check = (register: Register, w: RegisterWorld = world()) => registerProblems(register, w);
 
 const problems = (candidates: unknown[], w: RegisterWorld = world()) =>
   check({ sources: [source], candidates }, w);
+
+const grouped = (
+  candidates: unknown[],
+  investigations: unknown[] = [investigation()],
+  w: RegisterWorld = world(),
+) => check({ sources: [source], investigations, candidates }, w);
 
 describe('normaliseQuote', () => {
   it('folds curly quotes and runs of whitespace, and nothing else', () => {
@@ -125,6 +171,167 @@ describe('registerProblems: sources', () => {
     expect(check({ sources: [{ ...source, kind: 'tweet' }], candidates: [] })).toContain(
       'source thread kind: "tweet" is not one of facebook-post, article, discussion, video',
     );
+  });
+});
+
+describe('registerProblems: investigations', () => {
+  it('accepts a question with a claim on each side of it', () => {
+    expect(grouped([claim(), otherSide()])).toEqual([]);
+  });
+
+  it('rejects two investigations sharing an id', () => {
+    expect(grouped([claim(), otherSide()], [investigation(), investigation()])).toContain(
+      'investigation id "lanes-and-congestion" appears more than once',
+    );
+  });
+
+  it('rejects an id that is both an investigation and a claim', () => {
+    expect(grouped([claim({ id: 'lanes-and-congestion' })])).toContain(
+      'id "lanes-and-congestion" is both an investigation and a claim',
+    );
+  });
+
+  it('rejects an outcome triage cannot give a question', () => {
+    expect(
+      grouped([claim(), otherSide()], [investigation({ outcome: 'not-a-claim' })]),
+    ).toContain(
+      'investigation lanes-and-congestion outcome: "not-a-claim" is not one of GO, PARK, NO',
+    );
+  });
+
+  for (const outcome of ['PARK', 'NO'] as const) {
+    it(`requires a public reason on ${outcome}`, () => {
+      expect(
+        grouped([claim(), otherSide()], [investigation({ outcome, reason: '  ' })]),
+      ).toContain(
+        `investigation lanes-and-congestion: outcome ${outcome} needs a public reason sentence`,
+      );
+    });
+  }
+
+  it('requires the question it asks', () => {
+    expect(grouped([claim(), otherSide()], [investigation({ question: '' })])).toContain(
+      'investigation lanes-and-congestion: needs the question it asks',
+    );
+  });
+
+  it('rejects a source that is not in the sources list', () => {
+    expect(grouped([claim(), otherSide()], [investigation({ source: 'nowhere' })])).toContain(
+      'investigation lanes-and-congestion: source "nowhere" is not in the sources list',
+    );
+  });
+
+  it('rejects a run directory that does not exist', () => {
+    expect(
+      grouped([claim(), otherSide()], [investigation({ run: 'reviews/intake/gone' })]),
+    ).toContain(
+      'investigation lanes-and-congestion: run directory "reviews/intake/gone" does not exist',
+    );
+  });
+
+  it('rejects a question no claim is checked under', () => {
+    expect(grouped([])).toContain(
+      'investigation lanes-and-congestion: no claim is checked under it',
+    );
+  });
+});
+
+describe('registerProblems: the outcome sits on the investigation', () => {
+  it('rejects a claim that carries an outcome as well', () => {
+    expect(grouped([claim({ outcome: 'GO' }), otherSide()])).toContain(
+      'lanes-removed: triage ruled on its investigation, so it carries no outcome of its own',
+    );
+  });
+
+  it('rejects a claim with neither an outcome nor an investigation', () => {
+    expect(problems([candidate({ outcome: undefined })])).toContain(
+      'lanes-removed: needs an investigation to be checked under, or an outcome of its own',
+    );
+  });
+
+  it('rejects an investigation the investigations list does not have', () => {
+    expect(grouped([claim({ investigation: 'invented' }), otherSide()])).toContain(
+      'lanes-removed: investigation "invented" is not in the investigations list',
+    );
+  });
+
+  it('requires the side and the account count on a grouped claim', () => {
+    expect(grouped([claim({ side: undefined, accounts: undefined }), otherSide()])).toEqual([
+      'investigation lanes-and-congestion: accounts.total 2 is outside its claims\' range 1 to 1',
+      'lanes-removed: needs the side of the argument it serves',
+      'lanes-removed: needs the number of accounts that argued it',
+    ]);
+  });
+
+  it('rejects a side outside the vocabulary', () => {
+    expect(grouped([claim({ side: 'both' }), otherSide()])).toContain(
+      'lanes-removed side: "both" is not one of for, against, neither',
+    );
+  });
+
+  it('rejects an account count that is not a whole number of accounts', () => {
+    expect(grouped([claim({ accounts: 0 }), otherSide()])).toContain(
+      'lanes-removed: accounts must be the number of accounts that argued the claim',
+    );
+  });
+
+  it('rejects variations that are not wordings', () => {
+    expect(grouped([claim({ variations: ['a wording', ''] }), otherSide()])).toContain(
+      'lanes-removed: variations must be a list of alternative wordings',
+    );
+  });
+});
+
+describe('registerProblems: an investigation’s accounts are derived from its claims', () => {
+  it('accepts a total equal to the largest of its claims', () => {
+    expect(
+      grouped(
+        [claim({ accounts: 2 }), otherSide({ accounts: 2 })],
+        [investigation({ accounts: { total: 2, against: 2, for: 2 } })],
+      ),
+    ).toEqual([]);
+  });
+
+  it('accepts a total equal to the sum of its claims', () => {
+    expect(
+      grouped(
+        [claim({ accounts: 2 }), otherSide({ accounts: 2 })],
+        [investigation({ accounts: { total: 4, against: 2, for: 2 } })],
+      ),
+    ).toEqual([]);
+  });
+
+  it('rejects a total smaller than one of its claims', () => {
+    expect(
+      grouped(
+        [claim({ accounts: 5 }), otherSide()],
+        [investigation({ accounts: { total: 4, against: 5, for: 1 } })],
+      ),
+    ).toEqual([
+      "investigation lanes-and-congestion: accounts.total 4 is outside its claims' range 5 to 6",
+    ]);
+  });
+
+  it('rejects a total larger than every claim counted separately', () => {
+    expect(
+      grouped([claim(), otherSide()], [investigation({ accounts: { total: 3, against: 2 } })]),
+    ).toEqual([
+      "investigation lanes-and-congestion: accounts.total 3 is outside its claims' range 1 to 2",
+    ]);
+  });
+
+  it('rejects a missing total', () => {
+    expect(
+      grouped([claim(), otherSide()], [investigation({ accounts: { against: 1, for: 1 } })]),
+    ).toEqual([
+      'investigation lanes-and-congestion: accounts.total must be the number of distinct accounts arguing the question',
+    ]);
+  });
+
+  it('rejects a side count that is not a whole number of accounts', () => {
+    expect(
+      grouped([claim(), otherSide()], [investigation({ accounts: { total: 2, against: 1.5 } })]),
+    ).toContain('investigation lanes-and-congestion: accounts.against must be a whole number of accounts');
   });
 });
 

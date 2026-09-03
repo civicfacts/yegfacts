@@ -22,6 +22,50 @@ export type CandidateOutcome =
 /** Where the wording came from. */
 export type CandidateOrigin = 'captured' | 'supplied' | 'editor';
 
+/**
+ * How many distinct commenter labels argued something in a source.
+ *
+ * Accounts, never people: the labels are pseudonyms, one to a commenter within
+ * one source, and an account arguing a question is not an account agreeing with
+ * the claim it is counted under. `total` is the distinct accounts on the
+ * question; the three side counts are the distinct accounts on each side, and
+ * an account that argued both ways is in both, so the sides can come to more
+ * than the total.
+ */
+export interface Accounts {
+  total: number;
+  for?: number;
+  against?: number;
+  neither?: number;
+}
+
+/**
+ * One question, checked once: one brief, one body of evidence, one panel run.
+ *
+ * This is the unit of work and the unit triage rules on, which is why the
+ * outcome lives here rather than on the claims. Several claims to an
+ * investigation is normal, and opposite claims belong in the same one: a single
+ * finding over both would state nothing, and would label each side with a
+ * verdict about the other, so each claim keeps its own finding under the one
+ * question.
+ */
+export interface Investigation {
+  id: string;
+  recorded: string;
+  /** Id of the `sources` entry the question came out of. */
+  source: string;
+  /** The question, as the brief will ask it. */
+  question: string;
+  outcome: string;
+  /** One public sentence saying why the outcome is what it is. */
+  reason?: string;
+  /** Why these claims are one investigation, when that needs saying. */
+  grouping_note?: string;
+  accounts: Accounts;
+  /** Repo-relative run directory the grouping came out of. */
+  run: string;
+}
+
 /** One captured wording of a proposition, as a person actually typed it. */
 export interface CapturedForm {
   /** Stable pseudonym within the source. Never a real name. */
@@ -37,6 +81,11 @@ export interface Candidate {
   recorded: string;
   origin: string;
   wording: string;
+  /**
+   * What triage decided. A claim inside an investigation has none of its own in
+   * the register and inherits its investigation's, which the loader resolves
+   * here so everything downstream — the redaction included — reads one field.
+   */
   outcome: string;
   /** Who passed the wording on, when a person did. */
   supplied_by?: string;
@@ -54,12 +103,16 @@ export interface Candidate {
   story?: string;
   /** Id of the `sources` entry the proposition was extracted from. */
   source?: string;
+  /** Id of the `investigations` entry this claim is checked under. */
+  investigation?: string;
   /** What would have to be true, in one plain sentence. Shown as the claim. */
   proposition?: string;
   /** Which side of the source's argument the proposition serves. */
   side?: string;
-  /** How many distinct people asserted it in the source. */
-  commenters?: number;
+  /** How many distinct accounts argued the claim, either way. */
+  accounts?: number;
+  /** Other wordings of the same assertion folded into this claim. */
+  variations?: string[];
   /** Which extractor seats found it. */
   seats?: string[];
   /** Every captured wording. Empty when the site is withholding them. */
@@ -148,6 +201,12 @@ function forms(value: unknown): CapturedForm[] | undefined {
  * page cannot leak. The entry keeps its id, its outcome and its `reason`, which
  * the validator makes mandatory on every outcome this can apply to, so the row
  * is still on `/considered` to be read and counted.
+ *
+ * The `outcome` this reads is the one that decided the claim: its own for an
+ * entry registered on its own, and its investigation's for a claim from a whole
+ * source, which is the only outcome such a claim has. `parseRegister` resolves
+ * that before calling this, so a claim in a declined investigation is withheld
+ * even though the claim itself carries no outcome in the file.
  */
 export function withholdsWording(entry: {
   names_person?: boolean;
@@ -175,9 +234,10 @@ export const WITHHELD_LABEL = 'Withheld claim';
 /**
  * A candidate as the site may print it. Identity for everything else.
  *
- * `side` and `commenters` go with the wording: "against the argument" and "one
- * person said it" describe a claim this entry is refusing to show, so the site
- * never receives them either.
+ * `side`, `accounts` and `variations` go with the wording: "against the
+ * argument", "argued by one account" and another phrasing of the allegation all
+ * describe a claim this entry is refusing to show, so the site never receives
+ * them either.
  */
 export function redact(candidate: Candidate): Candidate {
   if (!withholdsWording(candidate)) return candidate;
@@ -186,19 +246,26 @@ export function redact(candidate: Candidate): Candidate {
     wording: WITHHELD_LABEL,
     proposition: WITHHELD_LABEL,
     side: undefined,
-    commenters: undefined,
+    accounts: undefined,
+    variations: undefined,
     forms: [],
     withheld: true,
   };
 }
 
-function toCandidate(entry: Record<string, unknown>): Candidate {
+function toCandidate(
+  entry: Record<string, unknown>,
+  investigations: Map<string, Investigation>,
+): Candidate {
+  const investigation = optional(entry.investigation);
+  const inherited = investigation ? investigations.get(investigation)?.outcome : undefined;
   return redact({
     id: text(entry.id),
     recorded: text(entry.recorded),
     origin: text(entry.origin),
     wording: text(entry.wording),
-    outcome: text(entry.outcome),
+    outcome: optional(entry.outcome) ?? inherited ?? '',
+    investigation,
     supplied_by: optional(entry.supplied_by),
     context: optional(entry.context),
     reason: optional(entry.reason),
@@ -209,7 +276,8 @@ function toCandidate(entry: Record<string, unknown>): Candidate {
     source: optional(entry.source),
     proposition: optional(entry.proposition),
     side: optional(entry.side),
-    commenters: count(entry.commenters),
+    accounts: count(entry.accounts),
+    variations: entry.variations === undefined ? undefined : strings(entry.variations),
     seats: entry.seats === undefined ? undefined : strings(entry.seats),
     forms: forms(entry.forms),
     names_person: entry.names_person === true,
@@ -236,34 +304,153 @@ function toSource(entry: Record<string, unknown>): Source {
   };
 }
 
-function list(key: 'candidates' | 'sources'): Record<string, unknown>[] {
-  return Object.values(files)
-    .flatMap((raw) => {
-      const parsed: unknown = parse(raw);
-      const entries = (parsed as Record<string, unknown> | null)?.[key];
-      return Array.isArray(entries) ? entries : [];
-    })
-    .filter((entry): entry is Record<string, unknown> => typeof entry === 'object' && entry !== null);
+function toInvestigation(entry: Record<string, unknown>): Investigation {
+  return {
+    id: text(entry.id),
+    recorded: text(entry.recorded),
+    source: text(entry.source),
+    question: text(entry.question),
+    outcome: text(entry.outcome),
+    reason: optional(entry.reason),
+    grouping_note: optional(entry.grouping_note),
+    accounts: toAccounts(entry.accounts),
+    run: text(entry.run),
+  };
 }
 
-let candidateCache: Candidate[] | undefined;
-let sourceCache: Source[] | undefined;
+function toAccounts(value: unknown): Accounts {
+  const entry = (typeof value === 'object' && value !== null ? value : {}) as Record<string, unknown>;
+  return {
+    total: count(entry.total) ?? 0,
+    for: count(entry.for),
+    against: count(entry.against),
+    neither: count(entry.neither),
+  };
+}
+
+function rows(parsed: unknown, key: string): Record<string, unknown>[] {
+  const entries = (parsed as Record<string, unknown> | null)?.[key];
+  return (Array.isArray(entries) ? entries : []).filter(
+    (entry): entry is Record<string, unknown> => typeof entry === 'object' && entry !== null,
+  );
+}
+
+/** The register's three lists, in the order the file lists them. */
+export interface IntakeRegister {
+  investigations: Investigation[];
+  sources: Source[];
+  candidates: Candidate[];
+}
 
 /**
- * Every candidate in the register, in the order the file lists them, with
- * named-individual allegations already redacted (`redact`).
+ * One register file as the site receives it: investigations first, because a
+ * claim's outcome is its investigation's and the claims cannot be built without
+ * them.
+ *
+ * Exported as a pure function of the text so the rules that matter can be
+ * tested against a fixture — above all that a claim naming an individual, in an
+ * investigation both readers declined, arrives with nothing of the allegation
+ * left on it.
+ */
+export function parseRegister(raw: string): IntakeRegister {
+  const parsed: unknown = parse(raw);
+  const investigations = rows(parsed, 'investigations')
+    .map(toInvestigation)
+    .filter((investigation) => investigation.id !== '');
+  const byId = new Map(investigations.map((investigation) => [investigation.id, investigation]));
+  return {
+    investigations,
+    sources: rows(parsed, 'sources').map(toSource).filter((source) => source.id !== ''),
+    candidates: rows(parsed, 'candidates')
+      .map((entry) => toCandidate(entry, byId))
+      .filter((candidate) => candidate.id !== ''),
+  };
+}
+
+let cache: IntakeRegister | undefined;
+
+function register(): IntakeRegister {
+  if (cache === undefined) {
+    const parsed = Object.values(files).map(parseRegister);
+    cache = {
+      investigations: parsed.flatMap((file) => file.investigations),
+      sources: parsed.flatMap((file) => file.sources),
+      candidates: parsed.flatMap((file) => file.candidates),
+    };
+  }
+  return cache;
+}
+
+/**
+ * Every candidate in the register, in the order the file lists them, each
+ * carrying the outcome that decided it and with named-individual allegations
+ * already redacted (`redact`).
  */
 export function candidateRegister(): Candidate[] {
-  candidateCache ??= list('candidates')
-    .map(toCandidate)
-    .filter((candidate) => candidate.id !== '');
-  return candidateCache;
+  return register().candidates;
 }
 
 /** Every source in the register, in the order the file lists them. */
 export function sourceRegister(): Source[] {
-  sourceCache ??= list('sources').map(toSource).filter((source) => source.id !== '');
-  return sourceCache;
+  return register().sources;
+}
+
+/** Every investigation in the register, in the order the file lists them. */
+export function investigationRegister(): Investigation[] {
+  return register().investigations;
+}
+
+/** The investigation a claim is checked under, when it belongs to one. */
+export function investigationOf(candidate: Candidate): Investigation | undefined {
+  return candidate.investigation === undefined
+    ? undefined
+    : investigationRegister().find(({ id }) => id === candidate.investigation);
+}
+
+/** One investigation with the claims checked under it. */
+export interface InvestigationClaims {
+  investigation: Investigation;
+  claims: Candidate[];
+  /**
+   * Claims for the source's argument and claims against it, under the one
+   * question. The site's best evidence that it is not picking sides, so the
+   * pages say it rather than leaving it to be counted off the rows.
+   */
+  twoSided: boolean;
+}
+
+/** The claims checked under one investigation, in the register's order. */
+export function claimsOf(investigationId: string): Candidate[] {
+  return candidateRegister().filter(
+    (candidate) => candidate.investigation === investigationId,
+  );
+}
+
+/**
+ * A source's investigations, most-argued question first.
+ *
+ * `accounts.total` is the sort key because it is the closest thing the register
+ * has to "how many people are having this argument": it puts the questions
+ * Edmonton is actually arguing over at the top and sinks the hyper-specific
+ * ones, which is the order a reader checking for cherry-picking wants.
+ */
+export function investigationsForSource(sourceId: string): InvestigationClaims[] {
+  return investigationRegister()
+    .filter((investigation) => investigation.source === sourceId)
+    .map((investigation) => {
+      const claims = claimsOf(investigation.id);
+      const sides = new Set(claims.map((claim) => claim.side));
+      return {
+        investigation,
+        claims,
+        twoSided: sides.has('for') && sides.has('against'),
+      };
+    })
+    .sort(
+      (a, b) =>
+        b.investigation.accounts.total - a.investigation.accounts.total ||
+        a.investigation.id.localeCompare(b.investigation.id),
+    );
 }
 
 /**
@@ -403,7 +590,10 @@ export function outcomeRank(outcome: string): number {
  * page cannot show a label it has not defined.
  */
 export function registerKey(): Array<(typeof REGISTER_SECTIONS)[number]> {
-  const used = new Set(candidateRegister().map((candidate) => candidate.outcome));
+  const used = new Set([
+    ...investigationRegister().map((investigation) => investigation.outcome),
+    ...candidateRegister().map((candidate) => candidate.outcome),
+  ]);
   return REGISTER_SECTIONS.filter((section) => used.has(section.outcome)).sort(
     (a, b) => outcomeRank(a.outcome) - outcomeRank(b.outcome),
   );
@@ -462,6 +652,43 @@ export function sideLabel(side: string): string {
   return side === 'neither' ? 'neither side of the argument' : `${side} the argument`;
 }
 
+/** The side, in the two or three words a count can sit beside. */
+const SIDE_WORD: Record<string, string> = {
+  for: 'for',
+  against: 'against',
+  neither: 'on neither side',
+};
+
+/**
+ * How many accounts argued a claim, in words.
+ *
+ * Accounts, not people, everywhere the site prints one of these numbers. The
+ * labels behind them are pseudonyms, and a count is of the accounts that argued
+ * the claim rather than of the accounts that assert it: a proposition's captured
+ * wordings include the comments denying it.
+ */
+export function arguedBy(accounts: number): string {
+  return `argued by ${accounts} ${accounts === 1 ? 'account' : 'accounts'}`;
+}
+
+/**
+ * An investigation's accounts, always disaggregated.
+ *
+ * A bare total reads as corroboration — twenty-five accounts saying so — when
+ * on a two-sided question it is twenty-one accounts saying one thing and five
+ * saying the opposite. So the split is printed with the total every time, and
+ * the total is never printed alone.
+ */
+export function accountSplit(accounts: Accounts): string {
+  const total = `${accounts.total} ${accounts.total === 1 ? 'account' : 'accounts'}`;
+  const parts = (['against', 'for', 'neither'] as const)
+    .map((side) => ({ side, count: accounts[side] ?? 0 }))
+    .filter((part) => part.count > 0)
+    .sort((a, b) => b.count - a.count);
+  if (parts.length === 0) return total;
+  return `${total}: ${parts.map((part) => `${part.count} ${SIDE_WORD[part.side]}`).join(', ')}`;
+}
+
 /** The label for the link to a candidate's story, when it has one. */
 export function storyLinkLabel(candidate: Candidate): string {
   return candidate.outcome === 'not-answered'
@@ -479,6 +706,15 @@ export function reportsFor(candidate: Candidate): Array<{ label: string; path: s
     candidate.intake && { label: 'Intake record', path: candidate.intake },
     candidate.triage && { label: 'Triage', path: candidate.triage },
   ].filter((report): report is { label: string; path: string } => Boolean(report));
+}
+
+/**
+ * The section anchor a report renders under. Two places need it and they have
+ * to agree: the page's outline, built before the reports are rendered, and the
+ * section itself.
+ */
+export function reportAnchor(label: string): string {
+  return label === 'Triage' ? 'triage' : 'intake';
 }
 
 /**

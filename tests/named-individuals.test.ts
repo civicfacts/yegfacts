@@ -16,11 +16,17 @@
  * redaction itself, the live register, and the structural fact that no page or
  * component reaches around `src/lib/intake.ts` to read the file directly.
  *
- * Both register pages print `candidate.side` and `candidate.commenters`
- * straight, each inside a test for the field being there, so a field the
- * redaction removes is a line the page does not render. That is why the
- * "does the page print it" question is answered here, against the candidate the
- * page is handed, rather than against built HTML.
+ * A claim from a whole source carries no outcome of its own — triage rules on
+ * the investigation it belongs to — so the trigger is now the investigation's
+ * decline, which is what the fixture below reads through `parseRegister`. No
+ * claim in the live register is in that position, and a test that only looks at
+ * the live register would therefore prove nothing.
+ *
+ * Both register pages print `candidate.side` and `candidate.accounts` straight,
+ * each inside a test for the field being there, so a field the redaction removes
+ * is a line the page does not render. That is why the "does the page print it"
+ * question is answered here, against the candidate the page is handed, rather
+ * than against built HTML.
  */
 import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
@@ -30,6 +36,8 @@ import {
   WITHHELD_LABEL,
   candidateRegister,
   claimText,
+  investigationOf,
+  parseRegister,
   redact,
   withholdsWording,
   type Candidate,
@@ -44,7 +52,7 @@ function entry(overrides: Partial<Candidate> = {}): Candidate {
     proposition: 'Councillor Someone accepted a payment from a developer.',
     outcome: 'NO',
     side: 'against',
-    commenters: 3,
+    accounts: 3,
     names_person: true,
     reason: 'An allegation against a named individual, which this site has no process to put to them.',
     forms: [{ commenter: 'Snowy Hare F.', quote: 'took a bribe', comment: 12 }],
@@ -84,10 +92,15 @@ describe('redact', () => {
     expect(claimText(redact(entry()))).not.toBe(entry().reason);
   });
 
-  it('drops the side and the commenter count, which describe the claim it will not show', () => {
+  it('drops the side and the account count, which describe the claim it will not show', () => {
     const redacted = redact(entry());
     expect(redacted.side).toBeUndefined();
-    expect(redacted.commenters).toBeUndefined();
+    expect(redacted.accounts).toBeUndefined();
+  });
+
+  it('drops the other wordings it was folded from, which are the allegation again', () => {
+    expect(redact(entry({ variations: ['Councillor Someone was paid off.'] })).variations)
+      .toBeUndefined();
   });
 
   it('keeps the id, the outcome and the reason, so the entry is still on the register', () => {
@@ -122,6 +135,104 @@ describe('redact', () => {
   });
 });
 
+/**
+ * Two questions from one source, one declined and one going ahead, each with a
+ * claim naming a person. The claims carry no outcome, because triage ruled on
+ * the questions; the decline has to reach the claim under it all the same.
+ */
+const FIXTURE = `
+investigations:
+  - id: developer-payment
+    recorded: "2026-09-02"
+    source: thread
+    question: "Was a councillor paid by a developer?"
+    outcome: NO
+    reason: "An allegation about a named person, which this site has no process to put to them."
+    accounts:
+      total: 3
+      against: 3
+    run: reviews/intake/thread
+  - id: pause-vote
+    recorded: "2026-09-02"
+    source: thread
+    question: "How did council vote on pausing the routes?"
+    outcome: GO
+    reason: "The minutes record the motion and the vote."
+    accounts:
+      total: 1
+      against: 1
+    run: reviews/intake/thread
+candidates:
+  - id: developer-paid-councillor
+    recorded: "2026-09-02"
+    origin: captured
+    source: thread
+    investigation: developer-payment
+    proposition: "Councillor Someone accepted a payment from a developer."
+    wording: "Someone took a bribe from a developer."
+    side: against
+    accounts: 3
+    names_person: true
+    forms:
+      - commenter: "Snowy Hare F."
+        quote: "took a bribe"
+        comment: 12
+  - id: councillor-moved-the-pause
+    recorded: "2026-09-02"
+    origin: captured
+    source: thread
+    investigation: pause-vote
+    proposition: "Councillor Someone brought the motion to pause the routes."
+    wording: "Someone brought the motion to pause them."
+    side: against
+    accounts: 1
+    names_person: true
+    forms:
+      - commenter: "Snowy Hare F."
+        quote: "brought the motion"
+        comment: 13
+`;
+
+const fixture = (id: string): Candidate => {
+  const found = parseRegister(FIXTURE).candidates.find((candidate) => candidate.id === id);
+  if (found === undefined) throw new Error(`no ${id} in the fixture`);
+  return found;
+};
+
+describe('a claim whose investigation was declined', () => {
+  it('inherits the decline, because the claim has no outcome of its own', () => {
+    expect(fixture('developer-paid-councillor').outcome).toBe('NO');
+  });
+
+  it('renders no proposition, no wording and no captured forms', () => {
+    const withheld = fixture('developer-paid-councillor');
+    expect(withheld.withheld).toBe(true);
+    expect(withheld.proposition).toBe(WITHHELD_LABEL);
+    expect(withheld.wording).toBe(WITHHELD_LABEL);
+    expect(claimText(withheld)).toBe(WITHHELD_LABEL);
+    expect(withheld.forms).toEqual([]);
+  });
+
+  it('leaves nothing of the allegation anywhere in the entry', () => {
+    expect(JSON.stringify(fixture('developer-paid-councillor'))).not.toContain('bribe');
+  });
+
+  it('keeps the entry on the register, with its id and the outcome it inherited', () => {
+    const withheld = fixture('developer-paid-councillor');
+    expect(withheld.id).toBe('developer-paid-councillor');
+    expect(withheld.investigation).toBe('developer-payment');
+  });
+
+  // The trigger is the decline, not the name: an office-holder's public record
+  // is what the site exists to check, and it is named here as in the stories.
+  it('prints a named office-holder’s public record when the investigation goes ahead', () => {
+    const going = fixture('councillor-moved-the-pause');
+    expect(going.withheld).toBeUndefined();
+    expect(going.proposition).toContain('brought the motion');
+    expect(going.forms).toHaveLength(1);
+  });
+});
+
 describe('the register as the site receives it', () => {
   it('carries no proposition or quote for a withheld entry', () => {
     for (const candidate of candidateRegister()) {
@@ -134,24 +245,31 @@ describe('the register as the site receives it', () => {
   });
 
   /**
-   * The register page prints the side and the commenter count from these two
+   * The register page prints the side and the account count from these two
    * fields and only from them, each under a test for the field being present,
    * so an entry that arrives without them renders no such line.
    */
-  it('carries no side and no commenter count for a withheld entry', () => {
+  it('carries no side and no account count for a withheld entry', () => {
     for (const candidate of candidateRegister()) {
       if (!candidate.withheld) continue;
       expect(candidate.side).toBeUndefined();
-      expect(candidate.commenters).toBeUndefined();
+      expect(candidate.accounts).toBeUndefined();
     }
   });
 
-  it('keeps a withheld entry on the register with its outcome and its reason', () => {
+  /**
+   * The row stays public, with somewhere to read the reason: its own, for an
+   * entry registered on its own, and its investigation's for a claim from a
+   * source, which is where the reason for that decision lives.
+   */
+  it('keeps a withheld entry on the register with its outcome and a reason to read', () => {
     for (const candidate of candidateRegister()) {
       if (!candidate.withheld) continue;
       expect(candidate.id).not.toBe('');
       expect(candidate.outcome).not.toBe('');
-      expect(candidate.reason ?? candidate.note).toBeTruthy();
+      expect(
+        candidate.reason ?? candidate.note ?? investigationOf(candidate)?.reason,
+      ).toBeTruthy();
     }
   });
 });
