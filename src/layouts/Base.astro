@@ -210,6 +210,19 @@ const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY
         </div>
       )
     }
+    <aside
+      aria-label="Site status"
+      class="border-b-[3px] border-brick bg-gold px-5 py-4 text-ink"
+      data-pagefind-ignore
+    >
+      <p class="mx-auto max-w-[66rem] text-[0.9375rem] leading-relaxed text-pretty sm:text-base">
+        <strong>YEGFacts has not launched yet.</strong> This site is still a work in progress. We have not
+        yet found the right methodology.{' '}
+        <a href="/methodology" class="font-semibold text-navy underline underline-offset-2">
+          See the current methodology.
+        </a>
+      </p>
+    </aside>
     <Header wordmark={hasMasthead ? 'masthead' : 'compact'}>
       {hasMasthead && (
         <div slot="deck" id="masthead" tabindex="-1" class="order-last min-w-0 grow basis-full lg:order-2 lg:basis-[30rem]">
