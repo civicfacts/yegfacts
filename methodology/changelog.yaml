@@ -1,6 +1,42 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.18"
+  date: "2026-09-03"
+  scope: plain-speech-answers
+  summary: >
+    Every claim now carries its own one-sentence answer, in the words a person
+    would use, and a reader from a different vendor has to pass it before it
+    publishes. The thirty-word cap that produced the prose this replaces is
+    gone, and nothing has been put in its place.
+  highlights:
+    - "The founder's complaint was that the language on the site is not human, that nobody speaks the way it describes things. The cause turned out to be measurable rather than a matter of taste: five of the six published one-sentence answers were exactly thirty words long, against a thirty-word cap. The limit had become a target. Each answer crammed a whole finding set into one breath with colons and semicolons, because the writer was filling the space rather than answering the question, and the rule meant to keep answers short was producing the densest prose on the site."
+    - "So the cap goes and nothing replaces it. What does the work now is punctuation. An answer may not use a colon, a semicolon, an em dash or an en dash, because that punctuation is how a second idea gets into a sentence; hyphens inside ordinary compounds are English and stay. The general rule is written down with it: a limit every instance sits on is generating the failure it was meant to prevent, and if a new limit starts collecting instances at its ceiling it is wrong and it goes."
+    - "The answer moves onto the claim, which is the unit of judgement. One sentence used to sit on the story and answer every claim under it, which is exactly why it needed semicolons: three findings in one breath. A claim carries one finding, so it now carries one answer, and it opens with the stance a person would say rather than the finding word. The finding word stays where it was, as the badge beside the answer. The badge does the method's job, the answer does the human one, and both appear on every page that shows either."
+    - "The story keeps a standfirst where a question has several claims and may drop it where a question has exactly one, in which case that claim's answer is the sentence. Five of the six published standfirsts broke the punctuation rule and were rewritten. Nothing was deleted. Every fact they carried is still on the page, in the TL;DR or the body, and each story's changelog says so."
+    - "docs/DESIGN.md section 12 is the standard: what the question, the claim, the answer and the explanation each have to do, and what a script can check against what a reader has to. The schema checks shape only, which is the punctuation, the stance opener and the absence of a finding word. A method-vocabulary list in scripts/validate.ts prints warnings and never fails the build, because a word list that fails the build is the next rule that deletes true content."
+    - "The plain-speech read is a required stage with a named artifact, not a style guide. prompts/plain-speech-read.md goes to a model from a different vendor than the one that drafted, at stage 6 beside the faithfulness check, and asks four things: would a person say this out loud, does it make sense to somebody who has not seen the question, is every fact carried by the key facts, and has anything true been dropped rather than moved down. Its report is committed under the run directory at plain-speech/, in the shape the faithfulness reports use, and every published claim names that file in plain_speech_read. scripts/validate.ts checks the file is on disk, so a claim that cannot name its read does not publish."
+    - "The control that makes the read worth running is the clause accounting. Every substantive clause of the draft, and of the wording it replaces, has to be booked as kept, moved to the explanation, split into another claim, or dropped with a written reason. This project has already had a rule delete true content once, when a numbers-in-every-bullet rule gutted a story whose key facts were absences in a bylaw's text, and a standard about brevity is exactly the shape of rule that does it again."
+    - "The stage exists because of what happened the first time the read ran. The site's own editor drafted the ten answers under the standard it had just written, and the GPT seat rewrote nine of them. The drafts leaned on the question the reader could not see, said 'the buses' with nothing to attach it to, carried two supporting facts where the rule allows one, and in one case asserted a budget total the key facts did not carry. Nine of ten is the argument for the stage, and it is a poor argument for letting the drafting seat mark its own work."
+    - "One rewrite was rejected, in writing, under the reader's own section of the committed report. For at-100m-vs-roads the reader offered the budget's combined 'active pathways and roads' line as the roads figure; that line contains the bike lanes being compared against it, and the claim's own key facts say the adopted budget publishes no roads-only total. The reader's other objection to that answer was right and was applied. The editor may reject a rewrite on evidence and has to say so where a reader can find it. The editor may not publish an answer this read has not seen."
+    - "What this has not touched, stated plainly: ten answers and six standfirsts. No story prose has been rewritten under the standard yet. The explanation rules in section 12 are written and unenforced, and the pages under the answers still read the way they read before."
+  links:
+    - label: Edmonton's electric buses
+      href: /questions/electric-buses
+    - label: How a finding is produced
+      href: /methodology#stages
+  note: >
+    Deleting a limit is the move that looks like loosening a rule, and the
+    honest reading is that the limit was doing the damage. Thirty words was a
+    number somebody picked; what it produced, on five answers out of six, was a
+    sentence built to reach it. The replacement is stricter where it matters,
+    because a colon is how a second idea gets in and there is now no way to
+    write one, and it is the reader rather than the counter who decides whether
+    a sentence is one a person would say. The part worth being uncomfortable
+    about is that the editor wrote this standard and then failed it nine times
+    out of ten on the first attempt. That is the case for the read being a stage
+    with an artifact rather than a habit, and it is on the public record for the
+    same reason the rest of the method is.
 - version: "1.17"
   date: "2026-09-03"
   scope: launch-slate-dropped

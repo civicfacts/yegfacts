@@ -256,11 +256,24 @@ stopped.
    identity never affects the result. Adopting the round-1 basis changed no
    published finding: both multisets resolve identically on all six published
    claims.
-6. **Drafting and faithfulness check.** Claude drafts the story and claim files
-   from the merged evidence (a fixed, disclosed choice for v1). The other two
-   models check the draft against the evidence: every sentence traceable, no
-   smuggled claims. All published arithmetic lives in
+6. **Drafting, faithfulness check and plain-speech read.** Claude drafts the
+   story and claim files from the merged evidence (a fixed, disclosed choice for
+   v1). The other two models check the draft against the evidence: every
+   sentence traceable, no smuggled claims. All published arithmetic lives in
    `scripts/calcs/<story-slug>.ts`, never done ad hoc in prose.
+   Beside that check and in the same shape, a model from a different vendor than
+   the one that drafted reads the answers under `prompts/plain-speech-read.md`
+   (methodology v1.18): would a person say this out loud, does it make sense to
+   somebody who has not seen the question, is every fact carried by the key
+   facts, and has anything true been dropped rather than moved down. It must
+   account for every substantive clause as kept, moved to the explanation, split
+   into another claim, or dropped with a written reason, which is the control
+   that stops §12 becoming the rule that deletes true content. The faithfulness
+   check asks whether the words are true to the evidence; this one asks whether
+   a person would say them. Its report is committed with the run at
+   `<run>/plain-speech/<seat>-<n>.md`, every published claim names the file in
+   `plain_speech_read`, and `scripts/validate.ts` checks that the file is there,
+   so a claim that cannot name its read does not publish.
 7. **Publication gate.** A dedicated audit — separate from the models that
    produced the draft — verifies every statement of fact in the final claims
    against the archived bytes of its cited sources, not a sample and not the
@@ -665,8 +678,10 @@ One sentence, under the claim, and the thing most readers will read.
 - **It opens with the plain-speech stance**, not the finding word: Yes. No.
   Partly. Nobody can tell from the record. The finding word is the badge beside
   it and does the method's job; the answer does the human one.
-- **No colon, no semicolon, no dash.** This is the replacement for the word
-  cap, and it is the rule doing the real work. Punctuation that lets a second
+- **No colon, no semicolon, no em dash or en dash.** Hyphens inside ordinary
+  compounds are English and stay. What is banned is the punctuation that lets a
+  second idea into the sentence. This is the replacement for the word cap, and
+  it is the rule doing the real work. Punctuation that lets a second
   idea in is what produced the thirty-word abstracts.
 - **One supporting fact at most**, and only if it is the fact that decides the
   answer.
@@ -711,6 +726,18 @@ anything true been deleted rather than moved. The last one is the important
 one: the reader has to account for every substantive clause in the draft as
 kept, moved to the explanation, split into another claim, or dropped with a
 written reason.
+
+The read is a stage, not a habit, because a prompt nobody is obliged to run is
+documentation. It has a prompt (`prompts/plain-speech-read.md`), a committed
+artifact beside the run's faithfulness reports
+(`<run>/plain-speech/<seat>-<n>.md`), and a field on every published claim
+naming that file (`plain_speech_read`), which the validator checks is really on
+disk. §4 stage 6 has the sequence. The vendor rule cannot be enforced by a
+schema, so it is written into the prompt in the imperative and both seats are
+named in the report header, where a breach is visible to anyone reading it.
+
+The standard was not written and then applied. The site's own editor drafted ten
+answers under it first, and the reading seat rewrote nine of them.
 
 No script rewrites prose. A build rule that silently removes a sentence
 recreates the failure this section exists because of.
