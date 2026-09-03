@@ -5,12 +5,17 @@
  * between the seats and the merged list — the failure mode it exists to
  * prevent is a claim disappearing because no one chose it. So the arithmetic
  * is checked rather than asserted: every `e-NNN` id emitted by every seat must
- * appear exactly once in merged.json, either under a proposition's `from` or
- * in the `dropped` list.
+ * turn up in merged.json, either under a proposition's `from` or in the
+ * `dropped` list with a reason.
+ *
+ * What this proves is narrow, and worth stating narrowly: no claim the seats
+ * raised was lost between them and the list. It does not show that the seats
+ * found every claim in the source. Nothing here can show that.
  *
  *   npx tsx scripts/intake-coverage.ts reviews/intake/<slug>
  *
- * Non-zero exit on any unaccounted, double-counted, or invented id.
+ * Non-zero exit on an id that is nowhere, an id both kept and dropped, an id
+ * no seat emitted, or a quote that is not the words of the comment it cites.
  */
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
@@ -60,8 +65,13 @@ for (const seat of seats) {
   emitted.set(seat, new Set(extraction.claims.map((claim) => claim.id)));
 }
 
-// Where each id was accounted for: a proposition slug, or "dropped". A second
-// sighting is as much a defect as none — it means one claim was counted twice.
+// Where each id was accounted for: proposition slugs, or "dropped".
+//
+// A seat often raises one claim that is really two ("very few people cycle,
+// only 1 to 2 percent"), and the merge is required to split those, so one id
+// landing on several propositions is correct and is reported as a split rather
+// than counted as a defect. What is a defect: an id nowhere at all, an id both
+// kept and dropped, and an id the merge cites that no seat emitted.
 const accounted = new Map<string, string[]>();
 const key = (seat: string, id: string) => `${seat}/${id}`;
 
@@ -80,11 +90,17 @@ for (const entry of merged.dropped ?? []) account(entry.seat, entry.id, 'dropped
 
 const problems: string[] = [];
 
+const splits: string[] = [];
 for (const seat of seats) {
   for (const id of [...emitted.get(seat)!].sort()) {
     const where = accounted.get(key(seat, id));
-    if (!where) problems.push(`unaccounted  ${seat}/${id} — in the extraction, in neither a proposition nor dropped`);
-    else if (where.length > 1) problems.push(`counted twice  ${seat}/${id} — ${where.join(', ')}`);
+    if (!where) {
+      problems.push(`unaccounted  ${seat}/${id} — in the extraction, in neither a proposition nor dropped`);
+    } else if (where.includes('dropped') && where.length > 1) {
+      problems.push(`kept and dropped  ${seat}/${id} — ${where.join(', ')}`);
+    } else if (where.length > 1) {
+      splits.push(`${seat}/${id} → ${where.join(', ')}`);
+    }
   }
 }
 
@@ -162,6 +178,10 @@ for (const count of [...bySeatCount.keys()].sort((a, b) => b - a)) {
   console.log(`    found by ${count} seat${count === 1 ? ' ' : 's'}   ${bySeatCount.get(count)}`);
 }
 console.log(`  dropped             ${(merged.dropped ?? []).length}`);
+if (splits.length > 0) {
+  console.log(`  split across propositions  ${splits.length}`);
+  for (const split of splits) console.log(`    ${split}`);
+}
 
 if (problems.length > 0) {
   console.error(`\nintake-coverage: ${problems.length} problem(s)`);
@@ -169,4 +189,4 @@ if (problems.length > 0) {
   process.exit(1);
 }
 
-console.log('\nintake-coverage: every extractor claim is accounted for exactly once');
+console.log('\nintake-coverage: every extractor claim is accounted for, none both kept and dropped');

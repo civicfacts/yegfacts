@@ -174,9 +174,14 @@ published at `/considered`.
    proposition's `from`, or in `dropped` with one of three permitted reasons
    (not a claim, duplicate quote, not about Edmonton civic government). This is
    the guarantee the arrangement exists to provide.
-5. **Triage.** `prompts/intake-triage.md` dispositions every proposition in one
-   batch, GO, PARK or NO, each with a reason written for a reader. Only a GO
-   reaches stage 1 below.
+5. **Triage.** `prompts/intake-triage-batch.md` goes to two readers, both from
+   a different vendor than the editor, neither seeing the other. Each rules on
+   every proposition in one batch, GO, PARK or NO, with a reason written for a
+   reader. They combine so that GO takes both, or one GO and one PARK; NO takes
+   both; everything else parks, a GO set against a NO included. Throwing out a
+   real claim costs the reader more than holding one too long, which is the
+   lean D-0011 takes on verdicts, applied to selection. Only a GO reaches stage
+   1 below, and where the readers split the published reason says so.
 
 Three rules hang off this:
 
@@ -184,12 +189,19 @@ Three rules hang off this:
   registered with `origin: editor` and held at PARK until a captured form of it
   exists in a real source. Registered wording is not captured wording, and only
   captured wording goes to a panel.
-- **Named individuals.** A proposition naming an identifiable person is
-  extracted like any other, so it is counted rather than hidden, and flagged
-  `names_person` at the merge. Triage then declines it under one standing
-  public reason: there is no right-of-reply process here and v1 does not build
-  one. `/considered` shows the decline without the allegation and without the
-  name.
+- **Named individuals.** A proposition accusing an identifiable person of
+  wrongdoing, dishonesty or an improper motive is extracted like any other, so
+  it is counted rather than hidden, and flagged `names_person` at the merge.
+  Triage declines it under one standing public reason: checking what one person
+  says about another needs a way for that person to answer, and v1 builds none.
+  `/considered` keeps the row, its outcome and its reason and prints neither
+  the accusation nor the name. The id is neutral too, because a slug is
+  published as surely as a paragraph. The wording and the comments go to the
+  private board record so the decision stays auditable.
+  What an office-holder did in office is not in this class. A motion brought, a
+  vote cast, a lane built: council minutes settle those, the site names
+  office-holders when it reports them, and those claims are triaged on the
+  ordinary tests. Withholding follows a decline, not the presence of a name.
 - **Pseudonyms.** Commenters are replaced by a stable "Adjective + Edmonton
   animal + initial" label ("Snowy Hare F.") derived from a hash of the name, so
   a re-export of the same source yields the same labels. Magpie is excluded, it

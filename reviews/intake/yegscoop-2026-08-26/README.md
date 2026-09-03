@@ -12,46 +12,56 @@ which claims in it to look at.
 | Distinct commenters | 389 |
 | Claims raised by the three seats | 230 |
 | Forms thrown out by the quote gate | 7 |
-| Propositions after the merge | 99 |
-| Captured wordings carried onto them | 337 |
+| Propositions after the merge | 112 |
+| Captured wordings carried onto them | 309 |
 | Extractor claims unaccounted for | 0 |
 
-Propositions by how many seats found them: 25 by all three, 29 by two, 45 by
-one. By side of the argument: 52 against the spending, 34 for it, 13 neither.
-Thirteen are variations of claims the register or a published story already
-carries. Triage returned 61 GO, 30 PARK, 8 NO.
+Propositions by how many seats found them: 26 by all three, 28 by two, 58 by
+one. By side of the argument: 65 against the spending, 38 for it, 9 neither.
+Nineteen restate claims the register or a published story already carries.
+Triage returned 85 GO, 15 PARK, 12 NO, the two readers agreeing on 78 of 112.
 
-One extractor claim was dropped in the merge, with its reason: a pair of
-rhetorical questions about whether another commenter had been to a council
-meeting, asserting nothing checkable.
+Twelve extractor claims were dropped in the merge, each with its reason. Most
+are policy preferences a seat had logged as claims: that cyclists should be
+licensed and insured, that the network should be fully integrated, that the
+Province will step in. A demand is not an assertion a record can settle.
+
+One seat's claim was split three ways. Flash had logged "very few Edmontonians
+commute by bicycle, only about 1 to 2 percent" as one item; it is three
+different propositions with three different denominators, and the merge is
+required to separate them.
 
 ## The comparison that made this worth building
 
 On 2026-09-02 the editor read the same thread by hand and registered **seven**
-candidates. The pipeline found all seven again, as variations pointing at those
-register entries, and **86 more**. The hand pass was not lazy; it was one
-reader deciding what looked checkable, which is the failure this method exists
-to remove.
+candidates. The pipeline matched **eight** existing register entries, the seven
+among them, and raised **93 propositions nobody had registered**. The hand pass
+was not lazy; it was one reader deciding what looked checkable, which is the
+failure this method exists to remove.
 
-Some the editor missed, with the number of different people who said them:
+The largest of the ones the editor missed, by how many different people made
+them:
 
-| people | proposition |
-| ---: | --- |
-| 24 | Only about 1 to 2 percent of Edmontonians cycle, and the lanes sit largely empty |
-| 18 | The bike lanes reduce motor-vehicle congestion |
-| 17 | Drivers pay for roads through fuel tax and registration, so cyclists should be licensed and pay their share |
-| 13 | The City claims an infrastructure deficit while spending $100 million on bike lanes |
-| 10 | Building the lanes removes on-street parking residents and businesses depend on |
-| 7 | Municipal roads are funded predominantly by property taxes, which cyclists also pay |
-| 7 | The Province has directed Edmonton to stop building lanes and will order some removed |
-| 6 | More people turned up at the hearing for the lanes than against them |
+| people | outcome | proposition |
+| ---: | --- | --- |
+| 10 | PARK | Most residents in the affected neighbourhoods oppose the bike lanes |
+| 9 | PARK | Roads, alleys and basic services are in poor condition while this is funded |
+| 8 | GO | Installing bike lanes takes away on-street parking |
+| 8 | GO | Drivers already pay for roads through fuel taxes and registration |
+| 5 | GO | The City fast-tracked routes on old data without consulting the communities |
+| 5 | GO | More people spoke for the lanes at the hearing than against |
+| 4 | GO | Winter cycling has grown, with people commuting at -30 |
+| 4 | GO | Municipal roads are paid for predominantly out of property and general taxes |
 
-The largest of these, and the sharpest exchange in the thread, is the one the
-editor took only one side of. A commenter opened with "All 5 people who ride
-bikes showed up?" and was answered with about 1.3 million counted cycling trips
-in the first seven months of 2026. That number was re-fought at comments 81,
-111, 121, 213 and 369. The hand pass registered the "nobody rides" side and not
-the figure thrown back at it.
+The sharpest exchange in the thread is one the editor took only one side of. A
+commenter opened with "All 5 people who ride bikes showed up?" and was answered
+with about 1.3 million cycling trips counted in the first seven months of 2026.
+That number was re-fought at comments 81, 111, 121, 213 and 369. The hand pass
+registered the "nobody rides" side and not the figure thrown back at it. Both
+are now propositions, and so are the four separate rates people quoted at each
+other: 2 percent of trips, under 1 percent of commuters, 87 percent by car, 1
+to 2 percent of the population. The first merge had collapsed several of those
+into one compound claim; see below.
 
 ## Who found what
 
@@ -61,7 +71,17 @@ the figure thrown back at it.
 | luna | gpt-5.6-luna (low) | 100 | 259 | 2 |
 | haiku | Claude Haiku 4.5 | 40 | 53 | 5 |
 
-Merge: Claude Opus 5 at high effort, 23 minutes.
+Merge: Claude Opus 5 at high effort, 26 minutes.
+
+The first merge of this run was thrown away. An independent critique found it
+had grouped by topic rather than by proposition: one proposition on congestion
+carried quotes from people arguing the opposite of it, and a claim that 24
+people said "only 1 to 2 percent cycle and the lanes sit empty" put a compound
+assertion into the mouths of commenters who had made neither half of it. The
+merge prompt now forbids joining two assertions, says a form must assert the
+proposition and not the topic, and treats a policy preference as not a claim.
+Re-run under those rules the two triage readers agreed on 78 of 112, against 58
+of 99 before, which is the clearest evidence the grouping had been wrong.
 
 Haiku found the fewest claims by a wide margin and lost the most forms to the
 quote gate. A first run of this thread on Gemini 3.6 Flash at low effort
@@ -82,16 +102,25 @@ missed claim: the person can read the site and find words they did not write.
 
 ## Claims naming a person
 
-Three propositions name an identifiable person and were declined by both triage
-seats on the same ground: this site has no right-of-reply process, so it does
-not adjudicate what one person alleges about another. They appear on the
-register and on `/considered` under a neutral id with the reason and nothing
-else. Their wording and the comments they came from are in the private board
-record, so the decision can still be audited.
+Six propositions name an identifiable person. One was declined by both readers
+because it accuses a named person of a private conflict of interest, and this
+site has no way to put an accusation to the person and print their answer. It
+keeps its row, its outcome and its reason on `/considered`, under a neutral id,
+with the wording and the comments held in the private board record so the
+decision stays auditable. The id is neutral because a slug is published as
+surely as a paragraph is.
 
-Claims about what a councillor did in office are not in that class. Several are
-here in full, parked or cleared, because a motion brought or a lane installed
-is the public record.
+The other five are claims about what office-holders did in office, and they are
+here in full: a motion brought, a lane installed, a school-bus loading area
+proposed. Council minutes settle those, the site names office-holders when it
+reports them, and withholding them would hide the public record rather than
+protect anyone.
+
+The first triage run got this wrong. One reader declined "these two councillors
+brought motions to cut the budget" as a claim about named individuals, which
+would have withheld a matter of council minutes. The prompt now says the rule
+covers an accusation of wrongdoing, dishonesty or improper motive, and warns
+against reading it more widely.
 
 ## Files
 

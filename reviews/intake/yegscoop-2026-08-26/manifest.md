@@ -69,10 +69,14 @@ saw a quote that fails.
 
 - Reported by the CLI: `Claude Opus 5`
 - Effort: high
-- 2026-09-03T05:13:01Z to 05:35:54Z (22m53s), exit 0
+- Run of record 2026-09-03T05:59:26Z to 06:25:01Z (25m35s), exit 0. An earlier
+  merge of the same three extractions (05:13:01Z to 05:35:54Z) was discarded
+  after an independent critique found it grouping by topic rather than by
+  proposition; `prompts/intake-merge.md` gained the three bounds under
+  "Merging" and this run replaced it
 - Prompt: `prompts/intake-merge.md` with all three extractions,
   `intake/register.yaml` and the published claim questions inlined, 160 KB
-- 99 propositions, 337 forms, 1 dropped extractor claim
+- 112 propositions, 309 forms, 12 dropped extractor claims
 
 The inputs are inlined rather than read from disk because a merge run with file
 tools needs a permission the headless CLI cannot grant. `--output-format
@@ -84,8 +88,10 @@ assistant message.
 
     npx tsx scripts/intake-coverage.ts reviews/intake/yegscoop-2026-08-26
 
-230 extractor claims, every one accounted for exactly once. 337 quotes checked
-against the capture, all exact.
+230 extractor claims, every one accounted for and none both kept and dropped.
+309 quotes checked against the capture, all exact. One seat's claim was split
+across three propositions, which the check reports rather than counts as a
+fault: a compound claim is one the merge is required to separate.
 
 ## Triage
 
@@ -98,9 +104,15 @@ appended. Neither saw the other's answer.
     agy -p "<read $WORK/triage-prompt.txt and follow it>" --model gemini-3.1-pro-high \
       --add-dir $WORK --dangerously-skip-permissions --sandbox --print-timeout 30m
 
-- sol: `gpt-5.6-sol`, high, 05:37:07Z to 05:41:02Z, 99 decisions
-- gemini: `Gemini 3.1 Pro (High)`, 05:37:07Z to 05:40:05Z, 99 decisions
-- Agreed on 58 of 99. Combined: 61 GO, 30 PARK, 8 NO.
+- sol: `gpt-5.6-sol`, high, 06:27Z to 06:30:49Z, 112 decisions
+- gemini: `Gemini 3.1 Pro (High)`, 06:27Z to 06:31:01Z, 112 decisions
+- Agreed on 78 of 112. Combined: 85 GO, 15 PARK, 12 NO.
+
+An earlier pass over the discarded merge agreed on only 58 of 99. Same two
+readers, same source: the agreement moved because what they were ruling on had
+stopped being compounds. That earlier pass also declined a councillor's
+recorded motions as a claim about a named individual, which is why the prompt
+now states the named-person rule narrowly.
 
 Combining rule, in `triage.md`: GO takes both readers or one GO and one PARK;
 NO takes both; everything else parks, including a straight GO against NO. A
@@ -112,11 +124,11 @@ verdict matrix takes (D-0011), applied to selection.
 
     npx tsx scripts/intake-register.ts reviews/intake/yegscoop-2026-08-26
 
-98 new entries. One proposition, the 15-minute-city agreement, matched a
-candidate the editor registered by hand on 2026-09-02; its captured wordings
-were folded into that entry rather than registered twice. Three declined
-propositions naming an identifiable person carry a neutral id and their reason
-only, per the rule in the README.
+110 new entries. Two propositions matched candidates already on the register,
+the 15-minute-city agreement and lanes removed citywide; their captured
+wordings were folded into those entries rather than registered a second time,
+so a claim suggested twice meets the same answer. One declined proposition
+carries a neutral id and its reason only, per the rule in the README.
 
 ## Not done in this run
 
