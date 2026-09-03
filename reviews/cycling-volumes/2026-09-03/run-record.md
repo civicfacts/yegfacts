@@ -1,6 +1,6 @@
 # Run record: `cycling-volumes`, run 2026-09-03
 
-Stage: framing. Methodology v1.18.
+Stage: framing. Methodology v1.20.
 
 This file records what happened to the brief between drafting and
 freezing: every framing-check report, what the editor adopted and what
@@ -32,6 +32,7 @@ flags that run carried.
 | 1 | REVISE, nine findings | `framing/check-1.md` | `framing/response-1.md` |
 | 2 | REVISE, 8 of 12 resolved, 3 new findings | `framing/check-2.md` | `framing/resolution-2.md` |
 | 3 | REVISE, 12 of 15 resolved, 3 standing | `framing/check-3.md` | this file |
+| 4 | defect confirmation (methodology v1.20) | `framing/check-4-defects.md` | this file |
 
 **Check 1, in one line:** the brief leaked expected findings in its
 stakes headings, put floors under two ceiling claims so they could have
@@ -68,30 +69,44 @@ findings across the three reports are resolved, including the one the
 editor decided against the checker on. Three stand, and all three are
 arithmetic defects in cutoff ladders rather than framing defects.
 
-## The freeze: there is none. The brief is parked.
+## Parked after check 3, then corrected under methodology v1.20
 
 Methodology v1.12 caps the framing check at three reports and says that a
 brief still at REVISE after the third is parked, and reopens only on new
 intake evidence, never on a further revision of the same brief. Check 3
-returned REVISE. So there is no freeze commit, no panel runs on this
-brief, and the brief is left in the repository exactly as the check
-refused it, with its status line saying so.
+returned REVISE, so on 2026-09-03 this brief was parked, with no freeze
+commit and its status line saying so.
 
-The editor's view of that outcome is on the record here rather than in a
-revision: the three standing defects are ones the editor introduced while
-adopting the checker's own findings, the checker supplied replacement
-wording for each, and none of them is a question about whether the brief
-tests the right thing. Freezing anyway would put a brief on a panel that
-the check refused, which is the thing the cap exists to prevent, and this
-project has twice been in a position where doing so would have been
-wrong. Widening the cap for a defect of this kind is a methodology
-question and belongs in its own change with its own changelog entry, not
-in a brief.
+What the cap had caught was three arithmetic defects. They are ones the
+editor introduced while adopting the checker's own findings, the checker
+supplied replacement wording for each, and none of them is a question
+about whether the brief tests the right thing. Freezing anyway would have
+put a brief on a panel that the check refused, which is what the cap
+exists to prevent. So the brief stayed parked and the cap was amended
+instead, in its own change with its own changelog entry: methodology
+v1.20, committed before any word of this brief was touched.
 
-## The three defects still standing, with the checker's own replacements
+v1.20 says a defect finding is not a framing finding. A defect finding is
+one where the checker states the correction and the correction is
+verifiable without judgement, and only three kinds qualify: verdict bands
+that overlap or leave a gap, a stated rule whose direction contradicts
+its own arithmetic, and a coverage or completeness rule that lets an
+unclassified remainder decide a verdict. A defect finding still standing
+after the third report does not park the brief; the editor corrects it in
+the checker's supplied wording, records the correction, and the brief
+goes back for one defect confirmation, which may only confirm the
+corrections or name further defects. A framing finding in that fourth
+report parks the brief for good. The value of a cutoff is a framing
+question under the v1.8 bound, capped at three, and was not reopened
+here: no threshold in this brief moved.
 
-Recorded so that whoever reopens this question does not have to
-reconstruct them.
+The uncomfortable part, recorded because it is the part that matters: the
+rule was amended by the editor it had just blocked, on the brief it had
+just blocked. The changelog entry says so in the same words.
+
+## The three defects check 3 left standing, with the checker's own replacements
+
+Recorded as check 3 left them, before the corrections below.
 
 **1. Claim 1's verdict ladder assigns two verdicts to the same total.**
 The brief says Partially supported at or above 1.50 million and
@@ -122,6 +137,98 @@ checker's replacement: "Supported, Partially supported or Contradicted
 may be returned only if every counter in the verdict set is
 classifiable. Otherwise return Not established and report the observed
 counters as qualifications."
+
+## The corrections made, each against the finding it answers
+
+Made 2026-09-03 by Stew under methodology v1.20, in the checker's own
+words. No threshold moved, no band boundary moved, and nothing else in
+the brief was touched.
+
+**Correction 1 answers defect 1** (check 3, heading 3; report 2 finding
+3, marked OPEN). Claim 1's primary ladder.
+
+- Before: "**Partially supported** if the total is at least 0.65 million
+  and below 1.10 million, or at or above 1.50 million."
+- After: "**Partially supported** if the total is at least 0.65 million
+  and below 1.10 million, or at least 1.50 million and at most 1.95
+  million."
+
+The alternative ladder, in the same correction.
+
+- Before: "Supported from 1.17 million to below 1.43 million (within a
+  tenth of the stated figure); Partially supported from 0.65 million to
+  below 1.17 million, or above 1.43 million to 1.95 million; Contradicted
+  below 0.65 million or above 1.95 million."
+- After: "Supported if the total is at least 1.17 million and below 1.43
+  million (within a tenth of the stated figure); Partially supported if
+  the total is at least 0.65 million and below 1.17 million, or at least
+  1.43 million and at most 1.95 million; Contradicted if the total is
+  below 0.65 million or above 1.95 million."
+
+Where the checker's wording did not reach, and what the editor chose.
+The checker supplied only the Partially supported clause of the
+alternative set. That clause on its own closes the 1.43 million gap,
+because Supported already ended below 1.43 million and Partially
+supported now begins at it. What it leaves behind is the alternative's
+other two clauses in the brief's original prose, where the endpoints are
+implicit: "from 1.17 million", "above 1.43 million to 1.95 million",
+"below 0.65 million or above 1.95 million". Rather than leave inclusivity
+to be read off prose in the one ladder that had already lost a number,
+the editor restated all three alternative clauses in the at-least, below,
+at-most form the checker used in his own replacement. That is the only
+wording in these three corrections the checker did not supply, and it
+moves no boundary: 1.17 and 1.43 are inclusive at the lower end, which is
+what "from" already meant, and 1.95 stays inside Partially supported,
+which is what "to 1.95 million" already meant.
+
+Both ladders now give every total exactly one verdict. Primary: below
+0.65 Contradicted, 0.65 up to but not including 1.10 Partially
+supported, 1.10 up to but not including 1.50 Supported, 1.50 through
+1.95 inclusive Partially supported, above 1.95 Contradicted.
+Alternative: below 0.65 Contradicted, 0.65 up to but not including 1.17
+Partially supported, 1.17 up to but not including 1.43 Supported, 1.43
+through 1.95 inclusive Partially supported, above 1.95 Contradicted.
+
+**Correction 2 answers defect 2** (report 1 finding 4c and report 2's
+short-window finding, marked WEAKENED). Claim 1's short-window rule.
+
+- Before: "The allowance is fourteen days ... If they are short by
+  fourteen days or fewer, the verdict is computed on the days published
+  ... Because a short window can only lower a total, a Supported verdict,
+  a Partially-supported-above verdict and a Contradicted-above verdict
+  all stand on a short window ... If they are short by more than fourteen
+  days, the verdict is Not established."
+- After: "If the published record does not cover 2026-01-01 through
+  2026-07-31, return Not established. Report the available subtotal,
+  exact dates and direction of uncertainty as qualifications." The
+  allowance is gone, and the sentence that justified it now states the
+  direction of the error the right way round: missing days can only add
+  to a total, so a subtotal inside the Supported band could cross 1.50
+  million and one in the Partially-supported band above it could cross
+  1.95 million.
+
+Consequential, in the same correction: claim 1's Not established clause
+pointed at "the allowance below", which no longer exists, and now reads
+"or if the published record does not cover 2026-01-01 through
+2026-07-31".
+
+**Correction 3 answers defect 3** (report 2's Claim 2 coverage finding,
+marked WEAKENED). Claim 2's coverage rule.
+
+- Before: "Supported, Partially supported and Contradicted all require at
+  least four fifths of the verdict set to be classifiable", and "**Not
+  established** if fewer than four fifths of the verdict set is
+  classifiable".
+- After: "Supported, Partially supported or Contradicted may be returned
+  only if every counter in the verdict set is classifiable. Otherwise
+  return Not established and report the observed counters as
+  qualifications", and "**Not established** if any counter in the verdict
+  set is not classifiable".
+
+Consequential, in the same correction: the sentence describing an
+unclassifiable counter said it "does not carry the verdict", which read
+as though a verdict were still available, and now says the coverage rule
+decides what verdict is available.
 
 ## What check 3 did settle
 

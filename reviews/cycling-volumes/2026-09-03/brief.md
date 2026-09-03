@@ -1,15 +1,16 @@
 # Review brief: How many people in Edmonton cycle, and how much do the bike lanes get used?
 
-Status: **PARKED 2026-09-03, not frozen.** The framing check returned
-REVISE on all three permitted reports (`framing/check-1.md`,
-`framing/check-2.md`, `framing/check-3.md`). Under methodology v1.12 a
-brief still at REVISE after the third report is parked, and reopens only
-on new intake evidence, never on a further revision of the same brief.
-No panel runs on this brief. The three defects the confirmation report
-left standing, and the checker's own replacement wording for each, are
-recorded in `run-record.md`; the text below is left exactly as the check
-refused it.
-Drafted and twice revised 2026-09-03 by Stew. Methodology v1.18.
+Status: **AWAITING DEFECT CONFIRMATION 2026-09-03, not frozen.** The
+framing check returned REVISE on all three permitted reports
+(`framing/check-1.md`, `framing/check-2.md`, `framing/check-3.md`), and
+all three findings it left standing are arithmetic defects inside verdict
+ladders. Under methodology v1.20 a defect finding does not park a brief:
+the three are corrected here in the checker's own words, each correction
+is recorded in `run-record.md` against the finding it answers, and the
+brief goes back for one defect confirmation. Nothing else in the brief is
+changed. No panel runs on this brief until that report says so.
+Drafted, twice revised and once corrected 2026-09-03 by Stew.
+Methodology v1.20.
 Question id: `cycling-volumes`. Register entry: `intake/register.yaml`.
 
 ## The question
@@ -259,43 +260,36 @@ is the network total defined above.
 - **Supported** if the total is at least 1.10 million and below 1.50
   million.
 - **Partially supported** if the total is at least 0.65 million and below
-  1.10 million, or at or above 1.50 million. The failing part is the
-  figure "nearly 1.3 million"; the counters record cycling at the order
-  of magnitude the holder claimed.
+  1.10 million, or at least 1.50 million and at most 1.95 million. The
+  failing part is the figure "nearly 1.3 million"; the counters record
+  cycling at the order of magnitude the holder claimed.
 - **Contradicted** if the total is below 0.65 million or above 1.95
   million. Either way the published record is half again away from the
   stated figure and does not carry it.
 - **Not established** if the published record does not permit a network
-  total to be computed, or if the window is short by more than the
-  allowance below.
+  total to be computed, or if the published record does not cover
+  2026-01-01 through 2026-07-31.
 
-Alternative cutoffs, results required under both: Supported from 1.17
-million to below 1.43 million (within a tenth of the stated figure);
-Partially supported from 0.65 million to below 1.17 million, or above
-1.43 million to 1.95 million; Contradicted below 0.65 million or above
+Alternative cutoffs, results required under both: Supported if the total
+is at least 1.17 million and below 1.43 million (within a tenth of the
+stated figure); Partially supported if the total is at least 0.65
+million and below 1.17 million, or at least 1.43 million and at most
+1.95 million; Contradicted if the total is below 0.65 million or above
 1.95 million.
 
 **If the published window is short, fixed here before the data is
-seen.** The dataset's last update may fall before 2026-07-31. The
-allowance is fourteen days: an open-data refresh lag is not a gap in the
-record, and a fortnight is longer than the portal's observed update
-interval.
+seen.** The dataset's last update may fall before 2026-07-31. There is
+no allowance for a short window. Missing days can only add to a total,
+so a subtotal cannot carry any verdict that turns on where the total
+sits between the cutoffs: a subtotal inside the Supported band could
+cross 1.50 million once the missing days arrive, and a subtotal in the
+Partially-supported band above it could cross 1.95 million.
 
 - If the published records cover 2026-01-01 through 2026-07-31, the
   verdict is as above.
-- If they are short by fourteen days or fewer, the verdict is computed on
-  the days published, the exact first and last day covered is named, and
-  the shortfall is stated in `interpretation_notes` and wherever the
-  figure appears. Because a short window can only lower a total, a
-  Supported verdict, a Partially-supported-above verdict and a
-  Contradicted-above verdict all stand on a short window. A
-  Contradicted-below or Partially-supported-below verdict may not be
-  returned on a short window: return Not established instead and report
-  the subtotal.
-- If they are short by more than fourteen days, the verdict is Not
-  established. Report the subtotal, its exact dates and what is missing.
-  A five-month or six-month subtotal does not test a seven-month
-  proposition.
+- If the published record does not cover 2026-01-01 through 2026-07-31,
+  return Not established. Report the available subtotal, exact dates and
+  direction of uncertainty as qualifications.
 
 Neither set comes from an identified pre-existing standard. The primary
 band is the stated figure plus or minus about fifteen percent, which is
@@ -366,7 +360,8 @@ it, and list the set before reporting any figure.
 **How much data a counter needs, fixed here.** A counter is
 *classifiable* if it published bicycle counts for at least 20 of July
 2025's 31 days. A counter below that is listed and its partial figures
-reported, but it is not classified and does not carry the verdict.
+reported, but it is not classified, and the coverage rule below then
+decides what verdict is available.
 
 **The named corridors, inside that set.** Holders of this claim named
 four corridors: 119 Avenue; 132 Avenue between 97 Street and 127 Street;
@@ -389,15 +384,18 @@ because one event day would move a mean.
 carrying little or no traffic if its July median daily bicycle count is
 below 25.
 
-Supported, Partially supported and Contradicted all require at least four
-fifths of the verdict set to be classifiable, so that a verdict
-quantifying over every counter is not returned on a fragment of them.
+Supported, Partially supported or Contradicted may be returned only if
+every counter in the verdict set is classifiable. Otherwise return Not
+established and report the observed counters as qualifications. Each of
+these three verdicts quantifies over the metered lanes as a set, and one
+unclassified counter can turn Supported or Contradicted into Partially
+supported.
 
 - **Supported** if every classifiable counter is below 25.
 - **Partially supported** if at least one classifiable counter is below
   25 and at least one is at or above 25.
 - **Contradicted** if no classifiable counter is below 25.
-- **Not established** if fewer than four fifths of the verdict set is
+- **Not established** if any counter in the verdict set is not
   classifiable, or if the City's locations data does not allow on-street
   lanes to be told from recreational paths, or if the verdict set is
   empty. Report every counter's figures as qualifications in that case.
