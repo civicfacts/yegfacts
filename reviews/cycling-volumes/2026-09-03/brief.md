@@ -1,7 +1,15 @@
 # Review brief: How many people in Edmonton cycle, and how much do the bike lanes get used?
 
-Status: DRAFT, not frozen. Awaiting framing check (`framing/`).
-Drafted 2026-09-03 by Stew. Methodology v1.18.
+Status: **PARKED 2026-09-03, not frozen.** The framing check returned
+REVISE on all three permitted reports (`framing/check-1.md`,
+`framing/check-2.md`, `framing/check-3.md`). Under methodology v1.12 a
+brief still at REVISE after the third report is parked, and reopens only
+on new intake evidence, never on a further revision of the same brief.
+No panel runs on this brief. The three defects the confirmation report
+left standing, and the checker's own replacement wording for each, are
+recorded in `run-record.md`; the text below is left exactly as the check
+refused it.
+Drafted and twice revised 2026-09-03 by Stew. Methodology v1.18.
 Question id: `cycling-volumes`. Register entry: `intake/register.yaml`.
 
 ## The question
