@@ -7,7 +7,6 @@ import {
   outcomeHeading,
   provenance,
   reportAnchor,
-  sideLabel,
   sourceKind,
   storyLinkLabel,
   type Candidate,
@@ -121,11 +120,6 @@ const declinedApart =
       {
         candidate.withheld && (
           <span class="normal-case tracking-normal">{` · entry ${candidate.id}`}</span>
-        )
-      }
-      {
-        candidate.side && (
-          <span class="normal-case tracking-normal">{` · ${sideLabel(candidate.side)}`}</span>
         )
       }
       {

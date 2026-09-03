@@ -651,15 +651,6 @@ export function provenance(candidate: Candidate): string {
 }
 
 /**
- * Which side of the source's argument a proposition serves, in words. The
- * register's third value is `neither`, and "neither the argument" is not a
- * phrase, so that one takes a longer form.
- */
-export function sideLabel(side: string): string {
-  return side === 'neither' ? 'neither side of the argument' : `${side} the argument`;
-}
-
-/**
  * How many people discussed a question or a claim, in words. The one phrase the
  * site prints for any of these counts, at either level of the register.
  *

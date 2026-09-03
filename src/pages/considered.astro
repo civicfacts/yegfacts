@@ -12,7 +12,6 @@ import {
   provenance,
   registerKey,
   reportsFor,
-  sideLabel,
   sourceKind,
   sourceRegister,
   storyLinkLabel,
@@ -299,15 +298,6 @@ const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-
                         >
                           {claimText(claim)}
                         </a>
-                        {/* A withheld claim has neither this nor a count: the
-                            side it served and the people who discussed it
-                            describe a claim the row is refusing to show, so the
-                            redaction keeps them off the site with the wording. */}
-                        {claim.side && (
-                          <span class={`mt-1 block ${label}`} data-record>
-                            {sideLabel(claim.side)}
-                          </span>
-                        )}
                       </td>
                       {/* A withheld claim has no count either, and no empty
                           line where one would have been. */}

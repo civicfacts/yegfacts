@@ -3,7 +3,6 @@ import {
   claimText,
   discussedBy,
   outcomeHeading,
-  sideLabel,
   sourceKind,
   type Candidate,
   type Investigation,
@@ -100,8 +99,8 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
       */
       twoSided && (
         <p class="mt-4 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
-          This question was raised by people arguing in both directions, and the claims below show
-          which side each one is on.
+          People arguing in both directions raised this question, and every claim they made about it
+          is checked, whichever way it points.
         </p>
       )
     }
@@ -157,11 +156,12 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
               </a>
             </h3>
 
-            {(claim.side || claim.accounts !== undefined) && (
+            {/* A withheld claim has no count: the people who discussed it
+                describe a claim this row is refusing to show, so the redaction
+                keeps the number off the site along with the wording. */}
+            {claim.accounts !== undefined && (
               <p class={`mt-1.5 ${label}`} data-record>
-                {claim.side && sideLabel(claim.side)}
-                {claim.accounts !== undefined &&
-                  `${claim.side ? ' · ' : ''}${discussedBy(claim.accounts)}`}
+                {discussedBy(claim.accounts)}
               </p>
             )}
 
