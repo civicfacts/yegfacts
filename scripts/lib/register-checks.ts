@@ -44,7 +44,13 @@ export const SOURCE_KINDS = ['facebook-post', 'article', 'discussion', 'video'] 
  * claim can be registered with on its own — a merge, an opinion, a check that
  * came back unanswered — are not decisions triage makes about a question.
  */
-export const INVESTIGATION_OUTCOMES = ['GO', 'PARK', 'NO'] as const;
+/**
+ * `not-triaged` is here because a source can be captured, grouped and
+ * registered before the readers have ruled on it, and the register is the
+ * public record of that state too. Only a ruling owes a reason, so this one
+ * does not.
+ */
+export const INVESTIGATION_OUTCOMES = ['GO', 'PARK', 'NO', 'not-triaged'] as const;
 
 /** An investigation that parks or declines owes the reader a sentence saying why. */
 export const INVESTIGATION_OUTCOMES_NEEDING_REASON = ['PARK', 'NO'] as const;

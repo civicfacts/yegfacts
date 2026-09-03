@@ -191,11 +191,20 @@ describe('registerProblems: investigations', () => {
     );
   });
 
+  // A source can be captured, grouped and registered before the readers rule on
+  // it, so not-triaged is a state the register records; the dispositions a claim
+  // can carry on its own are not answers to a question.
+  it('accepts a question the readers have not ruled on yet', () => {
+    expect(
+      grouped([claim(), otherSide()], [investigation({ outcome: 'not-triaged', reason: undefined })]),
+    ).toEqual([]);
+  });
+
   it('rejects an outcome triage cannot give a question', () => {
     expect(
       grouped([claim(), otherSide()], [investigation({ outcome: 'not-a-claim' })]),
     ).toContain(
-      'investigation lanes-and-congestion outcome: "not-a-claim" is not one of GO, PARK, NO',
+      'investigation lanes-and-congestion outcome: "not-a-claim" is not one of GO, PARK, NO, not-triaged',
     );
   });
 
