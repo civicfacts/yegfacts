@@ -4,10 +4,9 @@ import Outcome from '../components/Outcome.astro';
 import { allPublishedStories } from '../lib/content';
 import {
   REGISTER_SECTIONS,
-  accountSplit,
-  arguedBy,
   candidateRegister,
   claimText,
+  discussedBy,
   investigationsForSource,
   outcomeEdge,
   provenance,
@@ -37,7 +36,7 @@ import { toc } from '../lib/toc';
  * most wants to see — that both sides of an argument are asking the same
  * question.
  *
- * The questions are ordered by how many accounts argued them, so the arguments
+ * The questions are ordered by how many people discussed them, so the arguments
  * Edmonton is actually having are at the top and the hyper-specific ones sink.
  *
  * The claims that arrived one at a time, before there were sources, keep the
@@ -86,6 +85,19 @@ const outline = toc([
 ]);
 
 const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
+
+/**
+ * The count and badge columns of the source tables.
+ *
+ * From `md` up each shrinks to its own content, as the finding column does on
+ * /stories, so the question keeps every pixel the counts do not need. Below
+ * that the row stacks: four columns on a phone left the question wrapping in a
+ * ribbon a third of the screen wide with the rest of the row empty beside it,
+ * so under `md` every cell is a block and the counts read under the question
+ * they belong to.
+ */
+const countColumn = `md:table-cell md:w-px md:pl-4 md:text-right md:align-top md:whitespace-nowrap ${label}`;
+const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-top';
 ---
 
 <Base
@@ -123,11 +135,9 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
       surprise anyone.
     </p>
     <p class="mt-4 max-w-prose text-base leading-relaxed">
-      The numbers count accounts, not people. A name in a source is a pseudonym, one to a commenter
-      within that source, and an account that argued a question is not an account that agrees with
-      the claim it is counted under, so every count is printed with the sides it was argued on. An
-      account that argued both ways is counted on both, which is why the sides can come to more than
-      the total.
+      The counts are of distinct people within one source, so somebody who commented five times
+      counts once. Somebody counted under a claim may have been arguing against it, which is why
+      the count says discussed and not agreed.
     </p>
   </header>
 
@@ -191,7 +201,7 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
           <time datetime={source.captured}>{source.captured}</time>
           {source.captured_by && ` by the ${source.captured_by}`}
           {source.comments !== undefined && ` · ${source.comments} comments`}
-          {source.commenters !== undefined && ` from ${source.commenters} accounts`}
+          {source.commenters !== undefined && ` from ${source.commenters} people`}
           {source.claims_found !== undefined && ` · ${source.claims_found} claims raised in extraction`}
           {source.propositions !== undefined && ` · merged into ${source.propositions} propositions`}
         </p>
@@ -212,54 +222,76 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
           </p>
         ) : (
           <>
-            <p class={`mt-5 ${label}`}>The most-argued questions come first.</p>
+            <p class={`mt-5 ${label}`}>The most-discussed questions come first.</p>
 
             {/*
-              One question to a block, in the ledger idiom the findings boards
-              use: a 5px left edge in the outcome's colour on the question, the
-              filled badge in its own column, so the dispositions read down one
-              side of the page. The claims sit under the question they are
-              checked under, indented to the same edge, each with the side it
-              serves and how many accounts argued it.
+              The ledger idiom /stories uses, carrying the register's two
+              levels: a 5px left edge in the outcome's colour on the question,
+              the counts and the filled badge in columns of their own, so the
+              dispositions read down one side of the page. One tbody to a
+              question, with the claims checked under it as rows beneath it, so
+              a claim is attached to its question by the table's own structure.
+              A claim row prints no badge, because the outcome on the row above
+              is the one decision made and repeating it on each claim would put
+              four decisions where there was one.
+
+              The column heads say what each cell already says in words, so they
+              are for screen readers only, as on /stories.
             */}
-            <ol class="mt-4">
-              {investigations.map(({ investigation, claims, twoSided }) => (
-                <li id={investigation.id} class="scroll-mt-6 border-t border-rule py-6">
-                  <div class="flex flex-wrap items-baseline justify-between gap-x-5 gap-y-2">
-                    <h3
-                      class:list={[
-                        'border-l-[5px] pl-4 font-display text-[1.1875rem] leading-snug font-semibold text-pretty',
-                        outcomeEdge(investigation.outcome),
-                      ]}
-                    >
-                      <a href={`/considered/${investigation.id}`} class="link" data-record>
-                        {investigation.question}
-                      </a>
-                    </h3>
-                    <Outcome outcome={investigation.outcome} />
-                  </div>
-
-                  <p class={`mt-2 pl-4 ${label}`}>
-                    <span data-record>
-                      {accountSplit(investigation.accounts)}
-                      {` · ${claims.length} ${claims.length === 1 ? 'claim' : 'claims'}`}
-                    </span>
-                    {/* The site's best evidence that it is not picking sides. */}
-                    {twoSided && ' · asked from both sides'}
-                  </p>
-
-                  {investigation.reason && (
-                    <p
-                      class="mt-2.5 max-w-prose pl-4 text-[0.9375rem] leading-relaxed text-muted"
+            <table class="mt-4 block w-full border-collapse md:table">
+              <caption class="sr-only">Questions from {source.title}</caption>
+              <thead class="sr-only">
+                <tr>
+                  <th scope="col">Question or claim</th>
+                  <th scope="col">Discussed by</th>
+                  <th scope="col">Claims</th>
+                  <th scope="col">Outcome</th>
+                </tr>
+              </thead>
+              {investigations.map(({ investigation, claims }) => (
+                <tbody class="block border-t border-rule md:table-row-group">
+                  <tr id={investigation.id} class="block scroll-mt-6 md:table-row">
+                    <td class="block pt-4 md:table-cell md:py-4 md:pr-4 md:align-top">
+                      <span
+                        class:list={[
+                          'block border-l-[5px] pl-4',
+                          outcomeEdge(investigation.outcome),
+                        ]}
+                      >
+                        <a
+                          href={`/considered/${investigation.id}`}
+                          class="link font-display text-[1.1875rem] leading-snug font-semibold text-pretty"
+                          data-record
+                        >
+                          {investigation.question}
+                        </a>
+                        {investigation.reason && (
+                          <span
+                            class="mt-2 block max-w-prose text-[0.9375rem] leading-relaxed text-muted"
+                            data-record
+                          >
+                            {investigation.reason}
+                          </span>
+                        )}
+                      </span>
+                    </td>
+                    <td class:list={['block pt-2 pl-5 md:py-4', countColumn]} data-record>
+                      {discussedBy(investigation.accounts.total)}
+                    </td>
+                    <td
+                      class:list={['block pt-1 pl-5 whitespace-nowrap md:py-4', countColumn]}
                       data-record
                     >
-                      {investigation.reason}
-                    </p>
-                  )}
+                      {`${claims.length} ${claims.length === 1 ? 'claim' : 'claims'}`}
+                    </td>
+                    <td class:list={['pt-3 pb-4 pl-5 md:py-4', badgeColumn]}>
+                      <Outcome outcome={investigation.outcome} />
+                    </td>
+                  </tr>
 
-                  <ul class="mt-4 ml-4 divide-y divide-rule border-t border-rule">
-                    {claims.map((claim) => (
-                      <li id={claim.id} class="scroll-mt-6 py-2.5">
+                  {claims.map((claim) => (
+                    <tr id={claim.id} class="block scroll-mt-6 border-t border-rule md:table-row">
+                      <td class="block pt-2.5 pl-4 md:table-cell md:py-2.5 md:pr-4 md:align-top">
                         <a
                           href={`/considered/${claim.id}`}
                           class="link text-[0.9375rem] leading-snug text-ink"
@@ -267,23 +299,37 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
                         >
                           {claimText(claim)}
                         </a>
-                        {/* A withheld claim has neither: the side it served and
-                            the accounts that argued it describe a claim this row
-                            is refusing to show, so the redaction keeps them off
-                            the site with the wording. */}
-                        {(claim.side || claim.accounts !== undefined) && (
+                        {/* A withheld claim has neither this nor a count: the
+                            side it served and the people who discussed it
+                            describe a claim the row is refusing to show, so the
+                            redaction keeps them off the site with the wording. */}
+                        {claim.side && (
                           <span class={`mt-1 block ${label}`} data-record>
-                            {claim.side && sideLabel(claim.side)}
-                            {claim.accounts !== undefined &&
-                              `${claim.side ? ' · ' : ''}${arguedBy(claim.accounts)}`}
+                            {sideLabel(claim.side)}
                           </span>
                         )}
-                      </li>
-                    ))}
-                  </ul>
-                </li>
+                      </td>
+                      {/* A withheld claim has no count either, and no empty
+                          line where one would have been. */}
+                      <td
+                        class:list={[
+                          claim.accounts === undefined ? 'hidden' : 'block pt-1 pb-2.5 pl-4',
+                          'md:py-2.5',
+                          countColumn,
+                        ]}
+                        data-record
+                      >
+                        {claim.accounts !== undefined && discussedBy(claim.accounts)}
+                      </td>
+                      {/* The claim is decided by the question above it, so the
+                          two right-hand columns are its question's business. */}
+                      <td class="hidden md:table-cell md:py-2.5" />
+                      <td class="hidden md:table-cell md:py-2.5" />
+                    </tr>
+                  ))}
+                </tbody>
               ))}
-            </ol>
+            </table>
           </>
         )}
       </section>
