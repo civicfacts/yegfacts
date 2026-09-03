@@ -1,7 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { PANEL_AGREEMENT_GLOSS } from '../../lib/findings';
-import { launchSlate } from '../../lib/slate';
 import { SITE, repoPath } from '../../lib/site';
 import { PANEL_AGREEMENT_LEVELS } from '../../lib/vocabulary';
 import { toc } from '../../lib/toc';
@@ -79,13 +78,6 @@ const stages = [
 ];
 
 /**
- * The launch-slate stories that have not run yet. The slate itself lives in
- * `src/lib/slate.ts`, so this page and the home page cannot drift on what was
- * pre-registered; an entry drops off this list the moment its story publishes.
- */
-const remainingSlate = (await launchSlate()).filter((row) => !row.published);
-
-/**
  * The three panel-agreement values, in the order a reader meets them. The gloss
  * text is imported rather than retyped so this page and every claim page cannot
  * drift apart on what the word means.
@@ -126,7 +118,7 @@ const sections = toc([
   { id: 'stories', label: 'What stories carry' },
   { id: 'limits', label: 'Limits we set' },
   { id: 'panel-quality', label: 'Panel quality record' },
-  { id: 'launch-slate', label: 'The launch slate' },
+  { id: 'launch-slate', label: 'The launch slate, dropped' },
 ]);
 ---
 
@@ -365,8 +357,9 @@ const sections = toc([
       against another reviewer, unsupported figures, and the catches that turned out to be right —
       each one adjudicated, dated, and tied to the committed artifact that proves it. It is an
       error record, not a calibration: none of it measures the models against known truth. A
-      summary publishes when the nine-story launch slate completes, because counts over four runs
-      would be noise dressed as a statistic. The raw ledger is in the repo at{' '}
+      summary publishes once there are enough runs to count, which four are not; the point at
+      which it published used to be fixed by the launch slate, and that slate is gone. The raw
+      ledger is in the repo at{' '}
       <a href={repoPath('methodology/quality-ledger.yaml')} rel="noopener" class="link">
         methodology/quality-ledger.yaml
       </a>{' '}
@@ -375,27 +368,45 @@ const sections = toc([
   </section>
 
   <section id="launch-slate" class="mt-14 scroll-mt-6">
-    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">The launch slate</h2>
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
+      The launch slate, dropped
+    </h2>
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed">
-      The nine stories below, and the claims inside them, were fixed in writing before any panel
-      ran and before any verdict was known. That pre-commitment is the check on cherry-picking:
-      the slate cannot be trimmed to the results it produced. The stories published so far are the
-      first four; the remaining five are listed here so you can see what is still coming, and hold
-      the site to it.
+      Until 2026-09-03 this section listed nine stories, fourteen claims between them, written
+      down before any panel ran and before anyone knew how any of it would come out. The site was
+      not to be promoted until all nine had published.
     </p>
-    <ul class="mt-5 divide-y divide-rule border-t border-rule">
-      {
-        remainingSlate.map((entry) => (
-          <li class="grid gap-x-6 gap-y-1 py-4 sm:grid-cols-[14rem_1fr]">
-            <span class="font-semibold text-forest">{entry.story}</span>
-            <span class="text-[0.9375rem] leading-relaxed">{entry.claims}</span>
-          </li>
-        ))
-      }
-    </ul>
-    <p class="mt-4 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
-      No expected verdict is recorded for any of these, here or anywhere on the site. Naming a
-      hypothesis beside a claim prejudges it; the panel decides, and whatever it finds is published.
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      The list existed to answer one charge: that we check whatever suits us. A set fixed in
+      advance cannot be trimmed to the answers it produces, so a reader could hold the site to a
+      list it might later have preferred to forget.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      Reading whole sources answers that charge better, and answers it every time one arrives
+      rather than once at the start. Nobody picks the claims now. The first source handled this
+      way produced 34 questions, sixteen of them raised by people arguing on both sides, and each
+      is on the register with what was decided about it and why. Nine titles chosen in advance is
+      a thinner answer than a page that shows the lot.{' '}
+      <a href="/considered" class="link">
+        Every claim we've considered
+      </a>
+      .
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      The slate had also stopped being runnable. Since v1.15 a wording we wrote down is not a
+      wording anybody said, and only the second kind reaches a panel. Two of the slate's
+      claims sit on the register as parked, with their reasons, and they stay there. The bar was
+      one the method would not let us clear.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+      Dropping a pre-registration is the move a pre-registration exists to prevent, so this is
+      the record of it rather than a section that quietly disappeared; the reasoning is in the
+      method's{' '}
+      <a href="/methodology/changes" class="link">
+        version history
+      </a>{' '}
+      at v1.17. What the slate also did was fix when the site could be promoted, and nothing
+      fixes that now. It is an open question, not a rule.
     </p>
   </section>
 </Base>
