@@ -1,4 +1,4 @@
-# Candidate register (methodology v1.12).
+# Candidate register (methodology v1.12, regrouped under v1.16).
 #
 # Every claim the site has considered checking, whether or not it reached
 # triage, with where the wording came from and what happened. The
@@ -13,7 +13,24 @@
 # entry's intake record as another captured form, with its source, rather
 # than registered again; the triage reader is not asked to de-duplicate.
 # Two claims that answer different questions stay separate even when they
-# come from the same argument, and may share a story.
+# come from the same argument, and belong to the same investigation.
+#
+# Three keys, in this order:
+#
+#   investigations:  the unit of work. One question, one brief, one body of
+#                    evidence, one panel run. Triage rules here, so the
+#                    outcome and its reason live here.
+#   sources:         where claims came from.
+#   candidates:      the claims. Each gets one finding when it is checked, so
+#                    each is one assertion, and each belongs to exactly one
+#                    investigation.
+#
+# Several claims to an investigation is normal. Claims that contradict each
+# other belong to the SAME investigation: whether barriers delay emergency
+# vehicles and whether responders ride down the lanes to pass traffic are one
+# question, investigated once, and each still gets its own finding. A single
+# finding over both would state nothing and would label each side with a
+# verdict about the other.
 #
 # origin: captured (a post we hold with a URL or screenshot) |
 #         supplied (wording passed to us by a person, provenance not
@@ -49,7 +66,18 @@
 #                stays as the representative captured quote.
 # side:          for | against | neither — which side of the source's argument
 #                the proposition serves.
-# commenters:    how many distinct people asserted it in the source.
+# investigation: the id of the `investigations` entry it is checked under. A
+#                claim with an investigation carries no outcome of its own; it
+#                inherits the investigation's. The older hand-registered
+#                entries below carry their own outcome and no investigation.
+# accounts:      how many distinct accounts in the source asserted it. Accounts,
+#                not people: these are pseudonyms, and an account counted under
+#                a claim may have been arguing against it, so /considered never
+#                prints a total without the sides it was argued on.
+# variations:    the other wordings of the same assertion folded into this
+#                claim, when there is more than one. A restatement and a flat
+#                denial are variations; a different predicate, scope, period or
+#                quantifier is a different claim.
 # seats:         which extractor seats found it.
 # forms:         every captured wording, each {commenter, quote, comment}.
 #                `commenter` is the source's stable pseudonym, `quote` is the
@@ -57,13 +85,17 @@
 #                validator checks every quote is an exact substring of the
 #                comment it cites, so a quote attributed to a person is that
 #                person's words.
-# names_person:  the proposition names an identifiable individual. v1 has no
-#                right-of-reply process, so unless the outcome is GO the site
-#                prints the `reason` in place of the proposition and prints no
-#                forms at all. The register may hold them; the site may not.
+# names_person:  the proposition names an identifiable individual. What is
+#                withheld is an accusation, not the public record: a claim about
+#                a motion brought or a lane installed is published in full. Only
+#                where the resolved outcome is NO does the site print a neutral
+#                label in place of the claim and print no forms, because that
+#                decline can only be one the site has no way to put to the
+#                person. The register may hold the wording; the site may not.
 # variation_of:  register id or published claim id this is the same claim as.
 #
-# Entries are generated from a completed run rather than typed:
+# Investigations and claims are generated from a completed run rather than
+# typed:
 #
 #   npx tsx scripts/intake-register.ts reviews/intake/<slug>
 
@@ -486,6 +518,7 @@ candidates:
     proposition: "Edmonton's bike lanes carry little or no bicycle traffic when residents observe them."
     wording: "when out I see very few bikes on these very expensive bike lanes."
     side: against
+    variation_of: bike-lanes-nobody-rides
     accounts: 10
     seats:
       - flash
@@ -533,6 +566,7 @@ candidates:
     proposition: "Only about 1 to 2 percent of Edmonton's population rides bikes or uses the bike lanes."
     wording: "we are talking about huge expenditures for only 2.3% of the populations usage."
     side: against
+    variation_of: bike-lanes-nobody-rides
     accounts: 8
     seats:
       - flash
@@ -626,6 +660,7 @@ candidates:
     proposition: "City reports and 2021 census figures show fewer than 1 percent of Edmonton commuters travel by bicycle."
     wording: "City reports have census numbers in 2021 less than 1 percent."
     side: against
+    variation_of: bike-lanes-nobody-rides
     accounts: 2
     seats:
       - flash
@@ -646,6 +681,7 @@ candidates:
     proposition: "About 2 percent of all trips in Edmonton are made by bicycle."
     wording: "*2% of trips are done by bicycle, although it's higher in neighborhoods with bike infrastructure."
     side: for
+    variation_of: bike-lanes-nobody-rides
     accounts: 1
     seats:
       - flash
@@ -675,6 +711,7 @@ candidates:
     proposition: "87 percent of Edmontonians commute by car."
     wording: "87% of Edmontonians commute in cars."
     side: against
+    variation_of: bike-lanes-nobody-rides
     accounts: 1
     seats:
       - flash
@@ -692,6 +729,7 @@ candidates:
     proposition: "Only 1 percent of Edmonton's population uses the bike lanes year-round and fewer than 15 percent use them the rest of the year."
     wording: "only 1% of the pop use them year round and less than 15% the rest of the year."
     side: against
+    variation_of: bike-lanes-nobody-rides
     accounts: 1
     seats:
       - haiku
@@ -772,6 +810,7 @@ candidates:
     proposition: "Edmonton's winter is too long and too cold for cycling to work as everyday transportation."
     wording: "Edmontonians cannot convert to bike as primary tranportation. Be realistic winter cycling is a fantasy."
     side: against
+    variation_of: wc-too-cold
     accounts: 12
     seats:
       - flash
@@ -934,6 +973,7 @@ candidates:
     proposition: "Taking traffic lanes for bike lanes increases congestion, slows traffic and causes idling and emissions."
     wording: "Removing traffic lanes for cyclists and increasing the number of crossings increase congestion."
     side: against
+    variation_of: at-congestion-reduced
     accounts: 13
     seats:
       - flash
@@ -987,6 +1027,7 @@ candidates:
     proposition: "Cycling infrastructure reduces motor-vehicle congestion because every person who bikes is one less car on the road."
     wording: "Using a bicycle helps reduce traffic congestion."
     side: for
+    variation_of: at-congestion-reduced
     accounts: 6
     seats:
       - flash
@@ -1159,6 +1200,7 @@ candidates:
     proposition: "The $100 million is around 1 percent of Edmonton's capital budget for roads, with 99 percent going to roads for cars."
     wording: "we currently spend 99% of our road budget on roads for cars so spending is on track"
     side: for
+    variation_of: bike-100m-one-percent-of-roads
     accounts: 2
     seats:
       - flash
@@ -1190,6 +1232,7 @@ candidates:
     proposition: "The $100 million for active transportation is spread over a four-year budget cycle."
     wording: "It's 100 million over 4 years"
     side: for
+    variation_of: bike-100m-one-percent-of-roads
     accounts: 2
     seats:
       - flash
@@ -1215,6 +1258,7 @@ candidates:
     proposition: "The City is spending $181 million to grade separate 600 metres of 50 Street."
     wording: "We spend $181 million on grade separating 600m of 50th Street."
     side: for
+    variation_of: fifty-street-181m-600m
     accounts: 1
     seats:
       - flash
@@ -1232,6 +1276,7 @@ candidates:
     proposition: "That 600 metres of 50 Street costs nearly double the entire four-year active transportation investment."
     wording: "That's nearly double the cost for 600m of road compared to the entire 4 year investment in active transportation"
     side: for
+    variation_of: fifty-street-181m-600m
     accounts: 1
     seats:
       - luna
@@ -1297,6 +1342,7 @@ candidates:
     proposition: "Edmonton City Council approved $100 million for bike lane expansion."
     wording: "the City’s 100M for the active transportation network"
     side: against
+    variation_of: at-100m-a-year
     accounts: 17
     seats:
       - flash
@@ -1485,6 +1531,7 @@ candidates:
     proposition: "Council did not support the recommended pause and review of the future bike routes."
     wording: "That review was also not supported by Council."
     side: against
+    variation_of: rice-50m-motions-and-review
     accounts: 5
     seats:
       - flash
@@ -1513,6 +1560,7 @@ candidates:
     proposition: "City Administration recommended freezing 14 future bike routes to reassess them."
     wording: "Yesterday, City Administration recommended freezing 14 future routes to reassess"
     side: against
+    variation_of: rice-50m-motions-and-review
     accounts: 1
     seats:
       - haiku
@@ -1529,6 +1577,7 @@ candidates:
     proposition: "Councillor Karen Principe and Councillor Jennifer Rice brought two motions to cut the bike lane budget to $50 million and redirect the rest, and Council did not support them."
     wording: "Councillor Karen Principe and I brought forward two motions — twice — to cut it to $50M and redirect the rest to core priorities. Council didn’t support them."
     side: against
+    variation_of: rice-50m-motions-and-review
     accounts: 1
     seats:
       - flash
@@ -2977,4 +3026,19 @@ candidates:
     triage: intake/candidates/rice-50m-motions-and-review/triage.md
     intake: intake/candidates/rice-50m-motions-and-review/intake.md
     note: triage GO 2026-09-02; brief to follow
-
+  - id: lanes-removed-citywide
+    recorded: "2026-09-02"
+    origin: captured
+    source: yegscoop-2026-08-26
+    wording: "The city is removing traffic lanes all throughout the city for bike lanes."
+    outcome: variation
+    variation_of: city-removed-traffic-lanes
+    reason: "Registered on its own on 2026-09-02. The same claim now sits inside the investigation into what Edmonton has done to its traffic lanes, where it is checked alongside the other claims about that question."
+  - id: fifteen-minute-city-agreement
+    recorded: "2026-09-02"
+    origin: captured
+    source: yegscoop-2026-08-26
+    wording: "They signed an agreement to make Edmonton a 15 minute city."
+    outcome: variation
+    variation_of: 15-minute-city-agreement
+    reason: "Registered on its own on 2026-09-02. The same claim now sits inside the investigation into the 15-minute-city agreement, where it is checked alongside the other claims about that question."
