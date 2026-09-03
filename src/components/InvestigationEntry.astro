@@ -1,8 +1,7 @@
 ---
 import {
-  accountSplit,
-  arguedBy,
   claimText,
+  discussedBy,
   outcomeHeading,
   sideLabel,
   sourceKind,
@@ -50,16 +49,13 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
     </h1>
 
     {/* Straight out of the register: when the grouping was recorded, how many
-        accounts argued the question and on which sides, and how many claims sit
-        under it. The split is printed with the total everywhere, because a bare
-        total reads as corroboration on a question both sides are arguing. */}
-    <p class={`mt-4 ${label}`}>
-      <span data-record>
-        <time datetime={investigation.recorded}>{investigation.recorded}</time>
-        {` · ${accountSplit(investigation.accounts)}`}
-        {` · ${claims.length} ${claims.length === 1 ? 'claim' : 'claims'}`}
-      </span>
-      {twoSided && ' · asked from both sides'}
+        people discussed the question, and how many claims sit under it. Who
+        argued which way is on the claims below, where a reader can see which
+        claim each person was discussing. */}
+    <p class={`mt-4 ${label}`} data-record>
+      <time datetime={investigation.recorded}>{investigation.recorded}</time>
+      {` · ${discussedBy(investigation.accounts.total)}`}
+      {` · ${claims.length} ${claims.length === 1 ? 'claim' : 'claims'}`}
     </p>
   </header>
 
@@ -96,9 +92,16 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
     }
 
     {
+      /*
+        The one place the both-sides fact is stated. It is worth keeping and it
+        is not a count, so it reads as a sentence here rather than as small
+        print on the index row: a question both camps are asking is this site's
+        best evidence that it is not picking the claims that suit it.
+      */
       twoSided && (
         <p class="mt-4 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
-          Both sides of the argument are below, and each claim gets its own finding.
+          This question was raised by people arguing in both directions, and the claims below show
+          which side each one is on.
         </p>
       )
     }
@@ -158,7 +161,7 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
               <p class={`mt-1.5 ${label}`} data-record>
                 {claim.side && sideLabel(claim.side)}
                 {claim.accounts !== undefined &&
-                  `${claim.side ? ' · ' : ''}${arguedBy(claim.accounts)}`}
+                  `${claim.side ? ' · ' : ''}${discussedBy(claim.accounts)}`}
               </p>
             )}
 

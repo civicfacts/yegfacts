@@ -23,14 +23,14 @@ export type CandidateOutcome =
 export type CandidateOrigin = 'captured' | 'supplied' | 'editor';
 
 /**
- * How many distinct commenter labels argued something in a source.
+ * How many distinct commenters discussed something in a source.
  *
- * Accounts, never people: the labels are pseudonyms, one to a commenter within
- * one source, and an account arguing a question is not an account agreeing with
- * the claim it is counted under. `total` is the distinct accounts on the
- * question; the three side counts are the distinct accounts on each side, and
- * an account that argued both ways is in both, so the sides can come to more
- * than the total.
+ * One pseudonym is one person within one source, so `total` is the distinct
+ * people on the question. The three side counts are the distinct people on each
+ * side, and somebody who argued both ways is in both, so the sides can come to
+ * more than the total. The record keeps the split and the validator checks it;
+ * the site prints the total alone, because a count beside a claim has to say
+ * that people discussed it and never that they agreed with it.
  */
 export interface Accounts {
   total: number;
@@ -240,9 +240,9 @@ export const WITHHELD_LABEL = 'Withheld claim';
  * A candidate as the site may print it. Identity for everything else.
  *
  * `side`, `accounts` and `variations` go with the wording: "against the
- * argument", "argued by one account" and another phrasing of the allegation all
- * describe a claim this entry is refusing to show, so the site never receives
- * them either.
+ * argument", "discussed by one person" and another phrasing of the allegation
+ * all describe a claim this entry is refusing to show, so the site never
+ * receives them either.
  */
 export function redact(candidate: Candidate): Candidate {
   if (!withholdsWording(candidate)) return candidate;
@@ -419,7 +419,9 @@ export interface InvestigationClaims {
   /**
    * Claims for the source's argument and claims against it, under the one
    * question. The site's best evidence that it is not picking sides, so the
-   * pages say it rather than leaving it to be counted off the rows.
+   * investigation's own page says it in a sentence rather than leaving it to be
+   * counted off the claims. It is off the index row, where it was a third piece
+   * of small print beside two counts.
    */
   twoSided: boolean;
 }
@@ -657,41 +659,23 @@ export function sideLabel(side: string): string {
   return side === 'neither' ? 'neither side of the argument' : `${side} the argument`;
 }
 
-/** The side, in the two or three words a count can sit beside. */
-const SIDE_WORD: Record<string, string> = {
-  for: 'for',
-  against: 'against',
-  neither: 'on neither side',
-};
-
 /**
- * How many accounts argued a claim, in words.
+ * How many people discussed a question or a claim, in words. The one phrase the
+ * site prints for any of these counts, at either level of the register.
  *
- * Accounts, not people, everywhere the site prints one of these numbers. The
- * labels behind them are pseudonyms, and a count is of the accounts that argued
- * the claim rather than of the accounts that assert it: a proposition's captured
- * wordings include the comments denying it.
- */
-export function arguedBy(accounts: number): string {
-  return `argued by ${accounts} ${accounts === 1 ? 'account' : 'accounts'}`;
-}
-
-/**
- * An investigation's accounts, always disaggregated.
+ * "Discussed by" is doing the work a printed split used to do. A bare total
+ * next to a claim reads as corroboration if the verb lets it, and a count is of
+ * the people who argued the claim either way, not of the people who assert it:
+ * a proposition's captured wordings include the comments denying it. Discussed
+ * claims no agreement, so the count is safe to print whole and the sides stay
+ * where they belong, on each claim.
  *
- * A bare total reads as corroboration — twenty-five accounts saying so — when
- * on a two-sided question it is twenty-one accounts saying one thing and five
- * saying the opposite. So the split is printed with the total every time, and
- * the total is never printed alone.
+ * People, not accounts: a pseudonym is one person within its source by
+ * construction, so the count undercounts nobody and overcounts only across
+ * sources, which no page adds up.
  */
-export function accountSplit(accounts: Accounts): string {
-  const total = `${accounts.total} ${accounts.total === 1 ? 'account' : 'accounts'}`;
-  const parts = (['against', 'for', 'neither'] as const)
-    .map((side) => ({ side, count: accounts[side] ?? 0 }))
-    .filter((part) => part.count > 0)
-    .sort((a, b) => b.count - a.count);
-  if (parts.length === 0) return total;
-  return `${total}: ${parts.map((part) => `${part.count} ${SIDE_WORD[part.side]}`).join(', ')}`;
+export function discussedBy(people: number): string {
+  return `Discussed by ${people} ${people === 1 ? 'person' : 'people'}`;
 }
 
 /** The label for the link to a candidate's story, when it has one. */

@@ -2,8 +2,8 @@
 import { render, type CollectionEntry } from 'astro:content';
 import Outcome from './Outcome.astro';
 import {
-  arguedBy,
   claimText,
+  discussedBy,
   outcomeHeading,
   provenance,
   reportAnchor,
@@ -109,8 +109,9 @@ const declinedApart =
 
     {/*
       Straight out of the register, in the words `/considered` uses. A
-      withheld entry reaches this page with no side and no account count:
-      both describe a claim the page is refusing to show. Its register id
+      withheld entry reaches this page with no side and no count of the
+      people who discussed it: both describe a claim the page is refusing
+      to show, so neither is printed here either. Its register id
       stands in their place, because the id is what a later audit asks for.
     */}
     <p class={`mt-4 ${label}`} data-record>
@@ -129,7 +130,7 @@ const declinedApart =
       }
       {
         candidate.accounts !== undefined && (
-          <span class="normal-case tracking-normal">{` · ${arguedBy(candidate.accounts)}`}</span>
+          <span class="normal-case tracking-normal">{` · ${discussedBy(candidate.accounts)}`}</span>
         )
       }
     </p>
