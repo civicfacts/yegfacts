@@ -72,6 +72,20 @@ const quoted = candidate.proposition === undefined;
 const reason = candidate.reason ?? investigation?.reason ?? candidate.note;
 
 const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
+
+/**
+ * The claim was turned down while the question around it goes ahead.
+ *
+ * The one case is an accusation against a named person: the investigation into
+ * what an office-holder has disclosed can be entirely worth running, and the
+ * accusation inside it is still one this site has no way to put to them. Two
+ * decisions differ here, so the page prints both rather than the question's
+ * alone, which would read as though the accusation were being checked.
+ */
+const declinedApart =
+  investigation !== null &&
+  candidate.outcome === 'NO' &&
+  investigation.outcome !== 'NO';
 ---
 
 <article>
@@ -139,18 +153,35 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
           </p>
 
           <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
-            This claim is checked as part of that question. One brief covers every claim under it,
-            and each claim still gets its own finding.
+            {declinedApart
+              ? 'That question is going ahead without this claim. One brief covers the other claims under it; this one was turned down on its own, for the reason below.'
+              : 'This claim is checked as part of that question. One brief covers every claim under it, and each claim still gets its own finding.'}
           </p>
 
-          {/* The badge belongs to the question, and the line beside it says so,
-              so nobody reads it as a decision made about this claim alone. */}
+          {/* Two badges only where the two decisions differ. Otherwise the
+              badge belongs to the question and the line beside it says so, so
+              nobody reads it as a decision made about this claim alone. */}
           <p class="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-2">
-            <span class={label}>The investigation's outcome</span>
-            <Outcome outcome={investigation.outcome} />
+            <span class={label}>{declinedApart ? 'This claim' : "The investigation's outcome"}</span>
+            <Outcome outcome={declinedApart ? candidate.outcome : investigation.outcome} />
+            {declinedApart && (
+              <>
+                <span class={label}>The question around it</span>
+                <Outcome outcome={investigation.outcome} />
+              </>
+            )}
           </p>
 
-          {investigation.reason && (
+          {declinedApart && candidate.reason && (
+            <p
+              class="mt-3.5 max-w-prose border-l-2 border-gold pl-3.5 text-[1.0625rem] leading-relaxed text-pretty"
+              data-record
+            >
+              {candidate.reason}
+            </p>
+          )}
+
+          {!declinedApart && investigation.reason && (
             <p
               class="mt-3.5 max-w-prose border-l-2 border-gold pl-3.5 text-[1.0625rem] leading-relaxed text-pretty"
               data-record

@@ -85,6 +85,12 @@
 #                validator checks every quote is an exact substring of the
 #                comment it cites, so a quote attributed to a person is that
 #                person's words.
+# ground:        why a claim carries its own decline inside an investigation
+#                that is going ahead. `right-of-reply` is the only value: the
+#                claim accuses a named person and the site has no way to put
+#                that to them. Such a claim keeps its row, its outcome and its
+#                reason, and carries no proposition, wording or forms at all,
+#                because a slug and a paragraph are published alike.
 # names_person:  the proposition names an identifiable individual. What is
 #                withheld is an accusation, not the public record: a claim about
 #                a motion brought or a lane installed is published in full. Only
@@ -1902,22 +1908,19 @@ candidates:
       - commenter: "Chilly Fox J."
         quote: "They are unveiled get paid over 100k and pension and push their climate, women and anti car ideaologies"
         comment: 8
-  - id: councillor-family-development-interest
+  - id: withheld-yegscoop-2026-08-26-1
     recorded: "2026-09-03"
     origin: captured
     source: yegscoop-2026-08-26
     investigation: city-hall-pay-and-interests
-    proposition: "Councillor Ashley Salvador's husband has an infill company."
-    wording: "Can blame Ashley Salvador for this. What is she really up to? Husband has an infill company and it goes on."
     side: against
     accounts: 1
     seats:
       - flash
     names_person: true
-    forms:
-      - commenter: "Wintry Nuthatch J."
-        quote: "Can blame Ashley Salvador for this. What is she really up to? Husband has an infill company and it goes on."
-        comment: 362
+    outcome: NO
+    ground: right-of-reply
+    reason: "One commenter accused a named person of an undisclosed private interest. The question around it, what city hall pay and councillors' filed disclosures actually show, is going ahead; this claim is not."
   - id: drivers-pay-for-roads-via-fuel-taxes
     recorded: "2026-09-03"
     origin: captured

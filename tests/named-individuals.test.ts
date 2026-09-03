@@ -292,3 +292,77 @@ describe('the register has one way in', () => {
     expect(readers).toEqual([]);
   });
 });
+
+/**
+ * An accusation declined inside an investigation that is going ahead.
+ *
+ * The first version of grouping keyed withholding off the investigation's
+ * outcome, so a question worth investigating published the accusation sitting
+ * inside it. The decline is a property of the claim.
+ */
+describe('a claim declined while its question goes ahead', () => {
+  const yaml = `
+investigations:
+  - id: disclosed-interests
+    recorded: "2026-09-03"
+    source: a-thread
+    question: "What do councillors' filed disclosures show?"
+    outcome: GO
+    reason: "Filed disclosure statements can answer it."
+    accounts:
+      total: 2
+      against: 2
+    run: reviews/intake/a-thread
+sources: []
+candidates:
+  - id: withheld-a-thread-1
+    recorded: "2026-09-03"
+    origin: captured
+    source: a-thread
+    investigation: disclosed-interests
+    side: against
+    accounts: 1
+    names_person: true
+    outcome: NO
+    ground: right-of-reply
+    reason: "The question around it is going ahead; this claim is not."
+  - id: motion-brought
+    recorded: "2026-09-03"
+    origin: captured
+    source: a-thread
+    investigation: disclosed-interests
+    proposition: "A councillor brought a motion to cut the budget."
+    wording: "she moved to cut it"
+    side: against
+    accounts: 1
+    names_person: true
+    forms:
+      - commenter: "Snowy Hare F."
+        quote: "she moved to cut it"
+        comment: 3
+`;
+
+  const byId = () => new Map(parseRegister(yaml).candidates.map((c) => [c.id, c]));
+
+  it('keeps its own decline rather than inheriting the go-ahead', () => {
+    expect(byId().get('withheld-a-thread-1')!.outcome).toBe('NO');
+  });
+
+  it('is withheld even though the investigation around it goes ahead', () => {
+    expect(byId().get('withheld-a-thread-1')!.withheld).toBe(true);
+  });
+
+  it('renders no proposition, wording or forms', () => {
+    const entry = byId().get('withheld-a-thread-1')!;
+    expect(entry.proposition).toBe(WITHHELD_LABEL);
+    expect(entry.wording).toBe(WITHHELD_LABEL);
+    expect(entry.forms ?? []).toEqual([]);
+  });
+
+  it('leaves a claim about what an office-holder did in office intact', () => {
+    const entry = byId().get('motion-brought')!;
+    expect(entry.withheld).toBeFalsy();
+    expect(entry.proposition).toContain('brought a motion');
+    expect(entry.forms).toHaveLength(1);
+  });
+});

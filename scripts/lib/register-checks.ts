@@ -293,8 +293,38 @@ export function registerProblems(register: Register, world: RegisterWorld): stri
           `${where}: investigation "${String(investigation)}" is not in the investigations list`,
         );
       }
+      // One exception to inheriting, and it is the charter's, not a
+      // convenience. A claim accusing a named person of wrongdoing or an
+      // improper motive is declined whatever happens to the question around
+      // it: an investigation into what councillors have disclosed can be
+      // entirely worth running while the accusation inside it is one this site
+      // has no way to put to the person. So the claim carries its own NO, and
+      // it may carry nothing else that repeats the accusation.
       if (hasOutcome) {
-        fail(`${where}: triage ruled on its investigation, so it carries no outcome of its own`);
+        const ground = candidate.ground;
+        if (ground !== 'right-of-reply') {
+          fail(
+            `${where}: triage ruled on its investigation, so it carries no outcome of its own ` +
+              `unless it is declined on the right-of-reply ground`,
+          );
+        } else if (candidate.outcome !== 'NO') {
+          fail(`${where}: a right-of-reply ground only ever accompanies an outcome of NO`);
+        } else {
+          if (candidate.names_person !== true) {
+            fail(`${where}: declined on the right-of-reply ground, so it must be marked names_person`);
+          }
+          for (const field of ['proposition', 'wording', 'forms', 'variations'] as const) {
+            if (candidate[field] !== undefined) {
+              fail(
+                `${where}: withheld on the right-of-reply ground, so it must carry no ${field}; ` +
+                  `the register is published too`,
+              );
+            }
+          }
+          if (typeof candidate.reason !== 'string' || candidate.reason.trim() === '') {
+            fail(`${where}: withheld, so the reason is all a reader gets and it cannot be empty`);
+          }
+        }
       }
       // Both are printed beside the claim, and the account count is what the
       // investigation's total is checked against.

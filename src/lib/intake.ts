@@ -216,9 +216,14 @@ export function withholdsWording(entry: {
   // a refusal to repeat it, and most claims naming a person name an
   // office-holder doing something in office: a motion brought, a lane
   // installed. Those are the public record and the site names them, here and
-  // in the stories. What is withheld is what two readers refused outright,
-  // which under the triage rule can only be an allegation the site has no way
-  // to put to the person.
+  // in the stories.
+  //
+  // A decline can arrive two ways. Both readers can refuse the whole question,
+  // or a single claim can be declined on the right-of-reply ground inside a
+  // question that is going ahead. The second is the common case and the reason
+  // the claim's own outcome overrides what it would inherit: an investigation
+  // into what councillors have disclosed is worth running, and an accusation
+  // sitting inside it is still one this site cannot put to the person.
   return entry.names_person === true && entry.outcome === 'NO';
 }
 

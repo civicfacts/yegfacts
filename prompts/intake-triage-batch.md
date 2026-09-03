@@ -67,6 +67,14 @@ of that kind is `NO`, and your reason must stand on its own without
 repeating the accusation or the name, because the reason is published
 and the accusation is not.
 
+The decline attaches to the claim, not to the question around it. An
+investigation into what an office-holder has disclosed, or into what
+city hall pays, can be entirely worth running while one accusation
+sitting inside it is not. Where that happens, say GO on the
+investigation and name the claim you are declining and why, so the
+brief runs on the rest and the accusation is neither checked nor
+repeated.
+
 What an office-holder did in office is not an accusation, however
 unflattering, and is not covered by this rule. A motion a councillor
 brought, how they voted, a project they championed, a lane built or
