@@ -14,6 +14,14 @@ import { candidateReportsLoader } from './lib/candidate-reports';
  * topics being a subset of the story's — belong to `scripts/validate.ts`.
  */
 import {
+  FINDING_WORD_RULE,
+  ONE_IDEA_RULE,
+  STANCE_RULE,
+  hasSecondIdeaPunctuation,
+  opensWithFindingWord,
+  opensWithStance,
+} from './lib/plain-speech';
+import {
   CANONICAL_FINDINGS,
   CHANGELOG_TYPES,
   COMMITMENT_STATUSES,
@@ -93,15 +101,26 @@ const stories = defineCollection({
     .object({
       title: z.string().min(1),
       /**
-       * The whole answer in one sentence: first thing under the title, and the
-       * description on every share card. Thirty words is where it stops being a
-       * sentence held in one go; a dash is how a second clause sneaks in.
+       * The standfirst: the sentence under the title, and the description on
+       * every share card.
+       *
+       * Optional since the plain-speech standard (docs/DESIGN.md \u00a712) put the
+       * answer on the claim, which is the unit of judgement. A question with
+       * one claim under it has already written this sentence there and may
+       * simply use it; a question with several claims still needs a sentence of
+       * its own, because one answer cannot serve three findings \u2014 trying made
+       * it a semicolon-joined abstract. `scripts/validate.ts` is what checks
+       * that a story dropping this has exactly one claim to stand in for it,
+       * since that rule needs to see two files at once.
+       *
+       * Held to the answer's punctuation rule and not to its stance opener: a
+       * standfirst over several claims has no single stance to open with.
        */
       one_line: z
         .string()
         .min(1)
-        .refine((line) => line.trim().split(/\s+/).length <= 30, 'one_line is over 30 words')
-        .refine((line) => !/[\u2014\u2013]/.test(line), 'one_line must not contain a dash'),
+        .refine((line) => !hasSecondIdeaPunctuation(line), `one_line ${ONE_IDEA_RULE}`)
+        .optional(),
       /**
        * TL;DR bullets — the second disclosure layer, directly under the answer.
        * Five at most. Each should carry a fact the one-sentence answer does
@@ -185,6 +204,25 @@ const claims = defineCollection({
     /** Parent story slug. */
     story: z.string().min(1),
     finding: z.enum(CANONICAL_FINDINGS),
+    /**
+     * The answer, in one sentence a person would say out loud (docs/DESIGN.md
+     * §12). The thing most readers will read.
+     *
+     * It lives on the claim because the claim is the unit of judgement: one
+     * finding, one answer. It used to be the story's `one_line`, where a single
+     * sentence had to answer every claim under a question at once and did it by
+     * stacking them with semicolons.
+     *
+     * Required rather than optional. The standard makes it required of every
+     * claim that carries a `finding`, and every claim in this collection
+     * carries one, so the condition is unconditional here.
+     */
+    answer: z
+      .string()
+      .min(1)
+      .refine((text) => !hasSecondIdeaPunctuation(text), `answer ${ONE_IDEA_RULE}`)
+      .refine((text) => !opensWithFindingWord(text), `answer ${FINDING_WORD_RULE}`)
+      .refine(opensWithStance, `answer ${STANCE_RULE}`),
     evidence_basis: z.string().min(1),
     /**
      * Panel agreement over the locked round-1 multiset (methodology v1.3).
@@ -195,6 +233,17 @@ const claims = defineCollection({
     methodology_version: z.string().min(1),
     /** Repo path of the review run that produced this verdict. */
     review_run: z.string().min(1),
+    /**
+     * Repo path of the plain-speech read that passed this claim's `answer`
+     * (docs/DESIGN.md §12), under the run directory beside the faithfulness
+     * reports.
+     *
+     * Naming it here is what makes the read a stage rather than a habit: a
+     * prompt nobody is obliged to run is documentation. `scripts/validate.ts`
+     * checks the file is really on disk, so a claim that cannot name its read
+     * does not publish.
+     */
+    plain_speech_read: z.string().min(1),
     /** Narrower than the story's topics; validated as a subset in CI. */
     topics: z.array(topicSlug).optional(),
     evidence: z.array(evidenceId).default([]),

@@ -22,7 +22,10 @@
  *   path needing a methodology entry — are not implemented here; see the TODO
  *   at the bottom of this file.
  *
- * One rule is deliberately advisory. A published run's `combined-evidence.json`
+ * Two rules are deliberately advisory. The method-vocabulary list in
+ * `checkPlainSpeech` only warns, because a word list that fails the build is
+ * the next rule that deletes true content — see `METHOD_VOCABULARY`. And a
+ * published run's `combined-evidence.json`
  * MUST carry `fetch_status` on every item — that is a hard failure — but an
  * unverifiable item that a `key_fact` cites only prints a `warn:` line, because
  * matching citations to combined-evidence items is approximate and the gate
@@ -53,6 +56,7 @@ import {
 } from './lib/register-checks.ts';
 import { redirectProblems, type RedirectRow } from './lib/redirect-checks.ts';
 import { allRedirects, redirectFileText } from './lib/redirect-file.ts';
+import { methodVocabularyIn } from '../src/lib/plain-speech.ts';
 import {
   CANONICAL_FINDINGS,
   CHANGELOG_TYPES,
@@ -268,13 +272,22 @@ function checkStories(): void {
     seenSlugs.add(slug);
 
     // Mandatory sections (spec §8).
-    for (const field of ['title', 'one_line'] as const) {
-      if (typeof data[field] !== 'string' || data[field].trim() === '') {
-        fail(file, `${field} is required and must be non-empty`);
-      }
+    if (typeof data.title !== 'string' || data.title.trim() === '') {
+      fail(file, 'title is required and must be non-empty');
     }
 
-    // one_line length and dash rules live in the schema (src/content.config.ts).
+    // The standfirst's punctuation rule lives in the schema
+    // (src/content.config.ts). Whether it may be dropped altogether cannot: a
+    // question may lean on its claim's answer for that sentence only when it
+    // has exactly one claim, and the schema cannot see the claim files
+    // (docs/DESIGN.md §12).
+    if (data.one_line === undefined && stringArray(data.claims).length !== 1) {
+      fail(
+        file,
+        'one_line is required unless the question has exactly one claim, whose answer stands in for it',
+      );
+    }
+
     if (body.trim() === '') fail(file, 'story body is empty');
 
     checkEnum(file, 'status', data.status, STORY_STATUSES);
@@ -418,6 +431,37 @@ function checkClaims(): void {
     } else if (parent?.data.status === 'published') {
       checkPublishedReviewRun(file, reviewRun);
     }
+
+    /*
+     * The plain-speech read that passed this claim's answer (docs/DESIGN.md
+     * §12). Named on every claim, and the file has to be there before the claim
+     * publishes: a stage whose artifact nobody checks for is a habit, and a
+     * habit is what the standard was written to replace.
+     *
+     * The existence check is gated on `published` for the same reason the
+     * review-run check above is. Before the stage-7 gate a run lives locally
+     * and `reviews/` is not committed, so demanding the file of a
+     * `pending-review` claim would fail CI on exactly the state the workflow is
+     * designed to have.
+     */
+    const plainSpeechRead =
+      typeof data.plain_speech_read === 'string' ? data.plain_speech_read : '';
+    if (plainSpeechRead === '') {
+      fail(file, 'plain_speech_read is required: name the read that passed this answer');
+    } else if (parent?.data.status === 'published') {
+      const report = repoPath(plainSpeechRead);
+      if (!existsSync(report) || !statSync(report).isFile()) {
+        fail(
+          file,
+          `plain_speech_read: "${plainSpeechRead}" is not a file (required for published claims)`,
+        );
+      } else if (reviewRun !== '' && !plainSpeechRead.startsWith(`${reviewRun}/`)) {
+        fail(
+          file,
+          `plain_speech_read: "${plainSpeechRead}" belongs under this claim's review run "${reviewRun}"`,
+        );
+      }
+    }
   }
 }
 
@@ -458,6 +502,31 @@ function checkPublishedReviewRun(claimFile: string, reviewRun: string): void {
     }
   } catch (error) {
     fail(manifest, `unreadable manifest: ${(error as Error).message}`);
+  }
+}
+
+/**
+ * The reader-facing sentences, read for method vocabulary (docs/DESIGN.md §12).
+ * The list and the reason it only ever warns are in `src/lib/plain-speech.ts`,
+ * which the content schema reads from too.
+ */
+function checkPlainSpeech(): void {
+  const sentences: Array<{ file: string; field: string; text: string }> = [];
+  for (const { file, data } of claims) {
+    if (typeof data.answer === 'string') {
+      sentences.push({ file, field: 'answer', text: data.answer });
+    }
+  }
+  for (const { file, data } of stories) {
+    if (typeof data.one_line === 'string') {
+      sentences.push({ file, field: 'one_line', text: data.one_line });
+    }
+  }
+
+  for (const { file, field, text } of sentences) {
+    for (const term of methodVocabularyIn(text)) {
+      warn(file, `${field} uses method vocabulary "${term}". Say it in the words a reader uses.`);
+    }
   }
 }
 
@@ -1026,6 +1095,7 @@ checkMethodologyChangelog();
 checkTopicFiles();
 checkStories();
 checkClaims();
+checkPlainSpeech();
 checkCommitments();
 checkEvidence();
 checkReviewRuns();
