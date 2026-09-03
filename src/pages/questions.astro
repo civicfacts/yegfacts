@@ -1,16 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import Finding from '../components/Finding.astro';
+import PageToc from '../components/PageToc.astro';
+import ReportBox from '../components/ReportBox.astro';
 import StateBadge from '../components/StateBadge.astro';
 import { orderedTopics } from '../lib/content';
-import {
-  claimText,
-  commentsFrom,
-  commentsOn,
-  saidIn,
-  sourceRegister,
-  triageEdge,
-} from '../lib/intake';
+import { claimText, commentsFrom, commentsOn, saidIn, triageEdge } from '../lib/intake';
 import { questionRows, questionStateKey, statesOf } from '../lib/questions';
 import { toc } from '../lib/toc';
 
@@ -35,9 +30,8 @@ import { toc } from '../lib/toc';
  */
 const rows = await questionRows();
 const topics = await orderedTopics();
-const sources = sourceRegister();
 
-/** Only the states, topics and sources the register actually uses are offered. */
+/** Only the states and topics the register actually uses are offered. */
 const stateFilters = questionStateKey();
 
 const topicFilters = topics
@@ -47,14 +41,6 @@ const topicFilters = topics
     count: rows.filter((row) => row.topics.includes(topic.data.slug)).length,
   }))
   .filter((topic) => topic.count > 0);
-
-const sourceFilters = sources
-  .map((source) => ({
-    id: source.id,
-    label: source.title,
-    count: rows.filter((row) => row.question.source === source.id).length,
-  }))
-  .filter((source) => source.count > 0);
 
 const withholding = rows.some((row) => row.registered.some((claim) => claim.withheld));
 
@@ -86,6 +72,7 @@ const chip =
 
 <Base
   sections={outline}
+  rail={false}
   title="Every question we've considered"
   description="Every question that reached YEGFacts, with the claims under it and what happened to it, including the ones we parked and the ones we declined."
 >
@@ -182,37 +169,15 @@ const chip =
           </div>
         )
       }
-
-      {
-        sourceFilters.length > 0 && (
-          <div class="py-3.5 sm:flex sm:gap-5">
-            <p class:list={[label, 'sm:w-28 sm:shrink-0 sm:pt-1.5']}>Source</p>
-            <ul class="mt-2 flex flex-wrap gap-2 sm:mt-0">
-              <li>
-                <a href="/questions" class:list={[chip, 'link']} data-filter="source" data-value="">
-                  All
-                </a>
-              </li>
-              {sourceFilters.map((source) => (
-                <li>
-                  <a
-                    href={`/questions?source=${source.id}`}
-                    class:list={[chip, 'link']}
-                    data-filter="source"
-                    data-value={source.id}
-                  >
-                    {source.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )
-      }
     </div>
 
+    {/*
+      One line, because the count and the order are one fact about the list
+      below it: how much of the register is on screen, and what put it in that
+      order. The script rewrites the whole line as the filters change.
+    */}
     <p class:list={['mt-3', label]} data-filter-count>
-      {rows.length} questions
+      {rows.length} questions, most-commented first.
     </p>
     <noscript>
       <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
@@ -221,195 +186,241 @@ const chip =
     </noscript>
   </section>
 
-  <section id="states" class="mt-12 scroll-mt-6">
-    <h2 class="section-heading">What the states mean</h2>
+  {/*
+    The register and the key beside it. The key is reference material a reader
+    consults while reading the rows, so from `lg` it sits in its own column
+    alongside them rather than standing between the filters and the table. It
+    comes after the register in source order, which is where a phone wants it:
+    below the list, not in front of it.
 
-    {/* The tile is the term, so a reader can match a row to its line by shape. */}
-    <dl class="mt-5 divide-y divide-rule border-t border-rule">
-      {
-        stateFilters.map((state) => (
-          <div class="py-3 sm:flex sm:gap-5">
-            <dt class="sm:w-40 sm:shrink-0">
-              <StateBadge state={state.id} />
-            </dt>
-            <dd class="mt-1.5 max-w-prose text-[0.9375rem] leading-relaxed sm:mt-0">
-              {state.definition}
-            </dd>
-          </div>
-        ))
-      }
-      {
-        unchecked && (
-          <div class="py-3 sm:flex sm:gap-5">
-            <dt class:list={['sm:w-40 sm:shrink-0', label]}>No finding yet</dt>
-            <dd class="mt-1.5 max-w-prose text-[0.9375rem] leading-relaxed sm:mt-0">
-              A claim under a question the site has already answered, which has not itself been
-              through the panel. The question was answered; this claim was not checked.
-            </dd>
-          </div>
-        )
-      }
-    </dl>
+    The page carries its own right-hand column rather than borrowing the
+    layout's 13rem rail, the way the home page does, and the rail is off. The
+    rail is too narrow to hold the key, and a second column beside it left the
+    register 460px wide. The column is a fixed 16rem rather than the home
+    page's ratio because the register's other three columns never shrink: they
+    cost the table a flat 449px whatever the page is doing, so every pixel this
+    column takes comes out of the question title, which is the one thing on the
+    row a reader is actually reading.
+  */}
+  <div class="mt-12 lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-x-8">
+    <section id="register" class="scroll-mt-6">
+      <h2 class="section-heading">Every question</h2>
 
-    <p class="mt-6 max-w-prose text-[0.9375rem] leading-relaxed">
-      Two readers rule on every question, one call each, written GO, PARK or NO. Those are the words
-      some of the reasons below use. Going ahead takes both readers at GO, or one GO and one PARK.
-      Declined takes two NOs. Everything else parks, a GO set against a NO included, because
-      throwing out a real question costs the reader more than holding one too long. So a question
-      marked going ahead can be one the two readers did not agree on, and where they split the
-      reason says so.
-    </p>
-
-    {
-      withholding && (
-        <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
-          Some rows read “Withheld claim”. Those are claims about an identifiable person, which this
-          site does not repeat while it has no right of reply to offer them. The row keeps its place
-          under the question it was checked under, that question keeps its answer and its reason,
-          and the claim's own page says more.
-        </p>
-      )
-    }
-  </section>
-
-  <section id="register" class="mt-14 scroll-mt-6">
-    <h2 class="section-heading">Every question</h2>
-    <p class={`mt-2 ${label}`}>The most-commented questions come first.</p>
-
-    {/*
-      One tbody to a question, with the claims checked under it as rows beneath
-      it, so a claim is attached to its question by the table's own structure.
-      The column heads say what each cell already says in words, so they are for
-      screen readers only.
-    */}
-    <table class="mt-4 block w-full border-collapse md:table">
-      <caption class="sr-only">Every question YEGFacts has considered</caption>
-      <thead class="sr-only">
-        <tr>
-          <th scope="col">Question or claim</th>
-          <th scope="col">Comments</th>
-          <th scope="col">Claims</th>
-          <th scope="col">State</th>
-        </tr>
-      </thead>
-      {
-        rows.map((row) => (
-          <tbody
-            class="block border-t border-rule md:table-row-group"
-            data-question
-            data-state={statesOf(row.question).join(' ')}
-            data-topic={row.topics.join(' ')}
-            data-source={row.question.source ?? ''}
-          >
-            <tr id={row.question.id} class="block scroll-mt-6 md:table-row">
-              <td class="block pt-4 md:table-cell md:py-4 md:pr-4 md:align-top">
-                <span class:list={['block border-l-[5px] pl-4', triageEdge(row.question.triage)]}>
-                  <a
-                    href={`/questions/${row.question.id}`}
-                    class="link font-display text-[1.1875rem] leading-snug font-semibold text-pretty"
-                    data-record
-                  >
-                    {row.question.question}
-                  </a>
-                  {row.question.reason && (
-                    <span
-                      class="mt-2 block max-w-prose text-[0.9375rem] leading-relaxed text-muted"
+      {/*
+        One tbody to a question, with the claims checked under it as rows beneath
+        it, so a claim is attached to its question by the table's own structure.
+        The column heads say what each cell already says in words, so they are for
+        screen readers only.
+      */}
+      <table class="mt-4 block w-full border-collapse md:table">
+        <caption class="sr-only">Every question YEGFacts has considered</caption>
+        <thead class="sr-only">
+          <tr>
+            <th scope="col">Question or claim</th>
+            <th scope="col">Comments</th>
+            <th scope="col">Claims</th>
+            <th scope="col">State</th>
+          </tr>
+        </thead>
+        {
+          rows.map((row) => (
+            <tbody
+              class="block border-t border-rule md:table-row-group"
+              data-question
+              data-state={statesOf(row.question).join(' ')}
+              data-topic={row.topics.join(' ')}
+            >
+              <tr id={row.question.id} class="block scroll-mt-6 md:table-row">
+                <td class="block pt-4 md:table-cell md:py-4 md:pr-4 md:align-top">
+                  <span class:list={['block border-l-[5px] pl-4', triageEdge(row.question.triage)]}>
+                    <a
+                      href={`/questions/${row.question.id}`}
+                      class="link font-display text-[1.1875rem] leading-snug font-semibold text-pretty"
                       data-record
                     >
-                      {row.question.reason}
-                    </span>
-                  )}
-                </span>
-              </td>
-              <td class:list={['block pt-2 pl-5 md:py-4', countColumn]} data-record>
-                {row.comments > 0 && saidIn(row.comments)}
-              </td>
-              <td
-                class:list={['block pt-1 pl-5 whitespace-nowrap md:py-4', countColumn]}
-                data-record
-              >
-                {`${row.claimCount} ${row.claimCount === 1 ? 'claim' : 'claims'}`}
-              </td>
-              <td class:list={['pt-3 pb-4 pl-5 md:py-4', badgeColumn]}>
-                <span class="flex flex-wrap gap-1.5 md:justify-end">
-                  {statesOf(row.question).map((state) => (
-                    <StateBadge state={state} />
-                  ))}
-                </span>
-              </td>
-            </tr>
-
-            {row.answered.map((claim) => (
-              <tr class="block scroll-mt-6 border-t border-rule md:table-row">
-                <td class="block pt-2.5 pl-4 md:table-cell md:py-2.5 md:pr-4 md:align-top">
-                  <a
-                    href={`/claims/${claim.data.id}`}
-                    class="link text-[0.9375rem] leading-snug text-ink"
-                    data-record
-                  >
-                    {claim.data.question}
-                  </a>
+                      {row.question.question}
+                    </a>
+                    {row.question.reason && (
+                      <span
+                        class="mt-2 block max-w-prose text-[0.9375rem] leading-relaxed text-muted"
+                        data-record
+                      >
+                        {row.question.reason}
+                      </span>
+                    )}
+                  </span>
+                </td>
+                <td class:list={['block pt-2 pl-5 md:py-4', countColumn]} data-record>
+                  {row.comments > 0 && saidIn(row.comments)}
                 </td>
                 <td
-                  class:list={[
-                    commentsFrom(claim.data.register_claims) === 0
-                      ? 'hidden'
-                      : 'block pt-1 pl-4',
-                    'md:py-2.5',
-                    countColumn,
-                  ]}
+                  class:list={['block pt-1 pl-5 whitespace-nowrap md:py-4', countColumn]}
                   data-record
                 >
-                  {commentsFrom(claim.data.register_claims) > 0 &&
-                    saidIn(commentsFrom(claim.data.register_claims))}
+                  {`${row.claimCount} ${row.claimCount === 1 ? 'claim' : 'claims'}`}
                 </td>
-                <td class="hidden md:table-cell md:py-2.5" />
-                <td class:list={['pt-2 pb-2.5 pl-4 md:py-2.5', badgeColumn]}>
-                  <Finding finding={claim.data.finding} />
+                <td class:list={['pt-3 pb-4 pl-5 md:py-4', badgeColumn]}>
+                  <span class="flex flex-wrap gap-1.5 md:justify-end">
+                    {statesOf(row.question).map((state) => (
+                      <StateBadge state={state} />
+                    ))}
+                  </span>
                 </td>
               </tr>
-            ))}
 
-            {row.registered.map((claim) => (
-              <tr id={claim.id} class="block scroll-mt-6 border-t border-rule md:table-row">
-                <td class="block pt-2.5 pl-4 md:table-cell md:py-2.5 md:pr-4 md:align-top">
-                  <a
-                    href={`/claims/${claim.id}`}
-                    class="link text-[0.9375rem] leading-snug text-ink"
+              {row.answered.map((claim) => (
+                <tr class="block scroll-mt-6 border-t border-rule md:table-row">
+                  <td class="block pt-2.5 pl-4 md:table-cell md:py-2.5 md:pr-4 md:align-top">
+                    <a
+                      href={`/claims/${claim.data.id}`}
+                      class="link text-[0.9375rem] leading-snug text-ink"
+                      data-record
+                    >
+                      {claim.data.question}
+                    </a>
+                  </td>
+                  <td
+                    class:list={[
+                      commentsFrom(claim.data.register_claims) === 0
+                        ? 'hidden'
+                        : 'block pt-1 pl-4',
+                      'md:py-2.5',
+                      countColumn,
+                    ]}
                     data-record
                   >
-                    {claimText(claim)}
-                  </a>
-                </td>
-                {/* A withheld claim has no count either, and no empty line where one would have been. */}
-                <td
-                  class:list={[
-                    commentsOn(claim) === 0 ? 'hidden' : 'block pt-1 pb-2.5 pl-4',
-                    'md:py-2.5',
-                    countColumn,
-                  ]}
-                  data-record
-                >
-                  {commentsOn(claim) > 0 && saidIn(commentsOn(claim))}
-                </td>
-                <td class="hidden md:table-cell md:py-2.5" />
-                {/*
-                  Under a published question, a claim with no finding says so
-                  rather than sitting blank beside the ones that were checked.
-                  Everywhere else the question's own state above says it.
-                */}
-                <td class:list={['md:py-2.5', badgeColumn]}>
-                  {row.answered.length > 0 && (
-                    <span class:list={['block pb-2.5 pl-4 md:pl-0', label]}>No finding yet</span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        ))
-      }
-    </table>
-  </section>
+                    {commentsFrom(claim.data.register_claims) > 0 &&
+                      saidIn(commentsFrom(claim.data.register_claims))}
+                  </td>
+                  <td class="hidden md:table-cell md:py-2.5" />
+                  <td class:list={['pt-2 pb-2.5 pl-4 md:py-2.5', badgeColumn]}>
+                    <Finding finding={claim.data.finding} />
+                  </td>
+                </tr>
+              ))}
+
+              {row.registered.map((claim) => (
+                <tr id={claim.id} class="block scroll-mt-6 border-t border-rule md:table-row">
+                  <td class="block pt-2.5 pl-4 md:table-cell md:py-2.5 md:pr-4 md:align-top">
+                    <a
+                      href={`/claims/${claim.id}`}
+                      class="link text-[0.9375rem] leading-snug text-ink"
+                      data-record
+                    >
+                      {claimText(claim)}
+                    </a>
+                  </td>
+                  {/* A withheld claim has no count either, and no empty line where one would have been. */}
+                  <td
+                    class:list={[
+                      commentsOn(claim) === 0 ? 'hidden' : 'block pt-1 pb-2.5 pl-4',
+                      'md:py-2.5',
+                      countColumn,
+                    ]}
+                    data-record
+                  >
+                    {commentsOn(claim) > 0 && saidIn(commentsOn(claim))}
+                  </td>
+                  <td class="hidden md:table-cell md:py-2.5" />
+                  {/*
+                    Under a published question, a claim with no finding says so
+                    rather than sitting blank beside the ones that were checked.
+                    Everywhere else the question's own state above says it.
+                  */}
+                  <td class:list={['md:py-2.5', badgeColumn]}>
+                    {row.answered.length > 0 && (
+                      <span class:list={['block pb-2.5 pl-4 md:pl-0', label]}>No finding yet</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          ))
+        }
+      </table>
+    </section>
+
+    <div>
+      {/*
+        The key. In the sidebar the term sits above its definition rather than
+        beside it, because a 10rem label column inside a 16rem column leaves the
+        definition a ribbon; below `lg` it keeps the two-column reading it has
+        always had.
+      */}
+      <section id="states" class="mt-12 scroll-mt-6 lg:mt-0">
+        <h2 class="section-heading">What the states mean</h2>
+
+        {/* The tile is the term, so a reader can match a row to its line by shape. */}
+        <dl class="mt-5 divide-y divide-rule border-t border-rule">
+          {
+            stateFilters.map((state) => (
+              <div class="py-3 sm:flex sm:gap-5 lg:block">
+                <dt class="sm:w-40 sm:shrink-0 lg:w-auto">
+                  <StateBadge state={state.id} />
+                </dt>
+                <dd class="mt-1.5 max-w-prose text-[0.9375rem] leading-relaxed sm:mt-0 lg:mt-1.5">
+                  {state.definition}
+                </dd>
+              </div>
+            ))
+          }
+          {
+            unchecked && (
+              <div class="py-3 sm:flex sm:gap-5 lg:block">
+                <dt class:list={['sm:w-40 sm:shrink-0 lg:w-auto', label]}>No finding yet</dt>
+                <dd class="mt-1.5 max-w-prose text-[0.9375rem] leading-relaxed sm:mt-0 lg:mt-1.5">
+                  A claim under a question the site has already answered, which has not itself been
+                  through the panel. The question was answered; this claim was not checked.
+                </dd>
+              </div>
+            )
+          }
+        </dl>
+
+        <p class="mt-6 max-w-prose text-[0.9375rem] leading-relaxed">
+          Two readers rule on every question, one call each, written GO, PARK or NO. Those are
+          the words some of the reasons in the register use. Going ahead takes both readers at GO,
+          or one GO and one PARK. Declined takes two NOs. Everything else parks, a GO set against a
+          NO included, because throwing out a real question costs the reader more than holding one
+          too long. So a question marked going ahead can be one the two readers did not agree on,
+          and where they split the reason says so.
+        </p>
+
+        {
+          withholding && (
+            <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+              Some rows read “Withheld claim”. Those are claims about an identifiable person,
+              which this site does not repeat while it has no right of reply to offer them. The row
+              keeps its place under the question it was checked under, that question keeps its
+              answer and its reason, and the claim's own page says more.
+            </p>
+          )
+        }
+      </section>
+
+      {/*
+        The layout's rail, carried here instead. Below `lg` the layout's own
+        disclosure bar already holds both, so this copy only exists from `lg`
+        up, and it is ignored by the search index the way the rail was.
+      */}
+      <div
+        class="hidden lg:sticky lg:top-8 lg:mt-10 lg:block lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto"
+        data-pagefind-ignore
+      >
+        <nav aria-label="On this page">
+          <p class="text-[0.6875rem] font-semibold tracking-[0.11em] text-muted uppercase">
+            On this page
+          </p>
+          <div class="mt-3">
+            <PageToc sections={outline} />
+          </div>
+        </nav>
+        <div class="mt-7">
+          <ReportBox path="/questions" title="Every question we've considered" />
+        </div>
+      </div>
+    </div>
+  </div>
 </Base>
 
 <script>
@@ -427,10 +438,10 @@ const chip =
   const count = document.querySelector<HTMLElement>('[data-filter-count]');
 
   if (bar && rows.length > 0) {
-    const FILTERS = ['state', 'topic', 'source'] as const;
+    const FILTERS = ['state', 'topic'] as const;
     type Filter = (typeof FILTERS)[number];
 
-    const active: Record<Filter, string> = { state: '', topic: '', source: '' };
+    const active: Record<Filter, string> = { state: '', topic: '' };
 
     const matches = (row: HTMLElement, filter: Filter): boolean => {
       const wanted = active[filter];
@@ -458,8 +469,8 @@ const chip =
       if (count) {
         const filtered = FILTERS.some((filter) => active[filter] !== '');
         count.textContent = filtered
-          ? `Showing ${shown} of ${rows.length} questions`
-          : `${rows.length} questions`;
+          ? `Showing ${shown} of ${rows.length} questions, most-commented first.`
+          : `${rows.length} questions, most-commented first.`;
       }
     };
 
