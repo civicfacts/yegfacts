@@ -15,6 +15,7 @@ import {
   commitmentsForStory,
   evidenceForStory,
   firstPublished,
+  standfirst,
   type Commitment,
   type Evidence,
 } from '../../lib/content';
@@ -140,6 +141,9 @@ const methodologyVersions = [
 const withdrawn = story?.data.withdrawn;
 const published = story ? firstPublished(story) : undefined;
 
+/** The sentence under the title (docs/DESIGN.md §12). */
+const lede = story ? await standfirst(story) : '';
+
 const articleSections = story
   ? toc([
       story.data.tldr.length > 0 && { id: 'tldr', label: 'TL;DR' },
@@ -193,7 +197,7 @@ const Content = rendered?.Content;
   title={story ? story.data.title : question.question}
   description={
     story
-      ? story.data.one_line
+      ? lede
       : (question.reason ?? 'A question YEGFacts considered, with every claim under it.')
   }
   sections={story ? articleSections : entrySections}
@@ -241,16 +245,25 @@ const Content = rendered?.Content;
 
             {/*
               The verdict strip. The findings used to arrive at section four,
-              two or three screens down on a phone. Every claim and its finding
-              now sit directly under the title, each row linking down to the
-              check that produced it. The question links; the finding word is its
-              own control, because the word opens the definition of the word.
+              two or three screens down on a phone. Every claim, its answer and
+              its finding now sit directly under the title, each row linking
+              down to the check that produced it. The question links; the
+              finding word is its own control, because the word opens the
+              definition of the word.
+
+              The answer is here and nowhere else on this page. It is the one
+              sentence most readers will read (docs/DESIGN.md §12), so it goes
+              where they meet the claim first, and printing it again beside the
+              same claim further down would be the site saying one thing twice.
             */}
             {answered.length > 0 && (
               <ul class="mt-6 divide-y divide-rule border-y border-rule">
                 {answered.map((claim) => (
                   <li class="grid gap-x-8 gap-y-1.5 py-4 sm:grid-cols-[minmax(0,30rem)_1fr] sm:items-baseline">
-                    <p class="text-lg leading-snug font-bold text-pretty" data-crossref>
+                    <p
+                      class="text-lg leading-snug font-bold text-pretty sm:col-start-1 sm:row-start-1"
+                      data-crossref
+                    >
                       <a href={`#${claim.data.id}`} class="link">
                         {claim.data.question}
                       </a>
@@ -258,25 +271,29 @@ const Content = rendered?.Content;
                         <span class={mainClaim}>Main claim</span>
                       )}
                     </p>
-                    <div>
+                    <div class="sm:col-start-2 sm:row-start-1">
                       <Gloss {...gloss(claim.data.finding)} variant="boxed">
                         <Finding finding={claim.data.finding} size="md" />
                       </Gloss>
                     </div>
+                    <p class="text-[1.0625rem] leading-relaxed text-pretty sm:col-start-1 sm:row-start-2 sm:mt-1">
+                      {claim.data.answer}
+                    </p>
                   </li>
                 ))}
               </ul>
             )}
 
             {/*
-              One-line summary: one sentence, thirty words, enforced by the
-              validator. On a phone the Copy control drops under the sentence.
+              The standfirst: the whole question in a sentence or two, under the
+              same punctuation rule as an answer. On a phone the Copy control
+              drops under the sentence.
             */}
             <div class="mt-6 flex flex-col items-start gap-2.5 sm:flex-row sm:gap-3">
               <p class="grow border-l-2 border-gold pl-3.5 text-lg leading-relaxed text-forest text-pretty">
-                {story.data.one_line}
+                {lede}
               </p>
-              <CopyButton text={story.data.one_line} url={pageUrl} label="Copy" />
+              <CopyButton text={lede} url={pageUrl} label="Copy" />
             </div>
 
             {/*

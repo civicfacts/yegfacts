@@ -104,6 +104,21 @@ export async function claimsForStory(story: Story): Promise<Claim[]> {
     .filter((claim): claim is Claim => claim !== undefined);
 }
 
+/**
+ * The sentence under a question's title, and its description everywhere the
+ * question is linked from.
+ *
+ * The story's own standfirst where it has one. Where it does not, the question
+ * has exactly one claim — `scripts/validate.ts` refuses any other case — and
+ * that claim's answer is the sentence, because writing the same sentence in two
+ * files is how the two of them drift apart (docs/DESIGN.md §12).
+ */
+export async function standfirst(story: Story): Promise<string> {
+  if (story.data.one_line) return story.data.one_line;
+  const claims = await claimsForStory(story);
+  return claims[0]?.data.answer ?? story.data.title;
+}
+
 export async function commitmentsForStory(story: Story): Promise<Commitment[]> {
   const commitments = await getCollection('commitments');
   const listed = new Set(story.data.commitments);

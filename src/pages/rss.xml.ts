@@ -1,16 +1,16 @@
 import rss from '@astrojs/rss';
 import type { APIContext } from 'astro';
-import { firstPublished, publishedStories } from '../lib/content';
+import { firstPublished, publishedStories, standfirst } from '../lib/content';
 import { SITE } from '../lib/site';
 
 /**
  * The findings feed: the questions the panel has answered, newest first.
  *
- * An item carries `one_line` and nothing else, because the one-sentence answer
- * is the finding and everything that makes it trustworthy — the evidence, the
- * panel, the limitations, the corrections history — is on the page. A feed
- * reader showing the whole article would show the answer stripped of its
- * working.
+ * An item carries the question's standfirst and nothing else, because that
+ * sentence is the answer and everything that makes it trustworthy — the
+ * evidence, the panel, the limitations, the corrections history — is on the
+ * page. A feed reader showing the whole article would show the answer stripped
+ * of its working.
  *
  * `pubDate` is the day it was published, not the day it was last verified: a
  * re-verification is not a new item, and dating it as one would put an
@@ -24,11 +24,13 @@ export async function GET(context: APIContext) {
     site: context.site ?? SITE.url,
     // The site is `trailingSlash: 'never'`; the feed's links must match it.
     trailingSlash: false,
-    items: stories.map((story) => ({
-      title: story.data.title,
-      pubDate: new Date(`${firstPublished(story)}T00:00:00Z`),
-      description: story.data.one_line,
-      link: `/questions/${story.id}`,
-    })),
+    items: await Promise.all(
+      stories.map(async (story) => ({
+        title: story.data.title,
+        pubDate: new Date(`${firstPublished(story)}T00:00:00Z`),
+        description: await standfirst(story),
+        link: `/questions/${story.id}`,
+      })),
+    ),
   });
 }

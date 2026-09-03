@@ -68,7 +68,19 @@ const heading = 'section-heading mt-14';
       </span>
     </p>
 
-    <p class="mt-3.5 max-w-prose border-l-2 border-gold pl-3.5 text-[1.0625rem] leading-relaxed text-forest text-pretty">
+    {/*
+      The answer, and the page leads with it (docs/DESIGN.md §12). It sits
+      directly under the badge rather than above it because the two do different
+      jobs and both belong here: the badge is the method's word for the finding,
+      the answer is what a person would say. The evidence basis, which used to
+      hold this position, is a label for the kind of record behind the finding
+      and never was the answer to anything.
+    */}
+    <p class="mt-4 max-w-prose border-l-2 border-gold pl-3.5 text-[1.1875rem] leading-relaxed text-forest text-pretty">
+      {claim.data.answer}
+    </p>
+
+    <p class="mt-3 max-w-prose text-sm leading-relaxed text-muted">
       <Gloss {...gloss('evidence basis')}>Evidence basis</Gloss>: {claim.data.evidence_basis}
     </p>
 

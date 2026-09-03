@@ -70,7 +70,7 @@ const { groups, showQuestion = true } = Astro.props;
                   {claim.data.question}
                 </a>
               </p>
-              {/* Answer directly under the question on phones; in its own column, all badges starting on one line, from sm up. */}
+              {/* The finding directly under the question on phones; in its own column, all badges starting on one line, from sm up. */}
               <p class="mt-2.5 sm:col-start-2 sm:row-start-1 sm:mt-0.5 sm:justify-self-end sm:text-right">
                 <Finding finding={claim.data.finding} size="md" />
                 {/* Unanimous stays silent; Adjacent and Split print under the badge they qualify, so a contested verdict is never taken for a firm one. */}
@@ -81,12 +81,21 @@ const { groups, showQuestion = true } = Astro.props;
                 )}
               </p>
               {/*
+                The answer in the reader's own words, under the claim it answers
+                (docs/DESIGN.md §12). A row used to be a question and a verdict
+                word, which asked a reader to know what "Not established" meant
+                before the list told them anything.
+              */}
+              <p class="mt-2.5 text-[0.9375rem] leading-relaxed text-pretty sm:col-start-1 sm:row-start-2 sm:mt-2">
+                {claim.data.answer}
+              </p>
+              {/*
                 One line, two deliberate halves: who and where on the left, when
                 on the right, in the same 11rem column as the badge above it. On
                 a phone there is no second column, so the separator that divides
                 them comes back into view.
               */}
-              <small class="mt-2.5 block text-[0.9375rem] leading-normal font-medium text-ink tabular sm:col-span-2 sm:row-start-2 sm:mt-3.5 sm:flex sm:flex-wrap sm:items-baseline">
+              <small class="mt-2.5 block text-[0.9375rem] leading-normal font-medium text-ink tabular sm:col-span-2 sm:row-start-3 sm:mt-3.5 sm:flex sm:flex-wrap sm:items-baseline">
                 <span class="min-w-0 sm:flex-auto">
                   {showQuestion && (
                     <a href={`/questions/${story.id}`} class="link">

@@ -143,8 +143,11 @@ const claimReview =
 
 const title = checked ? claim.data.question : claimText(registered!);
 
+// The answer, because this is the sentence a reader meets in a search result
+// before they meet the page (docs/DESIGN.md §12). It used to be the finding
+// word and the evidence basis, which is the method talking to itself.
 const description = checked
-  ? `${claim.data.finding}. ${claim.data.evidence_basis}`
+  ? claim.data.answer
   : (registered!.reason ??
     question?.reason ??
     'A claim YEGFacts has registered and not yet checked.');
