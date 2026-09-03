@@ -139,6 +139,35 @@ const methodologyVersions = [
 ];
 
 const withdrawn = story?.data.withdrawn;
+
+/**
+ * The claim-level dispositions (methodology v1.19).
+ *
+ * `headline` is what this page presents as its findings. A `context_for` claim
+ * is not one: it is the established premise under a contested claim, so it
+ * renders inside that claim's block further down and never in the verdict
+ * strip, where it would compete with the question it exists to support.
+ *
+ * Everything that aggregates — evidence, comparisons, unknowns, the AI review —
+ * still reads `answered`, because the audit trail covers every claim the panel
+ * ran on whatever the page does with it.
+ */
+const headline = answered.filter((claim) => claim.data.context_for === undefined);
+const backgroundFor = (id: string) =>
+  answered.filter((claim) => claim.data.context_for === id);
+
+/**
+ * The most recent day a claim on this page came off the findings board, which
+ * dates the note that says so. The note is written once per page: the reason
+ * differs per claim and sits with the claim, but the framing — that nothing was
+ * corrected — is the same sentence however many claims it covers.
+ */
+const offTheBoard = headline
+  .map((claim) => claim.data.board_withdrawn?.date)
+  .filter((date): date is string => date !== undefined)
+  .sort()
+  .at(-1);
+
 const published = story ? firstPublished(story) : undefined;
 
 /** The sentence under the title (docs/DESIGN.md §12). */
@@ -223,6 +252,30 @@ const Content = rendered?.Content;
           </aside>
         )}
 
+        {/*
+          A claim can come off the board on its own since v1.19, and a reader who
+          sees that happen will assume the finding was wrong. It was not, so the
+          note says so first, and says what actually changed instead. The reason
+          for each claim sits with that claim under "Claims checked".
+        */}
+        {offTheBoard && (
+          <aside
+            class="mb-8 border-t-2 border-b border-t-gold border-b-rule bg-wash px-4 py-3.5"
+            role="note"
+          >
+            <p class="text-sm font-semibold text-forest">
+              Off the findings board · <time datetime={offTheBoard}>{offTheBoard}</time>
+            </p>
+            <p class="mt-1 text-sm leading-relaxed text-muted">
+              Every answer on this page still stands. We have corrected nothing and no finding has
+              changed. What changed is our own judgement about whether the question was worth
+              checking, and the reason sits beside each answer it applies to below. The site spent
+              a panel run on a question nobody was arguing about. What comes off is the board, not
+              the record: the page keeps its evidence, its panel and its history.
+            </p>
+          </aside>
+        )}
+
         <article>
           <header class="border-b border-rule pb-7">
             {/*
@@ -256,9 +309,9 @@ const Content = rendered?.Content;
               where they meet the claim first, and printing it again beside the
               same claim further down would be the site saying one thing twice.
             */}
-            {answered.length > 0 && (
+            {headline.length > 0 && (
               <ul class="mt-6 divide-y divide-rule border-y border-rule">
-                {answered.map((claim) => (
+                {headline.map((claim) => (
                   <li class="grid gap-x-8 gap-y-1.5 py-4 sm:grid-cols-[minmax(0,30rem)_1fr] sm:items-baseline">
                     <p
                       class="text-lg leading-snug font-bold text-pretty sm:col-start-1 sm:row-start-1"
@@ -275,6 +328,12 @@ const Content = rendered?.Content;
                       <Gloss {...gloss(claim.data.finding)} variant="boxed">
                         <Finding finding={claim.data.finding} size="md" />
                       </Gloss>
+                      {/* Said beside the badge too, so the strip is never read as a live board. */}
+                      {claim.data.board_withdrawn && (
+                        <span class="mt-1.5 block font-sans text-xs font-semibold tracking-[0.09em] text-muted uppercase">
+                          Off the board
+                        </span>
+                      )}
                     </div>
                     <p class="text-[1.0625rem] leading-relaxed text-pretty sm:col-start-1 sm:row-start-2 sm:mt-1">
                       {claim.data.answer}
@@ -357,13 +416,13 @@ const Content = rendered?.Content;
 
           <section id="claims-checked">
             <h2 class={heading}>Claims checked</h2>
-            {answered.length === 0 ? (
+            {headline.length === 0 ? (
               <p class="mt-4 border-l-2 border-rule-strong pl-3.5 text-sm text-muted">
                 No claims under this question have completed the review panel yet.
               </p>
             ) : (
               <div class="mt-4 space-y-8">
-                {answered.map((claim) => (
+                {headline.map((claim) => (
                   <div id={claim.data.id} class="scroll-mt-6 border-t border-rule-strong pt-5">
                     <h3 class="text-lg font-semibold tracking-[-0.012em] text-pretty">
                       <a href={`/claims/${claim.data.id}`} class="link">
@@ -373,6 +432,25 @@ const Content = rendered?.Content;
                         <span class={mainClaim}>Main claim</span>
                       )}
                     </h3>
+
+                    {/*
+                      Why this one came off the board, in its own words. The
+                      framing sits in the note at the top of the page; what is
+                      here is the part that differs from claim to claim.
+                    */}
+                    {claim.data.board_withdrawn && (
+                      <div class="mt-3 border-l-2 border-gold pl-3.5">
+                        <p class="text-xs font-semibold tracking-[0.08em] text-muted uppercase">
+                          Off the board ·{' '}
+                          <time datetime={claim.data.board_withdrawn.date}>
+                            {claim.data.board_withdrawn.date}
+                          </time>
+                        </p>
+                        <p class="mt-1.5 text-[0.9375rem] leading-relaxed text-muted" data-record>
+                          {claim.data.board_withdrawn.reason}
+                        </p>
+                      </div>
+                    )}
 
                     {/* The verdict, then the panel behind it, then what it rests on. */}
                     <p class="mt-3.5 flex flex-wrap items-baseline gap-x-2 gap-y-1.5">
@@ -473,6 +551,41 @@ const Content = rendered?.Content;
                         label="Copy citation"
                       />
                     </div>
+
+                    {/*
+                      The established premise under this claim (v1.19). It keeps
+                      its own finding and its own page — one finding over the
+                      pair would state neither — and sits here because this is
+                      the question it makes worth asking, not a rival to it.
+                    */}
+                    {backgroundFor(claim.data.id).map((premise) => (
+                      <div
+                        id={premise.data.id}
+                        class="mt-6 scroll-mt-6 border-l-2 border-navy bg-wash px-4 py-4"
+                      >
+                        <p class="text-xs font-semibold tracking-[0.08em] text-muted uppercase">
+                          Established background
+                        </p>
+                        <h4 class="mt-2 text-[1.0625rem] leading-snug font-semibold text-pretty">
+                          <a href={`/claims/${premise.data.id}`} class="link">
+                            {premise.data.question}
+                          </a>
+                        </h4>
+                        <p class="mt-2.5">
+                          <Gloss {...gloss(premise.data.finding)} variant="boxed">
+                            <Finding finding={premise.data.finding} size="md" />
+                          </Gloss>
+                        </p>
+                        <p class="mt-2.5 text-[1.0625rem] leading-relaxed text-pretty">
+                          {premise.data.answer}
+                        </p>
+                        <p class="mt-2.5 text-sm leading-relaxed text-muted">
+                          Nobody is arguing about this one, so the site does not carry it as a
+                          finding of its own. It is the ground the claim above stands on, and it is
+                          what makes that claim worth asking.
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 ))}
               </div>

@@ -68,6 +68,24 @@ missing evidence, and the path of the review run that produced the verdict.
 Claims carry `aliases` — the hostile or colloquial phrasings people actually
 search — which become short root-level redirects to the claim's anchor.
 
+A published claim may also carry one of two **dispositions** (methodology
+v1.19). Neither deletes anything, neither changes a finding, and both keep every
+page at its address. `board_withdrawn` (a date and a reason) is a finding that
+stands under a question the site decided was not worth asking: the claim keeps
+its page, its finding, its evidence and its history, comes off the findings
+board, the home page's count, the findings feed and the search index, and
+carries a dated note on its own page and on its question's page saying plainly
+that nothing was corrected. `context_for` names another claim on the same
+question that this one is the established premise of: it comes off the boards
+the same way and renders under that claim on the question's page as background
+rather than as a headline finding. The two keep two findings, because one
+finding over both would state neither and would label everyone quoted under it
+with a verdict about the other. A claim may not carry both dispositions;
+`scripts/validate.ts` checks that a `context_for` target is a claim on the same
+question and that no two claims name each other. `src/lib/content.ts` is the
+single gate — `standsAsFinding()` — so a question whose every claim has left the
+board contributes no rows to the boards, the counts or the feed.
+
 **Topics** are a controlled vocabulary of six neutral categories:
 transportation, housing-development, city-finances, growth-planning,
 climate-environment, downtown. The validator rejects anything else. Topic names
