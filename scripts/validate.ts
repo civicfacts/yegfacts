@@ -22,7 +22,10 @@
  *   path needing a methodology entry — are not implemented here; see the TODO
  *   at the bottom of this file.
  *
- * One rule is deliberately advisory. A published run's `combined-evidence.json`
+ * Two rules are deliberately advisory. The method-vocabulary list in
+ * `checkPlainSpeech` only warns, because a word list that fails the build is
+ * the next rule that deletes true content — see `METHOD_VOCABULARY`. And a
+ * published run's `combined-evidence.json`
  * MUST carry `fetch_status` on every item — that is a hard failure — but an
  * unverifiable item that a `key_fact` cites only prints a `warn:` line, because
  * matching citations to combined-evidence items is approximate and the gate
@@ -46,11 +49,14 @@ import {
 } from './lib/repo.ts';
 import { validateReviewFile, loadRunManifest } from './lib/review-schema.ts';
 import {
-  readComments,
+  readCapture,
   registerProblems,
   type Register,
   type RegisterWorld,
 } from './lib/register-checks.ts';
+import { redirectProblems, type RedirectRow } from './lib/redirect-checks.ts';
+import { allRedirects, redirectFileText } from './lib/redirect-file.ts';
+import { methodVocabularyIn } from '../src/lib/plain-speech.ts';
 import {
   CANONICAL_FINDINGS,
   CHANGELOG_TYPES,
@@ -170,6 +176,15 @@ const claims = loadYamlDocs(repoPath('src', 'content', 'claims'));
 const commitments = loadYamlDocs(repoPath('src', 'content', 'commitments'));
 const evidence = loadYamlDocs(repoPath('evidence', 'registry'));
 
+/**
+ * The slugs that actually have a hub page, read off the files rather than off
+ * the vocabulary: a topic named by a question with no file behind it is a link
+ * to a page the build never makes.
+ */
+const topicFileSlugs = new Set(
+  topics.map(({ data }) => data.slug).filter((slug): slug is string => typeof slug === 'string'),
+);
+
 /** Topic vocabulary: one file per slug, no extras, no duplicates. */
 function checkTopicFiles(): void {
   const defined = new Set<string>();
@@ -257,13 +272,22 @@ function checkStories(): void {
     seenSlugs.add(slug);
 
     // Mandatory sections (spec §8).
-    for (const field of ['title', 'one_line'] as const) {
-      if (typeof data[field] !== 'string' || data[field].trim() === '') {
-        fail(file, `${field} is required and must be non-empty`);
-      }
+    if (typeof data.title !== 'string' || data.title.trim() === '') {
+      fail(file, 'title is required and must be non-empty');
     }
 
-    // one_line length and dash rules live in the schema (src/content.config.ts).
+    // The standfirst's punctuation rule lives in the schema
+    // (src/content.config.ts). Whether it may be dropped altogether cannot: a
+    // question may lean on its claim's answer for that sentence only when it
+    // has exactly one claim, and the schema cannot see the claim files
+    // (docs/DESIGN.md §12).
+    if (data.one_line === undefined && stringArray(data.claims).length !== 1) {
+      fail(
+        file,
+        'one_line is required unless the question has exactly one claim, whose answer stands in for it',
+      );
+    }
+
     if (body.trim() === '') fail(file, 'story body is empty');
 
     checkEnum(file, 'status', data.status, STORY_STATUSES);
@@ -407,6 +431,37 @@ function checkClaims(): void {
     } else if (parent?.data.status === 'published') {
       checkPublishedReviewRun(file, reviewRun);
     }
+
+    /*
+     * The plain-speech read that passed this claim's answer (docs/DESIGN.md
+     * §12). Named on every claim, and the file has to be there before the claim
+     * publishes: a stage whose artifact nobody checks for is a habit, and a
+     * habit is what the standard was written to replace.
+     *
+     * The existence check is gated on `published` for the same reason the
+     * review-run check above is. Before the stage-7 gate a run lives locally
+     * and `reviews/` is not committed, so demanding the file of a
+     * `pending-review` claim would fail CI on exactly the state the workflow is
+     * designed to have.
+     */
+    const plainSpeechRead =
+      typeof data.plain_speech_read === 'string' ? data.plain_speech_read : '';
+    if (plainSpeechRead === '') {
+      fail(file, 'plain_speech_read is required: name the read that passed this answer');
+    } else if (parent?.data.status === 'published') {
+      const report = repoPath(plainSpeechRead);
+      if (!existsSync(report) || !statSync(report).isFile()) {
+        fail(
+          file,
+          `plain_speech_read: "${plainSpeechRead}" is not a file (required for published claims)`,
+        );
+      } else if (reviewRun !== '' && !plainSpeechRead.startsWith(`${reviewRun}/`)) {
+        fail(
+          file,
+          `plain_speech_read: "${plainSpeechRead}" belongs under this claim's review run "${reviewRun}"`,
+        );
+      }
+    }
   }
 }
 
@@ -447,6 +502,31 @@ function checkPublishedReviewRun(claimFile: string, reviewRun: string): void {
     }
   } catch (error) {
     fail(manifest, `unreadable manifest: ${(error as Error).message}`);
+  }
+}
+
+/**
+ * The reader-facing sentences, read for method vocabulary (docs/DESIGN.md §12).
+ * The list and the reason it only ever warns are in `src/lib/plain-speech.ts`,
+ * which the content schema reads from too.
+ */
+function checkPlainSpeech(): void {
+  const sentences: Array<{ file: string; field: string; text: string }> = [];
+  for (const { file, data } of claims) {
+    if (typeof data.answer === 'string') {
+      sentences.push({ file, field: 'answer', text: data.answer });
+    }
+  }
+  for (const { file, data } of stories) {
+    if (typeof data.one_line === 'string') {
+      sentences.push({ file, field: 'one_line', text: data.one_line });
+    }
+  }
+
+  for (const { file, field, text } of sentences) {
+    for (const term of methodVocabularyIn(text)) {
+      warn(file, `${field} uses method vocabulary "${term}". Say it in the words a reader uses.`);
+    }
   }
 }
 
@@ -681,12 +761,12 @@ function checkReviewRuns(): void {
 }
 
 /** The register, or `null` when it is absent or unreadable. */
-function loadCandidateRegister(file: string): Register | null {
+function loadRegister(file: string): Register | null {
   if (!existsSync(file)) return null;
   try {
     const data = loadYaml<Register>(file);
-    if (!Array.isArray(data?.candidates)) {
-      fail(file, 'must contain a `candidates` list');
+    if (!Array.isArray(data?.claims)) {
+      fail(file, 'must contain a `claims` list');
       return null;
     }
     return data;
@@ -698,8 +778,8 @@ function loadCandidateRegister(file: string): Register | null {
 
 /**
  * What `registerProblems` needs from outside the register file: the filesystem,
- * the capture each source was read from, and the published claim ids a
- * `variation_of` may point at.
+ * and the capture each source was read from — the comments a wording has to be
+ * a substring of, and the commenter labels an `author_name` has to be one of.
  */
 const registerWorld: RegisterWorld = {
   exists: (value) => existsSync(repoPath(value)),
@@ -707,42 +787,39 @@ const registerWorld: RegisterWorld = {
     const absolute = repoPath(value);
     return existsSync(absolute) && statSync(absolute).isDirectory();
   },
-  comments: (capture) => {
-    const file = repoPath(capture, 'comments.jsonl');
+  capture: (directory) => {
+    const file = repoPath(directory, 'comments.jsonl');
     if (!existsSync(file)) return undefined;
     try {
-      return readComments(readFileSync(file, 'utf8'));
+      return readCapture(readFileSync(file, 'utf8'));
     } catch {
       return undefined;
     }
   },
-  claimIds: new Set(
-    claims.map(({ data }) => String(data.id ?? '')).filter((id) => id !== ''),
-  ),
 };
 
 /**
- * A `withdrawn` story and its `not-answered` register entry have to point at
- * each other (methodology v1.13).
+ * A `withdrawn` story and the register question it was withdrawn from have to
+ * point at each other (methodology v1.13).
  *
- * The story leaves the findings boards and `/considered` becomes the only place
+ * The story leaves the findings boards and the register becomes the only place
  * its claims are listed, so a half-made pair is a claim that has quietly
- * vanished: withdrawn with nowhere saying so, or a register entry promising a
- * story that still counts itself a finding.
+ * vanished: withdrawn with nowhere saying so, or a register question promising
+ * a story that still counts itself a finding.
  */
-function checkWithdrawals(file: string, candidates: Record_[]): void {
+function checkWithdrawals(file: string, questions: Record_[]): void {
   const byId = new Map(
-    candidates
-      .filter((candidate) => typeof candidate?.id === 'string')
-      .map((candidate) => [candidate.id as string, candidate]),
+    questions
+      .filter((question) => typeof question?.id === 'string')
+      .map((question) => [question.id as string, question]),
   );
 
-  for (const candidate of candidates) {
-    if (candidate?.outcome !== 'not-answered') continue;
-    const where = typeof candidate.id === 'string' ? candidate.id : 'candidate';
-    const slug = candidate.story;
+  for (const question of questions) {
+    if (question?.publication !== 'withdrawn') continue;
+    const where = typeof question.id === 'string' ? question.id : 'question';
+    const slug = question.story;
     if (typeof slug !== 'string' || slug.trim() === '') {
-      fail(file, `${where}: outcome not-answered must name the story it withdrew`);
+      fail(file, `${where}: publication withdrawn must name the story it withdrew`);
       continue;
     }
     const story = storyBySlug.get(slug);
@@ -751,10 +828,10 @@ function checkWithdrawals(file: string, candidates: Record_[]): void {
       continue;
     }
     const withdrawn = story.data.withdrawn as Record_ | undefined;
-    if (withdrawn?.register !== candidate.id) {
+    if (withdrawn?.register !== question.id) {
       fail(
         file,
-        `${where}: story "${slug}" must carry withdrawn.register: ${String(candidate.id)}`,
+        `${where}: story "${slug}" must carry withdrawn.register: ${String(question.id)}`,
       );
     }
   }
@@ -765,27 +842,27 @@ function checkWithdrawals(file: string, candidates: Record_[]): void {
     const register = withdrawn.register;
     const entry = typeof register === 'string' ? byId.get(register) : undefined;
     if (!entry) {
-      fail(story.file, `withdrawn.register "${String(register)}" is not in the candidate register`);
-    } else if (entry.outcome !== 'not-answered' || entry.story !== story.slug) {
+      fail(story.file, `withdrawn.register "${String(register)}" is not a register question`);
+    } else if (entry.publication !== 'withdrawn' || entry.story !== story.slug) {
       fail(
         story.file,
-        `withdrawn.register "${String(register)}" must be a not-answered entry naming this story`,
+        `withdrawn.register "${String(register)}" must be a withdrawn question naming this story`,
       );
     }
   }
 }
 
 /**
- * The candidate register, which `/considered` publishes verbatim.
+ * The register, which the site publishes verbatim.
  *
  * The rules themselves are in `lib/register-checks.ts`, as a pure function over
  * the parsed file, so they can be tested against fixtures; this reads the file,
  * hands over a view of the world, and reports what comes back. The withdrawal
  * pairing stays here because it needs the stories, which that module does not.
  */
-function checkCandidateRegister(): void {
+function checkRegister(): void {
   const file = repoPath('intake', 'register.yaml');
-  const register = loadCandidateRegister(file);
+  const register = loadRegister(file);
   if (register === null) {
     // A withdrawn story with no register at all still has to be caught.
     checkWithdrawals(file, []);
@@ -794,7 +871,208 @@ function checkCandidateRegister(): void {
 
   for (const problem of registerProblems(register, registerWorld)) fail(file, problem);
 
-  checkWithdrawals(file, register.candidates as Record_[]);
+  checkWithdrawals(file, (register.questions ?? []) as Record_[]);
+  const questions = (register.questions ?? []) as Record_[];
+  checkRegisterClaims((register.claims ?? []) as Record_[], questions);
+  checkQuestionTopics(questions);
+  checkStoryQuestions(questions);
+  checkRedirects(register);
+}
+
+/**
+ * `redirects.yaml`, the source of truth for every published address that moved.
+ *
+ * A redirect file nobody checks is where a published address quietly stops
+ * resolving, so the targets are checked against the register the same way the
+ * register's own cross-references are. The rules are in
+ * `lib/redirect-checks.ts`, as a pure function; this reads the file and hands
+ * over the ids.
+ */
+function checkRedirects(register: Register): void {
+  const file = repoPath('redirects.yaml');
+  if (!existsSync(file)) {
+    fail(file, 'is missing — it is the source of truth for every address that moved');
+    return;
+  }
+  const ids = (key: 'questions' | 'claims') =>
+    new Set(
+      (Array.isArray(register[key]) ? (register[key] as Record_[]) : [])
+        .map((row) => row.id)
+        .filter((id): id is string => typeof id === 'string'),
+    );
+
+  let rows: RedirectRow[];
+  try {
+    const parsed = loadYaml<{ redirects?: unknown }>(file).redirects;
+    if (!Array.isArray(parsed)) {
+      fail(file, 'must contain a `redirects` list');
+      return;
+    }
+    rows = parsed.map((row) => {
+      const entry = (typeof row === 'object' && row !== null ? row : {}) as Record_;
+      return {
+        from: String(entry.from ?? '').trim(),
+        to: String(entry.to ?? '').trim(),
+        why: String(entry.why ?? '').trim(),
+        pending: entry.pending === true ? true : undefined,
+      };
+    });
+  } catch (error) {
+    fail(file, `unreadable YAML: ${(error as Error).message}`);
+    return;
+  }
+
+  const questionIds = ids('questions');
+  const claimIds = ids('claims');
+  for (const problem of redirectProblems(rows, { questionIds, claimIds })) {
+    fail(file, problem);
+  }
+
+  checkRedirectFile(rows, questionIds, claimIds);
+}
+
+/**
+ * `public/_redirects`, which Cloudflare serves before static files.
+ *
+ * It is generated from `redirects.yaml` and the register (`npm run redirects`)
+ * and committed, so the routing table can be read in a diff. Generated files
+ * that nothing checks go stale silently, and a stale one here is a published
+ * address that has quietly stopped resolving — so the bytes are regenerated in
+ * memory and compared.
+ */
+function checkRedirectFile(
+  rows: RedirectRow[],
+  questionIds: ReadonlySet<string>,
+  claimIds: ReadonlySet<string>,
+): void {
+  const file = repoPath('public', '_redirects');
+  const expected = redirectFileText(allRedirects(rows, [...questionIds], [...claimIds]));
+  if (!existsSync(file)) {
+    fail(file, 'is missing — run `npm run redirects`');
+    return;
+  }
+  if (readFileSync(file, 'utf8') !== expected) {
+    fail(file, 'is out of date with redirects.yaml and the register — run `npm run redirects`');
+  }
+}
+
+/**
+ * A published claim's `register_claims` name register claims that exist, and no
+ * register id collides with a published claim's.
+ *
+ * The first is what puts a commenter's own words on the page that answers them
+ * ("Also said as"), so a dangling id is captured wordings silently missing from
+ * a published page rather than a visible error. The second is the URL
+ * namespace: `/questions/<id>` and `/claims/<id>` are served from question ids,
+ * register claim ids and published claim ids alike, and two of them sharing one
+ * is two pages fighting over an address.
+ */
+function checkRegisterClaims(registered: Record_[], questions: Record_[]): void {
+  const file = repoPath('intake', 'register.yaml');
+  const ids = new Set(
+    registered.map((claim) => claim.id).filter((id): id is string => typeof id === 'string'),
+  );
+  const published = new Set(
+    claims.map(({ data }) => data.id).filter((id): id is string => typeof id === 'string'),
+  );
+
+  for (const { file: claimFile, data } of claims) {
+    for (const id of stringArray(data.register_claims)) {
+      if (!ids.has(id)) fail(claimFile, `register_claims: "${id}" is not a claim in the register`);
+    }
+  }
+
+  for (const row of [...questions, ...registered]) {
+    const id = typeof row.id === 'string' ? row.id : '';
+    // A question taking its story's slug is the point of D-0029, and a story
+    // slug is never a claim id, so this only fires on a real collision.
+    if (id !== '' && published.has(id) && row.story !== id) {
+      fail(file, `id "${id}" is also a published claim, and they share a URL namespace`);
+    }
+  }
+}
+
+/**
+ * Every published story is a question in the register, under its own slug.
+ *
+ * The six published stories became questions keeping their slugs (D-0029), so
+ * `/facts/<slug>` is a rename to `/questions/<slug>` rather than a move, and a
+ * published claim reaches its question through the `story` it already names. A
+ * story with no question is a published finding with no registered question
+ * behind it, which is the state the register exists to make impossible.
+ *
+ * A published question may hold claims with no finding, and that is not
+ * checked, because it is not a defect: it means the site answered a question
+ * and people have gone on making claims about it that have not been checked
+ * yet. A claim either has a finding or it does not.
+ */
+function checkStoryQuestions(questions: Record_[]): void {
+  const byId = new Map(
+    questions
+      .filter((question) => typeof question.id === 'string')
+      .map((question) => [question.id as string, question]),
+  );
+  const file = repoPath('intake', 'register.yaml');
+  for (const story of stories) {
+    const question = byId.get(story.slug);
+    if (question === undefined) {
+      fail(file, `story "${story.slug}" has no question; a published story is a question`);
+      continue;
+    }
+    if (question.story !== story.slug) {
+      fail(file, `question ${story.slug}: must name the story it carries (story: ${story.slug})`);
+    }
+    // The register is where a question is filed under its topics, and the
+    // article repeats them for its own tags and for the claim-level subset
+    // rule. Two files stating one fact drift, and a drifted pair would put a
+    // question on a hub whose article denies it belongs there, so they have to
+    // be the same set. Order is display, and is not compared.
+    const registered = stringArray(question.topics);
+    const written = stringArray(story.data.topics);
+    const missing = registered.filter((topic) => !written.includes(topic));
+    const extra = written.filter((topic) => !registered.includes(topic));
+    for (const topic of missing) {
+      fail(story.file, `topics: "${topic}" is on register question ${story.slug} but not here`);
+    }
+    for (const topic of extra) {
+      fail(file, `question ${story.slug}: topics must include "${topic}", which the story carries`);
+    }
+  }
+}
+
+/**
+ * Every topic a question is filed under has a hub page to land on.
+ *
+ * The register files all forty-four questions, not just the written-up ones,
+ * so a typo here is a topic filter that silently drops a question or a link to
+ * a page that does not exist. A question no topic honestly covers carries the
+ * field not at all; an empty list is the shape that means "we forgot".
+ */
+function checkQuestionTopics(questions: Record_[]): void {
+  const file = repoPath('intake', 'register.yaml');
+  for (const question of questions) {
+    const where = typeof question.id === 'string' ? `question ${question.id}` : 'question';
+    if (question.topics === undefined) continue;
+    if (!Array.isArray(question.topics)) {
+      fail(file, `${where}: topics must be a list of topic slugs`);
+      continue;
+    }
+    if (question.topics.length === 0) {
+      fail(file, `${where}: topics is empty; leave the field off where no topic applies`);
+    }
+    const seen = new Set<string>();
+    for (const topic of question.topics) {
+      if (typeof topic !== 'string' || topic.trim() === '') {
+        fail(file, `${where}: topics has an entry that is not a topic slug`);
+        continue;
+      }
+      if (seen.has(topic)) fail(file, `${where}: topic "${topic}" is listed twice`);
+      seen.add(topic);
+      if (!topicFileSlugs.has(topic)) {
+        fail(file, `${where}: topic "${topic}" has no file in src/content/topics/`);
+      }
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -817,11 +1095,12 @@ checkMethodologyChangelog();
 checkTopicFiles();
 checkStories();
 checkClaims();
+checkPlainSpeech();
 checkCommitments();
 checkEvidence();
 checkReviewRuns();
 checkCombinedEvidence();
-checkCandidateRegister();
+checkRegister();
 
 if (warnings.length > 0) {
   for (const warning of warnings) {

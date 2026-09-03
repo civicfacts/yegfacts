@@ -9,14 +9,14 @@ import { CANONICAL_FINDINGS } from '../lib/vocabulary';
  * Search, and under it the whole published record grouped by topic.
  *
  * The `/pagefind/` assets are produced by the postbuild step, so the box is
- * inert under `astro dev` and works from `npm run build` output. Draft stories
- * never have a page, so they are never in the index. The board below is the
- * no-JS path and the one place a reader can see all of it at once; every row
- * comes from `publishedClaims()`, so this page and the home page cannot
- * disagree about what has been checked.
+ * inert under `astro dev` and works from `npm run build` output. A draft article
+ * never has a page, so it is never in the index. The board below is the no-JS
+ * path and the one place a reader can see all of it at once; every row comes
+ * from `publishedClaims()`, so this page and the home page cannot disagree about
+ * what has been checked.
  */
 const rows = await publishedClaims();
-const storyCount = new Set(rows.map((row) => row.story.id)).size;
+const questionCount = new Set(rows.map((row) => row.story.id)).size;
 const claimCount = rows.length;
 
 const findingCounts = CANONICAL_FINDINGS.map((finding) => ({
@@ -63,15 +63,15 @@ const sections = toc(groups.map((group) => ({ id: group.id, label: group.label }
     <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Every checked claim</h2>
     <p class="mt-2 max-w-prose text-[0.9375rem] text-pretty leading-relaxed text-muted">
       Grouped by topic. A claim with more than one topic is filed under its first, so the counts
-      add up. A claim that is not here may be among
-      <a href="/considered" class="link">the claims we considered and declined</a>, with the reason.
+      add up. A claim that is not here may be under
+      <a href="/questions" class="link">a question we parked or declined</a>, with the reason.
     </p>
 
     <p class="mt-4 text-[0.9375rem] text-pretty text-muted tabular">
       {claimCount}
-      {claimCount === 1 ? ' claim in ' : ' claims in '}
-      {storyCount}
-      {storyCount === 1 ? ' story: ' : ' stories: '}
+      {claimCount === 1 ? ' claim under ' : ' claims under '}
+      {questionCount}
+      {questionCount === 1 ? ' question: ' : ' questions: '}
       {
         findingCounts.map((entry, index) => (
           <Fragment>

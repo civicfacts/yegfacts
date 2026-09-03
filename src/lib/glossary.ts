@@ -7,7 +7,7 @@ import { FINDING_GLOSS, PANEL_AGREEMENT_GLOSS } from './findings';
  *
  * Two kinds of entry live here. Subject vocabulary — Chapter 11, mode share —
  * is defined outright. Method vocabulary — the findings, panel agreement, the
- * dates in a story header — takes its wording from the modules the rest of the
+ * dates in a finding's header — takes its wording from the modules the rest of the
  * site already renders it from, and carries an `href` to the section of the
  * methodology that sets it out in full. Every href is an anchor that exists.
  */
@@ -28,12 +28,12 @@ function withHref(map: Record<string, string>, href: string): Record<string, Glo
   );
 }
 const STAGES = '/methodology#stages';
-const STORIES = '/methodology#stories';
+const QUESTIONS = '/methodology#questions';
 
 export const glossary: Record<string, GlossaryEntry> = {
   'frozen brief': {
     definition:
-      'The written question each story\u2019s panel answers: the exact claims, definitions, dates and cutoffs, fixed and published before any reviewer runs, so the framing cannot move after the answers arrive.',
+      'The written question each panel answers: the exact claims, definitions, dates and cutoffs, fixed and published before any reviewer runs, so the framing cannot move after the answers arrive.',
     href: STAGES,
   },
   'capital profile': {
@@ -111,12 +111,12 @@ export const glossary: Record<string, GlossaryEntry> = {
   'last verified': {
     definition:
       'The date we last re-read the cited sources and confirmed the page still matches them. It is not a claim that the records themselves changed.',
-    href: STORIES,
+    href: QUESTIONS,
   },
   'next review by': {
     definition:
-      'When this story is due for a fresh check of its sources. Past that date, treat it as unverified until it has been re-reviewed.',
-    href: STORIES,
+      'When this is due for a fresh check of its sources. Past that date, treat it as unverified until it has been re-reviewed.',
+    href: QUESTIONS,
   },
   'methodology version': {
     definition:
@@ -125,7 +125,7 @@ export const glossary: Record<string, GlossaryEntry> = {
   },
   'three-model AI panel': {
     definition:
-      'Three AI reviewers from different vendors research each claim independently in a first round that is blind to the other two, then read one another\u2019s findings in a second round that documents errors. Which models ran is recorded with every run and shown in the AI review section of every story.',
+      'Three AI reviewers from different vendors research each claim independently in a first round that is blind to the other two, then read one another\u2019s findings in a second round that documents errors. Which models ran is recorded with every run and shown in the AI review section of every question.',
     href: STAGES,
   },
   'published rule': {

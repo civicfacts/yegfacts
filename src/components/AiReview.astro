@@ -19,11 +19,11 @@ const REPO_ROOT = process.cwd();
  *   1. per claim, what each seat returned and what the panel produced;
  *   2. each model expandable to key findings and what changed between rounds;
  *   3. links to the committed run artifacts — rendered ONLY for `published`
- *      stories, because the raw rounds, the frozen brief and the gate reports
+ *      questions, because the raw rounds, the frozen brief and the gate reports
  *      are committed at the §5 stage-7 gate and do not exist in the repo before
  *      it.
  *
- * Layer 1 is ONE two-dimensional matrix for the whole story — claims down,
+ * Layer 1 is ONE two-dimensional matrix for the whole question — claims down,
  * seats across, the panel finding as the last column (founder decision,
  * 2026-09-01). Layer 2 is a single "Reviewer notes" disclosure per claim whose
  * summary does NOT restate the verdicts the matrix already shows; attribution
@@ -111,7 +111,7 @@ const effort = effortSentence(
   {
     reviewed.length === 0 ? (
       <p class="mt-5 border-l-2 border-rule-strong pl-3 text-sm text-muted">
-        No panel run has been published for this story yet.
+        No panel run has been published for this question yet.
       </p>
     ) : (
       <>
@@ -221,7 +221,7 @@ const effort = effortSentence(
               <a href={repoPath(run)} rel="noopener" class="link">
                 {run}
               </a>
-              {/* One list item per artifact: a story with two runs repeats the
+              {/* One list item per artifact: a question with two runs repeats the
                   same labels, and as one inline run of text that trips the
                   in-page duplication audit; as list items it is a list. */}
               {files.length > 0 && (
@@ -245,7 +245,7 @@ const effort = effortSentence(
         </div>
       ) : (
         <p class="mt-6 border-t border-rule pt-4 text-sm text-muted">
-          Raw run JSON is published with the story, after the publication gate’s release check.
+          Raw run JSON is published with the finding, after the publication gate’s release check.
         </p>
       ))
   }

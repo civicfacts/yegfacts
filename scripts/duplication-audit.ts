@@ -223,11 +223,23 @@ const strict = process.argv.includes('--strict');
 /**
  * Pages whose body is prose somebody wrote, as opposed to a generated view of
  * shared records. Only these are compared against each other: a source title or
- * a claim question appearing on both the registry listing and the story that
+ * a claim question appearing on both the registry listing and the question that
  * cites it is a reference, not boilerplate, and flagging it would bury the
  * boilerplate that matters.
+ *
+ * This list has to move whenever the prose moves. It said `facts/` until
+ * 2026-09-03, by which time the articles had been at `/questions/` for a batch,
+ * so the cross-page class was comparing nothing and reporting zero. A check
+ * that reports a clean result while inspecting an empty set is worse than no
+ * check, because the zero gets quoted.
+ *
+ * `/claims/` is deliberately not here. A claim page is a generated view of one
+ * claim record, and its answer and question are printed on the question page
+ * too because that is the design: the badge and the answer travel together
+ * wherever either appears. Comparing the two finds the design on every claim
+ * the site has, which buries the boilerplate this is looking for.
  */
-const NARRATIVE = /^\/(facts\/|methodology|about|support)/;
+const NARRATIVE = /^\/(questions\/|methodology|about|support)/;
 
 const pages = builtPages(DIST).map((file) => {
   const html = readFileSync(file, 'utf8');

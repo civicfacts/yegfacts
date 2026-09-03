@@ -3,11 +3,17 @@ import { allPublicStories, claimsForStory } from '../lib/content';
 
 /**
  * Root-level alias redirects (spec §6). Hostile or colloquial phrasings — the
- * words people actually search — land on the story, or on the specific claim's
- * anchor when the alias came from a claim.
+ * words people actually search — land on the question, or on the claim's own
+ * page when the alias came from a claim.
  *
- * Aliases of `draft` stories generate nothing: the source list is
- * `allPublicStories()` — a withdrawn story keeps its aliases, since it keeps its page.
+ * A claim's alias used to land on an anchor inside the article, because an
+ * anchor was the only address a claim had. D-0029 gave every claim a page, so
+ * the phrasing somebody searched now lands on the page that answers it rather
+ * than partway down a longer one.
+ *
+ * Aliases of `draft` articles generate nothing: the source list is
+ * `allPublicStories()` — a withdrawn one keeps its aliases, since it keeps its
+ * page.
  */
 export async function getStaticPaths() {
   const stories = await allPublicStories();
@@ -23,11 +29,11 @@ export async function getStaticPaths() {
 
   for (const story of stories) {
     for (const alias of story.data.aliases) {
-      add(alias, `/facts/${story.id}`);
+      add(alias, `/questions/${story.id}`);
     }
     for (const claim of await claimsForStory(story)) {
       for (const alias of claim.data.aliases) {
-        add(alias, `/facts/${story.id}#${claim.data.id}`);
+        add(alias, `/claims/${claim.data.id}`);
       }
     }
   }

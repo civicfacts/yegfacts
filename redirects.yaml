@@ -1,0 +1,154 @@
+# Redirects, as data (D-0029).
+#
+# Questions and claims got permanent addresses, and the pages that used to
+# carry them did not. Every address the site has published stays reachable, so
+# each one is listed here with where it goes now and why it moved.
+#
+# This file is the source of truth. `scripts/lib/redirect-file.ts` reads it and
+# adds the ones that can be derived from the register — every question id and
+# every claim id under `/considered/<id>` — so a question registered tomorrow
+# keeps its old-style address without anyone editing this file.
+#
+# `npm run redirects` writes the result to `public/_redirects`, which Cloudflare
+# Pages serves before static files; that file is committed so the routing table
+# can be read in a diff. `npm run validate` checks the rules here and fails if
+# the committed `_redirects` is not what this file and the register produce.
+#
+# Fields
+# ------
+#
+#   from     the path as it was published, with no trailing slash.
+#   to       where it goes now.
+#   why      one sentence, for whoever reads this in a year.
+#   pending  true while the target route does not exist yet. The validator
+#            requires a non-pending target to resolve in the register, and
+#            requires a pending one NOT to — so the flag cannot be left on
+#            after the route lands. Nothing here is pending: every target is
+#            in the register.
+#
+# Fragments
+# ---------
+#
+# A fragment never reaches the server: a request for `/facts/x#claim-1` arrives
+# as `/facts/x`. The browser re-applies the fragment to the redirect target
+# when the target carries none of its own. Verified in Chromium against a local
+# 301 on 2026-09-03: the server logged `/facts/at`, and the browser finished at
+# `/questions/at#claim-anchor-1`.
+#
+# So an old `/facts/<slug>#<claim-id>` link lands on `/questions/<id>` with the
+# claim's anchor intact, and the question page carries an anchor per claim
+# already. No client-side hop is needed for that case. One would only be needed
+# to send a reader on from the question page to the claim's own page, which is
+# a separate decision about where a claim anchor should land, not a technical
+# necessity.
+#
+# Cloudflare Pages serves `public/_redirects` before static files, and no rule
+# in it may be a wildcard covering `/questions/*` or `/claims/*`: it would
+# swallow the real pages. Every generated rule matches one exact path.
+#
+# `src/pages/[alias].astro` is the other half, and is not generated from here:
+# it turns each published article's and each published claim's `aliases` — the
+# hostile or colloquial phrasings people actually search — into root-level
+# meta-refresh pages pointing at `/questions/<id>` and `/claims/<id>`.
+
+redirects:
+  # ---------------------------------------------------------------------------
+  # The register's own pages
+  # ---------------------------------------------------------------------------
+  - from: /considered
+    to: /questions
+    why: "The register and the index are one page, and it is called what it lists."
+
+  # `/considered/<id>` is not listed entry by entry: `scripts/lib/redirect-file.ts`
+  # derives one per question and one per claim from the register, so a row
+  # added tomorrow is covered without an edit here.
+
+  - from: /stories
+    to: /questions
+    why: "The word story left the site; the findings are read off the questions."
+
+  # `/claims` was the findings list before it was retired into `/search`, and it
+  # bounced there until this file took over the routing table. It is now the
+  # claim namespace's index path, so sending it to search would tell a reader
+  # that claims are a search feature rather than the unit of judgement. It points
+  # at the register instead. The rule matches this exact path only; nothing here
+  # may redirect anything under `/claims/`, which the validator enforces.
+  - from: /claims
+    to: /questions
+    why: "The old findings list is the register, and /claims/<id> is now one claim each."
+
+  # ---------------------------------------------------------------------------
+  # The rows the whole-source grouping superseded
+  #
+  # Each was registered by hand before the Yegscoop post was read end to end,
+  # and each is now claims inside a question, grouped from the capture rather
+  # than picked out of it. The row is gone from the register; the address is not.
+  # ---------------------------------------------------------------------------
+  - from: /considered/bike-lanes-nobody-rides
+    to: /questions/cycling-volumes
+    why: "Six claims about how much the lanes are used, grouped from the source."
+  - from: /considered/at-congestion-reduced
+    to: /questions/lanes-and-congestion
+    why: "Both directions of the congestion argument are claims under one question."
+  - from: /considered/at-100m-a-year
+    to: /questions/hundred-million-approval
+    why: "The $100 million figure is checked under the question about the approval."
+  - from: /considered/bike-100m-one-percent-of-roads
+    to: /questions/active-transportation
+    why: "The share-of-the-roads-budget comparison is a claim under that question."
+  - from: /considered/fifty-street-181m-600m
+    to: /questions/active-transportation
+    why: "The 50 Street comparison is a second claim under the same question."
+  - from: /considered/rice-50m-motions-and-review
+    to: /questions/council-pause-vote
+    why: "The motions and the route review are three claims under one question."
+  - from: /considered/lanes-removed-citywide
+    to: /claims/city-removed-traffic-lanes
+    why: "Registered on its own, then merged into the claim grouped from the source."
+  - from: /considered/fifteen-minute-city-agreement
+    to: /claims/15-minute-city-agreement
+    why: "Registered on its own, then merged into the claim grouped from the source."
+  - from: /considered/infill-teardown-350k-1m
+    to: /questions/infill-prices
+    why: "The row the withdrawn finding was registered under; it is that question now."
+
+  # ---------------------------------------------------------------------------
+  # Questions merged into other questions
+  #
+  # One question asked twice, once by us and once by a thread. The id that lost
+  # is a published address and keeps resolving.
+  # ---------------------------------------------------------------------------
+  - from: /considered/bike-vs-road-spending
+    to: /questions/active-transportation
+    why: "The money-for-bike-lanes question is what the active-transportation check answers."
+  - from: /questions/bike-vs-road-spending
+    to: /questions/active-transportation
+    why: "The money-for-bike-lanes question is what the active-transportation check answers."
+
+  # ---------------------------------------------------------------------------
+  # The six published articles
+  #
+  # Each is a question under the slug it was published with, so every one of
+  # these is a rename rather than a move. A fragment never reaches the server
+  # and the browser re-applies it to the target, so an old
+  # /facts/electric-buses#ebus-82m-loss link arrives with its claim anchor
+  # intact and needs no client-side hop.
+  # ---------------------------------------------------------------------------
+  - from: /facts/active-transportation
+    to: /questions/active-transportation
+    why: "The published article is the question it answered, at the slug it was published under."
+  - from: /facts/climate-targets
+    to: /questions/climate-targets
+    why: "The published article is the question it answered, at the slug it was published under."
+  - from: /facts/electric-buses
+    to: /questions/electric-buses
+    why: "The published article is the question it answered, at the slug it was published under."
+  - from: /facts/fifteen-minute-districts
+    to: /questions/fifteen-minute-districts
+    why: "The published article is the question it answered, at the slug it was published under."
+  - from: /facts/infill-prices
+    to: /questions/infill-prices
+    why: "The withdrawn finding keeps its address; the tombstone is the question's page."
+  - from: /facts/winter-cycling
+    to: /questions/winter-cycling
+    why: "The published article and the Yegscoop question are one question, under this slug."

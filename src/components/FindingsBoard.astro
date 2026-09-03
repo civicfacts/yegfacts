@@ -4,15 +4,15 @@ import Finding from './Finding.astro';
 import { findingEdge } from '../lib/findings';
 
 /**
- * Claims as ledger rows, in whatever grouping the page asks for: by story on a
- * story index, by topic on the claim index, one unlabelled group for a plain
- * recent list.
+ * Checked claims as ledger rows, in whatever grouping the page asks for: by
+ * topic on the search page, one unlabelled group for a plain recent list.
  *
- * Every row is treated alike. The question is the row's headline and its link;
- * the finding badge sits in a fixed 11rem right-hand column from `sm` up, with
- * the verification date under it in the same column, so the whole list can be
- * read down one edge. The 5px left border repeats the finding's colour, which
- * is the at-a-glance signal the printed word cannot be.
+ * Every row is treated alike. The claim is the row's headline and links to its
+ * own page, which answers on its own; the finding badge sits in a fixed 11rem
+ * right-hand column from `sm` up, with the verification date under it in the
+ * same column, so the whole list can be read down one edge. The 5px left border
+ * repeats the finding's colour, which is the at-a-glance signal the printed
+ * word cannot be.
  *
  * The board counts nothing. A page that wants a summary line computes it from
  * the same rows it passes in, so the two cannot disagree.
@@ -29,11 +29,11 @@ export interface BoardGroup {
 
 interface Props {
   groups: BoardGroup[];
-  /** Off when the group heading already names the story. */
-  showStory?: boolean;
+  /** Off when the group heading already names the question. */
+  showQuestion?: boolean;
 }
 
-const { groups, showStory = true } = Astro.props;
+const { groups, showQuestion = true } = Astro.props;
 ---
 
 <div>
@@ -64,13 +64,13 @@ const { groups, showStory = true } = Astro.props;
               >
               <p class="sm:col-start-1 sm:row-start-1">
                 <a
-                  href={`/facts/${story.id}#${claim.data.id}`}
+                  href={`/claims/${claim.data.id}`}
                   class="link font-display text-[1.375rem] leading-[1.25] font-semibold"
                 >
                   {claim.data.question}
                 </a>
               </p>
-              {/* Answer directly under the question on phones; in its own column, all badges starting on one line, from sm up. */}
+              {/* The finding directly under the question on phones; in its own column, all badges starting on one line, from sm up. */}
               <p class="mt-2.5 sm:col-start-2 sm:row-start-1 sm:mt-0.5 sm:justify-self-end sm:text-right">
                 <Finding finding={claim.data.finding} size="md" />
                 {/* Unanimous stays silent; Adjacent and Split print under the badge they qualify, so a contested verdict is never taken for a firm one. */}
@@ -81,15 +81,24 @@ const { groups, showStory = true } = Astro.props;
                 )}
               </p>
               {/*
+                The answer in the reader's own words, under the claim it answers
+                (docs/DESIGN.md §12). A row used to be a question and a verdict
+                word, which asked a reader to know what "Not established" meant
+                before the list told them anything.
+              */}
+              <p class="mt-2.5 text-[0.9375rem] leading-relaxed text-pretty sm:col-start-1 sm:row-start-2 sm:mt-2">
+                {claim.data.answer}
+              </p>
+              {/*
                 One line, two deliberate halves: who and where on the left, when
                 on the right, in the same 11rem column as the badge above it. On
                 a phone there is no second column, so the separator that divides
                 them comes back into view.
               */}
-              <small class="mt-2.5 block text-[0.9375rem] leading-normal font-medium text-ink tabular sm:col-span-2 sm:row-start-2 sm:mt-3.5 sm:flex sm:flex-wrap sm:items-baseline">
+              <small class="mt-2.5 block text-[0.9375rem] leading-normal font-medium text-ink tabular sm:col-span-2 sm:row-start-3 sm:mt-3.5 sm:flex sm:flex-wrap sm:items-baseline">
                 <span class="min-w-0 sm:flex-auto">
-                  {showStory && (
-                    <a href={`/facts/${story.id}`} class="link">
+                  {showQuestion && (
+                    <a href={`/questions/${story.id}`} class="link">
                       {story.data.title}
                     </a>
                   )}

@@ -1,0 +1,328 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import {
+  LIFECYCLE_LABELS,
+  PUBLICATION_LABELS,
+  claimText,
+  commentsOn,
+  provenance,
+  saidIn,
+  reportAnchor,
+  sourceKind,
+  triageHeading,
+} from '../lib/intake';
+import type { QuestionRow } from '../lib/questions';
+import { repoFile } from '../lib/site';
+
+type Report = CollectionEntry<'candidateReports'>;
+
+/**
+ * One question that has not been written up: what is being asked, where the
+ * work has got to, and every claim under it in the words it was said in.
+ *
+ * This is the page the decision belongs to. A claim's page can only point up
+ * here, because the triage read the question, the brief will ask the question,
+ * and one panel run will answer it for every claim below.
+ *
+ * The claims carry their captured wordings, which is what makes the page worth
+ * reading rather than a table of contents: somebody who commented on the
+ * original post can find the words they typed, under a pseudonym, beside the
+ * words somebody arguing the other way typed about the same question.
+ *
+ * A question registered one at a time, before whole-source intake existed, has
+ * no claims under it and no source. It carries the wording it was filed under
+ * and the records behind the decision instead.
+ */
+interface Props {
+  row: QuestionRow;
+  reports: Array<{ label: string; path: string; entry: Report }>;
+}
+
+const { row, reports } = Astro.props;
+const { question, source, registered: claims } = row;
+
+const rendered = await Promise.all(
+  reports.map(async (report) => ({
+    label: report.label,
+    /** The section id is the record's kind, so the outline reads as the page does. */
+    id: reportAnchor(report.label),
+    reader: report.entry.data.reader,
+    run: report.entry.data.run,
+    Content: (await render(report.entry)).Content,
+  })),
+);
+
+const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
+
+/**
+ * The three state fields, each under the question it answers.
+ *
+ * They are printed as three rows rather than folded into one word because that
+ * is the whole of D-0029's state model: how far the work has got, whether it is
+ * worth doing, and whether anybody can read it are different facts, and one
+ * field standing for all three is what drifted.
+ */
+const states = [
+  { term: 'How far the work has got', value: LIFECYCLE_LABELS[question.lifecycle] ?? question.lifecycle },
+  { term: 'Whether it is worth checking', value: triageHeading(question.triage) },
+  {
+    term: 'What a reader can see',
+    value: PUBLICATION_LABELS[question.publication] ?? question.publication,
+  },
+];
+---
+
+<article>
+  <header class="border-b border-rule pb-7">
+    <div class="text-xs text-muted" data-crossref>
+      <a href="/questions" class="link">Every question we've considered</a>
+    </div>
+
+    <h1
+      class="mt-3 font-display text-[1.5rem] leading-[1.2] font-semibold text-pretty sm:text-[1.875rem]"
+    >
+      {question.question}
+    </h1>
+
+    {/* Straight out of the register: when it was recorded, how many people
+        discussed it, and how many claims sit under it. Who argued which way is
+        on the claims below, where a reader can see which claim each person was
+        discussing. */}
+    <p class={`mt-4 ${label}`} data-record>
+      <time datetime={question.recorded}>{question.recorded}</time>
+      {row.comments > 0 && ` · ${saidIn(row.comments)}`}
+      {claims.length > 0 && ` · ${claims.length} ${claims.length === 1 ? 'claim' : 'claims'}`}
+    </p>
+
+    {
+      /* The wording a hand-registered question was filed under, kept verbatim.
+         It is what a reader recognises; the question above it is what the site
+         would ask about it. */
+      question.registered_as && (
+        <blockquote
+          class="mt-5 max-w-prose border-l-2 border-gold pl-4 text-[1.0625rem] leading-relaxed text-pretty"
+          data-record
+        >
+          {question.registered_as}
+        </blockquote>
+      )
+    }
+
+    {
+      question.registered_as && (
+        <p class={`mt-3 ${label}`} data-record>
+          <span class="normal-case tracking-normal">{provenance(question)}</span>
+        </p>
+      )
+    }
+  </header>
+
+  <section id="state" class="mt-10 scroll-mt-6">
+    {/* Triage is a heading here, not a tile: this page is the decision, not a
+        row in a column of them. */}
+    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
+      {triageHeading(question.triage)}
+    </h2>
+
+    {
+      (question.reason ?? question.note) && (
+        <p
+          class="mt-3.5 max-w-prose border-l-2 border-gold pl-3.5 text-[1.0625rem] leading-relaxed text-pretty"
+          data-record
+        >
+          {question.reason ?? question.note}
+        </p>
+      )
+    }
+
+    <dl class="mt-6 divide-y divide-rule border-y border-rule">
+      {
+        states.map((state) => (
+          <div class="py-2.5 sm:flex sm:gap-5">
+            <dt class:list={[label, 'sm:w-64 sm:shrink-0']}>{state.term}</dt>
+            <dd class="mt-0.5 text-[0.9375rem] leading-relaxed sm:mt-0" data-record>
+              {state.value}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    {
+      /*
+        Why these claims are one question, in the register's own words. It is
+        the answer to the obvious objection: that grouping claims is where a
+        fact-checker could quietly drop the inconvenient half of an argument.
+      */
+      question.grouping_note && (
+        <p class="mt-5 max-w-prose text-[0.9375rem] leading-relaxed text-muted" data-record>
+          {question.grouping_note}
+        </p>
+      )
+    }
+
+    {
+      /*
+        The one place the both-sides fact is stated. It is worth keeping and it
+        is not a count, so it reads as a sentence here rather than as small
+        print on the index row: a question both camps are asking is this site's
+        best evidence that it is not picking the claims that suit it.
+      */
+      row.twoSided && (
+        <p class="mt-4 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+          People arguing in both directions raised this question, and every claim they made about it
+          is checked, whichever way it points.
+        </p>
+      )
+    }
+
+    <p class="mt-5 text-sm" data-crossref>
+      <a href="/questions#states" class="link">What the states mean</a>
+    </p>
+  </section>
+
+  {
+    source && (
+      <section id="source" class="mt-14 scroll-mt-6">
+        <h2 class="section-heading">Where it came from</h2>
+        <p class="mt-3 max-w-prose text-[1.0625rem] leading-relaxed text-pretty">
+          Taken from{' '}
+          <a href={`/sources/${source.id}`} class="link">
+            {source.title}
+          </a>
+          , read end to end. Every factual claim in it was extracted and merged, so this question is
+          listed whatever became of it.
+        </p>
+        <p class={`mt-3 ${label}`} data-record>
+          {sourceKind(source)}
+          {' · captured '}
+          <time datetime={source.captured}>{source.captured}</time>
+          {source.comments !== undefined && ` · ${source.comments} comments`}
+        </p>
+        <p class="mt-3 max-w-prose text-sm leading-relaxed text-muted">
+          The names below are pseudonyms, one to a commenter within this source.
+        </p>
+        <p class="mt-3 text-sm" data-crossref>
+          <a href={source.url} class="link" rel="noopener nofollow">
+            The original post
+          </a>
+        </p>
+      </section>
+    )
+  }
+
+  {
+    claims.length > 0 && (
+      <section id="claims" class="mt-14 scroll-mt-6">
+        <h2 class="section-heading">
+          {claims.length === 1 ? 'The claim under it' : 'The claims under it'}
+        </h2>
+
+        <ol class="mt-6">
+          {claims.map((claim) => (
+            <li id={claim.id} class="scroll-mt-6 border-t border-rule py-6">
+              <h3 class="font-display text-[1.0625rem] leading-snug font-semibold text-pretty">
+                <a href={`/claims/${claim.id}`} class="link" data-record>
+                  {claimText(claim)}
+                </a>
+              </h3>
+
+              {/* A withheld claim has no count: its wordings are what the count
+                  is of, and the redaction emptied them, so no number is left to
+                  print. */}
+              {commentsOn(claim) > 0 && (
+                <p class={`mt-1.5 ${label}`} data-record>
+                  {saidIn(commentsOn(claim))}
+                </p>
+              )}
+
+              {/* Emptied by the loader for a withheld claim, so the page cannot
+                  print what it never received. */}
+              <ul class="mt-4 space-y-3.5">
+                {(claim.variations ?? []).map((variation) => (
+                  <li>
+                    <blockquote
+                      class="max-w-prose border-l-2 border-gold pl-4 text-[0.9375rem] leading-relaxed text-pretty"
+                      data-record
+                    >
+                      {variation.wording}
+                    </blockquote>
+                    <p class={`mt-1 pl-4 ${label}`} data-record>
+                      <span class="normal-case tracking-normal">{variation.author_name}</span>
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )
+  }
+
+  {
+    rendered.map(({ id, label: heading, reader, run, Content }) => (
+      <section id={id} class="mt-14 scroll-mt-6">
+        <h2 class="section-heading">{heading}</h2>
+        {/*
+          The triage is somebody else's reading, and it has to be unmistakable
+          which. A byline naming the model read as if the model had reviewed
+          the site's work, and left the report's judgements available to be
+          taken for the site's own. The notice says both things instead: whose
+          reading this is, and that the decision above is ours. The intake
+          record needs none of it — that one is Stew's.
+        */}
+        {id === 'triage' && (
+          <aside
+            class="mt-4 border-t-2 border-b border-t-gold border-b-rule bg-wash px-4 py-3.5"
+            role="note"
+          >
+            <p class="text-sm leading-relaxed text-forest">
+              What follows is the triage read, written by a model from another vendor and published
+              as written. The site's decision is the state above.
+            </p>
+            {(reader || run) && (
+              <p class="mt-1 text-xs text-muted" data-record>
+                {reader}
+                {reader && run && ' · '}
+                {run && (
+                  <>
+                    run <time datetime={run}>{run}</time>
+                  </>
+                )}
+              </p>
+            )}
+          </aside>
+        )}
+        {/*
+          `data-record` for the same reason the register's meta line carries it:
+          this is a stored record rendered verbatim, not the site writing prose.
+          One triage report covers three questions, so its words legitimately
+          appear on three pages.
+        */}
+        <div class="prose mt-4" data-record>
+          <Content />
+        </div>
+      </section>
+    ))
+  }
+
+  <footer class="mt-14 border-t border-rule pt-5">
+    {/*
+      Each record names what it is: the site footer already carries a "Source on
+      GitHub" pointing at the repository, and a page with both an intake record
+      and a triage report would otherwise offer two links with the same words
+      and different destinations.
+    */}
+    <p class="flex flex-wrap gap-x-5 gap-y-1 text-sm" data-crossref>
+      <a href="/questions" class="link">Every question we've considered</a>
+      {
+        reports.map((report) => (
+          <a href={repoFile(report.path)} rel="noopener" class="link">
+            {report.label} on GitHub
+          </a>
+        ))
+      }
+    </p>
+  </footer>
+</article>

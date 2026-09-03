@@ -1,0 +1,275 @@
+---
+import CopyButton from './CopyButton.astro';
+import Finding from './Finding.astro';
+import Gloss from './Gloss.astro';
+import TopicTags from './TopicTags.astro';
+import { claimTopics, type Claim, type Story } from '../lib/content';
+import { saidIn, sourceRegister, variationsFrom, type Question } from '../lib/intake';
+import { requireTerm as gloss } from '../lib/glossary';
+
+/**
+ * One checked claim, answering on its own.
+ *
+ * THE UNIT OF JUDGEMENT (D-0029): exactly one finding, and a page that carries
+ * everything needed to read it — the finding, the panel behind it, what it
+ * rests on, what it does not cover, and who said it. A reader arriving from a
+ * search result must not have to click up to the question to learn the answer.
+ * The link up is for the whole investigation, not for the answer.
+ */
+interface Props {
+  claim: Claim;
+  /** The article the finding was published in. */
+  story: Story;
+  /** The register entry for the question it is checked under. */
+  question: Question;
+  /** Absolute URL of this page, for the copy control. */
+  pageUrl: string;
+}
+
+const { claim, story, question, pageUrl } = Astro.props;
+
+const sources = new Map(sourceRegister().map((source) => [source.id, source]));
+
+/**
+ * The captured wordings this claim was grouped from, read through the loader
+ * that redacts named-individual claims, so a withheld one contributes nothing.
+ */
+const said = variationsFrom(claim.data.register_claims).map(({ variation }) => ({
+  variation,
+  source: sources.get(variation.source_id),
+}));
+
+const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
+const heading = 'section-heading mt-14';
+---
+
+<article>
+  <header class="border-b border-rule pb-7">
+    <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-xs text-muted">
+      <span>Fact check ·</span>
+      <TopicTags topics={claimTopics(claim, story)} />
+    </div>
+
+    <h1
+      class="mt-3 text-[1.5rem] leading-[1.2] font-extrabold tracking-[-0.02em] text-pretty sm:text-[1.875rem]"
+    >
+      {claim.data.question}
+    </h1>
+
+    {/* The finding, then the panel behind it. Both are glossed, because the
+        words are the method's and a reader arriving from a search has not read
+        the methodology. */}
+    <p class="mt-5 flex flex-wrap items-baseline gap-x-2 gap-y-1.5">
+      <Gloss {...gloss(claim.data.finding)} variant="boxed">
+        <Finding finding={claim.data.finding} size="md" />
+      </Gloss>
+      <span class="text-[0.9375rem] text-muted">
+        · <Gloss {...gloss(claim.data.panel_agreement)}>{claim.data.panel_agreement}</Gloss> panel
+      </span>
+    </p>
+
+    {/*
+      The answer, and the page leads with it (docs/DESIGN.md §12). It sits
+      directly under the badge rather than above it because the two do different
+      jobs and both belong here: the badge is the method's word for the finding,
+      the answer is what a person would say. The evidence basis, which used to
+      hold this position, is a label for the kind of record behind the finding
+      and never was the answer to anything.
+    */}
+    <p class="mt-4 max-w-prose border-l-2 border-gold pl-3.5 text-[1.1875rem] leading-relaxed text-forest text-pretty">
+      {claim.data.answer}
+    </p>
+
+    <p class="mt-3 max-w-prose text-sm leading-relaxed text-muted">
+      <Gloss {...gloss('evidence basis')}>Evidence basis</Gloss>: {claim.data.evidence_basis}
+    </p>
+
+    <div class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
+      <CopyButton
+        text={`${claim.data.question} — ${claim.data.finding} (${claim.data.panel_agreement} panel). YEGFacts.ca`}
+        url={pageUrl}
+        label="Copy citation"
+      />
+      <span data-pagefind-filter={`finding:${claim.data.finding}`} class="sr-only">
+        {claim.data.finding}
+      </span>
+    </div>
+
+    {/* Who decided this, under what rule, and how old it is. */}
+    <p class="mt-5 text-xs text-muted">
+      Verdict by a <Gloss {...gloss('three-model AI panel')}>three-model AI panel</Gloss> under a{' '}
+      <Gloss {...gloss('published rule')}>published rule</Gloss> ·{' '}
+      <Gloss {...gloss('as of')}>as of</Gloss>{' '}
+      <time datetime={story.data.as_of}>{story.data.as_of}</time> ·{' '}
+      <Gloss {...gloss('last verified')}>last verified</Gloss>{' '}
+      <time datetime={story.data.last_verified}>{story.data.last_verified}</time> ·{' '}
+      <Gloss {...gloss('next review by')}>next review by</Gloss>{' '}
+      <time datetime={story.data.review_by}>{story.data.review_by}</time> ·{' '}
+      <Gloss {...gloss('methodology version')} hrefLabel="See what changed">
+        methodology v{claim.data.methodology_version}
+      </Gloss>
+    </p>
+  </header>
+
+  {
+    claim.data.key_facts.length > 0 && (
+      <section id="facts">
+        <h2 class={heading}>What it rests on</h2>
+        <ul class="mt-4 space-y-2">
+          {claim.data.key_facts.map((fact) => (
+            <li class="border-l-2 border-rule pl-3.5 text-[0.9375rem] leading-relaxed">
+              {fact.text}{' '}
+              {fact.sources.map((id, index) => (
+                <>
+                  {index > 0 && ', '}
+                  <a href={`/evidence/${id}`} class="link">
+                    {id}
+                  </a>
+                </>
+              ))}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    /*
+      What the finding does not cover, on the same page as the finding. A
+      qualification a reader has to click through to is a qualification most
+      readers never see.
+    */
+    (claim.data.limitations.length > 0 ||
+      claim.data.unknowns.length > 0 ||
+      claim.data.missing_evidence.length > 0) && (
+      <section id="limits">
+        <h2 class={heading}>What this does not settle</h2>
+
+        {claim.data.limitations.length > 0 && (
+          <div class="mt-4">
+            <h3 class={label}>Limitations</h3>
+            <ul class="mt-2 space-y-1.5 text-[0.9375rem] leading-relaxed text-muted">
+              {claim.data.limitations.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {claim.data.unknowns.length > 0 && (
+          <div class="mt-5">
+            <h3 class={label}>What remains unknown</h3>
+            <ul class="mt-2 space-y-2">
+              {claim.data.unknowns.map((item) => (
+                <li class="border-l-2 border-rule pl-3.5 text-[0.9375rem] leading-relaxed">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {claim.data.missing_evidence.length > 0 && (
+          <div class="mt-5">
+            <h3 class={label}>Missing evidence</h3>
+            <p class="mt-2 max-w-prose text-sm leading-relaxed text-muted">
+              Records we asked for and have not received, or that do not appear to exist publicly.
+            </p>
+            <ul class="mt-2 space-y-2">
+              {claim.data.missing_evidence.map((item) => (
+                <li class="border-l-2 border-rule pl-3.5 text-[0.9375rem] leading-relaxed">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </section>
+    )
+  }
+
+  {
+    claim.data.comparisons.length > 0 && (
+      <section id="comparisons">
+        <h2 class={heading}>Comparable cities</h2>
+        <ul class="mt-4 divide-y divide-rule border-t border-rule">
+          {claim.data.comparisons.map((comparison) => (
+            <li class="py-4">
+              <p class="font-semibold">{comparison.city}</p>
+              <p class="mt-1 text-[0.9375rem] leading-relaxed">{comparison.note}</p>
+              <p class="mt-1.5 text-sm text-muted">
+                <span class="font-semibold">Transfers to Edmonton?</span>{' '}
+                {comparison.transferability}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    /*
+      The words people actually used, on the page that answers them. Quoted
+      exactly and attributed to the capture's pseudonyms, never a real name.
+      Expanded rather than folded away: on the question page this is one claim
+      among several, but here it is half of what the page is for.
+    */
+    said.length > 0 && (
+      <section id="said">
+        <h2 class={heading}>How it was said</h2>
+        <p class="mt-1.5 max-w-prose text-sm leading-relaxed text-muted">
+          {saidIn(said.length)} in the sources we hold, quoted exactly. The names are pseudonyms,
+          one to a person within a source, and one person can write more than one comment.
+        </p>
+        <ul class="mt-5 space-y-4">
+          {said.map(({ variation, source }) => (
+            <li>
+              <blockquote
+                class="max-w-prose border-l-2 border-gold pl-4 text-[1.0625rem] leading-relaxed text-pretty"
+                data-record
+              >
+                {variation.wording}
+              </blockquote>
+              <p class={`mt-1.5 pl-4 ${label}`} data-record>
+                <span class="normal-case tracking-normal">{variation.author_name}</span>
+                {source && (
+                  <>
+                    {' · '}
+                    <a href={`/sources/${source.id}`} class="link normal-case tracking-normal">
+                      {source.title}
+                    </a>
+                  </>
+                )}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section id="question">
+    <h2 class={heading}>The question it answers</h2>
+    <p
+      class="mt-3.5 max-w-prose font-display text-[1.1875rem] leading-snug font-semibold text-pretty"
+      data-crossref
+    >
+      <a href={`/questions/${question.id}`} class="link">{question.question}</a>
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      One brief, one body of evidence and one panel run cover every claim under that question, and
+      each claim still gets its own finding. The investigation behind this one is there: the
+      evidence, the reviewers' own verdicts, the corrections history and the other claims checked
+      alongside it.
+    </p>
+  </section>
+
+  <footer class="mt-14 border-t border-rule pt-5">
+    <p class="flex flex-wrap gap-x-5 gap-y-1 text-sm" data-crossref>
+      <a href={`/questions/${question.id}`} class="link">The full investigation</a>
+      <a href="/questions" class="link">Every question we've considered</a>
+    </p>
+  </footer>
+</article>

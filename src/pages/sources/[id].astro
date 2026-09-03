@@ -1,0 +1,251 @@
+---
+import Base from '../../layouts/Base.astro';
+import StateBadge from '../../components/StateBadge.astro';
+import {
+  claimText,
+  commentsOn,
+  saidIn,
+  sourceKind,
+  sourceRegister,
+  triageEdge,
+  type Source,
+} from '../../lib/intake';
+import { questionRows, statesOf, type QuestionRow } from '../../lib/questions';
+import { toc } from '../../lib/toc';
+
+/**
+ * `/sources/<id>` — one capture, and everything that came out of it.
+ *
+ * This page is the completeness record. The promise the site makes about a
+ * source is that it was read end to end and that every factual claim in it was
+ * extracted, whether or not the claim suits anybody: so the page carries what
+ * the capture is, how big it was, the questions the merge produced from it, and
+ * the propositions it set aside as not factual claims, each with its reason.
+ *
+ * That last list is why the page exists. While "not a claim" was a claim
+ * disposition those propositions were nowhere on the site, and a promise that
+ * nothing was quietly binned is not a promise anybody can check unless the
+ * binned things are printed.
+ */
+export async function getStaticPaths() {
+  const rows = await questionRows();
+  return sourceRegister().map((source) => ({
+    params: { id: source.id },
+    props: {
+      source,
+      questions: rows.filter((row) => row.question.source === source.id),
+    },
+  }));
+}
+
+interface Props {
+  source: Source;
+  questions: QuestionRow[];
+}
+
+const { source, questions } = Astro.props;
+
+const setAside = source.set_aside ?? [];
+
+const outline = toc([
+  { id: 'capture', label: 'The capture' },
+  { id: 'questions', label: 'Questions from it' },
+  setAside.length > 0 && { id: 'set-aside', label: 'Set aside' },
+]);
+
+const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
+const countColumn = `md:table-cell md:w-px md:pl-4 md:text-right md:align-top md:whitespace-nowrap ${label}`;
+const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-top';
+---
+
+<Base
+  sections={outline}
+  title={source.title}
+  description={`What YEGFacts took from ${source.title}: the questions it produced, and what was read and set aside as not a factual claim.`}
+>
+  <header class="border-b border-rule pb-6">
+    <p class={label}>Source</p>
+    <h1
+      class="mt-2 font-display text-[1.5rem] leading-[1.2] font-semibold text-pretty sm:text-[1.875rem]"
+    >
+      {source.title}
+    </h1>
+    <p class="mt-4 max-w-prose text-base leading-relaxed">
+      This source was read end to end. Three models each wrote down every factual claim they could
+      find in it, a fourth folded those lists into one claim for each thing a public record could
+      settle, and the claims were grouped into the questions below. Everything that came out of it
+      is on this page, including what was read and set aside.
+    </p>
+  </header>
+
+  <section id="capture" class="mt-12 scroll-mt-6">
+    <h2 class="section-heading">The capture</h2>
+
+    {/*
+      Straight out of the register: what the source is, when we took it, how big
+      it was, and the two counts kept apart. The three extractions raise claims;
+      the merge is what turns those into the claims below, and there are fewer
+      of the second because one claim holds every wording of itself that the
+      three readings found.
+    */}
+    <p class={`mt-3 ${label}`} data-record>
+      {sourceKind(source)}
+      {' · captured '}
+      <time datetime={source.captured}>{source.captured}</time>
+      {source.captured_by && ` by the ${source.captured_by}`}
+      {source.comments !== undefined && ` · ${source.comments} comments`}
+      {source.commenters !== undefined && ` from ${source.commenters} people`}
+      {source.claims_found !== undefined && ` · ${source.claims_found} claims raised in extraction`}
+      {source.propositions !== undefined && ` · merged into ${source.propositions} claims`}
+    </p>
+
+    {
+      source.extracted_by.length > 0 && (
+        <p class={`mt-2 ${label}`} data-record>
+          {`Extracted by ${source.extracted_by.join(', ')}`}
+          {source.merged_by && ` · merged by ${source.merged_by}`}
+        </p>
+      )
+    }
+
+    <p class="mt-4 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+      Commenter names are replaced throughout by stable pseudonyms: one pseudonym is one person
+      within this source, so a reply still lines up with what it answers, and it means nothing
+      outside it. People holding public office keep their names, because what they did in office is
+      the public record.
+    </p>
+
+    <p class="mt-4 text-sm" data-crossref>
+      <a href={source.url} class="link" rel="noopener nofollow">The original post</a>
+    </p>
+  </section>
+
+  <section id="questions" class="mt-14 scroll-mt-6">
+    <h2 class="section-heading">Questions from it</h2>
+    {
+      questions.length === 0 ? (
+        <p class="mt-4 border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed text-muted">
+          The source has been read and merged; the questions are not registered yet.
+        </p>
+      ) : (
+        <>
+          <p class={`mt-2 ${label}`}>The most-commented questions come first.</p>
+          <table class="mt-4 block w-full border-collapse md:table">
+            <caption class="sr-only">Questions from {source.title}</caption>
+            <thead class="sr-only">
+              <tr>
+                <th scope="col">Question or claim</th>
+                <th scope="col">Comments</th>
+                <th scope="col">Claims</th>
+                <th scope="col">State</th>
+              </tr>
+            </thead>
+            {questions.map((row) => (
+              <tbody class="block border-t border-rule md:table-row-group">
+                <tr id={row.question.id} class="block scroll-mt-6 md:table-row">
+                  <td class="block pt-4 md:table-cell md:py-4 md:pr-4 md:align-top">
+                    <span class:list={['block border-l-[5px] pl-4', triageEdge(row.question.triage)]}>
+                      <a
+                        href={`/questions/${row.question.id}`}
+                        class="link font-display text-[1.1875rem] leading-snug font-semibold text-pretty"
+                        data-record
+                      >
+                        {row.question.question}
+                      </a>
+                      {row.question.reason && (
+                        <span
+                          class="mt-2 block max-w-prose text-[0.9375rem] leading-relaxed text-muted"
+                          data-record
+                        >
+                          {row.question.reason}
+                        </span>
+                      )}
+                    </span>
+                  </td>
+                  <td class:list={['block pt-2 pl-5 md:py-4', countColumn]} data-record>
+                    {row.comments > 0 && saidIn(row.comments)}
+                  </td>
+                  <td
+                    class:list={['block pt-1 pl-5 whitespace-nowrap md:py-4', countColumn]}
+                    data-record
+                  >
+                    {`${row.claimCount} ${row.claimCount === 1 ? 'claim' : 'claims'}`}
+                  </td>
+                  <td class:list={['pt-3 pb-4 pl-5 md:py-4', badgeColumn]}>
+                    <span class="flex flex-wrap gap-1.5 md:justify-end">
+                      {statesOf(row.question).map((state) => (
+                        <StateBadge state={state} />
+                      ))}
+                    </span>
+                  </td>
+                </tr>
+
+                {row.registered.map((claim) => (
+                  <tr id={claim.id} class="block scroll-mt-6 border-t border-rule md:table-row">
+                    <td class="block pt-2.5 pl-4 md:table-cell md:py-2.5 md:pr-4 md:align-top">
+                      <a
+                        href={`/claims/${claim.id}`}
+                        class="link text-[0.9375rem] leading-snug text-ink"
+                        data-record
+                      >
+                        {claimText(claim)}
+                      </a>
+                    </td>
+                    <td
+                      class:list={[
+                        commentsOn(claim) === 0 ? 'hidden' : 'block pt-1 pb-2.5 pl-4',
+                        'md:py-2.5',
+                        countColumn,
+                      ]}
+                      data-record
+                    >
+                      {commentsOn(claim) > 0 && saidIn(commentsOn(claim))}
+                    </td>
+                    <td class="hidden md:table-cell md:py-2.5" />
+                    <td class="hidden md:table-cell md:py-2.5" />
+                  </tr>
+                ))}
+              </tbody>
+            ))}
+          </table>
+        </>
+      )
+    }
+  </section>
+
+  {
+    setAside.length > 0 && (
+      <section id="set-aside" class="mt-14 scroll-mt-6">
+        <h2 class="section-heading">Set aside</h2>
+        <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+          The merge read these and set them aside as things a public record cannot settle: opinion,
+          prediction, a value judgement about what the City ought to do. They are not claims and
+          they were not checked. They are printed because the promise made about a source is that it
+          was read whole, and a promise that nothing was quietly binned is only worth something if
+          the binned things are here.
+        </p>
+        <ul class="mt-6 divide-y divide-rule border-t border-rule">
+          {setAside.map((entry) => (
+            <li class="py-5">
+              <blockquote
+                class="max-w-prose border-l-2 border-gold pl-4 text-[1.0625rem] leading-relaxed text-pretty"
+                data-record
+              >
+                {entry.wording}
+              </blockquote>
+              <p class="mt-2 max-w-prose pl-4 text-[0.9375rem] leading-relaxed text-muted" data-record>
+                {entry.reason}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <footer class="mt-14 border-t border-rule pt-5">
+    <p class="flex flex-wrap gap-x-5 gap-y-1 text-sm" data-crossref>
+      <a href="/questions" class="link">Every question we've considered</a>
+    </p>
+  </footer>
+</Base>

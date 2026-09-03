@@ -81,7 +81,7 @@ const sections = toc(ladder.map((group) => ({ id: anchor(group.status), label: g
                     {commitment.data.story && storyById.has(commitment.data.story) && (
                       <>
                         {' '}·{' '}
-                        <a href={`/facts/${commitment.data.story}`} class="link">
+                        <a href={`/questions/${commitment.data.story}`} class="link">
                           {storyById.get(commitment.data.story)?.data.title}
                         </a>
                       </>

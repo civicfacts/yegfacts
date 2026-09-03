@@ -11,7 +11,7 @@ export type JournalPost = CollectionEntry<'journal'>;
  * The single visibility gate (build plan, Phase 1A item 3).
  *
  * `draft` stories are excluded from every public route, from the search index,
- * from the homepage and from topic hubs. Because `/facts/[slug]` builds its
+ * from the homepage and from topic hubs. Because `/questions/[id]` builds its
  * paths from this function, a draft story has no page at all — which is what
  * keeps it out of Pagefind too, with no separate exclusion rule to forget.
  */
@@ -102,6 +102,21 @@ export async function claimsForStory(story: Story): Promise<Claim[]> {
   return story.data.claims
     .map((id) => byId.get(id))
     .filter((claim): claim is Claim => claim !== undefined);
+}
+
+/**
+ * The sentence under a question's title, and its description everywhere the
+ * question is linked from.
+ *
+ * The story's own standfirst where it has one. Where it does not, the question
+ * has exactly one claim — `scripts/validate.ts` refuses any other case — and
+ * that claim's answer is the sentence, because writing the same sentence in two
+ * files is how the two of them drift apart (docs/DESIGN.md §12).
+ */
+export async function standfirst(story: Story): Promise<string> {
+  if (story.data.one_line) return story.data.one_line;
+  const claims = await claimsForStory(story);
+  return claims[0]?.data.answer ?? story.data.title;
 }
 
 export async function commitmentsForStory(story: Story): Promise<Commitment[]> {

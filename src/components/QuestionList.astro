@@ -1,0 +1,51 @@
+---
+import StateBadge from './StateBadge.astro';
+import { saidIn, triageEdge } from '../lib/intake';
+import { statesOf, type QuestionRow } from '../lib/questions';
+
+/**
+ * A run of questions as ledger rows: the question, how many people discussed
+ * it, how many claims sit under it, and what state it is in.
+ *
+ * No findings. A topic is a label with a page listing its questions and nothing
+ * else (D-0029): a grouping that summarises what its questions concluded is
+ * exactly where a conclusion nobody audited gets in, because the audited unit is
+ * the claim and the grouping sits two levels above it. So a row here says what
+ * the question is and where it has got to, and the answer is one click away on
+ * the question's own page, where the evidence is.
+ */
+interface Props {
+  rows: QuestionRow[];
+}
+
+const { rows } = Astro.props;
+
+const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
+---
+
+<ul class="divide-y divide-rule border-t border-rule">
+  {
+    rows.map((row) => (
+      <li class="py-5">
+        <div class:list={['border-l-[5px] pl-4', triageEdge(row.question.triage)]}>
+          <div class="flex flex-wrap items-baseline justify-between gap-x-5 gap-y-2">
+            <p class="min-w-0 grow font-display text-[1.1875rem] leading-snug font-semibold text-pretty">
+              <a href={`/questions/${row.question.id}`} class="link" data-record>
+                {row.question.question}
+              </a>
+            </p>
+            <span class="flex flex-wrap gap-1.5">
+              {statesOf(row.question).map((state) => (
+                <StateBadge state={state} />
+              ))}
+            </span>
+          </div>
+          <p class={`mt-2 ${label}`} data-record>
+            {row.comments > 0 && `${saidIn(row.comments)} · `}
+            {`${row.claimCount} ${row.claimCount === 1 ? 'claim' : 'claims'}`}
+          </p>
+        </div>
+      </li>
+    ))
+  }
+</ul>

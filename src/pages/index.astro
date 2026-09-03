@@ -9,11 +9,11 @@ import FindingsBoard from '../components/FindingsBoard.astro';
 import ReportBox from '../components/ReportBox.astro';
 import StewByline from '../components/StewByline.astro';
 import {
-  claimTopics,
   orderedTopics,
   publishedClaims,
   publishedStories,
 } from '../lib/content';
+import { questionRows } from '../lib/questions';
 import { SITE } from '../lib/site';
 import { CANONICAL_FINDINGS } from '../lib/vocabulary';
 import { loadRunManifest } from '../../scripts/lib/review-schema.ts';
@@ -29,8 +29,7 @@ import { methodologyChanges } from '../lib/methodology';
 const stories = await publishedStories();
 const rows = await publishedClaims();
 const claimCount = rows.length;
-const storyCount = stories.length;
-/** The /stories link counts what /stories lists, which includes a story still in review. */
+const questionCount = stories.length;
 
 /** The most recent claims, in the record's own order. */
 const recent = rows.slice(0, 8);
@@ -61,10 +60,22 @@ if (newest) {
 const evidenceCount = (await getCollection('evidence')).length;
 const methodologyVersion = highestMethodologyVersion(methodologyChanges());
 
-/** A topic's weight is how many checked claims sit under it, not how many stories. */
+/** A topic's weight is how many checked claims sit under it, not how many questions. */
+/**
+ * Topics count questions, not checked claims.
+ *
+ * Counting checked claims made the biggest topic on the site read "no claims
+ * yet": bike lanes holds twenty-six questions and none of them has been
+ * checked, because the register filled up faster than the panel did. A
+ * navigation list that hides where the argument is because nobody has answered
+ * it yet is navigation pointed at the wrong thing. A question can carry several
+ * topics, so these do not sum to the total and the line above no longer says
+ * they do.
+ */
+const questions = await questionRows();
 const topics = (await orderedTopics()).map((topic) => ({
   ...topic.data,
-  count: rows.filter((row) => claimTopics(row.claim, row.story)[0] === topic.data.slug).length,
+  count: questions.filter((row) => row.topics.includes(topic.data.slug)).length,
 }));
 
 const CHANGE_LABELS: Record<'correction' | 'verdict-change', string> = {
@@ -182,8 +193,8 @@ const jsonLd = [
   {
     stories.length === 0 && (
       <p class="mb-10 border-l-[5px] border-gold pl-4 text-base leading-relaxed text-muted">
-        Nothing is published yet. The first stories go through the full review panel before they
-        appear here — how that works is set out in the{' '}
+        Nothing is published yet. The first questions go through the full review panel before they
+        are answered here — how that works is set out in the{' '}
         <a href="/methodology" class="link">
           methodology
         </a>
@@ -207,7 +218,7 @@ const jsonLd = [
     <section class="lg:col-start-2 lg:row-start-1">
       <div class={head}><h2 class={headText}>Browse by topic</h2></div>
       <p class={lead}>
-        Each claim is filed under one topic, so the counts add up to the total above.
+        A question can sit under more than one topic, so these do not add up to the total above.
       </p>
       <ul class="mt-4">
         {
@@ -219,14 +230,14 @@ const jsonLd = [
                     {topic.name}
                   </a>
                   <span class="text-[0.875rem] whitespace-nowrap text-muted tabular">
-                    {topic.count} {topic.count === 1 ? 'claim' : 'claims'}
+                    {topic.count} {topic.count === 1 ? 'question' : 'questions'}
                   </span>
                 </Fragment>
               ) : (
                 <Fragment>
                   <span class:list={[topicName, 'text-muted']}>{topic.name}</span>
                   <span class="text-[0.875rem] whitespace-nowrap text-muted italic">
-                    no claims yet
+                    nothing yet
                   </span>
                 </Fragment>
               )}
@@ -244,9 +255,9 @@ const jsonLd = [
           </div>
           <p class:list={[lead, 'tabular']}>
             {claimCount}
-            {claimCount === 1 ? ' claim in ' : ' claims in '}
-            {storyCount}
-            {storyCount === 1 ? ' story: ' : ' stories: '}
+            {claimCount === 1 ? ' claim under ' : ' claims under '}
+            {questionCount}
+            {questionCount === 1 ? ' question: ' : ' questions: '}
             {findingCounts.map((entry, index) => (
               <Fragment>
                 {index > 0 && ' · '}
@@ -343,7 +354,7 @@ const jsonLd = [
       </ol>
     </div>
     <p class="mt-5 text-[0.9375rem] font-semibold">
-      <a href="/considered" class="link">Claims we declined or parked, and why</a>.
+      <a href="/questions" class="link">Every question we've considered, including the ones we parked and declined</a>.
     </p>
   </section>
 
@@ -368,7 +379,7 @@ const jsonLd = [
                   {CHANGE_LABELS[row.entry.type as 'correction' | 'verdict-change']}
                 </p>
                 <p class="mt-1.5 font-display text-[1.1875rem] leading-snug font-semibold">
-                  <a href={`/facts/${row.story.id}`} class="link">
+                  <a href={`/questions/${row.story.id}`} class="link">
                     {row.story.data.title}
                   </a>
                 </p>
@@ -377,7 +388,7 @@ const jsonLd = [
                   {row.truncated && (
                     <Fragment>
                       {' '}
-                      <a href={`/facts/${row.story.id}#history`} class="link">
+                      <a href={`/questions/${row.story.id}#history`} class="link">
                         Full note
                       </a>
                     </Fragment>

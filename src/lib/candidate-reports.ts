@@ -1,14 +1,15 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import type { Loader } from 'astro/loaders';
-import { candidateRegister, reportsFor } from './intake';
+import { questionRegister, reportsFor } from './intake';
 
 /**
- * The intake records and triage reports behind `/considered/<id>`.
+ * The intake records and triage reports behind `/questions/<id>`.
  *
  * They are Markdown files that live where the intake process put them —
- * `intake/candidates/<id>/` for a new candidate, a review run's directory for
- * one that came out of a re-brief — so no single `glob()` base covers them and
+ * `intake/candidates/<id>/` for a question registered on its own, a review
+ * run's directory for one that came out of a re-brief — so no single `glob()`
+ * base covers them and
  * the register is the only thing that knows which files matter. This loader
  * therefore reads `intake/register.yaml` and loads exactly the paths it names,
  * which also means a report nobody references never becomes a page.
@@ -126,7 +127,7 @@ function metadata(comment: string): Pick<CandidateReport, 'reader' | 'run'> {
 /** Every distinct report path the register names, in the order it names them. */
 function reportPaths(): string[] {
   return [
-    ...new Set(candidateRegister().flatMap((candidate) => reportsFor(candidate).map((r) => r.path))),
+    ...new Set(questionRegister().flatMap((question) => reportsFor(question).map((r) => r.path))),
   ];
 }
 

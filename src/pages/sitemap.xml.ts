@@ -1,12 +1,13 @@
 import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
 import {
+  allPublicClaims,
   allPublicStories,
   orderedTopics,
   publicJournal,
   publishedStories,
 } from '../lib/content';
-import { candidatesWithPages, investigationRegister } from '../lib/intake';
+import { claimsWithPages, questionRegister, sourceRegister } from '../lib/intake';
 import { methodologyChanges } from '../lib/methodology';
 import { SITE } from '../lib/site';
 
@@ -57,8 +58,19 @@ export async function GET(context: APIContext): Promise<Response> {
     getCollection('evidence'),
   ]);
 
+  /** The article behind a question, keyed by the question's id, for `lastmod`. */
+  const articles = new Map(stories.map((story) => [story.id, story]));
+
+  /** Every claim that carries a finding, dated by the article it was published in. */
+  const findingPages = (await allPublicClaims()).flatMap((claim) => {
+    const article = articles.get(claim.data.story);
+    return article
+      ? [{ path: `/claims/${claim.data.id}`, lastmod: article.data.last_verified }]
+      : [];
+  });
+
   /**
-   * The boards — home, the story index, the search page — say what they say
+   * The boards — home, the register, the search page — say what they say
    * because of the findings on them, so they are as old as the newest
    * verification behind a finding that still stands.
    */
@@ -66,20 +78,40 @@ export async function GET(context: APIContext): Promise<Response> {
 
   const entries: Entry[] = [
     { path: '/', lastmod: boards },
-    { path: '/stories', lastmod: boards },
     { path: '/search', lastmod: boards },
 
-    // A withdrawn story keeps its page and its URL, so it keeps its place here.
-    ...stories.map((story) => ({
-      path: `/facts/${story.id}`,
-      lastmod: newest([
-        story.data.last_verified,
-        ...story.data.changelog.map((entry) => entry.date),
-      ]),
+    // The register, and one page per question whatever its state: an address a
+    // question has from the day it is registered is one the sitemap carries
+    // from that day too. A question that has been written up is as new as its
+    // article; one that has not has no date in the record to give.
+    { path: '/questions', lastmod: boards },
+    ...questionRegister().map((question) => {
+      const article = question.story ? articles.get(question.story) : undefined;
+      return {
+        path: `/questions/${question.id}`,
+        lastmod: article
+          ? newest([
+              article.data.last_verified,
+              ...article.data.changelog.map((entry) => entry.date),
+            ])
+          : undefined,
+      };
+    }),
+
+    // Both kinds of claim page: the ones that came back with a finding, and the
+    // register entries that have not been checked.
+    ...findingPages,
+    ...claimsWithPages().map((claim) => ({ path: `/claims/${claim.id}` })),
+
+    // One page per capture: the completeness record for what came out of it.
+    ...sourceRegister().map((source) => ({
+      path: `/sources/${source.id}`,
+      lastmod: source.captured,
     })),
 
-    // Every topic gets a hub, whether or not a story has landed under it yet,
+    // Every topic gets a hub, whether or not a question has landed under it yet,
     // which is what `/topics/[slug].astro` builds from.
+    { path: '/topics' },
     ...topics.map((topic) => ({ path: `/topics/${topic.data.slug}` })),
 
     { path: '/evidence' },
@@ -91,13 +123,6 @@ export async function GET(context: APIContext): Promise<Response> {
     })),
 
     { path: '/commitments' },
-    { path: '/considered' },
-    // Both levels of the register have a page: the question with the decision
-    // on it, and each claim checked under it.
-    ...investigationRegister().map((investigation) => ({
-      path: `/considered/${investigation.id}`,
-    })),
-    ...candidatesWithPages().map(({ candidate }) => ({ path: `/considered/${candidate.id}` })),
 
     { path: '/about' },
     { path: '/support' },
