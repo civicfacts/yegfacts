@@ -1,11 +1,15 @@
 /**
  * Named individuals (v1 excludes right-of-reply, docs/DESIGN.md §2).
  *
- * Some captured claims name a real person and allege wrongdoing. Checked and
- * published, that is a finding. Parked, declined or merged, it is an unanswered
- * allegation about a named person with no process behind it, so the site does
- * not print the proposition or the words it was said in — the register may hold
- * them, the site may not.
+ * Some captured claims accuse a named person of wrongdoing. Triage declines
+ * those on a standing rule: the site has no right of reply to offer, so it does
+ * not repeat the accusation. What it withholds is the proposition and the words
+ * it was said in; the row, its outcome and its reason stay public.
+ *
+ * A claim about what an office-holder did in office is not in that class and is
+ * not withheld. A motion brought, a vote cast, a lane built: council minutes
+ * settle those, and the site names office-holders when it reports them. So the
+ * trigger is the decline, not the presence of a name.
  *
  * The rule is enforced where the register enters the site rather than on the
  * pages, so what a page never receives it cannot leak. These tests pin that: the
@@ -38,7 +42,7 @@ function entry(overrides: Partial<Candidate> = {}): Candidate {
     origin: 'captured',
     wording: 'Councillor Someone took a bribe from a developer.',
     proposition: 'Councillor Someone accepted a payment from a developer.',
-    outcome: 'PARK',
+    outcome: 'NO',
     side: 'against',
     commenters: 3,
     names_person: true,
@@ -49,15 +53,18 @@ function entry(overrides: Partial<Candidate> = {}): Candidate {
 }
 
 describe('withholdsWording', () => {
-  for (const outcome of ['PARK', 'NO', 'variation', 'not-a-claim', 'pre-triage'] as const) {
-    it(`withholds a named-individual claim on ${outcome}`, () => {
-      expect(withholdsWording(entry({ outcome }))).toBe(true);
+  it('withholds an accusation both readers declined', () => {
+    expect(withholdsWording(entry({ outcome: 'NO' }))).toBe(true);
+  });
+
+  // Parking is a decision about when to check something, not a refusal to
+  // repeat it, and most claims that name a person name an office-holder doing
+  // something the public record already carries.
+  for (const outcome of ['GO', 'PARK', 'variation', 'not-a-claim', 'pre-triage'] as const) {
+    it(`prints a named-individual claim on ${outcome}`, () => {
+      expect(withholdsWording(entry({ outcome }))).toBe(false);
     });
   }
-
-  it('does not withhold once the claim is going ahead', () => {
-    expect(withholdsWording(entry({ outcome: 'GO' }))).toBe(false);
-  });
 
   it('does not withhold a claim that names nobody', () => {
     expect(withholdsWording(entry({ names_person: false }))).toBe(false);
@@ -118,7 +125,7 @@ describe('redact', () => {
 describe('the register as the site receives it', () => {
   it('carries no proposition or quote for a withheld entry', () => {
     for (const candidate of candidateRegister()) {
-      if (!candidate.names_person || candidate.outcome === 'GO') continue;
+      if (!candidate.names_person || candidate.outcome !== 'NO') continue;
       expect(candidate.withheld).toBe(true);
       expect(candidate.forms ?? []).toEqual([]);
       expect(candidate.proposition).toBe(WITHHELD_LABEL);

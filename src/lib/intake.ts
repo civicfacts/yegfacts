@@ -153,7 +153,14 @@ export function withholdsWording(entry: {
   names_person?: boolean;
   outcome: string;
 }): boolean {
-  return entry.names_person === true && entry.outcome !== 'GO';
+  // Only a decline. Parking a claim is a decision about when to check it, not
+  // a refusal to repeat it, and most claims naming a person name an
+  // office-holder doing something in office: a motion brought, a lane
+  // installed. Those are the public record and the site names them, here and
+  // in the stories. What is withheld is what two readers refused outright,
+  // which under the triage rule can only be an allegation the site has no way
+  // to put to the person.
+  return entry.names_person === true && entry.outcome === 'NO';
 }
 
 /**

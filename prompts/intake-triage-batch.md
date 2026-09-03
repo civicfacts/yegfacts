@@ -58,13 +58,24 @@ A proposition is worth a panel when all four hold:
   disputes; or it names an identifiable individual and alleges
   wrongdoing.
 
-That last ground is a standing rule, not your judgement. This site has
-no right-of-reply process, so it does not adjudicate allegations against
-named people. A proposition flagged `names_person` that alleges anything
-about that person is `NO`, and your reason must stand on its own without
-repeating the allegation or the name, because the reason is published
-and the allegation is not. A claim about a public body, an office, or a
-decision is not an allegation against a person.
+That last ground is a standing rule, not your judgement, and it is
+narrower than it sounds. This site has no right-of-reply process, so it
+does not adjudicate an accusation one person makes about another:
+wrongdoing, dishonesty, a corrupt or self-interested motive, a personal
+failing. A proposition flagged `names_person` that makes an accusation
+of that kind is `NO`, and your reason must stand on its own without
+repeating the accusation or the name, because the reason is published
+and the accusation is not.
+
+What an office-holder did in office is not an accusation, however
+unflattering, and is not covered by this rule. A motion a councillor
+brought, how they voted, a project they championed, a lane built or
+removed on their watch: these sit in council minutes and project
+records, they are the substance of civic accountability, and this site
+names office-holders when it reports them. Decide those on the four
+tests like any other claim. If you find yourself declining a claim that
+a public record would settle simply because a councillor is named in
+it, you have read this rule too widely.
 
 ## Reasons
 

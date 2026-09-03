@@ -22,8 +22,33 @@ true.
 ## Merging
 
 Two extractor claims become one proposition when **the same evidence would
-settle both**. Same number in different units, an assertion and its flat
-denial, the same event described from two sides — one proposition.
+settle both**. The same number in different units, or the same event described
+from two sides, is one proposition.
+
+Three rules bound that, and they matter more than a tidy list. Every form is
+published on the site as the words of a real person asserting the proposition
+it sits under, so a wrong grouping is a false attribution to somebody who can
+read the page.
+
+1. **A proposition is one assertion.** If you are joining two assertions with
+   "and" or "while", they are two propositions. "Only 2 percent of Edmontonians
+   cycle" and "the lanes sit empty" have different populations, periods and
+   measures; split them even when one commenter said both in a breath.
+2. **A form must assert the proposition, not the topic.** "Bicycles reduce
+   congestion" and "removing a traffic lane increases congestion" are opposite
+   claims about one subject. They are two propositions, and a comment making
+   the second is never a form of the first. A flat denial is the one exception:
+   "that never happened" is a form of the proposition it denies, because the
+   same evidence settles both.
+3. **A rhetorical line is not a numeric claim.** "All 5 people who ride bikes
+   showed up?" and "2.3 percent of the population uses them" are not one
+   proposition. The first says few people cycle and puts no number on it that a
+   record could settle; the second names a rate. Where a jibe carries no
+   testable content at all, drop it as `not a claim`.
+
+When you cannot tell whether two claims are one, keep them apart. Two
+propositions that turn out to be the same cost a duplicated check. One
+proposition that turns out to be two puts words in somebody's mouth.
 
 Two claims stay apart when a record could settle one and leave the other open.
 "$100 million is 1% of the roads capital budget" and "$100 million is over four
@@ -74,7 +99,10 @@ appears either in some proposition's `from` list, or in the top-level
 nothing may go missing. The permitted reasons are:
 
 - `not a claim` — opinion, insult, prediction, or a value judgement the seat
-  mislabelled.
+  mislabelled. A statement about what the City or anyone else *should* do
+  ("cyclists should be licensed and insured") is a policy preference however
+  firmly it is asserted. The factual premise inside it ("drivers already pay
+  for roads through the fuel tax") is a claim, and becomes its own proposition.
 - `duplicate quote` — the same form the same seat already emitted under another
   id.
 - `not about Edmonton civic government` — out of scope for this project.
