@@ -1,26 +1,39 @@
 ---
 import Base from '../layouts/Base.astro';
+import Outcome from '../components/Outcome.astro';
 import { allPublishedStories } from '../lib/content';
 import {
   REGISTER_SECTIONS,
   candidateRegister,
+  claimText,
+  outcomeEdge,
+  outcomeRank,
   provenance,
   reportsFor,
+  sourceKind,
+  sourceRegister,
   storyLinkLabel,
 } from '../lib/intake';
 import { toc } from '../lib/toc';
 
 /**
- * `/considered` — the candidate register, published.
+ * `/considered` — the register, published.
  *
- * The register already holds every claim that reached us and what happened to
- * it; this page is that file with the shorthand swapped for sentences. The
- * declined entries are the reason it exists, so they lead, and they are set in
- * the same type as everything else: the outcome is the section heading, not a
- * badge, because a declined claim is a decision we defend rather than a state
- * to colour-code.
+ * The page is the answer to "what did you leave out". Since whole-source
+ * intake it answers it twice over: a source is read end to end, every factual
+ * claim in it is extracted and merged into a proposition, and every one of
+ * those propositions is listed here with what happened to it. So the page is
+ * organised by source, because that is the unit the promise is made about —
+ * one section per source, the whole source's claims under it, in the order a
+ * reader wants them: what is being checked, then what is waiting, then what
+ * merged into another entry, then what was turned down, then what was never a
+ * factual claim.
+ *
+ * The claims that arrived one at a time, before there were sources, keep the
+ * shape they had: outcome as a section heading, one entry to a row.
  */
 const candidates = candidateRegister();
+const sources = sourceRegister();
 
 /**
  * A story link is only offered when there is a page behind it — which a
@@ -29,16 +42,30 @@ const candidates = candidateRegister();
  */
 const published = new Set((await allPublishedStories()).map((story) => story.id));
 
-const sections = REGISTER_SECTIONS.map((section) => ({
-  ...section,
-  entries: candidates.filter((candidate) => candidate.outcome === section.outcome),
+const bySource = sources.map((source) => ({
+  source,
+  entries: candidates
+    .filter((candidate) => candidate.source === source.id)
+    .sort((a, b) => outcomeRank(a.outcome) - outcomeRank(b.outcome)),
 }));
 
-const outline = toc(
-  sections.map((section) => section.entries.length > 0 && { id: section.id, label: section.heading }),
-);
+/** Everything registered before the source was the unit, grouped by outcome. */
+const unsourced = candidates.filter((candidate) => candidate.source === undefined);
+
+const sections = REGISTER_SECTIONS.map((section) => ({
+  ...section,
+  entries: unsourced.filter((candidate) => candidate.outcome === section.outcome),
+})).filter((section) => section.entries.length > 0);
+
+const outline = toc([
+  ...bySource.map(({ source }) => ({ id: source.id, label: source.title })),
+  unsourced.length > 0 && { id: 'one-at-a-time', label: 'Registered one at a time' },
+]);
 
 const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
+
+/** Shrinks to the widest badge on a phone, a fixed column from sm up, as on /stories. */
+const outcomeColumn = 'w-px py-3 pl-4 text-right align-top whitespace-nowrap sm:w-40';
 ---
 
 <Base
@@ -53,85 +80,186 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
       Every claim we've considered
     </h1>
     <p class="mt-4 max-w-prose text-base leading-relaxed">
-      This site checks factual claims about Edmonton that circulate. Before any claim is checked, a
-      short <a href="/methodology/changes" class="link">triage (methodology v1.12)</a> asks who is
-      asking it, whether the public record can answer it, and which verdicts would surprise anyone.
-      Every claim we have considered is listed below with the outcome, whether a reader sent it, the
-      founder passed it on, or it was our own idea, and including the ones we declined, so nobody
-      has to wonder why a claim was not checked.
+      This site checks factual claims about Edmonton that circulate. When we read a source — a post
+      and every comment on it — we take out every factual claim in it, not the ones that suit us:
+      three models extract independently, a fourth merges what they found into one list, and every
+      proposition on that list is below with its outcome and the reason for it. A short
+      <a href="/methodology/changes" class="link">triage</a> is what decides the outcome, asking who
+      is asking the claim, whether the public record can answer it, and which answers would surprise
+      anyone.
     </p>
   </header>
 
   {
-    sections
-      .filter((section) => section.entries.length > 0)
-      .map((section) => (
-        <section id={section.id} class="mt-12">
-          <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">{section.heading}</h2>
+    bySource.map(({ source, entries }) => (
+      <section id={source.id} class="mt-14 scroll-mt-6">
+        <h2 class="border-t-[3px] border-ink pt-3.5 font-display text-[1.5rem] leading-[1.2] font-semibold text-pretty">
+          {source.title}
+        </h2>
 
-          <ol class="mt-5 divide-y divide-rule border-t border-rule">
-            {section.entries.map((candidate) => {
-              const reports = reportsFor(candidate);
-              return (
-              /* The register id is the anchor, so a story that was withdrawn can
-                 send a reader to the entry that says why. */
-              <li id={candidate.id} class="scroll-mt-6 py-7">
-                <article>
-                  {/* The claim in the words it reached us in. `data-record` for the
-                      same reason the meta line below carries it: one wording can be
-                      registered twice — once when it was checked, once when the story
-                      it produced was withdrawn — and that is the register's business,
-                      not this page saying the same thing twice. */}
-                  <blockquote
-                    class="max-w-prose border-l-2 border-gold pl-4 text-[1.0625rem] leading-relaxed text-pretty"
-                    data-record
-                  >
-                    {candidate.wording}
-                  </blockquote>
+        {/* Straight out of the register: what the source is, when we took it, how big it was. */}
+        <p class={`mt-2 ${label}`} data-record>
+          {sourceKind(source)}
+          {' · captured '}
+          <time datetime={source.captured}>{source.captured}</time>
+          {source.captured_by && ` by the ${source.captured_by}`}
+          {source.comments !== undefined && ` · ${source.comments} comments`}
+          {source.commenters !== undefined && ` from ${source.commenters} people`}
+        </p>
 
-                  {/* Straight out of the register: two candidates sharing a date and a
-                      provenance is the register's business, not this page repeating itself. */}
-                  <p class={`mt-3 ${label}`} data-record>
-                    <time datetime={candidate.recorded}>{candidate.recorded}</time>
-                    {' · '}
-                    <span class="normal-case tracking-normal">{provenance(candidate)}</span>
-                  </p>
+        <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+          Commenter names are replaced throughout by stable pseudonyms: one pseudonym is one person
+          within this source, so a reply still lines up with what it answers, and it means nothing
+          outside it.{' '}
+          <a href={source.url} class="link" rel="noopener nofollow">
+            The original post
+          </a>
+          .
+        </p>
 
-                  {(candidate.reason ?? candidate.note) && (
-                    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
-                      {candidate.reason ?? candidate.note}
-                    </p>
-                  )}
-
-                  {(reports.length > 0 ||
-                    (candidate.story && published.has(candidate.story))) && (
-                    <p class="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm">
-                      {/* The reports are on the site now, so the reader is sent
-                          there rather than to GitHub; the repository copy is
-                          linked at the foot of the candidate's own page. */}
-                      {reports.length > 0 && (
-                        <a href={`/considered/${candidate.id}`} class="link">
-                          {candidate.triage ? 'Read the triage' : 'Read the intake record'}
-                        </a>
+        {entries.length === 0 ? (
+          <p class="mt-4 border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed text-muted">
+            The source has been read and merged; the dispositions are not registered yet.
+          </p>
+        ) : (
+          <table class="mt-6 w-full border-collapse border-t border-rule">
+            <caption class="sr-only">Every claim taken from {source.title}</caption>
+            {/* The badge says what its column is, so the header is for screen readers only. */}
+            <thead class="sr-only">
+              <tr>
+                <th scope="col">Claim</th>
+                <th scope="col">Outcome</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-rule">
+              {entries.map((candidate) => (
+                <tr id={candidate.id} class="scroll-mt-6">
+                  <td class="py-3 pr-4 align-top">
+                    <span
+                      class:list={[
+                        'block border-l-[5px] pl-4',
+                        outcomeEdge(candidate.outcome),
+                      ]}
+                    >
+                      <a
+                        href={`/considered/${candidate.id}`}
+                        class="link font-display text-[1.0625rem] leading-snug font-semibold text-ink"
+                        data-record
+                      >
+                        {claimText(candidate)}
+                      </a>
+                      <span class={`mt-1.5 block ${label}`} data-record>
+                        {candidate.side && `${candidate.side} the argument`}
+                        {candidate.commenters !== undefined &&
+                          `${candidate.side ? ' · ' : ''}${candidate.commenters} ${
+                            candidate.commenters === 1 ? 'person' : 'people'
+                          }`}
+                      </span>
+                      {/* A withheld entry's claim line already IS its reason —
+                          the placeholder the redaction put there — so printing
+                          the reason under it would say the same sentence twice. */}
+                      {!candidate.withheld && (candidate.reason ?? candidate.note) && (
+                        <span
+                          class="mt-1.5 block max-w-prose text-[0.9375rem] leading-relaxed text-muted"
+                          data-record
+                        >
+                          {candidate.reason ?? candidate.note}
+                        </span>
                       )}
-                      {candidate.story && published.has(candidate.story) && (
-                        <a href={`/facts/${candidate.story}`} class="link">
-                          {storyLinkLabel(candidate)}
-                        </a>
-                      )}
-                    </p>
-                  )}
-                </article>
-              </li>
-              );
-            })}
-          </ol>
-        </section>
-      ))
+                    </span>
+                  </td>
+                  <td class={outcomeColumn}>
+                    <Outcome outcome={candidate.outcome} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </section>
+    ))
   }
 
   {
-    candidates.length === 0 && (
+    unsourced.length > 0 && (
+      <section id="one-at-a-time" class="mt-16 scroll-mt-6">
+        <h2 class="border-t-[3px] border-ink pt-3.5 font-display text-[1.5rem] leading-[1.2] font-semibold">
+          Registered one at a time
+        </h2>
+        <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+          Claims that reached us singly rather than inside a source we hold: a reader's suggestion,
+          a wording the founder passed on, a hypothesis of our own.
+        </p>
+
+        {sections.map((section) => (
+          <section id={section.id} class="mt-10 scroll-mt-6">
+            <h3 class="text-lg font-extrabold tracking-[-0.015em] text-forest">{section.heading}</h3>
+
+            <ol class="mt-5 divide-y divide-rule border-t border-rule">
+              {section.entries.map((candidate) => {
+                const reports = reportsFor(candidate);
+                return (
+                  /* The register id is the anchor, so a story that was withdrawn can
+                     send a reader to the entry that says why. */
+                  <li id={candidate.id} class="scroll-mt-6 py-7">
+                    <article>
+                      {/* The claim in the words it reached us in. `data-record` for the
+                          same reason the meta line below carries it: one wording can be
+                          registered twice — once when it was checked, once when the story
+                          it produced was withdrawn — and that is the register's business,
+                          not this page saying the same thing twice. */}
+                      <blockquote
+                        class="max-w-prose border-l-2 border-gold pl-4 text-[1.0625rem] leading-relaxed text-pretty"
+                        data-record
+                      >
+                        {candidate.wording}
+                      </blockquote>
+
+                      {/* Straight out of the register: two candidates sharing a date and a
+                          provenance is the register's business, not this page repeating itself. */}
+                      <p class={`mt-3 ${label}`} data-record>
+                        <time datetime={candidate.recorded}>{candidate.recorded}</time>
+                        {' · '}
+                        <span class="normal-case tracking-normal">{provenance(candidate)}</span>
+                      </p>
+
+                      {(candidate.reason ?? candidate.note) && (
+                        <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+                          {candidate.reason ?? candidate.note}
+                        </p>
+                      )}
+
+                      {(reports.length > 0 ||
+                        (candidate.story && published.has(candidate.story))) && (
+                        <p class="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm">
+                          {/* The reports are on the site now, so the reader is sent
+                              there rather than to GitHub; the repository copy is
+                              linked at the foot of the candidate's own page. */}
+                          {reports.length > 0 && (
+                            <a href={`/considered/${candidate.id}`} class="link">
+                              {candidate.triage ? 'Read the triage' : 'Read the intake record'}
+                            </a>
+                          )}
+                          {candidate.story && published.has(candidate.story) && (
+                            <a href={`/facts/${candidate.story}`} class="link">
+                              {storyLinkLabel(candidate)}
+                            </a>
+                          )}
+                        </p>
+                      )}
+                    </article>
+                  </li>
+                );
+              })}
+            </ol>
+          </section>
+        ))}
+      </section>
+    )
+  }
+
+  {
+    candidates.length === 0 && sources.length === 0 && (
       <p class="mt-8 border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed text-muted">
         Nothing has been recorded yet. The first entry lands with the first claim someone sends us.
       </p>
