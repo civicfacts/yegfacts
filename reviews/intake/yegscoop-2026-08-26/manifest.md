@@ -93,10 +93,14 @@ assistant message.
 across three propositions, which the check reports rather than counts as a
 fault: a compound claim is one the merge is required to separate.
 
-## Triage
+## Triage, per proposition (superseded)
+
+This pass ran before grouping existed and its decisions are not what the
+register carries; the story triage below replaced it. It is kept because the
+comparison between the two is the argument for grouping at all.
 
 Two seats, both from a different vendor than the editor who runs the merge.
-Same prompt, `prompts/intake-triage-batch.md` with all 99 propositions
+Same prompt, `prompts/intake-triage-batch.md` with all 112 propositions
 appended. Neither saw the other's answer.
 
     cat $WORK/triage-prompt.txt | codex exec -m gpt-5.6-sol \
@@ -114,11 +118,18 @@ stopped being compounds. That earlier pass also declined a councillor's
 recorded motions as a claim about a named individual, which is why the prompt
 now states the named-person rule narrowly.
 
-Combining rule, in `triage.md`: GO takes both readers or one GO and one PARK;
-NO takes both; everything else parks, including a straight GO against NO. A
-claim one reader would refuse does not jump the queue on the other reader's
-word, and one reader's refusal does not discard it either. This is the lean the
-verdict matrix takes (D-0011), applied to selection.
+Ruling on propositions one at a time produced a fault grouping later fixed:
+of four propositions turning on who pays for Edmonton's roads, three were
+cleared and one declined as undisputed, inside a thread that is an argument
+about exactly that. A reader seeing one proposition cannot see it is one side
+of a live dispute.
+
+Combining rule, the same at both levels and recorded in `triage.md`: GO takes
+both readers or one GO and one PARK; NO takes both; everything else parks,
+including a straight GO against NO. A claim one reader would refuse does not
+jump the queue on the other reader's word, and one reader's refusal does not
+discard it either. This is the lean the verdict matrix takes (D-0011), applied
+to selection.
 
 ## Grouping
 
@@ -163,11 +174,15 @@ the first, and matches pretty-printed JSON as well as compact.
 
     npx tsx scripts/intake-register.ts reviews/intake/yegscoop-2026-08-26
 
-110 new entries. Two propositions matched candidates already on the register,
-the 15-minute-city agreement and lanes removed citywide; their captured
-wordings were folded into those entries rather than registered a second time,
-so a claim suggested twice meets the same answer. One declined proposition
-carries a neutral id and its reason only, per the rule in the README.
+34 investigations and 112 claims. Nineteen claims carry a `variation_of` link
+to a claim the site already registered or published, which is what puts a
+commenter's own words on the page that answers them. The two candidates
+registered by hand on 2026-09-02 that the regrouping superseded keep their rows
+and their URLs, pointing at the claims that now carry them.
+
+No claim is withheld in this run: the one accusation naming a person sits in an
+investigation the readers cleared, and withholding follows a decline rather
+than a name.
 
 ## Not done in this run
 
