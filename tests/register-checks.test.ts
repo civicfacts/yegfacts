@@ -259,6 +259,25 @@ describe('registerProblems: a question carries all three state fields', () => {
     ).toEqual([]);
   });
 
+  /**
+   * A published question holding claims that carry no finding is correct, not a
+   * defect: the site answered a question, and people have gone on making claims
+   * about it that have not been checked. A claim either has a finding or it
+   * does not, which is a fact about the data rather than a state to model, so
+   * nothing here may demand one.
+   *
+   * This is the live shape of `winter-cycling` and `active-transportation`,
+   * which are published and hold Yegscoop claims nobody has checked.
+   */
+  it('accepts a published question whose claims carry no finding', () => {
+    expect(
+      grouped(
+        [claim(), otherSide()],
+        [question({ lifecycle: 'gate-complete', publication: 'published' })],
+      ),
+    ).toEqual([]);
+  });
+
   for (const triage of ['park', 'no'] as const) {
     it(`requires a public reason on ${triage}`, () => {
       expect(grouped([claim(), otherSide()], [question({ triage, reason: '  ' })])).toContain(

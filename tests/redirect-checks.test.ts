@@ -88,16 +88,30 @@ describe('redirectProblems', () => {
   });
 
   /**
-   * Redirects are served before static files, so a rule under either new
-   * namespace makes a real page unreachable with no error anywhere.
+   * Redirects are served before static files, so a rule over a page that still
+   * exists makes it unreachable with no error anywhere.
    */
   for (const from of ['/questions/cycling-volumes', '/claims/bike-lanes-look-empty']) {
-    it(`refuses to redirect ${from}, which would hide the page`, () => {
+    it(`refuses to redirect ${from}, which still exists`, () => {
       expect(redirectProblems([row({ from, to: '/search' })], world)).toContain(
-        `${from}: redirects a page inside its own namespace, which would hide it`,
+        `${from}: still exists in the register, so redirecting it would hide the page`,
       );
     });
   }
+
+  /**
+   * The opposite case, and the reason the file exists: a question merged into
+   * another leaves a published address behind, and that address has to keep
+   * resolving inside its own namespace.
+   */
+  it('allows redirecting a question id that has left the register', () => {
+    expect(
+      redirectProblems(
+        [row({ from: '/questions/bike-vs-road-spending', to: '/questions/cycling-volumes' })],
+        world,
+      ),
+    ).toEqual([]);
+  });
 
   it('allows the bare namespace paths, which are index routes and a decision', () => {
     expect(redirectProblems([row({ from: '/claims', to: '/questions' })], world)).toEqual([]);
@@ -144,6 +158,39 @@ describe('the file the site ships', () => {
   });
 
   /**
+   * The six published stories kept their slugs as question ids, so every one of
+   * these is a rename. That is what makes an old `/facts/<slug>#<claim-id>`
+   * link land on the right claim with no client-side hop: the browser carries
+   * the fragment across, and only the first path segment changes.
+   */
+  it('renames each published story’s address rather than moving it', () => {
+    for (const slug of [
+      'active-transportation',
+      'climate-targets',
+      'electric-buses',
+      'fifteen-minute-districts',
+      'infill-prices',
+      'winter-cycling',
+    ]) {
+      const rule = rows.find((redirect) => redirect.from === `/facts/${slug}`);
+      expect(rule?.to).toBe(`/questions/${slug}`);
+      expect(rule?.pending).toBeUndefined();
+    }
+  });
+
+  it('keeps the merged-away question ids resolving', () => {
+    for (const from of ['/questions/bike-vs-road-spending', '/considered/bike-vs-road-spending']) {
+      expect(rows.find((redirect) => redirect.from === from)?.to).toBe(
+        '/questions/active-transportation',
+      );
+    }
+  });
+
+  it('has nothing left pending, because every target is in the register', () => {
+    expect(rows.filter((redirect) => redirect.pending === true)).toEqual([]);
+  });
+
+  /**
    * `/considered/<id>` is derived from the register rather than listed, so a
    * question registered tomorrow keeps its old-style address with no edit here.
    * Listing one by hand would be the start of the two drifting apart.
@@ -161,6 +208,8 @@ describe('the file the site ships', () => {
       'rice-50m-motions-and-review',
       'lanes-removed-citywide',
       'fifteen-minute-city-agreement',
+      'infill-teardown-350k-1m',
+      'bike-vs-road-spending',
     ]);
   });
 });

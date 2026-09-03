@@ -19,7 +19,8 @@
 #   pending  true while the target route does not exist yet. The validator
 #            requires a non-pending target to resolve in the register, and
 #            requires a pending one NOT to — so the flag cannot be left on
-#            after the route lands.
+#            after the route lands. Nothing here is pending: every target is
+#            in the register.
 #
 # Fragments
 # ---------
@@ -96,10 +97,10 @@ redirects:
     to: /questions/hundred-million-approval
     why: "The $100 million figure is checked under the question about the approval."
   - from: /considered/bike-100m-one-percent-of-roads
-    to: /questions/bike-vs-road-spending
+    to: /questions/active-transportation
     why: "The share-of-the-roads-budget comparison is a claim under that question."
   - from: /considered/fifty-street-181m-600m
-    to: /questions/bike-vs-road-spending
+    to: /questions/active-transportation
     why: "The 50 Street comparison is a second claim under the same question."
   - from: /considered/rice-50m-motions-and-review
     to: /questions/council-pause-vote
@@ -110,41 +111,47 @@ redirects:
   - from: /considered/fifteen-minute-city-agreement
     to: /claims/15-minute-city-agreement
     why: "Registered on its own, then merged into the claim grouped from the source."
+  - from: /considered/infill-teardown-350k-1m
+    to: /questions/infill-prices
+    why: "The row the withdrawn story was registered under; the story is that question now."
+
+  # ---------------------------------------------------------------------------
+  # Questions merged into other questions
+  #
+  # One question asked twice, once by us and once by a thread. The id that lost
+  # is a published address and keeps resolving.
+  # ---------------------------------------------------------------------------
+  - from: /considered/bike-vs-road-spending
+    to: /questions/active-transportation
+    why: "The money-for-bike-lanes question is what the active-transportation story answers."
+  - from: /questions/bike-vs-road-spending
+    to: /questions/active-transportation
+    why: "The money-for-bike-lanes question is what the active-transportation story answers."
 
   # ---------------------------------------------------------------------------
   # The six published stories
   #
-  # Each becomes a question keeping the slug it was published under, so the
-  # move is one hop and an old claim anchor rides along with it. Pending until
-  # those questions are in the register.
+  # Each is a question under the slug it was published with, so every one of
+  # these is a rename rather than a move. A fragment never reaches the server
+  # and the browser re-applies it to the target, so an old
+  # /facts/electric-buses#ebus-82m-loss link arrives with its claim anchor
+  # intact and needs no client-side hop.
   # ---------------------------------------------------------------------------
   - from: /facts/active-transportation
     to: /questions/active-transportation
-    why: "The published story becomes the question it always answered."
-    pending: true
+    why: "The published story is the question it answered, at the slug it was published under."
   - from: /facts/climate-targets
     to: /questions/climate-targets
-    why: "The published story becomes the question it always answered."
-    pending: true
+    why: "The published story is the question it answered, at the slug it was published under."
   - from: /facts/electric-buses
     to: /questions/electric-buses
-    why: "The published story becomes the question it always answered."
-    pending: true
+    why: "The published story is the question it answered, at the slug it was published under."
   - from: /facts/fifteen-minute-districts
     to: /questions/fifteen-minute-districts
-    why: "The published story becomes the question it always answered."
-    pending: true
+    why: "The published story is the question it answered, at the slug it was published under."
   - from: /facts/infill-prices
     to: /questions/infill-prices
-    why: "The published story becomes the question it always answered."
-    pending: true
-  # The one story whose slug is already taken: `winter-cycling` is the Yegscoop
-  # question "Can people cycle through an Edmonton winter, and do they?", which
-  # is a different question from the published story's, and ids are permanent.
-  # Sending the old address to that question would answer a reader with the
-  # wrong page, so until the story's question has an id of its own this lands on
-  # the register. Whoever gives it one repoints this line; the id is a decision
-  # about a permanent address and is not made here.
+    why: "The withdrawn story keeps its address; the tombstone is the question's page."
   - from: /facts/winter-cycling
-    to: /questions
-    why: "Its slug already names a different question, so the address waits on the register."
+    to: /questions/winter-cycling
+    why: "The published story and the Yegscoop question are one question, under this slug."

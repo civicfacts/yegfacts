@@ -117,15 +117,16 @@ questions:
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "Can people cycle through an Edmonton winter, and do they?"
-    lifecycle: registered
+    lifecycle: gate-complete
     triage: go
-    publication: unpublished
+    publication: published
     reason: "Monthly counter totals and weather records can show how many people ride through winter, under what conditions and whether winter cycling has grown."
     grouping_note: "Winter counter data and the weather record answer both directions."
     accounts:
       total: 16
       for: 4
       against: 12
+    story: winter-cycling
     run: reviews/intake/yegscoop-2026-08-26
   - id: snow-clearing
     recorded: "2026-09-03"
@@ -170,19 +171,20 @@ questions:
       against: 1
       neither: 1
     run: reviews/intake/yegscoop-2026-08-26
-  - id: bike-vs-road-spending
+  - id: active-transportation
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
     question: "How does the money for bike lanes compare with what Edmonton spends on roads?"
-    lifecycle: registered
+    lifecycle: gate-complete
     triage: go
-    publication: unpublished
+    publication: published
     reason: "Capital budgets and project cost sheets can put the active-transportation allocation beside road spending and test each percentage and project comparison on the same basis."
     grouping_note: "The four-year capital budget and the project cost sheets for road jobs like 50 Street settle the phasing, the share and every comparison drawn from them."
     accounts:
       total: 5
       for: 4
       against: 1
+    story: active-transportation
     run: reviews/intake/yegscoop-2026-08-26
   - id: hundred-million-approval
     recorded: "2026-09-03"
@@ -546,17 +548,38 @@ questions:
       total: 1
       against: 1
     run: reviews/intake/yegscoop-2026-08-26
-  - id: infill-teardown-350k-1m
+  - id: climate-targets
+    recorded: "2026-09-03"
+    question: "Is Edmonton on track to meet its climate targets?"
+    lifecycle: gate-complete
+    triage: go
+    publication: published
+    story: climate-targets
+  - id: electric-buses
+    recorded: "2026-09-03"
+    question: "Did Edmonton's electric buses fail, what did that cost, and does it show electric buses do not work in cold cities?"
+    lifecycle: gate-complete
+    triage: go
+    publication: published
+    story: electric-buses
+  - id: fifteen-minute-districts
+    recorded: "2026-09-03"
+    question: "Do Edmonton's district plans restrict, or create a mechanism to restrict, where residents can travel within the city?"
+    lifecycle: gate-complete
+    triage: go
+    publication: published
+    story: fifteen-minute-districts
+  - id: infill-prices
     recorded: "2026-09-01"
     question: "What happens to the price of an Edmonton house when it is torn down and replaced?"
     lifecycle: gate-complete
     triage: go
     publication: withdrawn
+    reason: "Checked before triage existed, three runs, both claims Not established. A triage read then parked both: the price gap needs a decade-scale lot-by-lot linkage the run did not build, and no public record says what the housing that replaced particular demolished homes costs. The story is no longer a finding until one of those exists."
     registered_as: "AFFORDABLE!?! Have you looked at the prices of these houses?! A $350,000 house is torn down and a $1,000,000 house goes up in its place!!"
     origin: supplied
     supplied_by: "founder"
     context: "an Edmonton social-media thread on infill; platform, author and URL not captured; may be a composite paraphrase"
-    reason: "Checked before triage existed, three runs, both claims Not established. A triage read then parked both: the price gap needs a decade-scale lot-by-lot linkage the run did not build, and no public record says what the housing that replaced particular demolished homes costs. The story is no longer a finding until one of those exists."
     story: infill-prices
     triage_report: intake/candidates/infill-teardown-350k-1m/triage.md
     intake: intake/candidates/infill-teardown-350k-1m/intake.md
@@ -1346,7 +1369,7 @@ claims:
     recorded: "2026-09-03"
     origin: captured
     source: yegscoop-2026-08-26
-    question: bike-vs-road-spending
+    question: active-transportation
     proposition: "The $100 million is around 1 percent of Edmonton's capital budget for roads, with 99 percent going to roads for cars."
     wording: "we currently spend 99% of our road budget on roads for cars so spending is on track"
     side: for
@@ -1377,7 +1400,7 @@ claims:
     recorded: "2026-09-03"
     origin: captured
     source: yegscoop-2026-08-26
-    question: bike-vs-road-spending
+    question: active-transportation
     proposition: "The $100 million for active transportation is spread over a four-year budget cycle."
     wording: "It's 100 million over 4 years"
     side: for
@@ -1402,7 +1425,7 @@ claims:
     recorded: "2026-09-03"
     origin: captured
     source: yegscoop-2026-08-26
-    question: bike-vs-road-spending
+    question: active-transportation
     proposition: "The City is spending $181 million to grade separate 600 metres of 50 Street."
     wording: "We spend $181 million on grade separating 600m of 50th Street."
     side: for
@@ -1419,7 +1442,7 @@ claims:
     recorded: "2026-09-03"
     origin: captured
     source: yegscoop-2026-08-26
-    question: bike-vs-road-spending
+    question: active-transportation
     proposition: "That 600 metres of 50 Street costs nearly double the entire four-year active transportation investment."
     wording: "That's nearly double the cost for 600m of road compared to the entire 4 year investment in active transportation"
     side: for
@@ -1434,7 +1457,7 @@ claims:
     recorded: "2026-09-03"
     origin: captured
     source: yegscoop-2026-08-26
-    question: bike-vs-road-spending
+    question: active-transportation
     proposition: "Edmonton spends billions on road building, including the Yellowhead."
     wording: "the billions for road building."
     side: for
@@ -1452,7 +1475,7 @@ claims:
     recorded: "2026-09-03"
     origin: captured
     source: yegscoop-2026-08-26
-    question: bike-vs-road-spending
+    question: active-transportation
     proposition: "The City's $100 million for the active transportation network is close to proportional to the number of cyclists."
     wording: "the City's 100M for the active transportation network is close to proportional to cyclist numbers"
     side: for
@@ -1467,7 +1490,7 @@ claims:
     recorded: "2026-09-03"
     origin: captured
     source: yegscoop-2026-08-26
-    question: bike-vs-road-spending
+    question: active-transportation
     proposition: "Maintaining Edmonton's bike lanes costs about three quarters of a million dollars a year."
     wording: "it costs around three quarters of a million to maintain them every year"
     side: against

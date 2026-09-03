@@ -368,8 +368,15 @@ const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-
                           provenance is the register's business, not this page repeating itself. */}
                       <p class={`mt-3 ${label}`} data-record>
                         <time datetime={question.recorded}>{question.recorded}</time>
-                        {' · '}
-                        <span class="normal-case tracking-normal">{provenance(question)}</span>
+                        {/* A question that came out of a published story has no
+                            wording provenance: nobody passed it to us, we asked
+                            it. */}
+                        {question.origin && (
+                          <>
+                            {' · '}
+                            <span class="normal-case tracking-normal">{provenance(question)}</span>
+                          </>
+                        )}
                       </p>
 
                       {(question.reason ?? question.note) && (

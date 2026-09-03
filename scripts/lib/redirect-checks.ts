@@ -62,12 +62,19 @@ export function redirectProblems(rows: RedirectRow[], world: RedirectWorld): str
 
     if (row.from === row.to) fail(`${where}: redirects to itself`);
 
-    // Redirects are served before static files, so a rule under either new
-    // namespace makes a real page unreachable with no error anywhere. The bare
-    // `/questions` and `/claims` are allowed: those are index routes, and
-    // whether either exists is a decision, not an accident.
-    if (/^\/(questions|claims)\//.test(row.from)) {
-      fail(`${where}: redirects a page inside its own namespace, which would hide it`);
+    // Redirects are served before static files, so a rule over a page that
+    // still exists makes it unreachable with no error anywhere. An id that has
+    // left the register is the opposite case and the reason this file exists:
+    // `/questions/bike-vs-road-spending` is a real published address whose
+    // question was merged into another, and it has to keep resolving. The bare
+    // `/questions` and `/claims` are index routes, and whether either exists is
+    // a decision rather than an accident.
+    const inside = /^\/(questions|claims)\/([^/#?]+)$/.exec(row.from);
+    if (inside !== null) {
+      const known = inside[1] === 'questions' ? world.questionIds : world.claimIds;
+      if (known.has(inside[2]!)) {
+        fail(`${where}: still exists in the register, so redirecting it would hide the page`);
+      }
     }
   }
 

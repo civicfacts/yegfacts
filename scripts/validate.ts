@@ -793,7 +793,9 @@ function checkRegister(): void {
   for (const problem of registerProblems(register, registerWorld)) fail(file, problem);
 
   checkWithdrawals(file, (register.questions ?? []) as Record_[]);
-  checkRegisterClaims((register.claims ?? []) as Record_[]);
+  const questions = (register.questions ?? []) as Record_[];
+  checkRegisterClaims((register.claims ?? []) as Record_[], questions);
+  checkStoryQuestions(questions);
   checkRedirects(register);
 }
 
@@ -849,19 +851,68 @@ function checkRedirects(register: Register): void {
 }
 
 /**
- * A published claim's `register_claims` name register claims that exist.
+ * A published claim's `register_claims` name register claims that exist, and no
+ * register id collides with a published claim's.
  *
- * That is what puts a commenter's own words on the page that answers them
+ * The first is what puts a commenter's own words on the page that answers them
  * ("Also said as"), so a dangling id is captured wordings silently missing from
- * a published page rather than a visible error.
+ * a published page rather than a visible error. The second is the URL
+ * namespace: `/questions/<id>` and `/claims/<id>` are served from question ids,
+ * register claim ids and published claim ids alike, and two of them sharing one
+ * is two pages fighting over an address.
  */
-function checkRegisterClaims(registered: Record_[]): void {
+function checkRegisterClaims(registered: Record_[], questions: Record_[]): void {
+  const file = repoPath('intake', 'register.yaml');
   const ids = new Set(
     registered.map((claim) => claim.id).filter((id): id is string => typeof id === 'string'),
   );
-  for (const { file, data } of claims) {
+  const published = new Set(
+    claims.map(({ data }) => data.id).filter((id): id is string => typeof id === 'string'),
+  );
+
+  for (const { file: claimFile, data } of claims) {
     for (const id of stringArray(data.register_claims)) {
-      if (!ids.has(id)) fail(file, `register_claims: "${id}" is not a claim in the register`);
+      if (!ids.has(id)) fail(claimFile, `register_claims: "${id}" is not a claim in the register`);
+    }
+  }
+
+  for (const row of [...questions, ...registered]) {
+    const id = typeof row.id === 'string' ? row.id : '';
+    // A question taking its story's slug is the point of D-0029, and a story
+    // slug is never a claim id, so this only fires on a real collision.
+    if (id !== '' && published.has(id) && row.story !== id) {
+      fail(file, `id "${id}" is also a published claim, and they share a URL namespace`);
+    }
+  }
+}
+
+/**
+ * Every published story is a question in the register, under its own slug.
+ *
+ * The six published stories became questions keeping their slugs (D-0029), so
+ * `/facts/<slug>` is a rename to `/questions/<slug>` rather than a move, and a
+ * published claim reaches its question through the `story` it already names. A
+ * story with no question is a published finding with no registered question
+ * behind it, which is the state the register exists to make impossible.
+ *
+ * A published question may hold claims with no finding, and that is not
+ * checked, because it is not a defect: it means the site answered a question
+ * and people have gone on making claims about it that have not been checked
+ * yet. A claim either has a finding or it does not.
+ */
+function checkStoryQuestions(questions: Record_[]): void {
+  const byId = new Map(
+    questions
+      .filter((question) => typeof question.id === 'string')
+      .map((question) => [question.id as string, question]),
+  );
+  const file = repoPath('intake', 'register.yaml');
+  for (const story of stories) {
+    const question = byId.get(story.slug);
+    if (question === undefined) {
+      fail(file, `story "${story.slug}" has no question; a published story is a question`);
+    } else if (question.story !== story.slug) {
+      fail(file, `question ${story.slug}: must name the story it carries (story: ${story.slug})`);
     }
   }
 }
