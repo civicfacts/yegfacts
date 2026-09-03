@@ -56,6 +56,16 @@ export interface Question {
   recorded: string;
   /** The question, as the brief asks it. */
   question: string;
+  /**
+   * Every topic the question is filed under, broad and narrow alike, and empty
+   * for a question no topic honestly covers.
+   *
+   * The register carries them because the register carries every question, and
+   * a topic that only appeared once an article did would file six questions of
+   * forty-four. Where a question has an article, the two lists are the same set
+   * and `scripts/validate.ts` fails the build if they drift.
+   */
+  topics: readonly string[];
   lifecycle: string;
   triage: string;
   publication: string;
@@ -327,6 +337,7 @@ function toQuestion(entry: Record<string, unknown>): Question {
     id: text(entry.id),
     recorded: text(entry.recorded),
     question: text(entry.question),
+    topics: strings(entry.topics),
     lifecycle: text(entry.lifecycle),
     triage: text(entry.triage),
     publication: text(entry.publication),

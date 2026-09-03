@@ -172,6 +172,15 @@ const claims = loadYamlDocs(repoPath('src', 'content', 'claims'));
 const commitments = loadYamlDocs(repoPath('src', 'content', 'commitments'));
 const evidence = loadYamlDocs(repoPath('evidence', 'registry'));
 
+/**
+ * The slugs that actually have a hub page, read off the files rather than off
+ * the vocabulary: a topic named by a question with no file behind it is a link
+ * to a page the build never makes.
+ */
+const topicFileSlugs = new Set(
+  topics.map(({ data }) => data.slug).filter((slug): slug is string => typeof slug === 'string'),
+);
+
 /** Topic vocabulary: one file per slug, no extras, no duplicates. */
 function checkTopicFiles(): void {
   const defined = new Set<string>();
@@ -796,6 +805,7 @@ function checkRegister(): void {
   checkWithdrawals(file, (register.questions ?? []) as Record_[]);
   const questions = (register.questions ?? []) as Record_[];
   checkRegisterClaims((register.claims ?? []) as Record_[], questions);
+  checkQuestionTopics(questions);
   checkStoryQuestions(questions);
   checkRedirects(register);
 }
@@ -938,8 +948,60 @@ function checkStoryQuestions(questions: Record_[]): void {
     const question = byId.get(story.slug);
     if (question === undefined) {
       fail(file, `story "${story.slug}" has no question; a published story is a question`);
-    } else if (question.story !== story.slug) {
+      continue;
+    }
+    if (question.story !== story.slug) {
       fail(file, `question ${story.slug}: must name the story it carries (story: ${story.slug})`);
+    }
+    // The register is where a question is filed under its topics, and the
+    // article repeats them for its own tags and for the claim-level subset
+    // rule. Two files stating one fact drift, and a drifted pair would put a
+    // question on a hub whose article denies it belongs there, so they have to
+    // be the same set. Order is display, and is not compared.
+    const registered = stringArray(question.topics);
+    const written = stringArray(story.data.topics);
+    const missing = registered.filter((topic) => !written.includes(topic));
+    const extra = written.filter((topic) => !registered.includes(topic));
+    for (const topic of missing) {
+      fail(story.file, `topics: "${topic}" is on register question ${story.slug} but not here`);
+    }
+    for (const topic of extra) {
+      fail(file, `question ${story.slug}: topics must include "${topic}", which the story carries`);
+    }
+  }
+}
+
+/**
+ * Every topic a question is filed under has a hub page to land on.
+ *
+ * The register files all forty-four questions, not just the written-up ones,
+ * so a typo here is a topic filter that silently drops a question or a link to
+ * a page that does not exist. A question no topic honestly covers carries the
+ * field not at all; an empty list is the shape that means "we forgot".
+ */
+function checkQuestionTopics(questions: Record_[]): void {
+  const file = repoPath('intake', 'register.yaml');
+  for (const question of questions) {
+    const where = typeof question.id === 'string' ? `question ${question.id}` : 'question';
+    if (question.topics === undefined) continue;
+    if (!Array.isArray(question.topics)) {
+      fail(file, `${where}: topics must be a list of topic slugs`);
+      continue;
+    }
+    if (question.topics.length === 0) {
+      fail(file, `${where}: topics is empty; leave the field off where no topic applies`);
+    }
+    const seen = new Set<string>();
+    for (const topic of question.topics) {
+      if (typeof topic !== 'string' || topic.trim() === '') {
+        fail(file, `${where}: topics has an entry that is not a topic slug`);
+        continue;
+      }
+      if (seen.has(topic)) fail(file, `${where}: topic "${topic}" is listed twice`);
+      seen.add(topic);
+      if (!topicFileSlugs.has(topic)) {
+        fail(file, `${where}: topic "${topic}" has no file in src/content/topics/`);
+      }
     }
   }
 }

@@ -50,9 +50,13 @@ export interface QuestionRow {
    */
   registered: RegisterClaim[];
   /**
-   * The topics the question is filed under. They come off the article, because
-   * the register does not carry topics: an unregistered-for-topics question has
-   * none, and a topic page lists what it can honestly say is under it.
+   * The topics the question is filed under, straight off the register.
+   *
+   * They used to come off the article, which meant a topic page listed the six
+   * questions that had been written up and none of the thirty-eight that had
+   * not. The register carries every question, so it is where the filing
+   * belongs; a published question's article repeats the same set, and the
+   * validator fails the build if the two disagree.
    */
   topics: readonly string[];
   /** How many captured comments carried it, added up over every claim under it. */
@@ -104,7 +108,7 @@ export async function questionRows(): Promise<QuestionRow[]> {
         story,
         answered,
         registered,
-        topics: story?.data.topics ?? [],
+        topics: question.topics,
         comments: commentsOnQuestion(question.id),
         claimCount: answered.length + registered.length,
         twoSided: sides.has('for') && sides.has('against'),
