@@ -98,6 +98,51 @@ for (const [composite, where] of accounted) {
 }
 
 // ---------------------------------------------------------------------------
+// Every form quotes the comment it cites
+// ---------------------------------------------------------------------------
+//
+// Counting is not enough: a proposition is only usable if the words attributed
+// to a commenter are the words in the capture, under the index given. Seats
+// reword lightly (a dropped sentence stitched without an ellipsis, a corrected
+// typo) and one seat invented comment numbers outright, so both are checked.
+// Curly quotes and runs of whitespace are normalised away; nothing else is.
+
+const captureFile = path.join(REPO_ROOT, 'intake/captures', path.basename(dir), 'comments.jsonl');
+if (existsSync(captureFile)) {
+  type Comment = { index: number; text: string };
+  const comments = new Map<number, string>();
+  for (const line of readFileSync(captureFile, 'utf8').split('\n')) {
+    if (!line.trim()) continue;
+    const row = JSON.parse(line) as Comment;
+    comments.set(row.index, row.text);
+  }
+  const normalise = (s: string) =>
+    s.replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, ' ').trim().toLowerCase();
+  const normalised = new Map([...comments].map(([index, text]) => [index, normalise(text)]));
+
+  let quotesChecked = 0;
+  for (const proposition of merged.propositions) {
+    for (const form of proposition.forms ?? []) {
+      quotesChecked += 1;
+      const quote = normalise(form.quote ?? '');
+      const cited = normalised.get(form.index);
+      if (cited !== undefined && cited.includes(quote)) continue;
+      // Where the real words are, if they are anywhere: usually the seat cited
+      // the wrong comment rather than made the quote up.
+      const found = quote ? [...normalised].filter(([, text]) => text.includes(quote)).map(([index]) => index) : [];
+      const where =
+        cited === undefined
+          ? `comment ${form.index} does not exist`
+          : found.length > 0
+            ? `not in comment ${form.index}; these words are in ${found.join(', ')}`
+            : `not in comment ${form.index}, and nowhere in the capture`;
+      problems.push(`quote  ${proposition.id} — ${where}: "${(form.quote ?? '').slice(0, 60)}"`);
+    }
+  }
+  console.log(`intake-coverage: checked ${quotesChecked} quotes against ${comments.size} captured comments\n`);
+}
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 
