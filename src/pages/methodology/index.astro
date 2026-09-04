@@ -335,16 +335,18 @@ const sections = toc([
       so a nested one would close the strip early and the shared rationale would
       come back as an in-page failure.
     */}
-    <details class="mt-8 border-y border-rule open:pb-6" data-pagefind-ignore>
-      <summary class="flex min-h-12 cursor-pointer list-none items-baseline justify-between gap-3 py-2">
-        <h3 class="font-semibold tracking-[-0.012em] text-forest">The whole table</h3>
-        <span class="disclosure-state shrink-0 text-sm text-muted"></span>
+    <h3 class="mt-8 font-semibold tracking-[-0.012em] text-forest">The whole table</h3>
+    <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+      Three reviewers, four words, twenty possible panels. Every one is written out in
+      the script that computes the finding, and this is that script's table, not a copy
+      of it. Read down the left for what the three said, across for what is published.
+    </p>
+    {/* The heading stays outside the disclosure: a heading inside a summary is not reliably announced as one. */}
+    <details class="mt-4 border-y border-rule open:pb-6" data-pagefind-ignore>
+      <summary class="flex min-h-12 cursor-pointer list-none items-baseline justify-between gap-3 py-2 text-sm">
+        <span class="font-semibold">The twenty panels, from the script</span>
+        <span class="disclosure-state shrink-0 text-muted"></span>
       </summary>
-      <p class="mt-1 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
-        Three reviewers, four words, twenty possible panels. Every one is written out in
-        the script that computes the finding, and this is that script's table, not a copy
-        of it. Read down the left for what the three said, across for what is published.
-      </p>
 
       {
         matrixGroups.map((group) => (
