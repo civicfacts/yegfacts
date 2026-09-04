@@ -14,6 +14,7 @@ scope by construction — and reports findings by class with `file:line`.
 |---|---|---|
 | SECRETS | fail | Private key blocks; API-key, token and credential-assignment formats |
 | PRIVATE-EVIDENCE LEAK | fail | Tracked paths under `evidence/private/` or `evidence/staging/`; any registry entry marked `visibility: private` whose archive is tracked |
+| WITHHELD LEAK | fail | The proposition, wording or descriptive slug of a claim declined with `ground: right-of-reply`, anywhere in the tracked tree; and any such claim with no entry in `intake/withheld-fingerprints.yaml` |
 | RIGHTS | fail | A file in `evidence/files/` with no registry entry saying `rights.redistribution: allowed` |
 | LOCAL PATHS | fail | Absolute home-directory paths from a contributor's machine |
 | PII | warn | Email addresses outside the site's own domain, phone numbers, postal codes, street addresses |
@@ -28,9 +29,21 @@ Warn classes need judgement a regex cannot supply. A councillor's name in a
 never auto-blocked, and are dispositioned in the audit record. `--strict` fails
 on warns too, for use during a full-tree audit.
 
+WITHHELD LEAK is the one class whose targets are not in this repository. A
+right-of-reply decline keeps its row, outcome and reason on the register under a
+neutral id and withholds everything else, so the words it is looking for cannot
+be committed here — a check that published them would be the leak. It matches on
+salted digests instead, listed in `intake/withheld-fingerprints.yaml` with the
+generator that produces them. Findings print the location and never the match,
+and any path the file exempts is named on every run so an exemption cannot pass
+in silence.
+
 **Known limits.** The scan skips binary files, and the pattern classes skip
 `scripts/exposure-audit.ts`, which necessarily contains the patterns it hunts
-for. It finds formats, not meaning — hence layers 2 and 3.
+for. It finds formats, not meaning — hence layers 2 and 3. WITHHELD LEAK covers
+the tracked tree at HEAD and says nothing about git history: text that was
+committed and later redacted is still in the history, and taking it out of there
+is a separate decision.
 
 ## 2. Per-run release check — every story
 

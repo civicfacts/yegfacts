@@ -1,0 +1,59 @@
+# Fingerprints of the text a right-of-reply decline withholds.
+#
+# When triage declines a claim because it accuses a named person and this site
+# has no way to put the accusation to them and print their answer, the register
+# keeps the row, the outcome and the reason under a neutral id, and nothing
+# else. The proposition, the commenter's wording and any descriptive slug a run
+# artifact gave the claim stay in the private board record.
+#
+# The repository is public, so keeping them off the register is not enough:
+# every tracked file is published. This file is how `scripts/exposure-audit.ts`
+# checks the tracked tree for text it has never been told — salted SHA-256
+# digests of the normalised words, never the words. Anyone already holding the
+# plain text can confirm a digest matches it; a reader of this file cannot read
+# the text back out of it. The salt is committed, so this is protection against
+# a passer-by reading an accusation, not against an attacker who already has a
+# candidate string. That is the threat that matters here.
+#
+# Normalisation before hashing: lower-cased, every run of characters that is not
+# a letter or a digit collapsed to one space, trimmed. A hyphenated slug and the
+# same words in a sentence therefore fingerprint identically. `tokens` is the
+# window width in words, `chars` its normalised length — the audit uses `chars`
+# to skip hashing windows that cannot match.
+#
+# Adding an entry: the audit fails if a register claim carrying
+# `ground: right-of-reply` has no entry here, so a future withheld claim cannot
+# slip past the check by omission. Generate the digests with
+#
+#   npm run withheld:fingerprint      # one plain string per line on stdin
+#
+# piping the strings from the board record, and paste the block in. Do not put
+# the plain strings in a file in this repository, even briefly.
+
+salt: yegfacts-withheld-v1
+
+entries:
+  - id: withheld-yegscoop-2026-08-26-1
+    # Three strings: the descriptive slug the intake run gave this claim before
+    # the register entry was cleaned, the proposition drafted from the comment,
+    # and the commenter's own sentence. All three were published in the run
+    # artifacts and were redacted out of them on 2026-09-03; see
+    # `methodology/audits/exposure/2026-09-03.md`.
+    fingerprints:
+      - tokens: 4
+        chars: 31
+        sha256: 10daa39ea4b7b162c79dab41bb8f4b38490fa28640376d777df942d4fcb79eab
+      - tokens: 9
+        chars: 58
+        sha256: 231c999d0f281d45e60a0202ba59097820b8aa8423d1270ea29254c79230de86
+      - tokens: 21
+        chars: 104
+        sha256: 734f0b101d2292c1e612c8963b7cd58d11d560e6eb29ab08c3d6ae49389831e4
+    allow:
+      - path: intake/captures/yegscoop-2026-08-26/comments.jsonl
+        reason: >-
+          The capture is held verbatim under D-0026, so the commenter's sentence
+          is still in it at index 362. Whether that stands is a separate
+          decision from the run-artifact redaction, and this exemption is here
+          so the audit states it out loud on every run rather than passing in
+          silence.
