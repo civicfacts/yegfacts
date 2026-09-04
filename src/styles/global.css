@@ -114,7 +114,13 @@
       background-color 0.15s ease,
       border-color 0.15s ease,
       text-decoration-color 0.15s ease,
+      text-decoration-thickness 0.15s ease,
       opacity 0.15s ease;
+  }
+
+  /* The compact search link thickens its glyph on hover; that settles too. */
+  .masthead a svg {
+    transition: stroke-width 0.15s ease;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -128,6 +134,10 @@
     .chip,
     button,
     [data-toc-link] {
+      transition: none;
+    }
+
+    .masthead a svg {
       transition: none;
     }
   }
