@@ -1,9 +1,11 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Finding from '../../components/Finding.astro';
 import { PANEL_AGREEMENT_GLOSS } from '../../lib/findings';
 import { SITE, repoPath } from '../../lib/site';
 import { PANEL_AGREEMENT_LEVELS } from '../../lib/vocabulary';
 import { toc } from '../../lib/toc';
+import { SYNTHESIS_MATRIX } from '../../../scripts/synthesis-matrix.ts';
 
 /**
  * Stage zero, and the reason the seven stages below can be trusted at all: the
@@ -85,6 +87,25 @@ const stages = [
 const agreements = PANEL_AGREEMENT_LEVELS.map((level) => ({
   word: level,
   body: PANEL_AGREEMENT_GLOSS[level],
+}));
+
+/**
+ * Panel agreement is outlined, never filled. A finding is a filled badge; these
+ * three words describe the panel rather than the record, and a filled tile
+ * beside a filled badge would invite a reader to take the two vocabularies for
+ * one (the idiom is set out in `StateBadge.astro`).
+ */
+const agreementTile =
+  'inline-block border border-ink px-[10px] py-[6px] font-sans text-[0.75rem] leading-[1.2] font-bold tracking-[0.08em] uppercase whitespace-nowrap';
+
+/**
+ * The twenty rows of the published matrix, grouped by agreement in the order a
+ * reader met the three words above. Derived from the script that computes every
+ * finding on the site, so the page cannot drift from the rule it describes.
+ */
+const matrixGroups = PANEL_AGREEMENT_LEVELS.map((level) => ({
+  word: level,
+  rows: SYNTHESIS_MATRIX.filter((row) => row.agreement === level),
 }));
 
 const findings = [
@@ -250,8 +271,10 @@ const sections = toc([
     <dl class="mt-6 divide-y divide-rule border-t border-rule">
       {
         findings.map((finding) => (
-          <div class="grid gap-x-6 gap-y-1 py-4 sm:grid-cols-[11rem_1fr]">
-            <dt class="font-semibold text-forest">{finding.word}</dt>
+          <div class="grid gap-x-6 gap-y-1.5 py-4 sm:grid-cols-[14rem_1fr]">
+            <dt>
+              <Finding finding={finding.word} size="lg" />
+            </dt>
             <dd class="text-[0.9375rem] leading-relaxed">{finding.body}</dd>
           </div>
         ))
@@ -278,8 +301,10 @@ const sections = toc([
     <dl class="mt-6 divide-y divide-rule border-t border-rule">
       {
         agreements.map((agreement) => (
-          <div class="grid gap-x-6 gap-y-1 py-4 sm:grid-cols-[11rem_1fr]">
-            <dt class="font-semibold text-forest">{agreement.word}</dt>
+          <div class="grid gap-x-6 gap-y-1.5 py-4 sm:grid-cols-[11rem_1fr]">
+            <dt>
+              <span class={agreementTile}>{agreement.word}</span>
+            </dt>
             <dd class="text-[0.9375rem] leading-relaxed">{agreement.body}</dd>
           </div>
         ))
@@ -300,6 +325,56 @@ const sections = toc([
       of the three said, so a reader who thinks the lone qualifier was wrong can see precisely that
       and weigh it — without the site publishing a stronger claim than every reviewer accepted.
     </p>
+
+    {/*
+      Twenty rows of badge words would drown the search index and two rows share
+      a rationale word for word, so the whole table is ignored. Nothing inside
+      this wrapper may be a `div`: the duplication audit strips a
+      `data-pagefind-ignore` element with a non-greedy same-tag regex, so a
+      nested `div` closes the strip at the first row and the shared rationale
+      comes back as an in-page failure.
+    */}
+    <div data-pagefind-ignore>
+      <h3 class="mt-8 font-semibold tracking-[-0.012em] text-forest">The whole table</h3>
+      <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+        Three reviewers, four words, twenty possible panels. Every one is written out in
+        the script that computes the finding, and this is that script's table, not a copy
+        of it. Read down the left for what the three said, across for what is published.
+      </p>
+
+      {
+        matrixGroups.map((group) => (
+          <>
+            <p class="mt-6 flex flex-wrap items-center gap-3">
+              <span class={agreementTile}>{group.word}</span>
+              <span class="text-[0.6875rem] font-semibold tracking-[0.11em] text-muted uppercase">
+                {group.rows.length} panels
+              </span>
+            </p>
+            <ul class="mt-3 divide-y divide-rule border-t border-rule">
+              {group.rows.map((row) => (
+                <li class="py-3">
+                  <span class="grid gap-x-4 gap-y-1.5 sm:grid-cols-[28rem_1.25rem_1fr] sm:items-center">
+                    <span class="flex flex-wrap gap-1">
+                      {row.verdicts.map((v) => (
+                        <Finding finding={v} size="sm" />
+                      ))}
+                    </span>
+                    <span class="inline-block w-fit rotate-90 text-muted sm:rotate-0" aria-hidden="true">
+                      →
+                    </span>
+                    <span>
+                      <Finding finding={row.finding} size="md" />
+                    </span>
+                  </span>
+                  <p class="mt-1.5 text-[0.8125rem] leading-snug text-muted">{row.rationale}</p>
+                </li>
+              ))}
+            </ul>
+          </>
+        ))
+      }
+    </div>
   </section>
 
   <section id="questions" class="mt-14">

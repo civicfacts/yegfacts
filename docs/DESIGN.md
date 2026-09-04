@@ -563,9 +563,11 @@ navy survives on that ground; colophon links are running text, so they are
 underlined, in paper.
 
 Hierarchy still comes from type rather than decoration: a section heading is a
-heading, with the space above it as the break and no rule over it on any page,
-and the 11px uppercase label is reserved for metadata — dates, "Limitations",
-the sub-labels inside a claim.
+heading, with the space above it as the break; the 3px ink rules that once sat
+over the home page's section heads are gone, and the one hairline that still
+precedes a heading (above a journal post's receipts) is a section divider, not
+a heading device. The 11px uppercase label is reserved for metadata — dates,
+"Limitations", the sub-labels inside a claim.
 
 This supersedes the earlier rule that a finding is carried by the word and never
 by a badge, and that colour is a whisper (founder decision, 2026-09-01). The
@@ -603,7 +605,11 @@ narrative instead of pointing at one heading over a thousand words.
 
 A visual (chart, pull quote, timeline, table) must carry a number or a quotation
 the text already establishes with a source ID. If it does not, cut it. No
-photographs, no stock imagery, no decorative charts.
+photographs, no stock imagery, no decorative charts. The methodology page is
+where that rule is easiest to see: it renders the vocabulary as the badges the
+site actually publishes and builds its synthesis table out of
+`scripts/synthesis-matrix.ts` itself, so the page's visuals are the rule rather
+than an illustration of it.
 
 **Stew's identity.** Stew has two blues, both taken from his avatar: dark
 #1F385C and brighter #36639A. They are used only where Stew speaks in the first
