@@ -1,0 +1,27 @@
+---
+/**
+ * The magnifier, drawn once. The header's search link and the home page's
+ * search field both carry it; the caller sets size, colour and hover weight
+ * through `class`, and the drawing itself stays in one file so the two cannot
+ * drift into two slightly different glyphs.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<svg
+  viewBox="0 0 20 20"
+  class={className}
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  <circle cx="8.5" cy="8.5" r="5.5"></circle>
+  <path d="M12.6 12.6 17 17"></path>
+</svg>

@@ -507,16 +507,45 @@ badges, panels, buttons, inputs, tables and rules carry no radius, and the one
 exception is 2px on inline code. Two things are circles because the thing
 itself is: Stew's avatar wherever it appears, and the verdict dots in the
 AI-review matrix. No shadows except the one that lifts a
-glossary popover off the text it covers, and no animation beyond
-colour transitions on a few controls — the copy button, the outline links. A
+glossary popover off the text it covers. Motion is 150ms transitions of
+colour, background, border, underline colour, underline thickness, opacity
+(the nav's 82% to full) and the search glyph's stroke, on links and on the controls that change
+on hover (the chips, the buttons, the outline), and nothing else; under
+`prefers-reduced-motion` even those are off. A
 finding is a filled badge in its own colour — forest Supported, navy Partially
 supported, charcoal Not established, brick Contradicted, gold Mixed — with the
 word always printed in full, and a claim list is a run of ledger rows each
 carrying a 5px left edge in the same colour, so the verdicts read down one
-column. Gold is load-bearing in exactly two places, the ".ca" of the wordmark
-on forest and the Mixed badge; it never sets text on a light ground, where it
-fails AA. Every page opens with the full-bleed forest masthead, and the home
-page extends it with the descriptor, the search field and the helper line.
+column. Gold is load-bearing in exactly three places: the ".ca" of the wordmark
+on forest, the Mixed badge, and the 2px bar under the current item in the
+masthead nav. All three sit on forest or fill a badge; gold never sets text on a
+light ground, where it fails AA. Every page opens with the full-bleed forest
+masthead, and the home page extends it with the descriptor, the search field and
+the helper line.
+
+The **masthead nav** is set in sentence case, in paper held to 82% opacity, with
+no underline. The page a reader is on comes to full opacity and takes the gold
+bar, drawn as a rule inside the link's own box so the row is the same height on
+every page; the search glyph beside it carries the same bar on /search.
+
+There are **two link treatments, and one rule that picks between them**. A link
+inside running text is underlined at rest, in navy, because nothing else in a
+paragraph marks it: that is `.link`. A link that is a headline, or a list item's
+title, is navy with no underline until it is hovered or focused: that is
+`.link-title`, because the size and position of a headline already say it is the
+thing to click, and a page of underlined headlines reads as ruled paper. Stew's
+brighter blue mirrors both, `.link-stew` and `.link-title-stew`, in the blocks
+where he is the one speaking.
+
+The **home page's search field** is set in the display face, and its placeholder
+is a question this site has actually checked rather than an example of one. Three
+counts read out of the record at build time, questions registered, claims
+checked and sources archived, sit beside the deck from `lg` up and under it on
+a phone, above the search field.
+
+The **pre-launch notice** is a single gold line with an ink hairline under it,
+not a band with a brick edge. The **footer** closes the page on the wash tone.
+
 Hierarchy still comes from type rather than decoration: a section heading is a
 heading — on the home page's front page each one sits above a 3px ink rule —
 and the 11px uppercase label is reserved for metadata — dates, "Limitations",

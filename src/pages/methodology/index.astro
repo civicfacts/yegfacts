@@ -128,7 +128,7 @@ const sections = toc([
   description="How YEGFacts produces a finding: a whole source in and every claim in it listed, then a frozen brief, three models researching blind, a deterministic merge, a cross-review round, and a publication gate before anything is published."
 >
   <header class="border-b border-rule pb-6">
-    <h1 class="text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
+    <h1 class="text-[1.75rem] leading-[1.15] font-bold tracking-[-0.022em] sm:text-display">
       Methodology
     </h1>
     <p class="mt-3 max-w-prose text-base leading-relaxed text-muted">
@@ -146,7 +146,7 @@ const sections = toc([
   </header>
 
   <section id="intake" class="mt-11">
-    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
+    <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">
       How a claim gets in
     </h2>
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
@@ -160,7 +160,7 @@ const sections = toc([
       {
         intake.map((step) => (
           <li class="grid gap-x-5 gap-y-1 py-5 sm:grid-cols-[2rem_1fr]">
-            <span class="text-lg font-extrabold text-forest tabular">{step.n}</span>
+            <span class="text-lg font-bold text-forest tabular">{step.n}</span>
             <div>
               <h3 class="font-semibold tracking-[-0.012em] text-forest">{step.name}</h3>
               <p class="mt-1.5 text-[0.9375rem] leading-relaxed">{step.body}</p>
@@ -187,7 +187,7 @@ const sections = toc([
   </section>
 
   <section id="pseudonyms" class="mt-14 scroll-mt-6">
-    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
+    <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">
       Names, and why the quotes are exact
     </h2>
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed">
@@ -208,7 +208,7 @@ const sections = toc([
   </section>
 
   <section id="stages" class="mt-14">
-    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
+    <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">
       Seven stages, per question
     </h2>
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
@@ -221,7 +221,7 @@ const sections = toc([
       {
         stages.map((stage) => (
           <li class="grid gap-x-5 gap-y-1 py-5 sm:grid-cols-[2rem_1fr]">
-            <span class="text-lg font-extrabold text-forest tabular">{stage.n}</span>
+            <span class="text-lg font-bold text-forest tabular">{stage.n}</span>
             <div>
               <h3 class="font-semibold tracking-[-0.012em] text-forest">{stage.name}</h3>
               <p class="mt-1.5 text-[0.9375rem] leading-relaxed">{stage.body}</p>
@@ -238,7 +238,7 @@ const sections = toc([
   </section>
 
   <section id="vocabulary" class="mt-14">
-    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">The words we use</h2>
+    <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">The words we use</h2>
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
       No TRUE/FALSE. No scores out of ten. A finding is a sentence in a controlled vocabulary, and
       it is reported alongside two separate things: the evidence basis (what kind of record answered
@@ -267,7 +267,7 @@ const sections = toc([
   </section>
 
   <section id="synthesis" class="mt-14 scroll-mt-6">
-    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
+    <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">
       Panel agreement, and why the merge leans cautious
     </h2>
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
@@ -303,7 +303,7 @@ const sections = toc([
   </section>
 
   <section id="questions" class="mt-14">
-    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
+    <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">
       What a question carries
     </h2>
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed">
@@ -323,7 +323,7 @@ const sections = toc([
   </section>
 
   <section id="limits" class="mt-14">
-    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Limits we set on ourselves</h2>
+    <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">Limits we set on ourselves</h2>
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed">
       Version 1 of YEGFacts publishes no allegations about named individuals. The claims we check
       are about policies, programs, budgets and outcomes.
@@ -353,7 +353,7 @@ const sections = toc([
   </section>
 
   <section id="panel-quality" class="mt-14 scroll-mt-6">
-    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">Panel quality record</h2>
+    <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">Panel quality record</h2>
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed">
       The models get things wrong. Collection of a per-seat record of that began on 2026-09-01 and
       was seeded backwards from the four published runs: fabricated citations, false accusations
@@ -371,7 +371,7 @@ const sections = toc([
   </section>
 
   <section id="launch-slate" class="mt-14 scroll-mt-6">
-    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">
+    <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">
       The launch slate, dropped
     </h2>
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed">

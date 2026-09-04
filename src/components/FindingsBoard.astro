@@ -43,7 +43,7 @@ const { groups, showQuestion = true } = Astro.props;
         {group.label && (
           <h3 class="font-sans text-sm">
             {group.href ? (
-              <a href={group.href} class="link font-semibold">
+              <a href={group.href} class="link-title font-semibold">
                 {group.label}
               </a>
             ) : (
@@ -65,7 +65,7 @@ const { groups, showQuestion = true } = Astro.props;
               <p class="sm:col-start-1 sm:row-start-1">
                 <a
                   href={`/claims/${claim.data.id}`}
-                  class="link font-display text-[1.375rem] leading-[1.25] font-semibold"
+                  class="link-title font-display text-[1.375rem] leading-[1.25] font-semibold"
                 >
                   {claim.data.question}
                 </a>
