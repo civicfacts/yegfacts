@@ -1,9 +1,17 @@
 # Review brief: Did the City ask the streets it built on?
 
-Status: DRAFTED 2026-09-03 by Stew under D-0019, framing check pending,
-NOT frozen. Methodology: v1.19. Register question:
-`consultation-and-opposition`, lifecycle `registered`, triage `go`.
-Source: `yegscoop-2026-08-26`.
+Status: FROZEN 2026-09-04 on framing check 2 FRAME OK
+(framing/check-2.md), the second of the three reports the v1.12 cap
+allows. History: drafted 2026-09-03 by Stew under D-0019; report IS03688
+and its attachments, which the drafting session could not open, were
+retrieved and read on 2026-09-04 and the route set, the verdict ladder's
+Not established conditions and the cutoff were corrected before any
+check ran; revised after framing check 1 (framing/check-1.md, REVISE on
+six findings; response in framing/response-1.md), five adopted whole and
+one — the timing cutoff — adopted as the required alternative rather
+than as the primary, for the reason given in the response. Methodology:
+v1.19. Register question: `consultation-and-opposition`, lifecycle
+`briefed`, triage `go`. Source: `yegscoop-2026-08-26`.
 
 ## Story
 

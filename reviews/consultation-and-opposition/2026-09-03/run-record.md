@@ -1,9 +1,71 @@
-# Run record: `consultation-and-opposition`, draft of 2026-09-03
+# Run record: `consultation-and-opposition`, run of 2026-09-03
 
-Drafted by Stew under D-0019. Methodology v1.19. The brief is NOT frozen.
-The framing check has not been run. It must be run by a model from a
-different vendor before anything here goes to a panel, and nothing in
-this session was sent to a non-Anthropic tool.
+Drafted by Stew under D-0019. Methodology v1.19. **The brief is FROZEN**
+as of 2026-09-04, on framing check 2 FRAME OK. No panel has run; round 1
+has not started.
+
+## The freeze
+
+Frozen 2026-09-04 on `framing/check-2.md`, FRAME OK, every finding from
+check 1 marked RESOLVED and none WEAKENED or OPEN. Two reports, not
+three: the cap allows three and the brief did not need the third, so
+there is no `resolution.md` in this run.
+
+The freeze is the sha256 of `brief.md` as it stands after the status-line
+edit, and it is not a branch commit. This branch is squashed on merge, so
+a commit sha recorded here would name an object that never reaches main.
+
+    083f4a63800a1d12f348c0186fec8dd01c6d47c557049d24b5f5149feaa02018
+
+Recompute it with:
+
+    shasum -a 256 reviews/consultation-and-opposition/2026-09-03/brief.md
+
+Nothing but the status line changed in `brief.md` after check 2 returned.
+
+## What the framing check changed
+
+Check 1 (`framing/check-1.md`) returned REVISE with six findings. The
+response is `framing/response-1.md`; five findings were adopted whole and
+one was adopted as a required alternative rather than as the primary,
+with the reason written out. In short:
+
+1. Four captured wordings had been folded into one proposition. Only one
+   of the five makes the general assertion the brief tests. The other
+   four are now listed as what they are — two about places on no route in
+   the set, one about a single group, one about notification — and the
+   prevalence line says one account asserts the claim as stated.
+2. The old alternative cutoff set would have returned Supported at one or
+   two documented engagements on a proposition that there were none.
+   Both cutoff sets now require E = 0 for Supported, and the "engagement
+   was rare" reading survives only as a labelled qualification.
+3. The primary definition of engagement had excluded the targeted
+   property-owner contact the City itself files under public engagement,
+   which would have decided part of the answer in the definition. Primary
+   and alternative swapped: the primary now counts targeted contact with
+   affected people, and the open-to-everyone reading is the alternative.
+4. The ladder had two buckets, so a route the City has simply never
+   written about counted as evidence that nothing happened on it. It now
+   has three — E confirmed, N stated by a City record, U unresolved — and
+   Supported needs E = 0 and U = 0.
+5. Scope, stakes and the resident's question were rewritten in the
+   checker's own words. Not established no longer claims to be a finding
+   about the City's record-keeping, which it is not.
+6. Refused as primary, adopted as the alternative: the checker's cutoff
+   at the point a route's design stopped being open to public influence.
+   It is the better test and the City publishes no such date, so making
+   it primary would have pushed most of the fourteen into unresolved and
+   left Not established as the only reachable verdict — the defect the
+   framing prompt itself names. It is required alongside the computable
+   cutoff instead.
+
+Check 2 returned FRAME OK on all nine checks and accepted the refusal on
+its own terms.
+
+**What the checker did not do.** It did not propose that a participation
+count stand in for public opinion, and it did not disturb either park.
+The brief was written to refuse that substitution and the refusal was
+never tested.
 
 ## What I did
 
@@ -315,12 +377,87 @@ made in one pass by whoever freezes it.
   the named-individual strand declined on right-of-reply.
 - Decide whether the question's public wording changes, per weakness 5.
 
-Nothing on the register was edited by this session. The question's
-lifecycle is still `registered`.
+Nothing on the register was edited by the drafting session. The question's
+lifecycle was still `registered` when it ended.
 
-## Verification run in this session
+## Register reconciliation, done at the freeze (2026-09-04)
 
-`npm run validate`, `npm run audit:exposure`, `npm run build` and
-`npm run audit:duplication` were run in the worktree after the three files
-were written; output is in the report to the orchestrator. No panel ran,
-no framing check ran, no pull request was opened.
+Done in one pass, touching only this question's entries.
+
+- `consultation-and-opposition`: `lifecycle` `registered` → `briefed`.
+  `grouping_note` rewritten, because the old one said the engagement
+  record settles both claims and it does not settle the opposition one.
+  A `note` records where the frozen brief is. `run` is unchanged: it
+  names the intake run the grouping came out of, which is what the field
+  means, and the frozen brief is named in `note` instead.
+- Added claim `ca-route-level-engagement` with the proposition from the
+  frozen brief, `side: against`, `accounts: 1`, and the one captured
+  wording that asserts it. Not four: framing check 1 found that the other
+  three consultation wordings say narrower or different things, and the
+  brief no longer folds them in, so the register may not either.
+- `most-residents-oppose-lanes`: `reason` records the park, why no
+  published instrument can settle it, and the condition on which it
+  reopens.
+- `fast-tracked-without-consultation`: `reason` records the split — the
+  consultation assertion checked as `ca-route-level-engagement`, "old
+  data" parked with its reopening condition, "fast-tracked" not checked
+  because undisputed, the named-individual wording declined on
+  right-of-reply.
+- `public/_redirects` regenerated by `npm run redirects`, which the
+  validator requires once a claim id exists; the diff is one line, the
+  new claim's `/considered/` address.
+
+**The question's public wording is unchanged.** It asks two things and
+the run answers one of them, which is a mismatch a reader will notice.
+Changing it would have hidden the mismatch rather than explained it, so
+the question keeps the words the argument was had in and the
+`grouping_note`, which is rendered on the question's page, says plainly
+which half is being checked and why the other half is parked.
+
+**Two schema limits, recorded because they matter to a reader.** A
+register claim carries no state of its own — that is the schema's rule,
+and the one exception is a right-of-reply decline — so a park cannot be
+written as a claim-level `triage: park`. It is written as the claim's
+`reason`, which is published in the register file but is not rendered on
+the claim's page, because the page only prints a claim's own reason when
+the claim was declined apart from its question. The reader-facing place
+for the parks is therefore the question's `grouping_note` and the frozen
+brief. Whether the claim page should print a park reason is a question
+for the methodology, not something to fix inside a freeze.
+
+## Still standing after the freeze
+
+1. **The tested claim rests on one account.** Fourteen people argued the
+   question; one of them asserted the proposition in the form the panel
+   will answer. That is honest and it is thin, and it is the direct
+   consequence of framing check 1's second finding. The question carries
+   the prevalence; the claim does not.
+2. **The register carries a wording naming a sitting councillor.** The
+   brief declines the accusation on right-of-reply grounds and the
+   register flags `names_person: true`, but the wording itself is still
+   published under `fast-tracked-without-consultation`, and the schema's
+   right-of-reply decline would require stripping the claim's other
+   wordings with it. Whether that wording should be on the site at all is
+   the drafting session's open question 6 and it is not settled here.
+   Nothing about it changed tonight.
+3. **The "What We Heard" report is still unread.** No tool in either
+   session parsed it, so no participation figure from it is stated
+   anywhere. The panel reports those figures.
+
+## Verification
+
+The drafting session ran `npm run validate`, `npm run audit:exposure`,
+`npm run build` and `npm run audit:duplication` after writing the three
+files.
+
+The freezing session of 2026-09-04 ran `npm run validate`,
+`npm run audit:exposure`, `npx astro check`, `npm run build`,
+`npm run audit:duplication` and `npm test`, and `npm ci` first, because
+the worktree's `node_modules` held only build caches and three tests
+resolve `tsx` through it. Output is in the report to the orchestrator and
+in the pull request comment.
+
+Two framing checks ran, both `codex exec -m gpt-5.6-sol -c
+model_reasoning_effort=high -s read-only --skip-git-repo-check`, from a
+scratch directory outside the repository, with no repository access.
+**No panel ran. Round 1 has not started.**
