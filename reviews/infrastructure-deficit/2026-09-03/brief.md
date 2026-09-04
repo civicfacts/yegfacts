@@ -1,8 +1,10 @@
-# Review brief: Are Edmonton's roads in poor shape, and could the $100 million for bike lanes have fixed them?
+# Review brief: Are Edmonton's roads in poor shape, could the $100 million for bike lanes have gone to road renewal, and how large was it beside what the City says it is short of?
 
 Status: DRAFTED 2026-09-03 by Stew under D-0019, revised 2026-09-03 under
 framing check 1 (framing/check-1.md, REVISE; response in
-framing/response-1.md), framing check 2 pending, NOT frozen. Methodology:
+framing/response-1.md), revised again 2026-09-03 under framing check 2
+(framing/check-2.md, REVISE; editor's resolution in
+framing/resolution.md), framing check 3 pending, NOT frozen. Methodology:
 v1.19. Register question `infrastructure-deficit` (intake/register.yaml),
 triage GO from both readers
 (reviews/intake/yegscoop-2026-08-26/triage-stories.md). Intake record:
@@ -70,12 +72,22 @@ enough to matter?"
 
 The three claims are those three parts, in that order.
 
-One thing the public record cannot do, and the brief says so rather than
-letting a reader assume otherwise: it cannot tell any particular resident
-whether their own street or their own alley is in poor condition. The
-City publishes a citywide condition distribution, not a per-street
-verdict. Claim 1 answers the citywide question, in the City's own Roads
-asset class, and says that is what it is answering.
+Two things the public record cannot do, and the brief says so rather than
+letting a reader assume otherwise.
+
+It cannot tell any particular resident whether their own street or their
+own alley is in poor condition. The City publishes a citywide condition
+distribution, not a per-street verdict. Claim 1 answers the citywide
+question, in the City's own road asset class, and says that is what it is
+answering.
+
+And it cannot say what condition the roads were in during the week the
+claims were made. The City's latest published condition inventory
+available by 2026-09-03 describes its assets as of an earlier date, which
+reviewers must state. It cannot establish whether road condition changed
+between that date and August 2026. Claim 1 is answered on the latest
+published measure, and the story must give the reader the date that
+measure describes wherever it gives the verdict.
 
 Nor can anyone show what council would have done with $100 million it
 never approved for bike lanes. That counterfactual is not tested. What
@@ -141,11 +153,16 @@ four-year requirement is the span mismatch B2 forbids.
 **B5. Nominal Canadian dollars**, unless a reviewer reports a
 constant-dollar restatement as a qualification and names the index.
 
-**B6. Drainage is not assumed to be in the City's budget at all.** Whether
-Edmonton's drainage assets are funded from the tax-supported capital
-budget that funds bike lanes, or from utility rates under a bylaw, is a
-fact the panel establishes and reports; it is not a fact this brief
-asserts, and no claim's verdict turns on it. See required calculation 6.
+**B6. Drainage is not assumed to be in the City's budget, and is not
+tested.** Whether Edmonton's drainage assets are funded from the
+tax-supported capital budget that funds bike lanes, or from utility rates
+under a bylaw, is not a fact this brief asserts, not a fact it asks the
+panel to establish, and not a thing any verdict here turns on. No renewal
+set in this brief contains a drainage profile. Neither the reviewers nor
+the story may say or imply that bike-lane money could have gone to
+drainage, or that it could not have. Nobody in the captured source
+asserted either, and a question the record was never asked is not answered
+here.
 
 **B7. Where the record cannot answer, the brief says so in the
 proposition.** A proposition here is stated in the words a resident would
@@ -166,7 +183,11 @@ not about December 2022.
 calendar years. Completed years at the as-of date: 2023, 2024, 2025.
 
 **Condition as of:** the most recent condition rating the City has
-published by the as-of date. Reviewers state its publication date.
+published by the as-of date. Reviewers state **two** dates for it and
+never one: the date the report was published, and the date the underlying
+inventory describes. Those are not the same, and the second may be a year
+or more before the claims were made. Where the report does not state the
+date its data describes, say so.
 
 ## Sources named for this brief
 
@@ -195,12 +216,22 @@ named as the fallback with its location inside it.
    https://data.edmonton.ca/dataset/Neighbourhood-and-Alley-Renewal/dtuf-twc2
    — and its companion "Neighbourhood and Alley Renewal Map",
    https://data.edmonton.ca/dataset/Neighbourhood-and-Alley-Renewal-Map/4s3w-mdwf
-   . Reviewers state the fields these carry, whether they carry a
-   condition grade and for which surfaces, and the date the data was last
-   updated. These are renewal-programme datasets. A renewal schedule, a
-   project status or a construction year is **not** a condition rating and
-   may not be used as one. If they carry no condition grade, say so; that
-   is a finding about the record.
+   . Both assets resolved publicly on 2026-09-03 and the map is a view
+   derived from the dataset. Reviewers state the fields these carry, list
+   them, say whether any field is a condition grade and for which
+   surfaces, and give the date the data was last updated. These are
+   renewal-programme datasets. A renewal schedule, a project status or a
+   construction year is **not** a condition rating and may not be used as
+   one. If they carry no condition grade, say so and list the fields that
+   show it; that is a finding about the record and the reason this brief
+   gives alleys no verdict.
+
+   Reviewers also search the City's current open-data catalogue and the
+   condition-report materials for any other published alley condition
+   measure, and name any usable source they find. If an asset named here
+   cannot be reached by their tooling, they say so in `limitations` and
+   report what they could reach, rather than treating an access failure as
+   evidence that the City publishes nothing.
 4. **City of Edmonton, "2025 Infrastructure Report"** (Integrated
    Infrastructure Services),
    https://www.edmonton.ca/sites/default/files/public-files/IIS-Infrastructure-Report-2025.pdf
@@ -231,19 +262,7 @@ named as the fallback with its location inside it.
 8. **City of Edmonton, "Neighbourhood Renewal"** (web page),
    https://www.edmonton.ca/transportation/on_your_streets/neighbourhood-renewal
    — what the programme covers.
-9. **The instruments under which Edmonton's drainage utility sits**, all
-   through the meeting portal at source 6: the 2017 council decision
-   transferring drainage services to EPCOR, with its date and the
-   transfer's effective date; and the succession of rate bylaws that
-   followed it — **Bylaw 18100**, then **Bylaw 19627, "EPCOR Drainage
-   Services and Wastewater Treatment Bylaw"**, then **Bylaw 20865, "EPCOR
-   Wastewater Services Bylaw"**. Reviewers establish which of these is in
-   force on 2026-09-03, name it, give the period it covers and say what it
-   does, and report whether the City's own terminology for the service has
-   changed across them. A rate bylaw sets charges; it is not the
-   instrument that moved the utility, and the two must not be conflated.
-   Named for required calculation 6 only, and carrying no verdict.
-10. **The terms of any grant or restricted funding source** the council
+9. **The terms of any grant or restricted funding source** the council
     record identifies as funding CM-20-0330 — the granting body's own
     published programme terms, eligibility rules and agreement, named and
     linked. Required for Claim 2.
@@ -270,6 +289,19 @@ MATERIAL FRAMING CONCERN.
 ### Claim 1, id: `infra-roads-condition`
 
 **Normalized proposition:** Edmonton's roads are in poor condition.
+
+**The date this is answered on.** The proposition is stated as a resident
+states it, in the present tense, because B7 puts the difference between
+the question and the record into the claim's own section rather than into
+the proposition — a proposition written in the vintage of an inventory is
+a proposition stated in the record's units, which is its own defect. The
+difference is this: the verdict is computed on the City's latest published
+condition rating available at the as-of date, and that rating describes
+the network as of an earlier date than the claims. Reviewers report both
+dates. The finding is a finding about the latest published measure, the
+story says so in those words wherever it carries the verdict, and neither
+the verdict nor the story may assert that the roads were in that condition
+in August 2026.
 
 **Why this reading, and why it is roads.** Eight of the ten accounts
 behind the registered basic-services claim named roads, alleys or
@@ -361,7 +393,7 @@ compares with the classification under the cutoffs fixed here.
 **Qualifications reported, never carrying the verdict:**
 
 1. The D-and-F share for each rated road class separately, each with its
-   denominator and its date.
+   denominator, its publication date and the date its data describes.
 2. The full A-to-F distribution for the set, as published.
 3. The same shares from the previous published rating, and the direction
    of change. This is the nearest the record comes to a trend, and it is
@@ -372,8 +404,9 @@ compares with the classification under the cutoffs fixed here.
    re-rated, and what share of the set was rated in the most recent cycle
    rather than carried forward.
 
-**What this claim does not test.** Any particular street; alleys, which
-carry no verdict here; snow clearing; grass and berm mowing; sidewalks;
+**What this claim does not test.** Any particular street; the condition of
+the network in August 2026, as against the date the latest published
+rating describes; alleys, which carry no verdict here; snow clearing; grass and berm mowing; sidewalks;
 whether the condition is worse than in other cities; whether the City's
 rating method is the right one; whether the condition is getting worse.
 The story may not assert any of these.
@@ -381,9 +414,8 @@ The story may not assert any of these.
 ### Claim 2, id: `infra-bike-money-renewal-eligible`
 
 **Normalized proposition:** At least half of the $100 million council
-approved for the bike-lane programme was money it could have spent on
-renewing roads and alleys instead, at a time when the City was reporting
-an unmet capital renewal requirement.
+approved for CM-20-0330 came from funding sources that permitted road or
+alley renewal instead.
 
 **Why this reading, and what it replaces.** The captured wordings put the
 two things side by side — "the city claims they have a huge infestructure
@@ -402,7 +434,7 @@ actually settle — whether this was money that could have gone on roads —
 and the transfer question becomes required calculation 3, reported in full
 without a verdict.
 
-**"Money it could have spent on renewing roads and alleys", fixed here.**
+**"Funding sources that permitted road or alley renewal", fixed here.**
 Every dollar of CM-20-0330's approved amount whose funding source, as the
 adopted 2023-2026 Capital Budget and the council record identify it, could
 have been applied to road or alley renewal instead. General municipal
@@ -410,7 +442,7 @@ capital funding — tax-supported debt, pay-as-you-go, and unrestricted
 reserve draws — is eligible unless the record says otherwise. A grant or
 other restricted source is eligible only if the granting body's own
 published terms permit road or alley renewal; reviewers name and link
-those terms (source 10) and quote the eligibility wording. Where a source
+those terms (source 9) and quote the eligibility wording. Where a source
 is identified but its terms cannot be determined from published material,
 those dollars are undetermined, not eligible and not ineligible.
 
@@ -473,12 +505,7 @@ programme rather than a corner of it.
    disposition, from the minutes. A sitting councillor states in the
    captured source that two such motions were brought and not supported;
    the minutes either show that or do not, and either way it is reported.
-3. Whether the City was reporting an unmet capital renewal requirement
-   over the 2023-2026 cycle at the time of approval and at the as-of date,
-   with the figure and the City's own wording for it. This is the second
-   half of the proposition and is reported as fact; it is established in
-   required calculation 4 and is not itself classified here.
-4. Every capital budget adjustment to the as-of date that changed
+3. Every capital budget adjustment to the as-of date that changed
    CM-20-0330's approved amount, with its date, its amount and its stated
    source or destination, in both directions.
 
@@ -631,11 +658,14 @@ the claim and to an opponent of it.
   available for renewal but less than half of it. An opponent must concede
   limited fungibility but can reject the claim that most of the programme
   competed with road money.
-- **Contradicted.** A holder must abandon the premise that this money
-  could have fixed their street — it was money that existed for this
-  purpose or for nothing. An opponent gains a direct answer to the
-  opportunity-cost argument rather than the bookkeeping non-answer that a
-  transfer test would have produced.
+- **Contradicted.** A holder must abandon the premise that any of this
+  programme's identified funding could have been used for road or alley
+  renewal. An opponent gains a direct answer to the opportunity-cost
+  argument rather than the bookkeeping non-answer that a transfer test
+  would have produced — but only that answer: a source barred from road
+  and alley renewal may still have been available for other capital work,
+  and neither the verdict nor the story may say the money existed for bike
+  lanes or for nothing.
 - **Not established.** Neither side can say the public record settles
   where this money could have gone. The holder lacks evidence for the
   opportunity-cost premise; the opponent lacks evidence the money was
@@ -679,7 +709,8 @@ establishes and what it cannot.
 Time: as fixed above.
 
 Out of scope, and the story may not claim any of it: the condition of any
-particular street or alley; alley condition as a verdict; snow clearing,
+particular street or alley; the condition of the road network at any date
+later than the one the City's latest published rating describes; alley condition as a verdict; snow clearing,
 which is its own registered question; grass and berm mowing, for which no
 City-published condition or service measure was identified; sidewalks;
 property taxes and tax increases, which are their own registered question;
@@ -744,19 +775,7 @@ the reader rather than only classify three propositions.
    arithmetic shown, and labelled as actuals. Approved and projected
    amounts are never described as spending. This figure is context and is
    put on neither side of any classified ratio (B4).
-6. **Where drainage money comes from.** Which body owns and funds
-   Edmonton's drainage assets on the as-of date, and under which
-   instrument — name the council decision that transferred drainage
-   services and its effective date, and the bylaw in force on 2026-09-03,
-   checking whether the instrument you find has itself been replaced.
-   State whether drainage renewal is funded from the tax-supported capital
-   budget that funds CM-20-0330 or from utility rates, and if the latter,
-   state plainly that money in the one could not reach the other without a
-   council decision of a kind the reviewer should name. This is reported
-   as fact and carries no verdict. It is here because the question arrives
-   from a thread in which drainage sits beside roads and bike lanes, and a
-   reader who is not told this will assume the two budgets are one.
-7. Whether the City publishes a condition target or service level for
+6. Whether the City publishes a condition target or service level for
    roads, and whether council has set one for alleys; and whether the City
    publishes any benchmark for the share of its renewal requirement it
    funds. Give the document, the date and the body that set each.
