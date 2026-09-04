@@ -435,10 +435,28 @@ sat in which seat cannot change a finding), that panel agreement is a pure
 function of the multiset and no row resolves past the panel's most cautious
 verdict, and that a reviewer JSON containing "Mixed" is rejected.
 
-Two spec rules are enforced in CI against the PR diff rather than the working
-tree: a change to a claim's finding or panel agreement requires a story
-changelog entry, and a change under `prompts/`, `scripts/merge*`, `scripts/synthesize*`
-or `methodology/` requires a methodology changelog entry.
+Two spec rules cannot be asked of a snapshot, because they compare a branch
+against its base. They live in `npm run validate:diff`
+(`scripts/validate-diff.ts`), which CI runs with `fetch-depth: 0` so the base
+commit is in the clone: a change to a claim's `finding` or `panel_agreement`
+requires a new entry in its story's changelog, and a change under `prompts/`,
+`scripts/merge*`, `scripts/synthesize*` or `methodology/` requires a new entry in
+`methodology/changelog.yaml`. Re-wording an existing entry satisfies neither.
+Two paths under `methodology/` are exempt, both because of what the version
+number means: `methodology/audits/` holds records that report on the method
+rather than change it, and the changelog is the record itself. This paragraph
+described a check that did not run until 2026-09-03; the rules were a TODO in
+`scripts/validate.ts` and a change under `methodology/` shipped clean.
+
+One rule from `prompts/intake-merge.md` also has a mechanical guard now.
+`scripts/intake-claim-bound.ts` refuses a merged run whose proposition asserts
+two quantities that no single captured wording carries together, and
+`scripts/validate.ts` runs the same check over the register. It is one
+decidable corner of "a claim is one assertion" and not the rule: whether a
+wording asserts a proposition is entailment, which no string test decides, so
+compound propositions with no numbers in them and the whole of the
+form-must-assert-the-claim rule still need a reader. Every report the gate
+writes says so.
 
 ## 7. Launch slate (dropped 2026-09-03, D-0027)
 

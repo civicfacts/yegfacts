@@ -20,6 +20,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # The method-change rules below compare this branch against its base,
+          # so the base commit has to be in the clone. The default depth-1
+          # checkout has no merge base and `validate:diff` fails loudly rather
+          # than passing on a history it cannot see.
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -32,6 +38,17 @@ jobs:
       # backlinks agree, public archives hash to what the registry says.
       - name: Validate content
         run: npm run validate
+
+      # The half of validation that needs a base commit, which is why it never
+      # ran until now: a change to prompts/, scripts/merge*, scripts/synthesize*
+      # or methodology/ (audits and the changelog itself excepted) must bump the
+      # methodology version, and a changed claim `finding` or `panel_agreement`
+      # must come with an entry in its story's changelog. The changelog header
+      # promised the first of these for weeks while nothing checked it.
+      - name: Method-change rules
+        env:
+          VALIDATE_BASE_REF: origin/${{ github.base_ref || github.event.repository.default_branch }}
+        run: npm run validate:diff
 
       # The repo is public, so everything tracked is published. The fail
       # classes — secrets, private-evidence leaks, unlicensed archives, local

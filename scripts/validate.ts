@@ -19,8 +19,9 @@
  *   carry a `published` changelog entry. The two spec rules that compare a PR
  *   against its base — a changed `finding`/`panel_agreement` needing a story entry,
  *   a touched `prompts/`/`scripts/merge*`/`scripts/synthesize*`/`methodology/`
- *   path needing a methodology entry — are not implemented here; see the TODO
- *   at the bottom of this file.
+ *   path needing a methodology entry — cannot be asked of a snapshot at all, and
+ *   live in `npm run validate:diff` (`scripts/validate-diff.ts`), which CI runs
+ *   with the base ref in hand.
  *
  * Two rules are deliberately advisory. The method-vocabulary list in
  * `checkPlainSpeech` only warns, because a word list that fails the build is
@@ -48,6 +49,7 @@ import {
   sha256File,
 } from './lib/repo.ts';
 import { validateReviewFile, loadRunManifest } from './lib/review-schema.ts';
+import { describeUnsplit, unsplitClaims, type BoundClaim } from './lib/claim-bound.ts';
 import {
   readCapture,
   registerProblems,
@@ -1131,21 +1133,66 @@ function checkQuestionTopics(questions: Record_[]): void {
   }
 }
 
-// ---------------------------------------------------------------------------
-// TODO — the two spec §8 rules that need a diff, not a snapshot
-//
-// Both compare a PR against its base commit, so they belong in CI where the
-// base ref is available (`git diff --name-only origin/main...HEAD`), not in a
-// script that only ever sees the working tree:
-//
-//   1. A change to any claim's `finding` or `panel_agreement` requires a matching
-//      entry in the parent story's changelog.
-//   2. A change under `prompts/`, `scripts/merge*`, `scripts/synthesize*` or
-//      `methodology/` requires a new entry in `methodology/changelog.yaml`.
-//
-// The snapshot half of rule 1 — a `published` story carrying a `published`
-// changelog entry — is enforced above in `checkStories`.
-// ---------------------------------------------------------------------------
+/**
+ * A claim in the register must not assert two things nobody asserted together.
+ *
+ * `prompts/intake-merge.md` rule 1 — a claim is one assertion — was a rule on
+ * paper with nothing behind it, and `property-taxes-rising-sharply` reached the
+ * public register joining one person's tax bill to another person's tax rise
+ * with the word the rule names. `scripts/lib/claim-bound.ts` argues what a
+ * string test can and cannot decide here; the short version is that this is one
+ * mechanical corner of rule 1 and is not rule 1.
+ *
+ * The gate that belongs upstream of this is `scripts/intake-claim-bound.ts`,
+ * run on a merged run before it becomes register entries. This is the standing
+ * check on what is already published, so a claim cannot be edited back into the
+ * shape after the gate has seen it.
+ *
+ * `KNOWN_UNSPLIT_CLAIMS` is empty as of 2026-09-04. The one claim this check
+ * found on the live register was `property-taxes-rising-sharply`, split under
+ * v1.25, so the check passes the published register with no exemptions.
+ *
+ * An entry here is a debt, not a dispensation: a claim the check flags, named
+ * with the date it was found and the reason it is not fixed yet, printed as a
+ * `warn:` on every run until it is. An unlisted flagged claim fails, and a
+ * listed claim that has left the register fails too, so the list cannot rot.
+ */
+const KNOWN_UNSPLIT_CLAIMS = new Map<string, string>([]);
+
+function checkClaimBound(): void {
+  const file = repoPath('intake', 'register.yaml');
+  const register = loadRegister(file);
+  if (register === null) return;
+  const rows = (register.claims ?? []) as Record_[];
+
+  const bound: BoundClaim[] = rows
+    .filter((row) => typeof row.proposition === 'string' && row.proposition.trim() !== '')
+    .map((row) => ({
+      id: typeof row.id === 'string' ? row.id : '',
+      proposition: String(row.proposition),
+      wordings: [
+        ...new Set([
+          ...(typeof row.wording === 'string' ? [row.wording] : []),
+          ...(Array.isArray(row.variations) ? row.variations : [])
+            .map((variation) => (variation as Record_)?.wording)
+            .filter((wording): wording is string => typeof wording === 'string'),
+        ]),
+      ],
+    }));
+
+  for (const claim of unsplitClaims(bound)) {
+    const known = KNOWN_UNSPLIT_CLAIMS.get(claim.id);
+    if (known === undefined) fail(file, describeUnsplit(claim));
+    // Named, dated and still printed on every run. A known violation that stops
+    // being said out loud is how the last three paper rules got there.
+    else warn(file, `${describeUnsplit(claim)} — known: ${known}`);
+  }
+  for (const id of KNOWN_UNSPLIT_CLAIMS.keys()) {
+    if (!bound.some((claim) => claim.id === id)) {
+      fail(file, `KNOWN_UNSPLIT_CLAIMS lists "${id}", which is not a claim in the register`);
+    }
+  }
+}
 
 checkMethodologyChangelog();
 checkTopicFiles();
@@ -1158,6 +1205,7 @@ checkEvidence();
 checkReviewRuns();
 checkCombinedEvidence();
 checkRegister();
+checkClaimBound();
 
 if (warnings.length > 0) {
   for (const warning of warnings) {
