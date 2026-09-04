@@ -327,6 +327,12 @@ status line is the only change to `brief.md` after the freeze: no
 proposition, no cutoff, no verdict rule and no instrument description
 moves again, and any change to one is a new brief with a new check.
 
+That SHA is a commit on the `cycling-volumes` branch, in PR #37. The
+repository squash-merges, so the commit itself does not survive onto
+`main`; the frozen text arrives there in the squashed commit for #37,
+and this record names the branch commit because that is where the freeze
+actually happened.
+
 The checker's standing objection from report 2, that
 `one-to-two-percent-of-population-rides` and
 `one-percent-year-round-users` should not go to the panel without a
