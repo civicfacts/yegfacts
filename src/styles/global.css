@@ -3,8 +3,8 @@
 /* ---------------------------------------------------------------------------
    YEGFacts visual system — broadsheet ledger (design spec §10). Locked palette,
    light theme only: ink on paper, one saturated forest ground, filled verdict
-   badges. Badges, tiles, panels, tables and rules are square; an interactive
-   control — a chip, a button, a field, the search UI — carries the 3px
+   badges. Badges, tiles, tables and rules are square; an interactive control — a
+   chip, a button, a field, the search UI — and the white panels carry the 3px
    `--radius-control`, and inline code keeps its 2px (a portrait and a status
    dot are circles because they are round things, not chrome). The only shadow
    is `--shadow-panel` on the white panels and the home search field, plus the
@@ -564,13 +564,15 @@ time,
    `border-top-color` in the same class list depend on emission order to
    resolve, and the top edge is the whole point of the element. Both carry
    `--shadow-panel`: white on paper is a two-point difference in value, and the
-   shadow is what tells a reader the white block is a block. The corners stay
-   square — a panel is print, not a card.
+   shadow is what tells a reader the white block is a block, and a block with
+   a shadow is a card, so both take the control radius; the badge inside one
+   stays square.
 --------------------------------------------------------------------------- */
 
 .panel,
 .strip {
   background-color: #ffffff;
+  border-radius: var(--radius-control);
   box-shadow: var(--shadow-panel);
 }
 

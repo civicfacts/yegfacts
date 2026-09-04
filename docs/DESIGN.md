@@ -502,10 +502,12 @@ The visual system is the broadsheet ledger, locked and light-only: paper
 #F7F5F0, ink #1C2124, muted #5A6166, hairline rules #CFC9BD, forest #123F35,
 navy #123B5D, gold #C3A35E, brick #8A2F22 and charcoal #4A5258. Newsreader
 sets the wordmark, headings, questions and slate quotes; Libre Franklin sets
-body, metadata, labels and buttons. Badges, tiles, panels, tables and rules are
+body, metadata, labels and buttons. Badges, tiles, tables and rules are
 square-cornered; an interactive control — a filter chip, a button, a field, the
-copy button, the Pagefind search UI — carries a 3px radius (`--radius-control`),
-and inline code keeps its 2px. Two things are circles because the thing
+copy button, the Pagefind search UI — and the white panels (`.panel`, `.strip`)
+carry a 3px radius (`--radius-control`), and inline code keeps its 2px. A
+verdict badge stays square on purpose: it is the site's stamp, and at this
+size a rounded one reads as a tag. Two things are circles because the thing
 itself is: Stew's avatar wherever it appears, and the verdict dots in the
 AI-review matrix. White panels (`.panel`, `.strip`) and the home page's search
 field carry one soft shadow (`--shadow-panel`), the glossary popover keeps its
@@ -561,7 +563,7 @@ navy survives on that ground; colophon links are running text, so they are
 underlined, in paper.
 
 Hierarchy still comes from type rather than decoration: a section heading is a
-heading — on the home page's front page each one sits above a 3px ink rule —
+heading, with the space above it as the break and no rule over it on any page,
 and the 11px uppercase label is reserved for metadata — dates, "Limitations",
 the sub-labels inside a claim.
 
