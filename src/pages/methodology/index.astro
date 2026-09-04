@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Finding from '../../components/Finding.astro';
+import NumberedSteps from '../../components/NumberedSteps.astro';
 import { PANEL_AGREEMENT_GLOSS } from '../../lib/findings';
 import { SITE, repoPath } from '../../lib/site';
 import { PANEL_AGREEMENT_LEVELS } from '../../lib/vocabulary';
@@ -15,29 +16,24 @@ import { SYNTHESIS_MATRIX } from '../../../scripts/synthesis-matrix.ts';
  */
 const short = [
   {
-    n: '1',
     name: 'Someone sends us a source',
-    body: 'A post and every comment under it, an article, a thread. We keep the whole thing and list every factual claim in it, and commenters get a label instead of their name. Every question we found is listed publicly with what was decided about it, including the ones we declined.',
+    body: 'A post with all its comments, an article, a thread. We keep the whole thing and list every claim in it that a public record could settle. Commenters get a label instead of their name, unless they hold public office. Every question we found is listed publicly with what was decided about it, including the ones we declined.',
   },
   {
-    n: '2',
     name: 'The question is pinned down before anyone looks for answers',
     body: 'A written brief says exactly what the claim means, in words both sides would accept: what counts as lost, whose money, up to what date. A model from a different company checks that the brief is fair to the people making the claim. Then it is frozen, so nobody can move the goalposts once answers start coming in.',
   },
   {
-    n: '3',
     name: 'Three AI models research it blind',
     body: "Claude, GPT and Gemini each get the same brief and search the public record on their own, without seeing each other's work. Each comes back with a verdict, the evidence for and against, and what it could not find.",
   },
   {
-    n: '4',
     name: 'A table turns three verdicts into one finding',
-    body: 'The table was written down in advance and covers every way three verdicts can combine. Nobody votes and nobody picks. When the three disagree, the finding leans to the more cautious side, and the disagreement is shown.',
+    body: 'The table was written down in advance and covers every way three verdicts can combine. Nobody votes and nobody picks. When the three do not agree, the finding is never stronger than the most cautious of the three. When they genuinely split, it is Mixed, and the split is shown.',
   },
   {
-    n: '5',
     name: 'Every fact is checked against a saved copy of its source',
-    body: 'Before anything goes up, an audit reads the write-up against the archived bytes of the sources it cites, not the live web. What the models said, what they cited and what the audit found are all public. Ildar Abdulin is the named person accountable for every word, and he can take any of it down.',
+    body: 'Before anything is published as a finding, an audit reads the write-up against the archived bytes of the sources it cites, not the live web. What the models said, what they cited and what the audit found are published with it. Ildar Abdulin is the named person accountable for every word, and he can take any of it down.',
   },
 ];
 
@@ -50,27 +46,22 @@ const short = [
  */
 const intake = [
   {
-    n: '1',
     name: 'A source arrives',
     body: 'The unit is a whole source: a post and every comment under it, an article, a discussion someone sends us. Anyone can send one, and you do not have to say which part of it you think is wrong. The whole thing is captured, with its address and the date it was taken, and kept.',
   },
   {
-    n: '2',
     name: 'Every claim in it is written down',
     body: 'Three inexpensive models read that capture separately. Each lists every factual assertion in it: numbers, counts, dates, what somebody says a document said, and the factual premise sitting inside an opinion. They are told not to work out whether any of it is true, and not to decide which parts are interesting. Each one is recorded with the exact words that carry it and the comment those words came from.',
   },
   {
-    n: '3',
     name: 'The three lists become one',
     body: 'A stronger model folds them into propositions, one for each thing a record could settle, keeping every version of the wording underneath. A script then audits that step. Whatever any of the three wrote down has to appear once in the merged list, or on a dropped list under one of three allowed reasons. If something goes missing, the merge fails and runs again. The failure this exists to catch is a claim quietly disappearing.',
   },
   {
-    n: '4',
     name: 'The same argument is gathered into one question',
     body: 'One argument arrives as many claims. Checking each on its own would spend a panel run on every one and answer the same question several times over. So claims a single investigation would settle are gathered under one question: the same figure in different units, a general claim and an instance of it, a claim together with the claim that contradicts it. Each still gets its own finding. Take the argument about emergency vehicles. One side says the concrete barriers hold responders up. The other says responders use the lanes to get past queues. That is one question, answered by the same response-time records, and two claims, because one finding across the pair would settle neither and would tar each side with a ruling about the other.',
   },
   {
-    n: '5',
     name: 'Triage rules on the questions',
     body: 'The questions go to two readers, one pass each, and neither reader sees the other. Each returns GO, PARK or NO on every one, with a reason short enough to show the person who raised it. Where they disagree the question is kept rather than dropped, because throwing out a real question costs a reader more than holding one too long. Only a GO reaches stage 1 below. The rest are listed anyway, with their reasons, and the questions most people are arguing about are checked first.',
   },
@@ -78,37 +69,30 @@ const intake = [
 
 const stages = [
   {
-    n: '1',
     name: 'Framing',
     body: 'A written brief fixes the scope of the question and states each claim precisely before any model runs. This is where the arguable words get pinned down: what “lost” means, gross or net, whose money, and the date that closes the accounting window. Any calculation the finding depends on is named here. Since v1.7 Stew, the AI steward, writes the brief from the intake record, which carries the wordings the extraction captured and where each came from. Before the freeze a model from a different vendor checks it. Its only question is whether the brief tests the claim people actually make, at its strongest fair reading, with definitions both sides would accept before seeing the result. That report is committed beside the brief. The brief is frozen once the check passes, so nobody can move the goalposts once the answers start arriving.',
   },
   {
-    n: '2',
     name: 'Blind research round',
     body: 'Three models, Claude, GPT and Gemini, receive the identical package: the brief, the public reviewer prompt, and a required JSON output schema. Each runs in its own scratch directory with no access to this repository and no sight of the others. Each returns a per-claim verdict, its confidence, the evidence supporting and challenging it, its limitations, what it could not find, and comparison cities with a judgement about whether those cases transfer to Edmonton.',
   },
   {
-    n: '3',
     name: 'Evidence staging and deterministic merge',
     body: 'Cited URLs are fetched, hashed and snapshotted. Then a script, with no model and no network, validates the three JSON files, removes duplicate sources, and produces a combined evidence set plus an explicit list of where the models disagree. Accepted sources are added to the evidence registry deliberately, by a separate script, never automatically.',
   },
   {
-    n: '4',
     name: 'Cross-review round',
     body: "Each model now sees the combined evidence and the other two sets of findings. The instruction is the opposite of consensus-seeking: find what you missed, find their errors, and state your final position. This is an error-documentation round, not a second vote. Since v1.3 nothing said here can move the canonical finding, which removes the incentive to drift toward the majority. Every final position is published beside the round-one one, so a reader can see who moved and why. When this round catches something material, a fabricated citation or evidence that turns out to say something else, the answer is a fresh blind re-run of that claim, not a quiet patch inside the same run. Since v1.22 that re-run has a fixed shape: all three seats receive the frozen brief again with the claims named and nothing about why, and the first round's answers stay on the record beside the new ones.",
   },
   {
-    n: '5',
     name: 'Deterministic synthesis',
     body: 'A script computes the canonical finding from the three locked round-one verdicts, using a published lookup table over every possible combination. Round one is the only round in which the three reviewers are independent of each other, so it is the only round that can honestly be read as three separate judgements of the record. Model identity never enters the calculation, and the property is tested. A genuinely split panel produces Mixed, with the split shown. Beside the finding the site publishes panel agreement, Unanimous, Adjacent or Split. That replaced a confidence score in v1.3, because agreement is what the method actually measures and confidence implied a probability of truth that nothing here computes. All published arithmetic lives in a tested script, never in prose. Since v1.24 a run can also publish fewer claims than it asked. Where a framing concern is right and no repair exists that does not weaken the claim, that claim is parked with a public reason, and its answers stay committed.',
   },
   {
-    n: '6',
     name: 'Drafting, faithfulness check and plain-speech read',
     body: 'Claude drafts the question page and the claim records from the merged evidence, a fixed choice disclosed here. The other two models then check the draft against the evidence sentence by sentence, looking for anything asserted that the evidence does not carry. Flags are fixed before a human sees it. Then a model from a different vendor than the drafter reads the answers as a person would: would anyone say this out loud, does it make sense to somebody who has not seen the question, and has anything true been dropped rather than moved down. Its report is committed with the run, and a claim that cannot name its read does not publish.',
   },
   {
-    n: '7',
     name: 'Publication gate',
     body: 'Before publication, a dedicated audit, separate from the models that produced the draft, verifies every statement of fact against the archived bytes of its cited sources, not the live web. It also scans the raw review output for personal information and other material unsuitable for public release. Both audit reports are committed alongside the run. Since v1.1 this gate is performed by AI auditors under a standing delegation from Ildar Abdulin, who remains accountable for everything published and can revert any decision. A question may be deployed earlier in pending-review status; it is bannered as such and is not a finding.',
   },
@@ -200,28 +184,10 @@ const sections = toc([
     </p>
   </header>
 
-  {/*
-    The short version comes first and the full method follows it, so a stranger
-    can stop after one screen and still have the whole shape of the thing. The
-    numbered list is the same idiom as the intake and stages lists below rather
-    than a treatment of its own.
-  */}
   <section id="short" class="mt-11">
     <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">The short version</h2>
 
-    <ol class="mt-6 divide-y divide-rule border-t border-rule">
-      {
-        short.map((step) => (
-          <li class="grid gap-x-5 gap-y-1 py-5 sm:grid-cols-[2rem_1fr]">
-            <span class="text-lg font-bold text-forest tabular">{step.n}</span>
-            <div>
-              <h3 class="font-semibold tracking-[-0.012em] text-forest">{step.name}</h3>
-              <p class="mt-1.5 text-[0.9375rem] leading-relaxed">{step.body}</p>
-            </div>
-          </li>
-        ))
-      }
-    </ol>
+    <NumberedSteps steps={short} />
 
     <h3 class="mt-8 font-semibold tracking-[-0.012em] text-forest">Three things we will not do</h3>
     <ul class="mt-3 max-w-prose list-disc space-y-2 pl-5 text-[0.9375rem] leading-relaxed">
@@ -240,9 +206,11 @@ const sections = toc([
     </ul>
 
     <p class="mt-5 max-w-prose text-[0.9375rem] leading-relaxed">
-      Everything the site runs on is public: the prompts, the table, the three models' raw answers,
-      the audit reports and every edit ever made, at{' '}
-      <a href={SITE.repo} rel="noopener" class="link">{SITE.repo}</a>. The rest of this page is the
+      The prompts, the table, the models' answers, the audit reports and every edit ever made are
+      public, at{' '}
+      <a href={SITE.repo} rel="noopener" class="link">{SITE.repo}</a>. Two things are not, and the
+      sections on names and limits below say which: who is behind a commenter's label, and
+      documents we are not allowed to mirror. The rest of this page is the
       same method in full, for a reader who wants to audit it.
     </p>
   </section>
@@ -292,19 +260,7 @@ const sections = toc([
       dealt with.
     </p>
 
-    <ol class="mt-6 divide-y divide-rule border-t border-rule">
-      {
-        intake.map((step) => (
-          <li class="grid gap-x-5 gap-y-1 py-5 sm:grid-cols-[2rem_1fr]">
-            <span class="text-lg font-bold text-forest tabular">{step.n}</span>
-            <div>
-              <h3 class="font-semibold tracking-[-0.012em] text-forest">{step.name}</h3>
-              <p class="mt-1.5 text-[0.9375rem] leading-relaxed">{step.body}</p>
-            </div>
-          </li>
-        ))
-      }
-    </ol>
+    <NumberedSteps steps={intake} />
 
     <p class="mt-5 max-w-prose text-[0.9375rem] leading-relaxed">
       Two rules fall out of this, and both bind us rather than you. We do not check a claim that
@@ -353,19 +309,7 @@ const sections = toc([
       seven begin once a question has come through the five steps above and triage has said go.
     </p>
 
-    <ol class="mt-6 divide-y divide-rule border-t border-rule">
-      {
-        stages.map((stage) => (
-          <li class="grid gap-x-5 gap-y-1 py-5 sm:grid-cols-[2rem_1fr]">
-            <span class="text-lg font-bold text-forest tabular">{stage.n}</span>
-            <div>
-              <h3 class="font-semibold tracking-[-0.012em] text-forest">{stage.name}</h3>
-              <p class="mt-1.5 text-[0.9375rem] leading-relaxed">{stage.body}</p>
-            </div>
-          </li>
-        ))
-      }
-    </ol>
+    <NumberedSteps steps={stages} />
 
     <p class="mt-5 max-w-prose border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed">
       Every question published so far passed the AI audit gate under this delegation; none was
