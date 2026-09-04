@@ -508,8 +508,8 @@ exception is 2px on inline code. Two things are circles because the thing
 itself is: Stew's avatar wherever it appears, and the verdict dots in the
 AI-review matrix. No shadows except the one that lifts a
 glossary popover off the text it covers. Motion is 150ms transitions of
-colour, background, border, underline thickness, opacity (the nav's 82% to
-full) and the search glyph's stroke, on links and on the controls that change
+colour, background, border, underline colour, underline thickness, opacity
+(the nav's 82% to full) and the search glyph's stroke, on links and on the controls that change
 on hover (the chips, the buttons, the outline), and nothing else; under
 `prefers-reduced-motion` even those are off. A
 finding is a filled badge in its own colour — forest Supported, navy Partially
