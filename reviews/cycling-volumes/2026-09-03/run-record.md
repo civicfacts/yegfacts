@@ -1,6 +1,10 @@
 # Run record: `cycling-volumes`, run 2026-09-03
 
-Stage: synthesised, before drafting. Methodology v1.22.
+Stage: **halted at synthesis**, before drafting. Methodology v1.23.
+A blind re-run of claim 8 under v1.22 returned a `MATERIAL FRAMING
+CONCERN` from one seat, which under v1.2 halts synthesis. "Stage 8" at
+the end of this file is the record of it, and the finding table below is
+superseded by it.
 
 This file records what happened to the brief between drafting and
 freezing: every framing-check report, what the editor adopted and what
@@ -947,6 +951,201 @@ No finding changed. Round 2 is now complete on all three seats, and the
 citations are resolved in `fetch-report.md` rather than left for the
 gate.
 
+**That table is no longer current.** It describes the run before claim 8
+went back to three blind seats under v1.22. That re-run halted synthesis,
+and "Stage 8" below says what it returned and what the record can and
+cannot claim now.
+
 No story, answers or reader-facing copy have been drafted. The next
 stages are drafting, faithfulness and the publication gate, none of them
 started.
+
+## Stage 8, the blind re-run of claim 8, and the halt it produced
+
+Ordered under methodology v1.22 and stage 4 of `docs/DESIGN.md`. It did
+not end in a finding. It ended in a `MATERIAL FRAMING CONCERN` and a
+halted synthesis, and this section is the record of that.
+
+### Why it was ordered, and how that differs from claim 1's re-run
+
+Both re-runs on this run were ordered under the same rule, and a reader
+should be able to see that they were ordered on very different strengths
+of evidence. The two are recorded side by side for that reason.
+
+**Claim 1's re-run rested on the editor's inference.** No seat said the
+claim's finding was unsound. The editor read GPT's round-1 Not
+established beside its round-2 move to Supported and inferred that the
+first verdict recorded an omission rather than a judgement — a seat that
+had not queried the dataset, not a seat that had queried it and
+disagreed. That inference was the whole trigger. Blind, on the same
+frozen brief, the seat reached the same developer-portal page and
+returned Not established again. **The premise was wrong and the finding
+stood.** The editor was overruled by the method, which is what the method
+is for.
+
+**Claim 8's re-run rested on two seats' findings, in writing, against a
+published-path finding.** Cross-review recovered them from the Gemini
+seat: `riders-are-recreational-not-commuters` synthesised Contradicted
+from Claude's Contradicted and GPT's Contradicted, and both of those
+verdicts reached the substantive question by multiplying the 2015
+household travel survey's rounded integer modal shares by all-mode
+totals — about 21,379 commute trips against about 11,994 recreational —
+where the brief's own priority rule requires Not established first if
+the source does not break bicycle trips down by purpose or if its
+categories cannot be mapped completely onto recreation and commuting.
+One of the two findings is Claude's, against its own work. Two seats,
+independently, saying the reasoning under a published-path finding does
+not hold, one of them the seat that made the error, is the case stage 4
+is written for, and it is a stronger trigger than an editor's inference
+by a wide margin.
+
+### What the seats were given
+
+All three seats, blind, in fresh scratch directories,
+`riders-are-recreational-not-commuters` only. Package construction
+identical to `round1-rerun-1/`: the frozen brief byte for byte at sha256
+`86f4df04e2037914fe9dfe81f256f10266635420f8c6aae22a43a5b1d83289fc`,
+`prompts/reviewer.md`, `prompts/review-schema.json`, and one scoping
+paragraph in the wrapper naming the claim. Nothing about why it came
+back, what any seat found, or that a prior round happened. The
+`prompt_sha256` is
+`24e7c7a64978aeeefc3f7a7609d7b2a45d88256b355261f34541394dc27e18eb`,
+identical for all three seats. `round1-rerun-2/run.yaml` records each
+seat's command, CLI version and timings. The answers are at
+`round1-rerun-2/`; `round1/` is untouched.
+
+**Two things about the run itself, recorded because they are the editor's
+own mistakes and the seats' packages are only as clean as the operator.**
+
+1. The Gemini seat was invoked once before the run that produced the
+   committed answer. Its first attempt ran to completion, and the write
+   failed with `ENOENT` because the editor had deleted the output
+   directory while the seat was running, to get an unrelated synthesis
+   command past a guard. `extract-review.ts` could not write, the runner
+   read that as a validation failure and started its one retry, and the
+   whole invocation was killed rather than allowed to finish on a
+   package that now carried a retry notice the other two seats' packages
+   did not. **No bytes from that attempt survive anywhere**, and nothing
+   was written under `reviews/`. All three seats were then re-invoked
+   from scratch, which is why the committed manifest shows one attempt
+   each on identical package hashes. The CLIs are stateless and each ran
+   in a fresh scratch directory, so the committed pass is blind; the
+   incident is recorded because a seat that has seen a claim once is a
+   fact about the run whether or not its answer was kept.
+2. The Gemini seat's CLI moved from 1.1.25 to 1.1.26 between round 1 and
+   this re-run. `run.yaml` records both. Nothing here controls a
+   vendor's CLI releases; the manifest is what makes the drift visible.
+
+### The superseded verdicts, and the new ones
+
+| Seat | Round 1 (`round1/`) | Blind re-run (`round1-rerun-2/`) |
+| --- | --- | --- |
+| Claude Opus 5 | Contradicted (Low) | Contradicted (Moderate), **MATERIAL FRAMING CONCERN** |
+| Gemini 3.1 Pro | Not established (High) | Not established (High) |
+| GPT-5.6 Sol | Contradicted (Moderate) | Contradicted (Moderate) |
+
+One attempt each, all schema-valid. Every seat held its round-1 verdict.
+The multiset is unchanged, so had nothing else happened this claim would
+have synthesised Contradicted on an Adjacent panel exactly as before.
+
+**Something else happened.** The Claude seat raised a material framing
+concern against the brief, and under methodology v1.2 that halts
+synthesis. `scripts/synthesize.ts` scans re-run directories for the
+marker as well as `round1/` and `round2/`, so it now exits nonzero on
+this run and writes nothing.
+
+### What the concern says
+
+Two objections, both about claim 8's own section of the brief. The seat
+answered the claim as posed anyway and recorded them beside its answer,
+which is what `prompts/reviewer.md` asks for.
+
+**First, the instrument's season and day type.** The proposition is
+about cycling in Edmonton without qualification. The brief fixes the
+2015 Edmonton and Region Household Travel Survey, whose fieldwork ran
+2015-09-14 to 2015-12-11, weekdays only. Both restrictions cut the same
+way, against the recreational side. The seat reports from the City's own
+Eco-Counter records that the 89 days matching that window in 2025
+carried 614,757 bicycle passages, about 6,908 a day, against 436,863 in
+July 2025, about 14,092 a day, and that weekends — excluded outright —
+carry about a fifth of a July week's passages with a midday-humped shape
+rather than the weekday twin commute peaks. Its point is that the same
+brief fixes July for claim 2 on the express ground that a claim is
+tested at its strongest for the side asserting it, and claim 8 does the
+opposite. It does not claim a full-week, full-year measure would flip
+the verdict, and says so.
+
+**Second, the verdict ladder contradicts itself.** The ladder's first
+gate returns Not established where "the source's categories cannot be
+mapped completely onto recreation and commuting". Its Contradicted
+branch expressly contemplates "where Rec is above 35 percent but some
+third purpose category is larger". If every category mapped onto
+recreation or commuting there could be no third purpose category, so the
+two clauses cannot both be operative — and which one governs decides
+this claim. Six of the survey's ten categories map to neither bucket.
+Under the gate the verdict is Not established; under the reading the
+Contradicted branch implies, residual categories are permitted so long
+as Rec and Com are each computable, and the verdict is Contradicted. The
+seat took the second reading and returned Contradicted, and says the
+brief leaves a two-verdict ambiguity to the reviewer.
+
+**This is the same fault the cross-review findings named, seen from the
+other side.** Findings 4 and 5 said the two Contradicted verdicts
+bypassed the priority rule. This says the priority rule and the
+Contradicted branch cannot both be read as written. The re-run was
+ordered to test whether the finding survived the objection; what came
+back is that the objection is a defect in the brief, not only in the
+seats' arithmetic.
+
+### What the re-run also settled about the arithmetic
+
+Worth recording, because it is the part the objection was originally
+about. Both Contradicted seats re-derived the shares and both tested
+them against the rounding this time, unprompted.
+
+- **Claude** takes every whole-percent cell at plus or minus 0.5 points:
+  HB-Work bicycle trips fall between 16,268 and 22,775 and HB-Social /
+  Recreation between 9,995 and 13,993. The floor of the work range
+  exceeds the ceiling of the recreation range, so commuting beats
+  recreation under every admissible rounding combination.
+- **GPT** reports the recreational estimate at about 22 percent against
+  work at about 39 percent, with rounding bounds of about 18.2 to 25.6
+  percent for recreation and 31.4 to 46.7 percent for work, and notes
+  that the ten derived cells sum to about 56,600 against a published
+  54,800.
+- **Gemini** reports the same derivation and the same direction, and
+  still returns Not established, because it reads the priority gate as
+  blocking: Table 3-10 publishes mode share within purpose rather than a
+  purpose distribution of bicycle trips, and "HB-Social / Recreation"
+  bundles social visits with recreation.
+
+So the direction of the derived arithmetic is robust to the rounding, and
+the disagreement between the seats is not about the numbers at all. It is
+about whether the brief's priority gate lets the numbers be used.
+
+### Where this leaves the run
+
+**Synthesis is halted and no finding for this run is current.** The
+`synthesis.json` committed in this directory was regenerated under
+methodology v1.23 before `round1-rerun-2/` existed, so it still names
+`round1` as claim 8's basis and does not know the re-run happened.
+Re-running `scripts/synthesize.ts` on this directory today exits nonzero
+and writes nothing. A deterministic artifact that cannot be reproduced
+from the directory it describes is not a finding a story may be drafted
+from, and nothing here should be read as one until the halt is resolved.
+
+**The halt is not the editor's to resolve in passing.** Methodology v1.2
+answers a framing concern by revising the brief and rerunning round 1,
+and the brief is frozen. A revision means a new freeze hash, a fresh
+framing check on the revised section, and a decision about how many of
+the eight claims go back to the panel — the last time this happened on
+this run, all three seats answered all eight claims again, on the
+reasoning that mixing answers from two packages in one round makes the
+round dishonest. None of that is decided here, and no word of it is
+started.
+
+**What the record holds right now.** Three blind answers on claim 8, one
+of them carrying a framing concern; the round-1 answers they sit beside,
+unedited; the manifest for both; and a synthesis that predates the
+re-run and says so. No story, answers or reader-facing copy have been
+drafted.

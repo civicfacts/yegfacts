@@ -205,3 +205,26 @@ disputed self-report beside it.
 not by a test. A seat wrote an account of itself that was true of a round
 that had been superseded and false of the round it was answering, and the
 synthesis believed it. The anachronism is what exposed the precedence.
+
+## 6. The run is halted at synthesis, and `synthesis.json` predates the halt
+
+`round1-rerun-2/` holds a blind re-run of
+`riders-are-recreational-not-commuters` on all three seats, ordered under
+methodology v1.22 after cross-review recovered two findings against that
+claim's published-path finding. Every seat held its round-1 verdict, so
+the multiset did not move. But the Claude seat raised a `MATERIAL FRAMING
+CONCERN` against claim 8's section of the brief, and under methodology
+v1.2 that halts synthesis.
+
+**`synthesis.json` in this directory was written before that re-run
+existed.** It names `round1` as claim 8's basis and knows nothing about
+`round1-rerun-2/`. Running `scripts/synthesize.ts` on this directory
+today exits nonzero and writes nothing, so the committed file cannot be
+reproduced from the files it describes. **No finding in it should be
+treated as current, and no story may be drafted from it**, until the halt
+is resolved under v1.2 — which means the brief, its freeze and how many
+claims go back to the panel, none of which is decided here.
+
+The run record's "Stage 8" has the three verdicts, both objections the
+seat raised, and what the re-run settled about the arithmetic the
+cross-review findings were about.
