@@ -511,8 +511,9 @@ AI-review matrix. White panels (`.panel`, `.strip`) and the home page's search
 field carry one soft shadow (`--shadow-panel`), the glossary popover keeps its
 own, and nothing else on the site has one; the gold rule under the current nav
 word is drawn with an inset box-shadow, but it is a rule, not depth. The strip
-is boxed by hairlines on all four sides, because with the shadow alone its
-outline read fainter than the dividers between its own cells. Motion is 150ms transitions of
+keeps its 3px forest top rule and is closed by hairlines on its sides and
+bottom, because with the shadow alone its outline read fainter than the
+dividers between its own cells. Motion is 150ms transitions of
 colour, background, border, underline colour, underline thickness, opacity
 (the nav's 82% to full) and the search glyph's stroke, on links and on the controls that change
 on hover (the chips, the buttons, the outline), and nothing else; under
