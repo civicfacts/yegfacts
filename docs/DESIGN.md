@@ -502,12 +502,18 @@ The visual system is the broadsheet ledger, locked and light-only: paper
 #F7F5F0, ink #1C2124, muted #5A6166, hairline rules #CFC9BD, forest #123F35,
 navy #123B5D, gold #C3A35E, brick #8A2F22 and charcoal #4A5258. Newsreader
 sets the wordmark, headings, questions and slate quotes; Libre Franklin sets
-body, metadata, labels and buttons. Interface chrome is square-cornered —
-badges, panels, buttons, inputs, tables and rules carry no radius, and the one
-exception is 2px on inline code. Two things are circles because the thing
+body, metadata, labels and buttons. Badges, tiles, panels, tables and rules are
+square-cornered; an interactive control — a filter chip, a button, a field, the
+copy button, the Pagefind search UI — carries a 3px radius (`--radius-control`),
+and inline code keeps its 2px. Two things are circles because the thing
 itself is: Stew's avatar wherever it appears, and the verdict dots in the
-AI-review matrix. No shadows except the one that lifts a
-glossary popover off the text it covers. Motion is 150ms transitions of
+AI-review matrix. White panels (`.panel`, `.strip`) and the home page's search
+field carry one soft shadow (`--shadow-panel`), the glossary popover keeps its
+own, and nothing else on the site has one; the gold rule under the current nav
+word is drawn with an inset box-shadow, but it is a rule, not depth. The strip
+keeps its 3px forest top rule and is closed by hairlines on its sides and
+bottom, because with the shadow alone its outline read fainter than the
+dividers between its own cells. Motion is 150ms transitions of
 colour, background, border, underline colour, underline thickness, opacity
 (the nav's 82% to full) and the search glyph's stroke, on links and on the controls that change
 on hover (the chips, the buttons, the outline), and nothing else; under
@@ -516,17 +522,19 @@ finding is a filled badge in its own colour — forest Supported, navy Partially
 supported, charcoal Not established, brick Contradicted, gold Mixed — with the
 word always printed in full, and a claim list is a run of ledger rows each
 carrying a 5px left edge in the same colour, so the verdicts read down one
-column. Gold is load-bearing in exactly three places: the ".ca" of the wordmark
-on forest, the Mixed badge, and the 2px bar under the current item in the
-masthead nav. All three sit on forest or fill a badge; gold never sets text on a
-light ground, where it fails AA. Every page opens with the full-bleed forest
-masthead, and the home page extends it with the descriptor, the search field and
-the helper line.
+column. Gold is load-bearing in exactly four places: the ".ca" of the wordmark
+on forest, the Mixed badge, the 2px bar under the current item in the masthead
+nav, and the footer's column labels. All four sit on forest or fill a badge;
+gold never sets text on a light ground, where it fails AA. Every page opens with
+the full-bleed forest masthead, and the home page extends it with the
+descriptor, the search field and the helper line.
 
-The **masthead nav** is set in sentence case, in paper held to 82% opacity, with
-no underline. The page a reader is on comes to full opacity and takes the gold
-bar, drawn as a rule inside the link's own box so the row is the same height on
-every page; the search glyph beside it carries the same bar on /search.
+The **forest nav** — `.forest-nav`, used by the masthead row and by the footer's
+link columns — is set in sentence case, in paper held to 82% opacity, with no
+underline. The page a reader is on comes to full opacity and takes the gold bar,
+drawn as a rule inside the link's own box so the row is the same height on every
+page; the search glyph beside it carries the same bar on /search. Footer links
+carry no `aria-current`, so the bar is a masthead mark in practice.
 
 There are **two link treatments, and one rule that picks between them**. A link
 inside running text is underlined at rest, in navy, because nothing else in a
@@ -544,7 +552,13 @@ checked and sources archived, sit beside the deck from `lg` up and under it on
 a phone, above the search field.
 
 The **pre-launch notice** is a single gold line with an ink hairline under it,
-not a band with a brick edge. The **footer** closes the page on the wash tone.
+not a band with a brick edge. The **footer** is a forest block that bookends the
+masthead: the same ground, the same container, the compact wordmark and the
+site's descriptor sentence at its head on one baseline, then gold column labels
+over three `.forest-nav` link lists, then the colophon in paper — who builds the
+site, what it is, and the commit this build came from. Nothing muted-grey and no
+navy survives on that ground; colophon links are running text, so they are
+underlined, in paper.
 
 Hierarchy still comes from type rather than decoration: a section heading is a
 heading — on the home page's front page each one sits above a 3px ink rule —

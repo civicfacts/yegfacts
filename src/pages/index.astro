@@ -216,7 +216,9 @@ const jsonLd = [
             claim this site has checked, not an "e.g." — the box says what kind
             of question it answers by showing one. The glyph is the same 20x20
             magnifier the header carries, laid over the field's own padding so
-            it costs no layout and takes no clicks.
+            it costs no layout and takes no clicks. The field and the button
+            carry the 3px control radius, and the field takes `shadow-panel`, so
+            the white lifts off the forest the way a panel lifts off the paper.
           */}
           <div class="relative flex min-w-0 flex-1 basis-72 items-stretch">
             <SearchGlyph class="pointer-events-none absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-muted" />
@@ -227,12 +229,12 @@ const jsonLd = [
               placeholder="Did Edmonton lose $82 million on its electric buses?"
               aria-label="Search checked claims"
               autocomplete="off"
-              class="h-[52px] w-full min-w-0 appearance-none rounded-none border-0 bg-white pr-3.5 pl-12 font-display text-[1.125rem] text-ink placeholder:text-muted placeholder:italic focus-visible:outline-offset-2"
+              class="h-[52px] w-full min-w-0 appearance-none border-0 bg-white pr-3.5 pl-12 font-display text-[1.125rem] text-ink shadow-panel placeholder:text-muted placeholder:italic focus-visible:outline-offset-2"
             />
           </div>
           <button
             type="submit"
-            class="h-[52px] cursor-pointer rounded-none bg-brick px-7 text-[1rem] font-bold text-white hover:bg-[#75261b] max-[40rem]:grow max-[40rem]:basis-full"
+            class="h-[52px] cursor-pointer bg-brick px-7 text-[1rem] font-bold text-white hover:bg-[#75261b] max-[40rem]:grow max-[40rem]:basis-full"
           >
             Search
           </button>
