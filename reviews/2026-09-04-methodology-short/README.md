@@ -24,7 +24,7 @@ brought current, and one component for the page's three numbered lists.
   The sixth: the NumberedSteps component had been committed unused. The
   commit that was meant to wire it in (888a2b7) had lost the wiring to a
   review agent's file revert in the same worktree; the record of that is
-  in the board repo. Fixed in 8c0fd5a.
+  in the board repo. Fixed in 87f6fe3.
 - Round 2 (REVISE, 2 spec open): "when they genuinely split, it is
   Mixed" was still wrong, since S S N, S N N and S P N are Split panels
   with non-Mixed findings; and the public list was still exhaustive
