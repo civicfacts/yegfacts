@@ -170,20 +170,23 @@ cannot outlive the split.
 
 ## The changelog entry this earns
 
-1.20, 1.21 and 1.22 are spoken for by branches already queued on the file
-(the frozen `cycling-volumes` brief, the register repairs, the Gemini seat
-change), so this takes **1.23**. Drafted, not written into
-`methodology/changelog.yaml`, because a fourth branch touching that file is
-how this gets messy. Written in for real when this branch's turn comes.
+The number moved while this branch waited its turn. The `cycling-volumes` run
+(PR #37) landed as five entries at once, 1.20 through 1.24, and two branches are
+still queued ahead of this one on the file: the register repairs and the claim
+split (PR #45) take 1.25, the Gemini seat change (PR #49) takes 1.26. So this
+takes **1.27**, and unlike the earlier draft it is written into
+`methodology/changelog.yaml` here rather than left quoted. This branch's turn
+has come, and a branch that ships the changelog rule while owing the changelog
+an entry is the thing the rule exists to stop.
 
 One more thing the entry has to carry, found by replaying the new rule over
 recent history: the change that added the `WITHHELD LEAK` fail class
 (PR #44, `002c1ab`) edited `methodology/exposure-audit.md`, which describes
 the method, and minted no version. Under the rule it now owes one. Rather
-than a retroactive bump for one class, 1.23 records it.
+than a retroactive bump for one class, this entry records it.
 
 ```yaml
-- version: "1.23"
+- version: "1.27"
   date: "2026-09-03"
   scope: enforcement
   summary: >

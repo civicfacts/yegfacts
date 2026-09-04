@@ -14,6 +14,34 @@
 # The sentence above used to describe a check that did not exist: the rule sat
 # as a TODO in scripts/validate.ts, and a change under methodology/ shipped
 # clean. It runs now.
+- version: "1.27"
+  date: "2026-09-03"
+  scope: enforcement
+  summary: >
+    Three of this project's own files described checks that did not exist. Two
+    were fixed in the preceding changes; this one makes the third rule actually
+    run, and adds the first mechanical guard on the rule whose absence put words
+    in a real person's mouth.
+  highlights:
+    - "The methodology changelog's own header claimed CI required a version entry for any change under prompts/, scripts/merge*, scripts/synthesize* or methodology/. It did not; the rule was a TODO in the validator. It runs now, in npm run validate:diff, which CI runs against the branch's base commit."
+    - "Two paths under methodology/ are exempt and the header says so: methodology/audits/ holds records that report on the method rather than change it, and the changelog is the record itself. Without those, the version number would come to mean something happened rather than the method changed."
+    - "The second rule in the same TODO runs too: a change to a claim's finding or panel_agreement now requires a matching entry in the parent story's changelog. Re-wording an existing entry does not satisfy either rule."
+    - "A claim is one assertion is a rule the merge prompt has always carried and nothing ever checked. One claim reached the public register joining two people's remarks with the word the rule names, recording someone as asserting a tax rise when their words stated a tax bill. A gate now refuses a merge whose proposition asserts two quantities that no single captured wording carries together."
+    - "That gate is a corner of the rule, not the rule, and it says so in every report it writes. Whether a wording asserts a proposition is entailment, and no string test decides entailment. The compound propositions with no numbers in them, and the whole of rule 2, still need a reader."
+    - "The one claim the gate flags on the live register is named in the validator with the date it was found and the reason it is not fixed yet, and prints on every run. Everything else fails."
+    - "Replaying the version rule over the last fourteen merges to main found one that owed an entry and had none, and it was ours from the same evening: the change that added the WITHHELD LEAK fail class to the exposure audit edited methodology/exposure-audit.md, which describes the method, and bumped nothing. The rule did not exist yet to stop it. This entry records that class's arrival, so the method's public record is complete without a retroactive version for a single check."
+  links:
+    - label: How the site works
+      href: /about
+    - label: Every question we've considered
+      href: /questions
+  note: >
+    The uncomfortable part is not that a check was missing. It is that the file
+    said the check was there. A gap is something a reader can weigh; a
+    documented check that does not run tells them not to bother weighing it. The
+    fourth finding here is what that costs when it is a rule about attribution:
+    a real person, quoted under a pseudonym, recorded as asserting a sentence
+    they did not say.
 - version: "1.24"
   date: "2026-09-03"
   scope: a-claim-parked-out-of-a-run
