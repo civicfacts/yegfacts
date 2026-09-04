@@ -31,11 +31,23 @@
  * A run halts here, nonzero and unsynthesised, when any reviewer flagged
  * `MATERIAL FRAMING CONCERN` against the brief (methodology v1.2). See
  * `framingConcerns` below.
+ *
+ * Since methodology v1.24 a run may also publish fewer claims than it asked.
+ * `run.yaml` carries a `synthesis_scope` naming every claim this run
+ * synthesises and every claim it parks, with the reason each was parked. The
+ * two lists together must account for every round-1 claim exactly once, so a
+ * claim can never fall out of a run by being left unmentioned. See
+ * `loadScope`.
  */
 import { existsSync, mkdirSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { listFiles, relative, repoPath, currentMethodologyVersion } from './lib/repo.ts';
-import { validateReviewFile, type Review, type ReviewClaim } from './lib/review-schema.ts';
+import {
+  loadRunManifest,
+  validateReviewFile,
+  type Review,
+  type ReviewClaim,
+} from './lib/review-schema.ts';
 import { synthesize } from './synthesis-matrix.ts';
 import type {
   CanonicalFinding,
@@ -94,6 +106,28 @@ type ClaimSynthesis = {
   disagreement_notes: string[];
 };
 
+/**
+ * A claim the run asked and does not answer (methodology v1.24).
+ *
+ * It is named here because parking is a decision, not an omission: the seats'
+ * answers stay committed where they were written, and this entry says in the
+ * deterministic artifact that the run dropped the claim and why.
+ */
+type ParkedClaim = {
+  id: string;
+  /** The reason a reader is shown, from the manifest. */
+  reason: string;
+  /** Where its seats' answers live, when they are not in `round1`. */
+  basis?: string;
+  /**
+   * Every framing concern raised on this claim, by round and seat. A concern
+   * on a parked claim does not halt the run — the claim it concerns is not
+   * being published — but it is copied here so that parking can never be a way
+   * to make a halt disappear. The concern's own words stay in the review file.
+   */
+  framing_concerns: string[];
+};
+
 type Synthesis = {
   story: string;
   run: string;
@@ -106,6 +140,12 @@ type Synthesis = {
   basis: 'round1';
   /** The `round1-rerun-*` directories read, in name order. Empty when none. */
   claim_reruns: string[];
+  /**
+   * The claims this run asked and parked rather than answered, in the
+   * manifest's order. Empty when the run synthesises everything it asked,
+   * which is the normal case.
+   */
+  parked_claims: ParkedClaim[];
   /** Whether a cross-review round ran and is reflected in `round2_positions`. */
   round2_documented: boolean;
   generated_at: string;
@@ -113,6 +153,18 @@ type Synthesis = {
 };
 
 type LoadedRound = { provider: string; review: Review };
+
+/** What `run.yaml` says this run answers, and what it parks. */
+type SynthesisScope = { claims: Set<string>; parked: ParkedClaim[] };
+
+/** One reviewer's framing concern, kept with the claim it was raised against. */
+type FramingConcern = {
+  claim: string;
+  /** Round and seat, for the halt message and for the parked claim's record. */
+  where: string;
+  /** The reviewer's own words, whitespace-collapsed. */
+  notes: string;
+};
 
 /**
  * A claim-scoped blind re-run: one `round1-rerun-*` directory, the claim ids
@@ -214,9 +266,14 @@ const FRAMING_HALT_MARKER = 'MATERIAL FRAMING CONCERN';
  * itself is loaded, and computing a canonical finding over it would launder a
  * bad framing into a three-model verdict. So this halts the run rather than
  * degrading it: the brief is revised and round 1 rerun.
+ *
+ * Each concern is kept with the claim it was raised against, because since
+ * methodology v1.24 a run may answer one by dropping that claim rather than by
+ * revising the brief. Only a concern against a claim the run still publishes
+ * halts it, which `loadScope` explains is not the same as ignoring one.
  */
-function framingConcerns(rounds: LoadedRound[], round: number): string[] {
-  const hits: string[] = [];
+function framingConcerns(rounds: LoadedRound[], round: number): FramingConcern[] {
+  const hits: FramingConcern[] = [];
   for (const { provider, review } of rounds) {
     for (const claim of review.claims) {
       const notes = claim.interpretation_notes;
@@ -224,11 +281,81 @@ function framingConcerns(rounds: LoadedRound[], round: number): string[] {
       // the frame held, not raising one; the reviewer prompt now asks them not
       // to write the string at all in that case, and this guards the seam.
       if (notes && new RegExp(`(?<!\\bno\\s)${FRAMING_HALT_MARKER}`, 'i').test(notes)) {
-        hits.push(`round ${round} · ${provider} · claim "${claim.id}": ${notes.replace(/\s+/g, ' ').trim()}`);
+        hits.push({
+          claim: claim.id,
+          where: `round ${round} · ${provider} · claim "${claim.id}"`,
+          notes: notes.replace(/\s+/g, ' ').trim(),
+        });
       }
     }
   }
   return hits;
+}
+
+/**
+ * The run's synthesis scope, from `run.yaml` (methodology v1.24).
+ *
+ * A brief can turn out to have fixed an instrument that cannot carry the claim
+ * it was fixed for. Where the claim cannot be re-framed without weakening it —
+ * and a proposition may be made more precise, never weaker — the honest
+ * outcome is that the run answers the claims it can and parks the one it
+ * cannot. This is where the run is told which is which.
+ *
+ * The rules exist so that parking cannot be quiet. Every claim round 1 asked
+ * appears in exactly one of the two lists, so a claim cannot leave a run by
+ * going unmentioned; a parked claim carries the reason a reader is shown,
+ * because a claim dropped without a public reason cannot be told from a claim
+ * dropped for the answer it gave; and any framing concern raised against it is
+ * copied into `synthesis.json` rather than discarded. What parking does not do
+ * is resolve the concern. The seats' answers stay committed where they were
+ * written, and the register entry says the site tried and could not answer it.
+ */
+function loadScope(runDir: string, round1: LoadedRound[]): SynthesisScope | undefined {
+  const manifest = path.join(runDir, 'run.yaml');
+  if (!existsSync(manifest)) return undefined;
+  const scope = loadRunManifest(manifest).synthesis_scope;
+  if (!scope) return undefined;
+
+  const known = new Set(round1.flatMap(({ review }) => review.claims.map((claim) => claim.id)));
+  const at = `${relative(manifest)} synthesis_scope`;
+  const listed = new Set<string>();
+  const place = (id: string, list: string): void => {
+    if (!known.has(id)) throw new Error(`${at} ${list} names claim "${id}", which round 1 never asked`);
+    if (listed.has(id)) throw new Error(`${at} names claim "${id}" twice; each claim is listed once`);
+    listed.add(id);
+  };
+
+  const claims = new Set<string>();
+  for (const id of scope.claims ?? []) {
+    place(id, 'claims');
+    claims.add(id);
+  }
+
+  const parked: ParkedClaim[] = [];
+  for (const entry of scope.parked ?? []) {
+    const id = entry?.claim ?? '';
+    if (id === '') throw new Error(`${at} parked: every parked entry names the claim it parks`);
+    place(id, 'parked');
+    const reason = (entry.reason ?? '').trim();
+    if (reason === '') {
+      throw new Error(
+        `${at} parked "${id}": a parked claim carries the reason it was parked, in words a reader ` +
+          `can be shown. Without one, a claim dropped because the record cannot answer it reads ` +
+          `exactly like a claim dropped for the answer it gave.`,
+      );
+    }
+    parked.push({ id, reason, ...(entry.basis ? { basis: entry.basis } : {}), framing_concerns: [] });
+  }
+
+  const unlisted = [...known].filter((id) => !listed.has(id));
+  if (unlisted.length > 0) {
+    throw new Error(
+      `${at} neither synthesises nor parks ${unlisted.map((id) => `"${id}"`).join(', ')}. ` +
+        `Every claim round 1 asked is listed once, so none can fall out of a run unmentioned.`,
+    );
+  }
+
+  return { claims, parked };
 }
 
 function claimIds(rounds: LoadedRound[]): string[] {
@@ -327,19 +454,32 @@ export function synthesizeRun(runDir: string): Synthesis {
   const round1 = loadRound(runDir, 1);
   const round2 = loadRound(runDir, 2);
   const reruns = loadClaimReruns(runDir, round1);
+  const scope = loadScope(runDir, round1);
 
   const concerns = [
     ...framingConcerns(round1, 1),
     ...reruns.flatMap((rerun) => framingConcerns(rerun.round, 1)),
     ...framingConcerns(round2, 2),
   ];
-  if (concerns.length > 0) {
+  // A concern against a parked claim does not halt: that claim is not being
+  // published, and the manifest says on the record that it was dropped and
+  // why. A concern against anything this run still answers halts as before.
+  const halting = scope ? concerns.filter((concern) => scope.claims.has(concern.claim)) : concerns;
+  if (halting.length > 0) {
     throw new Error(
       `halted: a reviewer flagged ${FRAMING_HALT_MARKER} against the brief for ` +
         `${relative(runDir)}. Revise the brief and rerun round 1; do not synthesise over a ` +
-        `framing a reviewer says predetermines the answer.\n  - ${concerns.join('\n  - ')}`,
+        `framing a reviewer says predetermines the answer.\n  - ${halting
+          .map((concern) => `${concern.where}: ${concern.notes}`)
+          .join('\n  - ')}`,
     );
   }
+  const parked = (scope?.parked ?? []).map((entry) => ({
+    ...entry,
+    framing_concerns: concerns
+      .filter((concern) => concern.claim === entry.id)
+      .map((concern) => concern.where),
+  }));
 
   if (round1.length === 0) throw new Error(`no round-1 review JSON found under ${relative(runDir)}`);
   if (round1.length !== 3) {
@@ -350,7 +490,9 @@ export function synthesizeRun(runDir: string): Synthesis {
     );
   }
 
-  const claims: ClaimSynthesis[] = claimIds(round1).map((id) => {
+  const inScope = (id: string): boolean => !scope || scope.claims.has(id);
+
+  const claims: ClaimSynthesis[] = claimIds(round1).filter(inScope).map((id) => {
     // A claim answered by a blind re-run reads its three positions from there
     // and nowhere else. Mixing the superseded round-1 verdict into the multiset
     // would be the quiet correction inside the run that §4 forbids.
@@ -379,6 +521,7 @@ export function synthesizeRun(runDir: string): Synthesis {
     methodology_version: currentMethodologyVersion(),
     basis: 'round1',
     claim_reruns: reruns.map((rerun) => rerun.name),
+    parked_claims: parked,
     round2_documented: round2.length > 0,
     generated_at: new Date().toISOString(),
     claims,
@@ -399,11 +542,20 @@ function main(): void {
   console.log(
     `wrote ${relative(out)} (basis ${synthesis.basis}` +
       `${synthesis.round2_documented ? ', round 2 documented' : ''}, ` +
-      `${synthesis.claims.length} claims)`,
+      `${synthesis.claims.length} claims` +
+      `${synthesis.parked_claims.length > 0 ? `, ${synthesis.parked_claims.length} parked` : ''})`,
   );
   for (const claim of synthesis.claims) {
     const basis = claim.basis === 'round1' ? '' : ` [${claim.basis}]`;
     console.log(`  ${claim.id}: ${claim.finding} / ${claim.panel_agreement}${basis}`);
+  }
+  // Printed as loudly as a finding, because a claim the run dropped is the
+  // thing an operator is most likely to miss in a list of the ones it kept.
+  for (const claim of synthesis.parked_claims) {
+    const concerns =
+      claim.framing_concerns.length > 0 ? ` [framing concern: ${claim.framing_concerns.join('; ')}]` : '';
+    console.log(`  ${claim.id}: PARKED, not synthesised${concerns}`);
+    console.log(`    ${claim.reason.replace(/\s+/g, ' ').trim()}`);
   }
 }
 

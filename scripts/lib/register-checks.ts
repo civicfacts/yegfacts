@@ -56,6 +56,22 @@ export const CLAIM_SIDES = ['for', 'against', 'neither'] as const;
 /** The only ground on which a claim carries a decline of its own. */
 export const DECLINE_GROUND = 'right-of-reply';
 
+/**
+ * The only ground on which a claim carries a park of its own (methodology
+ * v1.24): the question was checked, the panel answered it, and this one claim
+ * came back unanswerable on the record that exists.
+ *
+ * It is a different thing from a question parked at triage, which is a decision
+ * about when to spend a run. This is what is left when the run has been spent:
+ * the only instrument the search found cannot carry the proposition as posed,
+ * and the proposition may be made more precise but never weaker to fit it. The
+ * claim keeps its wording and its provenance — nothing here is withheld — and
+ * it carries the reason and the condition on which it reopens, because a claim
+ * dropped at the last stage without a public reason cannot be told apart from a
+ * claim dropped for the answer it was going to give.
+ */
+export const PARK_GROUND = 'no-instrument';
+
 /** A capture, as the rules need to see it. */
 export interface Capture {
   /** Every comment's text, in the capture's order. */
@@ -426,14 +442,20 @@ function checkState(where: string, question: Record_, fail: (message: string) =>
 }
 
 /**
- * A claim carries no state of its own, with one exception.
+ * A claim carries no state of its own, with two exceptions, and both name the
+ * ground they stand on so neither can be reached by accident.
  *
- * The exception is the charter's, not a convenience. A claim accusing a named
- * person of wrongdoing or an improper motive is declined whatever happens to the
- * question around it: an investigation into what councillors have disclosed can
- * be entirely worth running while the accusation inside it is one this site has
- * no way to put to the person. So the claim carries its own decline, and it may
- * carry nothing else that repeats the accusation — the register is published too.
+ * The first is the charter's. A claim accusing a named person of wrongdoing or
+ * an improper motive is declined whatever happens to the question around it: an
+ * investigation into what councillors have disclosed can be entirely worth
+ * running while the accusation inside it is one this site has no way to put to
+ * the person. So the claim carries its own decline, and it may carry nothing
+ * else that repeats the accusation — the register is published too.
+ *
+ * The second is the run's. A claim the panel answered and the run could not
+ * publish — because the only instrument that exists cannot carry the
+ * proposition, and a proposition may be made more precise but never weaker — is
+ * parked on its own while the question around it goes ahead. See `PARK_GROUND`.
  */
 function checkClaimState(where: string, claim: Record_, fail: (message: string) => void): void {
   for (const field of ['lifecycle', 'publication'] as const) {
@@ -445,10 +467,26 @@ function checkClaimState(where: string, claim: Record_, fail: (message: string) 
   const ground = claim.ground;
   if (claim.triage === undefined && ground === undefined) return;
 
+  if (ground === PARK_GROUND) {
+    if (claim.triage !== 'park') {
+      fail(`${where}: a ${PARK_GROUND} ground only ever accompanies a triage of park`);
+      return;
+    }
+    // The reason is the whole point of parking a claim in public: it says the
+    // site tried, what stopped it, and what would let it try again.
+    if (!filled(claim.reason)) {
+      fail(
+        `${where}: parked on the ${PARK_GROUND} ground, so it needs the reason a reader is shown, ` +
+          `including what would reopen it`,
+      );
+    }
+    return;
+  }
+
   if (ground !== DECLINE_GROUND) {
     fail(
       `${where}: triage ruled on its question, so it carries no triage of its own ` +
-        `unless it is declined on the ${DECLINE_GROUND} ground`,
+        `unless it is declined on the ${DECLINE_GROUND} ground or parked on the ${PARK_GROUND} ground`,
     );
     return;
   }

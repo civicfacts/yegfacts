@@ -47,15 +47,20 @@ const quoted = claim.proposition === undefined;
 const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
 
 /**
- * The claim was turned down while the question around it goes ahead.
+ * The claim was ruled on separately from the question around it.
  *
- * The one case is an accusation against a named person: the investigation into
- * what an office-holder has disclosed can be entirely worth running, and the
- * accusation inside it is still one this site has no way to put to them. Two
- * decisions differ here, so the page prints both rather than the question's
- * alone, which would read as though the accusation were being checked.
+ * Two cases, and they are different enough that the page says which. An
+ * accusation against a named person is declined even where the investigation
+ * around it is worth running, because the site has no way to put the
+ * accusation to them. A claim parked on the `no-instrument` ground went to the
+ * panel and came back unpublishable: the only instrument that exists cannot
+ * carry the proposition, and the site will not make the proposition weaker to
+ * fit it. Either way two decisions differ here, so the page prints both rather
+ * than the question's alone.
  */
 const declinedApart = claim.triage === 'no' && question.triage !== 'no';
+const parkedApart = claim.triage === 'park' && question.triage !== 'park';
+const ruledApart = declinedApart || parkedApart;
 ---
 
 <article>
@@ -106,17 +111,19 @@ const declinedApart = claim.triage === 'no' && question.triage !== 'no';
       {
         declinedApart
           ? 'This claim has not been checked and will not be. It is an allegation about a named person, and the site declines those; the reason is below.'
-          : question.triage === 'no'
-            ? 'This claim has not been checked. The question it belongs to was turned down at intake, for the reason below.'
-            : 'This claim has not been checked. It is waiting on the question below, which is what a brief, a body of evidence and a panel run are spent on.'
+          : parkedApart
+            ? 'This claim was put to the panel and came back without one. No published record can settle it as the claim was made, so it is parked rather than answered on something that would not carry it. The reason is below, with the condition on which we come back to it.'
+            : question.triage === 'no'
+              ? 'This claim has not been checked. The question it belongs to was turned down at intake, for the reason below.'
+              : 'This claim has not been checked. It is waiting on the question below, which is what a brief, a body of evidence and a panel run are spent on.'
       }
     </p>
 
     <p class="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-2">
-      <span class={label}>{declinedApart ? 'This claim' : 'Its question'}</span>
-      <StateBadge state={declinedApart ? claim.triage! : question.triage} />
+      <span class={label}>{ruledApart ? 'This claim' : 'Its question'}</span>
+      <StateBadge state={ruledApart ? claim.triage! : question.triage} />
       {
-        declinedApart && (
+        ruledApart && (
           <>
             <span class={label}>The question around it</span>
             <StateBadge state={question.triage} />
@@ -126,12 +133,12 @@ const declinedApart = claim.triage === 'no' && question.triage !== 'no';
     </p>
 
     {
-      (declinedApart ? claim.reason : question.reason) && (
+      (ruledApart ? claim.reason : question.reason) && (
         <p
           class="mt-3.5 max-w-prose border-l-2 border-gold pl-3.5 text-[1.0625rem] leading-relaxed text-pretty"
           data-record
         >
-          {declinedApart ? claim.reason : question.reason}
+          {ruledApart ? claim.reason : question.reason}
         </p>
       )
     }

@@ -281,7 +281,15 @@ stopped.
    published finding: both multisets resolve identically on all six published
    claims. A claim answered by a blind re-run is read from that re-run and not
    from `round1/`, and every claim in `synthesis.json` names its own `basis` so
-   the reader is told which blind round produced it.
+   the reader is told which blind round produced it. Since methodology v1.24 a
+   run may also publish fewer claims than it asked: where a framing concern is
+   right and no repair exists that does not make the claim weaker, `run.yaml`
+   carries a `synthesis_scope` naming the claims this run synthesises and the
+   claims it parks, with the reason each was parked. The two lists must account
+   for every round-1 claim exactly once, a parked claim must carry a public
+   reason, and a concern against a claim still being published halts the run as
+   before. The parked claim's answers stay committed, its reason goes on the
+   register, and `synthesis.json` records it beside the findings.
 6. **Drafting, faithfulness check and plain-speech read.** Claude drafts the
    story and claim files from the merged evidence (a fixed, disclosed choice for
    v1). The other two models check the draft against the evidence: every

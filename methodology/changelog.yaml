@@ -1,6 +1,37 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.24"
+  date: "2026-09-03"
+  scope: a-claim-parked-out-of-a-run
+  summary: >
+    A run may now publish fewer claims than it asked. Where a reviewer's framing
+    concern is right and no repair is available that does not make the claim
+    weaker, the claim leaves the run: named in the run manifest with its reason,
+    parked in public on the register, its answers left committed where they were
+    written, and the rest of the run synthesised.
+  highlights:
+    - "What happened. On cycling-volumes a blind seat raised a material framing concern against the claim that Edmonton's riders are recreational rather than commuters. The brief had fixed the 2015 regional household travel survey, whose fieldwork ran mid-September to mid-December on weekdays only, as the instrument for a claim about cycling with no season or day named. Both restrictions cut the same way, against the recreational side, and the same brief fixed July for another claim on the express ground that a claim is tested at its strongest for the side asserting it. The seat was right, and the inconsistency was the brief's."
+    - "Why the existing answer did not fit. Since methodology v1.2 a framing concern is answered by revising the brief and rerunning round 1. Neither available revision was honest here. Qualifying the proposition to autumn weekdays, in those words, makes it weaker than the claim people are actually making, and the standing rule is that a proposition may be made more precise and never weaker. Naming a better instrument means an Edmonton travel survey that records trip purpose across a representative period, which the brief's own source search had already looked for and not found."
+    - "What a run does instead. run.yaml carries a synthesis_scope: the claims this run synthesises, and the claims it parks with the reason each was parked. scripts/synthesize.ts reads it, produces findings for the claims in scope, and writes the parked ones into synthesis.json with their reasons and with every framing concern raised against them. A run that says nothing about scope behaves exactly as before."
+    - "The guards, because parking must not become a quiet way past a halt. Every claim round 1 asked appears in exactly one of the two lists, so a claim cannot fall out of a run by going unmentioned. A parked claim carries the reason a reader is shown; without one, a claim dropped because the record cannot answer it reads exactly like a claim dropped for the answer it gave. And a framing concern against a claim the run still publishes halts the run as it always did."
+    - "Nothing is deleted. The parked claim's round-1 answers, its blind re-run and the cross-review that sent it back all stay committed and readable. A claim the site tried and could not answer is part of the record of trying, and a reader following the run can see that a claim was dropped at the last stage and why."
+    - "In public. The claim is parked on the register on a new no-instrument ground, which is a different thing from a question parked at triage: this is what is left after the run has been spent. Its page keeps its wording and its provenance, says the claim went to the panel and came back unanswerable, and gives the reason and the condition on which it reopens."
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: Every question we've considered
+      href: /questions
+  note: >
+    The risk is that parking becomes the exit from an answer somebody did not
+    like. Two things bound it. The seats' answers stay committed beside the
+    reason, so anyone can see what the run would have published: here all three
+    had answered, and the finding it cost the run was Contradicted — a finding
+    against the people making the claim, not for them. And the concern that
+    parked it is copied into the deterministic artifact rather than dropped with
+    the claim. What would show this was wrong is a run that parks the claim
+    whose answer the editor found inconvenient, or a register where parked
+    claims accumulate faster than answered ones.
 - version: "1.23"
   date: "2026-09-03"
   scope: prior-verdict-from-the-committed-file
