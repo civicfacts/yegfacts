@@ -168,6 +168,12 @@ Everything not on that list fails. The list is a debt, not a dispensation, and
 the validator fails if it names a claim that is not in the register — so it
 cannot outlive the split.
 
+**2026-09-04:** the debt is cleared. PR #45 merged and split the claim, so the
+entry came out and `KNOWN_UNSPLIT_CLAIMS` is empty. The gate now reads the live
+register — 113 claims, none flagged — and passes with no exemptions. The
+mechanism stays for the next one: an entry warns, anything unlisted fails, and a
+listed claim that has left the register fails too.
+
 ## The changelog entry this earns
 
 The number moved while this branch waited its turn. The `cycling-volumes` run

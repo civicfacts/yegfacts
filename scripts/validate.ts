@@ -1147,16 +1147,17 @@ function checkQuestionTopics(questions: Record_[]): void {
  * run on a merged run before it becomes register entries. This is the standing
  * check on what is already published, so a claim cannot be edited back into the
  * shape after the gate has seen it.
+ *
+ * `KNOWN_UNSPLIT_CLAIMS` is empty as of 2026-09-04. The one claim this check
+ * found on the live register was `property-taxes-rising-sharply`, split under
+ * v1.25, so the check passes the published register with no exemptions.
+ *
+ * An entry here is a debt, not a dispensation: a claim the check flags, named
+ * with the date it was found and the reason it is not fixed yet, printed as a
+ * `warn:` on every run until it is. An unlisted flagged claim fails, and a
+ * listed claim that has left the register fails too, so the list cannot rot.
  */
-const KNOWN_UNSPLIT_CLAIMS = new Map<string, string>([
-  [
-    'property-taxes-rising-sharply',
-    'found 2026-09-03 by the merge-bound check, on the register as it stands. The split ' +
-      'is an editorial act on a file two other branches hold, so it is queued, not ' +
-      'done here. This entry is a debt, not a dispensation: it must go when the ' +
-      'claim is split.',
-  ],
-]);
+const KNOWN_UNSPLIT_CLAIMS = new Map<string, string>([]);
 
 function checkClaimBound(): void {
   const file = repoPath('intake', 'register.yaml');
