@@ -306,10 +306,17 @@ PARK." That is good and rare, and it should stay. But it does not say
 which reader took which side, so a reader cannot tell whether the
 permissive seat or the cautious seat prevailed, or whether the same seat
 is permissive every time. On this run it is the same seat every time:
-the OpenAI seat parked all three of the GO-against-PARK splits and
-declined the one that became `downtown-business`. That is a systematic
-difference between the two readers, and it is not visible from the
-register.
+the OpenAI seat parked all three of the GO-against-PARK splits, and it
+also parked `downtown-business`; it was the Gemini seat that declined
+it. That is a systematic difference between the two readers, and it is
+not visible from the register.
+
+**Correction, 2026-09-04.** The paragraph above originally said the
+OpenAI seat declined `downtown-business`. The seat outputs show the
+opposite: the OpenAI seat (gpt-5.6-sol) parked it and the Gemini seat
+(Gemini 3.1 Pro) declined it. This was caught by the independent
+critique of PR #45. The larger claim above, that the same seat parked
+all three GO-against-PARK splits, is unaffected.
 
 ## 8. The four extra checks
 
