@@ -66,6 +66,16 @@ Corrected later).
   5, broken only behind each digit) and the founder's look at the
   preview is the gate for the merge (D-0021). codex-review_7.md is the
   brief that did not run.
+- After the merge (b0d2c4f, on the founder's "merge pr, looks better
+  now") the founder approved running the Gemini seat headless with the
+  permissions flag, and it read the same brief: gemini-output_1.md
+  (Gemini 3.8 Flash at high, agy, sandboxed). It inspected the 1280
+  screenshot and the CSS and confirmed the spine is one continuous line
+  from numeral 1 to 5, broken only behind each digit, starting and
+  ending on a node, with no dividers crossing it. Its one REVISE was
+  that the local build's footer SHA was the fix commit rather than the
+  later README-only commit; not a property of the change, and CI built
+  the merge from its own commit.
 
 Four rounds for ten sentences, then two for one visual fix. Every finding was a sentence saying more
 than the method does, the same failure the short version itself drew in
