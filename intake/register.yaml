@@ -51,9 +51,12 @@
 #                 with the for/against/neither split. One pseudonym is one
 #                 person within a source; no page sums across sources. The
 #                 validator checks the total two ways: it must fall inside the
-#                 range its claims allow, and the split must add up to it, so a
-#                 person who argued on more than one side is counted once, on
-#                 the side their own words put them on.
+#                 range its claims allow, and the for/against/neither counts
+#                 must add up to it. That arithmetic is all the validator can
+#                 prove; it cannot show that each person was counted once,
+#                 because a double count and a missed person cancel out. Which
+#                 side somebody who argued on both sides belongs on is an
+#                 editor's judgement, and this file does not record it.
 # registered_as:  the verbatim wording a hand-registered question was filed
 #                 under, before the register had claims.
 # triage_report:  repo-relative path to the triage report. (`triage` is a state
@@ -91,14 +94,20 @@
 #               proposition was read on its own by two seats, and eleven that
 #               both seats refused are now live claims under questions that are
 #               going ahead. That is the right outcome — the question is worth
-#               the work — but a brief author who cannot see the refusal spends
-#               a panel run on a claim two independent readers already declined.
+#               the work — but a brief author who cannot see the refusal writes
+#               up a claim two independent readers already declined, and it
+#               gets a published finding.
 #               So the decision is recorded where it was made:
 #               { outcome, readers, reason }. `outcome` is from the same
 #               go | park | no vocabulary; `readers` names every seat that
 #               reached it, at least two, because "the readers declined it"
 #               means nothing unless a reader can see how many there were and
-#               who they were; `reason` is the sentence they gave. It is
+#               who they were; `reason` is the reason the run's combined
+#               triage file recorded for that decision. That file keeps one
+#               reason per decision, and on the eleven claims that carry this
+#               field the stored sentence copies one seat's wording word for
+#               word; the field neither names that seat nor keeps the other
+#               seat's reason. It is
 #               history, not state: the question's triage is what decides
 #               whether the work happens, and a claim declined on the
 #               right-of-reply ground carries that live decline instead.
@@ -230,7 +239,7 @@ questions:
     lifecycle: registered
     triage: no
     publication: unpublished
-    reason: "All 17 people who raised the $100 million in this source take the approval as given, so checking the council vote would only restate an undisputed budget fact. What the money buys and over how long is argued about, and that half of the question went to a separate question that has since been published: how the money for bike lanes compares with what Edmonton spends on roads."
+    reason: "All 17 people who raised the $100 million in this source take the approval as given, so checking the council vote would settle nothing anybody here is arguing about. What is argued about is how long the money covers and how it sits beside road spending, and that half went to a separate question, now published: how the money for bike lanes compares with what Edmonton spends on roads."
     accounts:
       total: 17
       against: 17
@@ -258,6 +267,7 @@ questions:
     triage: go
     publication: unpublished
     reason: "City tax-rate and typical-property records can show the general increase, although the two anonymous residents’ dollar amounts cannot be verified without their assessment and tax notices."
+    grouping_note: "One resident's increase and another's yearly bill are different measures of the same complaint about what Edmontonians pay, and both were raised in the same argument. The resident who reported the increase wrote \"my taxes\" and not property taxes, so the claim under her name says taxes. Both readers sent the question ahead on the City's own tax records. Neither resident's own amount can be checked without their assessment and tax notices, which is the limit the combined reason carries."
     accounts:
       total: 2
       against: 2
@@ -401,7 +411,7 @@ questions:
     lifecycle: registered
     triage: go
     publication: unpublished
-    reason: "The zoning bylaw and infill permit records answer questions about parking minimums, tree removal, and density. The two readers split: Gemini 3.1 Pro said go, GPT-5.6 Sol parked it."
+    reason: "Gemini 3.1 Pro sent this ahead, saying the zoning bylaw and the infill permit records answer the questions about parking minimums, tree removal and density. GPT-5.6 Sol parked it until address-level permits can be tied to tree removals and to before-and-after parking counts."
     grouping_note: "The zoning bylaw and the infill permit record cover the parking minimums, the multiplexes and the housing mix."
     accounts:
       total: 4
@@ -430,7 +440,7 @@ questions:
     lifecycle: registered
     triage: go
     publication: unpublished
-    reason: "Response-time records and emergency access design standards show whether bike lanes delay or assist emergency vehicles. The two readers split: Gemini 3.1 Pro said go, GPT-5.6 Sol parked it."
+    reason: "Gemini 3.1 Pro sent this ahead, saying response-time records and the City's emergency access design standards show whether bike lanes delay or assist emergency vehicles. GPT-5.6 Sol parked it until response records can identify corridor-level delays or emergency use of the lanes."
     grouping_note: "Response-time records and the City's design standards for emergency access settle both directions at once."
     accounts:
       total: 5
@@ -475,7 +485,7 @@ questions:
     lifecycle: registered
     triage: go
     publication: unpublished
-    reason: "Edmonton's traffic bylaw settles who may ride where and who is at fault in a collision, and the City's collision records show where and how often cyclists are hit. Neither shows whether a lane made riding safer, because a crash count with no count of the riders using it cannot tell a more dangerous lane from a busier one. The two readers split on that point: Gemini 3.1 Pro said go, GPT-5.6 Sol parked it and asked for collision records linked to route design and rider exposure."
+    reason: "Edmonton's traffic bylaw sets where cyclists may ride and the rules they and drivers have to follow, and the City's collision records show where and how often cyclists are hit. Neither shows whether a lane made riding safer, because a crash count with no count of the riders using it cannot tell a more dangerous lane from a busier one. That is the point the two readers split on. Gemini 3.1 Pro sent it ahead on the strength of those records; GPT-5.6 Sol parked it until the collision records can be tied to route design and to how many riders use each route."
     grouping_note: "Edmonton's collision records and the traffic bylaw cover whether the lanes reduce harm, who is at fault and who is riding where."
     accounts:
       total: 10
@@ -605,7 +615,7 @@ questions:
     lifecycle: registered
     triage: park
     publication: unpublished
-    reason: "Reopen this when business closures can be linked to customer-access changes through location-level records or owner evidence, because closure counts alone cannot establish why businesses failed. The two readers split: Gemini 3.1 Pro declined it, because no public record tracks why an individual business closed, and GPT-5.6 Sol parked it."
+    reason: "Reopen this when business closures can be tied to customer-access changes through location-level records or owner evidence, because closure counts alone cannot establish why a business failed. That is where GPT-5.6 Sol landed. Gemini 3.1 Pro went further and declined it, because no public record tracks the specific reasons individual downtown businesses closed."
     accounts:
       total: 1
       against: 1
@@ -688,7 +698,7 @@ questions:
     registered_as: "New infill housing is luxury housing."
     origin: editor
     supplied_by: "founder, as a suggested claim"
-    reason: "\"Luxury\" is not a category in the assessment roll, the permit record or any other City document, so no record could return a verdict either side could lose. No captured post makes the claim either, which on its own would only park it."
+    reason: "\"Luxury\" is not a category in Edmonton's assessment roll or its permit records, and without a definition somebody could be wrong about, no record could settle this either way. No captured post makes the claim either, which on its own would only park it."
     triage_report: reviews/infill-prices/2026-09-02-questions/triage-1.md
     intake: reviews/infill-prices/2026-09-02-questions/intake.md
     note: "same triage report; see the editor decision in that directory"
@@ -1760,7 +1770,7 @@ claims:
     origin: captured
     source: yegscoop-2026-08-26
     question: property-taxes
-    proposition: "One Edmonton resident's property taxes went up by $1,500 over three years."
+    proposition: "One Edmonton resident's taxes went up by $1,500 in the last three years."
     wording: "my taxes have gone up $ 1500 in the last 3 years."
     side: against
     accounts: 1
