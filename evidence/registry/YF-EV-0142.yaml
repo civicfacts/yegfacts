@@ -1,0 +1,17 @@
+id: YF-EV-0142
+title: "Bike and Pedestrian Counts (Eco Counter), dataset tq23-qn4m: daily bicycle counts by counter, calendar 2025"
+publisher: City of Edmonton
+url: https://data.edmonton.ca/resource/tq23-qn4m.json?%24select=counter_location_description%2C+counter_configuration%2C+date_trunc_ymd%28log_timestamp%29+AS+day%2C+sum%28total_cyclist_count%29+AS+bicycle_count%2C+count%28%2A%29+AS+records&%24where=log_timestamp+%3E%3D+%272025-01-01T00%3A00%3A00%27+AND+log_timestamp+%3C+%272026-01-01T00%3A00%3A00%27&%24group=counter_location_description%2C+counter_configuration%2C+day&%24order=counter_location_description%2C+day&%24limit=50000
+published_on: 2025-04-25
+retrieved_on: 2026-09-04
+kind: observed-data
+establishes: "One row per counter per day of 2025, with the counter's configuration and its bicycle count, as an aggregate of dataset tq23-qn4m taken on 2026-09-04. Every per-counter figure in the corridor claim is recomputable from it: the July 2025 medians, the January 2025 medians, the busiest single day, the calendar-year totals and how many days each counter published. It establishes counted passages at the counters the City chose to install, and nothing about lanes the City does not meter."
+archive:
+  required: true
+  sha256: 17042542f4ad1aed3f0ee01190ae52671c2a704a5620b7c0f81ba110e3a4d15e
+  visibility: private
+  path: evidence/private/YF-EV-0142-tq23-qn4m.json
+rights:
+  redistribution: unclear
+  note: City of Edmonton open data served through Socrata; the archived bytes carry no redistribution grant. Fails closed to private.
+excerpts: []

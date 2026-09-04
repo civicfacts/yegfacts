@@ -1,0 +1,70 @@
+id: cv-commuters-cycle
+question: Do fewer than 1 percent of Edmonton commuters travel to work by bicycle?
+story: cycling-volumes
+finding: Supported
+answer: >-
+  Yes. Statistics Canada counted 3,355 of Edmonton's 380,315 commuters cycling to work
+  in the 2021 census, which is 0.88 per cent.
+evidence_basis: Direct Edmonton evidence
+panel_agreement: Unanimous
+methodology_version: "1.24"
+review_run: reviews/cycling-volumes/2026-09-03
+plain_speech_read: reviews/cycling-volumes/2026-09-03/plain-speech/gpt-1.md
+topics: [transportation, bike-lanes]
+evidence: [YF-EV-0155, YF-EV-0156, YF-EV-0157, YF-EV-0158, YF-EV-0159]
+key_facts:
+  - text: "In the 2021 census, 3,355 of the 380,315 people counted as Edmonton commuters gave bicycle as their main way of getting to work. That is 0.88 per cent, below the 1 per cent the claim states and below the alternative cutoff of 1.1 per cent the brief also required."
+    sources: [YF-EV-0155]
+  - text: "The census counts journeys to work only. Its universe is employed people aged 15 and over with a usual workplace or no fixed workplace, so it excludes everyone who worked at home, and it counts nobody riding to school, to the shops or for any other purpose."
+    sources: [YF-EV-0155, YF-EV-0157]
+  - text: "The wider Edmonton region agrees. Across the census metropolitan area, which takes in St Albert, Sherwood Park, Spruce Grove and Leduc, 3,905 of 537,645 commuters cycled, or 0.73 per cent."
+    sources: [YF-EV-0156]
+  - text: "The same figure was higher five years earlier. In the 2016 census, 5,575 of 466,230 Edmonton commuters cycled, which is 1.20 per cent and would not have cleared the 1 per cent the claim states."
+    sources: [YF-EV-0158]
+  - text: "The 2021 reference week, 2 to 8 May, fell under pandemic restrictions, and that changes what the number is a share of. Statistics Canada recorded 102,210 of 483,855 employed Edmontonians working at home in 2021, against 23,160 of 490,665 in 2016."
+    sources: [YF-EV-0157, YF-EV-0158]
+  - text: "A City-run instrument put the figure below 1 per cent too, on its own question and its own date. Edmonton's 2012 municipal census recorded 2,568 residents giving bicycle as their mode of transportation out of 380,640 who answered, or 0.67 per cent."
+    sources: [YF-EV-0159]
+aliases:
+  - less-than-one-percent-commute-by-bike
+  - census-bike-commuting-edmonton
+register_claims: [under-one-percent-of-commuters-cycle]
+limitations:
+  - "This finding and the car-commuting finding on this page come from the same census table, the same universe and the same reference week. They are two readings of one table, not two independent findings."
+  - "The 2021 reference week fell during pandemic restrictions, when work at home in Edmonton was 21 per cent of employed residents against under 5 per cent in 2016. That is a qualification on what the number means, and the brief was explicit that it is never a reason to move the finding."
+  - "Put the people who worked at home back into the denominator and the bicycle share is 0.69 per cent rather than 0.88, because the denominator grows while the numerator does not."
+  - "The 2021 commuting data was released on 2022-11-30 and nothing later had been released by 2026-09-03. The next census release comes after that date."
+  - "Census counts are randomly rounded and drawn from the long-form sample of a quarter of households. The percentages here are calculated from counts that are rounded to the nearest five."
+  - "The person making this claim said City reports carry the figure. Whether a City report repeats it was not tested, because the census is the identifiable published source and the one a reader can check."
+unknowns:
+  - "Whether the 2021 figure is depressed by pandemic conditions relative to an ordinary year. Bicycle commuting fell from 1.20 to 0.88 per cent between censuses while work at home quadrupled, and the census cannot separate the two effects."
+  - "What the share is in 2026, after the recent network expansion."
+  - "Whether any City report repeats the census figure. The reviewers located none that does."
+missing_evidence:
+  - "2026 census journey-to-work data for Edmonton, which will not be released until after this page's freeze date (Statistics Canada; high)."
+  - "A City of Edmonton report quoting a commuting cycling share, which would settle whether City reports carry the figure the commenter attributed to them (City of Edmonton; moderate)."
+review:
+  agreement: Unanimous
+  reviewers:
+    - model: Claude Opus 5
+      verdict: Supported
+      confidence: High
+      key_findings:
+        - "3,355 bicycle commuters of 380,315 is 0.88 per cent, below both the primary and the alternative cutoffs, and the required metropolitan-area alternative agrees at 0.73 per cent."
+        - "The widely used commuting tables stop at an active-transportation category that does not separate bicycle from walking, so they cannot answer this claim at all."
+        - "The number is fragile in a way the finding is not, the same variable having given 1.20 per cent in 2016 while work at home quadrupled."
+      changed_between_rounds: "No change. In cross-review, corrected another reviewer's 2016 comparison figures against the published counts."
+    - model: Gemini 3.1 Pro
+      verdict: Supported
+      confidence: High
+      key_findings:
+        - "0.88 per cent for the city and 0.73 per cent for the metropolitan area, both below the 1 per cent threshold."
+        - "Including people who worked at home in the denominator lowers the share to 0.69 per cent."
+      changed_between_rounds: "No change in verdict. Corrected its own round-1 figures for 2016, which it had given as about 4,600 commuters and 1.1 per cent, to the published 5,575 and 1.20 per cent."
+    - model: GPT-5.6 Sol
+      verdict: Supported
+      confidence: High
+      key_findings:
+        - "3,355 bicycle commuters in a commuting universe of 380,315, about 0.88 per cent, below both Supported cutoffs."
+        - "The pandemic reference week and the exclusion of people working at home are qualifications that do not change the finding under the fixed denominator."
+      changed_between_rounds: "No change."

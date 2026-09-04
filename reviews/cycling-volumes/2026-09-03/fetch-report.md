@@ -181,3 +181,79 @@ bytes and there are no bytes to keep, and neither carries a finding.
   paywall. It was cited as weak challenging evidence on two claims the
   whole panel returned Not established, so nothing rests on it, and it
   should not appear in published copy.
+
+---
+
+# Resolutions, 2026-09-04, at drafting
+
+Added at stage 6, before the claim records were written, for the same
+reason the 2026-09-03 section exists: a citation the site cannot verify
+from bytes it holds should be settled in the record and not left for the
+publication gate.
+
+## 8. The counter dataset archived as a first page, not as the dataset
+
+The 2026-09-03 report says the counts dataset
+`data.edmonton.ca/resource/tq23-qn4m.json` "archived clean at 813,032
+bytes". The bytes are clean and the sentence is wrong about what they
+are. Socrata's resource endpoint returns its default first page, and the
+archived file holds 1,000 fifteen-minute records running from
+2018-08-06 to 2024-06-12. It does not contain the 2026 window claim 1
+turns on, and it does not contain July 2025 at all.
+
+So neither counter claim was reproducible from archived bytes: the
+network total, every July median, every January median and the
+membership tests all rested on live queries that would answer
+differently tomorrow. Three aggregates of the same endpoint were staged
+on 2026-09-04 and entered the registry. They are the City's own
+endpoint with a `$select` and a `$group`, not a different source.
+
+- **Monthly network totals, whole dataset** (`YF-EV-0141`, 7,896 bytes).
+  Sums to 1,291,714 for 2026-01 to 2026-07, 1,611,749 for the same
+  months of 2025, 1,547,532 for 2024, 2,856,631 for calendar 2025 and
+  436,863 for July 2025. Every figure the two executing seats reported,
+  to the unit.
+- **Daily bicycle counts by counter, calendar 2025** (`YF-EV-0142`,
+  2,933,091 bytes, 16,982 rows). Every July median in the verdict set
+  recomputes exactly, 46 at 96 Street S of Jasper Ave through 979 at 83
+  Avenue W of 99 Street, as do the January medians (6 to 212), the
+  calendar-year totals and the June 2025 median of 177.5 at the counter
+  test 4 removed.
+- **First and last record per counter** (`YF-EV-0143`, 12,712 bytes).
+  Confirms 106 Street N of Jasper Avenue last recorded 2025-07-16, and
+  carries the service dates tests 2 and 4 turn on.
+
+Two further datasets were archived in the same form, for the same
+reason. `YF-EV-0162` is the Bike Routes type, classification and line
+geometry for all 10,417 segments, which is what test 3 joins to: taking
+the nearest built segment to each counter's published coordinates
+reproduces the seats' distances (96 Street S of Jasper Ave at 6.7 m ON
+ROAD against 55.2 m OFF ROAD; Hermitage North at 0.8 m OFF ROAD; High
+Level Bridge East at 1.9 m OFF ROAD). `YF-EV-0161` is all 1,296 rows of
+the historic short-duration counts, which carry the four 82 Avenue
+observations of 27 and 28 September 2016 (187 and 150 east of 104
+Street, 175 and 141 west) and establish that no such count exists for
+119 Avenue, 132 Avenue or Hermitage.
+
+## 9. Table 98-10-0467-01 staged as its data
+
+The work-at-home figures that qualify both census claims were read by
+the seats through the Web Data Service; what staged on 2026-09-03 was
+the table's landing page, which does not carry them. The full table
+(`https://www150.statcan.gc.ca/n1/tbl/csv/98100467-eng.zip`,
+109,957,496 bytes) was staged on 2026-09-04 and is `YF-EV-0157`. It
+carries 102,210 of 483,855 employed Edmontonians working at home in
+2021, at DGUID `2021A00054811061`.
+
+## What was checked against archived bytes before drafting
+
+Every figure in the seven claim records was read out of the archived
+file it cites, not out of a seat's report of it. The census counts
+(380,315, 3,355, 323,705, 298,320, 25,380, 30,860, 13,430, 335, 8,635;
+537,645, 469,900, 3,905; 466,230, 5,575, 342,145, 25,080, 67,990,
+19,025, 6,405, 23,160 of 490,665), the travel survey shares (1.7 and
+0.8 per cent, 54,800 of 3,139,100, 10,600 of 1,331,800, the
+2015-09-14 to 2015-12-11 fieldwork and the 21,000 households), the 2014
+panel's response counts (327 and 715 of 816, and the recruitment note)
+and every counter figure named above all reproduce from the registry's
+own files.

@@ -1,0 +1,76 @@
+id: cv-lanes-look-empty
+question: Do the Edmonton bike lanes the City meters carry little or no bicycle traffic?
+story: cycling-volumes
+finding: Contradicted
+answer: >-
+  No. Every one of the 20 on-street bike lanes the City of Edmonton meters carried at
+  least 46 bicycles a day through July 2025.
+evidence_basis: Direct Edmonton evidence
+panel_agreement: Adjacent
+methodology_version: "1.24"
+review_run: reviews/cycling-volumes/2026-09-03
+plain_speech_read: reviews/cycling-volumes/2026-09-03/plain-speech/gpt-1.md
+topics: [transportation, bike-lanes]
+evidence: [YF-EV-0142, YF-EV-0143, YF-EV-0144, YF-EV-0145, YF-EV-0146, YF-EV-0147, YF-EV-0161, YF-EV-0162]
+key_facts:
+  - text: "Twenty of the City of Edmonton's automated counters sat on on-street bike lanes and ran through July 2025. Their median daily bicycle counts that month run from 46 on 96 Street south of Jasper Avenue to 979 on 83 Avenue west of 99 Street. Not one is below 25 a day, the level the brief fixed in advance as \"little or no\"."
+    sources: [YF-EV-0142]
+  - text: "The corridors residents named are real and they are among the quietest of the metered lanes, an order of magnitude below the busiest. The two counters on 132 Avenue recorded July 2025 medians of 71 and 79 bicycles a day, and the counter on 119 Avenue recorded 152."
+    sources: [YF-EV-0142]
+  - text: "No City counter sits on Whyte Avenue. The only bicycle counts the City has ever published for 82 Avenue are two 24-hour manual counts on each side of 104 Street taken on 27 and 28 September 2016, which recorded 187 and 150 bicycles east of 104 Street and 175 and 141 west of it."
+    sources: [YF-EV-0161]
+  - text: "The City has never published a short-duration count for 119 Avenue, 132 Avenue or the Hermitage lanes, and it warns that its historic counts should not be related to its automated counter data at all."
+    sources: [YF-EV-0161, YF-EV-0147]
+  - text: "One counter left the reckoning because the device stopped, not because the lane emptied. 106 Street north of Jasper Avenue, on a protected bike lane, last recorded anything on 2025-07-16. In June 2025, the last full month it published, its median was 177.5 bicycles a day, about seven times the level the brief treats as almost none."
+    sources: [YF-EV-0143, YF-EV-0142, YF-EV-0162]
+  - text: "Whether a counter sits on an on-street lane or a shared path was decided from the City's own Bike Routes map, whose type field has only the two values ON ROAD and OFF ROAD, by taking the nearest built segment to the counter's published coordinates. Of the 42 counters in service on 2025-07-01, 21 came out on-street and 21 off-street, and none was too close to call."
+    sources: [YF-EV-0162, YF-EV-0145, YF-EV-0146]
+  - text: "Winter is a different number at the same counters. January 2025 medians in the same 20 lanes run from 6 bicycles a day on 119 Avenue to 212 on 102 Avenue east of 121 Street."
+    sources: [YF-EV-0142]
+aliases:
+  - empty-bike-lanes-edmonton
+  - nobody-uses-the-bike-lanes
+  - bike-lanes-no-one-uses-them
+register_claims: [bike-lanes-look-empty]
+limitations:
+  - "This covers the 20 on-street lanes the City meters and no others. The counters sit where the City chose to monitor, they are not a sample of the network, and nobody publishes a representative sample of Edmonton's on-street bike lanes. Anyone who means every lane in the city has not been answered here, and the unmetered lanes were not measured."
+  - "The finding depends on where the line for \"little or no\" is drawn, and the brief required both answers. At 25 bicycles a day, which is about one every forty minutes across a sixteen-hour day, no counter falls below and the claim is contradicted. At 50 a day, one of the 20 falls below, at 96 Street south of Jasper Avenue, and the claim would be partly right instead. Neither figure comes from an existing standard."
+  - "July is a summer month, and the brief chose it so the claim would be tested at its strongest for the lanes rather than at its weakest, in the season the people making the claim named themselves."
+  - "Three counters in the set have partial 2025 records, so their calendar-year totals are not comparable with the rest. The two on 132 Avenue first recorded on 2025-06-16 and have no January figure, and 103 Street north of 102 Avenue has records only from May to December. All three still published every day of July 2025, which is what the finding turns on."
+  - "A network-wide total and a rate at one corridor answer different questions, and the counter figure on this page is the other one. Neither bears on the other, though both are read out of the City's counter records."
+  - "By the City's own description these are unassured readings taken straight off the monitoring equipment, and a day's record can come up short where a device or its surroundings failed."
+unknowns:
+  - "What the lanes the City does not meter carry. This is the largest gap on this claim and nothing published closes it."
+  - "How many distinct people the counts on any corridor represent."
+  - "Whether riders on a named corridor use the lane, the sidewalk or the road. A counter at a point records passages past that point, and which surface they were on is a separate registered question."
+  - "Whether the City chose counter sites in a way that correlates with expected volume. No siting rationale is published."
+  - "What 132 Avenue and 119 Avenue carried before their lanes were built. The City publishes no comparable count from before construction."
+missing_evidence:
+  - "Bicycle counts on unmetered on-street lanes, or a published sampling frame that would let the metered set stand for the network (City of Edmonton; critical)."
+  - "Short-duration bicycle counts on 119 Avenue, 132 Avenue and the Hermitage lanes, before and after construction (City of Edmonton; high)."
+  - "Motor vehicle counts on the named corridors after the lanes were built. The City's published weekday volumes dataset stops at 2022 (City of Edmonton; moderate)."
+review:
+  agreement: Adjacent
+  reviewers:
+    - model: Claude Opus 5
+      verdict: Contradicted
+      confidence: High
+      key_findings:
+        - "Ran the brief's five membership tests from published fields alone and reached a set of 20 on-street counters, every one reporting all 31 days of July 2025, with medians from 46 to 979 a day."
+        - "One counter left the set under the out-of-service test, 106 Street north of Jasper Avenue, whose last record is 2025-07-16 and whose last full month ran at 177.5 a day."
+        - "The finding flips to Partially supported at the alternative cutoff of 50 a day, and the story cannot fairly quote the verdict without saying so."
+      changed_between_rounds: "No change."
+    - model: Gemini 3.1 Pro
+      verdict: Contradicted
+      confidence: High
+      key_findings:
+        - "Reached the same 20-counter set, the same single out-of-service removal and the same medians working independently, which is the strongest available check on a membership rule this intricate."
+        - "Zero counters below 25 a day under the primary cutoff, exactly one below 50 under the alternative."
+      changed_between_rounds: "No change. This reviewer's own cross-review notes described its verdict as having moved from Not established, which is a movement across the halted first round rather than within this one; its committed round-1 answer on the frozen brief is Contradicted."
+    - model: GPT-5.6 Sol
+      verdict: Not established
+      confidence: Low
+      key_findings:
+        - "The claim covers only the metered on-street lanes the brief's five tests select, not every lane in Edmonton and not the accuracy of what anybody saw from a car."
+        - "Could not reproducibly build the required set of counters, so returned no finding rather than apply a cutoff to a set it could not construct."
+      changed_between_rounds: "Moved to Contradicted at High confidence in the cross-review round, once the combined evidence carried the completed membership calculation. That round cannot move a finding."

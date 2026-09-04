@@ -1,0 +1,69 @@
+id: cv-trips-by-bike
+question: Are about 2 percent of all trips in Edmonton made by bicycle?
+story: cycling-volumes
+finding: Supported
+answer: >-
+  Yes, roughly. Bicycles carried 1.7 per cent of all weekday trips Edmonton residents
+  made in the City's 2015 travel survey, which is still the most recent one published.
+evidence_basis: Direct Edmonton evidence
+panel_agreement: Unanimous
+methodology_version: "1.24"
+review_run: reviews/cycling-volumes/2026-09-03
+plain_speech_read: reviews/cycling-volumes/2026-09-03/plain-speech/gpt-1.md
+topics: [transportation, bike-lanes]
+evidence: [YF-EV-0152, YF-EV-0153, YF-EV-0154]
+key_facts:
+  - text: "The 2015 Edmonton and Region Household Travel Survey recorded 54,800 bicycle trips out of the 3,139,100 trips City of Edmonton residents made on a weekday, which the City published as 1.7 per cent. That sits inside the range the brief fixed in advance for \"about 2 per cent\" to hold, under both sets of cutoffs."
+    sources: [YF-EV-0152]
+  - text: "The figure is eleven years old. About 21,000 households took part between 14 September and 11 December 2015, roughly 15,300 of them in the city, each keeping a travel diary for one 24-hour weekday period. The report was published in April 2018."
+    sources: [YF-EV-0152]
+  - text: "Which geography is quoted changes the answer. The same survey puts the bicycle share for residents of the wider Edmonton region at 0.8 per cent, less than half the city figure, on 10,600 bicycle trips out of 1,331,800."
+    sources: [YF-EV-0152]
+  - text: "The commenter who posted this figure also named a Statistics Canada table on main mode of commuting for the ten largest metropolitan areas. That table measures how people get to work, so it cannot produce a share of all trips, even though the share turns out to be about right."
+    sources: [YF-EV-0154]
+  - text: "The successor survey, Navigating Tomorrow, launched in September 2025 with the City, Strathcona County, the Government of Alberta and regional partners, and had published no bicycle share by 2026-09-03."
+    sources: [YF-EV-0153]
+aliases:
+  - two-percent-of-trips-by-bicycle
+  - edmonton-bike-mode-share
+register_claims: [two-percent-of-trips-by-bike]
+limitations:
+  - "The finding depends on geography, and the brief required both to be reported. On the City of Edmonton figure of 1.7 per cent the claim holds. On the regional figure of 0.8 per cent it would be contradicted. Neither side can fairly quote this finding without saying which geography it is about."
+  - "The survey covers weekdays only, from a 24-hour travel diary. Weekend travel is in neither the numerator nor the denominator, and the fieldwork ran from mid-September to mid-December."
+  - "The figure is from autumn 2015 and Edmonton's bike network has changed substantially since. Nothing here establishes what the share is in 2026."
+  - "The second half of the commenter's own sentence, that the share is higher in neighbourhoods with bike infrastructure, is reported and not tested. The survey publishes trips by sector but no bicycle share by neighbourhood or by presence of bike infrastructure."
+  - "A share of trips is not a share of people and not a share of commuters. It does not say how many Edmontonians ride, which is a separate finding on this page."
+unknowns:
+  - "What the bicycle share of all trips is in 2026."
+  - "Whether the share differs by neighbourhood or by the presence of bike infrastructure. The survey does not publish it that way."
+  - "What a full-week rather than weekday-only diary would give."
+  - "When Navigating Tomorrow results will be published and whether they will be comparable with 2015."
+missing_evidence:
+  - "Published Navigating Tomorrow results with a bicycle share of all trips for City of Edmonton residents (City of Edmonton and its regional partners; critical)."
+  - "A sub-area or infrastructure-presence breakdown of the bicycle trip share, which the 2015 microdata would support (City of Edmonton; moderate)."
+  - "The sample size for bicycle trips specifically in the 2015 survey, which the summary report does not give (City of Edmonton; moderate)."
+review:
+  agreement: Unanimous
+  reviewers:
+    - model: Claude Opus 5
+      verdict: Supported
+      confidence: Moderate
+      key_findings:
+        - "The published City of Edmonton figure is 1.7 per cent, 54,800 bicycle trips of 3,139,100, inside the Supported band under both cutoff sets."
+        - "The required regional alternative is 0.8 per cent, which would be contradicted, so the finding is sensitive to geography and the story must say which figure it is quoting."
+        - "The Statistics Canada table the commenter named measures journeys to work rather than trips, so that half of the citation does not support the figure."
+      changed_between_rounds: "Raised its confidence to High in the cross-review round, all three reviewers agreeing on the figure and the verdict."
+    - model: Gemini 3.1 Pro
+      verdict: Supported
+      confidence: High
+      key_findings:
+        - "The 2015 survey sampled over 21,000 households on autumn weekdays with a 24-hour diary, and the successor survey had published no mode shares by the freeze date."
+        - "1.7 per cent falls inside both the primary and the alternative Supported ranges."
+      changed_between_rounds: "No change."
+    - model: GPT-5.6 Sol
+      verdict: Supported
+      confidence: High
+      key_findings:
+        - "The report gives 54,800 bicycle trips among 3,139,100 weekday trips by City residents, 1.7 per cent at its displayed precision and 2 per cent in a rounded table."
+        - "Located the Statistics Canada commuting table named in the thread and established that it does not measure all trips."
+      changed_between_rounds: "Lowered its confidence to Moderate in the cross-review round, on the age of the survey and the geography sensitivity."

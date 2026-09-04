@@ -45,7 +45,13 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
       <summary class="link inline-flex min-h-10 cursor-pointer list-none items-center text-sm">
         Also said as — {said.length} captured {said.length === 1 ? 'wording' : 'wordings'}
       </summary>
-      <p class="max-w-prose pb-2 text-sm leading-relaxed text-muted">
+      {/*
+        Chrome, not content: one sentence explaining the records below it, and a
+        question with seven claims renders it seven times. `data-pagefind-ignore`
+        is what the duplication audit and the search index both read as "this
+        belongs to the component, not to the page".
+      */}
+      <p class="max-w-prose pb-2 text-sm leading-relaxed text-muted" data-pagefind-ignore>
         Quoted exactly from sources we hold. Each name is a pseudonym, one to a person within its
         source.
       </p>

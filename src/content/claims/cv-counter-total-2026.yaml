@@ -1,0 +1,72 @@
+id: cv-counter-total-2026
+question: Did Edmonton's automated counters record nearly 1.3 million cycling trips in the first seven months of 2026?
+story: cycling-volumes
+finding: Partially supported
+answer: >-
+  Partly. Two of the three reviewers added up the City of Edmonton's own counter data
+  and got 1,291,714 bicycle counts for January to July 2026, and the third could not
+  confirm the City had published the whole period.
+evidence_basis: Direct Edmonton evidence
+panel_agreement: Split
+methodology_version: "1.24"
+review_run: reviews/cycling-volumes/2026-09-03
+plain_speech_read: reviews/cycling-volumes/2026-09-03/plain-speech/gpt-1.md
+topics: [transportation, bike-lanes]
+evidence: [YF-EV-0141, YF-EV-0143, YF-EV-0144, YF-EV-0148, YF-EV-0160]
+key_facts:
+  - text: "Adding up the City of Edmonton's published monthly counter totals for January to July 2026 gives 1,291,714 bicycle counts. That is 0.6 per cent below the 1.3 million the commenter posted, and inside the range the brief fixed in advance for the stated figure to hold."
+    sources: [YF-EV-0141]
+  - text: "The City's word is counts, not trips. Its dataset is called \"Bike and Pedestrian Counts (Eco Counter)\", the field is Total Cyclist Count, and the City says the data is raw and has not been through a quality control or quality assurance process."
+    sources: [YF-EV-0144]
+  - text: "The sentence people were arguing about came from a CBC News analysis of the same City data published on 2026-08-07, which wrote that \"nearly 1.3 million trips have happened through the first seven months of 2026\". The same article says the counters \"measure the number of bikes that cross them, so the data is a better indicator of traffic volume than individual cyclists\"."
+    sources: [YF-EV-0160]
+  - text: "The City's records run past the end of the period. Its counters have monthly totals for August and September 2026, and the last record any counter published is 2026-09-02."
+    sources: [YF-EV-0141, YF-EV-0143]
+  - text: "One reviewer read the dataset's developer documentation page, which gives the dataset a last update of 2026-07-22, and could not show from it that the City had published records through 2026-07-31. Under the rule the brief fixed before anyone looked, a record that stops short of the period returns no finding, so that reviewer returned none."
+    sources: [YF-EV-0148]
+  - text: "The same seven months carried more traffic in each of the two preceding years. The counters recorded 1,611,749 bicycle counts from January to July 2025 and 1,547,532 in 2024, so 2026 is about a fifth below 2025."
+    sources: [YF-EV-0141]
+aliases:
+  - 1-3-million-cycling-trips
+  - edmonton-bike-counter-numbers-fudged
+register_claims: [cycling-trips-1-3-million-2026]
+limitations:
+  - "Two reviewers established the figure and one did not, and the disagreement is not about the number. Both reviewers who queried the City's data returned 1,291,714 to the unit. The third never saw that figure. It read the dataset's developer documentation page, found a last update of 2026-07-22, and stopped there rather than guessing, which is what the reviewer instructions ask for. The finding is therefore Partially supported on a split panel, and nobody should quote it as the number being wrong."
+  - "The claim was put to three blind reviewers twice. After the cross-review round the editor ordered a fresh blind re-run on the belief that the reviewer that returned no finding had simply not queried the source. Handed the same frozen brief again, with nothing about why, it took the same route and returned the same answer. That is a reproducible position of that reviewer on this brief and not a one-off slip."
+  - "A counter records a passage past a fixed point, not a person and not a journey. The number of distinct people behind 1,291,714 is unknown and no counter can establish it."
+  - "The City labels the data raw and not quality-assured, and says a full day's data may be incomplete for technical, environmental or equipment reasons."
+  - "The counters are not a fixed panel. Locations are added and retired between years, so a comparison between 2024, 2025 and 2026 is a comparison between slightly different sets of counters."
+  - "This total says nothing about any one corridor, and the corridor figures on this page say nothing about the network total. The two findings come out of the same City dataset and are separate readings of it."
+  - "The CBC article the figure came from could not be archived. CBC refuses this site's archiver by its user agent, and the archiver was not changed to pretend to be a browser. The wording quoted here is from a syndicated copy of the same article published by Yahoo News, which is a substitute for the bytes and not for the original address."
+unknowns:
+  - "How many distinct people the 1,291,714 counts represent. No published instrument answers this."
+  - "Why the same seven months fell about a fifth between 2025 and 2026. The City has published no explanation, and the record cannot separate a change in riding from a change in devices, siting or construction on measured corridors."
+  - "Whether the City itself has published this seven-month total anywhere. The figure in circulation traces to CBC's analysis of the open data rather than to a City publication."
+missing_evidence:
+  - "A City-published, quality-assured annual or year-to-date counter total, with the method it uses to fill gaps stated (City of Edmonton, Open Data and Traffic Safety and Mobility; high)."
+  - "A device log giving installation, relocation, outage and repair dates for each counter. The dataset's description points to an external Google Sheet for device issues, which is not a published City source (City of Edmonton; moderate)."
+review:
+  agreement: Split
+  reviewers:
+    - model: Claude Opus 5
+      verdict: Supported
+      confidence: High
+      key_findings:
+        - "Queried the City's dataset directly and summed 1,291,714 bicycle counts over 933,576 fifteen-minute records at 48 counter locations for 2026-01-01 to 2026-07-31, which sits inside the Supported band under both cutoff sets the brief fixes."
+        - "The published window is complete, with records on all 212 calendar days and the dataset running on to 2026-09-02, so the brief's short-window rule does not trigger."
+        - "The City's own word is counts rather than trips, and the word trips came from CBC's report of the same data."
+      changed_between_rounds: "No change. In cross-review, identified the developer documentation page the third reviewer relied on as documentation about the dataset rather than the dataset itself."
+    - model: Gemini 3.1 Pro
+      verdict: Supported
+      confidence: High
+      key_findings:
+        - "Reached 1,291,714 independently from the same City endpoint, 8,286 counts short of 1.3 million, and inside the Supported band under both cutoff sets."
+        - "Automated sensors measure passages past a fixed point rather than complete journeys or distinct people, whatever word the holder and the media used."
+      changed_between_rounds: "No change."
+    - model: GPT-5.6 Sol
+      verdict: Not established
+      confidence: Moderate
+      key_findings:
+        - "A completed total of about 1.3 million would be Supported under both threshold sets, so the figure itself is not what is in dispute."
+        - "Could not verify that the published dataset covered the period through 2026-07-31, having taken the dataset's last update from a developer documentation page giving 2026-07-22, and returned no finding rather than assume."
+      changed_between_rounds: "Moved to Supported at High confidence in the cross-review round, once the other two reviewers' direct queries were in front of it, recording that a metadata timestamp does not establish the final observation date. That round cannot move a finding, and a fresh blind re-run of this claim returned Not established again."

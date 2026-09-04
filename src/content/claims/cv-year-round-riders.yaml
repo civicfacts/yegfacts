@@ -1,0 +1,68 @@
+id: cv-year-round-riders
+question: Do only 1 percent of Edmontonians ride year-round, and fewer than 15 percent the rest of the year?
+story: cycling-volumes
+finding: Not established
+answer: >-
+  Nobody can tell. No Edmonton survey measures how many residents ride through the
+  winter and how many ride the rest of the year from one representative sample.
+evidence_basis: Direct Edmonton evidence
+panel_agreement: Unanimous
+methodology_version: "1.24"
+review_run: reviews/cycling-volumes/2026-09-03
+plain_speech_read: reviews/cycling-volumes/2026-09-03/plain-speech/gpt-1.md
+topics: [transportation, bike-lanes]
+evidence: [YF-EV-0026, YF-EV-0141, YF-EV-0149, YF-EV-0150]
+key_facts:
+  - text: "Both halves of this claim need one representative survey of Edmonton residents that splits the year, and no such survey exists. Nothing Statistics Canada had released by 2026-09-03 carries a cycling participation rate for Edmonton in any season."
+    sources: [YF-EV-0150]
+  - text: "One Edmonton instrument does ask the same people about summer riding and winter riding, and it is an opt-in panel. In the City's August 2014 bike ridership survey, 715 of 816 respondents chose \"Never ride a bike\" for winter, so 101 of them, one in eight, gave some winter riding frequency."
+    sources: [YF-EV-0149]
+  - text: "That panel's numbers are far above both of the ceilings in the claim, which is exactly why a self-selected panel cannot settle it in either direction. Reading its winter question strictly, as riding daily or four or more times a week, gives 21 of 816 respondents instead of 101, and the reading changes the number by a factor of five."
+    sources: [YF-EV-0149]
+  - text: "The counters show how concentrated Edmonton cycling is outside winter, and they count passages rather than people. Of the 2,856,631 bicycle counts the City recorded across its network in 2025, December, January and February together account for 139,245 of them, or 4.87 per cent."
+    sources: [YF-EV-0141]
+  - text: "The City itself has published a winter figure that is easy to misread. It estimates that one in four cyclists ride all year round, which is a share of cyclists and not a share of Edmontonians, so it cannot be set against a claim about the population."
+    sources: [YF-EV-0026]
+aliases:
+  - one-percent-ride-year-round
+  - fifteen-percent-rest-of-the-year
+register_claims: [one-percent-year-round-users]
+limitations:
+  - "The person who said this said \"use them year round\", meaning the bike lanes. No published Edmonton instrument measures the distinct residents who use bike lanes in any season, so the nearest thing the record does measure, riding a bicycle, is what was checked. The substitution is stated here and nothing in this finding is a finding about lane use."
+  - "The second half of the claim is a ceiling rather than an estimate. Any figure below 15 per cent satisfies it, so even a finding that it held would say much less than a finding on the first half. Since no instrument publishes either share, neither half is testable."
+  - "The 2014 panel asks how often people ride in winter, not whether they ride year-round, and the City's open data publishes response values rather than the questionnaire. The instrument never defines winter or year-round in its own words."
+  - "Counter volume is passages, not people, and may not be read as a participation rate for either season. A person who rides all year and a person who rides once in July are both passages."
+  - "The plain participation claim on this page fails for the same reason, and the 2014 opt-in survey is the nearest thing to an instrument in either case. One hole in the record, two findings resting on it."
+unknowns:
+  - "The share of Edmonton residents who ride through the winter. Not published."
+  - "The share who ride in the non-winter part of the year. Not published."
+  - "How many distinct people ride in a bike lane in either season. No instrument measures it."
+  - "How the two shares relate. Even if both were published from different samples, two shares from two samples are not a seasonal split."
+missing_evidence:
+  - "One representative survey of Edmonton residents reporting both a year-round riding share and a non-winter riding share, with its own definition of winter stated (City of Edmonton; critical)."
+  - "The 2014 survey's question wording as fielded, including how winter was defined for respondents. The City publishes the response values but not the questionnaire (City of Edmonton public engagement; moderate)."
+review:
+  agreement: Unanimous
+  reviewers:
+    - model: Claude Opus 5
+      verdict: Not established
+      confidence: High
+      key_findings:
+        - "Identified no representative instrument publishing an Edmonton cycling participation share with a seasonal split from one sample, which is what the brief requires before either half can be tested."
+        - "Reported the 2014 opt-in panel's two questions under its own name, with both readings of its winter band, and attached no weight to either."
+        - "Reported the winter share of counted volume as context, and not as a participation rate."
+      changed_between_rounds: "No change. In cross-review, singled out the City's \"one in four cyclists ride all year\" figure as the one most likely to be misused here, because swapping its denominator turns a claim about the population into a claim about a subset of it."
+    - model: Gemini 3.1 Pro
+      verdict: Not established
+      confidence: High
+      key_findings:
+        - "No representative survey measures seasonal cycling participation for Edmonton, so the brief's priority rule returns no finding."
+        - "The City's \"one in four cyclists\" figure divides by cyclists rather than by residents, and the counters' sharp winter decline is passages rather than people."
+      changed_between_rounds: "No change."
+    - model: GPT-5.6 Sol
+      verdict: Not established
+      confidence: High
+      key_findings:
+        - "The wording was about using bike lanes, and no instrument measures distinct seasonal lane users, so the nearest measurable quantity was substituted openly."
+        - "No admissible seasonal population split was found under either of the two cutoffs the brief fixes for the first half."
+      changed_between_rounds: "No change."

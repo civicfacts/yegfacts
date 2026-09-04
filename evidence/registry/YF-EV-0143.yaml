@@ -1,0 +1,17 @@
+id: YF-EV-0143
+title: "Bike and Pedestrian Counts (Eco Counter), dataset tq23-qn4m: first and last record for every counter"
+publisher: City of Edmonton
+url: https://data.edmonton.ca/resource/tq23-qn4m.json?%24select=counter_location_description%2C+counter_configuration%2C+min%28log_timestamp%29+AS+first_record%2C+max%28log_timestamp%29+AS+last_record%2C+count%28%2A%29+AS+records&%24group=counter_location_description%2C+counter_configuration&%24order=counter_location_description&%24limit=500
+published_on: 2025-04-25
+retrieved_on: 2026-09-04
+kind: observed-data
+establishes: The first and last timestamp each counter published, with its configuration, as an aggregate of dataset tq23-qn4m taken on 2026-09-04. It establishes which counters were recording on a given date and which had stopped, including that 106 Street N of Jasper Avenue last recorded on 2025-07-16. It establishes nothing about why a counter stopped.
+archive:
+  required: true
+  sha256: 27a214452636f7032247ec7ccb92e9e5c4badcdf48ca0e95e077e6317d7fca42
+  visibility: private
+  path: evidence/private/YF-EV-0143-tq23-qn4m.json
+rights:
+  redistribution: unclear
+  note: City of Edmonton open data served through Socrata; the archived bytes carry no redistribution grant. Fails closed to private.
+excerpts: []
