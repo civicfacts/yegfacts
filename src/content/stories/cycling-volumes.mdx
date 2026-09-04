@@ -1,0 +1,267 @@
+---
+title: "How much Edmonton cycles"
+one_line: "The bike lanes Edmonton meters carry real traffic, and cycling was about 2 per cent of trips in the City's most recent travel survey."
+tldr:
+  - "Twenty of the City's automated counters sit on on-street bike lanes. Their July 2025 medians run from 46 bicycles a day at the quietest to 979 at the busiest, and none is below the level the brief set for almost none."
+  - "The corridors residents described as empty are genuinely the quiet ones. 132 Avenue logged 71 and 79 a day; 119 Avenue logged 152. Whyte Avenue has no automated counter."
+  - "1,291,714 bicycle counts were recorded from January to July 2026. Two reviewers found that in the City's data and a third could not confirm the whole period had been published, so the panel split and the finding is partial."
+  - "The shares are all small and all different: 1.7 per cent of weekday trips in 2015, 0.88 per cent of journeys to work in 2021, against 85 per cent of commuters in a car."
+  - "How many Edmontonians ride a bicycle at all is not published, in any season. The only Edmonton survey found that asks, as of 2026-09-03, is a self-selected panel from 2014."
+topics: [transportation, bike-lanes]
+claims:
+  - cv-counter-total-2026
+  - cv-lanes-look-empty
+  - cv-population-rides
+  - cv-year-round-riders
+  - cv-trips-by-bike
+  - cv-commuters-cycle
+  - cv-commute-by-car
+aliases:
+  - how-many-edmontonians-cycle
+  - do-people-use-edmonton-bike-lanes
+  - edmonton-cycling-numbers
+status: published
+as_of: "2026-09-03"
+last_verified: "2026-09-04"
+review_by: "2027-03-04"
+changelog:
+  - date: "2026-09-04"
+    type: published
+    note: "Initial publication, after the gate. Source verification checked 320 statements in the seven claim records and the question page against the archived bytes of their evidence: 12 unsupported and 3 imprecise on pass 1, every one corrected, 322 of 322 on pass 2. The largest defect was a census reference week that existed only in the brief and had spread through eight sentences; the brief is not evidence, and it is gone. A corridor residents named, Hermitage, was reported only as absent from the City's historic count dataset when a counter sits on it, off-street and outside the twenty, at 148 bicycles a day; both the freshness audit and the brief's own disclosure rule caught that, and it is now on the page. The seven-month counter total, all twenty July medians and the whole five-test membership chain were recomputed from the archived files, and the arithmetic now lives in scripts/calcs/cycling-volumes.ts with a test. Release check: no blocking findings, no new exposure warnings, one advisory recorded about the intake capture. Freshness audit: no correction to any finding, and an independent search on the same day found the same absences the two Not established findings rest on. Two faithfulness checks ran before the gate, on GPT-5.6 Sol and on the Gemini seat; all 25 items of the first were taken and seven of the second's eight, with the refusal written up."
+  - date: "2026-09-04"
+    type: updated
+    note: "Drafted from the panel run of 2026-09-03 and deployed for review ahead of the publication gate. Seven of the eight claims the brief put to the panel carry findings. The eighth, whether Edmonton's riders are recreational rather than commuters, was answered twice by all three reviewers and is parked with its reason, because the brief had fixed an instrument that cannot carry it."
+---
+
+Under a Facebook post about council's bike-lane decision, in a thread
+running to 621 comments, twenty-five people argued about how much this
+city rides. They did it with percentages. Two per cent of trips, said
+one. Under one per cent, said another, citing the census. Eighty-seven
+per cent drive, said a third. One or two per cent of the population,
+said eight more. And somebody posted a counter figure of nearly 1.3
+million.
+
+Most of those numbers turn out to be right. Hardly any two of them are
+about the same thing. Passages past a sensor, journeys to work, trips of
+every kind, and people who ride at all are four quantities with four
+denominators, and each one comes from a different instrument. That is
+what the argument was: people quoting a real number at somebody quoting
+a different real number. Every claim below is tested against whatever
+measures that particular quantity, and each finding says what its number
+is a share of.
+
+Two of them sit at the centre. The lanes the City meters are not empty.
+Cycling is also a small part of how Edmonton gets around. Both are true,
+and neither answers the other.
+
+### The counter figure, and a panel that split
+
+Edmonton's automated counters log a bicycle whenever one goes past. Add
+the City's published monthly totals across the first seven months of
+2026 and you get 1,291,714, which is within a percentage point of the
+figure being argued over. The commenter had not worked that out. The
+sentence was reposted from a CBC News piece that analysed the same open
+data in August.
+
+So the finding is Partially supported, and the split is not about
+arithmetic. Two reviewers went to the data and came back with the same
+number to the unit. The third went to a developer documentation page
+about the dataset instead, recorded an update date earlier than the end
+of July, and could not establish from that page that the City had
+published the full period.
+Under a rule the brief set before anyone looked, that returns nothing:
+days still to arrive can only push a total up, so a subtotal cannot
+carry a verdict that depends on where the total lands.
+
+We then ordered the claim re-run, blind, on all three seats, on the
+assumption that the third reviewer had simply skipped the source. It
+came back unchanged. Given the frozen brief a second time, with nothing
+in the package hinting at why, that seat went to the documentation page
+again and stopped in the same place. The expectation was wrong and the
+mechanism caught it, which is more useful than the confirmation we were
+looking for. Nobody on the panel disputes the number. What divides them
+is whether the record could be shown to reach the end of July.
+
+Two cautions belong beside it, and only one is ours. The City's own
+label for what it publishes is counts rather than trips, and it warns
+that the figures are raw and unassured. Ours is the arithmetic of what a
+passage is: ride to work and home past one sensor and you are two, take
+a single journey past two sensors and you are also two, and ride
+anywhere unmetered and you are none. So the count cannot be read as a
+headcount, and nothing published says how many people it represents. CBC
+made that point in the article itself.
+
+### The lanes described as empty
+
+Ten people offered something they had seen. What they were saying could
+not be checked as a report of their own perception, because no record
+establishes what a passer-by noticed. It was checked instead as a claim about traffic, which the
+City's meters do measure.
+
+Five membership tests were fixed in advance, so that three reviewers
+working from the same files would arrive at one list of counters rather
+than three. Keep the ones configured for bicycles. Keep the ones running
+on the first of July 2025. Sort each into on-street or off-street by
+joining its published coordinates to the nearest built segment of the
+City's route map, which carries a field with exactly two values for
+that. Remove any device that quit inside the measured month. Require
+twenty of the month's thirty-one days. Twenty counters survived, and
+every one of them reported all thirty-one.
+
+Their medians that month begin at 46 a day and reach 979. The bar for
+"little or no" was set at 25, roughly a bicycle every forty minutes over
+a sixteen-hour day, and far above anything the people making the claim
+described. Nothing clears downward. At the alternative bar of 50, which
+the brief also required, one of the twenty drops below and the answer
+would be a qualified one instead. Neither number is borrowed from any
+standard, so the finding travels with the bar it was measured against.
+
+The streets people named do come out at the quiet end. Both meters on
+132 Avenue and the one on 119 Avenue sit in double and low triple
+figures while 83 Avenue runs near a thousand, an order of magnitude
+between them, and that gap is real even though none of them approaches
+the threshold. Whyte Avenue has no automated counter. In the City's
+historic-count dataset, which runs from 2009 to 2016, the only bicycle
+counts anywhere on 82 Avenue are four manual observations from two days
+in September 2016, and the City says those old counts should not be set
+against the automated ones. That dataset holds nothing at all for 119
+Avenue, 132 Avenue or Hermitage. Hermitage is metered, but not on the
+road: its counter sits on a shared path, which is what put it outside
+the twenty, and it ran at 148 a day that July.
+
+One device left the reckoning, and it is named here because a set that
+lost a member has to say which one. The meter on 106 Street north of
+Jasper Avenue, sitting on a protected lane, went silent on 2025-07-16
+and never resumed. A sensor that stops is a fact about the sensor, not
+about the street it was watching, which is why the brief takes it out
+instead of voiding the answer. It had been running at 177.5 a day
+through June, several times over the threshold, so its removal does not
+help the claim.
+
+Two boundaries on all of this. It reaches those twenty counters and no
+further. They sit where the City chose to put them, and nothing found in
+the search behind this page would license reading them as a sample of
+the whole network. Twenty counters is also thirteen corridors, several
+streets carrying a pair. And July was picked on purpose, to test the
+claim in the season its holders named. The seventeen counters in the set
+that have January records run from 6 bicycles a day to 212, and the one
+at the bottom of that range reported 21 of January's 31 days.
+
+### Trips, commuters and drivers
+
+Three of the circulating percentages are shares, and all three hold up.
+
+The bicycle share of weekday travel comes from the region's household
+travel survey, whose most recent published round was fielded in the
+autumn of 2015 and reported in 2018. About twenty-one thousand
+households kept a one-day diary, and bicycles came out at 1.7 per cent
+for people living in the city. Eleven years is a long time for a number
+to stand as current, and the replacement survey launched in 2025 had
+released nothing by the time this brief froze. Geography moves it as well: taken across
+the wider region, the same survey gives 0.8 per cent, less than half. The commenter who posted the trip share also
+pointed at a Statistics Canada commuting table, which counts journeys to
+work and therefore cannot produce a share of all travel, so that
+citation does not carry the figure even though another document does.
+
+The two commuting figures come out of one table in the 2021 census.
+Bicycles were 0.88 per cent of Edmonton's commuters; cars, trucks and
+vans were 85.11 per cent. Because they are two rows of the
+same table they are not two independent results, and this page counts
+them as one document read twice. The 87 per cent one commenter quoted is
+not the city's number at all. It is almost exactly the figure for the
+metropolitan area, which reaches out to St Albert, Sherwood Park, Spruce
+Grove and Leduc.
+
+That census needs its qualification here rather than further down,
+because a reader who meets those two shares without it will take away
+the wrong impression. It did not catch an ordinary time for commuting.
+Working from home in Edmonton had gone from about one employed resident
+in twenty to better than one in five, and everybody working from home is
+outside the commuting universe entirely. Transit's share roughly halved
+between the two censuses while driving climbed by more than six points,
+and bicycle commuting fell from 1.20 per cent. Widen the denominator to
+all employed residents and the driving figure drops to about two thirds.
+None of that shifts the findings, which are measured among people who
+actually commuted, and the brief said as much before the numbers were
+seen.
+
+### The number that does not exist
+
+Eight people quoted a share of the population who ride. Nothing found
+in the published record measures it. That is the result here, and it is
+not a technicality: it is the thing those eight people could not have
+looked up even if they had tried.
+
+The search behind that, as it stood on 2026-09-03, went like this.
+Statistics Canada's full catalogue of released tables was pulled and
+filtered, and holds no cycling participation rate for this city or its
+metropolitan area. The census measures how people reach work. The 2015
+travel survey measures trips inside a single weekday. The successor
+survey had published nothing. The national health survey does put a
+suitable question to respondents, but nothing released from it reports
+an answer for Edmonton. That bounds the absence to the published record
+on that date. It is not a claim that the number could never be produced.
+A custom tabulation of the health survey might settle it, where its
+sample is large enough for a city of this size.
+
+There is one local instrument that asks Edmontonians how often they
+ride, and it is a self-selected panel from the summer of 2014. Roughly
+three in five of its respondents reported riding at some frequency,
+which is not remotely one or two per cent, and that is exactly why it
+cannot settle the question. Its respondents chose themselves into it, so
+it cannot estimate the population in either direction.
+
+The seasonal version fails on the same gap. To test the sentence about
+one per cent riding through the winter and under fifteen per cent the
+rest of the year, you need one representative sample split across the
+seasons, and that search turned up none. The 2014 panel does ask both
+questions of the same people, and nearly nine in ten of them said they
+never ride in winter, but the sample is no better here than it is
+above. Two things a reader might reach for are not substitutes either.
+The share of a year's counter volume that falls in December, January
+and February is under five per cent, and that is traffic rather than
+people. And the City's own line that a quarter of cyclists ride all
+year divides by cyclists, not by residents, which is a different
+denominator again.
+
+One further gap sits under both. Several of the captured wordings are
+not about riding at all but about using the lanes: "bike lanes for the
+.001% of the population", "500 people using the bike lanes 4 months of
+the year", "only 1% of the pop use them year round". Nothing in the
+record searched counts the distinct residents who use a bike lane, in
+any season. Those wordings were made and they are recorded here, and no
+riding figure is put against them either way, because that would be
+answering a question nobody asked.
+
+### What is not answered here
+
+Eight claims went to the panel; seven carry findings. The eighth, that
+the people riding are recreational rather than commuters, does not, and
+the fault is ours rather than the panel's.
+
+The one Edmonton source that records why a trip was made is the 2015
+travel survey, and its fieldwork ran on weekdays from the middle of
+September to the middle of December. Both of those restrictions push
+against the recreational reading, and the same brief had fixed July for
+the corridor claim precisely so that a claim gets tested where it is
+strongest for the people making it. A reviewer said so in a blind
+re-run, we agreed, and there was no repair to make. Narrowing the claim
+to autumn weekdays would answer something easier than what two
+commenters actually said, and no Edmonton survey records trip purpose
+across a representative stretch of the year. So it is parked in public,
+with its reason and the condition that would reopen it, and its wording
+is <a href="#not-checked" data-crossref>listed below among the claims
+carrying no finding</a>.
+
+A ninth never reached the panel. Somebody wrote that more than five
+people rode to Heritage Days within an hour of the Saturday opening,
+answering a joke made at the top of the thread. The search behind the
+brief found no public count of bicycle arrivals for that event and that
+hour, so it could not be settled in either direction, and it was dropped
+while the brief was being written rather than sent out.
+
+Nothing on this page says whether the lanes were worth building, whether
+the money went to the right place, what any of it did to congestion, or
+whether riders use the lane or the road beside it. Those are registered
+separately. What is here is the arithmetic underneath the argument, with
+every number's denominator attached to it.

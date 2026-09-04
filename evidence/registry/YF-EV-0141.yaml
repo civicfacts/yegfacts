@@ -1,0 +1,17 @@
+id: YF-EV-0141
+title: "Bike and Pedestrian Counts (Eco Counter), dataset tq23-qn4m: monthly bicycle counts across the whole network, 2018-08 to 2026-09"
+publisher: City of Edmonton
+url: https://data.edmonton.ca/resource/tq23-qn4m.json?%24select=date_trunc_ym%28log_timestamp%29+AS+month%2C+sum%28total_cyclist_count%29+AS+bicycle_count%2C+count%28%2A%29+AS+records&%24group=month&%24order=month&%24limit=500
+published_on: 2025-04-25
+retrieved_on: 2026-09-04
+kind: observed-data
+establishes: "The City's own monthly bicycle counts for every automated counter it publishes, as an aggregate of dataset tq23-qn4m taken on 2026-09-04. Any network total over a range of whole months is a sum of these rows: January to July 2026 is 1,291,714, the same window in 2025 is 1,611,749 and in 2024 is 1,547,532, calendar 2025 is 2,856,631 and July 2025 alone is 436,863. It establishes counted passages past fixed points and nothing about how many people or journeys they represent."
+archive:
+  required: true
+  sha256: 9fd8f92e7de299575aa86ffdcb3153a5f6f55c7b416829c5f03029a73ca95caa
+  visibility: private
+  path: evidence/private/YF-EV-0141-tq23-qn4m.json
+rights:
+  redistribution: unclear
+  note: City of Edmonton open data served through Socrata; the archived bytes carry no redistribution grant. Fails closed to private.
+excerpts: []

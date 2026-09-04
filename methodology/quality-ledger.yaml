@@ -525,3 +525,151 @@ events:
       gate/source-verification.md, passes 1 to 3; errata.md "Found at
       the gate".
 
+  # --- cycling volumes, run 2026-09-03 -------------------------------------
+  - date: "2026-09-03"
+    story: cycling-volumes
+    run: reviews/cycling-volumes/2026-09-03
+    stage: framing
+    seat: Framing check (GPT-5.6 Sol via codex exec)
+    event: framing-miss
+    materiality: blocking
+    disposition: >
+      The checker's own replacement wording for claim 2's coverage rule
+      fixed a real defect and created a worse one. It made a single word,
+      "classifiable", carry two unrelated jobs — whether a counter measures
+      an on-street lane at all, and whether its device kept running — and
+      voided the whole verdict on either. One counter had died mid-July
+      2025, so a dead sensor was set to void a verdict over a set whose
+      other counters run in the tens and hundreds a day. Recorded against
+      the check and the editor: the checker supplied it under the v1.20
+      defect rule, which requires a correction verifiable without judgement,
+      and the editor adopted it verbatim without testing it against the
+      published counter data, which would have shown the counter it
+      voided on. The same four framing reports also left the eligible
+      set unpinned: two panel seats derived twenty on-street counters and
+      seventeen from the same brief, because the locations dataset has no
+      facility-type field and the brief left classification to whatever
+      each reader made of the counters' names. Both are corrected in the
+      revised brief: out of service is separated from unclassifiable, and
+      membership is decided by five ordered tests over named dataset
+      fields, with the editor's test of the rule against the published
+      data recorded before the re-freeze.
+    notes: >
+      framing/check-3.md defect 3 and framing/check-4-defects.md; the
+      corrections and the revision in run-record.md; the superseded brief
+      at sha256 b222574225ea300f924240b715a7332398af5d905a2fc2596d6bc067e33ef700
+      and its answers under round1-superseded/.
+  - date: "2026-09-03"
+    story: cycling-volumes
+    run: reviews/cycling-volumes/2026-09-03
+    stage: round1
+    seat: Claude Opus 5
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      MATERIAL FRAMING CONCERN on bike-lanes-look-empty. Named the counter
+      the coverage rule voided on, 106 Street N of Jasper Avenue, with its
+      last record at 2025-07-16, its decay to zero over its final days and
+      its absence from 2026, and identified it as a failed device rather
+      than an unmeasured lane. Answered the claim as posed alongside the
+      concern, as the reviewer prompt requires. Upheld: the brief was
+      revised and round 1 rerun under methodology v1.2. The same review
+      also reported that the locations dataset py7x-4d39 has no
+      facility-type field and that its own classification was therefore
+      the reviewer's, which is the second defect the revision pins.
+    notes: >
+      round1-superseded/claude.json, bike-lanes-look-empty
+      interpretation_notes; run-record.md, stage 2.
+  - date: "2026-09-03"
+    story: cycling-volumes
+    run: reviews/cycling-volumes/2026-09-03
+    stage: round1
+    seat: Gemini 3.1 Pro
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      MATERIAL FRAMING CONCERN on bike-lanes-look-empty, reached
+      independently and blind, naming the same counter and the same cause:
+      one decommissioned meter forcing Not established across a set whose
+      other counters carried substantial traffic. Upheld with the Claude
+      seat's; the brief was revised and round 1 rerun.
+    notes: >
+      round1-superseded/gemini.json, bike-lanes-look-empty
+      interpretation_notes; run-record.md, stage 2.
+  - date: "2026-09-03"
+    story: cycling-volumes
+    run: reviews/cycling-volumes/2026-09-03
+    stage: round2
+    seat: Gemini 3.1 Pro
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      Cross-review findings 4 and 5, against the Claude and GPT verdicts on
+      riders-are-recreational-not-commuters. Both had reached the substantive
+      question by multiplying the 2015 survey's rounded whole-percent modal
+      shares by all-mode category totals — about 21,379 work trips against
+      about 11,994 recreational — where the brief's own priority rule requires
+      Not established first if the source does not break bicycle trips down by
+      purpose, or if its categories cannot be mapped completely onto recreation
+      and commuting. Upheld, and it is what sent the claim back to three blind
+      seats under methodology v1.22. The re-run then showed the objection was a
+      defect in the brief and not only in the two seats' arithmetic: the
+      priority gate and the Contradicted branch cannot both be read as written.
+    notes: >
+      round2/gemini.json round2_notes.errors_in_other_reviews[3] and [4];
+      run-record.md stage 8.
+  - date: "2026-09-03"
+    story: cycling-volumes
+    run: reviews/cycling-volumes/2026-09-03
+    stage: round1
+    seat: Claude Opus 5
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      MATERIAL FRAMING CONCERN on riders-are-recreational-not-commuters, raised
+      blind in the claim-scoped re-run at round1-rerun-2/ while still answering
+      the claim as posed, as the reviewer prompt requires. Two defects, both in
+      the brief. The instrument is the 2015 household travel survey, weekdays
+      only and 2015-09-14 to 2015-12-11, fixed for a proposition about cycling
+      in Edmonton with no season or day named; the seat put the City's own
+      counter records against that window, at about 6,908 passages a day
+      against about 14,092 in July 2025, with weekends excluded outright, and
+      pointed out that the same brief fixed July for claim 2 on the express
+      ground that a claim is tested at its strongest. And the verdict ladder's
+      priority gate and its Contradicted branch cannot both be operative, which
+      leaves two verdicts reachable on the same figures. Upheld. It did not
+      produce a revised brief: no revision was available that did not make the
+      claim weaker, so the claim was parked out of the run under methodology
+      v1.24 and registered as parked, and this run publishes seven.
+    notes: >
+      round1-rerun-2/claude.json, riders-are-recreational-not-commuters
+      interpretation_notes; run-record.md stages 8 and 9; errata.md item 7.
+  - date: "2026-09-03"
+    story: cycling-volumes
+    run: reviews/cycling-volumes/2026-09-03
+    stage: framing
+    seat: Framing check (GPT-5.6 Sol via codex exec)
+    event: framing-miss
+    materiality: blocking
+    disposition: >
+      The second framing defect the panel found in this brief, and the second
+      the framing check passed; the first, claim 2's coverage rule, is recorded
+      above. Claim 8's section fixed an autumn-weekday instrument for an
+      unqualified proposition about who rides, in a brief that fixed July for
+      claim 2 on the express ground that a claim is tested at its strongest for
+      the side asserting it, and wrote a verdict ladder whose priority gate and
+      Contradicted branch cannot both be operative. Four framing reports passed
+      both. Check 1 waved claims 5 to 8 through as checkable in principle
+      because the 2015 report carries a mode-by-purpose table, without asking
+      whether that table's fieldwork window matched the proposition it was
+      being fixed for — the same instrument-coverage question those reports
+      pressed hard on claims 3 and 4. Not repaired: qualifying the proposition
+      to autumn weekdays would make it weaker, and no representative Edmonton
+      instrument recording trip purpose exists, so the claim was parked out of
+      the run and onto the register. Recorded against the check and against the
+      editor, who wrote the section and froze it.
+    notes: >
+      framing/check-1.md finding 6 and framing/check-2.md; the concern at
+      round1-rerun-2/claude.json; run-record.md stages 8 and 9, including the
+      observation that on this brief the panel was a better framing check than
+      the framing check; errata.md item 7.

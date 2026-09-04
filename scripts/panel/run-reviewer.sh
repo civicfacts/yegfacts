@@ -28,11 +28,17 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 usage() {
   cat >&2 <<'USAGE'
-usage: scripts/panel/run-reviewer.sh <provider> <story> <date> <round> [--dry-run]
+usage: scripts/panel/run-reviewer.sh <provider> <story> <date> <round> [options]
   provider  claude | codex | agy   (aliases: anthropic, gpt, openai, gemini, google)
   story     story slug, e.g. electric-buses
   date      run date, e.g. 2026-08-31
   round     1 (blind research) or 2 (cross-review)
+
+options:
+  --dry-run          assemble the package and print the command, run nothing
+  --claims <id,...>  answer only these claim ids (claim-scoped re-run)
+  --into <dirname>   write the review and the manifest under <run>/<dirname>
+                     instead of <run>/round<N> and <run>/run.yaml
 USAGE
   exit 2
 }
@@ -41,12 +47,19 @@ USAGE
 
 PROVIDER_ARG="$1"; STORY="$2"; RUN_DATE="$3"; ROUND="$4"; shift 4
 DRY_RUN=0
-for arg in "$@"; do
-  case "$arg" in
-    --dry-run) DRY_RUN=1 ;;
-    *) echo "unknown option: $arg" >&2; usage ;;
+CLAIMS=""
+INTO=""
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --dry-run) DRY_RUN=1; shift ;;
+    --claims) CLAIMS="${2:-}"; [ -n "$CLAIMS" ] || { echo "--claims needs a value" >&2; usage; }; shift 2 ;;
+    --into) INTO="${2:-}"; [ -n "$INTO" ] || { echo "--into needs a value" >&2; usage; }; shift 2 ;;
+    *) echo "unknown option: $1" >&2; usage ;;
   esac
 done
+case "$INTO" in
+  */*|..|.) echo "--into must be a single directory name, got '$INTO'" >&2; exit 2 ;;
+esac
 
 case "$ROUND" in 1|2) ;; *) echo "round must be 1 or 2, got '$ROUND'" >&2; exit 2 ;; esac
 
@@ -112,9 +125,15 @@ esac
 RUN_DIR="$REPO_ROOT/reviews/$STORY/$RUN_DATE"
 BRIEF="$RUN_DIR/brief.md"
 SCHEMA="$REPO_ROOT/prompts/review-schema.json"
-OUT_DIR="$RUN_DIR/round$ROUND"
+# A claim-scoped re-run (`--claims` with `--into`) writes into its own directory
+# with its own manifest, and never into `round1/` or the run's `run.yaml`. The
+# completed round stays exactly as the seats returned it: nothing is
+# overwritten, the package hash recorded against it still describes the package
+# the seats answered, and the re-run's own hashes sit beside its own answers.
+OUT_DIR="$RUN_DIR/${INTO:-round$ROUND}"
 OUT_FILE="$OUT_DIR/$SLOT.json"
-MANIFEST="$RUN_DIR/run.yaml"
+MANIFEST="${INTO:+$RUN_DIR/$INTO/run.yaml}"
+MANIFEST="${MANIFEST:-$RUN_DIR/run.yaml}"
 
 [ -f "$BRIEF" ] || { echo "brief not found: $BRIEF" >&2; exit 1; }
 [ -f "$SCHEMA" ] || { echo "schema not found: $SCHEMA" >&2; exit 1; }
@@ -172,6 +191,23 @@ PACKAGE="$SCRATCH/package.md"
   echo "No prose, no explanation, no markdown fence — the first character of your"
   echo "response must be \`{\` and the last must be \`}\`. Set \`round\` to $ROUND."
   echo
+  if [ -n "$CLAIMS" ]; then
+    # Scoping lives in the wrapper, never in the brief: the brief below is the
+    # frozen bytes, so its hash still verifies. The seat is told what to answer
+    # and nothing about why, which is what keeps a re-run blind.
+    echo "## Scope of this run"
+    echo
+    echo "Answer ONLY the following claims from the brief:"
+    echo
+    printf '%s\n' "$CLAIMS" | tr ',' '\n' | sed '/^$/d;s/^/- `/;s/$/`/'
+    echo
+    echo "Your \`claims\` array must contain exactly those claims and no others."
+    echo "Every other claim in the brief is out of scope: do not research it and"
+    echo "do not return it. Everything else in the brief governs as written — the"
+    echo "definitions, the fixed dates, the denominators, the thresholds, the"
+    echo "required calculations and the reviewer instructions all still apply."
+    echo
+  fi
   echo "---"
   echo
   echo "## Methodology"
@@ -214,6 +250,9 @@ PACKAGE="$SCRATCH/package.md"
   echo '```'
   echo
   echo "Return ONLY the JSON document. Set \`round\` to $ROUND."
+  if [ -n "$CLAIMS" ]; then
+    echo "Answer only these claims, and no others: $CLAIMS"
+  fi
 } > "$PACKAGE"
 
 PROMPT_SHA="$(shasum -a 256 "$PACKAGE" | cut -d' ' -f1)"

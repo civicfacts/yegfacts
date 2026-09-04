@@ -1,0 +1,106 @@
+{
+  "reviewer": {
+    "provider": "google",
+    "model_self_reported": "Gemini 3.8 Flash",
+    "runner_model": "gemini-3.1-pro",
+    "runner_seat": "Gemini 3.1 Pro",
+    "runner_effort": "high"
+  },
+  "story": "cycling-volumes",
+  "round": 1,
+  "claims": [
+    {
+      "id": "riders-are-recreational-not-commuters",
+      "proposition_evaluated": "Most cycling in Edmonton is recreational rather than commuting.",
+      "interpretation_notes": "Evaluated the claim that bicycle trips in Edmonton are primarily recreational rather than commuting, using the primary source specified in the brief: the most recent regional household travel survey published by the 2026-09-03 freeze date (the 2015 Edmonton and Region Household Travel Survey Summary Report, April 2018; the continuous Navigating Tomorrow survey launched in September 2025 had released no public summary results by the freeze date). Under the brief's ordered decision ladder: 'Apply in this order: Not established if no published Edmonton source breaks bicycle trips down by purpose, or if the source's categories cannot be mapped completely onto recreation and commuting. Say what the obstacle is.' The verdict is Not established because: (1) The 2015 HTS Summary Report does not publish a standalone distribution of bicycle trips by purpose; Table 3-10 only reports mode share within each purpose category, rounded to whole integer percentages. (2) The survey categories cannot be mapped completely onto recreation and commuting: the leisure category is 'HB-Social / Recreation', combining social visits with recreation, and other utilitarian purposes (shopping, school, post-secondary education, personal business, chauffeuring/drop-offs, and other trips) represent over 40% of all travel. Alternatively, if bicycle trips are derived by multiplying Table 3-10 purpose totals by bicycle mode share, HB-Work accounts for ~19,521 trips (34.5% of estimated 56,605 bike trips; 35.6% of 54,800 control total) while HB-Social / Recreation accounts for ~11,994 trips (21.2% of estimated; 21.9% of control total). Under this derived calculation, commuting outnumbers social/recreational trips by more than 60%, and neither constitutes a majority; thus, under the secondary threshold rules, the claim is Contradicted (Com > Rec and Rec <= 35% under both primary and alternative cutoffs). Both readings point decisively against the assertion that most riders are recreational.",
+      "verdict": "Not established",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Public consultation for the Edmonton Bike Plan emphasized substantial community appreciation for recreational cycling facilities, especially within the North Saskatchewan River Valley and multi-use trail network.",
+          "source_title": "Edmonton Bike Plan - Phase 1 What We Heard Report",
+          "source_url": "https://www.edmonton.ca/transportation/cycling_walking/bicycle-transportation-plan",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2019",
+          "source_type": "policy-document",
+          "establishes": "Demonstrates that recreational cycling is a recognized, valued component of Edmonton's transportation and parks network, though it does not provide quantitative mode or purpose shares.",
+          "strength": "moderate"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "In the 2015 Edmonton and Region Household Travel Survey (Table 3-10), Home-Based Work trips generated an estimated 19,521 weekday bicycle trips (3% of 650,700 trips) compared to 11,994 bicycle trips for Home-Based Social / Recreation (3% of 399,800 trips). Work commuting trips exceeded social and recreational trips by over 60%.",
+          "source_title": "2015 Edmonton and Region Household Travel Survey Summary Report",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/assets/RoadsTraffic/2015_HTS_SummaryReport.pdf",
+          "source_publisher": "City of Edmonton & R.A. Malatest & Associates Ltd.",
+          "source_date": "2018-04",
+          "source_type": "analytical-report",
+          "establishes": "Establishes that among weekday bicycle trips, work commuting trips significantly outnumber social and recreational trips.",
+          "quote": "The highest shares for bicycle trips are for HB-work, HB-post secondary trips and HB-social / recreational trips among City residents.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Average weekday bicycle trip length for City of Edmonton residents was 4.1 km in 2015 (Table 3-12), up 41% from 2.9 km in 1994, reflecting substantial utilitarian travel distances rather than short localized leisure loops.",
+          "source_title": "2015 Edmonton and Region Household Travel Survey Summary Report",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/assets/RoadsTraffic/2015_HTS_SummaryReport.pdf",
+          "source_publisher": "City of Edmonton & R.A. Malatest & Associates Ltd.",
+          "source_date": "2018-04",
+          "source_type": "analytical-report",
+          "establishes": "Demonstrates that bicycle trips cover meaningful commuting distances (averaging 4.1 km in the City and 4.2 km in the Region).",
+          "strength": "strong"
+        },
+        {
+          "finding": "Automated bicycle counters on central on-street corridors (e.g., 100 Avenue, 102 Avenue) show pronounced weekday bimodal traffic peaks during morning (07:00-09:00) and afternoon (16:00-18:00) commuting windows, whereas weekend traffic displays a single broad mid-day peak (12:00-16:00).",
+          "source_title": "Bike and Pedestrian Counts (Eco Counter)",
+          "source_url": "https://data.edmonton.ca/Transportation/Bike-and-Pedestrian-Counts-Eco-Counter-/tq23-qn4m",
+          "source_publisher": "City of Edmonton Open Data",
+          "source_date": "2026-09-03",
+          "source_type": "observed-data",
+          "establishes": "Provides temporal evidence that weekday cycling on metered corridors is heavily driven by commuter schedules.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "The 2015 Edmonton and Region Household Travel Survey is an autumn weekday travel diary (September-December 2015) and does not capture weekend travel, when recreational cycling is likely higher.",
+        "Table 3-10 reports mode share by purpose rounded to integer percentages (1% to 3% for bicycle), introducing minor arithmetic rounding error when estimating absolute trips by purpose.",
+        "The survey category 'HB-Social / Recreation' bundles social visits with recreational exercise, precluding isolation of pure recreation.",
+        "This claim and Claim 5 ('two-percent-of-trips-by-bike') both rely on the 2015 Edmonton and Region Household Travel Survey Summary Report (April 2018), with Claim 5 drawing on the total bicycle mode share (Table 3-2, 1.7% of 3.14M trips) and Claim 8 analyzing the purpose distribution across modes (Tables 3-9 and 3-10)."
+      ],
+      "unknowns": [
+        "The proportion of cycling trips taken for recreation versus utilitarian purposes on summer weekends, which are not captured in the weekday household travel diary.",
+        "The internal split within the 'HB-Social / Recreation' category between recreational exercise/leisure and utilitarian social visits.",
+        "Updated trip purpose data from the continuous 'Navigating Tomorrow' regional travel survey, which launched in September 2025 but had released no summary results by the 2026-09-03 freeze date."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Cross-tabulated microdata from the 2015 Household Travel Survey or subsequent surveys providing exact, disaggregated bicycle trip counts by individual trip purpose.",
+          "likely_holder": "City of Edmonton Urban Planning and Economy / R.A. Malatest & Associates Ltd.",
+          "importance": "high"
+        },
+        {
+          "description": "Published findings from the Navigating Tomorrow travel survey detailing cycling mode share and purpose distribution across seasons and days of the week.",
+          "likely_holder": "City of Edmonton / Edmonton Metropolitan Region Board",
+          "importance": "critical"
+        }
+      ],
+      "calculations_needed": [
+        "Derived estimated weekday bicycle trips by purpose (City residents, 2015 HTS Table 3-10): HB-Work = 650,700 * 3% = 19,521 (34.5%); HB-PSE = 82,500 * 3% = 2,475 (4.4%); HB-School = 255,400 * 2% = 5,108 (9.0%); HB-Shopping = 352,600 * 1% = 3,526 (6.2%); HB-Social / Rec = 399,800 * 3% = 11,994 (21.2%); HB-Personal Business = 226,200 * 1% = 2,262 (4.0%); HB-Pick up/Drop off = 217,000 * 1% = 2,170 (3.8%); HB-Other = 172,100 * 1% = 1,721 (3.0%); NHB-Work = 185,800 * 1% = 1,858 (3.3%); NHB-Other = 597,000 * 1% = 5,970 (10.5%). Total estimated bicycle trips = 56,605 (vs 54,800 published control total in Table 3-2).",
+        "Recreational share (HB-Social / Rec): 11,994 / 56,605 = 21.2% (or 11,994 / 54,800 = 21.9%).",
+        "Commuting share: HB-Work alone = 19,521 / 56,605 = 34.5% (or 19,521 / 54,800 = 35.6%); Total work commuting (HB-Work + NHB-Work) = 21,379 / 56,605 = 37.8% (or 39.0%); Combined work and school commuting = 28,962 / 56,605 = 51.2%."
+      ],
+      "what_would_change_my_verdict": [
+        "Release of validated travel diary microdata from the Navigating Tomorrow survey showing that disaggregated recreation, exercise, and leisure bicycle trips exceed 50% of all bicycle trips would change the verdict to Supported.",
+        "An official published breakdown demonstrating that recreational cycling represents between 35% and 50% of bicycle trips and forms the largest single purpose category would change the verdict to Partially supported.",
+        "If the panel rules that derived estimates from cross-tabulated mode-share tables satisfy the requirement for a published source breakdown, the verdict would change to Contradicted based on work trips outnumbering social/recreation trips (35-38% vs 21%)."
+      ],
+      "suggested_one_line": "No published Edmonton source breaks bicycle trips down by purpose, and survey estimates show weekday commute trips outnumber social and recreational rides.",
+      "suggested_short_answer": "The proposition is Not established under the review rules because no published Edmonton instrument provides an explicit breakdown of bicycle trips by purpose, and the household travel survey bundles social visits with recreation while excluding other major utilitarian trip types. Furthermore, derived estimates from the 2015 Household Travel Survey show work commute trips (~35%–38%) significantly exceed social/recreational trips (~21%), with other utilitarian trips (school, shopping, personal business) comprising the remaining ~41%. Automated counters on metered bike corridors also display pronounced weekday morning and afternoon commute peaks rather than leisure patterns.",
+      "suggested_tldr": [
+        "The 2015 Edmonton and Region Household Travel Survey does not publish a standalone distribution of bicycle trips by purpose, and its 'HB-Social / Recreation' category cannot isolate pure recreation.",
+        "Derived estimates from survey data indicate weekday work commuting accounts for ~35%–38% of bicycle trips, compared to ~21% for social/recreational trips and ~41% for other utilitarian purposes.",
+        "Automated counter data on downtown and connector bike routes shows sharp weekday morning (7–9 AM) and evening (4–6 PM) commute peaks, contradicting the perception that metered lanes primarily serve recreational riders."
+      ]
+    }
+  ]
+}
