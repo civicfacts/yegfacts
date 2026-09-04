@@ -73,7 +73,7 @@ const links: { href: string; label: string }[] = [
               <li>
                 <a
                   href={link.href}
-                  aria-current={path === link.href ? 'page' : undefined}
+                  aria-current={path === link.href ? 'page' : path.startsWith(`${link.href}/`) ? 'true' : undefined}
                   class="pb-1 text-[0.9375rem] font-semibold"
                 >
                   {link.label}

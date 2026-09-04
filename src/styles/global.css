@@ -99,6 +99,8 @@
    * a transition on one element still wins, and switched off outright for a
    * reader who has asked for less motion.
    */
+  .prose a,
+  .masthead a,
   .link,
   .link-stew,
   .link-title,
@@ -116,6 +118,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .prose a,
+    .masthead a,
     .link,
     .link-stew,
     .link-title,
@@ -148,7 +152,9 @@
  * box-shadow, not a border or an underline: it is a rule drawn inside the box,
  * so it costs the row no height and the nav does not shift between pages. It
  * has to be stated after `.masthead a`, which it overrides at equal
- * specificity.
+ * specificity. A page inside a section (a question, a journal post, the
+ * methodology changes) carries `aria-current="true"` on its section's word
+ * and gets the same bar; the exact page carries `aria-current="page"`.
  */
 .masthead-nav a {
   opacity: 0.82;
@@ -157,11 +163,11 @@
 
 .masthead-nav a:hover,
 .masthead-nav a:focus-visible,
-.masthead-nav a[aria-current='page'] {
+.masthead-nav a[aria-current] {
   opacity: 1;
 }
 
-.masthead-nav a[aria-current='page'] {
+.masthead-nav a[aria-current] {
   box-shadow: inset 0 -2px 0 var(--color-gold);
 }
 

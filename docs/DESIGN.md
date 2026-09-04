@@ -508,7 +508,8 @@ exception is 2px on inline code. Two things are circles because the thing
 itself is: Stew's avatar wherever it appears, and the verdict dots in the
 AI-review matrix. No shadows except the one that lifts a
 glossary popover off the text it covers. Motion is colour and border
-transitions of 150ms on links and controls, and nothing else; under
+transitions of 150ms on links and on the controls that change colour on hover
+(the chips, the buttons, the outline), and nothing else; under
 `prefers-reduced-motion` even those are off. A
 finding is a filled badge in its own colour — forest Supported, navy Partially
 supported, charcoal Not established, brick Contradicted, gold Mixed — with the
@@ -536,9 +537,10 @@ brighter blue mirrors both, `.link-stew` and `.link-title-stew`, in the blocks
 where he is the one speaking.
 
 The **home page's search field** is set in the display face, and its placeholder
-is a question this site has actually checked rather than an example of one. A
-helper line under it prints three counts read out of the record at build time:
-questions registered, claims checked, sources archived.
+is a question this site has actually checked rather than an example of one. Three
+counts read out of the record at build time, questions registered, claims
+checked and sources archived, sit beside the deck from `lg` up and under it on
+a phone, above the search field.
 
 The **pre-launch notice** is a single gold line with an ink hairline under it,
 not a band with a brick edge. The **footer** closes the page on the wash tone.
