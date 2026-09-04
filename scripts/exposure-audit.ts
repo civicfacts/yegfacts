@@ -23,6 +23,13 @@ import { execFileSync } from 'node:child_process';
 import { lstatSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { REPO_ROOT, repoPath, listFiles, loadYaml } from './lib/repo.ts';
+import {
+  WITHHELD_FINGERPRINTS,
+  findMatches,
+  lineOf,
+  loadWithheld,
+  type WithheldEntry,
+} from './lib/withheld.ts';
 
 // ---------------------------------------------------------------------------
 // Classes
@@ -33,6 +40,7 @@ type Severity = 'fail' | 'warn';
 type ClassName =
   | 'SECRETS'
   | 'PRIVATE-EVIDENCE LEAK'
+  | 'WITHHELD LEAK'
   | 'RIGHTS'
   | 'LOCAL PATHS'
   | 'PII'
@@ -41,6 +49,7 @@ type ClassName =
 const SEVERITY: Record<ClassName, Severity> = {
   SECRETS: 'fail',
   'PRIVATE-EVIDENCE LEAK': 'fail',
+  'WITHHELD LEAK': 'fail',
   RIGHTS: 'fail',
   'LOCAL PATHS': 'fail',
   PII: 'warn',
@@ -248,6 +257,60 @@ function scanRights(tracked: Set<string>, registry: { file: string; entry: Regis
   }
 }
 
+/**
+ * A claim declined on right-of-reply grounds keeps its row, its outcome and its
+ * reason on the register under a neutral id, and nothing else. Its proposition,
+ * the wording it was said in, and any descriptive slug a run artifact gave it
+ * must not be anywhere in the tracked tree — a slug is published as surely as a
+ * paragraph is, and this class exists because that happened once.
+ *
+ * The strings themselves are not in this repository, so the check works on the
+ * salted digests in `intake/withheld-fingerprints.yaml`. See `lib/withheld.ts`.
+ * Findings report the location and never the match: printing the excerpt would
+ * republish the thing the class protects.
+ */
+function scanWithheld(relPath: string, text: string, salt: string, entries: WithheldEntry[]) {
+  if (relPath === WITHHELD_FINGERPRINTS) return;
+  for (const entry of entries) {
+    const allowed = (entry.allow ?? []).some((exemption) => exemption.path === relPath);
+    if (allowed) continue;
+    for (const match of findMatches(salt, entry.fingerprints ?? [], text)) {
+      report(
+        'WITHHELD LEAK',
+        relPath,
+        lineOf(text, match.offset),
+        `withheld text for ${entry.id} (${match.fingerprint.tokens} words)`,
+        '(match not printed)',
+      );
+    }
+  }
+}
+
+type RegisterClaim = { id?: string; ground?: string };
+
+/**
+ * Every right-of-reply decline must have a fingerprint entry. Without this a
+ * future withheld claim passes the class by simply not being listed, which is
+ * the failure mode the class was added for.
+ */
+function scanWithheldCoverage(entries: WithheldEntry[]) {
+  const register = loadYaml<{ claims?: RegisterClaim[] }>(repoPath('intake', 'register.yaml'));
+  const fingerprinted = new Set(
+    entries.filter((entry) => (entry.fingerprints ?? []).length > 0).map((entry) => entry.id),
+  );
+  for (const claim of register.claims ?? []) {
+    if (claim.ground !== 'right-of-reply') continue;
+    if (claim.id && fingerprinted.has(claim.id)) continue;
+    report(
+      'WITHHELD LEAK',
+      WITHHELD_FINGERPRINTS,
+      1,
+      `${claim.id ?? 'a claim'} is declined on right-of-reply grounds with no fingerprints here`,
+      claim.id ?? '',
+    );
+  }
+}
+
 const QUOTE_WORD_LIMIT = 75;
 const QUOTE_FIELD = /"quote"\s*:\s*("(?:[^"\\]|\\.)*")/;
 
@@ -282,6 +345,7 @@ const strict = process.argv.includes('--strict');
 const tracked = trackedFiles();
 const trackedSet = new Set(tracked);
 const registry = loadRegistry();
+const withheld = loadWithheld();
 
 let scanned = 0;
 let skippedBinary = 0;
@@ -302,10 +366,12 @@ for (const relPath of tracked) {
   const text = buffer.toString('utf8');
   scanLines(relPath, text);
   scanLongQuotes(relPath, text);
+  scanWithheld(relPath, text, withheld.salt, withheld.entries ?? []);
 }
 
 scanPrivateEvidence(trackedSet, registry);
 scanRights(trackedSet, registry);
+scanWithheldCoverage(withheld.entries ?? []);
 
 // ---------------------------------------------------------------------------
 // Output
@@ -334,6 +400,14 @@ console.log(
 for (const cls of CLASSES) {
   const count = findings.filter((finding) => finding.class === cls).length;
   console.log(`  ${SEVERITY[cls] === 'fail' ? 'fail' : 'warn'}  ${cls.padEnd(21)} ${count}`);
+}
+
+// Exemptions are stated on every run. A pass that quietly skipped a path would
+// be the same false assurance the WITHHELD LEAK class was added to end.
+for (const entry of withheld.entries ?? []) {
+  for (const exemption of entry.allow ?? []) {
+    console.log(`  note  withheld text for ${entry.id} is allowed in ${exemption.path}`);
+  }
 }
 
 if (failCount > 0) {

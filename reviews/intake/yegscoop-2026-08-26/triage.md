@@ -122,4 +122,4 @@ not jump the queue, and one reader's refusal does not discard it either.
 | `drivers-harass-cyclists-without-lanes` | NO | NO/NO | 1 | Cyclists riding lawfully on roads without bike lanes get honked at, passed too closely and veered at. |
 | `transit-moves-people-more-efficiently` | NO | NO/NO | 1 | Transit is a more efficient method of moving people than private cars. |
 | `lrt-barely-functions` | NO | NO/NO | 1 | The LRT barely functions except for large events and people who live near its limited stations. |
-| `salvador-husband-infill-company` | NO | NO/NO | 1 | Councillor Ashley Salvador's husband has an infill company. |
+| `withheld-yegscoop-2026-08-26-1` | NO | NO/NO | 1 | [redacted 2026-09-03: proposition of a claim withheld under right of reply; row, outcome and reason are public on the register under withheld-yegscoop-2026-08-26-1] |
