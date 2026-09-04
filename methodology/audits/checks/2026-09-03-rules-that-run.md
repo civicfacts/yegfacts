@@ -170,12 +170,20 @@ cannot outlive the split.
 
 ## The changelog entry this earns
 
-1.20 and 1.21 are spoken for by branches already queued on the file, so this
-should take **1.22**. Drafted, not written into `methodology/changelog.yaml`,
-because a third branch touching that file is how this gets messy.
+1.20, 1.21 and 1.22 are spoken for by branches already queued on the file
+(the frozen `cycling-volumes` brief, the register repairs, the Gemini seat
+change), so this takes **1.23**. Drafted, not written into
+`methodology/changelog.yaml`, because a fourth branch touching that file is
+how this gets messy. Written in for real when this branch's turn comes.
+
+One more thing the entry has to carry, found by replaying the new rule over
+recent history: the change that added the `WITHHELD LEAK` fail class
+(PR #44, `002c1ab`) edited `methodology/exposure-audit.md`, which describes
+the method, and minted no version. Under the rule it now owes one. Rather
+than a retroactive bump for one class, 1.23 records it.
 
 ```yaml
-- version: "1.22"
+- version: "1.23"
   date: "2026-09-03"
   scope: enforcement
   summary: >
@@ -190,6 +198,7 @@ because a third branch touching that file is how this gets messy.
     - "A claim is one assertion is a rule the merge prompt has always carried and nothing ever checked. One claim reached the public register joining two people's remarks with the word the rule names, recording someone as asserting a tax rise when their words stated a tax bill. A gate now refuses a merge whose proposition asserts two quantities that no single captured wording carries together."
     - "That gate is a corner of the rule, not the rule, and it says so in every report it writes. Whether a wording asserts a proposition is entailment, and no string test decides entailment. The compound propositions with no numbers in them, and the whole of rule 2, still need a reader."
     - "The one claim the gate flags on the live register is named in the validator with the date it was found and the reason it is not fixed yet, and prints on every run. Everything else fails."
+    - "Replaying the version rule over the last fourteen merges to main found one that owed an entry and had none, and it was ours from the same evening: the change that added the WITHHELD LEAK fail class to the exposure audit edited methodology/exposure-audit.md, which describes the method, and bumped nothing. The rule did not exist yet to stop it. This entry records that class's arrival, so the method's public record is complete without a retroactive version for a single check."
   links:
     - label: How the site works
       href: /about
