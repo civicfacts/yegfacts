@@ -55,6 +55,17 @@ Corrected later).
   (the Codex CLI failed twice on an internal error); what it was to
   confirm is mechanical and codex-output_6.md records Stew's own
   verification of it.
+- The founder's second look showed the spine as short stubs between
+  steps: the numeral cell stretched to the row's height, so its paper
+  ground hid the spine along the body. Fixed in fcdb744 with
+  `sm:self-start` on the numeral span. No reviewer report exists for
+  this commit. Codex hit its usage limit (reset Sep 7) on the first
+  attempt at round 7; the Gemini seat in headless mode needs the
+  permissions flag the session's classifier refused. Stew verified the
+  fix on the built page at 1280 (one continuous line from numeral 1 to
+  5, broken only behind each digit) and the founder's look at the
+  preview is the gate for the merge (D-0021). codex-review_7.md is the
+  brief that did not run.
 
 Four rounds for ten sentences, then two for one visual fix. Every finding was a sentence saying more
 than the method does, the same failure the short version itself drew in
