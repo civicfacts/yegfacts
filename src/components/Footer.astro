@@ -1,5 +1,18 @@
 ---
+import Wordmark from './Wordmark.astro';
 import { SITE, issueUrl } from '../lib/site';
+
+/**
+ * The forest block that closes the page, bookending the masthead: same ground,
+ * same container, the same compact mark, and the same nav treatment (see
+ * `.forest-nav` in global.css, which both blocks share). It arrives as a band
+ * of colour rather than as a wash panel behind an ink rule, so the page is
+ * framed top and bottom rather than trailing off into grey.
+ *
+ * Nothing muted survives here: grey text on forest fails, navy links disappear
+ * into the green, and so does the navy focus ring — `.site-footer` is what
+ * turns that ring white, alongside `.masthead`.
+ */
 
 /**
  * The commit this build came from, injected by `astro.config.mjs`. A reader can
@@ -9,11 +22,28 @@ import { SITE, issueUrl } from '../lib/site';
  */
 const commitSha = import.meta.env.COMMIT_SHA ?? 'dev';
 
-/** Small caps, the one label register the site uses for a column head. */
-const heading = 'font-sans text-[0.75rem] font-bold tracking-[0.12em] text-muted uppercase';
+/**
+ * The column labels. Gold on forest is 4.88:1, which passes AA at this size and
+ * weight; it is the only place gold sets type outside the wordmark's ".ca", and
+ * it is on forest, never on paper, where it would fail.
+ */
+const heading = 'font-sans text-[0.6875rem] font-bold tracking-[0.12em] text-gold uppercase';
 
+/**
+ * The colophon is running text, so its links are underlined — the site's rule
+ * for a link inside a sentence. They are paper, not `.link` navy or
+ * `.link-stew` blue: neither of those passes on this ground.
+ */
+const colophonLink = 'link-paper';
 
-const columns = [
+interface FooterLink {
+  href: string;
+  label: string;
+  /** Off-site, so it carries `rel="noopener"`. */
+  external?: boolean;
+}
+
+const columns: { heading: string; links: FooterLink[] }[] = [
   {
     heading: 'The site',
     links: [
@@ -36,20 +66,57 @@ const columns = [
       { href: '/rss.xml', label: 'RSS' },
     ],
   },
+  {
+    heading: 'Contact',
+    links: [
+      { href: `mailto:${SITE.email}`, label: SITE.email },
+      { href: SITE.repo, label: 'Source on GitHub', external: true },
+      /*
+        Lives here rather than at the foot of every finding: it is an
+        invitation to the site, not a response to the page you are on.
+      */
+      {
+        href: issueUrl('Suggest a topic', 'What should YEGFacts check, and why?\n'),
+        label: 'Suggest a topic',
+        external: true,
+      },
+    ],
+  },
 ];
 ---
 
-<footer class="mt-16 border-t-[3px] border-ink bg-wash" data-pagefind-ignore>
-  <div class:list={['mx-auto max-w-3xl px-5 pt-10 pb-14', 'lg:max-w-[66rem]']}>
-    <div class="grid gap-8 sm:grid-cols-3">
+<footer class="site-footer mt-16 bg-forest text-paper" data-pagefind-ignore>
+  <div class:list={['mx-auto max-w-3xl px-5 pt-10 pb-12', 'lg:max-w-[66rem]']}>
+    {/*
+      The head row is the masthead's row again: mark on the left, one line of
+      type beside it, aligned on the last baseline so the sentence sits on the
+      base of the letters rather than against their middle. Below `md` the
+      sentence takes a line of its own.
+    */}
+    <div class="flex flex-wrap items-baseline-last gap-x-7 gap-y-3">
+      <a href="/" class="mr-auto no-underline" aria-label="YEGFacts.ca home">
+        <Wordmark size="compact" />
+      </a>
+      <p class="max-w-[34ch] basis-full font-display text-[1.0625rem] text-paper/80 md:basis-auto">
+        Claims about Edmonton's city government, checked against the public record.
+      </p>
+    </div>
+
+    <div class="mt-8 grid gap-8 border-t border-paper/15 pt-8 sm:grid-cols-3">
       {
         columns.map((column) => (
-          <nav aria-label={column.heading}>
+          /*
+            `forest-nav` is the masthead's link treatment: paper at 82%, no
+            underline, full strength on hover. Its gold current-page bar keys off
+            `aria-current`, which nothing here sets — the footer is a site map,
+            not a statement about where you are.
+          */
+          <nav class="forest-nav" aria-label={column.heading}>
             <h2 class={heading}>{column.heading}</h2>
             <ul class="mt-3 space-y-1.5 text-[0.9375rem]">
               {column.links.map((link) => (
                 <li>
-                  <a href={link.href} class="link">
+                  <a href={link.href} rel={link.external ? 'noopener' : undefined}>
                     {link.label}
                   </a>
                 </li>
@@ -58,46 +125,22 @@ const columns = [
           </nav>
         ))
       }
-      <div>
-        <h2 class={heading}>Contact</h2>
-        <ul class="mt-3 space-y-1.5 text-[0.9375rem]">
-          <li>
-            <a href={`mailto:${SITE.email}`} class="link">
-              {SITE.email}
-            </a>
-          </li>
-          <li>
-            <a href={SITE.repo} rel="noopener" class="link">
-              Source on GitHub
-            </a>
-          </li>
-          <li>
-            {/*
-              Lives here rather than at the foot of every finding: it is an
-              invitation to the site, not a response to the page you are on.
-            */}
-            <a
-              href={issueUrl('Suggest a topic', 'What should YEGFacts check, and why?\n')}
-              rel="noopener"
-              class="link"
-            >
-              Suggest a topic
-            </a>
-          </li>
-        </ul>
-      </div>
     </div>
 
-    <p class="mt-10 border-t border-rule pt-5 text-[0.8125rem] leading-relaxed text-muted">
-      Built and maintained by <a href="/about" class="link">Stew</a>. Non-partisan
-      civic evidence for Edmonton — every finding shows its evidence, its model reviews, and its
-      revision history.
+    <p class="mt-10 border-t border-paper/15 pt-5 text-[0.8125rem] leading-relaxed text-paper/70">
+      Built and maintained by <a href="/about" class={colophonLink}>Stew</a>. Non-partisan civic
+      evidence for Edmonton: every finding shows its evidence, its model reviews, and its revision
+      history.
       {
         commitSha !== 'dev' ? (
           <>
             {' '}
             Deployed from{' '}
-            <a href={`${SITE.repo}/commit/${commitSha}`} rel="noopener" class="link tabular">
+            <a
+              href={`${SITE.repo}/commit/${commitSha}`}
+              rel="noopener"
+              class={`${colophonLink} tabular`}
+            >
               {commitSha}
             </a>
             .
