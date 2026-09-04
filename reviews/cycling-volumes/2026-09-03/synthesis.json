@@ -1,13 +1,24 @@
 {
   "story": "cycling-volumes",
   "run": "2026-09-03",
-  "methodology_version": "1.23",
+  "methodology_version": "1.24",
   "basis": "round1",
   "claim_reruns": [
-    "round1-rerun-1"
+    "round1-rerun-1",
+    "round1-rerun-2"
+  ],
+  "parked_claims": [
+    {
+      "id": "riders-are-recreational-not-commuters",
+      "reason": "The brief fixed the 2015 Edmonton and Region Household Travel Survey, whose fieldwork ran 2015-09-14 to 2015-12-11 on weekdays only, as the instrument for a proposition about cycling in Edmonton with no season or day named. Both restrictions cut against the recreational side, and the same brief fixed July for claim 2 on the express ground that a claim is tested at its strongest for the side asserting it. The Claude seat raised that as a material framing concern in the blind re-run, and it is right. No repair was available: qualifying the proposition to autumn weekdays makes it weaker than the claim people are making, and a representative Edmonton survey recording trip purpose does not exist — the brief's own source search looked for one. So the claim leaves this run rather than being answered on an instrument that cannot carry it. It is parked on the register, and reopens if such a survey is published. The sequence is in run-record.md stage 9 and errata.md item 7; the seats' answers are in round1/ and round1-rerun-2/.",
+      "basis": "round1-rerun-2",
+      "framing_concerns": [
+        "round 1 · claude · claim \"riders-are-recreational-not-commuters\""
+      ]
+    }
   ],
   "round2_documented": true,
-  "generated_at": "2026-09-04T03:43:16.598Z",
+  "generated_at": "2026-09-04T04:22:10.906Z",
   "claims": [
     {
       "id": "cycling-trips-1-3-million-2026",
@@ -451,73 +462,6 @@
         }
       ],
       "disagreement_notes": []
-    },
-    {
-      "id": "riders-are-recreational-not-commuters",
-      "finding": "Contradicted",
-      "panel_agreement": "Adjacent",
-      "rationale": "Majority found affirmative counter-evidence; one reviewer found the record silent.",
-      "basis": "round1",
-      "reviewers": [
-        {
-          "provider": "claude",
-          "model_self_reported": "Claude Opus 5 (claude-opus-5)",
-          "verdict": "Contradicted",
-          "confidence": "Low",
-          "evidence_basis": "direct-edmonton",
-          "interpretation_notes": "Source and categories. The 2015 Edmonton and Region Household Travel Survey publishes trip purpose crossed with mode in Table 3-10. Its purpose categories, verbatim: HB-Work, HB-PSE (home-based post-secondary education), HB-School, HB-Shopping, HB-Social / Rec, HB-Personal Bus., HB-Pick up/Drop off, HB-Other, NHB-Work, NHB-Other (HB is home-based, NHB non-home-based). My mapping, stated before the figures: recreational = HB-Social / Rec; commuting = HB-Work plus NHB-Work; everything else is a third category and belongs to neither. The brief's Contradicted branch explicitly contemplates 'some third purpose category', so a complete binary mapping is not required and the Not established branch is not triggered by the presence of school, shopping and errand trips. Arithmetic, labelled as my calculation. The survey publishes bicycle as a share within each purpose, not purpose within bicycle, so I multiplied each purpose total by its published whole-percent bicycle share for City of Edmonton residents: HB-Work 650,700 x 3% = 19,521; HB-PSE 82,500 x 3% = 2,475; HB-School 255,400 x 2% = 5,108; HB-Shopping 352,600 x 1% = 3,526; HB-Social/Rec 399,800 x 3% = 11,994; HB-Personal Bus. 226,200 x 1% = 2,262; HB-Pick up/Drop off 217,000 x 1% = 2,170; HB-Other 172,100 x 1% = 1,721; NHB-Work 185,800 x 1% = 1,858; NHB-Other 597,000 x 1% = 5,970. Sum 56,605, against the 54,800 bicycle trips the survey publishes in Table 3-2 - 3.3 percent over, which is the rounding. Recreational share = 11,994 / 56,605 = 21.2 percent (21.9 percent on the published 54,800 denominator). Commuting share = 21,379 / 56,605 = 37.8 percent. HB-Work alone is 34.5 percent and is the largest single category. Verdict. Commuting exceeds recreation and recreation is at most 35 percent, so the primary ladder returns Contradicted. The alternative ladder (Supported above 45 percent; Partially supported above 30 percent, at most 45, and largest) also returns Contradicted, since 21 percent is neither above 30 nor the largest category. Both cutoff sets agree. Rounding sensitivity. The published shares are whole percentages, so I tested the extremes. Even with HB-Social/Rec at the top of its rounding band (3.5 percent, 13,993 trips) and HB-Work at the bottom of its (2.5 percent, 16,268) plus NHB-Work at 0.5 percent (929), commuting at 17,197 still exceeds recreation at 13,993, and recreation is 25.5 percent of the published bicycle total. The verdict does not turn on the rounding."
-        },
-        {
-          "provider": "gemini",
-          "model_self_reported": "Gemini 3.8 Flash (High)",
-          "verdict": "Not established",
-          "confidence": "High",
-          "evidence_basis": "direct-edmonton",
-          "interpretation_notes": "Tested against the most recent published household travel survey (2015 HTS) and municipal datasets. Under the brief's decision rule: 'Not established if no published Edmonton source breaks bicycle trips down by purpose, or if the source's categories cannot be mapped completely onto recreation and commuting.' The 2015 HTS summary reports provide overall mode share and aggregate trip purposes across all travel modes (e.g. Home-Based Work, School, Other), but do not publish a cross-tabulation of bicycle trips specifically broken down by purpose categories. Nor does Statistics Canada or the City publish such a breakdown."
-        },
-        {
-          "provider": "gpt",
-          "model_self_reported": "GPT-5",
-          "verdict": "Contradicted",
-          "confidence": "Moderate",
-          "evidence_basis": "direct-edmonton",
-          "interpretation_notes": "I mapped the report's 'HB Social/Rec' category to recreation and 'HB Work' plus 'NHB Work' to commuting or work. The other categories—HB PSE, HB School, HB Shopping, HB Personal Business, HB Pick up/Drop off, HB Other, and NHB Other—remain named third purposes. Because the report publishes rounded bicycle shares within each purpose rather than a direct purpose distribution of bicycle trips, the resulting estimates are approximate. They nevertheless put recreation below 35 percent and work above recreation, producing Contradicted under both cutoff sets."
-        }
-      ],
-      "round2_positions": [
-        {
-          "provider": "claude",
-          "model_self_reported": "Claude Opus 5",
-          "verdict": "Contradicted",
-          "confidence": "Moderate",
-          "evidence_basis": "direct-edmonton",
-          "interpretation_notes": "Unchanged from round 1: Contradicted, Moderate confidence. This is the one claim where the panel splits, and I hold my position against gemini's Not established. gemini returns Not established on the ground that the 2015 survey does not publish a bicycle-by-purpose cross-tabulation. It does publish one, at rounded precision: the summary report's purpose table gives trip totals for every purpose with the bicycle share within each, and the brief expressly permits a reviewer to compute a share the source does not print provided the arithmetic is shown and labelled. gpt and I used that table independently and landed within a point of each other. On the survey's own categories, recreational bicycle trips (HB-Social/Rec) are about 11,994, and work-related bicycle trips (HB-Work plus NHB-Work) about 21,379, of which HB-Work alone is about 19,521 and is the largest single purpose. Recreation is 21.2 percent of my derived bicycle total of about 56,605 and 21.9 percent of the survey's published 54,800, and either way it is far below 35 percent while work exceeds it. The ladder returns Contradicted on two independent grounds, and the same under the alternative cutoffs. I tested the rounding, which is the real weakness here: taking every rounded whole-percent cell across its full interval, recreation ranges from 18.2 to 25.5 percent of bicycle trips and work from 31.4 to 46.6 percent, so recreation stays below 35 percent and below work across the entire range. The verdict is robust to the rounding. I keep confidence at Moderate rather than High because the shares are reviewer arithmetic on rounded cells and because HB-Social/Rec bundles social visits with recreation, though that bundling can only inflate the recreational share, which still fails. The counter shape, which points the same way, is context and carries nothing."
-        },
-        {
-          "provider": "gemini",
-          "model_self_reported": "Gemini 3.8 Flash (High)",
-          "verdict": "Not established",
-          "confidence": "High",
-          "evidence_basis": "direct-edmonton",
-          "interpretation_notes": "Tested against the most recent published household travel survey (2015 HTS) and municipal datasets under the brief's ordered threshold ladder: 'Apply in this order: Not established if no published Edmonton source breaks bicycle trips down by purpose, or if the source's categories cannot be mapped completely onto recreation and commuting. Say what the obstacle is.' The 2015 HTS Summary Report does not publish a breakdown of bicycle trips by purpose. Table 3-10 only breaks down all trips across all modes by purpose and reports integer-rounded bicycle mode shares within each purpose (e.g. 3% for HB-Work, 1% for NHB-Work, 3% for HB-Social/Rec). Furthermore, the survey categories include HB-School, HB-Post Secondary (HB-PSE), HB-Shopping, and HB-Personal Business, which cannot be mapped completely onto recreation and commuting. Under the brief's first priority condition, the lack of a published purpose breakdown and the inability to map categories completely mandates Not established. In cross-review, we evaluate the alternative approach taken by Claude and GPT, who multiplied the rounded mode shares by total purpose trips in Table 3-10 to estimate trip counts: ~21,379 work trips (37.8%-39.0%) vs ~11,994 social/recreational trips (21.2%-21.9%). If this reviewer-derived arithmetic is accepted, commuting trips exceed recreational trips (Com > Rec), which would yield Contradicted. In no reading is the claim Supported. Counter temporal profiles show protected bike lanes exhibit pronounced weekday morning (08:00) and afternoon (16:00-17:00) peaks, with weekday volumes exceeding weekend volumes by 40-87%, confirming substantial utility commuter traffic."
-        },
-        {
-          "provider": "gpt",
-          "model_self_reported": "GPT-5",
-          "verdict": "Contradicted",
-          "confidence": "Low",
-          "evidence_basis": "direct-edmonton",
-          "interpretation_notes": "Table 3-10 publishes total trips by purpose and the bicycle percentage within each purpose, rounded to whole percentage points. Mapping HB-Social / Rec to recreation, HB-Work and NHB-Work to commuting, and all remaining categories to third purposes produces approximately 12,000 recreational bicycle trips and 21,400 work-related bicycle trips. Recreation is approximately 21 percent of the derived bicycle total and commuting approximately 38 percent. More importantly, the direction survives the source's rounding: even if the recreation cell is at the top of its rounding interval and both work cells are at the bottom, work remains larger, while recreation remains below 35 percent. Both primary and alternative ladders therefore return Contradicted. I read the brief's complete-mapping requirement in light of its explicit third-purpose branches: every category must be classified as recreation, commuting or a named third purpose; it need not be forced into a false binary."
-        }
-      ],
-      "disagreement_notes": [
-        "claude: Contradicted (Low)",
-        "gemini: Not established (High)",
-        "gpt: Contradicted (Moderate)",
-        "claude interpretation: Source and categories. The 2015 Edmonton and Region Household Travel Survey publishes trip purpose crossed with mode in Table 3-10. Its purpose categories, verbatim: HB-Work, HB-PSE (home-based post-secondary education), HB-School, HB-Shopping, HB-Social / Rec, HB-Personal Bus., HB-Pick up/Drop off, HB-Other, NHB-Work, NHB-Other (HB is home-based, NHB non-home-based). My mapping, stated before the figures: recreational = HB-Social / Rec; commuting = HB-Work plus NHB-Work; everything else is a third category and belongs to neither. The brief's Contradicted branch explicitly contemplates 'some third purpose category', so a complete binary mapping is not required and the Not established branch is not triggered by the presence of school, shopping and errand trips. Arithmetic, labelled as my calculation. The survey publishes bicycle as a share within each purpose, not purpose within bicycle, so I multiplied each purpose total by its published whole-percent bicycle share for City of Edmonton residents: HB-Work 650,700 x 3% = 19,521; HB-PSE 82,500 x 3% = 2,475; HB-School 255,400 x 2% = 5,108; HB-Shopping 352,600 x 1% = 3,526; HB-Social/Rec 399,800 x 3% = 11,994; HB-Personal Bus. 226,200 x 1% = 2,262; HB-Pick up/Drop off 217,000 x 1% = 2,170; HB-Other 172,100 x 1% = 1,721; NHB-Work 185,800 x 1% = 1,858; NHB-Other 597,000 x 1% = 5,970. Sum 56,605, against the 54,800 bicycle trips the survey publishes in Table 3-2 - 3.3 percent over, which is the rounding. Recreational share = 11,994 / 56,605 = 21.2 percent (21.9 percent on the published 54,800 denominator). Commuting share = 21,379 / 56,605 = 37.8 percent. HB-Work alone is 34.5 percent and is the largest single category. Verdict. Commuting exceeds recreation and recreation is at most 35 percent, so the primary ladder returns Contradicted. The alternative ladder (Supported above 45 percent; Partially supported above 30 percent, at most 45, and largest) also returns Contradicted, since 21 percent is neither above 30 nor the largest category. Both cutoff sets agree. Rounding sensitivity. The published shares are whole percentages, so I tested the extremes. Even with HB-Social/Rec at the top of its rounding band (3.5 percent, 13,993 trips) and HB-Work at the bottom of its (2.5 percent, 16,268) plus NHB-Work at 0.5 percent (929), commuting at 17,197 still exceeds recreation at 13,993, and recreation is 25.5 percent of the published bicycle total. The verdict does not turn on the rounding.",
-        "gemini interpretation: Tested against the most recent published household travel survey (2015 HTS) and municipal datasets. Under the brief's decision rule: 'Not established if no published Edmonton source breaks bicycle trips down by purpose, or if the source's categories cannot be mapped completely onto recreation and commuting.' The 2015 HTS summary reports provide overall mode share and aggregate trip purposes across all travel modes (e.g. Home-Based Work, School, Other), but do not publish a cross-tabulation of bicycle trips specifically broken down by purpose categories. Nor does Statistics Canada or the City publish such a breakdown.",
-        "gpt interpretation: I mapped the report's 'HB Social/Rec' category to recreation and 'HB Work' plus 'NHB Work' to commuting or work. The other categories—HB PSE, HB School, HB Shopping, HB Personal Business, HB Pick up/Drop off, HB Other, and NHB Other—remain named third purposes. Because the report publishes rounded bicycle shares within each purpose rather than a direct purpose distribution of bicycle trips, the resulting estimates are approximate. They nevertheless put recreation below 35 percent and work above recreation, producing Contradicted under both cutoff sets."
-      ]
     }
   ]
 }

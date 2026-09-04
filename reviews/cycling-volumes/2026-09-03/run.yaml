@@ -1,6 +1,39 @@
 story: cycling-volumes
 date: 2026-09-03
 methodology_version: "1.20"
+# Which of the brief's eight claims this run synthesises, and which it parks
+# (methodology v1.24). Seven are answered. `riders-are-recreational-not-commuters`
+# is not, and its answers are not deleted: `round1/` and `round1-rerun-2/` stay
+# exactly where the seats wrote them.
+synthesis_scope:
+  claims:
+    - cycling-trips-1-3-million-2026
+    - bike-lanes-look-empty
+    - one-to-two-percent-of-population-rides
+    - one-percent-year-round-users
+    - two-percent-of-trips-by-bike
+    - under-one-percent-of-commuters-cycle
+    - 87-percent-commute-by-car
+  parked:
+    - claim: riders-are-recreational-not-commuters
+      basis: round1-rerun-2
+      reason: >
+        The brief fixed the 2015 Edmonton and Region Household Travel Survey,
+        whose fieldwork ran 2015-09-14 to 2015-12-11 on weekdays only, as the
+        instrument for a proposition about cycling in Edmonton with no season
+        or day named. Both restrictions cut against the recreational side, and
+        the same brief fixed July for claim 2 on the express ground that a
+        claim is tested at its strongest for the side asserting it. The Claude
+        seat raised that as a material framing concern in the blind re-run, and
+        it is right. No repair was available: qualifying the proposition to
+        autumn weekdays makes it weaker than the claim people are making, and a
+        representative Edmonton survey recording trip purpose does not exist —
+        the brief's own source search looked for one. So the claim leaves this
+        run rather than being answered on an instrument that cannot carry it.
+        It is parked on the register, and reopens if such a survey is
+        published. The sequence is in run-record.md stage 9 and errata.md item
+        7; the seats' answers are in round1/ and round1-rerun-2/.
+
 runs:
   - provider: anthropic
     round: 1

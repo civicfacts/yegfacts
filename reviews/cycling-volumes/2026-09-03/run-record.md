@@ -954,7 +954,8 @@ gate.
 **That table is no longer current.** It describes the run before claim 8
 went back to three blind seats under v1.22. That re-run halted synthesis,
 and "Stage 8" below says what it returned and what the record can and
-cannot claim now.
+cannot claim now. The current table, of seven claims, is in "Stage 9",
+which is where the halt is answered and claim 8 leaves the run.
 
 No story, answers or reader-facing copy have been drafted. The next
 stages are drafting, faithfulness and the publication gate, none of them
@@ -1149,3 +1150,228 @@ of them carrying a framing concern; the round-1 answers they sit beside,
 unedited; the manifest for both; and a synthesis that predates the
 re-run and says so. No story, answers or reader-facing copy have been
 drafted.
+
+**This section is left as it was written, and stage 9 is where the halt
+is answered.** It was answered by parking claim 8 rather than by
+revising the brief, for the reason stage 9 gives: no revision was
+available that did not make the claim weaker. `synthesis.json` was then
+regenerated and does reproduce from this directory, on seven claims.
+
+## Stage 9, the claim parked and the run synthesised on seven
+
+The halt in stage 8 is resolved, and not by revising the brief.
+`riders-are-recreational-not-commuters` leaves this run, parked, and the
+other seven synthesise. This section is the whole sequence, because a
+reader following the run has to be able to see that a claim was dropped
+at the last stage and why.
+
+### The concern, verbatim
+
+From `round1-rerun-2/claude.json`, the `interpretation_notes` on
+`riders-are-recreational-not-commuters`, from the marker to the end,
+unedited:
+
+> MATERIAL FRAMING CONCERN
+>
+> Two problems in this claim's section change what the honest answer
+> is, and I record them while still answering the claim as posed.
+>
+> First, the instrument's season and day type. The proposition is
+> about cycling in Edmonton without qualification, but the brief
+> fixes an instrument that surveyed weekdays only, between
+> mid-September and mid-December. Both restrictions cut in one
+> direction, against the recreational side. On the City's own
+> Eco-Counter records, the 89 days matching the 2015 fieldwork
+> window in 2025 (2025-09-14 to 2025-12-11) carried 614,757 bicycle
+> passages, about 6,908 a day, against 436,863 in July 2025, about
+> 14,092 a day: the survey window sits at roughly half of July's
+> riding. Weekends, which the survey excludes outright, carried
+> about 20 percent of a July 2025 week's passages and show a
+> midday-humped daily shape rather than the weekday twin commute
+> peaks. A measure taken on autumn weekdays is the least
+> recreational slice of the Edmonton cycling year, and the same
+> brief fixes July for claim 2 on the express ground that a claim
+> should be tested at its strongest for the side asserting it, not
+> at its weakest. Claim 8 does the opposite without noticing. I
+> cannot show that a full-week, full-year measure would flip the
+> verdict, and a rough extrapolation of weekend volume alone does
+> not, but the combined seasonal and day-type effect is large enough
+> that the direction of the honest answer is genuinely open. The
+> framing I would use instead: either state the proposition as being
+> about bicycle trips on autumn weekdays, in those words, beside the
+> verdict, or return Not established on the ground that no Edmonton
+> instrument measures cycling purpose across the full week and the
+> full year. Both are more honest than an unqualified Contradicted,
+> and the choice between them changes what the story says.
+>
+> Second, the verdict ladder contradicts itself. Its first gate
+> returns Not established where "the source's categories cannot be
+> mapped completely onto recreation and commuting", but its
+> Contradicted branch expressly contemplates the case "where Rec is
+> above 35 percent but some third purpose category is larger". If
+> every category mapped onto recreation or commuting there could be
+> no third purpose category. The two clauses cannot both be
+> operative, and which one governs decides this claim: under the
+> strict reading of the gate, six of the ten categories here
+> (Post-Secondary, School, Shopping, Personal Business, Pick up/Drop
+> off, Other, plus NHB-Other) map to neither bucket, the mapping is
+> not complete, and the verdict is Not established rather than
+> Contradicted. I have taken the reading the Contradicted branch
+> implies, that residual categories are permitted so long as Rec and
+> Com are each computable, and returned Contradicted. A brief that
+> decides this in one place would remove a two-verdict ambiguity
+> that is currently left to the reviewer.
+
+### The concern is right, and the fault is the brief's
+
+The seat is not being overruled and it is not being re-framed a third
+time. Both objections hold.
+
+The proposition is about cycling in Edmonton with no season and no day
+type named. The brief fixed an instrument that surveyed weekdays only,
+between 2015-09-14 and 2015-12-11. Both restrictions cut the same way,
+against the recreational side, and the seat's Eco-Counter figures put
+the survey window at roughly half of July's daily riding with the
+weekends that carry the recreational shape excluded outright. The same
+brief fixed July for claim 2, and said in terms why: a claim is tested
+at its strongest for the side asserting it. Claim 8 does the opposite.
+That inconsistency is not the seat's and not the panel's. It is the
+editor's, written into the brief and frozen there.
+
+The second objection is the same fault from the other side. The ladder's
+first gate returns Not established where the source's categories cannot
+be mapped completely onto recreation and commuting, and its Contradicted
+branch expressly contemplates a third purpose category being larger.
+Both cannot be operative, and which one governs decides the claim: six
+of the survey's ten categories map to neither bucket. Findings 4 and 5
+of the round-2 cross-review said the two Contradicted verdicts bypassed
+the priority rule. The seat says the priority rule and the Contradicted
+branch cannot both be read as written. They are describing one defect.
+
+### Why no re-frame was available
+
+Methodology v1.2 answers a framing concern by revising the brief and
+rerunning round 1. Both revisions available here are worse than not
+publishing.
+
+**Qualifying the claim to what the instrument measures makes it
+weaker.** The seat's own first option is to state the proposition as
+being about bicycle trips on autumn weekdays, in those words. That is a
+different and easier proposition than the one two commenters made, and
+the standing rule is that a proposition may be made more precise and
+never weaker. A site that narrows a claim until its instrument can
+carry it is answering a question nobody asked.
+
+**Finding a better instrument means finding one that does not exist.**
+What the claim needs is an Edmonton travel survey recording trip purpose
+across a representative period. The brief's own source search looked for
+one: the successor survey, Navigating Tomorrow, launched in September
+2025 and had published nothing by the as-of date, and no other Edmonton
+instrument measures cycling purpose across the full week and the full
+year. The seat's second option, returning Not established on that
+ground, is the honest verdict — but it is a verdict about the record
+reached by a brief the panel has already said is defective, and stage 4
+does not let the editor pick a verdict out of a halted claim.
+
+So the honest outcome is the one the site already has a mechanism for:
+the claim is parked, in public, with its reason, and the run publishes
+the seven claims whose framing nobody has faulted.
+
+### What was used to scope the synthesis
+
+`run.yaml` now carries a `synthesis_scope` block: the seven claim ids
+this run synthesises, and one `parked` entry naming
+`riders-are-recreational-not-commuters`, its basis directory and the
+reason it was parked. `scripts/synthesize.ts` reads it under methodology
+v1.24.
+
+The mechanism was written so that parking cannot be a quiet way past a
+halt, which is the obvious way for this to go wrong:
+
+- The two lists together must account for every claim round 1 asked,
+  exactly once. A claim cannot leave a run by going unmentioned.
+- A parked claim must carry a reason. Without one, a claim dropped
+  because the record cannot answer it reads exactly like a claim dropped
+  for the answer it gave.
+- A framing concern against a claim the run still publishes halts the
+  run exactly as before. Only the parked claim's concern is passed over,
+  and it is copied into `synthesis.json` under `parked_claims` rather
+  than discarded with the claim.
+
+**Nothing was deleted.** `round1/`, `round1-rerun-2/` and both rounds of
+the seats' reviews stay exactly where they were written. A claim the
+site tried and could not answer is part of the record of trying.
+
+### The seven findings
+
+Regenerated by `npx tsx scripts/synthesize.ts
+reviews/cycling-volumes/2026-09-03` under methodology v1.24. This
+supersedes the table earlier in this record.
+
+| Claim | Finding | Panel agreement | Basis |
+| --- | --- | --- | --- |
+| `cycling-trips-1-3-million-2026` | Partially supported | Split | `round1-rerun-1` |
+| `bike-lanes-look-empty` | Contradicted | Adjacent | `round1` |
+| `one-to-two-percent-of-population-rides` | Not established | Unanimous | `round1` |
+| `one-percent-year-round-users` | Not established | Unanimous | `round1` |
+| `two-percent-of-trips-by-bike` | Supported | Unanimous | `round1` |
+| `under-one-percent-of-commuters-cycle` | Supported | Unanimous | `round1` |
+| `87-percent-commute-by-car` | Supported | Unanimous | `round1` |
+
+No finding changed from what the record already held. What changed is
+that there are seven of them.
+
+**What parking cost.** Had the claim synthesised it would have returned
+Contradicted on an Adjacent panel, from Contradicted, Contradicted and
+Not established. That is a finding against the people who made the
+claim, so parking it is not the convenient outcome; it is the one the
+brief's defect leaves.
+
+### On the register
+
+`intake/register.yaml` carries the claim as `triage: park` with
+`ground: no-instrument` and the reason a reader is shown, which says
+plainly that the site tried, that the only instrument it could find
+covers autumn weekdays, that this cannot carry a claim about who rides
+in general, and that it reopens if a travel survey covering a
+representative period and recording trip purpose is published for
+Edmonton. The claim keeps its wording, its two commenters and its
+provenance: nothing here is withheld.
+
+### An observation, offered as an observation
+
+Four framing reports passed this brief. The panel then found two
+material framing defects in it: claim 2's coverage rule, which voided a
+verdict on a dead sensor, and claim 8's instrument-and-ladder mismatch.
+Both halts were correct. Neither was caught by the check that exists to
+catch exactly that.
+
+On this brief the panel was a better framing check than the framing
+check. The four reports did substantial work — they are what fixed the
+one-sided readings on claims 3 and 4, and check 2 is why claim 4's
+instrument was pinned — but a large share of their findings are
+threshold and cutoff arithmetic, and on claim 8 the reasoning they
+applied elsewhere was not applied at all. Check 1 waved claims 5 to 8
+through as "checkable in principle" because the 2015 report has a
+mode-by-purpose table. No report asked whether that table's fieldwork
+window matched the proposition it was being fixed for, which is the same
+instrument-coverage question the same checks pressed hard on claims 3
+and 4; and no report noticed that claim 8's ladder contradicts itself,
+though the ladders are what those reports spent most of their attention
+on.
+
+**This is one run, and it is not a proposed rule change.** Whether a
+seat reading a claim in order to answer it will generally see framing
+defects a checker reading the brief will not needs more than a single
+brief to say. It is recorded here so that if it happens again there is
+something to compare it to, and it should not be turned into a
+methodology change on the strength of this one.
+
+### The state of the run at the end of stage 9
+
+Seven findings, synthesised deterministically and reproducible from the
+files in this directory. One claim parked, on the register, with its
+reason and its reopening condition. No story, answers or reader-facing
+copy have been drafted: the next stages are drafting, the faithfulness
+check, the plain-speech read and the publication gate, none of them
+started.

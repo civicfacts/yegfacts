@@ -596,3 +596,80 @@ events:
     notes: >
       round1-superseded/gemini.json, bike-lanes-look-empty
       interpretation_notes; run-record.md, stage 2.
+  - date: "2026-09-03"
+    story: cycling-volumes
+    run: reviews/cycling-volumes/2026-09-03
+    stage: round2
+    seat: Gemini 3.1 Pro
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      Cross-review findings 4 and 5, against the Claude and GPT verdicts on
+      riders-are-recreational-not-commuters. Both had reached the substantive
+      question by multiplying the 2015 survey's rounded whole-percent modal
+      shares by all-mode category totals — about 21,379 work trips against
+      about 11,994 recreational — where the brief's own priority rule requires
+      Not established first if the source does not break bicycle trips down by
+      purpose, or if its categories cannot be mapped completely onto recreation
+      and commuting. Upheld, and it is what sent the claim back to three blind
+      seats under methodology v1.22. The re-run then showed the objection was a
+      defect in the brief and not only in the two seats' arithmetic: the
+      priority gate and the Contradicted branch cannot both be read as written.
+    notes: >
+      round2/gemini.json round2_notes.errors_in_other_reviews[3] and [4];
+      run-record.md stage 8.
+  - date: "2026-09-03"
+    story: cycling-volumes
+    run: reviews/cycling-volumes/2026-09-03
+    stage: round1
+    seat: Claude Opus 5
+    event: valid-catch
+    materiality: blocking
+    disposition: >
+      MATERIAL FRAMING CONCERN on riders-are-recreational-not-commuters, raised
+      blind in the claim-scoped re-run at round1-rerun-2/ while still answering
+      the claim as posed, as the reviewer prompt requires. Two defects, both in
+      the brief. The instrument is the 2015 household travel survey, weekdays
+      only and 2015-09-14 to 2015-12-11, fixed for a proposition about cycling
+      in Edmonton with no season or day named; the seat put the City's own
+      counter records against that window, at about 6,908 passages a day
+      against about 14,092 in July 2025, with weekends excluded outright, and
+      pointed out that the same brief fixed July for claim 2 on the express
+      ground that a claim is tested at its strongest. And the verdict ladder's
+      priority gate and its Contradicted branch cannot both be operative, which
+      leaves two verdicts reachable on the same figures. Upheld. It did not
+      produce a revised brief: no revision was available that did not make the
+      claim weaker, so the claim was parked out of the run under methodology
+      v1.24 and registered as parked, and this run publishes seven.
+    notes: >
+      round1-rerun-2/claude.json, riders-are-recreational-not-commuters
+      interpretation_notes; run-record.md stages 8 and 9; errata.md item 7.
+  - date: "2026-09-03"
+    story: cycling-volumes
+    run: reviews/cycling-volumes/2026-09-03
+    stage: framing
+    seat: Framing check (GPT-5.6 Sol via codex exec)
+    event: framing-miss
+    materiality: blocking
+    disposition: >
+      The second framing defect the panel found in this brief, and the second
+      the framing check passed; the first, claim 2's coverage rule, is recorded
+      above. Claim 8's section fixed an autumn-weekday instrument for an
+      unqualified proposition about who rides, in a brief that fixed July for
+      claim 2 on the express ground that a claim is tested at its strongest for
+      the side asserting it, and wrote a verdict ladder whose priority gate and
+      Contradicted branch cannot both be operative. Four framing reports passed
+      both. Check 1 waved claims 5 to 8 through as checkable in principle
+      because the 2015 report carries a mode-by-purpose table, without asking
+      whether that table's fieldwork window matched the proposition it was
+      being fixed for — the same instrument-coverage question those reports
+      pressed hard on claims 3 and 4. Not repaired: qualifying the proposition
+      to autumn weekdays would make it weaker, and no representative Edmonton
+      instrument recording trip purpose exists, so the claim was parked out of
+      the run and onto the register. Recorded against the check and against the
+      editor, who wrote the section and froze it.
+    notes: >
+      framing/check-1.md finding 6 and framing/check-2.md; the concern at
+      round1-rerun-2/claude.json; run-record.md stages 8 and 9, including the
+      observation that on this brief the panel was a better framing check than
+      the framing check; errata.md item 7.

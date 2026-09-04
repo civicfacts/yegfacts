@@ -206,7 +206,16 @@ not by a test. A seat wrote an account of itself that was true of a round
 that had been superseded and false of the round it was answering, and the
 synthesis believed it. The anachronism is what exposed the precedence.
 
-## 6. The run is halted at synthesis, and `synthesis.json` predates the halt
+## 6. The run was halted at synthesis, and claim 8 was parked out of it
+
+**Read item 7 first for the outcome.** The account below is what the
+record held while the run was halted, and it is kept unedited because it
+is what a reader checking the halt needs. The halt was answered under
+methodology v1.24 by parking the claim, not by revising the brief;
+`synthesis.json` has since been regenerated and does reproduce from this
+directory, on seven claims.
+
+### 6a. The halt as the record held it
 
 `round1-rerun-2/` holds a blind re-run of
 `riders-are-recreational-not-commuters` on all three seats, ordered under
@@ -228,3 +237,46 @@ claims go back to the panel, none of which is decided here.
 The run record's "Stage 8" has the three verdicts, both objections the
 seat raised, and what the re-run settled about the arithmetic the
 cross-review findings were about.
+
+## 7. Claim 8 is parked, and this run publishes seven
+
+`riders-are-recreational-not-commuters` is not in `synthesis.json` and
+has no finding. It was put to the panel twice, answered by all three
+seats both times, and dropped at the last stage.
+
+**Why.** The Claude seat's framing concern from `round1-rerun-2/` is
+right, and what it is right about is the brief. The brief fixed the 2015
+household travel survey — weekdays only, 2015-09-14 to 2015-12-11 — as
+the instrument for a proposition about cycling in Edmonton with no
+season or day named, having fixed July for claim 2 on the express ground
+that a claim is tested at its strongest for the side asserting it. The
+same section's verdict ladder contradicts itself, so two verdicts are
+reachable on the same figures. Both defects are the editor's.
+
+**Why it was not re-framed.** Qualifying the proposition to autumn
+weekdays makes it weaker, and a proposition may be made more precise and
+never weaker. The other repair needs an Edmonton travel survey recording
+trip purpose across a representative period, which the brief's own
+source search had already failed to find. Neither was available, so the
+claim leaves the run rather than being answered on an instrument that
+cannot carry it.
+
+**What is in the record, and what is not.** `round1/`,
+`round1-rerun-2/`, `round2/` and both manifests are untouched: all three
+seats' answers on this claim stay exactly where they were written.
+`run.yaml` carries a `synthesis_scope` naming the seven claims
+synthesised and this one as parked, with the reason. `synthesis.json`
+carries it under `parked_claims` with that reason and with the framing
+concern raised against it, so the halt is visible in the deterministic
+artifact rather than absent from it. `intake/register.yaml` parks the
+claim in public with the reason and the condition on which it reopens.
+
+**What a drafter must not do with it.** Not report a finding on this
+claim, in any form, including "the panel leaned Contradicted". Had it
+synthesised it would have returned Contradicted on an Adjacent panel;
+that is exactly the number a parked claim may not be reported as. The
+story may say that one claim was checked and could not be answered, and
+why, which is what the register entry says.
+
+The run record's "Stage 9" has the concern verbatim, the full reasoning
+and the seven findings.
