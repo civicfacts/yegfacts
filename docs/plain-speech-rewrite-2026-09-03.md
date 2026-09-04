@@ -13,17 +13,15 @@ friend. No method words.
 
 ## What this file is for
 
-It is the input to the plain-speech read (`prompts/plain-speech-read.md`) and the
-faithfulness check, neither of which has run on this wording yet. Every string
-that changed is below with its old text, its new text, and one line on why the
-meaning did not move. The cases where a plainer sentence *would* have moved a
-finding, and the wording was therefore left alone, are in their own section at
-the end, because those are the ones worth arguing about.
+It was the input to the plain-speech read (`prompts/plain-speech-read.md`).
+Every string that changed is below with its old text, its new text, and one line
+on why the meaning did not move. The cases where a plainer sentence *would* have
+moved a finding, and the wording was therefore left alone, are in their own
+section at the end, because those are the ones worth arguing about.
 
-**Nothing here is published-ready.** Every claim's `plain_speech_read` field
-still names the read that passed the *previous* answer. A different-vendor seat
-has to read this wording and that field has to be repointed before any of it goes
-in front of a reader.
+**The read has since run and is applied.** What it changed is at the bottom of
+this file, under "What the read did". Where a string below no longer matches the
+page, the read is the reason and its own record says why.
 
 ## The rule this pass held itself to
 
@@ -446,6 +444,59 @@ These are the interesting ones.
   `active-transportation` and `infill-prices` titles, both of which were rewritten
   shorter. `fifteen-minute-districts` is currently at the line and survives only
   because it has one claim.
-- **No claim's `plain_speech_read` was repointed.** Every one still names the read
-  that passed the previous answer. Three answers changed here, so three of those
-  fields are now describing a read of something else.
+- **Every claim's `plain_speech_read` has since been repointed.** All ten now
+  name the 2026-09-04 read, which is the only one that has seen the current
+  wording of the page each answer sits on.
+
+---
+
+## What the read did
+
+The read ran on 2026-09-04, as
+`codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check`,
+against a package holding the prompt, section 12 of `docs/DESIGN.md`, every old
+and new string with its claim id, finding, panel agreement and evidence basis,
+each claim's key facts and limitations, and this file. It read thirty-seven
+strings, passed twenty-one and rewrote sixteen. Its report is split across the
+seven review runs that produced the claims, at `<run>/plain-speech/gpt-2.md`,
+and every editorial disposition is written under the reader's own section there.
+
+Of the sixteen rewrites, five were adopted verbatim, seven in part or in
+substance with the wording changed, and four were rejected in writing.
+
+**Adopted verbatim.** The `active-transportation` title, now "How does bike-lane
+funding compare with roads and snow?", because "a lot" is not something a record
+can answer. The `electric-buses` title, now "What happened with Edmonton's
+electric buses?", for the reason the drafter feared when it listed the old one
+as its own worst doubt. The `ebus-cold-cities` question, which now names the
+Proterra buses so a reader arriving cold has the premise. The
+`ip-infill-affordable` question, which now asks what owning costs against income
+rather than what buying costs, which is the Statistics Canada threshold the
+panel tested and an imprecision older than this pass. The `infill-prices`
+withdrawal note, which names both claims instead of pointing at "it" and says
+plainly that both came off the findings board.
+
+**Rejected.** The `climate-targets` standfirst, where the reader would have
+dropped "Edmonton is not on track" as a repeat of the answer; that is the
+sentence section 12 gives as its own example of what a page must state rather
+than imply. The `districts-travel-restrictions` answer, where the replacement
+dropped Council's 12-0 amendment, which is the fact that decides the answer, and
+stated a flat absence broader than the panel's position on the mechanism form.
+Half the `fifteen-minute-districts` standfirst, for the same reason. And the two
+glosses of capital and operating money in the `at-100m-vs-snow` board note,
+which the reader called uncarried and which section 12's explanation rule asks
+for.
+
+**The nine deliberate non-changes above.** The reader agreed with six of them
+unprompted, including "prove" on `ebus-cold-cities`, the threshold carried by
+"fall well short", the fixed magnitude on `ip-teardown-price-gap`, and "the
+City's records" rather than "nobody keeps a record", which it said should stay
+for the same reason the drafter left it. It did not contest the other three.
+
+**What it caught that this file did not.** Two overclaims in the
+`winter-cycling` standfirst, where "every city that has counted" and "Edmonton
+has never measured" each state more than the evidence carries. A presupposition
+in the `infill-prices` standfirst, where "how much more the new housing costs"
+assumed a direction no more established than the magnitude. And "a household on
+a middle income" in the same sentence, which is a different test from the median
+income the claim below it turns on.
