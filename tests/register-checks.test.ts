@@ -501,7 +501,7 @@ describe('registerProblems: a question’s accounts are derived from its claims'
     expect(
       grouped(
         [claim({ accounts: 2 }), otherSide({ accounts: 2 })],
-        [question({ accounts: { total: 2, against: 2, for: 2 } })],
+        [question({ accounts: { total: 2, against: 1, for: 1 } })],
       ),
     ).toEqual([]);
   });
@@ -519,7 +519,7 @@ describe('registerProblems: a question’s accounts are derived from its claims'
     expect(
       grouped(
         [claim({ accounts: 5 }), otherSide()],
-        [question({ accounts: { total: 4, against: 5, for: 1 } })],
+        [question({ accounts: { total: 4, against: 3, for: 1 } })],
       ),
     ).toEqual([
       "question lanes-and-congestion: accounts.total 4 is outside its claims' range 5 to 6",
@@ -528,7 +528,7 @@ describe('registerProblems: a question’s accounts are derived from its claims'
 
   it('rejects a total larger than every claim counted separately', () => {
     expect(
-      grouped([claim(), otherSide()], [question({ accounts: { total: 3, against: 2 } })]),
+      grouped([claim(), otherSide()], [question({ accounts: { total: 3, against: 2, for: 1 } })]),
     ).toEqual([
       "question lanes-and-congestion: accounts.total 3 is outside its claims' range 1 to 2",
     ]);
@@ -544,8 +544,131 @@ describe('registerProblems: a question’s accounts are derived from its claims'
 
   it('rejects a side count that is not a whole number of people', () => {
     expect(
-      grouped([claim(), otherSide()], [question({ accounts: { total: 2, against: 1.5 } })]),
+      grouped([claim(), otherSide()], [question({ accounts: { total: 2, against: 1.5, for: 1 } })]),
     ).toContain('question lanes-and-congestion: accounts.against must be a whole number of people');
+  });
+});
+
+/**
+ * The register says the split is the total broken down by side, so it has to
+ * add up to it. Three questions published a split that overshot, each because
+ * one person had argued on two sides and been counted on both, and the header
+ * described a check that did not exist.
+ */
+describe('registerProblems: a question’s split adds up to its total', () => {
+  it('accepts a split that adds up', () => {
+    expect(
+      grouped([claim(), otherSide()], [question({ accounts: { total: 2, against: 1, for: 1 } })]),
+    ).toEqual([]);
+  });
+
+  it('counts a side that is not listed as nobody', () => {
+    expect(
+      grouped([claim(), otherSide()], [question({ accounts: { total: 2, against: 2 } })]),
+    ).toEqual([]);
+  });
+
+  it('rejects a split that counts one person on two sides', () => {
+    expect(
+      grouped(
+        [claim({ accounts: 2 }), otherSide({ accounts: 2 })],
+        [question({ accounts: { total: 3, against: 2, for: 2 } })],
+      ),
+    ).toEqual([
+      'question lanes-and-congestion: accounts.total 3 is not the 4 its for/against/neither split adds up to',
+    ]);
+  });
+
+  it('rejects a split that leaves somebody out', () => {
+    expect(
+      grouped([claim(), otherSide()], [question({ accounts: { total: 2, against: 1 } })]),
+    ).toEqual([
+      'question lanes-and-congestion: accounts.total 2 is not the 1 its for/against/neither split adds up to',
+    ]);
+  });
+
+  it('says nothing about the sum when a side is not a whole number', () => {
+    expect(
+      grouped([claim(), otherSide()], [question({ accounts: { total: 2, against: 1.5, for: 1 } })]),
+    ).toEqual(['question lanes-and-congestion: accounts.against must be a whole number of people']);
+  });
+});
+
+/**
+ * The claim-level decision v1.16 superseded. Eleven propositions two readers
+ * had independently refused became live claims under going-ahead questions with
+ * no trace of the refusal, and the next brief author would have paid for a
+ * panel run to find out what those two readers already knew. Recording it is not
+ * giving a claim state back: the question still decides whether the work
+ * happens.
+ */
+describe('registerProblems: a superseded claim-level decision', () => {
+  const prior = (overrides: Record<string, unknown> = {}) => ({
+    outcome: 'no',
+    readers: ['gpt-5.6-sol', 'Gemini 3.1 Pro'],
+    reason: 'Both readers took it for a truism neither side of the argument disputes.',
+    ...overrides,
+  });
+
+  it('accepts an outcome, the readers who reached it and their reason', () => {
+    expect(grouped([claim({ prior_triage: prior() }), otherSide()])).toEqual([]);
+  });
+
+  it('rejects an outcome outside the triage vocabulary', () => {
+    expect(
+      grouped([claim({ prior_triage: prior({ outcome: 'not-a-claim' }) }), otherSide()]),
+    ).toEqual(['lanes-removed prior_triage outcome: "not-a-claim" is not one of go, park, no']);
+  });
+
+  it('rejects a decision with only one reader behind it', () => {
+    expect(
+      grouped([claim({ prior_triage: prior({ readers: ['gpt-5.6-sol'] }) }), otherSide()]),
+    ).toEqual(['lanes-removed: prior_triage must name the two or more readers who reached it']);
+  });
+
+  it('rejects a reader with no name', () => {
+    expect(
+      grouped([claim({ prior_triage: prior({ readers: ['gpt-5.6-sol', ' '] }) }), otherSide()]),
+    ).toEqual(['lanes-removed: prior_triage must name the two or more readers who reached it']);
+  });
+
+  it('rejects a decision that does not say why, which is the part that saves the run', () => {
+    expect(grouped([claim({ prior_triage: prior({ reason: '  ' }) }), otherSide()])).toEqual([
+      'lanes-removed: prior_triage needs the reason those readers gave',
+    ]);
+  });
+
+  it('rejects a field beyond the three, so the record cannot grow a state', () => {
+    expect(grouped([claim({ prior_triage: prior({ triage: 'no' }) }), otherSide()])).toEqual([
+      'lanes-removed: prior_triage carries "triage"; it is an outcome, its readers and a reason',
+    ]);
+  });
+
+  it('rejects anything that is not a mapping', () => {
+    expect(grouped([claim({ prior_triage: 'no' }), otherSide()])).toEqual([
+      'lanes-removed: prior_triage must be a mapping of outcome, readers and reason',
+    ]);
+  });
+
+  // The one claim that carries a decline of its own carries a live one. A
+  // superseded decline beside it would say it had been ruled on twice.
+  it('refuses it on a claim withheld on the right-of-reply ground', () => {
+    expect(
+      grouped([
+        claim({
+          triage: 'no',
+          ground: 'right-of-reply',
+          names_person: true,
+          reason: 'The question around it is going ahead; this claim is not.',
+          proposition: undefined,
+          wording: undefined,
+          prior_triage: prior(),
+        }),
+        otherSide(),
+      ]),
+    ).toEqual([
+      'lanes-removed: declined on the right-of-reply ground, so its decline is live, not prior',
+    ]);
   });
 });
 

@@ -25,6 +25,11 @@
  * would say it had been ruled on twice. The single exception is an accusation
  * against a named person, declined on the right-of-reply ground inside a
  * question that is going ahead.
+ *
+ * A claim may also carry `prior_triage`, the claim-level decision v1.16
+ * superseded when triage moved up to the question. That is history and not
+ * state: it decides nothing, and it exists so a brief author does not spend a
+ * panel run on a claim two readers already refused.
  */
 import { isIsoDate } from './repo.ts';
 
@@ -288,11 +293,29 @@ export function registerProblems(register: Register, world: RegisterWorld): stri
         fail(`${where}: accounts.total ${total} is outside its claims' range ${largest} to ${sum}`);
       }
     }
+    let whole = true;
+    let split = 0;
     for (const side of CLAIM_SIDES) {
       const value = accounts?.[side];
-      if (value !== undefined && (!Number.isInteger(value) || (value as number) < 0)) {
+      if (value === undefined) continue;
+      if (!Number.isInteger(value) || (value as number) < 0) {
         fail(`${where}: accounts.${side} must be a whole number of people`);
+        whole = false;
+        continue;
       }
+      split += value as number;
+    }
+    // And the split is those same people, counted once each. The register says
+    // the sides add up to the total, so they have to: somebody who argued on
+    // more than one side of a question is still one person on the question, and
+    // a split that overshoots is that person counted twice. Which side they
+    // belong on is a judgement about their own words, not arithmetic, so the
+    // rule only refuses to publish a total the split contradicts.
+    if (whole && typeof total === 'number' && Number.isInteger(total) && split !== total) {
+      fail(
+        `${where}: accounts.total ${total} is not the ${split} its for/against/neither ` +
+          `split adds up to`,
+      );
     }
   }
 
@@ -344,6 +367,7 @@ export function registerProblems(register: Register, world: RegisterWorld): stri
     }
 
     checkClaimState(where, claim, fail);
+    checkPriorTriage(where, claim, fail);
 
     // Both are printed beside the claim, and the account count is what the
     // question's total is checked against.
@@ -469,6 +493,57 @@ function checkClaimState(where: string, claim: Record_, fail: (message: string) 
   }
   if (!filled(claim.reason)) {
     fail(`${where}: withheld, so the reason is all a reader gets and it cannot be empty`);
+  }
+}
+
+/**
+ * The claim-level decision v1.16 superseded, on the claims that kept it.
+ *
+ * When triage moved up to the question, the decisions made at the old level
+ * went with it, and eleven propositions two readers had independently refused
+ * became live claims under questions that are going ahead, with nothing
+ * anywhere saying they had been refused. `prior_triage` puts that back without
+ * putting state back: the question still decides whether the work happens, and
+ * this only tells the next brief author that two readers already read this one
+ * and said no, and on what ground.
+ *
+ * So it is checked as a record rather than as a disposition — an outcome, the
+ * readers who reached it, and the sentence they gave. A superseded decision
+ * with no reason is worse than none, because it stops a panel run without
+ * saying why.
+ */
+function checkPriorTriage(where: string, claim: Record_, fail: (message: string) => void): void {
+  const prior = claim.prior_triage;
+  if (prior === undefined) return;
+
+  // A claim declined on the right-of-reply ground carries that decline live. A
+  // superseded one beside it would say the claim had been ruled on twice, which
+  // is the thing the two levels are kept apart to prevent.
+  if (claim.ground === DECLINE_GROUND) {
+    fail(`${where}: declined on the ${DECLINE_GROUND} ground, so its decline is live, not prior`);
+    return;
+  }
+  if (!isRecord(prior)) {
+    fail(`${where}: prior_triage must be a mapping of outcome, readers and reason`);
+    return;
+  }
+  if (!TRIAGE.includes(prior.outcome as (typeof TRIAGE)[number])) {
+    fail(
+      `${where} prior_triage outcome: "${String(prior.outcome)}" is not one of ${TRIAGE.join(', ')}`,
+    );
+  }
+  // Named, and more than one. "The readers declined it" is worth nothing to a
+  // reader who cannot see how many there were or who they were, and the
+  // claim-level read is two seats that never saw each other's answer.
+  const readers = prior.readers;
+  if (!Array.isArray(readers) || readers.length < 2 || !readers.every(filled)) {
+    fail(`${where}: prior_triage must name the two or more readers who reached it`);
+  }
+  if (!filled(prior.reason)) fail(`${where}: prior_triage needs the reason those readers gave`);
+  for (const key of Object.keys(prior)) {
+    if (key !== 'outcome' && key !== 'readers' && key !== 'reason') {
+      fail(`${where}: prior_triage carries "${key}"; it is an outcome, its readers and a reason`);
+    }
   }
 }
 

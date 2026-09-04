@@ -50,7 +50,10 @@
 # accounts:       distinct people in the source who took part in the question,
 #                 with the for/against/neither split. One pseudonym is one
 #                 person within a source; no page sums across sources. The
-#                 split is what the validator checks the total against.
+#                 validator checks the total two ways: it must fall inside the
+#                 range its claims allow, and the split must add up to it, so a
+#                 person who argued on more than one side is counted once, on
+#                 the side their own words put them on.
 # registered_as:  the verbatim wording a hand-registered question was filed
 #                 under, before the register had claims.
 # triage_report:  repo-relative path to the triage report. (`triage` is a state
@@ -83,6 +86,22 @@
 #               That is `triage: no` with `ground: right-of-reply`, and such a
 #               claim carries no proposition, wording or variations at all.
 # names_person: the claim names an identifiable individual.
+# prior_triage: the claim-level decision v1.16 superseded, kept rather than
+#               discarded. Before triage moved up to the question, every
+#               proposition was read on its own by two seats, and eleven that
+#               both seats refused are now live claims under questions that are
+#               going ahead. That is the right outcome — the question is worth
+#               the work — but a brief author who cannot see the refusal spends
+#               a panel run on a claim two independent readers already declined.
+#               So the decision is recorded where it was made:
+#               { outcome, readers, reason }. `outcome` is from the same
+#               go | park | no vocabulary; `readers` names every seat that
+#               reached it, at least two, because "the readers declined it"
+#               means nothing unless a reader can see how many there were and
+#               who they were; `reason` is the sentence they gave. It is
+#               history, not state: the question's triage is what decides
+#               whether the work happens, and a claim declined on the
+#               right-of-reply ground carries that live decline instead.
 #
 # A source's fields
 # ----------------
@@ -108,7 +127,7 @@ questions:
     grouping_note: "The automated counter data, the census commute figures and the City's ridership reporting settle every count, share and denominator here at once."
     accounts:
       total: 25
-      for: 5
+      for: 4
       against: 21
     run: reviews/intake/yegscoop-2026-08-26
   - id: who-cycles
@@ -170,7 +189,7 @@ questions:
       total: 24
       for: 7
       against: 16
-      neither: 2
+      neither: 1
     run: reviews/intake/yegscoop-2026-08-26
   - id: converted-roadway
     recorded: "2026-09-03"
@@ -211,7 +230,7 @@ questions:
     lifecycle: registered
     triage: no
     publication: unpublished
-    reason: "The $100 million approval is common ground throughout this source, so checking the council vote would only restate an undisputed budget fact."
+    reason: "All 17 people who raised the $100 million in this source take the approval as given, so checking the council vote would only restate an undisputed budget fact. What the money buys and over how long is argued about, and that half of the question went to a separate question that has since been published: how the money for bike lanes compares with what Edmonton spends on roads."
     accounts:
       total: 17
       against: 17
@@ -382,7 +401,7 @@ questions:
     lifecycle: registered
     triage: go
     publication: unpublished
-    reason: "The zoning bylaw and infill permit records answer questions about parking minimums, tree removal, and density. The two readers split GO and PARK."
+    reason: "The zoning bylaw and infill permit records answer questions about parking minimums, tree removal, and density. The two readers split: Gemini 3.1 Pro said go, GPT-5.6 Sol parked it."
     grouping_note: "The zoning bylaw and the infill permit record cover the parking minimums, the multiplexes and the housing mix."
     accounts:
       total: 4
@@ -411,7 +430,7 @@ questions:
     lifecycle: registered
     triage: go
     publication: unpublished
-    reason: "Response-time records and emergency access design standards show whether bike lanes delay or assist emergency vehicles. The two readers split GO and PARK."
+    reason: "Response-time records and emergency access design standards show whether bike lanes delay or assist emergency vehicles. The two readers split: Gemini 3.1 Pro said go, GPT-5.6 Sol parked it."
     grouping_note: "Response-time records and the City's design standards for emergency access settle both directions at once."
     accounts:
       total: 5
@@ -456,7 +475,7 @@ questions:
     lifecycle: registered
     triage: go
     publication: unpublished
-    reason: "City collision records and the traffic bylaw answer whether bike lanes improve safety and who is at fault in collisions. The two readers split GO and PARK."
+    reason: "Edmonton's traffic bylaw settles who may ride where and who is at fault in a collision, and the City's collision records show where and how often cyclists are hit. Neither shows whether a lane made riding safer, because a crash count with no count of the riders using it cannot tell a more dangerous lane from a busier one. The two readers split on that point: Gemini 3.1 Pro said go, GPT-5.6 Sol parked it and asked for collision records linked to route design and rider exposure."
     grouping_note: "Edmonton's collision records and the traffic bylaw cover whether the lanes reduce harm, who is at fault and who is riding where."
     accounts:
       total: 10
@@ -507,7 +526,6 @@ questions:
     accounts:
       total: 1
       for: 1
-      neither: 1
     run: reviews/intake/yegscoop-2026-08-26
   - id: 132-avenue
     recorded: "2026-09-03"
@@ -587,7 +605,7 @@ questions:
     lifecycle: registered
     triage: park
     publication: unpublished
-    reason: "Reopen this when business closures can be linked to customer-access changes through location-level records or owner evidence, because closure counts alone cannot establish why businesses failed. The two readers split NO and PARK."
+    reason: "Reopen this when business closures can be linked to customer-access changes through location-level records or owner evidence, because closure counts alone cannot establish why businesses failed. The two readers split: Gemini 3.1 Pro declined it, because no public record tracks why an individual business closed, and GPT-5.6 Sol parked it."
     accounts:
       total: 1
       against: 1
@@ -670,7 +688,7 @@ questions:
     registered_as: "New infill housing is luxury housing."
     origin: editor
     supplied_by: "founder, as a suggested claim"
-    reason: "No captured post makes this claim, and \"luxury\" has no definition on which either side could lose."
+    reason: "\"Luxury\" is not a category in the assessment roll, the permit record or any other City document, so no record could return a verdict either side could lose. No captured post makes the claim either, which on its own would only park it."
     triage_report: reviews/infill-prices/2026-09-02-questions/triage-1.md
     intake: reviews/infill-prices/2026-09-02-questions/intake.md
     note: "same triage report; see the editor decision in that directory"
@@ -978,6 +996,12 @@ claims:
     seats:
       - flash
       - haiku
+    prior_triage:
+      outcome: no
+      readers:
+        - gpt-5.6-sol
+        - Gemini 3.1 Pro
+      reason: "No public record can establish how many bicycles appeared in an observer's photograph during one hour at Heritage Days."
     variations:
       - wording: "Looks like more than 5 rode to Heritage Days (this was within an hour of opening on the Saturday)."
         source_id: yegscoop-2026-08-26
@@ -1332,6 +1356,12 @@ claims:
     accounts: 2
     seats:
       - luna
+    prior_triage:
+      outcome: no
+      readers:
+        - gpt-5.6-sol
+        - Gemini 3.1 Pro
+      reason: "That roads carry deliveries, buses and emergency vehicles is a truism accepted by both sides of this argument."
     variations:
       - wording: "Roads also move the goods and services need by society"
         source_id: yegscoop-2026-08-26
@@ -1730,19 +1760,31 @@ claims:
     origin: captured
     source: yegscoop-2026-08-26
     question: property-taxes
-    proposition: "Edmonton property taxes have risen sharply, by $1,500 in three years for one resident and $6,000 a year for another."
+    proposition: "One Edmonton resident's property taxes went up by $1,500 over three years."
+    wording: "my taxes have gone up $ 1500 in the last 3 years."
+    side: against
+    accounts: 1
+    seats:
+      - flash
+    variations:
+      - wording: "my taxes have gone up $ 1500 in the last 3 years."
+        source_id: yegscoop-2026-08-26
+        author_name: "Dusty Raven M."
+  - id: property-tax-bill-six-thousand
+    recorded: "2026-09-03"
+    origin: captured
+    source: yegscoop-2026-08-26
+    question: property-taxes
+    proposition: "One Edmonton resident pays $6,000 a year in property tax."
     wording: "Glad I am paying $6,000 a year in property tax for this!"
     side: against
-    accounts: 2
+    accounts: 1
     seats:
       - flash
     variations:
       - wording: "Glad I am paying $6,000 a year in property tax for this!"
         source_id: yegscoop-2026-08-26
         author_name: "Rustic Bluejay S."
-      - wording: "my taxes have gone up $ 1500 in the last 3 years."
-        source_id: yegscoop-2026-08-26
-        author_name: "Dusty Raven M."
   - id: council-rejected-pause
     recorded: "2026-09-03"
     origin: captured
@@ -1861,6 +1903,12 @@ claims:
     accounts: 5
     seats:
       - flash
+    prior_triage:
+      outcome: no
+      readers:
+        - gpt-5.6-sol
+        - Gemini 3.1 Pro
+      reason: "No public record identifies who was paid to attend the meeting, so the allegation cannot be settled in either direction."
     variations:
       - wording: "special interest groups.. crazies!"
         source_id: yegscoop-2026-08-26
@@ -2035,6 +2083,12 @@ claims:
     seats:
       - flash
       - luna
+    prior_triage:
+      outcome: no
+      readers:
+        - gpt-5.6-sol
+        - Gemini 3.1 Pro
+      reason: "Election results record votes, not what each voter knew or intended when casting a ballot."
     variations:
       - wording: "the majority of voters elected the current city council knowing they were pro bike lane."
         source_id: yegscoop-2026-08-26
@@ -2070,6 +2124,12 @@ claims:
     seats:
       - flash
     names_person: true
+    prior_triage:
+      outcome: no
+      readers:
+        - gpt-5.6-sol
+        - Gemini 3.1 Pro
+      reason: "No public record comprehensively tracks how each office-holder travels to work, so the claim cannot be settled in either direction."
     variations:
       - wording: "I don't see city council riding their bikes all the time."
         source_id: yegscoop-2026-08-26
@@ -2209,6 +2269,12 @@ claims:
     accounts: 3
     seats:
       - luna
+    prior_triage:
+      outcome: no
+      readers:
+        - gpt-5.6-sol
+        - Gemini 3.1 Pro
+      reason: "Residents paying general taxes while also riding bicycles is an ordinary feature of the tax system that neither side meaningfully disputes."
     variations:
       - wording: "cyclists pay property taxes"
         source_id: yegscoop-2026-08-26
@@ -2236,6 +2302,12 @@ claims:
     accounts: 2
     seats:
       - luna
+    prior_triage:
+      outcome: no
+      readers:
+        - gpt-5.6-sol
+        - Gemini 3.1 Pro
+      reason: "Municipal taxes funding shared services regardless of each resident's personal use is an undisputed feature of public finance."
     variations:
       - wording: "We all pay taxes. We may not use all of the services our taxes fund."
         source_id: yegscoop-2026-08-26
@@ -2555,6 +2627,12 @@ claims:
     accounts: 1
     seats:
       - luna
+    prior_triage:
+      outcome: no
+      readers:
+        - gpt-5.6-sol
+        - Gemini 3.1 Pro
+      reason: "Barely functions has no defined measure, so ridership and reliability records could not produce a verdict on this wording."
     variations:
       - wording: "That barely functions beyond large events or the die hards that happen to.live close to the limited LRT stations .."
         source_id: yegscoop-2026-08-26
@@ -2585,6 +2663,12 @@ claims:
     accounts: 1
     seats:
       - luna
+    prior_triage:
+      outcome: no
+      readers:
+        - gpt-5.6-sol
+        - Gemini 3.1 Pro
+      reason: "Efficient is undefined here, so no record could settle the claim without choosing a measure such as capacity, cost, time or emissions."
     variations:
       - wording: "Since transit is a more efficient method of moving people"
         source_id: yegscoop-2026-08-26
@@ -2692,6 +2776,12 @@ claims:
     seats:
       - flash
       - luna
+    prior_triage:
+      outcome: no
+      readers:
+        - gpt-5.6-sol
+        - Gemini 3.1 Pro
+      reason: "No public record can settle whether the unreported encounters described by one rider occurred."
     variations:
       - wording: "I’ve been honked at, buzzed by too closely and veered at when I’ve been riding lawfully on roads without bike lanes or shared paths."
         source_id: yegscoop-2026-08-26
@@ -2897,6 +2987,12 @@ claims:
       - flash
       - haiku
       - luna
+    prior_triage:
+      outcome: no
+      readers:
+        - gpt-5.6-sol
+        - Gemini 3.1 Pro
+      reason: "No public record can establish that nobody complained about the lane over an entire decade."
     variations:
       - wording: "It's been like this on 83 Ave for over a decade and there have been no complaints."
         source_id: yegscoop-2026-08-26
