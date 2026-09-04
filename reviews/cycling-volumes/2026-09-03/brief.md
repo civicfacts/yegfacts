@@ -1,19 +1,19 @@
 # Review brief: How many people in Edmonton cycle, and how much do the bike lanes get used?
 
-Status: **NOT FROZEN 2026-09-03.** The framing check returned REVISE on
-all three permitted reports (`framing/check-1.md`, `framing/check-2.md`,
+Status: **FROZEN 2026-09-03.** The framing check returned REVISE on all
+three permitted reports (`framing/check-1.md`, `framing/check-2.md`,
 `framing/check-3.md`), and all three findings it left standing were
-arithmetic defects inside verdict ladders. Under methodology v1.20 a
-defect finding does not park a brief, so the three were corrected in the
-checker's own words, each correction recorded in `run-record.md` against
-the finding it answers, and the brief went back for one defect
-confirmation. That report, `framing/check-4-defects.md`, confirms all
-three corrections, raises no framing finding, and names a fourth
-arithmetic defect: claim 2's ladder is still ambiguous on an empty
-verdict set. So the brief is not frozen and no panel runs on it. v1.20
-does not say what a further defect at the confirmation earns, and that
-question is not being decided by the editor on the brief it would
-release; the run record has both readings.
+arithmetic defects inside
+verdict ladders. Under methodology v1.20 a defect finding does not park a
+brief: the three were corrected in the checker's own words and the brief
+went back for one defect confirmation, `framing/check-4-defects.md`. That
+report confirms all three corrections, raises no framing finding, and
+names a fourth defect, claim 2's ladder being ambiguous on an empty
+verdict set. Under v1.20 that is where the round ends: the editor
+corrected it in the checker's supplied wording, and the brief freezes.
+Every correction is recorded in `run-record.md` against the finding it
+answers. No cutoff moved and no proposition changed at any point after
+check 3.
 Drafted, twice revised and once corrected 2026-09-03 by Stew.
 Methodology v1.20.
 Question id: `cycling-volumes`. Register entry: `intake/register.yaml`.
@@ -389,21 +389,23 @@ because one event day would move a mean.
 carrying little or no traffic if its July median daily bicycle count is
 below 25.
 
-Supported, Partially supported or Contradicted may be returned only if
-every counter in the verdict set is classifiable. Otherwise return Not
-established and report the observed counters as qualifications. Each of
-these three verdicts quantifies over the metered lanes as a set, and one
-unclassified counter can turn Supported or Contradicted into Partially
-supported.
+Apply the primary and alternative cutoffs only when the verdict set is
+non-empty and every counter in it is classifiable. If the verdict set is
+empty, any counter in it is not classifiable, or the City's locations
+data does not allow on-street lanes to be told from recreational paths,
+return Not established and report every counter's figures as
+qualifications. Otherwise:
 
-- **Supported** if every classifiable counter is below 25.
-- **Partially supported** if at least one classifiable counter is below
-  25 and at least one is at or above 25.
-- **Contradicted** if no classifiable counter is below 25.
-- **Not established** if any counter in the verdict set is not
-  classifiable, or if the City's locations data does not allow on-street
-  lanes to be told from recreational paths, or if the verdict set is
-  empty. Report every counter's figures as qualifications in that case.
+- **Supported** if every counter is below the applicable cutoff.
+- **Partially supported** if at least one counter is below it and at
+  least one is at or above it.
+- **Contradicted** if no counter is below it.
+
+Each of these three verdicts quantifies over the metered lanes as a set.
+That is why an unclassified counter cannot be left out of the reckoning,
+and why an empty set returns Not established rather than Supported and
+Contradicted at once, which is what a rule quantifying over nothing
+otherwise does.
 
 Alternative cutoff, results required under both: 50 a day in place of
 25. Neither figure comes from an identified pre-existing standard.

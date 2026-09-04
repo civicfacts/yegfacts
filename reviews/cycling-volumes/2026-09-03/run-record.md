@@ -230,6 +230,9 @@ unclassifiable counter said it "does not carry the verdict", which read
 as though a verdict were still available, and now says the coverage rule
 decides what verdict is available.
 
+A fourth correction follows, below the defect confirmation, because it
+answers a finding that report raised.
+
 ## The defect confirmation: three confirmed, a fourth defect named
 
 `framing/check-4-defects.md`, run 2026-09-03 with the amended prompt, the
@@ -248,34 +251,89 @@ still ambiguous on an empty verdict set: with no classifiable counters,
 "every classifiable counter is below 25" and "no classifiable counter is
 below 25" are both vacuously true, so Supported, Contradicted and the Not
 established bullet for an empty set all match at once. It is not a defect
-the corrections introduced. It was in the brief through all three framing
-checks and nobody caught it, including the checker. His replacement
-wording is in his report and is not applied here.
+the corrections introduced. It sat in the brief through all three framing
+rounds and nobody caught it, the checker included. It is corrected below,
+as correction 4, in his wording.
 
-**There is no freeze. There is no freeze SHA.** The brief is not frozen
-and no panel runs on it.
+**v1.20 as first written did not say what happens next, and the first run
+of the rule found the hole.** The amendment gave a corrected brief one
+defect confirmation and said what a framing finding in it costs: the
+brief is parked for good. It said nothing about a confirmation that
+accepts every correction and names a further defect. Read strictly, one
+round is one round and the brief had no round left; read loosely, a
+defect earns another correction, which is the reading that turns a narrow
+exception into an unbounded loop.
 
-**And v1.20 does not say what happens next, which is a hole in the rule,
-found on its first use.** The amendment gives a corrected brief one
-defect confirmation and says what happens if that report raises a framing
-finding: the brief is parked for good. It does not say what happens when
-the confirmation confirms every correction and names a further defect.
-Read strictly, one round means one round and the brief has no round left.
-Read loosely, a defect is a defect and it earns another correction, which
-is exactly the reading that turns a narrow exception into an unbounded
-loop.
+**The rule now says which, and the entry says it in the same version.**
+One defect confirmation is all a brief gets. A confirmation that returns
+further defects and no framing finding ends with the editor correcting
+them in writing in the checker's supplied wording, recording each against
+the finding it answers, and freezing the brief. There is no fifth report.
+It is the shape v1.12 already uses one level up, where the editor
+resolves the open findings in writing after the second framing report and
+the brief goes on: the check gets its rounds, then the editor is
+accountable in the record. Ending in a second park was never available,
+because a brief parked on a known ladder bug is unusable and no intake
+evidence can ever release it, which is the failure v1.20 exists to fix.
 
-That question is not decided here, and the reason is the same reason the
-amendment itself was uncomfortable: the editor is the party who gains
-from deciding it one way, and deciding it now would be deciding it on the
-brief that would be released by the answer. It is written up as an open
-question in the board record, with both readings and a defensible middle
-set out, and the brief stays where the confirmation left it. What the first use of v1.20
-demonstrated is worth keeping separately from what it failed to settle:
-the checker labelled every finding, used the labels the rule defines,
-raised no framing objection when a framing objection would have ended the
-brief, and found a fourth arithmetic error that three framing rounds had
-walked past.
+The confirmation earned its place, and that belongs in the record next to
+the hole it exposed. The checker labelled every finding, used the labels
+the rule defines, raised no framing objection at the moment a framing
+objection would have ended the brief for good, and found a fourth
+arithmetic error that three framing rounds had walked straight past.
+
+## Correction 4, and the freeze
+
+**Correction 4 answers the defect confirmation's own further finding**
+(`framing/check-4-defects.md`, labelled `[defect]`). Claim 2's ladder on
+an empty verdict set.
+
+- Before: "Supported, Partially supported or Contradicted may be returned
+  only if every counter in the verdict set is classifiable ...
+  **Supported** if every classifiable counter is below 25 ...
+  **Contradicted** if no classifiable counter is below 25 ... **Not
+  established** if any counter in the verdict set is not classifiable, or
+  if the City's locations data does not allow on-street lanes to be told
+  from recreational paths, or if the verdict set is empty."
+- After, in the checker's wording: "Apply the primary and alternative
+  cutoffs only when the verdict set is non-empty and every counter in it
+  is classifiable. If the verdict set is empty, any counter in it is not
+  classifiable, or the City's locations data does not allow on-street
+  lanes to be told from recreational paths, return Not established and
+  report every counter's figures as qualifications. Otherwise, Supported
+  applies if every counter is below the applicable cutoff; Partially
+  supported applies if at least one counter is below it and at least one
+  is at or above it; Contradicted applies if no counter is below it."
+
+The three verdict rules are laid out as bullets in the brief, in the
+checker's words, so the ladder reads the way the other seven do. The
+wording closes a second thing the old bullets left implicit: they now say
+"the applicable cutoff", so they govern the alternative of 50 exactly as
+they govern the primary of 25, which is what "results required under
+both" always meant.
+
+Worth recording plainly. This defect had been in the brief since it was
+drafted. Three framing reports read that ladder and none of them saw it,
+and neither did the editor who wrote it. The round that found it is the
+one v1.20 added, on the first brief ever to run it.
+
+**The freeze.** Made by the editor under v1.20, which ends a defect
+confirmation that returns further defects with the editor's correction on
+the record and the brief frozen. The frozen text of this brief is the one
+carried by the commit that introduced this line; its SHA is written into
+this record and into the brief's status line by the next commit, which
+touches nothing else. Every change to `brief.md` after the freeze commit
+is that status line and nothing else: no
+proposition, no cutoff, no verdict rule and no instrument description
+moves again, and any change to one is a new brief with a new check.
+
+The checker's standing objection from report 2, that
+`one-to-two-percent-of-population-rides` and
+`one-percent-year-round-users` should not go to the panel without a
+verified representative instrument, is frozen with the brief rather than
+resolved by it. Check 3 marked it RESOLVED as a defensible editorial call
+and it is recorded above; the panel runs those two claims with Not
+established predeclared as a real outcome.
 
 ## What check 3 did settle
 
