@@ -1,9 +1,21 @@
 # Review brief: How many people in Edmonton cycle, and how much do the bike lanes get used?
 
-Status: **FROZEN 2026-09-03**. The freeze is the sha256 of this file,
-recorded in `run-record.md` with the one line that recomputes it, so
-anyone can check the frozen text against the file in front of them. The
-framing check returned
+Status: **REVISED AND RE-FROZEN 2026-09-03**, after round 1 was run and
+halted. Two of the three panel seats returned a material framing concern
+on claim 2's coverage rule, which under methodology v1.2 revises the
+brief and reruns round 1. The revision is confined to how claim 2
+decides which counters are in its verdict set: a counter that was in
+service and then stopped recording is now out of service and leaves the
+set named, while *unclassifiable* is returned to its own meaning, a
+counter whose facility type the record does not settle. No cutoff moved,
+no proposition changed, and no other claim was touched. The first
+round's answers are kept at `round1-superseded/` and the revision is
+recorded in `run-record.md` against each seat's concern. The freeze is
+the sha256 of this file, recorded in `run-record.md` with the one line
+that recomputes it and with the superseded hash beside it, so anyone can
+check the frozen text against the file in front of them.
+
+The framing check returned
 REVISE on all three permitted reports (`framing/check-1.md`,
 `framing/check-2.md`, `framing/check-3.md`), and all three findings it
 left standing were arithmetic defects inside
@@ -359,26 +371,124 @@ city is told, beside the verdict, that the unmetered lanes were not
 measured and that nobody publishes a measure of them.
 
 **Which lanes, fixed here.** The verdict set is every City automated
-bicycle counter that was in service on 2025-07-01 and is sited on an
+bicycle counter that was in service on 2025-07-01, is sited on an
 on-street bike lane rather than on a river valley or shared-use
-recreational path, each reported individually. Reviewers classify each
-counter from the City's published locations data, say how they classified
-it, and list the set before reporting any figure.
+recreational path, and did not go out of service during the measurement
+period, each reported individually. Membership is decided by the five
+tests below, in order, from published fields alone, so that three
+readers working from the same datasets arrive at the same set rather
+than at three sets. Reviewers list the verdict set, and every counter
+each test removed with the reason, before reporting any figure.
 
-**How much data a counter needs, fixed here.** A counter is
-*classifiable* if it published bicycle counts for at least 20 of July
-2025's 31 days. A counter below that is listed and its partial figures
-reported, but it is not classified, and the coverage rule below then
-decides what verdict is available.
+**Test 1, the universe.** Every distinct `counter_location_description`
+in the counts dataset `tq23-qn4m` whose `counter_configuration` names
+cyclists or bikes. A pedestrian-only counter is out. The universe is
+taken from the counts dataset rather than from the locations dataset
+because the counts dataset is what establishes service, it publishes its
+own `latitude` and `longitude` for every counter, and a counter can
+appear in it that the locations dataset does not list. Reviewers state
+how many counters the universe holds and name any the locations dataset
+does not list.
 
-**The named corridors, inside that set.** Holders of this claim named
-four corridors: 119 Avenue; 132 Avenue between 97 Street and 127 Street;
-the Hermitage area lanes; and the Whyte Avenue area. Reviewers say for
-each whether a City counter sits on or adjacent to it, name the counter
-if one does, and report its figures separately as well as inside the
-verdict set. A named corridor with no counter is reported as such. This
-membership is fixed before any data is read and may not be adjusted
-afterwards.
+**Test 2, in service on 2025-07-01.** The counter has at least one
+record in `tq23-qn4m` whose `log_timestamp` falls on 2025-07-01. A
+counter whose first record falls after that date, or whose last record
+falls before it, is not a candidate. It is named with that date and
+plays no further part.
+
+**Test 3, on-street or off-street.** The City's counter-locations
+dataset, identifier `py7x-4d39`, publishes a description, a counter
+configuration, a direction of travel, coordinates and a photograph link.
+It has no facility-type field, so it cannot on its own tell an on-street
+bike lane from a recreational path. A counter's description text may not
+be used to decide it either: a name of the form "106 Street N of Jasper
+Avenue" or "Rossdale SUP" is prose, and classifying prose is the reader's
+judgement rather than the City's record. Facility type is decided
+instead by joining the counter to the City's Bike Routes dataset,
+identifier `vd4b-a4iv`, which publishes a `type` field whose two values
+are `ON ROAD` and `OFF ROAD`.
+
+The join, fixed here. Take the counter's `latitude` and `longitude` as
+published on its own records in `tq23-qn4m`. Take every Bike Routes
+segment whose `route_coming_soon` is false, an unbuilt route not being a
+facility a counter can sit on. Find the segment whose `geometry_line`
+passes nearest the counter's point, measured as the shortest distance
+from the point to the line.
+
+- If that segment's `type` is `ON ROAD`, the counter is on-street and is
+  in the verdict set.
+- If it is `OFF ROAD`, the counter is off-street and is not in the
+  verdict set. It is named, with the distance and the segment's
+  `classification`, so a reader sees what was left out.
+- If no segment lies within 30 metres of the counter's point, or if the
+  nearest `ON ROAD` segment and the nearest `OFF ROAD` segment are the
+  same distance from it to within a tenth of a metre, the counter's
+  facility type cannot be determined from the record. It is
+  **unclassifiable**, and the verdict rule below then returns Not
+  established.
+
+Thirty metres is about the width of an arterial right-of-way with its
+boulevards, so it is wide enough to reach the facility a counter is
+mounted on and too narrow to reach the facility on the next street. The
+nearest segment's `classification` — `Protected Bike Lane`, `Painted
+Bike Lane`, `Shared Pathway` and the rest — is reported beside every
+counter and decides nothing, because `type` is the field that answers
+the question the claim asks, and using `classification` would put the
+reviewer back to judging which kinds of on-street facility count as a
+lane. Where a counter's nearest `ON ROAD` and nearest `OFF ROAD`
+segments are within ten metres of each other, the classification is
+borderline: that counter is named as borderline in the finding, and
+reviewers state whether the verdict changes if it is excluded.
+
+**Test 4, out of service.** A counter that was in service on 2025-07-01
+can stop recording afterwards. A device that stops is a fact about the
+device, not about the traffic on the lane it was watching, and the two
+must not be confused. A counter is **out of service** if its last record
+anywhere in `tq23-qn4m`, up to the as-of date, falls on or before
+2025-07-31: it stopped inside the measured month or at its edge and
+never resumed. An out-of-service counter leaves the verdict set. A
+counter that stopped and later resumed is not out of service; whether
+its July is readable is then test 5's question. Removal from the set
+does not make the verdict unavailable, because nothing about a failed
+sensor bears on how much traffic the metered lanes carry.
+
+Every counter the verdict set loses this way is named in the finding,
+with the date of its last record and its last stable level, that is the
+median daily bicycle count for the last complete calendar month it
+published in full before the record ended, and the name of that month. A
+reader is shown what was excluded, when it stopped, and how busy it was
+while it worked.
+
+**Test 5, how much data a counter needs.** A counter still in the
+verdict set after tests 1 to 4 is a live, on-street, metered lane, and
+the question is whether the record can say what it carried. It is
+**measured** if it published bicycle counts for at least 20 of July
+2025's 31 days, and **under-reported** if it did not. Twenty of
+thirty-one is unchanged from this brief's first frozen text. An
+under-reported counter is a lane the City meters and the record failed
+to measure, so it is listed with its partial figures and the verdict
+rule below then returns Not established.
+
+**The three words, kept apart.** *Unclassifiable* means the record does
+not say whether a counter is on an on-street lane at all, so it cannot
+be placed in or out of the set. *Out of service* means the counter is
+placed, and the device stopped. *Under-reported* means the counter is
+placed and running, and published too few days of July to read a level
+from. Only the first and the third leave the verdict unavailable. The
+second does not, and treating a dead device as an unmeasured lane is the
+error this brief made in its first frozen text.
+
+**The named corridors, reported beside that set.** Holders of this claim
+named four corridors: 119 Avenue; 132 Avenue between 97 Street and 127
+Street; the Hermitage area lanes; and the Whyte Avenue area. Reviewers
+say for each whether a City counter sits on or adjacent to it, name the
+counter if one does, and report its figures separately. A named corridor
+with no counter is reported as such. A named corridor whose only counter
+is off-street under test 3 is reported as such too, with the counter's
+figures given and the reason it is outside the verdict set stated: the
+corridor list is a list of what residents named, and it does not add a
+counter to the set or take one out. This membership is fixed before any
+data is read and may not be adjusted afterwards.
 
 **The measure, fixed here.** For each counter in the verdict set, the
 median daily bicycle count for July of the most recent complete calendar
@@ -393,11 +503,10 @@ carrying little or no traffic if its July median daily bicycle count is
 below 25.
 
 Apply the primary and alternative cutoffs only when the verdict set is
-non-empty and every counter in it is classifiable. If the verdict set is
-empty, any counter in it is not classifiable, or the City's locations
-data does not allow on-street lanes to be told from recreational paths,
-return Not established and report every counter's figures as
-qualifications. Otherwise:
+non-empty and every counter in it is measured. If the verdict set is
+empty, if any counter that passes tests 1 and 2 is unclassifiable, or if
+any counter in the verdict set is under-reported, return Not established
+and report every counter's figures as qualifications. Otherwise:
 
 - **Supported** if every counter is below the applicable cutoff.
 - **Partially supported** if at least one counter is below it and at
@@ -405,10 +514,15 @@ qualifications. Otherwise:
 - **Contradicted** if no counter is below it.
 
 Each of these three verdicts quantifies over the metered lanes as a set.
-That is why an unclassified counter cannot be left out of the reckoning,
-and why an empty set returns Not established rather than Supported and
+That is why a counter whose facility type is undetermined cannot be left
+out of the reckoning — the set it belongs to is unknown — and why a
+metered lane the record failed to measure cannot be either. It is also
+why an empty set returns Not established rather than Supported and
 Contradicted at once, which is what a rule quantifying over nothing
-otherwise does.
+otherwise does. An out-of-service counter is different in kind: the
+record settles both that it was on an on-street lane and that it stopped
+recording, so it is removed from the set by a fact rather than by a gap,
+and it is named in the finding under test 4.
 
 Alternative cutoff, results required under both: 50 a day in place of
 25. Neither figure comes from an identified pre-existing standard.
@@ -427,9 +541,15 @@ may be changed after the figures are seen.
    say which of the lanes people named cannot be checked this way.
 3. Whether any counter in the set was installed part-way through the
    period, or reported no data for part of it.
-4. Whether the City publishes any manual or short-duration count for a
+4. Every counter test 4 removed as out of service, with the date of its
+   last record, its last stable level and the month that level covers.
+   This is required, not optional: a verdict computed over a set that
+   lost a counter must say which counter it lost.
+5. Every counter test 3 marked borderline, with both distances, and
+   whether the verdict changes if it is excluded.
+6. Whether the City publishes any manual or short-duration count for a
    named corridor, and what it says.
-5. Motor vehicle counts on the same corridors where the City publishes
+7. Motor vehicle counts on the same corridors where the City publishes
    them, reported as context for the "thousands of vehicles vs 10 bikes"
    form, and never as part of the verdict.
 
@@ -1054,7 +1174,10 @@ Claim 2: per counter in the verdict set, the July 2025 median daily
 count, the busiest day, the January 2025 median and the 2025 total; how
 many counters exist, how many sit on on-street lanes, and what share of
 the City's on-street bike-lane length they sit on where it is published;
-the list of named corridors with no counter.
+the list of named corridors with no counter; the result of each of the
+five membership tests, counter by counter, with every counter each test
+removed and the reason; and for every out-of-service counter its last
+record date and last stable level.
 
 Claim 3: the published twelve-month participation share with its
 instrument, sampling frame and question wording; any shorter-period

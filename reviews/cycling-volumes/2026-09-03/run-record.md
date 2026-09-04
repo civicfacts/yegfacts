@@ -1,10 +1,13 @@
 # Run record: `cycling-volumes`, run 2026-09-03
 
-Stage: framing. Methodology v1.20.
+Stage: round 1, rerun. Methodology v1.20.
 
 This file records what happened to the brief between drafting and
 freezing: every framing-check report, what the editor adopted and what
-the editor rejected, and the commit the frozen brief sits in.
+the editor rejected, and the hash the frozen brief sits behind. From
+"Stage 2" onward it records what happened after the freeze, including
+the panel's own framing concern, the revision it forced under
+methodology v1.2, and the re-freeze.
 
 ## Stage 1, framing
 
@@ -413,3 +416,171 @@ guessing at one.
    the named instruments exist and are still published. `intake.md`
    records the two figures that appeared in those results in passing and
    that no cutoff moved afterwards.
+
+## Stage 2, round 1: run, halted, brief revised, round 1 rerun
+
+The panel ran blind on the frozen brief. Two of the three seats returned
+`MATERIAL FRAMING CONCERN` on `bike-lanes-look-empty`, which under
+methodology v1.2 halts synthesis, revises the brief and reruns round 1.
+That is not the same mechanism as the framing-check cap.
+
+**Why it is not the same mechanism, since the run stopped once over
+exactly this question.** Methodology v1.12 caps the *framing checker* at
+three reports, and v1.20 gives a corrected brief one defect confirmation
+after that. Both bound how many times one reviewing seat may send a
+brief back before the editor has to decide in writing and freeze.
+Methodology v1.2 governs something else: what happens when the *panel*,
+running blind on the frozen text, finds that the operationalisation
+changes the honest answer. The freeze is what stops framing being moved
+after the answers arrive; it was never a claim that the framing is
+right. The panel is asked for a framing concern precisely so a frozen
+brief can still be caught, and the answer to a caught brief is the one
+v1.2 states: revise and rerun round 1. It has happened twice before on
+this site, on `infill-prices` and on `low-density-history`, and both
+times the brief was revised and round 1 rerun.
+
+### The first round's answers, and the concern
+
+The first round's three reviews are kept at `round1-superseded/`, with a
+copy of the manifest as it stood when they were written. Nothing is
+deleted: the rerun writes into `round1/` and the superseded answers stay
+readable beside it.
+
+| Claim | Claude Opus 5 | Gemini 3.1 Pro | GPT-5.6 Sol |
+| --- | --- | --- | --- |
+| `cycling-trips-1-3-million-2026` | Supported | Supported | Not established |
+| `bike-lanes-look-empty` | Not established, **concern** | Not established, **concern** | Not established |
+| `one-to-two-percent-of-population-rides` | Contradicted | Not established | Not established |
+| `one-percent-year-round-users` | Not established | Not established | Not established |
+| `two-percent-of-trips-by-bike` | Supported | Supported | Supported |
+| `under-one-percent-of-commuters-cycle` | Supported | Supported | Supported |
+| `87-percent-commute-by-car` | Supported | Supported | Supported |
+| `riders-are-recreational-not-commuters` | Contradicted | Not established | Contradicted |
+
+Both concerns are on the same rule and name the same counter. Claim 2's
+coverage rule said that Supported, Partially supported or Contradicted
+may be returned only if every counter in the verdict set is
+classifiable, and that a counter is classifiable only if it published
+bicycle counts for at least 20 of July 2025's 31 days. One counter in
+the set fails it: `106 Street N of Jasper Avenue`, which published
+around 165 bicycles a day in June 2025, published 16 days of July whose
+daily counts decay to zero, has its last record at 2025-07-16, and
+appears nowhere afterwards. Both seats identify that as a device that
+died rather than a lane that went unmeasured, and both say that one dead
+sensor voiding the verdict is not a fair description of a record whose
+other counters run in the tens and hundreds a day.
+
+### The correction, and why it is a category error rather than a threshold
+
+The rule came into the brief as the framing checker's own replacement
+wording, adopted verbatim under methodology v1.20 to fix a real defect:
+the brief had previously allowed an all-set verdict on four fifths of
+the set, so an unclassified remainder could decide it. That defect was
+real and the correction for it stands. What the correction got wrong is
+that it made *classifiable* carry two unrelated jobs — whether a counter
+measures an on-street lane at all, and whether its device kept running —
+and then voided the verdict on either. The first is a fact the record
+may genuinely fail to settle. The second is a fact the record settles
+perfectly well: the device stopped, on a stated date, after a stated
+level.
+
+So the brief now separates them, and no cutoff moves.
+
+- **Out of service.** A counter in service on 2025-07-01 whose last
+  record anywhere in the dataset falls on or before 2025-07-31 stopped
+  and never resumed. It leaves the verdict set, and the brief requires
+  it to be named in the finding with the date of its last record and its
+  last stable level, the median daily count for the last complete
+  calendar month it published in full. A reader sees what was excluded,
+  when it stopped and how busy it was.
+- **Unclassifiable** returns to its own meaning: a counter whose facility
+  type the record does not settle, so it cannot be placed in the set or
+  out of it. That still voids the verdict, which is what the original
+  defect correction was for.
+- **Under-reported** is the third case and keeps the old consequence: a
+  counter that is on-street, live and short of 20 of July's 31 days is a
+  lane the City meters and the record failed to measure. It voids the
+  verdict too. Twenty of thirty-one does not move.
+
+Both cutoffs stay at 25 and 50 a day and results are required under
+both. The two seats' own arithmetic, reported alongside their concerns,
+lands on different verdicts at the two cutoffs, which is the v1.8
+alternative rule doing exactly what it exists for; both are reported.
+
+### Pinning the eligible set, which is a second defect the round exposed
+
+The seats did not agree on how many counters are on-street: one counted
+twenty, the other seventeen. A brief whose membership rule three careful
+readers resolve three ways is not pinned, whatever verdict it produces.
+The cause is that the counter-locations dataset `py7x-4d39` publishes a
+description, a counter configuration, a direction of travel, coordinates
+and a photograph link, and no facility-type field at all — so each seat
+fell back on reading the counters' names as prose, and prose read twice
+gave two answers.
+
+The brief now decides membership from published fields in five ordered
+tests, and forbids the description text from deciding anything. Facility
+type comes from a join to the City's Bike Routes dataset `vd4b-a4iv`,
+which does publish a `type` field with two values, `ON ROAD` and `OFF
+ROAD`: take the counter's own coordinates, drop route segments flagged
+`route_coming_soon`, and take the `type` of the segment whose geometry
+passes nearest the counter. Beyond 30 metres, or an exact tie between
+the nearest `ON ROAD` and `OFF ROAD` segments, is unclassifiable. The
+segment's `classification` is reported beside every counter and decides
+nothing, because deciding on it would put the reviewer back to judging
+which on-street facilities count as lanes. A counter whose two nearest
+segments of opposite type are within ten metres of each other is named
+as borderline, with the verdict stated both with and without it.
+
+One seat had already reached for `vd4b-a4iv` as a cross-check on its own
+initiative. The brief now either adopts a method or forbids it rather
+than leaving it to the seat, and this one is adopted, in the open, as
+the only thing that decides facility type.
+
+**The editor tested the rule against the published data before freezing,
+which is the part that was missing last time.** The membership rule was
+run over all 59 rows of `py7x-4d39` and all 10,417 rows of `vd4b-a4iv`
+as published on the as-of date: 50 counters record cyclists, every one
+of them has a bike-route segment within 20 metres, none is
+unclassifiable, and none is a tie. One counter, `142 Street N of
+Whitemud Drive`, is borderline under the ten-metre rule and will be
+named as such. No count figure was read while doing it, and no threshold
+in this brief was chosen or changed with any figure in view. The point
+of the exercise was to establish that the rule terminates on a
+determinate set for every counter, which is the property the round-1
+disagreement showed the old rule lacked.
+
+### What was not touched
+
+Nothing outside claim 2's membership and coverage rules. Not what any
+claim tests, not any cutoff, not any verdict band, not any of the other
+seven claims. The seven claims the panel answered without a concern go
+back to the panel with their text unchanged.
+
+### The re-freeze
+
+**The freeze is the sha256 of `brief.md`, and it is now
+`86f4df04e2037914fe9dfe81f256f10266635420f8c6aae22a43a5b1d83289fc`.**
+One line recomputes it, from the repository root:
+
+    shasum -a 256 reviews/cycling-volumes/2026-09-03/brief.md
+
+**The superseded freeze, kept beside it so the change is traceable, is
+`b222574225ea300f924240b715a7332398af5d905a2fc2596d6bc067e33ef700`.**
+That is the hash of the text the first round was run on. It is the hash
+recorded above under "The freeze", it is what
+`git show <the commit before the revision>:reviews/cycling-volumes/2026-09-03/brief.md | shasum -a 256`
+prints, and the three reviews under `round1-superseded/` are answers to
+it. Anyone comparing the two hashes is comparing the halted round's
+package with the rerun's.
+
+### The rerun
+
+Round 1 was rerun on all three seats against the re-frozen brief, blind,
+each in its own scratch directory, with the pinned commands recorded in
+`run.yaml`. All three, not only the claim that drew the concern: a seat
+that answered the superseded brief answered a different package, and
+mixing answers from two packages in one round would make the round
+dishonest. The manifest's round-1 entries are rewritten for the rerun;
+the copy at `round1-superseded/run.yaml` holds what they said for the
+halted round.
