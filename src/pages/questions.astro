@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Finding from '../components/Finding.astro';
 import PageToc from '../components/PageToc.astro';
+import RegisterCounts from '../components/RegisterCounts.astro';
 import ReportBox from '../components/ReportBox.astro';
 import StateBadge from '../components/StateBadge.astro';
 import { orderedTopics } from '../lib/content';
@@ -62,12 +63,29 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
  * the question keeps every pixel the counts do not need; below that the row
  * stacks, because four columns on a phone left the question wrapping in a
  * ribbon a third of the screen wide with the rest of the row empty beside it.
+ *
+ * The two counts share one cell. As separate columns each was as wide as its
+ * longest value across all 44 questions and neither could give the width back,
+ * so between them they took 250px off the question title on every row —
+ * including the rows that had no counts at all. In one cell they cost the
+ * widest single phrase instead of the sum of two columns: from `md` the two
+ * phrases stack on their own lines against the right edge, so the column is
+ * only ever as wide as the longer of them and no phrase is broken. The middot
+ * between them belongs to the stacked phone row, where they run inline, and is
+ * dropped from `md` up rather than left hanging at the end of a line.
  */
-const countColumn = `md:table-cell md:w-px md:pl-4 md:text-right md:align-top md:whitespace-nowrap ${label}`;
+const countColumn = `md:table-cell md:w-[1%] md:pl-4 md:text-right md:align-top ${label}`;
 const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-top';
 
-const chip =
-  'inline-flex min-h-9 items-center border border-rule-strong px-3 py-1 text-[0.875rem] leading-none no-underline';
+/** The row's counts as phrases — "Said in 35 comments", "9 claims" — dropping either when it is empty. */
+function counts(comments: number, claims?: number): string[] {
+  return [
+    comments > 0 ? saidIn(comments) : '',
+    claims === undefined ? '' : `${claims} ${claims === 1 ? 'claim' : 'claims'}`,
+  ].filter(Boolean);
+}
+
+/* The chip's own look lives in `.chip` (global.css); the register only says where they go. */
 ---
 
 <Base
@@ -77,7 +95,7 @@ const chip =
   description="Every question that reached YEGFacts, with the claims under it and what happened to it, including the ones we parked and the ones we declined."
 >
   <header class="border-b border-rule pb-6">
-    <h1 class="text-[1.75rem] leading-[1.15] font-extrabold tracking-[-0.022em] sm:text-display">
+    <h1 class="text-[1.75rem] leading-[1.15] font-bold tracking-[-0.022em] sm:text-display">
       Every question we've considered
     </h1>
     <p class="mt-4 max-w-prose text-base leading-relaxed">
@@ -122,16 +140,14 @@ const chip =
         <p class:list={[label, 'sm:w-28 sm:shrink-0 sm:pt-1.5']}>State</p>
         <ul class="mt-2 flex flex-wrap gap-2 sm:mt-0">
           <li>
-            <a href="/questions" class:list={[chip, 'link']} data-filter="state" data-value=""
-              >All</a
-            >
+            <a href="/questions" class="chip" data-filter="state" data-value="">All</a>
           </li>
           {
             stateFilters.map((state) => (
               <li>
                 <a
                   href={`/questions?state=${state.id}`}
-                  class:list={[chip, 'link']}
+                  class="chip"
                   data-filter="state"
                   data-value={state.id}
                 >
@@ -149,7 +165,7 @@ const chip =
             <p class:list={[label, 'sm:w-28 sm:shrink-0 sm:pt-1.5']}>Topic</p>
             <ul class="mt-2 flex flex-wrap gap-2 sm:mt-0">
               <li>
-                <a href="/questions" class:list={[chip, 'link']} data-filter="topic" data-value="">
+                <a href="/questions" class="chip" data-filter="topic" data-value="">
                   All
                 </a>
               </li>
@@ -157,7 +173,7 @@ const chip =
                 <li>
                   <a
                     href={`/questions?topic=${topic.id}`}
-                    class:list={[chip, 'link']}
+                    class="chip"
                     data-filter="topic"
                     data-value={topic.id}
                   >
@@ -197,10 +213,10 @@ const chip =
     layout's 13rem rail, the way the home page does, and the rail is off. The
     rail is too narrow to hold the key, and a second column beside it left the
     register 460px wide. The column is a fixed 16rem rather than the home
-    page's ratio because the register's other three columns never shrink: they
-    cost the table a flat 449px whatever the page is doing, so every pixel this
-    column takes comes out of the question title, which is the one thing on the
-    row a reader is actually reading.
+    page's ratio because the register's other columns never shrink: they cost
+    the table a flat few hundred pixels whatever the page is doing, so every
+    pixel this column takes comes out of the question title, which is the one
+    thing on the row a reader is actually reading.
   */}
   <div class="mt-12 lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-x-8">
     <section id="register" class="scroll-mt-6">
@@ -217,8 +233,7 @@ const chip =
         <thead class="sr-only">
           <tr>
             <th scope="col">Question or claim</th>
-            <th scope="col">Comments</th>
-            <th scope="col">Claims</th>
+            <th scope="col">Comments and claims</th>
             <th scope="col">State</th>
           </tr>
         </thead>
@@ -231,11 +246,11 @@ const chip =
               data-topic={row.topics.join(' ')}
             >
               <tr id={row.question.id} class="block scroll-mt-6 md:table-row">
-                <td class="block pt-4 md:table-cell md:py-4 md:pr-4 md:align-top">
+                <td class="block pt-4 md:table-cell md:w-[52%] md:py-4 md:pr-4 md:align-top">
                   <span class:list={['block border-l-[5px] pl-4', triageEdge(row.question.triage)]}>
                     <a
                       href={`/questions/${row.question.id}`}
-                      class="link font-display text-[1.1875rem] leading-snug font-semibold text-pretty"
+                      class="link-title font-display text-[1.1875rem] leading-snug font-semibold text-pretty"
                       data-record
                     >
                       {row.question.question}
@@ -251,13 +266,7 @@ const chip =
                   </span>
                 </td>
                 <td class:list={['block pt-2 pl-5 md:py-4', countColumn]} data-record>
-                  {row.comments > 0 && saidIn(row.comments)}
-                </td>
-                <td
-                  class:list={['block pt-1 pl-5 whitespace-nowrap md:py-4', countColumn]}
-                  data-record
-                >
-                  {`${row.claimCount} ${row.claimCount === 1 ? 'claim' : 'claims'}`}
+                  <RegisterCounts phrases={counts(row.comments, row.claimCount)} />
                 </td>
                 <td class:list={['pt-3 pb-4 pl-5 md:py-4', badgeColumn]}>
                   <span class="flex flex-wrap gap-1.5 md:justify-end">
@@ -273,7 +282,7 @@ const chip =
                   <td class="block pt-2.5 pl-4 md:table-cell md:py-2.5 md:pr-4 md:align-top">
                     <a
                       href={`/claims/${claim.data.id}`}
-                      class="link text-[0.9375rem] leading-snug text-ink"
+                      class="link-title text-[0.9375rem] leading-snug"
                       data-record
                     >
                       {claim.data.question}
@@ -289,10 +298,8 @@ const chip =
                     ]}
                     data-record
                   >
-                    {commentsFrom(claim.data.register_claims) > 0 &&
-                      saidIn(commentsFrom(claim.data.register_claims))}
+                    <RegisterCounts phrases={counts(commentsFrom(claim.data.register_claims))} />
                   </td>
-                  <td class="hidden md:table-cell md:py-2.5" />
                   <td class:list={['pt-2 pb-2.5 pl-4 md:py-2.5', badgeColumn]}>
                     <Finding finding={claim.data.finding} />
                   </td>
@@ -304,7 +311,7 @@ const chip =
                   <td class="block pt-2.5 pl-4 md:table-cell md:py-2.5 md:pr-4 md:align-top">
                     <a
                       href={`/claims/${claim.id}`}
-                      class="link text-[0.9375rem] leading-snug text-ink"
+                      class="link-title text-[0.9375rem] leading-snug"
                       data-record
                     >
                       {claimText(claim)}
@@ -319,9 +326,8 @@ const chip =
                     ]}
                     data-record
                   >
-                    {commentsOn(claim) > 0 && saidIn(commentsOn(claim))}
+                    <RegisterCounts phrases={counts(commentsOn(claim))} />
                   </td>
-                  <td class="hidden md:table-cell md:py-2.5" />
                   {/*
                     Under a published question, a claim with no finding says so
                     rather than sitting blank beside the ones that were checked.
@@ -504,13 +510,3 @@ const chip =
     read();
   }
 </script>
-
-<style>
-  .is-filter-on {
-    background-color: var(--color-forest);
-    border-color: var(--color-forest);
-    color: var(--color-paper);
-    font-weight: 600;
-    text-decoration: none;
-  }
-</style>

@@ -1,0 +1,23 @@
+---
+/**
+ * The count phrases in a register row's middle cell: "Said in 35 comments",
+ * "9 claims". From `md` up each phrase sits on its own line against the right
+ * edge and is never broken; below that the row is stacked and the phrases run
+ * inline with a middot between them. The middot is dropped from `md` up rather
+ * than left hanging at the start of a line.
+ */
+interface Props {
+  phrases: string[];
+}
+
+const { phrases } = Astro.props;
+---
+
+{
+  phrases.map((phrase, index) => (
+    <Fragment>
+      {index > 0 && <span class="md:hidden"> · </span>}
+      <span class="md:block md:whitespace-nowrap">{phrase}</span>
+    </Fragment>
+  ))
+}
