@@ -1,6 +1,48 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.21"
+  date: "2026-09-03"
+  scope: misattribution-and-prior-triage
+  summary: >
+    A real person was published asserting something they never asserted: their
+    tax bill was written up as a tax rise. The gate that exists to stop exactly
+    that could not have seen it, and the merge rule that would have stopped it
+    was written during this very intake run and enforced by nothing. Alongside it, eleven
+    propositions two readers had already refused were queued for panel runs with
+    no trace of the refusal, and three account splits counted a person twice.
+    None of this was caught by the pipeline. It was caught by the first audit
+    that looked backwards.
+  highlights:
+    - "The claim said Edmonton property taxes had risen sharply, by $1,500 in three years for one resident and $6,000 a year for another. The second resident had written: Glad I am paying $6,000 a year in property tax for this! That is what somebody pays, not what it went up by, and there is no sharply anywhere in it. One person's increase had been stitched to another person's bill and the compound put in both their mouths. On a site whose whole promise is fidelity to what people actually said, this is the worst defect available to us. It is now two claims, each carrying only what its own wording supports, and both quotes were read back against the capture by hand."
+    - "No amount of tightening the quote gate would have caught it, and that is the part worth understanding. Both wordings are exact substrings of the comments they came from, which is the entire thing that gate was built to prove. It establishes that the words were really typed by the person credited with them. Whether the sentence assembled on top of those words says what the words say is a separate question, and no step in the pipeline was asking it."
+    - "The rule that would have stopped it was already written. prompts/intake-merge.md opens its merging rules with: A claim is one assertion. If you are joining two assertions with and, they are two claims. This claim joined two people's remarks with exactly that word. Worse, that rule was written the same day, in the re-merge after an independent critique threw the first merge of this run away for grouping by topic instead of by proposition, having found a compound assertion put into the mouths of commenters who had made neither half of it. It was written in direct response to this failure, it went into a prompt file, and nothing was ever wired up to check it. The re-run under those rules shipped this anyway. A rule nobody checks is a wish."
+    - "Nothing in the pipeline found any of this. The first triage audit did, three weeks after the project's own open questions asked for one and nobody scheduled it: a reader sent back over work that had already cleared every check standing in front of it. Every guard here inspects a claim as it goes past and then stops looking at it. There was never anything behind them. Four defects had been sitting in shipped or queued work for days, and an afternoon of looking behind found all four."
+    - "prior_triage is the schema change, and it is what earns a version. When v1.16 lifted triage from the claim up to the question, the decisions made at the old level went in the bin, and eleven propositions that both triage seats had independently returned NO on became live claims under questions that are going ahead. Four of them are the same undisputed-truism shape that took four published claims off the findings board this morning, and they were sitting in the queue waiting for somebody to spend a panel run on them. The field records the outcome, the seats that reached it and the sentence they gave. It moves no question's disposition and decides nothing. It means a brief author can see the refusal instead of buying a run to rediscover it."
+    - "Two validator rules hold that field to being a record rather than a second opinion. One requires an outcome from the same vocabulary, at least two named readers, and the reason those readers gave, and rejects any other key: a superseded decision with no reason attached stops work without saying why, which is worse than keeping nothing. The other refuses the field on a claim declined on the right-of-reply ground, where the decline is live rather than historical, because a claim carrying both would read as having been ruled on twice."
+    - "The register header told readers the validator tested the for/against/neither split against the question's total. It did not. It tested the total against the range its claims allow, which is a different check that passes things the promised one refuses. The described check now runs, and on its first pass it caught three published splits overshooting their totals by one, on cycling-volumes, lanes-and-congestion and 83-avenue-lane. Each was one person who argued on two sides of a question and got counted on both. The claim-level count is deliberately everyone who argued a claim either way; the question-level split is people, once each, on the side their own words put them. The totals were right and the sides were wrong, and the header now describes a check that exists."
+    - "What this version does not do is close the hole. There is still no check anywhere that a claim's proposition says what its quotes say, and building one is separate work already under way rather than something shipped here. So the honest account of this version is that it repairs four specific defects and names the gap that let the worst of them through. That gap is open right now."
+  links:
+    - label: How much have Edmonton property taxes gone up?
+      href: /questions/property-taxes
+    - label: The register of questions and claims
+      href: /questions
+    - label: How findings are produced
+      href: /methodology
+  note: >
+    The comfortable story would be that a check failed. No check failed. The
+    check was never built. Somebody watched this exact failure happen during
+    intake, wrote a rule against it the same day, put the rule in a prompt, and
+    moved on, and an Edmontonian ended up on this site asserting a proposition
+    about tax increases when what they had made was a remark about a bill.
+    Between those two moments every guard the pipeline has ran, and passed. That
+    is the shape of the fault, not an accident of one claim: the guards all run
+    forwards, one item at a time, in the direction the work is moving, and not
+    one of them was ever asked to turn round and read what had already gone out.
+    The audit that did turn round was three weeks late. The lesson is not to
+    write better rules. It is that a rule which lives only in a prompt is a
+    statement of intent, and the difference between intent and a guarantee is
+    the whole of what this project claims to be selling.
 - version: "1.19"
   date: "2026-09-03"
   scope: claim-dispositions
