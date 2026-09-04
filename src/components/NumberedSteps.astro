@@ -8,7 +8,8 @@
  *
  * `flow` draws the list as a process rather than an enumeration: a hairline
  * spine down the numeral column joining the first numeral to the last, passing
- * behind each numeral (the numeral carries the paper ground) and with no row
+ * behind each numeral (the numeral carries the paper ground and sits at the
+ * top of its cell, so the ground covers the digit's line box and not the row) and with no row
  * dividers, since the spine is what joins the steps (from
  * `sm`; below that the numeral sits above the text and no spine is drawn), and
  * under any step that has them, what can happen to a claim there besides going
@@ -41,7 +42,7 @@ const { steps, flow = false } = Astro.props;
       <li
         class:list={['grid gap-x-5 gap-y-1 py-5 sm:grid-cols-[2rem_1fr]', flow && 'step-flow']}
       >
-        <span class:list={['text-lg font-bold text-forest tabular', flow && 'sm:relative sm:bg-paper sm:text-center']}>
+        <span class:list={['text-lg font-bold text-forest tabular', flow && 'sm:relative sm:self-start sm:bg-paper sm:text-center']}>
           {index + 1}
         </span>
         <div>
