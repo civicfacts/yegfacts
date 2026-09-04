@@ -1375,3 +1375,42 @@ reason and its reopening condition. No story, answers or reader-facing
 copy have been drafted: the next stages are drafting, the faithfulness
 check, the plain-speech read and the publication gate, none of them
 started.
+
+## Stage 10, drafting to the gate
+
+Written after the fact, closing the section above.
+
+The story and the seven claim records were drafted, read for plain speech
+by GPT-5.6 Sol (`plain-speech/gpt-1.md`, five rewrites taken and one
+refused), and checked for faithfulness twice: by GPT-5.6 Sol
+(`faithfulness/gpt-1.md`, 25 findings, all adopted) and by the Gemini
+seat (`faithfulness/gemini-1.md`, 8 findings, 7 adopted and 1 refused on
+the record). The second seat ran on the CLI's current default rather than
+Gemini 3.1 Pro, which was retired under D-0034 the day before; its report
+header says so, and so does the freshness seat's.
+
+The publication gate ran on 2026-09-04 and its three reports are under
+`gate/`. Source verification graded 320 statements against the archived
+bytes, found 12 unsupported and 3 imprecise, and passed 322 of 322 on the
+second pass. The release check returned no blocking findings and one
+advisory. The freshness audit returned no correction to any finding.
+
+Two things the gate found are worth carrying forward rather than leaving
+in a report.
+
+**The brief is not evidence, again.** The 2021 census reference week, "2
+to 8 May", appears in `brief.md` line 857 and in no archived source this
+run holds; from there it had reached a key fact, four limitations, an
+unknown and two sentences of the story. The 2026-09-02 gate on the $100
+million story named the same failure mode about a route count in that
+brief's selection rationale. Two runs in a row is a pattern, and the
+cheap guard is that a drafter takes figures and dates from registry
+entries and round files and never from the brief's prose.
+
+**A brief-required disclosure can be complied with by every seat and
+still miss the page.** The brief requires a named corridor whose only
+counter is off-street to be reported as such, with its figures and the
+reason. Two seats reported Hermitage North in cross-review. The drafter
+reported the corridor only as absent from the 2009-2016 historic count
+dataset, which is true and reads as unmeasured. The gate and the
+freshness seat found it independently on the same day.
