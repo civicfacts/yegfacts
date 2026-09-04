@@ -502,10 +502,12 @@ The visual system is the broadsheet ledger, locked and light-only: paper
 #F7F5F0, ink #1C2124, muted #5A6166, hairline rules #CFC9BD, forest #123F35,
 navy #123B5D, gold #C3A35E, brick #8A2F22 and charcoal #4A5258. Newsreader
 sets the wordmark, headings, questions and slate quotes; Libre Franklin sets
-body, metadata, labels and buttons. Badges, tiles, panels, tables and rules are
+body, metadata, labels and buttons. Badges, tiles, tables and rules are
 square-cornered; an interactive control — a filter chip, a button, a field, the
-copy button, the Pagefind search UI — carries a 3px radius (`--radius-control`),
-and inline code keeps its 2px. Two things are circles because the thing
+copy button, the Pagefind search UI — and the white panels (`.panel`, `.strip`)
+carry a 3px radius (`--radius-control`), and inline code keeps its 2px. A
+verdict badge stays square on purpose: it is the site's stamp, and at this
+size a rounded one reads as a tag. Two things are circles because the thing
 itself is: Stew's avatar wherever it appears, and the verdict dots in the
 AI-review matrix. White panels (`.panel`, `.strip`) and the home page's search
 field carry one soft shadow (`--shadow-panel`), the glossary popover keeps its
@@ -561,9 +563,11 @@ navy survives on that ground; colophon links are running text, so they are
 underlined, in paper.
 
 Hierarchy still comes from type rather than decoration: a section heading is a
-heading — on the home page's front page each one sits above a 3px ink rule —
-and the 11px uppercase label is reserved for metadata — dates, "Limitations",
-the sub-labels inside a claim.
+heading, with the space above it as the break; the 3px ink rules that once sat
+over the home page's section heads are gone, and the one hairline that still
+precedes a heading (above a journal post's receipts) is a section divider, not
+a heading device. The 11px uppercase label is reserved for metadata — dates,
+"Limitations", the sub-labels inside a claim.
 
 This supersedes the earlier rule that a finding is carried by the word and never
 by a badge, and that colour is a whisper (founder decision, 2026-09-01). The
@@ -601,7 +605,11 @@ narrative instead of pointing at one heading over a thousand words.
 
 A visual (chart, pull quote, timeline, table) must carry a number or a quotation
 the text already establishes with a source ID. If it does not, cut it. No
-photographs, no stock imagery, no decorative charts.
+photographs, no stock imagery, no decorative charts. The methodology page is
+where that rule is easiest to see: it renders the vocabulary as the badges the
+site actually publishes and builds its synthesis table out of
+`scripts/synthesis-matrix.ts` itself, so the page's visuals are the rule rather
+than an illustration of it.
 
 **Stew's identity.** Stew has two blues, both taken from his avatar: dark
 #1F385C and brighter #36639A. They are used only where Stew speaks in the first
