@@ -143,10 +143,28 @@ missed claim: the person can read the site and find words they did not write.
 Six propositions name an identifiable person. One was declined by both readers
 because it accuses a named person of a private conflict of interest, and this
 site has no way to put an accusation to the person and print their answer. It
-keeps its row, its outcome and its reason on `/considered`, under a neutral id,
-with the wording and the comments held in the private board record so the
-decision stays auditable. The id is neutral because a slug is published as
-surely as a paragraph is.
+keeps its row, its outcome and its reason on `/considered`, under the neutral
+id `withheld-yegscoop-2026-08-26-1`, which is the only id the register carries
+for it. A slug is published as surely as a paragraph is.
+
+That was the intent, and it is not what this repository did. The run artifacts
+in this directory were written before the register entry was cleaned, and they
+carried a descriptive slug that named the person and summarised the accusation,
+together with the proposition drafted from it. On 2026-09-03 both were replaced
+here with the neutral id and a marked placeholder. The raw seat outputs carry a
+notice at the top saying what came out of them, so a redaction can be told from
+an edit.
+
+Two things that did not fix. The commenter's own sentence is still in the
+capture, at index 362, because the capture is held verbatim and changing that
+is a separate decision. And the slug is still in this repository's git history,
+in every commit up to and including `cb73b39`; rewriting the history of a
+public repository is a much larger decision, and it has not been taken. The
+exposure is reduced, not undone.
+
+`scripts/exposure-audit.ts` now fails the build if the wording or the slug of a
+claim declined on right-of-reply grounds appears in a tracked file. It did not
+check for that before, which is how this got published.
 
 The other five are claims about what office-holders did in office, and they are
 here in full: a motion brought, a lane installed, a school-bus loading area
