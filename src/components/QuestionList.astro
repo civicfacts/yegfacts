@@ -30,7 +30,7 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
         <div class:list={['border-l-[5px] pl-4', triageEdge(row.question.triage)]}>
           <div class="flex flex-wrap items-baseline justify-between gap-x-5 gap-y-2">
             <p class="min-w-0 grow font-display text-[1.1875rem] leading-snug font-semibold text-pretty">
-              <a href={`/questions/${row.question.id}`} class="link" data-record>
+              <a href={`/questions/${row.question.id}`} class="link-title" data-record>
                 {row.question.question}
               </a>
             </p>
