@@ -1,6 +1,19 @@
 # Methodology changelog. Every entry bumps the version.
-# CI requires an entry here for any change under prompts/, scripts/merge*,
-# scripts/synthesize*, or methodology/.
+#
+# CI runs this rule (`npm run validate:diff`, from 2026-09-03): a branch that
+# changes anything under prompts/, scripts/merge*, scripts/synthesize* or
+# methodology/ must add a version entry here, or it fails.
+#
+# Two paths under methodology/ are exempt, and both exemptions are about what a
+# version number means. methodology/audits/ holds incident and audit records,
+# which report on the method rather than change it. This file is the record
+# itself, so correcting a past entry is not a new version of the method. If
+# either of those bumped the version, the number would mean "something
+# happened" instead of "the method changed".
+#
+# The sentence above used to describe a check that did not exist: the rule sat
+# as a TODO in scripts/validate.ts, and a change under methodology/ shipped
+# clean. It runs now.
 - version: "1.19"
   date: "2026-09-03"
   scope: claim-dispositions
