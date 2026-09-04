@@ -141,3 +141,43 @@ not archivable. The publisher answers 403 behind a bot challenge, which
 is a paywall doing its job.
 
 - **What rests on it.** GPT-5.6 Sol cited it as **weak** challenging evidence on `one-to-two-percent-of-population-rides` and on `one-percent-year-round-users`. Both claims were returned Not established by all three seats, so it is cited against propositions the panel did not establish in the first place. Nothing in either finding rests on it, and it should not be cited in published copy the site cannot verify.
+
+## What the evidence record now says about all seven
+
+`combined-evidence.json` is annotated (methodology v1.2), so the seven
+are visible in the artifact rather than only in this prose. Every item
+carries a `fetch_status` and an `evidence_id`: 26 `ok`, 3
+`content-mismatch`, 3 `failed`, none `not-attempted`; one item, the
+City's "Cycling in a winter wonderland" page, resolves to a registry
+entry already held from the `winter-cycling` run, `YF-EV-0026`, and the
+other 31 read `unregistered`.
+
+The three Census Profile deep links read `content-mismatch` rather than
+`ok`. They answered HTTP 200 and the archiver kept what came back, but
+what came back is the 4,099-byte "File not found" body described above
+and not the profile they were cited as. An item whose archived bytes are
+not the cited document must not read the same as one whose are.
+
+`https://www.edmonton.ca/transportation/traffic_reports/travel-surveys`
+reads `failed`, which is the 404 it returned; the resolution above
+substitutes the City's current page and the survey report itself, and
+both of those are `ok` items in their own right.
+
+**The two that cannot be archived read `failed` and stay that way.**
+Neither enters the evidence registry, because a registry entry keeps the
+bytes and there are no bytes to keep, and neither carries a finding.
+
+- **The CBC article.** CBC refuses this archiver by its user agent: the
+  connection is reset before any bytes arrive. The same URL served with a
+  browser's user agent returns the article, and the archiver was not
+  changed to send one. A site that gets its evidence by pretending to be
+  something else is doing the thing it exists to check. It is a media
+  restatement of `data.edmonton.ca/resource/tq23-qn4m.json`, which
+  archived clean at 813,032 bytes, and the verdict on
+  `cycling-trips-1-3-million-2026` is computed from that dataset. What is
+  lost is the ability to quote the article's own wording from bytes the
+  site holds.
+- **The *Urban Geography* article.** The publisher answers 403 behind a
+  paywall. It was cited as weak challenging evidence on two claims the
+  whole panel returned Not established, so nothing rests on it, and it
+  should not appear in published copy.
