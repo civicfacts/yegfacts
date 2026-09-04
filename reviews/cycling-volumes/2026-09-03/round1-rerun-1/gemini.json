@@ -1,0 +1,125 @@
+{
+  "reviewer": {
+    "provider": "google",
+    "model_self_reported": "Gemini 3.8 Flash (High)",
+    "runner_model": "gemini-3.1-pro",
+    "runner_seat": "Gemini 3.1 Pro",
+    "runner_effort": "high"
+  },
+  "story": "cycling-volumes",
+  "round": 1,
+  "claims": [
+    {
+      "id": "cycling-trips-1-3-million-2026",
+      "proposition_evaluated": "Edmonton's automated counters recorded nearly 1.3 million cycling trips in the first seven months of 2026.",
+      "interpretation_notes": "The claim is evaluated strictly against the City of Edmonton's automated Eco-Counter open data portal records between 2026-01-01 and 2026-07-31 inclusive. While the holder and media commentators describe the recorded total as 'cycling trips,' automated sensor equipment measures bicycle passages (counts past fixed sensors) rather than complete origin-destination journeys or unique individuals. Under the brief's fixed primary threshold (Supported if total is 1.10M to <1.50M), the recorded total of 1,291,714 bicycle counts falls directly in the Supported range (just 8,286 counts shy of 1.3 million). Under the brief's tighter alternative cutoff (Supported if total is 1.17M to <1.43M, within 10% of 1.3M), the verdict is also Supported.",
+      "verdict": "Supported",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Between 2026-01-01T00:00:00 and 2026-07-31T23:45:00 inclusive, the City of Edmonton's automated Eco-Counter dataset recorded an aggregate sum of exactly 1,291,714 bicycle counts across 48 reporting counter locations.",
+          "source_title": "Bike and Pedestrian Counts (Eco Counter)",
+          "source_url": "https://data.edmonton.ca/Monitoring-and-Data-Collection/Bike-and-Pedestrian-Counts-Eco-Counter-/tq23-qn4m",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-09-03",
+          "source_type": "observed-data",
+          "establishes": "The exact total number of bicycle counts logged by municipal automated counters during the first seven months of 2026 is 1,291,714, directly substantiating the circulating figure of 'nearly 1.3 million'.",
+          "quote": "This dataset contains bicycle only or bicycle and pedestrian counts that are currently being monitored at a number of locations... along bike lanes in addition to some key cyclist/pedestrian traffic areas.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Media analysis of municipal sensor data published by Taproot Edmonton in August 2026 reported that Edmonton recorded nearly 1.3 million cycling trips across its sensor network in the first seven months of 2026, establishing the public provenance of the circulating figure.",
+          "source_title": "The Pulse: Aug. 10, 2026",
+          "source_url": "https://edmonton.taproot.news/",
+          "source_publisher": "Taproot Edmonton",
+          "source_date": "2026-08-10",
+          "source_type": "media",
+          "establishes": "The origin of the circulating public claim is local media analysis summarizing open dataset tq23-qn4m through July 31, 2026.",
+          "quote": "An analysis of data from the city's nearly 50 cycling sensors recorded 1.3 million cycling trips within the first seven months of 2026.",
+          "strength": "moderate"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The City of Edmonton's open data metadata explicitly labels these records as raw 'counts' rather than 'trips' or unique riders, and notes that data has not undergone quality control/quality assurance and may contain missing periods.",
+          "source_title": "Bike and Pedestrian Counts (Eco Counter)",
+          "source_url": "https://data.edmonton.ca/Monitoring-and-Data-Collection/Bike-and-Pedestrian-Counts-Eco-Counter-/tq23-qn4m",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-09-03",
+          "source_type": "observed-data",
+          "establishes": "A counter count is a passage past a fixed monitoring point, not a trip or a person. Single journeys crossing multiple sensors or round-trip commutes trigger multiple counts, while trips on unmetered corridors generate zero counts.",
+          "quote": "Also, this data is raw data, coming straight from the monitoring equipment. It has not undergone the rigour of a Quality Control and/or Quality Assurance process.",
+          "strength": "strong"
+        },
+        {
+          "finding": "For the identical seven-month window (Jan 1 to Jul 31), automated counters recorded 1,611,749 bicycle counts in 2025 and 1,547,532 bicycle counts in 2024, demonstrating that the 2026 volume (1,291,714) represents a 19.86% year-over-year decline compared to 2025 and a 16.53% decline compared to 2024.",
+          "source_title": "Bike and Pedestrian Counts (Eco Counter)",
+          "source_url": "https://data.edmonton.ca/Monitoring-and-Data-Collection/Bike-and-Pedestrian-Counts-Eco-Counter-/tq23-qn4m",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-09-03",
+          "source_type": "observed-data",
+          "establishes": "While the 1.29 million total matches the stated claim, citing the raw 1.3 million figure in isolation masks a significant year-over-year drop in counted volume between 2025 and 2026.",
+          "quote": "Total cyclist count sum: 1,611,749 (2025-01-01 to 2025-07-31); 1,547,532 (2024-01-01 to 2024-07-31).",
+          "strength": "strong"
+        },
+        {
+          "finding": "Nearly half (49.96%, 645,349 counts) of the 2026 total volume was recorded on off-street shared pathways, bridges, and river valley trails rather than on-street bike lanes, with a single shared pathway counter (High Level Bridge West) accounting for 127,740 counts (9.89% of the entire network total).",
+          "source_title": "Bike Counter Locations (Eco Counter) & Bike Routes",
+          "source_url": "https://data.edmonton.ca/Monitoring-and-Data-Collection/Bike-Counter-Locations-Eco-Counter-/py7x-4d39",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-09-03",
+          "source_type": "observed-data",
+          "establishes": "The network total cannot be interpreted as solely reflecting use of on-street protected bike lanes, as multi-use trails and river valley crossings generate half of all recorded bicycle passages.",
+          "quote": "High Level Bridge West (Cyclist and Pedestrian) recorded 127,740 cyclist counts; Belgravia Rd Foot Bridge SUP recorded 59,526 counts.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "Counters record point passages, not individual people or complete journeys. A commuter riding past three counters on a one-way trip generates three counts; a person riding on an unmetered residential street generates zero counts.",
+        "The City explicitly notes the Eco-Counter dataset is raw data without quality assurance or control; sensor downtime or recalibration can affect readings.",
+        "Coverage is non-comprehensive: only 41 active bicycle-detecting counters monitor a network spanning hundreds of kilometres of roadways and trails.",
+        "The City has not published an official analytical report validating the 1.3 million figure; the number reflects third-party media aggregation of raw open data."
+      ],
+      "unknowns": [
+        "The exact number of unique individuals or distinct trips represented by the 1,291,714 recorded passages.",
+        "The exact volume of uncounted cycling trips occurring across Edmonton corridors that lack automated Eco-Counters.",
+        "The precise meteorological or construction factors driving the 19.86% volume reduction between Jan-Jul 2025 (1.61M) and Jan-Jul 2026 (1.29M)."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Quality-controlled annual active transportation monitoring report adjusting raw counter passages for sensor downtime, calibration drift, and trip chain factors.",
+          "likely_holder": "City of Edmonton (Urban Planning and Economy / Parks and Roads Services)",
+          "importance": "high"
+        },
+        {
+          "description": "Network-wide origin-destination travel diary data measuring total daily bicycle trips and distinct users across Edmonton for 2026.",
+          "likely_holder": "City of Edmonton / Edmonton Metropolitan Region Board (Navigating Tomorrow Household Travel Survey)",
+          "importance": "critical"
+        }
+      ],
+      "calculations_needed": [
+        "Network total count sum (2026-01-01 to 2026-07-31): sum(total_cyclist_count) = 1,291,714 counts across 933,576 records (15-minute intervals).",
+        "Preceding year 2025 comparison (2025-01-01 to 2025-07-31): sum(total_cyclist_count) = 1,611,749 counts across 936,958 records (-19.86% change in 2026).",
+        "Preceding year 2024 comparison (2024-01-01 to 2024-07-31): sum(total_cyclist_count) = 1,547,532 counts across 964,411 records (-16.53% change in 2026).",
+        "Reporting counters breakdown: 48 total locations logged records in window; 41 tracked cyclists (recorded >0 counts), 7 were pedestrian-only (recorded 0 cyclist counts). All 48 locations are catalogued in location dataset py7x-4d39.",
+        "Missing days / downtime: 41 counters reported all 212 days; 1 counter was added partway through the period (103 Street N of 102 Avenue began 2026-05-07, 86 active days, 126 missing days); 4 cyclist counters had partial downtime (Terwillegar Park Footbridge: 141 active days, 71 missing; 103 Street N of 100 Avenue: 131 active days, 81 missing; Gold Bar Trail: 202 active days, 10 missing; 102A Avenue W of 96 Street: 205 active days, 7 missing). Total missing counter-days across active cyclist counters: 295 counter-days. No gap-filling was applied by the City; reported total is raw sum.",
+        "Busiest counter: High Level Bridge West (Cyclist and Pedestrian) recorded 127,740 counts (9.89% of network total). Second busiest was 83 Avenue W of 99 Street (Cyclist Only) with 102,494 counts (7.93%).",
+        "Facility split via spatial join with Bike Routes (vd4b-a4iv, <=30m nearest segment): ON ROAD (on-street bike lanes) accounts for 20 counters and 646,365 counts (50.04%); OFF ROAD (shared-use paths, trails, bridges) accounts for 27 counters and 645,349 counts (49.96%); Unclassifiable accounts for 1 counter (Funicular @ 100 St, distance >30m, pedestrian-only with 0 cyclist counts).",
+        "Configuration breakdown: 'Cyclist and Pedestrian' counters recorded 676,533 counts (52.37%); 'Cyclist Only' recorded 604,543 counts (46.80%); 'Cyclist and e-Scooter' recorded 10,638 counts (0.82%)."
+      ],
+      "what_would_change_my_verdict": [
+        "If the City of Edmonton updated or corrected its raw 2026 Eco-Counter dataset such that the aggregate sum of bicycle counts between Jan 1 and Jul 31 fell below 1.10 million or exceeded 1.50 million, the verdict would change to Partially supported or Contradicted.",
+        "If an official municipal audit or sensor QA process revealed that major sensor locations experienced systemic false-positive counting errors of more than 15% across the network."
+      ],
+      "suggested_one_line": "Edmonton's automated counters did record nearly 1.3 million bicycle passages (1,291,714) in the first seven months of 2026, though counters record point passages rather than distinct trips or individuals, and half of all counts occurred on off-street multi-use trails.",
+      "suggested_short_answer": "Supported. City of Edmonton automated Eco-Counter open data records an aggregate of 1,291,714 bicycle counts from January 1 through July 31, 2026, across 41 cyclist-detecting monitoring locations. This directly substantiates the circulating claim of 'nearly 1.3 million.' However, these records measure point-in-time passages rather than unique individuals or complete trips, volume dropped nearly 20% compared to the 1.61 million counts recorded over the same period in 2025, and 50.0% of counts occurred on off-street shared pathways and river valley trails rather than on-street bike lanes.",
+      "suggested_tldr": [
+        "Automated counters recorded 1,291,714 bicycle passages between Jan 1 and Jul 31, 2026, confirming the 1.3 million count figure.",
+        "A counter count is a passage past a fixed sensor, not a unique person or trip; round-trips and multi-sensor routes trigger multiple counts.",
+        "The 2026 volume represents a 19.9% decline compared to the 1,611,749 counts logged during the same seven months in 2025.",
+        "Usage is split evenly between on-street bike lanes (50.0%) and off-street shared pathways/bridges (50.0%), led by High Level Bridge West (127,740 counts)."
+      ]
+    }
+  ]
+}

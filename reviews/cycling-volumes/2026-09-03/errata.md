@@ -19,9 +19,76 @@ canonical basis is `round1/`. `run.yaml` describes the rerun; the
 manifest as it stood for the halted round is copied at
 `round1-superseded/run.yaml`.
 
-## 2. The Gemini seat produced no valid round 2
+## 2. The Gemini seat's round 2, failed then recovered
 
-`run.yaml` records the Gemini seat's round 2 as `failed` after two
+**Read item 2a first.** The account below is what the record held before
+the cross-review prompt was corrected, and it is kept unedited because it
+is what a reader checking the failure needs. `round2/gemini.json` now
+holds a valid review from that seat; the file described below,
+`round2/gemini-invalid-output.txt`, is still committed and is still not a
+review.
+
+### 2a. What happened afterwards
+
+`prompts/cross-review.md` was read against `prompts/review-schema.json`
+and found underspecified on exactly the two fields that failed. Round 1's
+prompt hands the seat every value the schema constrains, verbatim; round
+2's named two fields and specified the shape of neither, asked for "the
+reason" where the schema's key is `why`, and asked for four attributes
+per error in a field the schema types as one bare string. The prompt was
+corrected under methodology v1.21; the schema was not touched. The run
+record's "Stage 7" has the reasoning in full.
+
+The seat was then re-run once on the same round-2 package construction
+under the amended prompt and **validated on its first attempt**. Five
+cross-review findings came back: four of the six items in the invalid
+output and one new one. The two items not recovered are the two that were
+corrections to its own round 1 rather than findings about another seat,
+which the valid pass correctly left out of a field named
+`errors_in_other_reviews`. They are still readable in the invalid file:
+its round-1 citation of `tq23-qn4m` for the 2014 Insight Community survey,
+which belongs to `nhbh-yj57`, and its round-1 "1.1 percent, about 4,600"
+bicycle-commuter figure for 2016, where the census records 5,575 of
+466,230.
+
+**The manifest row that recorded the failure**, replaced by the re-run
+because `record-run.ts` keeps one row per seat per round, quoted here so
+it is not lost:
+
+    - provider: google
+      round: 2
+      command: agy --effort high --sandbox --dangerously-skip-permissions --print-timeout 45m -p "$(cat package.md)"
+      cli_version: 1.1.25
+      model_id: gemini-3.1-pro
+      seat: Gemini 3.1 Pro
+      reasoning_effort: high
+      prompt_sha256: b41d6f5257989238596508385a198a4d03d5ddef5e77866a652fbf0c71d95cef
+      methodology_version: "1.20"
+      started_at: 2026-09-04T02:42:28Z
+      finished_at: 2026-09-04T02:51:49Z
+      attempts: 2
+      status: failed
+
+**The anachronistic `verdict_changes` entry survived into the valid
+file.** Its single entry still reports `bike-lanes-look-empty` moving
+from Not established to Contradicted and gives the brief's revision as
+the reason. That is a change across the halt, from the superseded round
+to the rerun, not a change within the rerun: against its own round-1
+answer on the re-frozen brief the seat did not move, and `round1/gemini.json`
+records Contradicted. `synthesize.ts` prefers a seat's self-reported
+`from` over the committed round-1 file, so `synthesis.json` carries
+`changed_from: "Not established"` for that seat on that claim. **It is
+wrong, and a drafter must not report it as a cross-review position
+change.** The committed round-1 file is the authority; a seat's account of
+its own earlier verdict is not.
+
+### 2b. The failure as the record held it
+
+Written before the re-run, and left as written. Its present tense
+describes the record as it stood then: `run.yaml` now carries the
+successful row, and the failed one is quoted above.
+
+`run.yaml` recorded the Gemini seat's round 2 as `failed` after two
 attempts. That is the second runner invocation: the seat was invoked
 twice, made two attempts each under the runner's one-retry rule, and all
 four outputs failed validation against `prompts/review-schema.json` on
@@ -72,3 +139,33 @@ Statistics Canada Census Profile deep links return HTTP 200 over a "File
 not found" body and carry the GPT seat's strong citations on both census
 claims; four other URLs failed outright. Both census claims are carried
 on other seats by StatCan tables that archived clean.
+
+**All seven were resolved before drafting**, and `fetch-report.md`'s
+"Resolutions" section names each with the cited form and the archived
+form. Two were never unarchivable: the staging script's ten-second
+whole-request deadline was cancelling downloads in progress, and it is
+now sixty seconds. Five have a stable archived form. Two cannot be
+archived at all — the CBC article, which the publisher refuses to the
+archiver's user agent, and a paywalled *Urban Geography* article — and
+`fetch-report.md` says which claim each supports and how much of it
+rests on them, which in both cases is nothing.
+
+## 4. Claim 1 was answered twice, blind, and the second answers are the basis
+
+`round1-rerun-1/` holds a fresh blind round 1 on
+`cycling-trips-1-3-million-2026` alone, run under methodology v1.22 after
+round 2 caught one seat resting its verdict on a developer-portal page
+rather than the dataset. The frozen brief is unchanged and its hash still
+verifies; only the package wrapper differs, naming the one claim to
+answer.
+
+**For that claim, `round1/` is the superseded record.** It is not edited
+and not deleted, and it remains the canonical basis for the other seven
+claims. `synthesis.json` names each claim's basis, so no reader has to
+infer which. The re-run's own manifest, with its seat commands and its
+own `prompt_sha256`, is `round1-rerun-1/run.yaml`.
+
+**The finding did not change.** All three seats returned what they had
+returned before, so the multiset and therefore the verdict and the panel
+agreement are the same. The run record's "Stage 6" says what that means
+and why it is worth having anyway.

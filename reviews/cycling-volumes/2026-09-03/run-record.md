@@ -1,13 +1,15 @@
 # Run record: `cycling-volumes`, run 2026-09-03
 
-Stage: round 1, rerun. Methodology v1.20.
+Stage: synthesised, before drafting. Methodology v1.22.
 
 This file records what happened to the brief between drafting and
 freezing: every framing-check report, what the editor adopted and what
 the editor rejected, and the hash the frozen brief sits behind. From
 "Stage 2" onward it records what happened after the freeze, including
 the panel's own framing concern, the revision it forced under
-methodology v1.2, and the re-freeze.
+methodology v1.2, the re-freeze, the blind re-run of claim 1 under
+methodology v1.22, and the round 2 that was recovered after the
+cross-review prompt was corrected under methodology v1.21.
 
 ## Stage 1, framing
 
@@ -709,6 +711,241 @@ Split at Partially supported although all three seats ended at
 Supported. That is the rule working as designed — the panel is only
 genuinely independent in round 1 — and it is recorded here so the story
 does not present three agreeing seats as a split without explaining why.
+
+## Stage 6, the blind re-run of claim 1
+
+Under methodology v1.22, added for this. What follows is the whole
+sequence in order, because the point of a re-run is that a reader can
+see it rather than be told about it.
+
+### Why it happened
+
+`cycling-trips-1-3-million-2026` synthesised **Partially supported** on a
+**Split** panel. The multiset it was computed from is the round-1 one:
+Claude Supported, Gemini Supported, GPT Not established. But by the end
+of round 2 all three seats stood at Supported. GPT's round-1 Not
+established was not a reading of the counts. It rested on a
+developer-portal page, `dev.socrata.com/foundry/data.edmonton.ca/tq23-qn4m`,
+which gives the dataset's last update as 2026-07-22; under the brief's
+short-window rule an update before 2026-07-31 forces Not established. In
+round 2, with the other two seats' work in front of it, that seat queried
+the dataset directly, found records through 2026-07-31 and a total of
+1,291,714, and moved to Supported.
+
+So the suspicion was that the round-1 verdict recorded an omission rather
+than a judgement about the evidence: a seat that had not yet looked at the
+source, not a seat that had looked and disagreed. That is a material catch
+of the kind stage 4 of `docs/DESIGN.md` describes, and stage 4's answer is
+a fresh blind re-run of the affected claim, never a correction inside the
+run. The editor could not have applied that answer before this run:
+`scripts/synthesize.ts` read one directory and had no way of being told a
+claim's answers were superseded. So the mechanism was built first, as
+methodology v1.22, and then used.
+
+### What the seats were given
+
+All three seats, blind, in fresh scratch directories, `claim 1 only`.
+The package is the round-1 rerun's construction: the frozen brief, byte
+for byte, at sha256
+`86f4df04e2037914fe9dfe81f256f10266635420f8c6aae22a43a5b1d83289fc`;
+`prompts/reviewer.md`; `prompts/review-schema.json`. The only addition is
+a scoping paragraph in the package wrapper naming
+`cycling-trips-1-3-million-2026` as the one claim to answer. The scoping
+is in the wrapper and not in the brief because editing a frozen brief
+makes it a different brief needing a different check, and because the
+freeze hash has to keep verifying. Nothing in the package says a prior
+round happened, what any seat found, or why the claim came back. The
+`prompt_sha256` is
+`36abb7db2cb923752b70863391f9254431ce36101f86652ab0cecadd070cfbe4`,
+identical for all three seats, and `round1-rerun-1/run.yaml` records each
+seat's command, CLI version and timings.
+
+The answers are at `round1-rerun-1/`. `round1/` was not touched: it is
+still the three seats' answers to the package whose hash `run.yaml`
+records, and for claim 1 it is now the superseded record, sitting beside
+what replaced it.
+
+### The superseded verdicts, and the new ones
+
+| Seat | Round 1 (`round1/`, superseded for this claim) | Blind re-run (`round1-rerun-1/`) |
+| --- | --- | --- |
+| Claude Opus 5 | Supported (High) | Supported (High) |
+| Gemini 3.1 Pro | Supported (High) | Supported (High) |
+| GPT-5.6 Sol | Not established (Moderate) | Not established (Moderate) |
+
+One attempt each, all schema-valid, no framing concern from any seat.
+
+### What the re-run found, which is not what it was expected to find
+
+**The re-run did not change the finding.** The multiset is the same,
+`{Supported, Supported, Not established}`, so claim 1 is still Partially
+supported on a Split panel. What changed is what the record can say about
+why.
+
+The two seats that queried the dataset directly agree on the number to
+the unit. Claude reports 1,291,714 as the sum of `total_cyclist_count`
+over 933,576 fifteen-minute records at 48 counter locations for
+`log_timestamp` from 2026-01-01 to 2026-07-31 inclusive, and states that
+the figure sits inside the Supported band under both cutoff sets, so the
+claim is not definition-sensitive here. Gemini reports the same
+1,291,714 and the same conclusion under both sets.
+
+GPT-5.6 Sol, blind and with no round-2 work in front of it, went to the
+same developer-portal page, read the same 2026-07-22 update date, and
+returned Not established again at Moderate confidence, recording in its
+limitations that it could not verify a newer dataset update as of
+2026-09-03. Its own `what_would_change_my_verdict` says a complete
+dataset through 2026-07-31 totalling between 1.10 and 1.50 million would
+make it Supported — which is exactly what the other two seats produced
+from the dataset itself.
+
+**So the premise the re-run was ordered on was wrong, and saying so is the
+point.** The expectation was that the round-1 verdict was a one-off
+omission that a fresh pass would not repeat. It repeated. This is a
+reproducible position of that seat on this brief: handed the claim twice,
+blind, it reaches for the dataset's published metadata rather than the
+dataset, and stops there. Only when it is handed another seat's direct
+query does it query directly itself. That is a fact about the seat and
+about what this brief asks of it, and it is worth more than the verdict
+change the re-run was expected to produce. A mechanism that could only
+confirm what the editor already believed would not be worth having.
+
+**What a reader should take from the finding.** Partially supported on a
+Split panel is now a description of a panel that genuinely splits when
+its seats are independent, not an artefact of one seat's first pass. The
+split is not about the number: no seat disputes 1,291,714, and the seat
+that returned Not established never saw it. It is about whether the
+published record could be shown to cover the window. Two seats showed
+that it does. The third could not, and said so rather than guessing,
+which is the behaviour the reviewer prompt asks for.
+
+`synthesis.json` now names each claim's basis. Claim 1 reads
+`round1-rerun-1`; the other seven read `round1`.
+
+## Stage 7, the Gemini round 2 recovered
+
+### The prompt was underspecified, and that is the finding
+
+`errata.md` recorded four attempts all failing schema validation on the
+same two fields. Reading `prompts/cross-review.md` against
+`prompts/review-schema.json` shows why, and it is not only the seat.
+
+Round 1's prompt hands the seat every value the schema constrains,
+verbatim: the four verdict words, the three confidence levels, all six
+`evidence_basis` labels. Round 2's prompt named two fields and specified
+the shape of neither. It asked the seat to "record every change in
+`verdict_changes` with the reason" — where the schema's key is `why`, and
+`reason` is what the seat wrote. And it asked, for each error found in
+another review, for four things: whose review, which claim, which
+citation, what is wrong with it — in `errors_in_other_reviews`, which the
+schema types as an array of bare strings. `errors_in_other_reviews` and
+`evidence_i_missed` are the only two lists in the whole schema that hold
+substantive findings as strings; every comparable list, `verdict_changes`
+and `missing_evidence` and the evidence items included, is an array of
+objects. A seat generalising from the schema's own conventions would
+write objects there, and this one did.
+
+Both fields the seat got wrong are exactly the two the prompt left
+unspecified, and one of them it got wrong in the prompt's own noun.
+Round 2 is also the only part of the schema round 1 never exercises, so
+it is the only part a seat meets cold.
+
+The fix is in the prompt, not the schema (methodology v1.21).
+`prompts/cross-review.md` now states that `round2_notes` has three fields
+and no others, that two of them are arrays of strings, that the four
+attributes go into the one string, and that `verdict_changes` takes
+exactly `claim`, `from`, `to` and `why`. **The schema was not relaxed.**
+Widening it to accept the objects the seat emitted would make the
+contract follow the failure, and would invalidate every round 2 already
+committed under it, this run's other two included.
+
+**The seat is not thereby exonerated.** The runner's one retry appends
+the validator's exact errors to the package, so the seat was told which
+fields were wrong and returned them wrong again. An underspecified prompt
+explains a first attempt; it does not explain a fourth.
+
+### The re-run, and what came back
+
+One invocation of `scripts/panel/run-reviewer.sh agy cycling-volumes
+2026-09-03 2` under the amended prompt: **valid on the first attempt**.
+Same seat, same CLI version, same package construction, one prompt
+paragraph different, and the failure did not recur. The review is at
+`round2/gemini.json`, `prompt_sha256`
+`f562837169ca6e7808bee4361f6faf1e4a1cb20c6553b3c10aa2140e944ada74`. The
+manifest row that recorded the failure is quoted in `errata.md`, because
+`record-run.ts` keeps one row per seat per round and this re-run replaced
+it.
+
+Its eight verdicts are identical to its own round 1, so nothing it
+returned moves a position, and round 2 could not move one anyway.
+
+**Five cross-review findings, four of them recovered and one new.** The
+invalid output held six items; two of those were corrections to its own
+round 1 rather than findings about another seat, and on the valid pass
+the seat put only other seats' errors in a field named for them. So four
+of the six are recovered, one is new, and the two self-corrections are
+not in the valid file. What the five say:
+
+1. **GPT on `cycling-trips-1-3-million-2026`**, citation does not
+   establish what it was cited for. The developer-portal page carries
+   static documentation metadata, not the dataset; the dataset itself
+   covers the window and totals 1,291,714. This is the same catch that
+   sent claim 1 back for its blind re-run, found independently by a third
+   seat.
+2. **GPT on `bike-lanes-look-empty`**, method not executed. It answered
+   from 2017–2021 annual counts in a Bike Plan implementation PDF rather
+   than the brief's five membership tests over `tq23-qn4m` and
+   `vd4b-a4iv` for July 2025. GPT's own round 1 says it could not run the
+   spatial join, so the two accounts agree on what happened.
+3. **GPT on `one-percent-year-round-users`**, wrong denominator. The
+   City's "one in four cyclists rides all year" divides by cyclists, not
+   by residents, and cannot bound a whole-population share. GPT had noted
+   the same thing in its limitations.
+4. **Claude on `riders-are-recreational-not-commuters`**, priority rule
+   bypassed. It derived roughly 21,379 commute against 11,994
+   recreational bicycle trips by multiplying the 2015 household travel
+   survey's rounded integer modal shares by all-mode totals. The brief's
+   ladder says to return Not established first if no published Edmonton
+   source breaks bicycle trips down by purpose or if the categories
+   cannot be mapped completely onto recreation and commuting, and Table
+   3-10 does neither.
+5. **GPT on the same claim**, the same objection to the same derivation.
+
+Findings 4 and 5 bear on a published finding: `riders-are-recreational-
+not-commuters` synthesised Contradicted on an Adjacent panel from
+Claude's Contradicted, GPT's Contradicted and Gemini's Not established,
+and this says both Contradicted verdicts reached the substantive question
+by arithmetic the brief's own priority rule forbids. **Round 2 documents
+errors and never moves a finding** (methodology v1.3), so the finding
+stands as computed and this objection is recorded against it rather than
+applied to it. It is the third seat's reason for its own Not established,
+now written out against the other two, and a drafter must not write that
+claim as though the panel merely disagreed about evidence. Whether it is
+a material catch of the kind that earns a blind re-run under v1.22 is a
+question for the editor before drafting, and it is not answered here.
+
+The seat also listed seven pieces of evidence it had missed, six of them
+Claude's or GPT's Statistics Canada and City open-data work, including
+the systematic check across 8,269 released StatCan tables that no
+published table carries a cycling participation rate for Edmonton — which
+is what the two participation claims' unanimous Not established rests on.
+
+## The finding table as it now stands
+
+| Claim | Finding | Panel agreement | Basis |
+| --- | --- | --- | --- |
+| `cycling-trips-1-3-million-2026` | Partially supported | Split | `round1-rerun-1` |
+| `bike-lanes-look-empty` | Contradicted | Adjacent | `round1` |
+| `one-to-two-percent-of-population-rides` | Not established | Unanimous | `round1` |
+| `one-percent-year-round-users` | Not established | Unanimous | `round1` |
+| `two-percent-of-trips-by-bike` | Supported | Unanimous | `round1` |
+| `under-one-percent-of-commuters-cycle` | Supported | Unanimous | `round1` |
+| `87-percent-commute-by-car` | Supported | Unanimous | `round1` |
+| `riders-are-recreational-not-commuters` | Contradicted | Adjacent | `round1` |
+
+No finding changed. Round 2 is now complete on all three seats, and the
+citations are resolved in `fetch-report.md` rather than left for the
+gate.
 
 No story, answers or reader-facing copy have been drafted. The next
 stages are drafting, faithfulness and the publication gate, none of them
