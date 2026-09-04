@@ -135,10 +135,9 @@ so the panel reads it rather than taking a figure from here.
    Implementation Acceleration Program Update", Infrastructure Committee,
    2026-08-26,
    https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304024
-   Recorded in this repository's earlier intake record for the
-   active-transportation question, which quotes it. The meeting portal
-   returned HTTP 403 to this session's fetch tool, so nothing from it is
-   quoted here.
+   The drafting session's fetch tool returned HTTP 403. It was obtained on
+   2026-09-04 by a second session; what it and its attachments say is
+   recorded below, under "Report IS03688, obtained".
 3. City of Edmonton, The Bike Plan (2020),
    https://www.edmonton.ca/sites/default/files/public-files/COE_The_Bike_Plan.pdf
    and the Bike Plan Implementation Guide,
@@ -177,6 +176,193 @@ so the panel reads it rather than taking a figure from here.
 CBC News pages returned HTTP 403 to this session's fetch tool, as they did
 during the earlier active-transportation intake, so no CBC sentence is
 quoted anywhere in this run.
+
+## Report IS03688, obtained
+
+Added 2026-09-04 by Stew. The drafting session could not open the City's
+meeting portal: every browser-style fetch it had returned HTTP 403, and
+the whole route set in the brief rested on a document nobody had read. A
+plain `curl` with an ordinary browser user-agent returned HTTP 200 and a
+395,857-byte PDF, and the attachments are at consecutive DocumentIds on
+the same endpoint. All of the following was read on 2026-09-04 from the
+PDFs those URLs return. Nothing here is quoted from news coverage.
+
+- Report IS03688, 9 pages, DocumentId 304024.
+- Attachment 1, "Examples of Active Transportation Infrastructure",
+  DocumentId 304025.
+- Attachment 2, "Options and Trade-offs in Active Transportation
+  Infrastructure Design", DocumentId 304027, and a version headed
+  REPLACEMENT at DocumentId 304026.
+- Attachment 3, "Locations & Status Updates", DocumentId 304029, and a
+  version headed REPLACEMENT at DocumentId 304028.
+- Attachment 4 is PRIVATE and is not published.
+- Attachment 5, "Modified Approach for the Active Transportation Network
+  Expansion Program", DocumentId 304032, and two versions headed
+  REPLACEMENT at DocumentIds 304030 and 304031.
+
+### The report does not enumerate the routes; Attachment 5 does
+
+The report body names no route. Its recommendation 1 is "That the
+updated approach for the remaining routes under the Active
+Transportation Network Expansion Program, as outlined in Attachment 5 of
+the August 26, 2026, Infrastructure Services report IS03688, be
+approved." Its attachment list ends: "5. Modified Approach for the
+Active Transportation Network Expansion Program".
+
+Attachment 5 carries two lists. Under "Will be reevaluated for
+feasibility and subject to funding availability" it names fourteen
+projects, verbatim and in this order:
+
+1. 50 Street (101 Avenue to 109A Avenue)
+2. 64 Street (119 Avenue to Yellowhead Trail)
+3. 79 Street (76 Avenue to 101 Avenue)
+4. 84 Avenue (79 Street to 83 Street)
+5. 85 Street (93 Avenue to 98 Avenue)
+6. 88 Avenue/93 Street/87 Avenue (85 Street to 96 Street)
+7. 89 Street (76 Avenue to Connors Road)
+8. 92A Avenue/86 Street/alley (Connors Road to 85 Street)
+9. 93 Street (82 Avenue to 84 Avenue) and 84 Avenue (91 Street to 89 Street)
+10. 93 Avenue/82 Street/94 Avenue (85 Street to 75 Street) and 75 Street
+    (94 Avenue to 94B Avenue)
+11. 95 Avenue (142 Street to 163 Street)
+12. 101 Avenue (50 Street to west of 84 Street)
+13. 106 Avenue (50 Street to west of 84 Street)
+14. Grovenor - 148 Street (Stony Plain Road to 104 Avenue), 104 Avenue
+    (142 Street to 149 Street) and 144 Street (Stony Plain Road to 107
+    Avenue)
+
+Under "Will continue as planned" it names thirteen:
+
+1. 50 Street (109A Avenue to Goldbar Park Road)
+2. 84 Avenue (Mill Creek Ravine to 91 Street)
+3. 100 Street (76 Avenue to 80 Avenue)
+4. 107 Avenue (East of Groat Road to 163 Street)
+5. 110 Avenue/90 Street (92 Street to 112 Avenue) and 112 Avenue
+   (90 Street to 76 Street)
+6. 111 Avenue (120 Street to 121 Street)
+7. 114 Avenue (81 Street to 89 Street)
+8. 127 Avenue (97 Street to 102A Street)
+9. 163 Street from 87 Avenue to 95 Avenue
+10. 163 Street (Stony Plain Road to 107 Avenue)
+11. 167 Street/169 Street (Whitemud Drive to 87 Avenue)
+12. Kingsway (113 Street to 122 Street)
+13. Victoria Park Road (116 Street to River Valley Road)
+
+The two lists are word-for-word identical in all three published
+versions of Attachment 5 (304030, 304031, 304032), which differ only in
+how they describe the decision rule. Fourteen and thirteen are also the
+counts Taproot reported on 2026-09-01 without naming a source document.
+
+### What the report says about consultation, verbatim
+
+These are the operative sentences. They are recorded here, and not in
+the brief, because the brief may not tell the panel what the record
+holds.
+
+Report IS03688, Executive Summary, page 2:
+
+> To fast-track the network's expansion in accordance with Council's
+> direction, designs were developed based on technical and safety
+> requirements, City policies and The City Plan. Engagement was limited
+> to targeted engagement with directly impacted property owners during
+> design, where required, and leveraging previous engagement data
+> collected during the development of the Bike Plan.
+
+Report IS03688, "Rapid Implementation", pages 3-4, under the bullet
+headed "Focused Public Engagement":
+
+> Citywide engagement during the development of the Bike Plan was used
+> to inform the development of the future network plan. The Bike Plan
+> envisioned additional opportunities for community insight as part of
+> the planning and design of individual routes. However, to support the
+> accelerated timelines of the Program, the project team adapted its
+> engagement strategy. This included leveraging input from previous
+> engagement wherever possible and a focused advising approach suited to
+> the rapid delivery model.
+
+Report IS03688, "Community Insight", page 6:
+
+> The Bike Plan was the culmination of two years of engagement with
+> Edmontonians. Throughout the 62 public events, including workshops,
+> pop up events, drop-in sessions, surveys and community conversations,
+> more than 11,500 Edmontonians provided feedback about biking in
+> Edmonton. Engagement for the Bike Plan, however, did not consider
+> details of implementation. As a result, when the Active Transportation
+> Network Expansion Program was approved in 2022, specific community
+> insight regarding rapid implementation was not available.
+
+And, on the same page:
+
+> Beyond technical and safety requirements and City policies, designs
+> were developed relying largely on previous engagement insights and
+> targeted public engagement where needed.
+
+Report IS03688, page 7:
+
+> Since 2023, the Active Transportation Network Expansion Program team
+> has received over 1,000 email and phone inquiries. Positive public
+> sentiment shared with the City represents a small portion of the
+> overall inquiries received - averaging around two per cent.
+
+Attachment 2, "Rapid Implementation and Adaptable Infrastructure":
+
+> the Active Transportation Network Expansion Program to date has
+> largely been completed in a rapid fashion, with limited engagement,
+> using adaptable infrastructure
+
+Report IS03688, page 8, on one narrow kind of contact:
+
+> The City has mapped existing accessible parking along the proposed
+> routes and has consulted with residents to confirm whether designated
+> zones are still in use.
+
+**What this does to the brief, said plainly.** The City's own report
+characterises the programme's engagement, at programme level, in terms
+that make the brief's primary definition — an activity that is
+route-specific, open to the neighbourhood, and before the build — look
+very hard to satisfy on most routes. That is a fact about the record and
+it is recorded here for the framing checker to rule on. It is not in the
+brief, and the brief must not repeat it: telling the panel what the City
+already conceded is the leak framing check 5 exists to catch. What the
+report says at programme level is also not a per-route record, and the
+panel's job is the per-route reading.
+
+### Construction status, which fixes the cutoff
+
+Attachment 3, "Locations & Status Updates", opens: "The following status
+updates provided are accurate as of August 10, 2026." Against the
+fourteen routes in set S it reports, in substance, that construction has
+started on none of them:
+
+- 84 Avenue (79 Street to 83 Street), 92A Avenue/86 Street/alley
+  (Connors Road to 85 Street) and 93 Street/84 Avenue (89 Street to 82
+  Avenue) each carry "Tender awarded. Construction has not yet started."
+- 64 Street, 79 Street, 85 Street, 88 Avenue/93 Street/87 Avenue, 89
+  Street and 93 Avenue/82 Street/94 Avenue are listed under "The
+  following locations were originally scheduled for construction in
+  2026. While they can be tendered, their installation in 2026 is no
+  longer viable."
+- 50 Street (101 Avenue to 109A Avenue), 95 Avenue, 101 Avenue, 106
+  Avenue and Grovenor are listed under "Some routes do not have a
+  delivery plan and schedule at this time."
+- On 50 Street the attachment records a July 7, 2026 Council motion and
+  adds: "only the segment north of 109A Avenue was advanced for
+  construction starting in 2026. The section from 101 Avenue to 109A
+  Avenue has been paused for reconsideration".
+
+So on the published record the brief's two candidate cutoffs —
+construction start, or the as-of date — coincide for every route in S.
+The cutoff is not verdict-sensitive for this set. The panel still
+confirms it per route.
+
+### What is still not read
+
+Attachment 4 is withheld by the City under the Access to Information
+Act and nobody outside the City has it. The Bike Plan Phase 2 "What We
+Heard" report was still not parsed by any tool in this session, so no
+participation figure from it is stated anywhere in this run; the 62
+events and 11,500 people above are the report's own words about the
+Bike Plan, not that document's.
 
 ## What was searched for and not found
 

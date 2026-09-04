@@ -159,6 +159,57 @@ gives Supported. That divergence is deliberate and is reported, because
 it is exactly the question of whether "zero consultation" survives one
 counter-example.
 
+## 2026-09-04: the hole was closed before the framing check ran
+
+The brief above was drafted over a document nobody had read. Weakness 1
+below says so in the drafting session's own words, and it was right that
+it should have been closed before the freeze.
+
+It has been. The City's meeting portal returns HTTP 403 to browser-style
+fetch tools; a plain `curl` with an ordinary browser user-agent returns
+HTTP 200 and the PDF. Report IS03688 and its four published attachments
+were retrieved that way on 2026-09-04 and read. What they say is written
+into `intake.md` under "Report IS03688, obtained", with the operative
+sentences quoted verbatim and the DocumentId each came from.
+
+What that changed in the brief, before the framing check saw it:
+
+- **The route set is no longer a bet.** The report body names no route.
+  Attachment 5 does, in two lists: fourteen "Will be reevaluated for
+  feasibility and subject to funding availability", thirteen "Will
+  continue as planned". The fourteen are transcribed into the brief so
+  reviewers check the membership rather than build one, and T is fixed at
+  14. The two lists are word-for-word identical across all three
+  published versions of Attachment 5.
+- **The required alternative route set changed.** It was "complete the
+  set from the project page", which existed only because the report might
+  not enumerate the routes. It does. The alternative is now the whole
+  remainder of the programme, all twenty-seven routes in Attachment 5,
+  which is a set a holder of the claim would recognise.
+- **The Not established conditions were rewritten.** Both of the old ones
+  were now known to be false — the routes are enumerated, and the City
+  publishes engagement material about the programme — which would have
+  left one of the four verdicts unreachable. The single condition now is
+  route-level: nothing published either way about engagement on any of
+  the fourteen, so that E = 0 cannot be told apart from a record that was
+  never published.
+- **The cutoff stopped being verdict-sensitive.** Attachment 3 reports
+  construction status per route as of 2026-08-10 and shows construction
+  started on none of the fourteen, so "before construction started" and
+  "before the as-of date" coincide for every route in S. Weakness 4 below
+  is answered by the record rather than by an argument.
+- **The "old data" park's reopening condition narrowed.** It named
+  IS03688 and its attachments as places the vintage might be stated. They
+  have now been read and do not state it, so the condition names the
+  guides and later records instead.
+- **Nothing about what the record shows went into the brief.** The
+  report's own account of the programme's engagement is quoted in
+  `intake.md`, which reviewers never see, and is deliberately absent from
+  the brief. Telling the panel what the City has already conceded is the
+  leak framing check 5 exists to catch. The framing checker sees it,
+  because the checker receives the intake record, and that is the reader
+  it is for.
+
 ## What is weak about this brief
 
 Stated bluntly, because the framing check will find these anyway.
@@ -174,7 +225,9 @@ Stated bluntly, because the framing check will find these anyway.
    fourteen, which suggests the set is enumerable from the record, but I
    have not confirmed it in the report itself. **This is the single
    biggest hole in the brief and it should be closed before the freeze,
-   by someone with a tool that can read the portal.**
+   by someone with a tool that can read the portal.** *Closed on
+   2026-09-04; see the section above. The report does not enumerate the
+   routes — Attachment 5 does, and it names fourteen.*
 2. **I have not read the Bike Plan Phase 2 "What We Heard" report.** The
    fetch returned a PDF the tool could not parse. I therefore assert no
    participation figure anywhere, which is correct behaviour, but it also

@@ -59,10 +59,12 @@ This is the register's own triage reason applied, not a new judgement.
 **Parked: the "old data" strand** of `fast-tracked-without-consultation`
 (one account). "Old" has no published standard here, and the City does
 not publish the vintage of the ridership and safety analysis behind each
-route, so a finding would turn on a threshold this brief invented. It
-reopens if report IS03688, its attachments, or the Bike Plan
-Implementation Guide state the vintage of the data behind route
-prioritisation.
+route, so a finding would turn on a threshold this brief invented.
+Report IS03688 and its published attachments were read on 2026-09-04 and
+state no vintage for that analysis. The strand reopens if the Bike Plan
+Implementation Guide, the Active Transportation Implementation Guide the
+report says is coming to Council in Q4 2026, or any later City record
+states the vintage of the data behind route prioritisation.
 
 **Not tested, and not parked: "fast-tracked".** Nobody disputes it. The
 capital profile funding this work is titled "Active Transportation
@@ -130,13 +132,20 @@ rather than answering a measurable cousin of it.
 
 ## Dates fixed in this brief
 
-**As-of date (freeze date):** 2026-09-03. Anything decided or published
-after it is out of scope.
+**As-of date:** 2026-09-03, the date of the run. Anything decided or
+published after it is out of scope. Documents dated on or before it may
+be read later; the council report and its attachments below were dated
+2026-08-26 and were retrieved on 2026-09-04.
 
 **Cutoff for "before building it":** for each route, the date construction
 started on that route. For a route on which construction had not started
-by 2026-09-03, the as-of date. Both are published or establishable per
-route; reviewers state which they used for each route and their source.
+by 2026-09-03, the as-of date. Reviewers state which they used for each
+route and their source, and Attachment 3 to IS03688, "Locations & Status
+Updates", is where the City states construction status per route, as of
+2026-08-10. Where Attachment 3 reports that construction has not started
+on a route in S, the two candidate cutoffs coincide for that route and
+the choice between them changes nothing; reviewers say for which routes,
+if any, they do not coincide.
 
 ## The claim under review
 
@@ -157,23 +166,53 @@ undefinable and softening it would drain the claim. It names the level
 the record answers at, the route, which is also the level residents argue
 about.
 
-**The route set, fixed here.** Set S is every route that report IS03688,
-"Active Transportation Implementation Acceleration Program Update",
-Infrastructure Committee 2026-08-26
-(https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304024),
-and its attachments identify as recommended for re-evaluation under the
-modified approach. Reviewers list every route in S by the name the report
-gives it, with the neighbourhood or neighbourhoods it runs through and its
-construction year, and state T, the number of routes in S. Where the
-report states a count but names fewer routes than that count, reviewers
-complete the set from the route table on the City's Active Transportation
-Network Expansion project page
-(https://www.edmonton.ca/projects_plans/roads/active-transportation-network-improvements-project),
-list every route they added and the field they matched on, and report
-both T for the report-only set and T for the completed set. The verdict
-uses the report-only set; the completed set is a required alternative,
-reported beside it. No route is added or dropped on a reviewer's reading
-of what a commenter meant.
+**The route set, fixed here.** Set S is the fourteen projects listed
+under the heading "Will be reevaluated for feasibility and subject to
+funding availability" in Attachment 5, "Modified Approach for the Active
+Transportation Network Expansion Program", to Infrastructure Services
+report IS03688, Infrastructure Committee 2026-08-26. The report body
+names no route; Attachment 5 is where the list is. Attachment 5 is
+published in three versions, at
+https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304032
+and, headed REPLACEMENT, at DocumentIds 304030 and 304031 on the same
+endpoint; the two route lists are word-for-word identical in all three.
+The membership is transcribed here so reviewers check it against the
+attachment rather than build a set of their own:
+
+1. 50 Street (101 Avenue to 109A Avenue)
+2. 64 Street (119 Avenue to Yellowhead Trail)
+3. 79 Street (76 Avenue to 101 Avenue)
+4. 84 Avenue (79 Street to 83 Street)
+5. 85 Street (93 Avenue to 98 Avenue)
+6. 88 Avenue/93 Street/87 Avenue (85 Street to 96 Street)
+7. 89 Street (76 Avenue to Connors Road)
+8. 92A Avenue/86 Street/alley (Connors Road to 85 Street)
+9. 93 Street (82 Avenue to 84 Avenue) and 84 Avenue (91 Street to 89 Street)
+10. 93 Avenue/82 Street/94 Avenue (85 Street to 75 Street) and 75 Street
+    (94 Avenue to 94B Avenue)
+11. 95 Avenue (142 Street to 163 Street)
+12. 101 Avenue (50 Street to west of 84 Street)
+13. 106 Avenue (50 Street to west of 84 Street)
+14. Grovenor - 148 Street (Stony Plain Road to 104 Avenue), 104 Avenue
+    (142 Street to 149 Street) and 144 Street (Stony Plain Road to 107
+    Avenue)
+
+So T = 14. Reviewers check this transcription against the attachment,
+report any discrepancy, and give for each route the neighbourhood or
+neighbourhoods it runs through, from the route table on the City's
+Active Transportation Network Expansion project page
+(https://www.edmonton.ca/projects_plans/roads/active-transportation-network-improvements-project).
+No route is added or dropped on a reviewer's reading of what a commenter
+meant.
+
+*Required alternative route set.* Attachment 5's other list, the
+thirteen projects under "Will continue as planned", added to the
+fourteen: all twenty-seven remaining routes the report is about. A
+holder of the claim was arguing about the programme, not only about the
+routes administration proposed to pause, and a reader is entitled to see
+whether the answer changes when the set is the whole remainder.
+Reviewers report the count and the classification for the twenty-seven
+beside the primary. The verdict uses set S.
 
 **"Public engagement about the specific route", fixed here.** An activity
 documented in a City record that meets all three tests:
@@ -203,34 +242,35 @@ engagement, community-league contact and a mailed or delivered notice
 inviting comment. Reviewers report the count and the classification under
 this definition beside the primary one.
 
-**The counts, and the verdict ladder.** For the report-only set S, let T
-be the number of routes in S and let E be the number of routes in S for
-which the reviewer finds at least one qualifying activity under the
-primary definition. Every route in S is either counted in E or not; there
-is no third bucket and no remainder.
+**The counts, and the verdict ladder.** For set S, T = 14, and let E be
+the number of routes in S for which the reviewer finds at least one
+qualifying activity under the primary definition. Every route in S is
+either counted in E or not; there is no third bucket and no remainder.
 
-Apply the two Not established conditions first, in this order, then the
-proportion:
+Apply the Not established condition first, then the proportion:
 
-- **Not established** if either (a) T = 0 — report IS03688 and its
-  attachments do not identify the re-evaluation routes, and the project
-  page's route table does not let the set be completed; or (b) the City
-  publishes no engagement record of any kind for the active
-  transportation network expansion programme, so that an absence of
-  route-level engagement cannot be told apart from an absence of
-  documentation.
-- Otherwise, with T > 0 and an engagement record in existence:
+- **Not established** if the City publishes nothing at route level about
+  engagement on any of the fourteen: no record of a qualifying activity
+  on any route in S, and no City record stating of any route in S that
+  none was run. In that case E = 0 cannot be told apart from a record
+  that was never published, and the difference is the whole claim.
+- Otherwise:
   - **Supported** if E = 0.
   - **Partially supported** if E > 0 and E / T is at most 1/2: engagement
     is documented for some routes but not for most, and the failing part
     of the proposition is the word "no".
   - **Contradicted** if E / T is greater than 1/2.
 
+At T = 14 the primary set works out as Supported for E = 0; Partially
+supported for E of 1 to 7; Contradicted for E of 8 to 14.
+
 Alternative cutoffs, results required under both sets: **Supported** if
 E / T is at most 1/7 (no more than one route in seven);
 **Partially supported** if E / T is greater than 1/7 and at most 2/3;
 **Contradicted** if E / T is greater than 2/3. The Not established
-conditions are unchanged.
+condition is unchanged. At T = 14 the alternative set works out as
+Supported for E of 0, 1 or 2; Partially supported for E of 3 to 9;
+Contradicted for E of 10 to 14.
 
 Neither cutoff set is drawn from an identified pre-existing standard.
 Under the primary set, "no engagement" is read strictly, and a majority
@@ -243,8 +283,9 @@ clear one. No cutoff may be changed after the counts are seen.
 
 1. E, E / T and the classification under the required alternative
    definition of engagement (test 2 dropped), under both cutoff sets.
-2. E, E / T and the classification for the completed route set, under
-   both definitions and both cutoff sets.
+2. E, E / T and the classification for the required alternative route
+   set, all twenty-seven remaining routes in Attachment 5, under both
+   definitions of engagement and both cutoff sets.
 3. For each route in S, every qualifying activity with its date, its
    form, and the record it comes from; and for each route with none, what
    records were checked.
@@ -309,11 +350,11 @@ Each of the four is reachable on the documents named below, and each
 changes something for someone.
 
 **Definition sensitivity.** The verdict applies under the primary
-definition of engagement and the report-only route set. If the required
-alternative definition or the completed set produces a different
-classification, the finding is definition-sensitive, the story says so
-beside the verdict, and neither side can fairly cite the verdict without
-that qualification.
+definition of engagement and set S, the fourteen re-evaluation routes.
+If the required alternative definition or the twenty-seven-route set
+produces a different classification, the finding is
+definition-sensitive, the story says so beside the verdict, and neither
+side can fairly cite the verdict without that qualification.
 
 ## Scope
 
@@ -348,19 +389,29 @@ reviewer who read the document and named the page.
    Program Update", Infrastructure Services, Infrastructure Committee,
    2026-08-26**,
    https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304024
-   with every attachment, reached through the committee's agenda page on
+   with every published attachment, on the same endpoint: Attachment 1 at
+   DocumentId 304025; Attachment 2, "Options and Trade-offs in Active
+   Transportation Infrastructure Design", at 304027 and, headed
+   REPLACEMENT, at 304026; Attachment 3, "Locations & Status Updates", at
+   304029 and, headed REPLACEMENT, at 304028; Attachment 5, "Modified
+   Approach for the Active Transportation Network Expansion Program", at
+   304032 and, headed REPLACEMENT, at 304030 and 304031. Attachment 4 is
+   withheld by the City under the Access to Information Act and is not
+   published. The committee's agenda page is on
    https://pub-edmonton.escribemeetings.com. Answers: the membership of
-   set S; what engagement administration states was carried out, on which
-   routes and when; what administration states about the basis on which
-   route locations were set.
+   set S, from Attachment 5; the construction status of each route in S,
+   from Attachment 3; what engagement administration states was carried
+   out, on which routes and when; what administration states about the
+   basis on which route locations were set. Reviewers report which
+   version of an attachment they read, and any difference between the
+   versions that bears on the count.
 2. **City of Edmonton, "Active Transportation Network Expansion" project
    page**,
    https://www.edmonton.ca/projects_plans/roads/active-transportation-network-improvements-project
    with its route table, per-route maps and per-route fact sheets.
-   Answers: the completed route set; the neighbourhoods each route runs
-   through; what per-route material the City published and when; the
-   City's own account of what engagement the programme's planning and
-   design drew on.
+   Answers: the neighbourhoods each route runs through; what per-route
+   material the City published and when; the City's own account of what
+   engagement the programme's planning and design drew on.
 3. **City of Edmonton, The Bike Plan (2020)**,
    https://www.edmonton.ca/sites/default/files/public-files/COE_The_Bike_Plan.pdf
    and the **Bike Plan Implementation Guide**,
@@ -400,13 +451,13 @@ which document and which section it came from.
 
 ## Required calculations
 
-- Set S enumerated: every route by the name IS03688 gives it, its
-  neighbourhoods, its construction year, and T. The same for the
-  completed set, with every added route and the field it was matched on.
+- Set S checked against Attachment 5 and listed: every route by the name
+  the attachment gives it, its neighbourhoods, its construction status,
+  and T. The same for the twenty-seven-route alternative set.
 - Per route in S: the cutoff date used (construction start, or the as-of
   date) and its source.
 - E and E / T under the primary definition and under the required
-  alternative, for the report-only set and for the completed set: four
+  alternative, for set S and for the twenty-seven-route set: four
   counts, each with the routes it counts, each with its classification
   under both cutoff sets. Show the arithmetic.
 - The engagement-record balance figures of qualification 4 and the
@@ -446,8 +497,8 @@ which document and which section it came from.
 - Record every source URL in full; you have no repository access. Where a
   council document is reached through the City's meeting portal, give the
   meeting agenda page as well as the attachment URL.
-- Report one verdict for this claim, under the primary definition, the
-  report-only route set and the primary cutoff set. Every alternative
+- Report one verdict for this claim, under the primary definition, set S
+  and the primary cutoff set. Every alternative
   reading's result goes in `interpretation_notes` or `limitations`. The
   schema carries one verdict per claim.
 - If a definition, cutoff, route set or date in this brief changes what
