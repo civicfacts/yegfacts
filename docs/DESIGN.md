@@ -644,9 +644,11 @@ where that rule is easiest to see: it renders the vocabulary as the badges the
 site actually publishes and builds its synthesis table out of
 `scripts/synthesis-matrix.ts` itself, so the page's visuals are the rule rather
 than an illustration of it. The short version is drawn the same way: a flow,
-connectors between the five steps and the ways a claim can leave the process
-marked at the step that produces each, read from the same array as the text, so
-the picture cannot drift from what the page says.
+connectors between the five steps from `sm` up, and under each step what can
+happen to a claim there besides going on (stopping, looping back, continuing
+changed, being fixed or corrected), read from the same array as the text so each
+outcome stays attached to its step. The shape does not make those sentences
+true; the pre-merge critique checks each against §4 and §5.
 
 **Stew's identity.** Stew has two blues, both taken from his avatar: dark
 #1F385C and brighter #36639A. They are used only where Stew speaks in the first

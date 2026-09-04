@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Finding from '../../components/Finding.astro';
-import NumberedSteps from '../../components/NumberedSteps.astro';
+import NumberedSteps, { type Exit } from '../../components/NumberedSteps.astro';
 import { PANEL_AGREEMENT_GLOSS } from '../../lib/findings';
 import { SITE, repoPath } from '../../lib/site';
 import { PANEL_AGREEMENT_LEVELS } from '../../lib/vocabulary';
@@ -14,47 +14,51 @@ import { SYNTHESIS_MATRIX } from '../../../scripts/synthesis-matrix.ts';
  * `intake` and `stages` lists below, so a reader who goes on meets a shape they
  * have already seen. Everything under it is the same method in full.
  *
- * Each step also carries the ways a claim can leave the process there. They are
- * the honest half of the method and the half a stranger never sees, and they
- * live in this array rather than in the template so the flow drawn under the
- * heading cannot say something the text does not.
+ * Each step also carries what can happen to a claim there besides going on to
+ * the next step. Those outcomes are the honest half of the method and the half
+ * a stranger never sees. They live in this array rather than in the template so
+ * each stays attached to its step; the critique checks them against the full
+ * method below, sentence by sentence.
  */
-const short = [
+const short: ReadonlyArray<{ name: string; body: string; exits: readonly Exit[] }> = [
   {
     name: 'Someone sends us a source',
     body: 'A post with all its comments, an article, a thread. We keep the whole thing and list every claim in it that a public record could settle. Commenters get a label instead of their name, unless they hold public office. Every question we found is listed publicly with what was decided about it, including the ones we declined.',
     exits: [
-      'Two readers can decline a question or park it. Either way the reason is on the register.',
-      'An accusation against a named person is written down, then declined.',
+      { kind: 'Stops here', text: 'Two readers can decline a question or park it. Either way the reason is on the register.' },
+      { kind: 'Stops here', text: 'An accusation against a named person is written down, then declined.' },
     ],
   },
   {
     name: 'The question is pinned down before anyone looks for answers',
     body: 'A written brief says exactly what the claim means, in words both sides would accept: what counts as lost, whose money, up to what date. A model from a different company checks that the brief is fair to the people making the claim. Then it is frozen, so nobody can move the goalposts once answers start coming in.',
-    exits: ['A brief that fails its fairness check is not frozen. It is rewritten first.'],
+    exits: [
+      { kind: 'Loops back', text: 'A brief that fails its fairness check is rewritten before it can be frozen.' },
+      { kind: 'Stops here', text: 'After three reports the check is over. A brief that still fails is parked until new evidence arrives.' },
+    ],
   },
   {
     name: 'Three AI models research it blind',
     body: "Claude, GPT and Gemini each get the same brief and search the public record on their own, without seeing each other's work. Each comes back with a verdict, the evidence for and against, and what it could not find.",
     exits: [
-      'A reviewer that returns nothing after its retry halts the run before any finding.',
-      'A fabricated citation caught in the cross-check sends that claim back for a fresh blind round.',
+      { kind: 'Stops here', text: 'A reviewer that returns nothing after its retry halts the run before any finding.' },
+      { kind: 'Loops back', text: "Afterwards the three read each other's work. A fabricated citation caught there sends that claim back for a fresh blind round." },
     ],
   },
   {
     name: 'A table turns three verdicts into one finding',
     body: 'The table was written down in advance and covers every way three verdicts can combine. Nobody votes and nobody picks. When the three do not agree, the finding is never stronger than the most cautious of the three. If one reviewer finds a claim supported and another finds it contradicted, the finding is Mixed, and the split is shown.',
     exits: [
-      'Supported against Contradicted publishes as Mixed, with the split shown.',
-      'A claim a framing concern was right about, with no fair repair, is parked with a public reason.',
+      { kind: 'Continues', text: 'Supported against Contradicted publishes as Mixed, with the split shown.' },
+      { kind: 'Stops here', text: 'A claim a framing concern was right about, with no fair repair, is parked with a public reason.' },
     ],
   },
   {
     name: 'Every fact is checked against a saved copy of its source',
     body: "Before anything is published as a finding, an audit reads the write-up against the archived bytes of the sources it cites, not the live web. The reviewers' answers, their sources and the audit reports are published with it, after a check that removes personal information. Ildar Abdulin is the named person accountable for every word, and he can take any of it down.",
     exits: [
-      'A statement the archived source does not carry is fixed before publication.',
-      'A finding later found wrong is withdrawn. Its page stays and says why.',
+      { kind: 'Fixed first', text: 'A statement the archived source does not carry is fixed before publication.' },
+      { kind: 'Corrected later', text: 'A finding that changes after publication is logged on its own page as a dated entry. Nothing is quietly edited.' },
     ],
   },
 ];
@@ -208,7 +212,7 @@ const sections = toc([
   <section id="short" class="mt-11">
     <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">The short version</h2>
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
-      Where a claim can leave the process, and what happens to it, is marked under each step.
+      What can stop a claim, send it back or change it at each step is marked under the step.
     </p>
 
     <NumberedSteps steps={short} flow />

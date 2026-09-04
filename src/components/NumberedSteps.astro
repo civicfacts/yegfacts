@@ -7,13 +7,26 @@
  * position, so a step cannot carry the wrong number.
  *
  * `flow` draws the list as a process rather than an enumeration: a hairline
- * spine down the numeral column joining the first numeral to the last, and
- * under any step that has them, the ways a claim can leave the process at that
- * step. Only the short version passes it; the exits ride in the same array as
- * the bodies, so the picture cannot drift from the text.
+ * spine down the numeral column joining the first numeral to the last (from
+ * `sm`; below that the numeral sits above the text and no spine is drawn), and
+ * under any step that has them, what can happen to a claim there besides going
+ * on: stopping, looping back, continuing changed, being fixed or corrected.
+ * Only the short version passes it. The exits ride in the same array as the
+ * bodies so each stays attached to its step; whether each is true of the
+ * method is checked by the critique, not by the shape.
  */
+/**
+ * What can happen to a claim at a step besides going on to the next one. The
+ * kind is the plain-words label a reader sees first; it is one of a fixed set
+ * so the labels stay consistent down the flow.
+ */
+export interface Exit {
+  kind: 'Stops here' | 'Loops back' | 'Continues' | 'Fixed first' | 'Corrected later';
+  text: string;
+}
+
 interface Props {
-  steps: ReadonlyArray<{ name: string; body: string; exits?: readonly string[] }>;
+  steps: ReadonlyArray<{ name: string; body: string; exits?: readonly Exit[] }>;
   flow?: boolean;
 }
 
@@ -24,30 +37,22 @@ const { steps, flow = false } = Astro.props;
   {
     steps.map((step, index) => (
       <li
-        class:list={[
-          'grid gap-x-5 gap-y-1 py-5 sm:grid-cols-[2rem_1fr]',
-          flow && 'step-flow',
-          flow && index === 0 && 'step-flow-first',
-          flow && index === steps.length - 1 && 'step-flow-last',
-        ]}
+        class:list={['grid gap-x-5 gap-y-1 py-5 sm:grid-cols-[2rem_1fr]', flow && 'step-flow']}
       >
-        <span class="text-lg font-bold text-forest tabular">{index + 1}</span>
+        <span class:list={['text-lg font-bold text-forest tabular', flow && 'sm:text-center']}>
+          {index + 1}
+        </span>
         <div>
           <h3 class="font-semibold tracking-[-0.012em] text-forest">{step.name}</h3>
           <p class="mt-1.5 text-[0.9375rem] leading-relaxed">{step.body}</p>
           {flow && step.exits && step.exits.length > 0 && (
-            <Fragment>
-              <p class="mt-3 text-[0.6875rem] font-semibold tracking-[0.11em] text-muted uppercase">
-                Leaves here
-              </p>
-              <ul class="mt-1.5 max-w-prose space-y-1.5">
-                {step.exits.map((exit) => (
-                  <li class="border-l-2 border-rule pl-3 text-[0.875rem] leading-relaxed text-muted">
-                    {exit}
-                  </li>
-                ))}
-              </ul>
-            </Fragment>
+            <ul class="mt-3 max-w-prose space-y-1.5">
+              {step.exits.map((exit) => (
+                <li class="border-l-2 border-rule pl-3 text-[0.875rem] leading-relaxed text-muted">
+                  <span class="font-semibold text-ink">{exit.kind}.</span> {exit.text}
+                </li>
+              ))}
+            </ul>
           )}
         </div>
       </li>
