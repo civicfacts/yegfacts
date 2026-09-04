@@ -10,11 +10,24 @@ What did not change: the 12 to 0 vote, the quoted clause, and the finding. The s
 
 The plain-speech read of the same day saw both strings. It rewrote half the standfirst and its proposed replacement for the answer was refused for dropping the 12-0 amendment. Neither check noticed the instrument until this one, and the wording each saw is in its own record.
 
-One thing this check did not reach, recorded here so it is not lost: the second TL;DR bullet on the page carries the same slip in weaker form, calling the clause "the sentence that the plans 'shall not restrict...'". The TL;DR did not change in this rewrite and was given to the seat as context rather than as a string under check, so it is out of scope here and left for the next pass on that layer. -->
+One thing this check did not reach, recorded here so it is not lost: the second TL;DR bullet on the page carries the same slip in weaker form, calling the clause "the sentence that the plans 'shall not restrict...'". The TL;DR did not change in this rewrite and was given to the seat as context rather than as a string under check, so the item does not formally reach it. The finding does, and a bullet naming the wrong instrument is the same factual error in a quieter voice, so it was corrected on this branch the same night. The disposition sits beneath item 4. -->
 
 The seat's items on this run, verbatim:
 
 4. **MISATTRIBUTED.** `src/content/stories/fifteen-minute-districts.mdx:one_line`, `"Council voted 12 to 0 to write into them that they 'shall not restrict freedom of movement, association and commerce'"`. Council wrote the clause into the District Policy, where it applies to both the Policy and the District Plans; it did not write the clause into each district plan. YF-EV-0014 and YF-EV-0015 establish the instrument amended. **Fix:** "Edmonton's district plans guide how land gets used, and Council voted 12 to 0 to write into the District Policy that it and the district plans 'shall not restrict freedom of movement, association and commerce'."
+
+**Editor, 2026-09-04: carried to the TL;DR as well.** The second bullet on this
+page said Council "added the sentence that the plans 'shall not restrict...'",
+naming the plans as the instrument amended — the same misattribution this item
+records, in weaker form. The bullet was context for the seat rather than a
+string under check, so the item does not formally reach it, but the finding does
+and the bullet was live. It now reads "Council itself added to the District
+Policy the sentence that binds both it and the district plans: they 'shall not
+restrict freedom of movement, association and commerce'. The amendment carried
+12-0 and is recorded in the June 2024 hearing minutes, and the clause survives
+every amendment through April 2026." The instrument and the clause's reach are
+YF-EV-0014, the 12-0 amendment is YF-EV-0015, and the quoted words, the vote and
+the finding are as the seat found them.
 
 9. **MISATTRIBUTED.** `src/content/claims/districts-travel-restrictions.yaml:answer`, `"Council voted 12 to 0 to write into the district plans that they must not restrict freedom of movement."` YF-EV-0014 and YF-EV-0015 show that Council amended the District Policy, whose clause also names the District Plans. **Fix:** "No. Council voted 12 to 0 to write into the District Policy that it and the district plans must not restrict freedom of movement."
 

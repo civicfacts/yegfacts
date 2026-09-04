@@ -16,11 +16,22 @@ Items 15 and 16 are the awkward ones, because they are about this page's own dat
 
 The plain-speech read of the same day wrote both of the sentences this check sent back, so the two records saw different text throughout this page. The read saw "every city that has counted" and "Edmonton has never measured" and narrowed them; this check saw the read's narrower versions and narrowed them again.
 
-One thing this check did not reach, recorded here so it is not lost. The fifth TL;DR bullet on this page carries the same overclaim item 6 struck from the standfirst, in the same words: "winter shrinks cycling in each of the cities measured here". That is where the plain-speech read took the phrase from. The TL;DR did not change in this rewrite and was given to the seat as context rather than as a string under check, so it is out of scope here and left for the next pass on that layer. -->
+One thing this check did not reach, recorded here so it is not lost. The fifth TL;DR bullet on this page carries the same overclaim item 6 struck from the standfirst, in the same words: "winter shrinks cycling in each of the cities measured here". That is where the plain-speech read took the phrase from. The TL;DR did not change in this rewrite and was given to the seat as context rather than as a string under check, so the item does not formally reach it. The finding does, and overclaiming is the costliest error this site makes, so the bullet was corrected on this branch the same night rather than left live behind a corrected standfirst. The disposition sits beneath item 6. -->
 
 The seat's items on this run, verbatim:
 
 6. **OVERCLAIM.** `src/content/stories/winter-cycling.mdx:one_line`, `"Winter cuts cycling back in each of the cities measured here"`. YF-EV-0023 supports a lower winter share in Oulu, and YF-EV-0030 reports winter retention in four Québec cities. YF-EV-0026 and YF-EV-0028 provide Edmonton and Calgary winter counts without comparable non-winter denominators, while YF-EV-0029 is annual commuting data. The evidence does not establish a decline in every city discussed. **Fix:** "Oulu's winter cycling share is below its annual share, and a study of four Québec cities found that only a fraction of cyclists kept riding through winter."
+
+**Editor, 2026-09-04: carried to the TL;DR as well.** The fifth bullet on this
+page said "winter shrinks cycling in each of the cities measured here", which is
+the sentence this item strikes, word for word. The bullet was context for the
+seat rather than a string under check, so the item does not formally reach it,
+but the finding does and the bullet was live. It now reads "The claim gets one
+thing right where the two seasons have been compared: the Oulu region cycles
+less in winter than it does across the year, and a Québec study reports Montréal
+retaining 13.6% of its cyclists through winter, and 4.35% in Saguenay." Oulu's
+18 per cent over the year against one trip in ten in winter is YF-EV-0023; the
+retention figures are YF-EV-0030. Nothing else in the bullet moved.
 
 7. **UNSUPPORTED.** `src/content/stories/winter-cycling.mdx:one_line`, `"people in a subarctic Finnish region ride through it anyway, so cold on its own does not settle the question"`. YF-EV-0023 establishes Oulu's winter trip share, but none of the archived sources classifies Oulu as subarctic or directly compares its climate with Edmonton's. **Fix:** "people in Finland's Oulu region make one trip in ten by bicycle in winter, although the archived sources do not directly compare Oulu's climate with Edmonton's."
 
