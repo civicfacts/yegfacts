@@ -186,8 +186,8 @@ const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY
   </head>
   <body class="flex min-h-screen flex-col">
     {/*
-      The home page's h1 lives in the header row (the `deck` slot) and its search
-      field in the masthead slot, both rendered ahead of <main>. Sending the
+      The home page's h1 lives under the header row (the `deck` slot) and its
+      search field in the masthead slot, both rendered ahead of <main>. Sending the
       skip link to #main there would jump the reader past the page's own
       headline, so the target is the deck.
     */}
@@ -212,20 +212,26 @@ const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY
     }
     <aside
       aria-label="Site status"
-      class="border-b-[3px] border-brick bg-gold px-5 py-4 text-ink"
+      class="border-b border-ink/15 bg-gold px-5 py-2.5 text-ink"
       data-pagefind-ignore
     >
-      <p class="mx-auto max-w-[66rem] text-[0.9375rem] leading-relaxed text-pretty sm:text-base">
+      <p class="mx-auto max-w-[66rem] text-[0.875rem] leading-snug text-pretty">
         <strong>YEGFacts has not launched yet.</strong> This site is still a work in progress. We have not
         yet found the right methodology.{' '}
-        <a href="/methodology" class="font-semibold text-navy underline underline-offset-2">
+        <a href="/methodology" class="link">
           See the current methodology.
         </a>
       </p>
     </aside>
     <Header wordmark={hasMasthead ? 'masthead' : 'compact'}>
+      {/*
+        The deck sits under the header row, divided from it by a hairline of
+        paper on the forest ground. `tabindex="-1"` keeps it a skip-link
+        target: on a page with a masthead the skip link lands here, on the
+        page's own headline, rather than past it.
+      */}
       {hasMasthead && (
-        <div slot="deck" id="masthead" tabindex="-1" class="order-last min-w-0 grow basis-full lg:order-2 lg:basis-[30rem]">
+        <div slot="deck" id="masthead" tabindex="-1" class="border-t border-paper/15">
           <slot name="deck" />
         </div>
       )}

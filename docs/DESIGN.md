@@ -308,7 +308,7 @@ Pinned reviewer commands (methodology v1.6, 2026-09-01; `scripts/panel/run-revie
 
 | Panel seat | Command |
 |---|---|
-| Claude Opus 5 | `claude -p --model opus --effort high` (v1.15; Fable 5.1 before that, pinned in v1.5 and given its effort setting in v1.6). The move is a cost decision, not a judgement about review quality: the founder's Fable allowance on his subscription is nearly exhausted. Runs already published under Fable 5.1 keep the model their manifests record. |
+| Claude Opus 5 | `claude -p --model claude-opus-5 --effort high` (v1.15; Fable 5.1 before that, pinned in v1.5 and given its effort setting in v1.6). The move is a cost decision, not a judgement about review quality: the founder's Fable allowance on his subscription is nearly exhausted. Runs already published under Fable 5.1 keep the model their manifests record. |
 | GPT-5.6 Sol | `codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check` |
 | Gemini 3.1 Pro | `agy --effort high --sandbox --dangerously-skip-permissions --print-timeout 45m -p` (v1.14; before that without the permissions flag, which made the headless seat return nothing on PDF-heavy briefs) |
 
@@ -502,25 +502,72 @@ The visual system is the broadsheet ledger, locked and light-only: paper
 #F7F5F0, ink #1C2124, muted #5A6166, hairline rules #CFC9BD, forest #123F35,
 navy #123B5D, gold #C3A35E, brick #8A2F22 and charcoal #4A5258. Newsreader
 sets the wordmark, headings, questions and slate quotes; Libre Franklin sets
-body, metadata, labels and buttons. Interface chrome is square-cornered —
-badges, panels, buttons, inputs, tables and rules carry no radius, and the one
-exception is 2px on inline code. Two things are circles because the thing
+body, metadata, labels and buttons. Badges, tiles, tables and rules are
+square-cornered; an interactive control — a filter chip, a button, a field, the
+copy button, the Pagefind search UI — and the white panels (`.panel`, `.strip`)
+carry a 3px radius (`--radius-control`), and inline code keeps its 2px. A
+verdict badge stays square on purpose: it is the site's stamp, and at this
+size a rounded one reads as a tag. Two things are circles because the thing
 itself is: Stew's avatar wherever it appears, and the verdict dots in the
-AI-review matrix. No shadows except the one that lifts a
-glossary popover off the text it covers, and no animation beyond
-colour transitions on a few controls — the copy button, the outline links. A
+AI-review matrix. White panels (`.panel`, `.strip`) and the home page's search
+field carry one soft shadow (`--shadow-panel`), the glossary popover keeps its
+own, and nothing else on the site has one; the gold rule under the current nav
+word is drawn with an inset box-shadow, but it is a rule, not depth. The strip
+keeps its 3px forest top rule and is closed by hairlines on its sides and
+bottom, because with the shadow alone its outline read fainter than the
+dividers between its own cells. Motion is 150ms transitions of
+colour, background, border, underline colour, underline thickness, opacity
+(the nav's 82% to full) and the search glyph's stroke, on links and on the controls that change
+on hover (the chips, the buttons, the outline), and nothing else; under
+`prefers-reduced-motion` even those are off. A
 finding is a filled badge in its own colour — forest Supported, navy Partially
 supported, charcoal Not established, brick Contradicted, gold Mixed — with the
 word always printed in full, and a claim list is a run of ledger rows each
 carrying a 5px left edge in the same colour, so the verdicts read down one
-column. Gold is load-bearing in exactly two places, the ".ca" of the wordmark
-on forest and the Mixed badge; it never sets text on a light ground, where it
-fails AA. Every page opens with the full-bleed forest masthead, and the home
-page extends it with the descriptor, the search field and the helper line.
+column. Gold is load-bearing in exactly four places: the ".ca" of the wordmark
+on forest, the Mixed badge, the 2px bar under the current item in the masthead
+nav, and the footer's column labels. All four sit on forest or fill a badge;
+gold never sets text on a light ground, where it fails AA. Every page opens with
+the full-bleed forest masthead, and the home page extends it with the
+descriptor, the search field and the helper line.
+
+The **forest nav** — `.forest-nav`, used by the masthead row and by the footer's
+link columns — is set in sentence case, in paper held to 82% opacity, with no
+underline. The page a reader is on comes to full opacity and takes the gold bar,
+drawn as a rule inside the link's own box so the row is the same height on every
+page; the search glyph beside it carries the same bar on /search. Footer links
+carry no `aria-current`, so the bar is a masthead mark in practice.
+
+There are **two link treatments, and one rule that picks between them**. A link
+inside running text is underlined at rest, in navy, because nothing else in a
+paragraph marks it: that is `.link`. A link that is a headline, or a list item's
+title, is navy with no underline until it is hovered or focused: that is
+`.link-title`, because the size and position of a headline already say it is the
+thing to click, and a page of underlined headlines reads as ruled paper. Stew's
+brighter blue mirrors both, `.link-stew` and `.link-title-stew`, in the blocks
+where he is the one speaking.
+
+The **home page's search field** is set in the display face, and its placeholder
+is a question this site has actually checked rather than an example of one. Three
+counts read out of the record at build time, questions registered, claims
+checked and sources archived, sit beside the deck from `lg` up and under it on
+a phone, above the search field.
+
+The **pre-launch notice** is a single gold line with an ink hairline under it,
+not a band with a brick edge. The **footer** is a forest block that bookends the
+masthead: the same ground, the same container, the compact wordmark and the
+site's descriptor sentence at its head on one baseline, then gold column labels
+over three `.forest-nav` link lists, then the colophon in paper — who builds the
+site, what it is, and the commit this build came from. Nothing muted-grey and no
+navy survives on that ground; colophon links are running text, so they are
+underlined, in paper.
+
 Hierarchy still comes from type rather than decoration: a section heading is a
-heading — on the home page's front page each one sits above a 3px ink rule —
-and the 11px uppercase label is reserved for metadata — dates, "Limitations",
-the sub-labels inside a claim.
+heading, with the space above it as the break; the 3px ink rules that once sat
+over the home page's section heads are gone, and the one hairline that still
+precedes a heading (above a journal post's receipts) is a section divider, not
+a heading device. The 11px uppercase label is reserved for metadata — dates,
+"Limitations", the sub-labels inside a claim.
 
 This supersedes the earlier rule that a finding is carried by the word and never
 by a badge, and that colour is a whisper (founder decision, 2026-09-01). The
@@ -558,7 +605,11 @@ narrative instead of pointing at one heading over a thousand words.
 
 A visual (chart, pull quote, timeline, table) must carry a number or a quotation
 the text already establishes with a source ID. If it does not, cut it. No
-photographs, no stock imagery, no decorative charts.
+photographs, no stock imagery, no decorative charts. The methodology page is
+where that rule is easiest to see: it renders the vocabulary as the badges the
+site actually publishes and builds its synthesis table out of
+`scripts/synthesis-matrix.ts` itself, so the page's visuals are the rule rather
+than an illustration of it.
 
 **Stew's identity.** Stew has two blues, both taken from his avatar: dark
 #1F385C and brighter #36639A. They are used only where Stew speaks in the first

@@ -3,12 +3,18 @@
 /* ---------------------------------------------------------------------------
    YEGFacts visual system — broadsheet ledger (design spec §10). Locked palette,
    light theme only: ink on paper, one saturated forest ground, filled verdict
-   badges. Interface chrome is square-cornered (2px on inline code is the one
-   exception; a portrait and a status dot are circles because they are round
-   things, not chrome), no shadows except on the glossary popover, and no
-   animation beyond colour transitions
-   on a control. A finding is printed in full and filled in its own colour, so a
-   list of them reads down one edge.
+   badges. Badges, tiles, tables and rules are square; an interactive control — a
+   chip, a button, a field, the search UI — and the white panels carry the 3px
+   `--radius-control`, and inline code keeps its 2px (a portrait and a status
+   dot are circles because they are round things, not chrome). The only shadow
+   is `--shadow-panel` on the white panels and the home search field, plus the
+   one the glossary popover lifts itself with; nothing else has one (the gold
+   rule under the current nav word is drawn with an inset box-shadow, but it
+   is a rule, not depth). No
+   animation beyond 150ms transitions of colour, background, border, underline
+   colour, underline thickness, opacity and the search glyph's stroke on links
+   and controls, off under `prefers-reduced-motion`. A finding is printed in full and filled
+   in its own colour, so a list of them reads down one edge.
 --------------------------------------------------------------------------- */
 
 @theme {
@@ -42,6 +48,14 @@
   --text-display: 2.5rem;
   --text-display--line-height: 1.1;
   --text-display--letter-spacing: -0.022em;
+
+  /* Interactive controls (a chip, a button, a field) and the white panels,
+     which their shadow makes cards. Badges, tiles, rules and tables stay
+     square; a finding is print, a button is a thing you press. */
+  --radius-control: 3px;
+  /* One soft shadow for a white panel on the paper ground. Low and short,
+     so the panel sits on the page rather than floating over it. */
+  --shadow-panel: 0 1px 2px rgb(28 33 36 / 0.06), 0 6px 16px -8px rgb(28 33 36 / 0.14);
 }
 
 /*
@@ -92,18 +106,113 @@
     outline: 3px solid var(--color-navy);
     outline-offset: 2px;
   }
+
+  /*
+   * A control is a thing you press, so it carries the control radius by default;
+   * badges and tiles are print and stay square (the panels take it in their own
+   * rule below, because a shadowed block is a card). Stated on the elements
+   * so no button or field has to ask for it, and `.chip` (an anchor) sets its own.
+   */
+  button,
+  input,
+  select,
+  textarea {
+    border-radius: var(--radius-control);
+  }
+
+  /*
+   * The only motion the site has: a link or a control settles into its hover
+   * colour rather than snapping. Stated in `@layer base` so a utility that sets
+   * a transition on one element still wins, and switched off outright for a
+   * reader who has asked for less motion.
+   */
+  .prose a,
+  .masthead a,
+  .link,
+  .link-stew,
+  .link-title,
+  .link-title-stew,
+  .forest-nav a,
+  .site-footer a,
+  .chip,
+  button,
+  [data-toc-link] {
+    transition:
+      color 0.15s ease,
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      text-decoration-color 0.15s ease,
+      text-decoration-thickness 0.15s ease,
+      opacity 0.15s ease;
+  }
+
+  /* The compact search link thickens its glyph on hover; that settles too. */
+  .masthead a svg {
+    transition: stroke-width 0.15s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .prose a,
+    .masthead a,
+    .link,
+    .link-stew,
+    .link-title,
+    .link-title-stew,
+    .forest-nav a,
+    .site-footer a,
+    .chip,
+    button,
+    [data-toc-link] {
+      transition: none;
+    }
+
+    .masthead a svg {
+      transition: none;
+    }
+  }
 }
 
 /*
- * On the forest masthead the navy ring disappears into the ground, and so does
- * a navy link. Nothing inside the dark block can go navy by accident.
+ * On a forest ground — the masthead at the top, the footer at the foot — the
+ * navy ring disappears into the green, and so does a navy link. Nothing inside
+ * either dark block can go navy by accident.
  */
-.masthead :focus-visible {
+.masthead :focus-visible,
+.site-footer :focus-visible {
   outline-color: #ffffff;
 }
 
 .masthead a {
   color: var(--color-paper);
+}
+
+/*
+ * The nav treatment both forest blocks use: the masthead row at the top and the
+ * footer's three link columns at the foot. Sentence case, no underline, and
+ * paper held back to 82% so the row sits behind the wordmark rather than
+ * competing with it; the page you are on comes to full strength and carries a
+ * gold bar. The bar is an inset box-shadow, not a border or an underline: it is
+ * a rule drawn inside the box, so it costs the row no height and the nav does
+ * not shift between pages. It has to be stated after `.masthead a`, which it
+ * overrides at equal specificity. A page inside a section (a question, a
+ * journal post, the methodology changes) carries `aria-current="true"` on its
+ * section's word and gets the same bar; the exact page carries
+ * `aria-current="page"`. Footer links carry no `aria-current`, so the bar is a
+ * masthead mark in practice — the footer is a site map, not a position.
+ */
+.forest-nav a {
+  opacity: 0.82;
+  text-decoration: none;
+}
+
+.forest-nav a:hover,
+.forest-nav a:focus-visible,
+.forest-nav a[aria-current] {
+  opacity: 1;
+}
+
+.forest-nav a[aria-current] {
+  box-shadow: inset 0 -2px 0 var(--color-gold);
 }
 
 /* ---------------------------------------------------------------------------
@@ -374,17 +483,101 @@ time,
   text-decoration-thickness: 2px;
 }
 
+/* The same, in paper, for running text on a forest ground: the footer colophon. */
+.link-paper {
+  color: var(--color-paper);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+}
+
+.link-paper:hover {
+  text-decoration-thickness: 2px;
+}
+
+/*
+ * The second link treatment, and the rule that picks between the two: a link
+ * inside running text is underlined at rest, because there is nothing else in a
+ * paragraph to mark it; a link that IS a headline or a list item's title is
+ * not, because its size and position already say it is the thing to click, and
+ * a page of underlined headlines reads as ruled paper. The underline arrives on
+ * hover and on focus, so the affordance is never actually missing.
+ */
+.link-title,
+.link-title-stew {
+  text-decoration: none;
+}
+
+.link-title:hover,
+.link-title:focus-visible,
+.link-title-stew:hover,
+.link-title-stew:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.14em;
+}
+
+.link-title {
+  color: var(--color-navy);
+}
+
+/* The same, in Stew's brighter blue, for a headline in a block where he speaks. */
+.link-title-stew {
+  color: var(--color-stew-bright);
+}
+
+/* ---------------------------------------------------------------------------
+   Filter chips. A control, not a link: bordered, on white, carrying the 3px
+   control radius, and it fills with ink when it is the filter in force. The
+   register's script toggles `is-filter-on`, so the on state is a class here
+   rather than a second markup path there.
+--------------------------------------------------------------------------- */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--color-rule-strong);
+  border-radius: var(--radius-control);
+  background-color: #ffffff;
+  color: var(--color-ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.chip:hover {
+  border-color: var(--color-ink);
+}
+
+.chip.is-filter-on {
+  background-color: var(--color-ink);
+  border-color: var(--color-ink);
+  color: var(--color-paper);
+}
+
 /* ---------------------------------------------------------------------------
    Panels and strips. Both are white on the paper ground with a 3px top edge
    that says what kind of thing they are — ink for the site talking about
    itself, brick for a correction, forest for the method. They live here rather
    than as utility stacks because a shorthand `border` and a longhand
    `border-top-color` in the same class list depend on emission order to
-   resolve, and the top edge is the whole point of the element.
+   resolve, and the top edge is the whole point of the element. Both carry
+   `--shadow-panel`: white on paper is a two-point difference in value, and the
+   shadow is what tells a reader the white block is a block, and a block with
+   a shadow is a card, so both take the control radius; the badge inside one
+   stays square.
 --------------------------------------------------------------------------- */
 
-.panel {
+.panel,
+.strip {
   background-color: #ffffff;
+  border-radius: var(--radius-control);
+  box-shadow: var(--shadow-panel);
+}
+
+.panel {
   border: 1px solid var(--color-rule);
   border-top-width: 3px;
   border-top-color: var(--color-ink);
@@ -394,11 +587,17 @@ time,
   border-top-color: var(--color-brick);
 }
 
-/* A strip, not a box: rule over, hairline under, cells flush to the edges. */
+/*
+ * A strip boxed by hairlines: rule over, hairline under, cells flush to the edges. The
+ * sides are hairlines too. The shadow alone left the strip's own outline
+ * fainter than the dividers between its cells — the block read as less of a
+ * boundary than the lines inside it — so the edge is drawn, and the shadow
+ * lifts it.
+ */
 .strip {
-  background-color: #ffffff;
   border-top: 3px solid var(--color-forest);
   border-bottom: 1px solid var(--color-rule);
+  border-inline: 1px solid var(--color-rule);
 }
 
 /* ---------------------------------------------------------------------------

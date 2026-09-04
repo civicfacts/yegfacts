@@ -19,9 +19,15 @@ interface Props {
 
 const { size = 'compact' } = Astro.props;
 
+/*
+ * The front-page cap is 3.25rem rather than the 3.625rem it once was: at the
+ * larger size the mark and the six nav words together ran four pixels past the
+ * 66rem container, and the nav dropped to a line of its own on every desktop
+ * width. The mark is still twice the compact size.
+ */
 const text =
   size === 'masthead'
-    ? 'text-[clamp(2rem,7.75vw,3.625rem)] gap-[0.2em]'
+    ? 'text-[clamp(2rem,7.75vw,3.25rem)] gap-[0.2em]'
     : 'text-[1.625rem] gap-[0.3em]';
 const symbol = size === 'masthead' ? 'h-[1.27em]' : 'h-[1.5em]';
 ---

@@ -51,7 +51,7 @@ const heading = 'section-heading mt-14';
     </div>
 
     <h1
-      class="mt-3 text-[1.5rem] leading-[1.2] font-extrabold tracking-[-0.02em] text-pretty sm:text-[1.875rem]"
+      class="mt-3 text-[1.5rem] leading-[1.2] font-bold tracking-[-0.02em] text-pretty sm:text-[1.875rem]"
     >
       {claim.data.question}
     </h1>
@@ -96,7 +96,7 @@ const heading = 'section-heading mt-14';
     </div>
 
     {/* Who decided this, under what rule, and how old it is. */}
-    <p class="mt-5 text-xs text-muted">
+    <p class="mt-5 text-[0.8125rem] text-muted">
       Verdict by a <Gloss {...gloss('three-model AI panel')}>three-model AI panel</Gloss> under a{' '}
       <Gloss {...gloss('published rule')}>published rule</Gloss> ·{' '}
       <Gloss {...gloss('as of')}>as of</Gloss>{' '}
@@ -256,7 +256,7 @@ const heading = 'section-heading mt-14';
       class="mt-3.5 max-w-prose font-display text-[1.1875rem] leading-snug font-semibold text-pretty"
       data-crossref
     >
-      <a href={`/questions/${question.id}`} class="link">{question.question}</a>
+      <a href={`/questions/${question.id}`} class="link-title">{question.question}</a>
     </p>
     <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
       One brief, one body of evidence and one panel run cover every claim under that question, and
