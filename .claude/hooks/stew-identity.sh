@@ -15,8 +15,12 @@ if [ -f "$stew_dir/hosts.yml" ]; then
   echo "export GH_CONFIG_DIR='$stew_dir'" >> "$CLAUDE_ENV_FILE"
 else
   tok=$(gh auth token --user stew-yegfacts 2>/dev/null)
-  if [ -z "$tok" ]; then
-    echo "Stew identity NOT set: no $stew_dir and no stew-yegfacts account in gh. Commits and pushes would run as the founder; stop and ask before committing."
+  # gh (2.98) answers `--user` with the ACTIVE account's token when that
+  # user is not in the keyring, so a non-empty token proves nothing: ask
+  # GitHub whose it is before exporting it under Stew's name.
+  login=$(GH_TOKEN="$tok" gh api user --jq .login 2>/dev/null)
+  if [ "$login" != "stew-yegfacts" ]; then
+    echo "Stew identity NOT set: no $stew_dir, and gh's keyring gave a token for '${login:-nobody}', not stew-yegfacts. Commits and pushes would run as the founder; stop and ask before committing."
     exit 0
   fi
   echo "export GH_TOKEN='$tok'" >> "$CLAUDE_ENV_FILE"
