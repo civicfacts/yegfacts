@@ -79,8 +79,14 @@ case "$PROVIDER_ARG" in
     CMD=(codex exec -m gpt-5.6-sol -c model_reasoning_effort="$EFFORT" -s read-only --skip-git-repo-check)
     ;;
   agy|gemini|google)
-    SLOT="gemini"; CLI="agy"; MODEL_ID="gemini-3.1-pro"
-    PROVIDER_CANONICAL="google"; SEAT="Gemini 3.1 Pro"
+    # v1.20 (2026-09-03): the seat moves from Gemini 3.1 Pro to Gemini 3.8
+    # Flash at high, on the founder's direction that 3.1 Pro is not to be
+    # used anywhere any more. agy carries the effort in the model id, so the
+    # id is pinned with it; --effort stays so the manifest records the same
+    # setting the other seats pin. Runs already published under 3.1 Pro keep
+    # the model their manifests record.
+    SLOT="gemini"; CLI="agy"; MODEL_ID="gemini-3.8-flash-high"
+    PROVIDER_CANONICAL="google"; SEAT="Gemini 3.8 Flash"
     # agy takes the prompt as the argument of -p and does not read stdin;
     # `-p --effort` made it treat "--effort" as the prompt. --sandbox and the
     # long print timeout are what the four published runs used.
@@ -96,7 +102,7 @@ case "$PROVIDER_ARG" in
     # read-only sandbox), so this levels the seats rather than loosening one.
     # Isolation still comes from the scratch directory, which holds only the
     # package.
-    CMD=(agy --effort "$EFFORT" --sandbox --dangerously-skip-permissions --print-timeout 45m -p)
+    CMD=(agy --model "$MODEL_ID" --effort "$EFFORT" --sandbox --dangerously-skip-permissions --print-timeout 45m -p)
     ;;
   *)
     echo "unknown provider: $PROVIDER_ARG" >&2; usage

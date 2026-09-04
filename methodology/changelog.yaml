@@ -1,6 +1,29 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.20"
+  date: "2026-09-03"
+  scope: reviewer-model-refresh
+  summary: >
+    The Gemini panel seat moves from Gemini 3.1 Pro to Gemini 3.8 Flash at
+    high reasoning effort, and 3.1 Pro is retired from every seat on this
+    site. Runs already published under 3.1 Pro keep the model their manifests
+    record.
+  highlights:
+    - "New review runs pin the Gemini seat as agy --model gemini-3.8-flash-high --effort high. This CLI carries the effort setting inside the model id, so the pinned id and the recorded effort say the same thing twice on purpose: the manifest keeps reading the same way for all three seats."
+    - "The founder's call, made on his own use of both models and on the one comparison this site has: in the whole-source intake run under v1.15, a first extraction on Gemini 3.6 Flash at low effort cited comment numbers past the end of the thread, and the same seat moved to 3.8 Flash at high became the cleanest of the three, with nothing thrown out by the quote gate. That is an extraction result, not a panel-round one. No published run has compared 3.1 Pro and 3.8 Flash as reviewers, and this entry does not claim one reviews better."
+    - "3.1 Pro also served as a triage reader, a gate auditor and an outside reader on writing briefs. Those seats are not pinned in a script; the rule that they use 3.8 Flash from here on is recorded with this entry, and the next run of each records the model it used."
+    - "The pins in v1.5 and v1.15 (the Claude seat), v1.6 (effort) and v1.14 (the Gemini seat's permissions flag) stand as written."
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+  note: >
+    Two seat changes in two days, both on cost or on the founder's read of a
+    model rather than on a measured comparison of reviewers. That is honest
+    about how a one-person site chooses models and it is also a gap: the
+    method records what ran, and can re-run it, but has no benchmark that
+    would tell a reader whether a seat change moved findings. The manifests
+    make that benchmark possible later; nothing here provides it.
 - version: "1.19"
   date: "2026-09-03"
   scope: claim-dispositions
