@@ -206,6 +206,15 @@ function counts(comments: number, claims?: number): string[] {
   </section>
     <section id="register" class="mt-12 scroll-mt-6">
       <h2 class="section-heading">Every question</h2>
+      {/*
+        Below `lg` the key follows the whole list and the page has no outline
+        bar, so the badges would appear for 44 rows before their definitions.
+        This is the route to them; from `lg` the key is already beside the
+        list.
+      */}
+      <p class="mt-2 text-[0.9375rem] lg:hidden">
+        <a href="#states" class="link">What the states mean</a>
+      </p>
 
       {/*
         One tbody to a question, with the claims checked under it as rows beneath
