@@ -643,7 +643,10 @@ photographs, no stock imagery, no decorative charts. The methodology page is
 where that rule is easiest to see: it renders the vocabulary as the badges the
 site actually publishes and builds its synthesis table out of
 `scripts/synthesis-matrix.ts` itself, so the page's visuals are the rule rather
-than an illustration of it.
+than an illustration of it. The short version is drawn the same way: a flow,
+connectors between the five steps and the ways a claim can leave the process
+marked at the step that produces each, read from the same array as the text, so
+the picture cannot drift from what the page says.
 
 **Stew's identity.** Stew has two blues, both taken from his avatar: dark
 #1F385C and brighter #36639A. They are used only where Stew speaks in the first

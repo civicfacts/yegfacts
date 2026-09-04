@@ -13,27 +13,49 @@ import { SYNTHESIS_MATRIX } from '../../../scripts/synthesis-matrix.ts';
  * carries the whole method in five steps, in the same numbered idiom as the
  * `intake` and `stages` lists below, so a reader who goes on meets a shape they
  * have already seen. Everything under it is the same method in full.
+ *
+ * Each step also carries the ways a claim can leave the process there. They are
+ * the honest half of the method and the half a stranger never sees, and they
+ * live in this array rather than in the template so the flow drawn under the
+ * heading cannot say something the text does not.
  */
 const short = [
   {
     name: 'Someone sends us a source',
     body: 'A post with all its comments, an article, a thread. We keep the whole thing and list every claim in it that a public record could settle. Commenters get a label instead of their name, unless they hold public office. Every question we found is listed publicly with what was decided about it, including the ones we declined.',
+    exits: [
+      'Two readers can decline a question or park it. Either way the reason is on the register.',
+      'An accusation against a named person is written down, then declined.',
+    ],
   },
   {
     name: 'The question is pinned down before anyone looks for answers',
     body: 'A written brief says exactly what the claim means, in words both sides would accept: what counts as lost, whose money, up to what date. A model from a different company checks that the brief is fair to the people making the claim. Then it is frozen, so nobody can move the goalposts once answers start coming in.',
+    exits: ['A brief that fails its fairness check is not frozen. It is rewritten first.'],
   },
   {
     name: 'Three AI models research it blind',
     body: "Claude, GPT and Gemini each get the same brief and search the public record on their own, without seeing each other's work. Each comes back with a verdict, the evidence for and against, and what it could not find.",
+    exits: [
+      'A reviewer that returns nothing after its retry halts the run before any finding.',
+      'A fabricated citation caught in the cross-check sends that claim back for a fresh blind round.',
+    ],
   },
   {
     name: 'A table turns three verdicts into one finding',
     body: 'The table was written down in advance and covers every way three verdicts can combine. Nobody votes and nobody picks. When the three do not agree, the finding is never stronger than the most cautious of the three. If one reviewer finds a claim supported and another finds it contradicted, the finding is Mixed, and the split is shown.',
+    exits: [
+      'Supported against Contradicted publishes as Mixed, with the split shown.',
+      'A claim a framing concern was right about, with no fair repair, is parked with a public reason.',
+    ],
   },
   {
     name: 'Every fact is checked against a saved copy of its source',
     body: "Before anything is published as a finding, an audit reads the write-up against the archived bytes of the sources it cites, not the live web. The reviewers' answers, their sources and the audit reports are published with it, after a check that removes personal information. Ildar Abdulin is the named person accountable for every word, and he can take any of it down.",
+    exits: [
+      'A statement the archived source does not carry is fixed before publication.',
+      'A finding later found wrong is withdrawn. Its page stays and says why.',
+    ],
   },
 ];
 
@@ -185,8 +207,11 @@ const sections = toc([
 
   <section id="short" class="mt-11">
     <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">The short version</h2>
+    <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+      Where a claim can leave the process, and what happens to it, is marked under each step.
+    </p>
 
-    <NumberedSteps steps={short} />
+    <NumberedSteps steps={short} flow />
 
     <h3 class="mt-8 font-semibold tracking-[-0.012em] text-forest">Three things we will not do</h3>
     <ul class="mt-3 max-w-prose list-disc space-y-2 pl-5 text-[0.9375rem] leading-relaxed">
