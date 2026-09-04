@@ -1,0 +1,148 @@
+story: cycling-volumes
+date: 2026-09-03
+methodology_version: "1.20"
+# Which of the brief's eight claims this run synthesises, and which it parks
+# (methodology v1.24). Seven are answered. `riders-are-recreational-not-commuters`
+# is not, and its answers are not deleted: `round1/` and `round1-rerun-2/` stay
+# exactly where the seats wrote them.
+synthesis_scope:
+  claims:
+    - cycling-trips-1-3-million-2026
+    - bike-lanes-look-empty
+    - one-to-two-percent-of-population-rides
+    - one-percent-year-round-users
+    - two-percent-of-trips-by-bike
+    - under-one-percent-of-commuters-cycle
+    - 87-percent-commute-by-car
+  parked:
+    - claim: riders-are-recreational-not-commuters
+      basis: round1-rerun-2
+      reason: >
+        The brief fixed the 2015 Edmonton and Region Household Travel Survey,
+        whose fieldwork ran 2015-09-14 to 2015-12-11 on weekdays only, as the
+        instrument for a proposition about cycling in Edmonton with no season
+        or day named. Both restrictions cut against the recreational side, and
+        the same brief fixed July for claim 2 on the express ground that a
+        claim is tested at its strongest for the side asserting it. The Claude
+        seat raised that as a material framing concern in the blind re-run, and
+        it is right. No repair was available: qualifying the proposition to
+        autumn weekdays makes it weaker than the claim people are making, and a
+        representative Edmonton survey recording trip purpose does not exist —
+        the brief's own source search looked for one. So the claim leaves this
+        run rather than being answered on an instrument that cannot carry it.
+        It is parked on the register, and reopens if such a survey is
+        published. The sequence is in run-record.md stage 9 and errata.md item
+        7; the seats' answers are in round1/ and round1-rerun-2/.
+
+runs:
+  - provider: anthropic
+    round: 1
+    command: claude -p --model claude-opus-5 --effort high < package.md
+    cli_version: 2.1.260 (Claude Code)
+    model_id: claude-opus-5
+    seat: Claude Opus 5
+    reasoning_effort: high
+    prompt_sha256: 6448222da855649d19038ca6656c7e4ef6fd367ba416f2fd601e5a31faae137d
+    methodology_version: "1.20"
+    started_at: 2026-09-04T01:35:28Z
+    finished_at: 2026-09-04T02:06:53Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - reviewer.md
+      - review-schema.json
+  - provider: google
+    round: 1
+    command: agy --effort high --sandbox --dangerously-skip-permissions --print-timeout 45m -p "$(cat package.md)"
+    cli_version: 1.1.25
+    model_id: gemini-3.1-pro
+    seat: Gemini 3.1 Pro
+    reasoning_effort: high
+    prompt_sha256: 6448222da855649d19038ca6656c7e4ef6fd367ba416f2fd601e5a31faae137d
+    methodology_version: "1.20"
+    started_at: 2026-09-04T01:13:35Z
+    finished_at: 2026-09-04T01:22:29Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - reviewer.md
+      - review-schema.json
+  - provider: openai
+    round: 1
+    command: codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check < package.md
+    cli_version: codex-cli 0.153.0
+    model_id: gpt-5.6-sol
+    seat: GPT-5.6 Sol
+    reasoning_effort: high
+    prompt_sha256: 6448222da855649d19038ca6656c7e4ef6fd367ba416f2fd601e5a31faae137d
+    methodology_version: "1.20"
+    started_at: 2026-09-04T01:22:30Z
+    finished_at: 2026-09-04T01:35:27Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - reviewer.md
+      - review-schema.json
+  - provider: anthropic
+    round: 2
+    command: claude -p --model claude-opus-5 --effort high < package.md
+    cli_version: 2.1.260 (Claude Code)
+    model_id: claude-opus-5
+    seat: Claude Opus 5
+    reasoning_effort: high
+    prompt_sha256: a513db3ed517ad52411c371f48d11a8a19102f77e9513c8f9841eec846393b72
+    methodology_version: "1.20"
+    started_at: 2026-09-04T02:27:30Z
+    finished_at: 2026-09-04T02:36:56Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - cross-review.md
+      - review-schema.json
+      - combined-evidence.json
+      - other-review-gemini.json
+      - other-review-gpt.json
+  - provider: google
+    round: 2
+    command: agy --effort high --sandbox --dangerously-skip-permissions --print-timeout 45m -p "$(cat package.md)"
+    cli_version: 1.1.25
+    model_id: gemini-3.1-pro
+    seat: Gemini 3.1 Pro
+    reasoning_effort: high
+    prompt_sha256: f562837169ca6e7808bee4361f6faf1e4a1cb20c6553b3c10aa2140e944ada74
+    methodology_version: "1.22"
+    started_at: 2026-09-04T03:23:16Z
+    finished_at: 2026-09-04T03:27:49Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - cross-review.md
+      - review-schema.json
+      - combined-evidence.json
+      - other-review-claude.json
+      - other-review-gpt.json
+  - provider: openai
+    round: 2
+    command: codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check < package.md
+    cli_version: codex-cli 0.153.0
+    model_id: gpt-5.6-sol
+    seat: GPT-5.6 Sol
+    reasoning_effort: high
+    prompt_sha256: 852188697ecb069cb19d2848cdd023aa1e3fe1d574c58a6cc2ffeea5f24931d6
+    methodology_version: "1.20"
+    started_at: 2026-09-04T02:21:39Z
+    finished_at: 2026-09-04T02:27:30Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - cross-review.md
+      - review-schema.json
+      - combined-evidence.json
+      - other-review-claude.json
+      - other-review-gemini.json

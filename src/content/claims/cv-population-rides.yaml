@@ -1,0 +1,72 @@
+id: cv-population-rides
+question: Do only about 1 to 2 percent of Edmonton's population ride a bicycle?
+story: cycling-volumes
+finding: Not established
+answer: >-
+  Nobody can tell from the published record. No representative survey of Edmontonians
+  has published how many of them ride a bicycle.
+evidence_basis: Direct Edmonton evidence
+panel_agreement: Unanimous
+methodology_version: "1.24"
+review_run: reviews/cycling-volumes/2026-09-03
+plain_speech_read: reviews/cycling-volumes/2026-09-03/plain-speech/gpt-1.md
+topics: [transportation, bike-lanes]
+evidence: [YF-EV-0149, YF-EV-0150, YF-EV-0151, YF-EV-0152, YF-EV-0153, YF-EV-0155]
+key_facts:
+  - text: "Nothing Statistics Canada had released by 2026-09-03 publishes a cycling participation rate for Edmonton. All of its released data tables were pulled and searched, and the only cycling-specific ones are about helmet use."
+    sources: [YF-EV-0150]
+  - text: "Statistics Canada does ask the right question. Its Canadian Community Health Survey asks whether the respondent bicycled in the past twelve months, but no released product carries an Edmonton result from it."
+    sources: [YF-EV-0151, YF-EV-0150]
+  - text: "The only Edmonton survey the reviewers found that asks residents how often they ride, searching as of 2026-09-03, is the City's bike ridership survey of August 2014, and it is an opt-in panel. Invitations went to 1,029 members of the City's Insight Community, 646 completed it, and another 170 answered through an anonymous link with no demographic information."
+    sources: [YF-EV-0149]
+  - text: "That panel's answers are nowhere near 1 or 2 per cent. Of its 816 respondents, 327 chose \"Never ride a bike\", so 489 of them, three in five, gave some riding frequency. Its respondents chose themselves into it, which is why it cannot stand in for the population in either direction."
+    sources: [YF-EV-0149]
+  - text: "The other Edmonton instruments measure something else. The 2021 census records how people got to work, and the 2015 travel survey records trips made on one weekday, so neither counts the people who ride a bicycle at all over a year."
+    sources: [YF-EV-0155, YF-EV-0152]
+  - text: "The successor to the 2015 travel survey, Navigating Tomorrow, is the 2025 travel survey, and it had published no results by 2026-09-03."
+    sources: [YF-EV-0153]
+aliases:
+  - two-percent-of-edmontonians-ride-bikes
+  - bike-lanes-for-one-percent
+  - 2-3-percent-of-the-population
+register_claims: [one-to-two-percent-of-population-rides]
+limitations:
+  - "This is a finding about the published record on 2026-09-03, not a claim that no such measure could be produced. Statistics Canada holds health survey microdata containing a past-twelve-months cycling question, and a custom tabulation could settle it if that survey's sample will support an Edmonton estimate."
+  - "Two of the eight wordings folded into this claim are about people who use the bike lanes rather than people who ride, and they are not answered here in either direction. No published Edmonton instrument measures distinct bike-lane users, so no participation figure may be set against them. They were made, and they are reported as unmeasured."
+  - "The 2014 panel figure is reported under its own name because the brief required panel results to be shown, not because it measures the population. It cannot carry a finding and no finding here rests on it."
+  - "The same absence sits behind the seasonal claim on this page. Two findings, one gap in the record, and the same 2014 panel is the only Edmonton instrument in both."
+  - "A share of people who ride at all in a year, a share of trips and a share of commuters are three different numbers over three different denominators. None of the other findings on this page substitutes for this one."
+unknowns:
+  - "The share of Edmonton residents who ride a bicycle at all, over any period. It is simply not published."
+  - "The share of Edmonton residents who use a bike lane, which is what two of the circulating wordings assert and which no instrument measures."
+  - "Whether the City holds an unpublished representative survey of its own."
+  - "Whether cycling participation is rising or falling, which would need two comparable instruments and there is not one."
+missing_evidence:
+  - "A probability-sample survey of Edmonton residents asking whether the respondent cycled in the past twelve months, with the sampling frame, sample size and question wording published (City of Edmonton, or Statistics Canada through a Canadian Community Health Survey custom tabulation for Edmonton; critical)."
+  - "Navigating Tomorrow results, and whether that survey will publish a person-level participation measure rather than only trips (City of Edmonton and its regional partners; high)."
+  - "Any instrument that measures distinct users of bike lanes, which nobody currently holds and which would need to be built (moderate)."
+review:
+  agreement: Unanimous
+  reviewers:
+    - model: Claude Opus 5
+      verdict: Not established
+      confidence: High
+      key_findings:
+        - "Searched independently and identified no representative instrument publishing a cycling participation rate for Edmonton over any period, reaching the editor's conclusion by a separate route."
+        - "Bounded the absence by pulling Statistics Canada's complete released-table list and filtering it, and by ruling out the census, the 2015 travel survey and the unpublished successor survey by name."
+        - "Reported the City's 2014 opt-in panel under its own name and set no figure from it against the claim."
+      changed_between_rounds: "No change. In cross-review, noted that another reviewer's citation for the 2014 survey pointed at the counter dataset rather than the survey dataset."
+    - model: Gemini 3.1 Pro
+      verdict: Not established
+      confidence: High
+      key_findings:
+        - "The Canadian Community Health Survey collects twelve-month cycling participation but releases it only at health-region geography, not for Edmonton."
+        - "A search of Statistics Canada's released tables found no municipal cycling participation table."
+      changed_between_rounds: "No change."
+    - model: GPT-5.6 Sol
+      verdict: Not established
+      confidence: High
+      key_findings:
+        - "The claim is about annual participation among residents, not trips, commuters, bicycle ownership, counter passages or distinct lane users, and no admissible estimate of it was found."
+        - "The 2014 Insight Community survey is opt-in and supplemented by an anonymous link, so it cannot estimate the population."
+      changed_between_rounds: "No change."

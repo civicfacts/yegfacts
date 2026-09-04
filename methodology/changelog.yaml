@@ -1,7 +1,7 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
-- version: "1.21"
+- version: "1.25"
   date: "2026-09-03"
   scope: misattribution-and-prior-triage
   summary: >
@@ -23,7 +23,7 @@
     - "prior_triage is the schema change, and it is what earns a version. When v1.16 lifted triage from the claim up to the question, the decisions made at the old level went in the bin, and eleven propositions that both triage seats had independently returned NO on became live claims under questions that are going ahead. Three of them are the plainest kind: that cyclists pay property taxes, that Edmontonians pay for services they do not use, and that roads carry goods and emergency vehicles. Both readers turned all three down as things nobody disputes, which is the shape that took four published claims off the findings board earlier the same day, and all three were queued to be written up and given published findings. The field records the outcome, the seats that reached it, and the reason the run's combined triage file gave for it. On all eleven that reason copies one seat's wording word for word, and the field neither names that seat nor keeps the other seat's reason, which is a gap this version names and does not close. It moves no question's disposition and decides nothing. It means a brief author can see the refusal instead of rediscovering it."
     - "Two validator rules hold the shape of that field. One requires an outcome from the same vocabulary, at least two named readers and a reason, and rejects any other key. A refusal with no reason attached tells a brief author the claim was turned down without telling them why, which is worse than keeping nothing. Neither rule checks that those values match the run's combined triage file, which is a check that could be written and has not been, so that comparison is still done by hand. The other refuses the field on a claim declined on the right-of-reply ground, where the decline is live rather than historical, because a claim carrying both would read as having been ruled on twice."
     - "The register header told readers the validator tested the for/against/neither split against the question's total. It did not. It tested the total against the range its claims allow, which is a different check that passes things the promised one refuses. The described check now runs, and on its first pass it caught three splits in the published register overshooting their totals by one, on cycling-volumes, lanes-and-congestion and 83-avenue-lane. No page prints those splits, so no page was wrong; the file was. Each was one person who argued on two sides of a question and got counted on both. The claim-level count is deliberately everyone who argued a claim either way. The question-level split is people, once each, so the sides have to add up to the total. Which side somebody who argued on both ends up on is an editor's judgement the file does not record, and the header now says that as well as describing a check that exists."
-    - "Six question reasons go back for rewriting, from the same audit. Four ended by naming a split and not the sides of it: three said \"The two readers split GO and PARK\" and downtown-business said \"The two readers split NO and PARK\", which tells a reader there was a disagreement and not who was on which side of it. GPT-5.6 Sol parked all four of them. Gemini 3.1 Pro sent three ahead and declined the fourth, downtown-business. One seat is the cautious one three times out of four and the strict one on the fourth, and none of that was visible from the register, so all four reasons now name both readers and what each of them wanted. infill-luxury opened its decline with \"No captured post makes this claim\", which v1.15 says is a park and not a decline; the decline now leads on the ground that carries it. And hundred-million-approval told the reader who raised it that their question was dropped, without saying that the live half of it, how long the money covers and how it sits beside road spending, is already published."
+    - "Six question reasons go back for rewriting, from the same audit. Four ended by naming the two outcomes without saying which reader chose which: three said \"The two readers split GO and PARK\" and downtown-business said \"The two readers split NO and PARK\", which tells a reader there was a disagreement and leaves them unable to see who was on which side of it. GPT-5.6 Sol parked all four of them. Gemini 3.1 Pro sent three ahead and declined the fourth, downtown-business. So Sol is the cautious seat in the three go-against-park splits, and Gemini is the stricter seat in the one no-against-park split. None of that was visible from the register, so all four reasons now name both readers and what each of them wanted. The register header called a reason one public sentence; several of these need two or three, and the header now says that too. infill-luxury opened its decline with \"No captured post makes this claim\", which v1.15 says is a park and not a decline; the decline now leads on the ground that carries it. And hundred-million-approval told the reader who raised it that their question was dropped, without saying that the live half of it, how long the money covers and how it sits beside road spending, is already published."
     - "What this version does not do is close the hole. There is still no check anywhere that a claim's proposition says what its quotes say, and building one is separate work already under way rather than something shipped here. So the honest account of this version is that it repairs the specific defects that day's audit found, and names the gap that let the worst of them through. That gap is open as this is published."
   links:
     - label: How much have Edmonton property taxes gone up?
@@ -49,6 +49,175 @@
     not to write better rules. It is that a rule which lives only in a prompt is a
     statement of intent, and the difference between intent and a guarantee is
     the whole of what this project claims to be selling.
+- version: "1.24"
+  date: "2026-09-03"
+  scope: a-claim-parked-out-of-a-run
+  summary: >
+    A run may now publish fewer claims than it asked. Where a reviewer's framing
+    concern is right and no repair is available that does not make the claim
+    weaker, the claim leaves the run: named in the run manifest with its reason,
+    parked in public on the register, its answers left committed where they were
+    written, and the rest of the run synthesised.
+  highlights:
+    - "What happened. On cycling-volumes a blind seat raised a material framing concern against the claim that Edmonton's riders are recreational rather than commuters. The brief had fixed the 2015 regional household travel survey, whose fieldwork ran mid-September to mid-December on weekdays only, as the instrument for a claim about cycling with no season or day named. Both restrictions cut the same way, against the recreational side, and the same brief fixed July for another claim on the express ground that a claim is tested at its strongest for the side asserting it. The seat was right, and the inconsistency was the brief's."
+    - "Why the existing answer did not fit. Since methodology v1.2 a framing concern is answered by revising the brief and rerunning round 1. Neither available revision was honest here. Qualifying the proposition to autumn weekdays, in those words, makes it weaker than the claim people are actually making, and the standing rule is that a proposition may be made more precise and never weaker. Naming a better instrument means an Edmonton travel survey that records trip purpose across a representative period, which the brief's own source search had already looked for and not found."
+    - "What a run does instead. run.yaml carries a synthesis_scope: the claims this run synthesises, and the claims it parks with the reason each was parked. scripts/synthesize.ts reads it, produces findings for the claims in scope, and writes the parked ones into synthesis.json with their reasons and with every framing concern raised against them. A run that says nothing about scope behaves exactly as before."
+    - "The guards, because parking must not become a quiet way past a halt. Every claim round 1 asked appears in exactly one of the two lists, so a claim cannot fall out of a run by going unmentioned. A parked claim carries the reason a reader is shown; without one, a claim dropped because the record cannot answer it reads exactly like a claim dropped for the answer it gave. And a framing concern against a claim the run still publishes halts the run as it always did."
+    - "Nothing is deleted. The parked claim's round-1 answers, its blind re-run and the cross-review that sent it back all stay committed and readable. A claim the site tried and could not answer is part of the record of trying, and a reader following the run can see that a claim was dropped at the last stage and why."
+    - "In public. The claim is parked on the register on a new no-instrument ground, which is a different thing from a question parked at triage: this is what is left after the run has been spent. Its page keeps its wording and its provenance, says the claim went to the panel and came back unanswerable, and gives the reason and the condition on which it reopens."
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: Every question we've considered
+      href: /questions
+  note: >
+    The risk is that parking becomes the exit from an answer somebody did not
+    like. Two things bound it. The seats' answers stay committed beside the
+    reason, so anyone can see what the run would have published: here all three
+    had answered, and the finding it cost the run was Contradicted — a finding
+    against the people making the claim, not for them. And the concern that
+    parked it is copied into the deterministic artifact rather than dropped with
+    the claim. What would show this was wrong is a run that parks the claim
+    whose answer the editor found inconvenient, or a register where parked
+    claims accumulate faster than answered ones.
+- version: "1.23"
+  date: "2026-09-03"
+  scope: prior-verdict-from-the-committed-file
+  summary: >
+    Synthesis read a seat's own account of its earlier verdict in preference to
+    the file that recorded it, so a seat could write a cross-review movement
+    that never happened and the artifact would carry it. The committed round is
+    now the only authority on what a seat said before, and a self-report that
+    contradicts it is written out beside the position rather than dropped.
+  highlights:
+    - "What the bug allowed. scripts/synthesize.ts computed a reviewer's prior verdict as the from field of that reviewer's own round-2 verdict_changes entry, falling back to the committed round-1 file only when the seat had claimed nothing. A seat's self-report therefore outranked the record. Any seat could report having moved from a verdict it never held, and synthesis.json would publish changed_from as though the movement were a fact about the panel. Nothing checked the two against each other, so a wrong self-report could not be seen in the output at all."
+    - "What it did here. On cycling-volumes the Gemini seat's round 2 reported bike-lanes-look-empty moving from Not established to Contradicted, and gave the brief's revision as the reason. It was describing the halted round on the superseded brief, not the round it was answering: against its own committed round 1 on the re-frozen brief the seat had not moved, and round1/gemini.json says Contradicted. synthesis.json recorded the movement anyway."
+    - "The rule now. A seat's account of its own earlier position is not evidence about that position; the committed blind round is. Movement is read file against file. Where the seat's from disagrees with the file, the file decides the movement and the disagreement is recorded on the same position as disputed_self_report, carrying what the seat claimed, what the file says and the reason it gave. A seat misdescribing its own prior verdict is a fact about the seat and is worth seeing, so it is written down rather than silently discarded. changed_why is now emitted only where a movement the files show actually happened, so a reason can no longer stand alone attached to nothing."
+    - "How it was found, which is the part worth recording. Not by review and not by a test. A seat wrote an account of itself that was anachronistic — true of a round that had been superseded, false of the round it was in — and the synthesis believed it. The wrong entry was visible in synthesis.json for anyone reading it against round1/gemini.json, and it was caught by that comparison. The pipeline has a general rule here already, stated in the runner: models never attest their own identity or run parameters, because a claim by the thing being described is not evidence about it. This is the same rule, and synthesis was the one place still breaking it."
+    - "Pinned by tests/synthesize-self-report.test.ts. A seat claiming a from that contradicts its committed round 1 must record no movement; the contradicted claim must appear as disputed_self_report; a movement the files do show still records its stated reason; and a movement the files show but the seat never reported is still read off the files."
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: Panel quality record
+      href: /methodology#panel-quality
+  note: >
+    The narrow version of this is a precedence bug in one expression. The wider
+    version is that the artifact had no way to disagree with a reviewer about
+    the reviewer's own history, and so could only repeat it. Preferring the
+    self-report was not obviously wrong when it was written — a seat that says
+    it moved usually did, and the seat's own wording is more informative than a
+    diff of two verdict words. What it cost is that the one case where the two
+    disagree is exactly the case worth reading, and the code resolved it in
+    favour of the party with the least standing to be believed. What would show
+    this correction was wrong is a run where a seat's self-report turns out to
+    describe its committed round better than the file does, which would mean
+    the wrong file was committed and is a different failure with a different
+    fix.
+- version: "1.22"
+  date: "2026-09-03"
+  scope: claim-level-blind-rerun
+  summary: >
+    Cross-review has always been able to send one claim back for a fresh blind
+    re-run. Until now there was nowhere for that re-run to land, so the rule
+    existed and could not be used. It now has a directory, a manifest and a
+    line in the synthesis saying which blind round each claim's finding came
+    from.
+  highlights:
+    - "What was missing. Since methodology v1.3, stage 4 has sent a claim back to three blind seats when cross-review catches something material in it: a citation that does not say what it was cited for, evidence that is wrong, a position taken without the source having been read. Patching the claim inside the run was never the answer. The synthesis script read one directory, round1/, and had no way to be told that one claim's answers had been superseded. The only ways to act on the rule were to overwrite the seats' committed answers or to hand-edit the finding, and both are the thing the rule was written to forbid."
+    - "Where a re-run lives. Its three seats write into round1-rerun-<n>/ with their own run.yaml beside them, recording their own package hashes. round1/ is never rewritten. It stays the seats' answers to the package its hash records, and for a re-run claim it is the superseded record, readable next to what replaced it. Nothing is deleted and nothing is edited, which is the same shape round1-superseded/ already uses for a brief that was revised under v1.2."
+    - "What the seats are asked. The frozen brief, byte for byte, so its freeze hash still verifies; the round-1 reviewer prompt; the schema; and one added instruction naming the claims to answer. The scoping lives in the package wrapper, never in the brief, because editing a frozen brief is a new brief and a new framing check. The seat is told what to answer and nothing about why, so the re-run is as blind as the round it replaces."
+    - "What synthesis does with it. For every claim a re-run answered, the three positions come from the re-run and the superseded ones are not in the multiset at all — averaging them in would be the quiet correction the rule forbids. Every other claim is untouched. Each claim in synthesis.json now names its own basis, round1 or the re-run directory, so a reader never has to work out which round produced which finding."
+    - "The guards, because this is the one place a locked verdict can be replaced. A re-run must carry all three seats; all three must have answered the same claims; every claim it answers must already exist in round 1; and no two re-runs may cover the same claim. Any of those failing throws rather than picking a winner. Round 2's recorded movement is still measured against round 1, which is the round it actually answered, not against a re-run that came later."
+    - "First use, and what it found. On cycling-volumes, claim 1 synthesised Partially supported on a Split panel because one seat returned Not established in round 1, having read the dataset's update date off a developer-portal page rather than querying the dataset; in round 2, with the other seats' work in front of it, it queried directly and moved to Supported. The suspicion was that the round-1 verdict recorded an omission rather than a judgement, which is a material catch, so the claim went back to three blind seats."
+    - "The re-run did not do what anyone expected, and that is the argument for having it. Blind, on the same frozen brief, the same seat reached the same developer-portal page, drew the same conclusion and returned Not established again. Two seats returned Supported on a direct query of 1,291,714 counts. The multiset is unchanged and so is the finding: Partially supported, Split. What was a suspicion about one run is now a reproducible position of that seat on this brief, which is a fact worth having and could not have been got by patching the verdict. A mechanism that can only confirm what the editor already believed would not be worth building."
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: The synthesis matrix
+      href: /methodology#synthesis
+  note: >
+    The obvious risk is that a re-run becomes a way to re-roll a verdict
+    somebody did not like, and nothing in the mechanism prevents that on its
+    own. Three things bound it. The trigger is stated in stage 4, and what it
+    names are faults in the record rather than outcomes anyone disliked. The superseded answers stay committed and readable beside
+    the ones that replaced them, so a re-run that produced a more convenient
+    answer is visible as exactly that. And the re-run is blind on the same
+    frozen brief, so the only thing that can move is what the seats find, not
+    what the question asks. What would show this was wrong is a run where the
+    re-run count climbs, or one where the superseded verdicts read as sounder
+    than the ones that replaced them.
+- version: "1.21"
+  date: "2026-09-03"
+  scope: cross-review-output-shape
+  summary: >
+    The cross-review prompt asked for round 2's notes in words and left their
+    shape to be read off the schema, and one seat lost six findings to the gap.
+    The prompt now states the three fields and their exact shapes, the way the
+    round-1 prompt already states every value it asks for.
+  highlights:
+    - "What happened. On cycling-volumes the Gemini seat produced round-2 content four times and failed schema validation the same way every time: errors_in_other_reviews written as objects where the schema requires strings, and verdict_changes using from_verdict, to_verdict and reason where the schema requires from, to and why. Its round 1 validated on the first attempt. Six cross-review findings about the other seats' citations were written in a shape the pipeline cannot read, and were never put to the seats they concern."
+    - "Why this is a prompt defect and not only a seat failure. Round 1's prompt hands over every value the schema constrains, verbatim: the four verdicts, the three confidence levels, all six evidence-basis labels. Round 2's prompt named two fields and specified the shape of neither. Worse, its own prose supplied a different word for one key — record every change with THE REASON, where the schema says why — and asked, for each error, whose review, which claim, which citation and what is wrong with it, which is four attributes, in a field the schema types as one bare string. Both fields the seat got wrong are exactly the two places the prompt underspecified, and one of them it got wrong in the prompt's own noun."
+    - "The fix, and what was deliberately not fixed. prompts/cross-review.md now states that round2_notes has three fields and no others, that evidence_i_missed and errors_in_other_reviews are arrays of strings, that the four attributes item 3 asks for go into the one string, and that verdict_changes takes exactly claim, from, to and why. The schema is unchanged. Relaxing it to accept the objects the seat emitted would have made the contract follow the failure, and it would have broken every round 2 already committed under it."
+    - "The seat is not exonerated. The runner's one retry appends the exact validation errors to the package, so the seat was told which fields were wrong and returned them wrong again. An underspecified prompt explains the first attempt; it does not explain the fourth. Both facts are on the record, and the seat's reliability is tracked in the open question that already holds its earlier failure."
+    - "What the re-run settled. Handed the amended prompt and the same round-2 package, the seat validated on its first attempt. Five cross-review findings came back that nobody had read, four of them the ones lost in the invalid output and one new. That is as close to a controlled result as this pipeline offers: same seat, same CLI, same package, one prompt paragraph different, and the failure did not recur."
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: Panel quality record
+      href: /methodology#panel-quality
+  note: >
+    Worth saying plainly which way the causation runs, because the comfortable
+    version is that a seat misbehaved and the prompt was fine. The prompt was
+    not fine. Round 2 is the only part of the schema round 1 never exercises,
+    so it is the only part a seat meets cold, and it was the part the prompt
+    described loosest. Two seats guessed right and one guessed wrong, and a
+    contract that three careful readers resolve two ways is underspecified
+    whatever the pass rate. The correction is the same one made to briefs on
+    this site: state the shape, do not leave it to be inferred.
+- version: "1.20"
+  date: "2026-09-03"
+  scope: framing-check-defect-not-framing
+  summary: >
+    A framing check that has run out of rounds can still leave arithmetic
+    behind it. An error inside a verdict ladder is now a defect rather than a
+    framing finding: the editor corrects it in the checker's own words and the
+    brief gets one confirmation round. Everything about what a brief tests is
+    still framing, and still capped at three.
+  highlights:
+    - "The distinction, written narrowly so it cannot be stretched. A defect finding is one where the checker states the correction and the correction is verifiable without judgement. Three kinds qualify and nothing else does: verdict bands that overlap or leave a gap, a stated rule whose direction contradicts its own arithmetic, and a coverage or completeness rule that lets an unclassified remainder decide a verdict. Internal consistency and arithmetic. That is the whole list, and a defect finding that does not carry the checker's exact replacement wording is not one, because there would be nothing to verify."
+    - "Everything else is a framing finding and stays capped at three reports under v1.12: what the claim tests, whose reading of it, the value of a cutoff, whether a source is adequate, whether a verdict is reachable, whether the brief leaks an expectation. If a finding can be argued about, it is a framing finding, because the test for a defect is that there is nothing left to argue about."
+    - "What changes. A defect finding still standing after the third report no longer parks the brief. The editor corrects it using the wording the checker supplied, records each correction in the run record against the finding it answers, and the brief goes back for one defect confirmation. That fourth report may do two things: confirm the corrections, or name further defects. Nothing else."
+    - "How the loop ends, because a rule with no ending is not a rule. One defect confirmation is all a brief gets. If that report returns further defects and no framing finding, the editor corrects them in writing in the checker's supplied wording, records each against the finding it answers, and the brief freezes. There is no fifth report. This is not a new pattern: it is the one v1.12 already uses one level up, where the editor resolves the open findings in writing after the second framing report and the brief goes on. The check gets its rounds and then the editor is accountable in the record, rather than the loop running until somebody gives up."
+    - "The confirmation round has its own two verdict words, because the first one to run had none. The report on cycling-volumes came back headed `Verdict: REVISE`, which is the framing vocabulary, at the moment that word had stopped describing what happens next: a fourth report that accepts every correction and names one more arithmetic error now ends in the editor correcting it and freezing the brief, which is the opposite of what REVISE has always meant here. The checker had nothing else available to write. prompts/framing-check.md now heads that report `DEFECTS CONFIRMED` or `DEFECTS REMAIN`, and states that neither word parks anything, a framing finding being the only thing in a fourth report that can. The committed report keeps the word it was written with. It is the checker's own text and is not edited after the fact."
+    - "Why it ends in a freeze rather than a park. An unbounded defect round is a loophole, and a bounded one that ends in parking is a rule that can never release what it caught, which is the failure this whole entry exists to fix. Parking on arithmetic is always the wrong outcome, because a parked brief with a known ladder bug is unusable to everyone and no new intake evidence can ever release it. So the only real question was how the loop ends, and it ends with the editor's name on the correction and the checker's wording quoted beside it."
+    - "The guard, which is the point of the amendment. If the defect confirmation raises a framing finding, whether new or revived, the brief stays parked and no further round is available. Without that, a framing objection could be relabelled a defect to buy a fourth pass and the cap would be worth nothing. The checker, not the editor, labels each finding framing or defect in its own report, so the distinction is auditable in the committed record rather than asserted afterwards by the person it benefits. prompts/framing-check.md now carries the definition, the labelling requirement and the fourth round."
+    - "This does not loosen the v1.8 bound the cap descends from. Everything v1.8 settled about thresholds stands untouched, its ban on asking for an alternative to the alternative included. The value of a cutoff is a framing question, capped at three, and not renegotiable in a defect round. What a defect round may fix is whether the bands drawn around that value cover every number once, which is arithmetic and has one right answer."
+    - "Why now, and by whom. The rule was amended by the editor it had just blocked, on the brief it had just blocked. That is the least comfortable way for a rule to change and it is stated here for that reason. The site's first register-chosen question, cycling-volumes, went through three framing checks; the third settled the framing and called the contested editorial call defensible. What it left standing was three defects, all arithmetic inside verdict ladders, all introduced by the editor while adopting the checker's own findings, and all with the checker's replacement wording already written down."
+    - "The test that justifies it, stated so it can be applied without today's case in front of you. The failure would exist whatever brief hit it. A ladder that assigns two verdicts to the same total is worse if it passes than if it parks, so the cap is protecting nothing by holding it. And v1.12's escape clause, that a parked brief reopens only on new intake evidence, can never be satisfied by an arithmetic typo, because no evidence about the world bears on whether one number falls in two bands. A cap that can never release what it caught is a cap on the wrong thing."
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: About and independence
+      href: /about
+  note: >
+    The obvious objection is that the editor changed the rule that had just
+    stopped the editor's own brief, and it is the right objection to make.
+    Three things are offered against it and nothing more. The definition names
+    three failures and excludes judgement by construction, so a finding anyone
+    could argue with is not one of them. The checker labels its own findings,
+    so an objection cannot be reclassified after it has been read. And a
+    framing finding in the fourth round parks the brief for good, so the extra
+    round is worth nothing to anyone trying to use it as a second attempt at
+    framing. What would show this was wrong is a defect round that turns into
+    a framing argument, or briefs that start needing a fourth report as a
+    matter of course; both are visible in the run records, and the founder can
+    revert this the way he can revert anything else here. The clause about how
+    the loop ends was written the same day, after first use: the confirmation
+    on cycling-volumes accepted all three corrections, raised no framing
+    finding, and named a fourth arithmetic defect that three framing rounds
+    had walked past, and the rule as first written had nothing to say about
+    that. That the first run of a new rule found a real hole in it, and a real
+    bug in the brief, is the argument for the round existing at all.
 - version: "1.19"
   date: "2026-09-03"
   scope: claim-dispositions

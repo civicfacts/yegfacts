@@ -1,0 +1,69 @@
+id: cv-commute-by-car
+question: Do 87 percent of Edmontonians commute by car?
+story: cycling-volumes
+finding: Supported
+answer: >-
+  Yes, near enough. Statistics Canada recorded 85 per cent of Edmonton commuters
+  travelling by car, truck or van in the 2021 census.
+evidence_basis: Direct Edmonton evidence
+panel_agreement: Unanimous
+methodology_version: "1.24"
+review_run: reviews/cycling-volumes/2026-09-03
+plain_speech_read: reviews/cycling-volumes/2026-09-03/plain-speech/gpt-1.md
+topics: [transportation, bike-lanes]
+evidence: [YF-EV-0155, YF-EV-0156, YF-EV-0157, YF-EV-0158]
+key_facts:
+  - text: "In the 2021 census, 323,705 of Edmonton's 380,315 commuters travelled by car, truck or van, as driver or passenger. That is 85.11 per cent, inside the range the brief fixed in advance for a stated 87 per cent to be a fair report of it, under both sets of cutoffs."
+    sources: [YF-EV-0155]
+  - text: "The exact figure of 87 per cent is not the city's. It is almost exactly the Edmonton metropolitan area's 87.40 per cent, on 469,900 car commuters of 537,645, and that area takes in St Albert, Sherwood Park, Spruce Grove, Leduc and the rest of the region."
+    sources: [YF-EV-0156]
+  - text: "Driving alone is a smaller number than the combined one. Of Edmonton's 380,315 commuters, 298,320 travelled as a driver, which is 78.44 per cent, and 25,380 travelled as a passenger."
+    sources: [YF-EV-0155]
+  - text: "The rest of Edmonton's commuters in 2021 were 30,860 on public transit, 13,430 walking, 3,355 cycling, 335 on a motorcycle, scooter or moped and 8,635 by some other method. Statistics Canada publishes the total as 380,315; these separately rounded rows added to the car figure come to 380,320, because census counts are rounded before they are published."
+    sources: [YF-EV-0155]
+  - text: "The car share was much lower in the census before this one. In 2016, 367,225 of 466,230 Edmonton commuters travelled by car, which is 78.76 per cent, while public transit carried 67,990 of them against 30,860 in 2021."
+    sources: [YF-EV-0158]
+  - text: "The word commute is doing heavy work in the claim. Statistics Canada counted 102,210 employed Edmontonians working at home in 2021, all of them outside the commuting count. Put them back into the denominator and car travel is 66.9 per cent of employed Edmontonians rather than 85 per cent of commuters."
+    sources: [YF-EV-0157, YF-EV-0155]
+aliases:
+  - 87-percent-of-edmontonians-drive
+  - edmonton-car-commuting-share
+register_claims: [87-percent-commute-by-car]
+limitations:
+  - "The bicycle-commuting finding on this page is the same document read again. Both take a row out of Statistics Canada table 98-10-0479-01, for one universe in the 2021 census, so they are not two independent results."
+  - "The stated 87 per cent matches the metropolitan area rather than the city. Both figures fall inside the band the brief fixed, so the finding does not turn on it, but 87 should not be allowed to stand as Edmonton's own number."
+  - "Commuting in 2021 was not what it usually is. Public transit's share of Edmonton commuting roughly halved between the censuses while the car share rose more than six points, and the car share here is measured among the people who did commute."
+  - "Long-form census counts are randomly rounded to the nearest five before Statistics Canada publishes them, and every percentage here is worked out from those published counts."
+  - "Whether the 87 per cent figure was quoted from the census or from somewhere else was not tested. The reviewers found no published Edmonton document printing that exact number."
+unknowns:
+  - "Where the 87 per cent figure came from. It matches the metropolitan area closely enough that the census is the likely origin, but no document printing it was found."
+  - "What the car share would be at an ordinary time for commuting."
+  - "What it is in 2026. The next census commuting release comes after this page's freeze date."
+missing_evidence:
+  - "2026 census journey-to-work data for Edmonton (Statistics Canada; high)."
+  - "Any published Edmonton document printing 87 per cent for car commuting, which would settle where the claim came from (City of Edmonton, or a media outlet; moderate)."
+review:
+  agreement: Unanimous
+  reviewers:
+    - model: Claude Opus 5
+      verdict: Supported
+      confidence: High
+      key_findings:
+        - "The City of Edmonton figure the brief fixes as primary is 85.11 per cent, inside the Supported band under both cutoff sets, so the city figure carries the finding on its own."
+        - "The exact 87 per cent is the metropolitan area's 87.40 per cent, and a holder quoting it for Edmontonians is quoting the region's number under the city's name."
+        - "Car commuters are 85 per cent of commuters and about 67 per cent of employed Edmontonians, and which a reader hears depends on whether the word commute is doing work in the sentence."
+      changed_between_rounds: "No change. In cross-review, recorded that another reviewer had led with the metropolitan figure and described both geographies as carrying the band, which the brief does not permit."
+    - model: Gemini 3.1 Pro
+      verdict: Supported
+      confidence: High
+      key_findings:
+        - "85.11 per cent for the city and 87.40 per cent for the metropolitan area, both inside the Supported band."
+        - "Published the full mode breakdown for Edmonton commuters, which sums to 100 per cent of the census universe."
+      changed_between_rounds: "No change."
+    - model: GPT-5.6 Sol
+      verdict: Supported
+      confidence: High
+      key_findings:
+        - "The city's combined car row is 323,705 of 380,315, about 85.11 per cent, inside both Supported bands."
+        - "The metropolitan figure matches the circulating number more closely but must stay labelled as metropolitan."
+      changed_between_rounds: "No change."
