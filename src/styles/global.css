@@ -670,3 +670,49 @@ time,
     border-left: 1px solid var(--color-rule);
   }
 }
+
+/* ---------------------------------------------------------------------------
+   The methodology short version drawn as a flow (`NumberedSteps` with `flow`).
+   A hairline spine in the rule colour runs down the numeral column and joins
+   the first numeral to the last, so the five steps read as one process rather
+   than five entries. It is a pseudo-element on the `<li>` because the line
+   belongs to the step, not to a wrapper: the first step carries no line above
+   its numeral and the last none below, which is what makes the spine start and
+   stop on a node instead of running off into the padding.
+
+   Under `flow` the numeral is centred in its 2rem column, so the spine sits at
+   1rem, half the track the grid already declares, and needs no glyph metrics.
+   `--flow-node-y` is the centre of the numeral's line box: the row's `py-5`
+   plus half the `text-lg` leading. Below `sm` the numeral sits above the text
+   rather than beside it, so there is no column to run a spine down and none is
+   drawn.
+--------------------------------------------------------------------------- */
+
+.step-flow {
+  --flow-spine-x: calc(1rem - 0.5px);
+  --flow-node-y: calc(1.25rem + 0.875rem);
+}
+
+@media (width >= 40rem) {
+  .step-flow {
+    position: relative;
+  }
+
+  .step-flow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--flow-spine-x);
+    width: 1px;
+    background-color: var(--color-rule);
+  }
+
+  .step-flow:first-child::before {
+    top: var(--flow-node-y);
+  }
+
+  .step-flow:last-child::before {
+    bottom: calc(100% - var(--flow-node-y));
+  }
+}
