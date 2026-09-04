@@ -640,7 +640,7 @@ describe('registerProblems: a superseded claim-level decision', () => {
     ...overrides,
   });
 
-  it('accepts an outcome, the readers who reached it and their reason', () => {
+  it('accepts an outcome, the readers who reached it and the run’s combined reason', () => {
     expect(grouped([claim({ prior_triage: prior() }), otherSide()])).toEqual([]);
   });
 
@@ -662,9 +662,20 @@ describe('registerProblems: a superseded claim-level decision', () => {
     ).toEqual(['lanes-removed: prior_triage must name the two or more readers who reached it']);
   });
 
+  it('rejects the same reader named twice, which is not two readers', () => {
+    expect(
+      grouped([
+        claim({ prior_triage: prior({ readers: ['gpt-5.6-sol', 'gpt-5.6-sol'] }) }),
+        otherSide(),
+      ]),
+    ).toEqual([
+      'lanes-removed: prior_triage names the same reader twice; two readers means two distinct seats',
+    ]);
+  });
+
   it('rejects a decision that does not say why, which is the part that saves the run', () => {
     expect(grouped([claim({ prior_triage: prior({ reason: '  ' }) }), otherSide()])).toEqual([
-      'lanes-removed: prior_triage needs the reason those readers gave',
+      'lanes-removed: prior_triage needs the run\'s combined reason for the decision',
     ]);
   });
 

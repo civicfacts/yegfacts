@@ -109,9 +109,10 @@
 #               So the decision is recorded where it was made:
 #               { outcome, readers, reason }. `outcome` is from the same
 #               go | park | no vocabulary; `readers` names every seat that
-#               reached it, at least two, because "the readers declined it"
-#               means nothing unless a reader can see how many there were and
-#               who they were; `reason` is the reason the run's combined
+#               reached it, at least two and each distinct, because "the
+#               readers declined it" means nothing unless a reader can see how
+#               many there were and who they were, and naming one seat twice
+#               is not naming two; `reason` is the reason the run's combined
 #               triage file recorded for that decision. That file keeps one
 #               reason per decision, and on the eleven claims that carry this
 #               field the stored sentence copies one seat's wording word for

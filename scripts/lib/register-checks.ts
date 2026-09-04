@@ -546,9 +546,10 @@ function checkClaimState(where: string, claim: Record_, fail: (message: string) 
  * and said no, and on what ground.
  *
  * So it is checked as a record rather than as a disposition — an outcome, the
- * readers who reached it, and the sentence they gave. A superseded decision
- * with no reason is worse than none, because it stops a panel run without
- * saying why.
+ * readers who reached it, and the reason: the run's combined reason for the
+ * decision, kept in one seat's wording without saying which seat gave it. A
+ * superseded decision with no reason is worse than none, because it stops a
+ * panel run without saying why.
  */
 function checkPriorTriage(where: string, claim: Record_, fail: (message: string) => void): void {
   const prior = claim.prior_triage;
@@ -576,8 +577,12 @@ function checkPriorTriage(where: string, claim: Record_, fail: (message: string)
   const readers = prior.readers;
   if (!Array.isArray(readers) || readers.length < 2 || !readers.every(filled)) {
     fail(`${where}: prior_triage must name the two or more readers who reached it`);
+  } else if (new Set(readers).size !== readers.length) {
+    fail(`${where}: prior_triage names the same reader twice; two readers means two distinct seats`);
   }
-  if (!filled(prior.reason)) fail(`${where}: prior_triage needs the reason those readers gave`);
+  if (!filled(prior.reason)) {
+    fail(`${where}: prior_triage needs the run's combined reason for the decision`);
+  }
   for (const key of Object.keys(prior)) {
     if (key !== 'outcome' && key !== 'readers' && key !== 'reason') {
       fail(`${where}: prior_triage carries "${key}"; it is an outcome, its readers and a reason`);
