@@ -1,4 +1,5 @@
 ---
+import SearchGlyph from './SearchGlyph.astro';
 import Wordmark from './Wordmark.astro';
 import { servedPath } from '../lib/site';
 
@@ -10,8 +11,10 @@ const path = servedPath(Astro.url.pathname);
  * than a coloured box wrapped around one. The header row is the same
  * everywhere; the default slot renders inside the forest block under it, so the
  * home page can extend its own masthead — deck, search, helper line — without a
- * second dark band or a seam between two greens. The `deck` slot goes into the
- * header row itself, between the mark and the nav.
+ * second dark band or a seam between two greens. The `deck` slot renders under
+ * the header row rather than inside it: the row is the site's identity and its
+ * navigation, and the home page's sentence is the first thing the page says,
+ * not a third item competing for the same line.
  *
  * Search is the one item here that is an action rather than a section, so it
  * is drawn as an icon and sits outside the nav. As a word it was the seventh
@@ -40,31 +43,38 @@ const links: { href: string; label: string }[] = [
 <header class="masthead bg-forest text-paper" data-pagefind-ignore>
   <div class="mx-auto w-full max-w-3xl px-5 pt-4 lg:max-w-[66rem]">
     {/*
-      The row is ordered, not sourced: mark 1, deck 2 (set in Base.astro), nav 3,
-      icon 4, and below `md` the icon and nav trade places so the glyph rides
-      beside the mark. `mr-auto` on the mark replaces `justify-between`, which
-      would strand a three-item row's middle item; an `ml-auto` on the nav
-      would throw the home page's nav right on the line it has to itself.
+      The row is ordered, not sourced: mark 1, nav 3, icon 4, and below `md` the
+      icon and nav trade places so the glyph rides beside the mark. `mr-auto` on
+      the mark replaces `justify-between`, which would strand a middle item; an
+      `ml-auto` on the nav would throw the home page's nav right on the line it
+      has to itself.
     */}
-    <div class="flex flex-wrap items-baseline-last gap-x-7 gap-y-3 pb-4">
+    <div
+      class:list={[
+        'flex flex-wrap items-baseline-last gap-x-7 gap-y-3',
+        /* The home page's row is followed by a hairline and the deck, which carry their own air. */
+        wordmark === 'masthead' ? 'pb-3' : 'pb-4',
+      ]}
+    >
       <a href="/" class="order-1 mr-auto no-underline" aria-label="YEGFacts.ca home">
         <Wordmark size={wordmark} />
       </a>
-      {/* The home page sets its deck beside the mark; from `lg` the two share the row and the nav drops under them. */}
-      <slot name="deck" />
-      {/* Below `md` the nav has a line of its own; the words align right from `sm`. */}
-      <nav aria-label="Primary" class="order-4 basis-full md:order-3 md:basis-auto">
-        <ul class="flex flex-wrap gap-x-7 gap-y-2 sm:justify-end">
+      {/*
+        Below `md` the nav has a line of its own; the words align right from
+        `sm`. Sentence case, no underline, and the current page marked by full
+        opacity and a gold bar rather than by a heavier weight — see
+        `.masthead-nav` in global.css, which is also why the row's height is the
+        same on every page. `pb-1` sets the bar 4px under the baseline.
+      */}
+      <nav aria-label="Primary" class="masthead-nav order-4 basis-full md:order-3 md:basis-auto">
+        <ul class="flex flex-wrap gap-x-6 gap-y-2 sm:justify-end">
           {
             links.map((link) => (
               <li>
                 <a
                   href={link.href}
                   aria-current={path === link.href ? 'page' : undefined}
-                  class:list={[
-                    'text-[0.875rem] tracking-[0.1em] text-paper uppercase underline underline-offset-[0.16em] hover:decoration-2',
-                    path === link.href ? 'font-bold' : 'font-semibold',
-                  ]}
+                  class="pb-1 text-[0.9375rem] font-semibold"
                 >
                   {link.label}
                 </a>
@@ -92,24 +102,16 @@ const links: { href: string; label: string }[] = [
           aria-current={path === '/search' ? 'page' : undefined}
           class="group relative order-3 -mt-[22px] -mr-[13px] -mb-[22px] -ml-[21px] inline-flex h-11 w-11 items-center justify-center text-paper no-underline md:order-4 md:translate-y-[3.5px]"
         >
-          <svg
-            viewBox="0 0 20 20"
-            class="h-[18px] w-[18px] group-hover:[stroke-width:2.5]"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <circle cx="8.5" cy="8.5" r="5.5"></circle>
-            <path d="M12.6 12.6 17 17"></path>
-          </svg>
+          <SearchGlyph class="h-[18px] w-[18px] group-hover:[stroke-width:2.5]" />
           {
             path === '/search' && (
-              /* Current-page rule; positioned, not a border, so the glyph does not move on /search. */
+              /*
+                Current-page rule; positioned, not a border, so the glyph does
+                not move on /search. Gold, like the bar under the current nav
+                word, because it is the same mark for the same thing.
+              */
               <span
-                class="absolute inset-x-[13px] bottom-[8px] h-0.5 bg-paper"
+                class="absolute inset-x-[13px] bottom-[8px] h-0.5 bg-gold"
                 aria-hidden="true"
               />
             )
@@ -117,6 +119,8 @@ const links: { href: string; label: string }[] = [
         </a>
       )}
     </div>
+    {/* The home page's deck, under the row it used to sit in. */}
+    <slot name="deck" />
     <slot />
   </div>
 </header>

@@ -6,9 +6,9 @@
    badges. Interface chrome is square-cornered (2px on inline code is the one
    exception; a portrait and a status dot are circles because they are round
    things, not chrome), no shadows except on the glossary popover, and no
-   animation beyond colour transitions
-   on a control. A finding is printed in full and filled in its own colour, so a
-   list of them reads down one edge.
+   animation beyond 150ms colour and border transitions on links and controls,
+   off under `prefers-reduced-motion`. A finding is printed in full and filled
+   in its own colour, so a list of them reads down one edge.
 --------------------------------------------------------------------------- */
 
 @theme {
@@ -92,6 +92,41 @@
     outline: 3px solid var(--color-navy);
     outline-offset: 2px;
   }
+
+  /*
+   * The only motion the site has: a link or a control settles into its hover
+   * colour rather than snapping. Stated in `@layer base` so a utility that sets
+   * a transition on one element still wins, and switched off outright for a
+   * reader who has asked for less motion.
+   */
+  .link,
+  .link-stew,
+  .link-title,
+  .link-title-stew,
+  .masthead-nav a,
+  .chip,
+  button,
+  [data-toc-link] {
+    transition:
+      color 0.15s ease,
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      text-decoration-color 0.15s ease,
+      opacity 0.15s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .link,
+    .link-stew,
+    .link-title,
+    .link-title-stew,
+    .masthead-nav a,
+    .chip,
+    button,
+    [data-toc-link] {
+      transition: none;
+    }
+  }
 }
 
 /*
@@ -104,6 +139,30 @@
 
 .masthead a {
   color: var(--color-paper);
+}
+
+/*
+ * The masthead nav. Sentence case, no underline, and paper held back to 82% so
+ * the row sits behind the wordmark rather than competing with it; the page you
+ * are on comes to full strength and carries a gold bar. The bar is an inset
+ * box-shadow, not a border or an underline: it is a rule drawn inside the box,
+ * so it costs the row no height and the nav does not shift between pages. It
+ * has to be stated after `.masthead a`, which it overrides at equal
+ * specificity.
+ */
+.masthead-nav a {
+  opacity: 0.82;
+  text-decoration: none;
+}
+
+.masthead-nav a:hover,
+.masthead-nav a:focus-visible,
+.masthead-nav a[aria-current='page'] {
+  opacity: 1;
+}
+
+.masthead-nav a[aria-current='page'] {
+  box-shadow: inset 0 -2px 0 var(--color-gold);
 }
 
 /* ---------------------------------------------------------------------------
@@ -372,6 +431,67 @@ time,
 
 .link-stew:hover {
   text-decoration-thickness: 2px;
+}
+
+/*
+ * The second link treatment, and the rule that picks between the two: a link
+ * inside running text is underlined at rest, because there is nothing else in a
+ * paragraph to mark it; a link that IS a headline or a list item's title is
+ * not, because its size and position already say it is the thing to click, and
+ * a page of underlined headlines reads as ruled paper. The underline arrives on
+ * hover and on focus, so the affordance is never actually missing.
+ */
+.link-title,
+.link-title-stew {
+  text-decoration: none;
+}
+
+.link-title:hover,
+.link-title:focus-visible,
+.link-title-stew:hover,
+.link-title-stew:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.14em;
+}
+
+.link-title {
+  color: var(--color-navy);
+}
+
+/* The same, in Stew's brighter blue, for a headline in a block where he speaks. */
+.link-title-stew {
+  color: var(--color-stew-bright);
+}
+
+/* ---------------------------------------------------------------------------
+   Filter chips. A control, not a link: square, bordered, on white, and it
+   fills with ink when it is the filter in force. The register's script toggles
+   `is-filter-on`, so the on state is a class here rather than a second markup
+   path there.
+--------------------------------------------------------------------------- */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--color-rule-strong);
+  background-color: #ffffff;
+  color: var(--color-ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.chip:hover {
+  border-color: var(--color-ink);
+}
+
+.chip.is-filter-on {
+  background-color: var(--color-ink);
+  border-color: var(--color-ink);
+  color: var(--color-paper);
 }
 
 /* ---------------------------------------------------------------------------

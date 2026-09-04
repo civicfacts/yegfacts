@@ -72,7 +72,7 @@ const declinedApart = claim.triage === 'no' && question.triage !== 'no';
       reason up as something a commenter said.
     */}
     <h1
-      class="mt-3 text-[1.5rem] leading-[1.2] font-extrabold tracking-[-0.02em] text-pretty sm:text-[1.875rem]"
+      class="mt-3 text-[1.5rem] leading-[1.2] font-bold tracking-[-0.02em] text-pretty sm:text-[1.875rem]"
     >
       {quoted && claim.wording ? `“${claim.wording}”` : claimText(claim)}
     </h1>
@@ -101,7 +101,7 @@ const declinedApart = claim.triage === 'no' && question.triage !== 'no';
     reads as though something had been decided.
   */}
   <section id="finding" class="mt-10 scroll-mt-6">
-    <h2 class="text-xl font-extrabold tracking-[-0.015em] text-forest">No finding yet</h2>
+    <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">No finding yet</h2>
     <p class="mt-3.5 max-w-prose text-[1.0625rem] leading-relaxed text-pretty">
       {
         declinedApart
