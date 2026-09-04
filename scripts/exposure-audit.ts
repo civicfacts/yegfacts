@@ -300,7 +300,7 @@ function scanWithheldCoverage(entries: WithheldEntry[]) {
   );
   for (const claim of register.claims ?? []) {
     if (claim.ground !== 'right-of-reply') continue;
-    if (fingerprinted.has(claim.id)) continue;
+    if (claim.id && fingerprinted.has(claim.id)) continue;
     report(
       'WITHHELD LEAK',
       WITHHELD_FINGERPRINTS,
