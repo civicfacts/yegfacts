@@ -584,3 +584,53 @@ mixing answers from two packages in one round would make the round
 dishonest. The manifest's round-1 entries are rewritten for the rerun;
 the copy at `round1-superseded/run.yaml` holds what they said for the
 halted round.
+
+### What the rerun returned
+
+Three seats, blind, identical package: `prompt_sha256`
+`6448222da855649d19038ca6656c7e4ef6fd367ba416f2fd601e5a31faae137d`
+for all three, against the superseded round's
+`8b393172b0ae667128a5ff5f4d3800b10ad9904e25d0b5939530d09d5114aed6`. One
+attempt each, all schema-valid. **No seat raised a framing concern on any
+claim.**
+
+| Claim | Claude Opus 5 | Gemini 3.1 Pro | GPT-5.6 Sol |
+| --- | --- | --- | --- |
+| `cycling-trips-1-3-million-2026` | Supported (High) | Supported (High) | Not established (Moderate) |
+| `bike-lanes-look-empty` | Contradicted (High) | Contradicted (High) | Not established (Low) |
+| `one-to-two-percent-of-population-rides` | Not established (High) | Not established (High) | Not established (High) |
+| `one-percent-year-round-users` | Not established (High) | Not established (High) | Not established (High) |
+| `two-percent-of-trips-by-bike` | Supported (Moderate) | Supported (High) | Supported (High) |
+| `under-one-percent-of-commuters-cycle` | Supported (High) | Supported (High) | Supported (High) |
+| `87-percent-commute-by-car` | Supported (High) | Supported (High) | Supported (High) |
+| `riders-are-recreational-not-commuters` | Contradicted (Low) | Not established (High) | Contradicted (Moderate) |
+
+**The membership rule did what it was revised to do.** The two seats that
+executed it derived the same set, counter for counter, working
+independently and blind: 51 counters in the universe, 42 in service on
+2025-07-01, 21 on-street against 21 off-street with none unclassifiable
+and no tie, one counter out of service, 20 measured with all 31 days of
+July 2025 published, and the lowest July median in the set at 46 a day.
+The counter that voided the superseded brief, `106 Street N of Jasper
+Avenue`, is named by both with its last record at 2025-07-16 and its
+last stable level at a median of 177.5 a day in June 2025 — about seven
+times the primary cutoff while it worked. On the superseded brief the
+same two seats derived twenty on-street counters and seventeen. That
+disagreement is gone.
+
+Both also report the claim as definition-sensitive between the cutoffs,
+which is the v1.8 alternative doing its job: Contradicted at 25 a day,
+Partially supported at 50, where one counter (`96 Street S of Jasper
+Ave`, median 46) falls below.
+
+**The third seat could not run the join, and said so rather than
+guessing.** GPT-5.6 Sol returned Not established at Low confidence on
+claim 2, recording in `limitations` that it could not execute the
+nearest-segment spatial join or enumerate tests 1 to 5 from the
+interfaces available to it, and listing every quantity it therefore did
+not have. It raised no framing concern. That is an honest Not
+established from that seat's own evidence, and it is a fact about what a
+brief may ask of a seat: this one now asks for a geometric computation
+over ten thousand line segments, which two seats did and one could not.
+The cost of pinning the set is that the rule is heavier to execute than
+reading a counter's name, and this run is the record of what that cost.
