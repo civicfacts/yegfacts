@@ -1,0 +1,467 @@
+{
+  "story": "cycling-volumes",
+  "run": "2026-09-03",
+  "methodology_version": "1.24",
+  "basis": "round1",
+  "claim_reruns": [
+    "round1-rerun-1",
+    "round1-rerun-2"
+  ],
+  "parked_claims": [
+    {
+      "id": "riders-are-recreational-not-commuters",
+      "reason": "The brief fixed the 2015 Edmonton and Region Household Travel Survey, whose fieldwork ran 2015-09-14 to 2015-12-11 on weekdays only, as the instrument for a proposition about cycling in Edmonton with no season or day named. Both restrictions cut against the recreational side, and the same brief fixed July for claim 2 on the express ground that a claim is tested at its strongest for the side asserting it. The Claude seat raised that as a material framing concern in the blind re-run, and it is right. No repair was available: qualifying the proposition to autumn weekdays makes it weaker than the claim people are making, and a representative Edmonton survey recording trip purpose does not exist — the brief's own source search looked for one. So the claim leaves this run rather than being answered on an instrument that cannot carry it. It is parked on the register, and reopens if such a survey is published. The sequence is in run-record.md stage 9 and errata.md item 7; the seats' answers are in round1/ and round1-rerun-2/.",
+      "basis": "round1-rerun-2",
+      "framing_concerns": [
+        "round 1 · claude · claim \"riders-are-recreational-not-commuters\""
+      ]
+    }
+  ],
+  "round2_documented": true,
+  "generated_at": "2026-09-04T04:22:10.906Z",
+  "claims": [
+    {
+      "id": "cycling-trips-1-3-million-2026",
+      "finding": "Partially supported",
+      "panel_agreement": "Split",
+      "rationale": "Two established the claim, one found the record silent; resolved down to the qualified reading.",
+      "basis": "round1-rerun-1",
+      "reviewers": [
+        {
+          "provider": "claude",
+          "model_self_reported": "claude-opus-5",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "I queried the base dataset directly through the City's Socrata API rather than relying on any published summary. Sum of total_cyclist_count for log_timestamp from 2026-01-01T00:00:00 to 2026-07-31T23:45:00 inclusive = 1,291,714, over 933,576 fifteen-minute records at 48 counter locations. That is 0.6 percent below the stated 1.3 million. It falls inside the primary Supported band (at least 1.10 million, below 1.50 million) and also inside the tighter alternative Supported band (at least 1.17 million, below 1.43 million), so the verdict is not definition-sensitive across the two cutoff sets the brief fixes. The short-window rule does not trigger: the published record covers the full window, with records on all 212 calendar days and a last record at 2026-07-31T23:45. Two independently published City views agree exactly — the 15-minute dataset tq23-qn4m and the derived daily dataset sw7k-ptx8 both return 1,291,714 for the window. On the brief's instruction to use the City's own word: the City calls these counts, not trips. The dataset is titled 'Bike and Pedestrian Counts (Eco Counter)' and the field is 'Total Cyclist Count'; the word 'trips' comes from CBC News, whose sentence of 2026-08-07 the commenter reposted verbatim, and CBC itself writes that the counters 'measure the number of bikes that cross them, so the data is a better indicator of traffic volume than individual cyclists'. Under the brief's ladder that wording is a reporting requirement and a limitation, not a component of the verdict, which is set on the figure alone. Robustness check the brief does not require: excluding every record the City flags in out_of_service ('Outage 1', 44,973 records carrying 25,341 counts; 'Out of Service', 2,400 records carrying 1,349 counts) lowers the total to 1,265,024, still Supported under both cutoff sets."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.8 Flash (High)",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "The claim is evaluated strictly against the City of Edmonton's automated Eco-Counter open data portal records between 2026-01-01 and 2026-07-31 inclusive. While the holder and media commentators describe the recorded total as 'cycling trips,' automated sensor equipment measures bicycle passages (counts past fixed sensors) rather than complete origin-destination journeys or unique individuals. Under the brief's fixed primary threshold (Supported if total is 1.10M to <1.50M), the recorded total of 1,291,714 bicycle counts falls directly in the Supported range (just 8,286 counts shy of 1.3 million). Under the brief's tighter alternative cutoff (Supported if total is 1.17M to <1.43M, within 10% of 1.3M), the verdict is also Supported."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "GPT-5",
+          "verdict": "Not established",
+          "confidence": "Moderate",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "I used the brief's fixed passage-count definition. Under both the primary and alternative thresholds, a completed total of approximately 1.3 million would be Supported. The verdict is instead Not established because I could not verify that the primary dataset covered the full period through July 31."
+        }
+      ],
+      "round2_positions": [
+        {
+          "provider": "claude",
+          "model_self_reported": "Claude Opus 5",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Unchanged from round 1: Supported, High confidence. The sum of total_cyclist_count in tq23-qn4m for log_timestamp from 2026-01-01T00:00:00 to 2026-07-31T23:45:00 is 1,291,714, which sits inside the primary Supported band of at least 1.10 million and below 1.50 million and inside the alternative band of at least 1.17 million and below 1.43 million. The verdict is not definition-sensitive. gemini queried the same endpoint independently and returned the identical figure to the unit, which is the strongest form of confirmation available here. gpt returned Not established on the ground that it could not verify the dataset covered the full window, citing a developer documentation page listing a last update of 2026-07-22. That page is not the dataset's metadata. The Socrata metadata for tq23-qn4m gives rowsUpdatedAt of 2026-09-03, and the extract runs to 2026-07-31T23:45 across 933,576 fifteen-minute records. The brief's short-window rule was written for the case where the published record stops before 2026-07-31, and that case did not arise. I hold Supported. The City calls these counts, not trips, and I use the City's word: the figure is 1,291,714 counted passages, over no denominator, and it is not a count of people or of journeys."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.8 Flash (High)",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Evaluated as the aggregate sum of total_cyclist_count recorded across every City of Edmonton automated bicycle counter published in open dataset tq23-qn4m between 2026-01-01T00:00:00 and 2026-07-31T23:59:59 inclusive. Counters record sensor detections (labeled 'counts' by the City), not individual unique trips or persons. The live dataset covers the required window in full (rows updated 2026-09-03, data through 2026-09-02), recording exactly 1,291,714 bicycle counts across 48 reporting counter locations (41 recorded non-zero cyclist counts; 7 are pedestrian-only). Under both the primary threshold ([1.10M, 1.50M]) and the alternative tenth-range threshold ([1.17M, 1.43M]), the recorded figure of 1,291,714 counts falls squarely within the Supported band (within 0.64% of 1.3 million). In cross-review, we note that GPT returned Not established by citing developer foundry doc metadata (dev.socrata.com/foundry/...) showing an update date of 2026-07-22; this was an error because the live dataset itself is complete through 2026-07-31. Media tracking confirms the circulating sentence originated from a CBC News analysis (2026-08-07) of the same open dataset."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "GPT-5",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "changed_from": "Not established",
+          "changed_why": "New direct dataset evidence establishes records through 2026-07-31 and an exact total of 1,291,714. The earlier 2026-07-22 metadata date was not proof of a short published window. The total is inside both Supported bands.",
+          "interpretation_notes": "The direct City dataset contains records through the end of 2026-07-31 and sums to 1,291,714 bicycle counts. This falls within the primary Supported band of 1.10 million to below 1.50 million and the alternative Supported band of 1.17 million to below 1.43 million. My round-1 reliance on a metadata page showing a 2026-07-22 update date was mistaken: a metadata timestamp does not establish the final observation date. The City's term is count, not trip. The figure measures passages detected at fixed points and cannot establish journeys or distinct riders."
+        }
+      ],
+      "disagreement_notes": [
+        "claude: Supported (High)",
+        "gemini: Supported (High)",
+        "gpt: Not established (Moderate)",
+        "claude interpretation: I queried the base dataset directly through the City's Socrata API rather than relying on any published summary. Sum of total_cyclist_count for log_timestamp from 2026-01-01T00:00:00 to 2026-07-31T23:45:00 inclusive = 1,291,714, over 933,576 fifteen-minute records at 48 counter locations. That is 0.6 percent below the stated 1.3 million. It falls inside the primary Supported band (at least 1.10 million, below 1.50 million) and also inside the tighter alternative Supported band (at least 1.17 million, below 1.43 million), so the verdict is not definition-sensitive across the two cutoff sets the brief fixes. The short-window rule does not trigger: the published record covers the full window, with records on all 212 calendar days and a last record at 2026-07-31T23:45. Two independently published City views agree exactly — the 15-minute dataset tq23-qn4m and the derived daily dataset sw7k-ptx8 both return 1,291,714 for the window. On the brief's instruction to use the City's own word: the City calls these counts, not trips. The dataset is titled 'Bike and Pedestrian Counts (Eco Counter)' and the field is 'Total Cyclist Count'; the word 'trips' comes from CBC News, whose sentence of 2026-08-07 the commenter reposted verbatim, and CBC itself writes that the counters 'measure the number of bikes that cross them, so the data is a better indicator of traffic volume than individual cyclists'. Under the brief's ladder that wording is a reporting requirement and a limitation, not a component of the verdict, which is set on the figure alone. Robustness check the brief does not require: excluding every record the City flags in out_of_service ('Outage 1', 44,973 records carrying 25,341 counts; 'Out of Service', 2,400 records carrying 1,349 counts) lowers the total to 1,265,024, still Supported under both cutoff sets.",
+        "gemini interpretation: The claim is evaluated strictly against the City of Edmonton's automated Eco-Counter open data portal records between 2026-01-01 and 2026-07-31 inclusive. While the holder and media commentators describe the recorded total as 'cycling trips,' automated sensor equipment measures bicycle passages (counts past fixed sensors) rather than complete origin-destination journeys or unique individuals. Under the brief's fixed primary threshold (Supported if total is 1.10M to <1.50M), the recorded total of 1,291,714 bicycle counts falls directly in the Supported range (just 8,286 counts shy of 1.3 million). Under the brief's tighter alternative cutoff (Supported if total is 1.17M to <1.43M, within 10% of 1.3M), the verdict is also Supported.",
+        "gpt interpretation: I used the brief's fixed passage-count definition. Under both the primary and alternative thresholds, a completed total of approximately 1.3 million would be Supported. The verdict is instead Not established because I could not verify that the primary dataset covered the full period through July 31."
+      ]
+    },
+    {
+      "id": "bike-lanes-look-empty",
+      "finding": "Contradicted",
+      "panel_agreement": "Adjacent",
+      "rationale": "Majority found affirmative counter-evidence; one reviewer found the record silent.",
+      "basis": "round1",
+      "reviewers": [
+        {
+          "provider": "claude",
+          "model_self_reported": "Claude Opus 5 (claude-opus-5)",
+          "verdict": "Contradicted",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "I ran the five tests from published fields alone, in order, against tq23-qn4m (counts, coordinates and service), py7x-4d39 (locations) and vd4b-a4iv (Bike Routes), all pulled 2026-09-03. TEST 1, universe: 51 distinct counter_location_description values whose counter_configuration names cyclists or bikes. 10 pedestrian-only locations removed: Capilano Bridge, Emily Murphy, Funicular @ 100 St, Hermitage South, Keillor Point, Keillor Point (EBD into Keillor Point/WBD out of Keillor Point), Queen Elizabeth Park 2, Riverside Golf Course, Sir Wilfrid Laurier Park, Whitemud Ravine Boardwalk. TEST 2, in service on 2025-07-01: 42 pass, 9 removed - 100 Street S of 81 Avenue, 106 Street S of 61 Avenue W, 142 Street N of Whitemud Drive and 23 Avenue W of Hewes Way (first record 2026-08-30, after the date); 105 Avenue W of 101 Street (last record 2023-03-19); 105 Avenue W of 109 Street (2021-07-04); 99 Street N of 102A Avenue (2024-04-03); Rossdale SUP (2024-04-24); Woodward Trail / Wolf Willow EBD/WBD (2022-12-31). TEST 3, on-street or off-street, by nearest built Bike Routes segment to the counter's published coordinates: 21 on-street, 21 off-street, 0 unclassifiable. Every counter had a segment within 30 m and no ON ROAD/OFF ROAD tie within 0.1 m; the closest call was 96 Street S of Jasper Ave at ON 6.7 m against OFF 55.2 m. No counter is borderline under the ten-metre rule: the smallest gap between nearest ON ROAD and nearest OFF ROAD across all 42 candidates is 20.8 m (High Level Bridge East). The 21 removed as off-street, with distance to the nearest OFF ROAD segment and its classification: 102 Avenue SUP W Groat Rd Bridge (0.3 m, Shared Pathway), 121 Street SUP N of 107 Avenue (3.2, Shared Pathway), 163 Ave SUP W 75 Street (2.6, Shared Pathway), 91 Street S Whitemud Dr (18.5, Shared Pathway), Belgravia Rd Foot Bridge SUP (0.5, Shared Pathway), Buena Vista Bridge (3.4, Shared Trail), Capilano SUP (1.7, Shared Pathway), East Trails (0.7, Shared Pathway), Gold Bar Trail (4.3, Shared Pathway), Hermitage North (0.8, Shared Pathway), High Level Bridge East (1.9, Shared Pathway), High Level Bridge West (3.3, Shared Pathway), LRT SUP East of 92 Street (1.1, Shared Pathway), MacKinnon Ravine (2.2, Shared Pathway), Power Line Tr E Carter Crest Way (0.9, Shared Pathway), Queen Elizabeth Park (0.8, Shared Pathway), Railtown Park SUP (1.2, Shared Pathway), Terwillegar Park Footbridge (1.2, Shared Pathway), Victoria Trail S 137 Avenue (2.2, Shared Pathway), Wedgewood (8.5, Shared Pathway), Woodward Trail Wolf Willow (0.3, Shared Trail). TEST 4, out of service: one counter leaves the set - 106 Street N of Jasper Avenue, last record anywhere 2025-07-16, so it stopped inside the measured month and never resumed. Its last stable level is a median of 177.5 bicycles/day in June 2025, the last calendar month it published in full (30 of 30 days). It was on a Protected Bike Lane 2.5 m from its coordinates. Removing it does not help the claim: it was carrying roughly seven times the primary cutoff while it worked. TEST 5, measured: all 20 remaining counters published bicycle counts on all 31 days of July 2025. None is under-reported. The verdict set is non-empty, nothing is unclassifiable, nothing is under-reported, so the cutoffs apply. RESULT. Every one of the 20 July medians is at or above 25, the lowest being 46. Under the primary cutoff no counter is below it, so the verdict is Contradicted. Under the alternative cutoff of 50 a day, one counter (96 Street S of Jasper Ave, median 46) is below and 19 are at or above, which returns Partially supported. The finding is therefore definition-sensitive at the alternative cutoff, and the story should say so beside the verdict. The verdict I report is the primary one. This finding covers the lanes the City counts and no others. The counters sit where the City chose to monitor; they are not a random or representative sample of Edmonton's on-street bike lanes, and nobody publishes a representative sample of them. A holder who means every lane in the city has not been answered."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.8 Flash (High)",
+          "verdict": "Contradicted",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Evaluated using the brief's five-test rule for metered on-street bike lanes. Test 1 found 51 cyclist counters. Test 2 confirmed 42 in service on 2025-07-01 (9 removed). Test 3 spatial join to Bike Routes vd4b-a4iv identified 21 ON ROAD and 21 OFF ROAD counters (0 unclassifiable, 0 borderline). Test 4 removed 1 out-of-service counter (106 Street N of Jasper Avenue, last record 2025-07-16, last complete month June 2025 median 177.5). Test 5 confirmed all 20 remaining counters reported all 31 days of July 2025 (0 under-reported). July 2025 daily medians ranged from 46.0 to 979.0 bikes/day. Under the primary cutoff of 25 bikes/day, zero counters were below 25, resulting in Contradicted. Under the alternative cutoff of 50 bikes/day, exactly one counter (96 Street S of Jasper Ave at 46.0) fell below 50 while 19 exceeded 50, which would yield Partially supported."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "GPT-5",
+          "verdict": "Not established",
+          "confidence": "Low",
+          "evidence_basis": "mostly-edmonton",
+          "interpretation_notes": "The proposition covers only metered on-street lanes selected by the brief's five tests, not all Edmonton bike lanes and not the accuracy of residents' momentary observations. The alternative cutoff is 50 passages per day. I could not reproducibly construct the required verdict set, so neither cutoff can be applied."
+        }
+      ],
+      "round2_positions": [
+        {
+          "provider": "claude",
+          "model_self_reported": "Claude Opus 5",
+          "verdict": "Contradicted",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Unchanged from round 1: Contradicted under the primary cutoff, High confidence, and definition-sensitive. Applying the brief's five tests I reached a verdict set of 20 on-street counters, all in service through July 2025 and all reporting the full month, with July 2025 median daily bicycle counts from 46 to 979. No counter is below the primary cutoff of 25 a day, so no counter is below it and the ladder returns Contradicted. Under the alternative cutoff of 50, one counter, 96 Street S of Jasper Ave at 46, falls below and nineteen do not, so the alternative returns Partially supported. The story cannot fairly quote this verdict without that. gemini reached the same 20-counter set and the same medians working independently, including the same single out-of-service removal at 106 Street N of Jasper Avenue, which is the strongest available check on a membership rule this intricate. gpt returned Not established because it could not execute the spatial join. I do not follow it there: the brief's Not established conditions for this claim are an empty set, an unclassifiable counter, or an under-reported counter, and none of the three obtained. A reviewer's inability to compute a figure is not a finding about the published record. Two features of the data survive the verdict and belong beside it. The corridors residents named are genuinely at the quiet end of the metered set, 71 and 79 on 132 Avenue and 152 on 119 Avenue against 979 on 83 Avenue, an order of magnitude apart. And no counter sits on Whyte Avenue itself."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.8 Flash (High)",
+          "verdict": "Contradicted",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "disputed_self_report": {
+            "claimed_from": "Not established",
+            "committed": "Contradicted",
+            "why": "In the initial halted round 1, a procedural verdict of Not established was returned due to counter 106 Street N of Jasper Avenue stopping records on 2025-07-16, which triggered the former coverage rule and prompted a Material Framing Concern. Following the brief revision and re-freeze under methodology v1.2 (Test 4: out-of-service counters leave the verdict set rather than rendering the verdict unavailable), the active verdict set contains 20 measured on-street counters. All 20 counters recorded July 2025 medians >= 25 bicycles/day (ranging from 46 to 979), establishing Contradicted under the primary threshold."
+          },
+          "interpretation_notes": "Evaluated using the brief's revised five-test rule for metered on-street bike lanes. Test 1 found 51 cyclist counter locations in tq23-qn4m (10 pedestrian-only removed). Test 2 confirmed 42 in service on 2025-07-01 (9 removed). Test 3 spatial join to built Bike Routes vd4b-a4iv identified 21 ON ROAD and 21 OFF ROAD counters (0 unclassifiable, 0 borderline under the 10m rule; smallest gap was 20.8m at High Level Bridge East). Test 4 (revised) removed 1 out-of-service counter (106 Street N of Jasper Avenue, last record 2025-07-16, last complete month June 2025 median 177.5). Test 5 confirmed all 20 remaining counters reported all 31 days of July 2025 (0 under-reported). July 2025 daily medians ranged from 46.0 to 979.0 bikes/day. Under the primary cutoff of 25 bikes/day, zero counters were below 25, resulting in Contradicted. Under the alternative cutoff of 50 bikes/day, exactly one counter (96 Street S of Jasper Ave at 46.0) fell below 50 while 19 exceeded 50, which would yield Partially supported."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "GPT-5",
+          "verdict": "Contradicted",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "changed_from": "Not established",
+          "changed_why": "The combined evidence now supplies the complete five-test membership calculation. The final set is non-empty, has no unclassifiable or under-reported counters, and all 20 July medians are at least 46 per day, so none is below the primary cutoff of 25.",
+          "interpretation_notes": "The combined evidence completes the five fixed tests. Test 1 leaves 51 cyclist-configured locations after removing 10 pedestrian-only locations. Test 2 leaves 42 locations with a record on 2025-07-01. Test 3 classifies 21 ON ROAD and 21 OFF ROAD, with no unclassifiable or borderline counter. Test 4 removes 106 Street N of Jasper Avenue because its final record is 2025-07-16. Test 5 finds all 20 remaining counters measured on all 31 July days. Their July medians range from 46 to 979 per day. None is below 25, so the primary verdict is Contradicted. At the alternative cutoff of 50, one counter is below and 19 are not, producing Partially supported. The finding is definition-sensitive and covers only the metered on-street locations."
+        }
+      ],
+      "disagreement_notes": [
+        "claude: Contradicted (High)",
+        "gemini: Contradicted (High)",
+        "gpt: Not established (Low)",
+        "claude interpretation: I ran the five tests from published fields alone, in order, against tq23-qn4m (counts, coordinates and service), py7x-4d39 (locations) and vd4b-a4iv (Bike Routes), all pulled 2026-09-03. TEST 1, universe: 51 distinct counter_location_description values whose counter_configuration names cyclists or bikes. 10 pedestrian-only locations removed: Capilano Bridge, Emily Murphy, Funicular @ 100 St, Hermitage South, Keillor Point, Keillor Point (EBD into Keillor Point/WBD out of Keillor Point), Queen Elizabeth Park 2, Riverside Golf Course, Sir Wilfrid Laurier Park, Whitemud Ravine Boardwalk. TEST 2, in service on 2025-07-01: 42 pass, 9 removed - 100 Street S of 81 Avenue, 106 Street S of 61 Avenue W, 142 Street N of Whitemud Drive and 23 Avenue W of Hewes Way (first record 2026-08-30, after the date); 105 Avenue W of 101 Street (last record 2023-03-19); 105 Avenue W of 109 Street (2021-07-04); 99 Street N of 102A Avenue (2024-04-03); Rossdale SUP (2024-04-24); Woodward Trail / Wolf Willow EBD/WBD (2022-12-31). TEST 3, on-street or off-street, by nearest built Bike Routes segment to the counter's published coordinates: 21 on-street, 21 off-street, 0 unclassifiable. Every counter had a segment within 30 m and no ON ROAD/OFF ROAD tie within 0.1 m; the closest call was 96 Street S of Jasper Ave at ON 6.7 m against OFF 55.2 m. No counter is borderline under the ten-metre rule: the smallest gap between nearest ON ROAD and nearest OFF ROAD across all 42 candidates is 20.8 m (High Level Bridge East). The 21 removed as off-street, with distance to the nearest OFF ROAD segment and its classification: 102 Avenue SUP W Groat Rd Bridge (0.3 m, Shared Pathway), 121 Street SUP N of 107 Avenue (3.2, Shared Pathway), 163 Ave SUP W 75 Street (2.6, Shared Pathway), 91 Street S Whitemud Dr (18.5, Shared Pathway), Belgravia Rd Foot Bridge SUP (0.5, Shared Pathway), Buena Vista Bridge (3.4, Shared Trail), Capilano SUP (1.7, Shared Pathway), East Trails (0.7, Shared Pathway), Gold Bar Trail (4.3, Shared Pathway), Hermitage North (0.8, Shared Pathway), High Level Bridge East (1.9, Shared Pathway), High Level Bridge West (3.3, Shared Pathway), LRT SUP East of 92 Street (1.1, Shared Pathway), MacKinnon Ravine (2.2, Shared Pathway), Power Line Tr E Carter Crest Way (0.9, Shared Pathway), Queen Elizabeth Park (0.8, Shared Pathway), Railtown Park SUP (1.2, Shared Pathway), Terwillegar Park Footbridge (1.2, Shared Pathway), Victoria Trail S 137 Avenue (2.2, Shared Pathway), Wedgewood (8.5, Shared Pathway), Woodward Trail Wolf Willow (0.3, Shared Trail). TEST 4, out of service: one counter leaves the set - 106 Street N of Jasper Avenue, last record anywhere 2025-07-16, so it stopped inside the measured month and never resumed. Its last stable level is a median of 177.5 bicycles/day in June 2025, the last calendar month it published in full (30 of 30 days). It was on a Protected Bike Lane 2.5 m from its coordinates. Removing it does not help the claim: it was carrying roughly seven times the primary cutoff while it worked. TEST 5, measured: all 20 remaining counters published bicycle counts on all 31 days of July 2025. None is under-reported. The verdict set is non-empty, nothing is unclassifiable, nothing is under-reported, so the cutoffs apply. RESULT. Every one of the 20 July medians is at or above 25, the lowest being 46. Under the primary cutoff no counter is below it, so the verdict is Contradicted. Under the alternative cutoff of 50 a day, one counter (96 Street S of Jasper Ave, median 46) is below and 19 are at or above, which returns Partially supported. The finding is therefore definition-sensitive at the alternative cutoff, and the story should say so beside the verdict. The verdict I report is the primary one. This finding covers the lanes the City counts and no others. The counters sit where the City chose to monitor; they are not a random or representative sample of Edmonton's on-street bike lanes, and nobody publishes a representative sample of them. A holder who means every lane in the city has not been answered.",
+        "gemini interpretation: Evaluated using the brief's five-test rule for metered on-street bike lanes. Test 1 found 51 cyclist counters. Test 2 confirmed 42 in service on 2025-07-01 (9 removed). Test 3 spatial join to Bike Routes vd4b-a4iv identified 21 ON ROAD and 21 OFF ROAD counters (0 unclassifiable, 0 borderline). Test 4 removed 1 out-of-service counter (106 Street N of Jasper Avenue, last record 2025-07-16, last complete month June 2025 median 177.5). Test 5 confirmed all 20 remaining counters reported all 31 days of July 2025 (0 under-reported). July 2025 daily medians ranged from 46.0 to 979.0 bikes/day. Under the primary cutoff of 25 bikes/day, zero counters were below 25, resulting in Contradicted. Under the alternative cutoff of 50 bikes/day, exactly one counter (96 Street S of Jasper Ave at 46.0) fell below 50 while 19 exceeded 50, which would yield Partially supported.",
+        "gpt interpretation: The proposition covers only metered on-street lanes selected by the brief's five tests, not all Edmonton bike lanes and not the accuracy of residents' momentary observations. The alternative cutoff is 50 passages per day. I could not reproducibly construct the required verdict set, so neither cutoff can be applied."
+      ]
+    },
+    {
+      "id": "one-to-two-percent-of-population-rides",
+      "finding": "Not established",
+      "panel_agreement": "Unanimous",
+      "rationale": "Unanimous.",
+      "basis": "round1",
+      "reviewers": [
+        {
+          "provider": "claude",
+          "model_self_reported": "Claude Opus 5 (claude-opus-5)",
+          "verdict": "Not established",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "I searched independently and did not identify a representative instrument that publishes a cycling-participation rate for the City of Edmonton or the Edmonton census metropolitan area over any period, let alone twelve months. On the brief's own rule that is Not established, and I reach the same conclusion the editor's bounded search reached, by a separate route. What I searched, as of 2026-09-03: (a) Statistics Canada's complete released-table list, 8,269 cubes, pulled from the Web Data Service, filtered for titles containing cycl, bicycl, active transportation or physical activ. The hits are helmet use, leisure-time physical activity (an active/inactive classification, not a cycling rate) and children's physical activity hours; none publishes a cycling-participation share, and the only ones below province level are health-region geographies, which are not this brief's primary geography. (b) The 2021 Census, which measures main mode of commuting, not participation. (c) The 2015 Edmonton and Region Household Travel Survey, a 24-hour weekday travel diary; its summary report gives trips by mode, not the share of respondents who made a bicycle trip, so it cannot serve even as the shorter-period alternative. (d) The Navigating Tomorrow successor survey, launched September 2025, which had published no results by the as-of date. (e) The City's own bike ridership survey, which is the August 2014 Edmonton Insight Community survey - an opt-in online panel, and inadmissible under the brief. Two of the eight captured wordings, 'bike lanes for the .001% of the population' and '500 people using the bike lanes 4 months of the year', are about lane users rather than about people who ride. No published Edmonton instrument measures distinct bike-lane users. They are reported as made and described as unmeasured, and I set no participation figure against them in either direction. This is not a technicality. Eight people in one thread quoted a population share at each other and the public record does not contain the number they were arguing about."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.8 Flash (High)",
+          "verdict": "Not established",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Evaluated as a 12-month population participation ceiling among Edmonton residents from a representative sample. Two circulating claims concerning lane use specifically ('.001% of the population' and '500 people') are unmeasured in published instruments and are noted as qualifications. A comprehensive review of Canadian Community Health Survey (CCHS), Statistics Canada data tables, and municipal sources reveals that no representative probability survey publishes a 12-month cycling participation rate for the City of Edmonton census subdivision. The 2014 bike ridership survey analyzed in academic literature (Cabral et al., 2018) utilized the Edmonton Insight Community, an opt-in panel excluded by the brief's rules. Under the brief's predetermined decision rule, the absence of a representative population survey requires a verdict of Not established."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "GPT-5",
+          "verdict": "Not established",
+          "confidence": "High",
+          "evidence_basis": "mostly-edmonton",
+          "interpretation_notes": "The claim concerns annual participation among residents, not bicycle trips, commuters, bicycle ownership, counter passages, or distinct bike-lane users. No admissible estimate was found, so neither the primary nor alternative thresholds can be applied."
+        }
+      ],
+      "round2_positions": [
+        {
+          "provider": "claude",
+          "model_self_reported": "Claude Opus 5",
+          "verdict": "Not established",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Unchanged from round 1: Not established, High confidence. All three reviewers reached the same verdict by the same route, which is unusual enough to be worth stating plainly: no published representative instrument measures how many Edmonton residents ride a bicycle over any period, so no figure can be tested against the ceiling. The only Edmonton instrument that asks residents how often they ride is the City's August 2014 bike ridership survey, an opt-in Insight Community panel with 646 panel completions plus 170 anonymous-link responses, and the brief bars a panel from carrying a verdict on a population share. Its answers are nowhere near 1 to 2 percent, which is worth reporting under its own name precisely because a reader who found it would misread it as a population estimate. On round-2 review, gemini's citation for that survey points at the Eco-Counter counts endpoint rather than the survey dataset, and its 62 percent figure matches neither the dataset (59.9 percent chose a riding frequency) nor gpt's read of the peer-reviewed analysis of the same panel (57.6 percent). I use the dataset's own figures. This is a real result and not a technicality: eight people quoted a population share at each other, and no published Edmonton instrument measures it."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.8 Flash (High)",
+          "verdict": "Not established",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Evaluated as the proportion of Edmonton residents who rode a bicycle at least once during a 12-month reference period, measured by a representative probability sample of Edmonton residents. No such representative survey exists in the published record. Statistics Canada's Canadian Community Health Survey (CCHS) collects 12-month cycling participation data, but releases public data only at the health region level (Edmonton Zone), not for the City of Edmonton CSD or CMA. A comprehensive search of Statistics Canada's 8,269 released data tables confirmed zero municipal cycling participation tables. Travel surveys (2015 HTS) measure 24-hour trips, not individual annual participation. The City's 2014 bike ridership survey used the opt-in Edmonton Insight Community panel (62% rode at least once/year), which is non-representative. Under the brief's explicit instructions, the absence of any representative population survey measuring cycling participation mandates a verdict of Not established. Two circulating claims regarding bike-lane users ('.001%' and '500 people') represent unmeasured lane-specific metrics that cannot be evaluated with general population participation data. Claude, Gemini, and GPT all independently reached Not established on this claim."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "GPT-5",
+          "verdict": "Not established",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "No representative published instrument was identified for the required geography and period. Statistics Canada's CCHS asks a suitable twelve-month question, but no released City of Edmonton or Edmonton CMA result was found. The 2015 Household Travel Survey measures trips during one weekday, not annual participation. The City's 2014 bike-ridership survey is an opt-in Insight Community panel supplemented by an anonymous link and cannot estimate the population. Two circulating forms concern distinct bike-lane users rather than residents who ride; no published instrument measures that numerator."
+        }
+      ],
+      "disagreement_notes": []
+    },
+    {
+      "id": "one-percent-year-round-users",
+      "finding": "Not established",
+      "panel_agreement": "Unanimous",
+      "rationale": "Unanimous.",
+      "basis": "round1",
+      "reviewers": [
+        {
+          "provider": "claude",
+          "model_self_reported": "Claude Opus 5 (claude-opus-5)",
+          "verdict": "Not established",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "The holder wrote 'only 1% of the pop use them year round', where 'them' is the bike lanes. No published Edmonton instrument measures the distinct residents who use bike lanes, in any season, so the proposition tests the nearest level the record answers and says 'rides a bicycle'. The substitution is open and is stated here and in limitations: no finding on this claim is a finding about lane use. I searched independently, as claim 3 records, and identified no representative instrument that publishes an Edmonton cycling-participation share with a seasonal split from one sample. That is Not established under the brief's rule. The one Edmonton instrument that does carry both halves from one sample is the City's August 2014 Insight Community survey, which asked riding frequency generally and riding frequency in winter of the same 816 respondents. It is an opt-in panel and cannot carry the verdict. Reported under its own name: 87.6 percent chose 'Never ride a bike' for winter, so 12.4 percent gave any winter frequency, and 2.6 percent gave 'daily' or '4 or more times a week'; for the general question 40.1 percent chose 'Never ride a bike', so 59.9 percent gave a frequency. Read as a seasonal split, both parts of the holder's sentence would fail on those numbers - but they are panel numbers and I attach no verdict weight to them in either direction. The instrument asks frequency bands, not a year-round question, so 'rides year-round' would have to be read as 'gives any winter frequency' (12.4 percent) or, more strictly, as the adjacent band 'rides daily or 4 or more times a week in winter' (2.6 percent). I state both because the reading changes the number by a factor of five, which is itself a reason a panel cannot settle this."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.8 Flash (High)",
+          "verdict": "Not established",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Evaluated as two paired ceilings from a single representative Edmonton sample with a seasonal split: Part A (year-round cycling participation <= 2.0%) and Part B (non-winter participation < 15%). The proposition substitutes 'rides a bicycle' for the commenter's 'use the lanes' because no instrument counts distinct bike-lane users. Under the brief's rules, because no representative survey publishes both seasonal shares from one Edmonton sample, the verdict is Not established."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "GPT-5",
+          "verdict": "Not established",
+          "confidence": "High",
+          "evidence_basis": "mostly-edmonton",
+          "interpretation_notes": "The circulating wording referred to people who use bike lanes. The normalized proposition openly substitutes the nearest potentially measurable quantity, residents who ride bicycles. It does not establish seasonal lane use. No admissible seasonal population split was found. The result is Not established under both the 2-percent and 3-percent Part A cutoffs."
+        }
+      ],
+      "round2_positions": [
+        {
+          "provider": "claude",
+          "model_self_reported": "Claude Opus 5",
+          "verdict": "Not established",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Unchanged from round 1: Not established, High confidence. All three reviewers agree. No representative Edmonton instrument publishes both seasonal shares from one sample, so neither part can be tested and no Partially supported verdict naming a failing part is available. The proposition openly substitutes riding for the holder's 'use them', because no published Edmonton instrument measures the distinct residents who use bike lanes in any season, and nothing in this finding may be described as a finding about lane use. The 2014 City panel is the only Edmonton instrument I found that asks the same respondents about riding generally and about riding in winter, and it is opt-in and cannot carry either part. gpt's round-1 addition of the City's 'Cycling in a winter wonderland' page is a useful catch precisely because it is the figure most likely to be misused here: one in four is a share of cyclists, not of residents, and swapping that denominator would turn a claim about the population into a claim about a subset of it."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.8 Flash (High)",
+          "verdict": "Not established",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Evaluated against representative population surveys reporting seasonal cycling participation for Edmonton residents (Part A: year-round <= 2.0%; Part B: non-winter < 15%). As established in Claim 3, no representative survey measures seasonal cycling participation for Edmonton. The 2014 Insight Community bike survey (nhbh-yj57) and academic analysis (Urban Geography, 2016) reported 10.2% year-round and 47.4% warm-weather cycling, but this sample is an opt-in panel and inadmissible for population estimates. Automated counters show a sharp winter decline (winter accounts for only 4.87% of annual counts), but counter passages cannot substitute for individual participation rates. City marketing claims that 'one in four cyclists rides all year' commit a wrong denominator error (dividing by cyclists rather than all residents). Because no representative survey measures Edmonton seasonal cycling participation, the brief's priority rule mandates Not established. Claude, Gemini, and GPT all independently returned Not established."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "GPT-5",
+          "verdict": "Not established",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "The original wording referred to using bike lanes, but no instrument measures distinct seasonal lane users. The brief openly substitutes seasonal bicycle participation. No representative Edmonton instrument publishing both required shares from one sample was identified, so the verdict remains Not established. The 2014 Insight Community survey and 2025 counter totals are qualifications only: one is a self-selected panel and the other measures passages rather than people."
+        }
+      ],
+      "disagreement_notes": []
+    },
+    {
+      "id": "two-percent-of-trips-by-bike",
+      "finding": "Supported",
+      "panel_agreement": "Unanimous",
+      "rationale": "Unanimous.",
+      "basis": "round1",
+      "reviewers": [
+        {
+          "provider": "claude",
+          "model_self_reported": "Claude Opus 5 (claude-opus-5)",
+          "verdict": "Supported",
+          "confidence": "Moderate",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "The most recent published survey is the 2015 Edmonton and Region Household Travel Survey, fielded on weekdays in autumn 2015, summary report published April 2018. Its successor, Navigating Tomorrow, launched in September 2025 and had published no results by the as-of date. The published City of Edmonton residents figure is 1.7 percent: 54,800 bicycle trips of 3,139,100 total daily trips. That is inside the primary Supported band (1.5 to 2.5 percent) and inside the alternative Supported band (1.2 to 3.0 percent). Both cutoff sets return Supported. Geography and day-type, stated as the brief requires: this is the City of Edmonton residents figure, not the region figure. The required regional alternative is 0.8 percent (10,600 of 1,331,800 daily trips by Region residents) - if the region figure were used the verdict would be Contradicted, so the finding is geography-sensitive and the story must say which figure it is quoting. The survey reports weekday trips only. The holder cited a Statistics Canada table on 'Main mode of commuting for the 10 largest census metropolitan areas'. Statistics Canada does publish main-mode-of-commuting tables at the census metropolitan area level, but they measure journeys to work, not trips. A commuting table cannot give a bicycle share of all trips, so that half of the citation does not support the figure even though the figure turns out to be right. The travel survey the holder also named is the right document."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.8 Flash (High)",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Evaluated against the most recent published regional travel survey on the as-of date: the 2015 Edmonton and Region Household Travel Survey (HTS). The survey sampled over 21,000 households (15,300 in Edmonton) in fall 2015 measuring a 24-hour weekday travel diary. Successor survey 'Navigating Tomorrow' had published no summary mode-share figures by 2026-09-03. The primary threshold for Supported is [1.5%, 2.5%]; the alternative is [1.2%, 3.0%]."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "GPT-5",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "The most recent published result located was the 2015 Edmonton and Region Household Travel Survey. It reports 54,800 bicycle trips among 3,139,100 weekday trips by City residents: 1.7 percent at the report's displayed precision and 2 percent in a rounded table. This is Supported under both threshold sets."
+        }
+      ],
+      "round2_positions": [
+        {
+          "provider": "claude",
+          "model_self_reported": "Claude Opus 5",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Unchanged from round 1: Supported, High confidence. All three reviewers agree on the figure and the verdict. The 2015 Edmonton and Region Household Travel Survey, the most recent Edmonton travel survey with published results as of the as-of date, reports 54,800 bicycle trips of 3,139,100 weekday trips by City of Edmonton residents, published as 1.7 percent. That is inside the primary Supported band of 1.5 to 2.5 percent and inside the alternative band of 1.2 to 3.0 percent, so the verdict is not sensitive to the cutoffs. It is sensitive to geography: the required regional alternative is 0.8 percent, which would be Contradicted under the primary cutoffs and Partially supported under the alternative, so anyone quoting a regional figure is quoting less than half the City figure. The number is eleven years old on the as-of date and the story should print the date beside it. The commenter who posted this figure named a Statistics Canada table on main mode of commuting, which gpt located: it is a commuting table and does not measure trips, so the commenter's own citation does not support the commenter's own figure, even though the figure holds from another source."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.8 Flash (High)",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Evaluated against the most recent published regional travel survey on the as-of date: the 2015 Edmonton and Region Household Travel Survey (HTS) Summary Report. Bicycles accounted for 1.7% of all weekday daily trips made by City of Edmonton residents (54,800 of 3,139,100 total trips). Under the brief's thresholds, 1.7% falls within the primary Supported range of [1.5%, 2.5%] and the alternative range of [1.2%, 3.0%]. Required alternative geography: across the broader Capital Region, the bicycle mode share was 0.8% (10,600 of 1,331,800 trips), which is geography-sensitive. The successor survey, Navigating Tomorrow, launched in September 2025 but had released no results as of the freeze date (2026-09-03). The commenter's cited Statistics Canada table ('Main mode of commuting for the 10 largest census metropolitan areas', 250826/t002a-eng.htm) measures journey-to-work commuting, not all trips. All panel reviewers (Claude, Gemini, GPT) concur on Supported."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "GPT-5",
+          "verdict": "Supported",
+          "confidence": "Moderate",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "The most recent published result is from the 2015 Edmonton and Region Household Travel Survey, fielded on autumn weekdays and published in 2018. It reports 54,800 bicycle trips among 3,139,100 weekday trips by City residents, publishing the share as 1.7 percent. This is Supported under both cutoff sets. The regional alternative is 10,600 among 1,331,800, published as 0.8 percent, which would be Contradicted under the primary geography's ladder. The finding is geography-sensitive. The Statistics Canada source named in the discussion is a commuting table and does not measure all trips."
+        }
+      ],
+      "disagreement_notes": []
+    },
+    {
+      "id": "under-one-percent-of-commuters-cycle",
+      "finding": "Supported",
+      "panel_agreement": "Unanimous",
+      "rationale": "Unanimous.",
+      "basis": "round1",
+      "reviewers": [
+        {
+          "provider": "claude",
+          "model_self_reported": "Claude Opus 5 (claude-opus-5)",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "The 2021 Census main-mode-of-commuting classification that separates Bicycle from Walked is published in table 98-10-0479-01, 'Place of work status by main mode of commuting, time leaving for work, and commuting duration: Canada, provinces and territories, census divisions and census subdivisions', released 2022-11-30. I retrieved the Edmonton census subdivision cells through the Statistics Canada Web Data Service, product 98100479, geography member 4372 (Edmonton, classification code 4811061). Note for anyone repeating this: the widely used commuting tables 98-10-0458-01 and 98-10-0464-01 use an eleven-category classification that stops at 'Active transportation' and does not separate bicycle from walking, so they cannot answer this claim. Result: Bicycle 3,355 of 380,315 = 0.88 percent. That is below the primary Supported cutoff of 1.0 percent and below the alternative Supported cutoff of 1.1 percent. Both cutoff sets return Supported. Required alternative geography: Edmonton census metropolitan area, from table 98-10-0480-01, Bicycle 3,905 of 537,645 = 0.73 percent. That is also Supported, so the finding is not geography-sensitive. The holder said 'City reports have census numbers in 2021 less than 1 percent'. Whether a City report repeats the figure is a qualification, not the test. The identifiable published source is the census and it is what a reader can check."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.8 Flash (High)",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Evaluated against the 2021 Census of Population, Journey to Work (reference week May 2-8, 2021), for employed persons aged 15 and over with a usual place of work or no fixed workplace address (excluding worked at home). Threshold for Supported is strictly below 1.0 percent."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "GPT-5",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Statistics Canada published 3,355 bicycle commuters among 380,315 people in the main-mode universe, or 0.9 percent. The result is Supported under both the below-1.0-percent primary cutoff and below-1.1-percent alternative cutoff."
+        }
+      ],
+      "round2_positions": [
+        {
+          "provider": "claude",
+          "model_self_reported": "Claude Opus 5",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Unchanged from round 1: Supported, High confidence. All three reviewers agree on the count and the share. The 2021 Census records 3,355 bicycle commuters of 380,315 in the City of Edmonton commuting universe, 0.88 percent by my calculation and published as 0.9 percent. That is below the primary cutoff of 1.0 percent and below the alternative of 1.1 percent, so the verdict is not cutoff-sensitive, and the required census metropolitan area alternative agrees at 0.73 percent. The number is fragile in a way the verdict is not: the 2021 reference week fell during pandemic restrictions, 21.12 percent of employed Edmontonians with a place of work status worked at home against 4.72 percent in 2016, and the same variable in 2016 gave 1.20 percent, which on these thresholds would have been Partially supported. The claim is Supported on 2021 figures and would not have been on 2016 figures. That belongs beside the verdict as a qualification on what the number means, never as a reason to move it. On round-2 review, gemini's 2016 comparison figures of 1.1 percent and about 4,600 commuters do not match the published counts of 5,575 of 466,230, which is 1.20 percent."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.8 Flash (High)",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Evaluated against the 2021 Census of Population, Journey to Work (reference week May 2-8, 2021), for employed persons aged 15 and over with a usual place of work or no fixed workplace address (excluding workers who worked at home). For the City of Edmonton (Census subdivision), 3,355 commuters gave bicycle as their main mode of commuting out of 380,315 commuters, representing 0.882% (rounds to 0.88% or 0.9%). This is strictly below 1.0%, satisfying both the primary (<1.0%) and alternative (<1.1%) Supported thresholds. Required alternative geography: for the Edmonton Census Metropolitan Area (CMA), 3,905 of 537,645 commuters traveled by bicycle (0.726%, rounds to 0.73%), which is also below 1.0%. Pre-pandemic baseline context: in the 2016 Census, 5,575 of 466,230 City commuters cycled (1.196%, rounds to 1.20%), which would have been Partially supported. Pandemic context: 102,210 City workers worked at home (21.12% of the place-of-work universe of 483,855); if home workers are included in the denominator, the bicycle share drops to 0.69% (3,355 of 483,855). Municipal comparison: the 2012 municipal census (dataset 24yu-behb) recorded 2,568 cycling commuters out of 380,640 (0.67%). In round 2, Gemini corrects its round 1 mention of 4,600 / 1.1% to the exact census count of 5,575 / 1.20%. All panel reviewers concur on Supported."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "GPT-5",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Statistics Canada table 98-10-0479-01 reports 3,355 bicycle commuters in a City commuting universe of 380,315, approximately 0.88 percent. This is below both Supported cutoffs. The required CMA alternative is 3,905 of 537,645, approximately 0.73 percent, and is also Supported. The 2021 reference week occurred during pandemic conditions and excluded people working at home, but that qualification does not change the verdict under the fixed denominator."
+        }
+      ],
+      "disagreement_notes": []
+    },
+    {
+      "id": "87-percent-commute-by-car",
+      "finding": "Supported",
+      "panel_agreement": "Unanimous",
+      "rationale": "Unanimous.",
+      "basis": "round1",
+      "reviewers": [
+        {
+          "provider": "claude",
+          "model_self_reported": "Claude Opus 5 (claude-opus-5)",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Combined car share for the City of Edmonton census subdivision = 323,705 of 380,315 = 85.11 percent, my calculation from the published counts in table 98-10-0479-01. That is inside the primary Supported band (84 to 90 percent) and inside the alternative Supported band (82 to 92 percent). Both cutoff sets return Supported. The required alternatives: driver-only share 298,320 of 380,315 = 78.44 percent; combined car share for the Edmonton census metropolitan area 469,900 of 537,645 = 87.40 percent. The census metropolitan area figure is 87.4 percent, which is where a stated 87 percent most likely came from - but the brief's primary geography is the City, and the City figure is 85.11 percent. Both are Supported, so the verdict is not geography-sensitive, though the story should say the exact 87 figure matches the metropolitan area rather than the city. 'Edmontonians' is read as commuters, because the sentence says 'commute'. Anyone reading it as all Edmontonians would be quoting a different number: put the 102,210 people who worked at home back into the denominator and the car share is 66.9 percent (323,705 of 483,855)."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.8 Flash (High)",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Evaluated as the share of commuters whose main mode is car, truck, or van (driver + passenger) in the 2021 Census for Edmonton. Threshold for Supported is [84%, 90%]; alternative is [82%, 92%]. In the City of Edmonton (CSD), the combined car share is 85.11% (78.44% driver, 6.67% passenger). In the Edmonton CMA, the combined car share is 87.40%. Both fall squarely within the Supported band [84%, 90%], and the regional CMA figure rounds directly to 87%."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "GPT-5",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "The combined City share is 85.1 percent. That is within the primary Supported interval of 84 to 90 percent and the alternative interval of 82 to 92 percent. The Edmonton CMA, a required alternative geography, was 87.4 percent."
+        }
+      ],
+      "round2_positions": [
+        {
+          "provider": "claude",
+          "model_self_reported": "Claude Opus 5",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Unchanged from round 1: Supported, High confidence. All three reviewers agree on the verdict, though not on the route to it, and the route matters here. The City of Edmonton census subdivision figure, which the brief fixes as the primary geography, is 85.11 percent: 323,705 car commuters of 380,315. That is inside the primary Supported band of 84 to 90 percent and the alternative band of 82 to 92 percent, so the verdict is not cutoff-sensitive and the City figure carries it on its own. The exact figure of 87 percent is the census metropolitan area, at 87.40 percent, which takes in St Albert, Sherwood Park, Spruce Grove, Leduc and the rest of the region. A holder quoting 87 percent for Edmontonians is quoting the region's number under the city's name, and the story should say so even though the verdict is Supported either way. gemini led its reasoning with the metropolitan figure and described both geographies as carrying the band, which the brief does not permit: a CMA figure is a required alternative reported under its own name and is never called a City of Edmonton figure. The word 'Edmontonians' carries a second trap. Car commuters are 85 percent of commuters and about 67 percent of employed Edmontonians once the 102,210 people who worked at home are put back into the denominator. Which of those a reader hears depends entirely on whether 'commute' is doing work in the sentence."
+        },
+        {
+          "provider": "gemini",
+          "model_self_reported": "Gemini 3.8 Flash (High)",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "Evaluated as the share of commuters whose main mode of commuting is car, truck, or van (as driver or passenger) in the 2021 Census for employed persons aged 15+ with a usual place of work or no fixed workplace. For the City of Edmonton (CSD), 323,705 commuters commuted by car (298,320 drivers and 25,380 passengers) out of 380,315 commuters, equaling 85.11%. This falls within the primary Supported band [84%, 90%] and the alternative band [82%, 92%]. Required alternative geography: for the Edmonton Census Metropolitan Area (CMA), 469,900 commuters traveled by car (437,695 drivers and 32,210 passengers) out of 537,645 commuters, equaling 87.40%, which rounds directly to 87%. The circulating figure of 87% matches the regional CMA figure almost exactly, but represents a fair description of the City figure (85.11%) within brief thresholds. Driver-only alternative: 78.44% in the City (298,320 of 380,315) and 81.41% in the CMA. Full mode breakdown (City CSD, denominator 380,315): Car/truck/van 323,705 (85.11%), Sustainable 47,640 (12.53%) [Transit 30,860 (8.11%), Walk 13,430 (3.53%), Bike 3,355 (0.88%)], Motorcycle 335 (0.09%), Other 8,635 (2.27%), summing to 100.00%. Pre-pandemic 2016 comparison: 367,225 of 466,230 = 78.76%. If workers at home (102,210) are included in the denominator (total 483,855), the car share is 66.90%. All panel reviewers concur on Supported."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "GPT-5",
+          "verdict": "Supported",
+          "confidence": "High",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "The published City parent row is 323,705 car, truck or van commuters among 380,315, approximately 85.11 percent. The separately rounded driver and passenger rows are 298,320 and 25,380 and sum to 323,700. Either treatment falls within both Supported bands. The CMA parent row is 469,900 of 537,645, approximately 87.40 percent, which more closely matches the circulating figure but must remain labelled as metropolitan. Driver-only for the City is approximately 78.44 percent. Adding people working at home to the fixed commuting denominator produces approximately 67.1 percent, but that is a reviewer-created alternative denominator."
+        }
+      ],
+      "disagreement_notes": []
+    }
+  ]
+}

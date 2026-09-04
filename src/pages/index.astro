@@ -114,8 +114,7 @@ const corrections = stories
     return { ...row, sentence, truncated: sentence !== row.entry.note.trim() };
   });
 
-/** The broadsheet section head: a 3px ink rule, then the title in the display face. */
-const head = 'border-t-[3px] border-ink pt-3.5';
+/** A section head is the title in the display face; the space above it is the break. */
 const headText = 'font-display text-[1.75rem] leading-[1.15] font-bold tracking-[-0.01em] text-ink';
 /* A lead is content, not metadata: it reads at full strength, like the section it opens. */
 const lead = 'mt-1.5 max-w-[62ch] text-base text-pretty text-ink';
@@ -269,7 +268,7 @@ const jsonLd = [
     class="lg:grid lg:grid-cols-[minmax(0,62fr)_minmax(0,34fr)] lg:grid-rows-[auto_1fr] lg:items-start lg:gap-x-12"
   >
     <section class="lg:col-start-2 lg:row-start-1">
-      <div class={head}><h2 class={headText}>Browse by topic</h2></div>
+      <h2 class={headText}>Browse by topic</h2>
       <p class={lead}>
         A question can sit under more than one topic, so these do not add up to the total above.
       </p>
@@ -303,9 +302,7 @@ const jsonLd = [
     {
       claimCount > 0 && (
         <section class="mt-11 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:mt-0">
-          <div class={head}>
-            <h2 class={headText}>Recently checked</h2>
-          </div>
+          <h2 class={headText}>Recently checked</h2>
           <p class:list={[lead, 'tabular']}>
             {claimCount}
             {claimCount === 1 ? ' claim under ' : ' claims under '}
@@ -351,7 +348,7 @@ const jsonLd = [
   </div>
 
   <section id="how-a-verdict-is-made" class="mt-14">
-    <div class={head}><h2 class={headText}>How a verdict is made</h2></div>
+    <h2 class={headText}>How a verdict is made</h2>
     <p class={lead}>
       Every finding goes through the same four steps. Methodology v{methodologyVersion},{' '}
       <a href="/methodology/changes" class="link">change history</a>.
@@ -412,7 +409,7 @@ const jsonLd = [
   </section>
 
   <section class="mt-14">
-    <div class={head}><h2 class={headText}>Corrections</h2></div>
+    <h2 class={headText}>Corrections</h2>
     <p class={lead}>What changed after publication, on the page it changed.</p>
     {
       corrections.length === 0 ? (

@@ -108,6 +108,17 @@ export type RunManifest = {
   story: string;
   date: string;
   methodology_version: string;
+  /**
+   * Which of the brief's claims this run synthesises, and which it parks
+   * (methodology v1.24). Absent on every run that synthesises all of them,
+   * which is the normal case. `scripts/synthesize.ts` owns the rules: the two
+   * lists together must account for every round-1 claim exactly once, and a
+   * parked claim carries the reason a reader is shown.
+   */
+  synthesis_scope?: {
+    claims?: string[];
+    parked?: { claim: string; reason: string; basis?: string }[];
+  };
   runs: {
     provider: string;
     round: number;

@@ -3,8 +3,8 @@
 /* ---------------------------------------------------------------------------
    YEGFacts visual system — broadsheet ledger (design spec §10). Locked palette,
    light theme only: ink on paper, one saturated forest ground, filled verdict
-   badges. Badges, tiles, panels, tables and rules are square; an interactive
-   control — a chip, a button, a field, the search UI — carries the 3px
+   badges. Badges, tiles, tables and rules are square; an interactive control — a
+   chip, a button, a field, the search UI — and the white panels carry the 3px
    `--radius-control`, and inline code keeps its 2px (a portrait and a status
    dot are circles because they are round things, not chrome). The only shadow
    is `--shadow-panel` on the white panels and the home search field, plus the
@@ -49,9 +49,9 @@
   --text-display--line-height: 1.1;
   --text-display--letter-spacing: -0.022em;
 
-  /* Interactive controls only: a chip, a button, a field. Badges, panels,
-     rules and tiles stay square; a finding is print, a button is a thing
-     you press. */
+  /* Interactive controls (a chip, a button, a field) and the white panels,
+     which their shadow makes cards. Badges, tiles, rules and tables stay
+     square; a finding is print, a button is a thing you press. */
   --radius-control: 3px;
   /* One soft shadow for a white panel on the paper ground. Low and short,
      so the panel sits on the page rather than floating over it. */
@@ -109,7 +109,8 @@
 
   /*
    * A control is a thing you press, so it carries the control radius by default;
-   * badges, tiles and panels are print and stay square. Stated on the elements
+   * badges and tiles are print and stay square (the panels take it in their own
+   * rule below, because a shadowed block is a card). Stated on the elements
    * so no button or field has to ask for it, and `.chip` (an anchor) sets its own.
    */
   button,
@@ -564,13 +565,15 @@ time,
    `border-top-color` in the same class list depend on emission order to
    resolve, and the top edge is the whole point of the element. Both carry
    `--shadow-panel`: white on paper is a two-point difference in value, and the
-   shadow is what tells a reader the white block is a block. The corners stay
-   square — a panel is print, not a card.
+   shadow is what tells a reader the white block is a block, and a block with
+   a shadow is a card, so both take the control radius; the badge inside one
+   stays square.
 --------------------------------------------------------------------------- */
 
 .panel,
 .strip {
   background-color: #ffffff;
+  border-radius: var(--radius-control);
   box-shadow: var(--shadow-panel);
 }
 
