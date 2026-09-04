@@ -634,3 +634,82 @@ brief may ask of a seat: this one now asks for a geometric computation
 over ten thousand line segments, which two seats did and one could not.
 The cost of pinning the set is that the rule is heavier to execute than
 reading a counter's name, and this run is the record of what that cost.
+
+## Stage 3, merge and evidence staging
+
+`scripts/merge.ts` over the rerun's round 1: 32 distinct sources, three
+contested claims (`cycling-trips-1-3-million-2026`,
+`bike-lanes-look-empty`, `riders-are-recreational-not-commuters`).
+`scripts/evidence-stage.ts` fetched and hashed all 32. Seven citations
+across four sources did not archive as the document cited, and
+`fetch-report.md` names each with the seat, the claim and the role.
+
+The three datasets claim 2's membership tests run over archived as their
+real bytes, so the verdict set is reproducible from the archive rather
+than from a live query.
+
+## Stage 4, round 2 cross-review
+
+Two seats of three returned a valid round 2.
+
+**Claude Opus 5** held every round-1 position, with no verdict change and
+one confidence rise on claim 8, Low to Moderate.
+
+**GPT-5.6 Sol moved on two claims, and both moves are the point of
+cross-review.** On `cycling-trips-1-3-million-2026` it had returned Not
+established on the strength of a developer-portal page giving the
+dataset's update date as 2026-07-22, which would have left the window
+short; querying the dataset directly it found records through 2026-07-31
+and a total of 1,291,714, and moved to Supported. On
+`bike-lanes-look-empty` it had returned Not established because it could
+not execute the membership join; reading the other two seats' complete
+test-by-test enumerations it moved to Contradicted. Both are position
+changes on evidence, which is what round 2 exists for, and neither moves
+the finding: since methodology v1.3 the canonical basis is the locked
+round-1 positions.
+
+**The Gemini seat produced no valid round 2.** Four attempts across two
+runner invocations all failed schema validation on the same two fields,
+`errors_in_other_reviews` written as objects rather than strings and
+`verdict_changes` using `from_verdict`/`to_verdict`/`reason` rather than
+`from`/`to`/`why`. The seat's round 1 validated on its first attempt and
+this seat has completed round 2 on earlier runs, so this is a
+serialisation failure at this stage, not a seat that could not do the
+work. It is recorded `failed` in `run.yaml`, the last invalid output is
+kept verbatim at `round2/gemini-invalid-output.txt`, and `errata.md`
+says what was lost: six cross-review findings about the other seats'
+citations, written in a shape the pipeline cannot read and never put to
+the seats they concern. Its eight verdicts in that file are identical to
+its own round 1, so nothing in it would have moved a position.
+
+The run proceeds because round 2 does not carry the finding. A missing
+round 1 stops a run; a missing round 2 is a gap in the record, and it is
+named rather than papered over.
+
+## Stage 5, deterministic synthesis
+
+`scripts/synthesize.ts`, basis round 1, round 2 documented, 8 claims.
+
+| Claim | Finding | Panel agreement |
+| --- | --- | --- |
+| `cycling-trips-1-3-million-2026` | Partially supported | Split |
+| `bike-lanes-look-empty` | Contradicted | Adjacent |
+| `one-to-two-percent-of-population-rides` | Not established | Unanimous |
+| `one-percent-year-round-users` | Not established | Unanimous |
+| `two-percent-of-trips-by-bike` | Supported | Unanimous |
+| `under-one-percent-of-commuters-cycle` | Supported | Unanimous |
+| `87-percent-commute-by-car` | Supported | Unanimous |
+| `riders-are-recreational-not-commuters` | Contradicted | Adjacent |
+
+Two of the three Split and Adjacent findings turn on the same seat
+returning Not established in round 1 and then moving in round 2 after
+the other seats' work reached it. Under v1.3 that seat's round-1
+position is what the matrix reads, which is why claim 1 synthesises
+Split at Partially supported although all three seats ended at
+Supported. That is the rule working as designed — the panel is only
+genuinely independent in round 1 — and it is recorded here so the story
+does not present three agreeing seats as a split without explaining why.
+
+No story, answers or reader-facing copy have been drafted. The next
+stages are drafting, faithfulness and the publication gate, none of them
+started.
