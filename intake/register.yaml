@@ -292,15 +292,16 @@ questions:
     source: yegscoop-2026-08-26
     question: "Did the City consult the affected neighbourhoods, and do residents oppose the bike lanes?"
     topics: [transportation, bike-lanes, city-hall]
-    lifecycle: registered
+    lifecycle: briefed
     triage: go
     publication: unpublished
     reason: "Project engagement records can show whom the City consulted and what participants said, while the claim about most Edmontonians should be dropped unless a representative citywide survey exists."
-    grouping_note: "The engagement record for these routes, including the City's own report on the data and consultation behind them, settles both."
+    grouping_note: "Both complaints came out of one argument about one set of routes, so one brief covers them. The brief tests the consultation half against the City's engagement record for each route. It parks the opposition half, because nothing published samples what the people of a neighbourhood or of Edmonton think about these routes, and a count of who chose to take part is not a measure of what anyone thinks. Each claim below carries its own disposition."
     accounts:
       total: 14
       against: 14
     run: reviews/intake/yegscoop-2026-08-26
+    note: "brief frozen 2026-09-04 at reviews/consultation-and-opposition/2026-09-03 on framing check 2 FRAME OK; no panel has run"
   - id: council-mandate
     recorded: "2026-09-03"
     source: yegscoop-2026-08-26
@@ -1942,6 +1943,7 @@ claims:
       - flash
       - haiku
       - luna
+    reason: "Parked at the brief of 2026-09-03 and not checked. Nothing published samples what the people of these neighbourhoods, or of Edmonton, think about these routes. Every count the argument reaches for — petition signatures, open-house attendance, an open survey, speakers at a hearing, the volume of inquiries, comments on a post — records who chose to take part, which is not a sample of anybody. On that record no verdict but Not established could be reached, and a proposition only one verdict can reach states nothing. It reopens if a probability-sample survey of Edmontonians, or of residents of an affected neighbourhood, asking about these routes, is published."
     variations:
       - wording: "whole neighborhoods have voted no and they still went ahead."
         source_id: yegscoop-2026-08-26
@@ -1987,6 +1989,7 @@ claims:
       - haiku
       - luna
     names_person: true
+    reason: "Split at the brief of 2026-09-03 and not checked under this id, because three assertions under one finding state none of them. The consultation assertion is checked as ca-route-level-engagement, in the general form one account gave it. The \"old data\" assertion is parked: the City publishes no vintage for the analysis behind route prioritisation, so a finding would turn on a threshold the brief invented; it reopens if the Bike Plan Implementation Guide, the Active Transportation Implementation Guide or a later City record states that vintage. \"Fast-tracked\" is not checked because nobody disputes it — the capital profile funding the work is titled Active Transportation Implementation Acceleration. The wording naming an individual is declined on right-of-reply grounds."
     variations:
       - wording: "relying on old data and zero community consultation (admitted to in the City's report)"
         source_id: yegscoop-2026-08-26
@@ -2003,6 +2006,24 @@ claims:
       - wording: "Stakeholder engagement fail as they did not engage parents with school kids."
         source_id: yegscoop-2026-08-26
         author_name: "Hardy Vole C."
+  - id: ca-route-level-engagement
+    recorded: "2026-09-04"
+    origin: captured
+    source: yegscoop-2026-08-26
+    question: consultation-and-opposition
+    proposition: "For the fourteen bike routes administration asked the Infrastructure Committee to re-evaluate in August 2026, the City ran no public engagement about the specific route with the people that route affects, before the route was built."
+    wording: "relying on old data and zero community consultation (admitted to in the City's report)"
+    side: against
+    accounts: 1
+    seats:
+      - flash
+      - haiku
+      - luna
+    reason: "The consultation assertion split out of fast-tracked-without-consultation and checked on its own, in the general form one account gave it. The other consultation wordings under that claim say narrower or different things — two of them about places on no route in the set — and none of them is counted as an assertion of this proposition. Brief frozen 2026-09-04 at reviews/consultation-and-opposition/2026-09-03."
+    variations:
+      - wording: "relying on old data and zero community consultation (admitted to in the City's report)"
+        source_id: yegscoop-2026-08-26
+        author_name: "Boreal Marmot L."
   - id: last-election-turnout-under-40
     recorded: "2026-09-03"
     origin: captured
