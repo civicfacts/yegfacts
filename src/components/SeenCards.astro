@@ -54,7 +54,7 @@ const anyParaphrased = seen.some((card) => card.paraphrased);
               <p class="mt-2 text-xs text-muted">
                 {card.attribution && <span>{card.attribution}. </span>}
                 {card.source_url && (
-                  <a class="underline decoration-rule underline-offset-2 transition-colors hover:text-ink" href={card.source_url} rel="noopener nofollow">
+                  <a class="underline decoration-rule underline-offset-2 transition-colors motion-reduce:transition-none hover:text-ink" href={card.source_url} rel="noopener nofollow">
                     Source post
                   </a>
                 )}

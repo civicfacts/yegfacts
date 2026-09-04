@@ -507,10 +507,10 @@ badges, panels, buttons, inputs, tables and rules carry no radius, and the one
 exception is 2px on inline code. Two things are circles because the thing
 itself is: Stew's avatar wherever it appears, and the verdict dots in the
 AI-review matrix. No shadows except the one that lifts a
-glossary popover off the text it covers. Motion is colour and border
-transitions of 150ms on links and on the controls that change colour on hover
-(the chips, the buttons, the outline), and nothing else; under
-`prefers-reduced-motion` even those are off. A
+glossary popover off the text it covers. Motion is 150ms transitions of
+colour, border, underline thickness and the search glyph's stroke, on links
+and on the controls that change on hover (the chips, the buttons, the
+outline), and nothing else; under `prefers-reduced-motion` even those are off. A
 finding is a filled badge in its own colour — forest Supported, navy Partially
 supported, charcoal Not established, brick Contradicted, gold Mixed — with the
 word always printed in full, and a claim list is a run of ledger rows each
