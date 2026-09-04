@@ -8,7 +8,9 @@
    `--radius-control`, and inline code keeps its 2px (a portrait and a status
    dot are circles because they are round things, not chrome). The only shadow
    is `--shadow-panel` on the white panels and the home search field, plus the
-   one the glossary popover lifts itself with; nothing else has one. No
+   one the glossary popover lifts itself with; nothing else has one (the gold
+   rule under the current nav word is drawn with an inset box-shadow, but it
+   is a rule, not depth). No
    animation beyond 150ms transitions of colour, background, border, underline
    colour, underline thickness, opacity and the search glyph's stroke on links
    and controls, off under `prefers-reduced-motion`. A finding is printed in full and filled
@@ -583,7 +585,7 @@ time,
 }
 
 /*
- * A strip, not a box: rule over, hairline under, cells flush to the edges. The
+ * A strip boxed by hairlines: rule over, hairline under, cells flush to the edges. The
  * sides are hairlines too. The shadow alone left the strip's own outline
  * fainter than the dividers between its cells — the block read as less of a
  * boundary than the lines inside it — so the edge is drawn, and the shadow

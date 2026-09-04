@@ -131,8 +131,9 @@ const sections = toc(groups.map((group) => ({ id: group.id, label: group.label }
 
   <style is:global>
     /* Fit Pagefind's default UI into the editorial system: paper ground, thin
-       rules, forest accents. Its input, buttons and filter controls take the
-       site's 3px control radius; nothing else on the page has one. */
+       rules, forest accents. Its shared radius variable also rounds result
+       tags and loading blocks, which are not controls, so it stays at zero;
+       the input and its clear button take the control radius directly. */
     #search {
       --pagefind-ui-scale: 0.85;
       --pagefind-ui-primary: #123f35;
@@ -141,8 +142,13 @@ const sections = toc(groups.map((group) => ({ id: group.id, label: group.label }
       --pagefind-ui-border: #cfc9bd;
       --pagefind-ui-tag: #efece4;
       --pagefind-ui-border-width: 1px;
-      --pagefind-ui-border-radius: var(--radius-control);
+      --pagefind-ui-border-radius: 0;
       --pagefind-ui-font: inherit;
+    }
+
+    #search .pagefind-ui__search-input,
+    #search .pagefind-ui__search-clear {
+      border-radius: var(--radius-control);
     }
   </style>
 </Base>
