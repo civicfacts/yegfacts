@@ -1,6 +1,67 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.22"
+  date: "2026-09-03"
+  scope: claim-level-blind-rerun
+  summary: >
+    Cross-review has always been able to send one claim back for a fresh blind
+    re-run. Until now there was nowhere for that re-run to land, so the rule
+    existed and could not be used. It now has a directory, a manifest and a
+    line in the synthesis saying which blind round each claim's finding came
+    from.
+  highlights:
+    - "What was missing. Since methodology v1.3, stage 4 has sent a claim back to three blind seats when cross-review catches something material in it: a citation that does not say what it was cited for, evidence that is wrong, a position taken without the source having been read. Patching the claim inside the run was never the answer. The synthesis script read one directory, round1/, and had no way to be told that one claim's answers had been superseded. The only ways to act on the rule were to overwrite the seats' committed answers or to hand-edit the finding, and both are the thing the rule was written to forbid."
+    - "Where a re-run lives. Its three seats write into round1-rerun-<n>/ with their own run.yaml beside them, recording their own package hashes. round1/ is never rewritten. It stays the seats' answers to the package its hash records, and for a re-run claim it is the superseded record, readable next to what replaced it. Nothing is deleted and nothing is edited, which is the same shape round1-superseded/ already uses for a brief that was revised under v1.2."
+    - "What the seats are asked. The frozen brief, byte for byte, so its freeze hash still verifies; the round-1 reviewer prompt; the schema; and one added instruction naming the claims to answer. The scoping lives in the package wrapper, never in the brief, because editing a frozen brief is a new brief and a new framing check. The seat is told what to answer and nothing about why, so the re-run is as blind as the round it replaces."
+    - "What synthesis does with it. For every claim a re-run answered, the three positions come from the re-run and the superseded ones are not in the multiset at all — averaging them in would be the quiet correction the rule forbids. Every other claim is untouched. Each claim in synthesis.json now names its own basis, round1 or the re-run directory, so a reader never has to work out which round produced which finding."
+    - "The guards, because this is the one place a locked verdict can be replaced. A re-run must carry all three seats; all three must have answered the same claims; every claim it answers must already exist in round 1; and no two re-runs may cover the same claim. Any of those failing throws rather than picking a winner. Round 2's recorded movement is still measured against round 1, which is the round it actually answered, not against a re-run that came later."
+    - "First use, and what it found. On cycling-volumes, claim 1 synthesised Partially supported on a Split panel because one seat returned Not established in round 1, having read the dataset's update date off a developer-portal page rather than querying the dataset; in round 2, with the other seats' work in front of it, it queried directly and moved to Supported. The suspicion was that the round-1 verdict recorded an omission rather than a judgement, which is a material catch, so the claim went back to three blind seats."
+    - "The re-run did not do what anyone expected, and that is the argument for having it. Blind, on the same frozen brief, the same seat reached the same developer-portal page, drew the same conclusion and returned Not established again. Two seats returned Supported on a direct query of 1,291,714 counts. The multiset is unchanged and so is the finding: Partially supported, Split. What was a suspicion about one run is now a reproducible position of that seat on this brief, which is a fact worth having and could not have been got by patching the verdict. A mechanism that can only confirm what the editor already believed would not be worth building."
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: The synthesis matrix
+      href: /methodology#synthesis
+  note: >
+    The obvious risk is that a re-run becomes a way to re-roll a verdict
+    somebody did not like, and nothing in the mechanism prevents that on its
+    own. Three things bound it. The trigger is stated in stage 4, and what it
+    names are faults in the record rather than outcomes anyone disliked. The superseded answers stay committed and readable beside
+    the ones that replaced them, so a re-run that produced a more convenient
+    answer is visible as exactly that. And the re-run is blind on the same
+    frozen brief, so the only thing that can move is what the seats find, not
+    what the question asks. What would show this was wrong is a run where the
+    re-run count climbs, or one where the superseded verdicts read as sounder
+    than the ones that replaced them.
+- version: "1.21"
+  date: "2026-09-03"
+  scope: cross-review-output-shape
+  summary: >
+    The cross-review prompt asked for round 2's notes in words and left their
+    shape to be read off the schema, and one seat lost six findings to the gap.
+    The prompt now states the three fields and their exact shapes, the way the
+    round-1 prompt already states every value it asks for.
+  highlights:
+    - "What happened. On cycling-volumes the Gemini seat produced round-2 content four times and failed schema validation the same way every time: errors_in_other_reviews written as objects where the schema requires strings, and verdict_changes using from_verdict, to_verdict and reason where the schema requires from, to and why. Its round 1 validated on the first attempt. Six cross-review findings about the other seats' citations were written in a shape the pipeline cannot read, and were never put to the seats they concern."
+    - "Why this is a prompt defect and not only a seat failure. Round 1's prompt hands over every value the schema constrains, verbatim: the four verdicts, the three confidence levels, all six evidence-basis labels. Round 2's prompt named two fields and specified the shape of neither. Worse, its own prose supplied a different word for one key — record every change with THE REASON, where the schema says why — and asked, for each error, whose review, which claim, which citation and what is wrong with it, which is four attributes, in a field the schema types as one bare string. Both fields the seat got wrong are exactly the two places the prompt underspecified, and one of them it got wrong in the prompt's own noun."
+    - "The fix, and what was deliberately not fixed. prompts/cross-review.md now states that round2_notes has three fields and no others, that evidence_i_missed and errors_in_other_reviews are arrays of strings, that the four attributes item 3 asks for go into the one string, and that verdict_changes takes exactly claim, from, to and why. The schema is unchanged. Relaxing it to accept the objects the seat emitted would have made the contract follow the failure, and it would have broken every round 2 already committed under it."
+    - "The seat is not exonerated. The runner's one retry appends the exact validation errors to the package, so the seat was told which fields were wrong and returned them wrong again. An underspecified prompt explains the first attempt; it does not explain the fourth. Both facts are on the record, and the seat's reliability is tracked in the open question that already holds its earlier failure."
+    - "What the re-run settled. Handed the amended prompt and the same round-2 package, the seat validated on its first attempt. Five cross-review findings came back that nobody had read, four of them the ones lost in the invalid output and one new. That is as close to a controlled result as this pipeline offers: same seat, same CLI, same package, one prompt paragraph different, and the failure did not recur."
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: Panel quality record
+      href: /methodology#panel-quality
+  note: >
+    Worth saying plainly which way the causation runs, because the comfortable
+    version is that a seat misbehaved and the prompt was fine. The prompt was
+    not fine. Round 2 is the only part of the schema round 1 never exercises,
+    so it is the only part a seat meets cold, and it was the part the prompt
+    described loosest. Two seats guessed right and one guessed wrong, and a
+    contract that three careful readers resolve two ways is underspecified
+    whatever the pass rate. The correction is the same one made to briefs on
+    this site: state the shape, do not leave it to be inferred.
 - version: "1.20"
   date: "2026-09-03"
   scope: framing-check-defect-not-framing
