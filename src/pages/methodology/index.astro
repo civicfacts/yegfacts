@@ -8,16 +8,51 @@ import { toc } from '../../lib/toc';
 import { SYNTHESIS_MATRIX } from '../../../scripts/synthesis-matrix.ts';
 
 /**
+ * The short version, and the only part of this page a stranger has to read. It
+ * carries the whole method in five steps, in the same numbered idiom as the
+ * `intake` and `stages` lists below, so a reader who goes on meets a shape they
+ * have already seen. Everything under it is the same method in full.
+ */
+const short = [
+  {
+    n: '1',
+    name: 'Someone sends us a source',
+    body: 'A post and every comment under it, an article, a thread. We keep the whole thing and list every factual claim in it, and commenters get a label instead of their name. Every question we found is listed publicly with what was decided about it, including the ones we declined.',
+  },
+  {
+    n: '2',
+    name: 'The question is pinned down before anyone looks for answers',
+    body: 'A written brief says exactly what the claim means, in words both sides would accept: what counts as lost, whose money, up to what date. A model from a different company checks that the brief is fair to the people making the claim. Then it is frozen, so nobody can move the goalposts once answers start coming in.',
+  },
+  {
+    n: '3',
+    name: 'Three AI models research it blind',
+    body: "Claude, GPT and Gemini each get the same brief and search the public record on their own, without seeing each other's work. Each comes back with a verdict, the evidence for and against, and what it could not find.",
+  },
+  {
+    n: '4',
+    name: 'A table turns three verdicts into one finding',
+    body: 'The table was written down in advance and covers every way three verdicts can combine. Nobody votes and nobody picks. When the three disagree, the finding leans to the more cautious side, and the disagreement is shown.',
+  },
+  {
+    n: '5',
+    name: 'Every fact is checked against a saved copy of its source',
+    body: 'Before anything goes up, an audit reads the write-up against the archived bytes of the sources it cites, not the live web. What the models said, what they cited and what the audit found are all public. Ildar Abdulin is the named person accountable for every word, and he can take any of it down.',
+  },
+];
+
+/**
  * Stage zero, and the reason the seven stages below can be trusted at all: the
- * claims that reach them were not picked out by anyone. Written as its own list
- * because a reader's first question is how a claim gets in, not how it is
- * checked (methodology v1.15, grouped into questions in v1.16).
+ * claims that reach them were not picked out by anyone. The short version above
+ * answers a reader's first question, which is what the site does; this list is
+ * the full account of stage zero (methodology v1.15, grouped into questions in
+ * v1.16).
  */
 const intake = [
   {
     n: '1',
     name: 'A source arrives',
-    body: 'The unit is a whole source: a post and every comment under it, an article, a discussion someone sends us. Anyone can send one, and you do not have to say which part of it you think is wrong. The whole thing is captured, with its address and the date it was taken, and kept.',
+    body: 'The unit is a whole source: an article, a discussion someone sends us, a post and every comment under it. Anyone can send one, and you do not have to say which part of it you think is wrong. The whole thing is captured, with its address and the date it was taken, and kept.',
   },
   {
     n: '2',
@@ -27,17 +62,17 @@ const intake = [
   {
     n: '3',
     name: 'The three lists become one',
-    body: 'A stronger model folds them into propositions, one for each thing a record could settle, keeping every version of the wording underneath. A script then audits that step: whatever any of the three wrote down has to appear once in the merged list, or on a dropped list under one of three allowed reasons. If something goes missing the merge fails and runs again. This is the point of the whole arrangement, because the failure it exists to catch is a claim quietly disappearing.',
+    body: 'A stronger model folds them into propositions, one for each thing a record could settle, keeping every version of the wording underneath. A script then audits that step. Whatever any of the three wrote down has to appear once in the merged list, or on a dropped list under one of three allowed reasons. If something goes missing, the merge fails and runs again. The failure this exists to catch is a claim quietly disappearing.',
   },
   {
     n: '4',
     name: 'The same argument is gathered into one question',
-    body: 'One argument arrives as many claims, and checking each on its own would spend a panel run on every one and answer the same question several times over. So propositions a single investigation would settle are gathered under one question: the same figure in different units, a general claim and an instance of it, and a claim together with the claim that contradicts it. Each of them still gets its own finding. Take the argument about emergency vehicles: one side says the concrete barriers hold responders up, the other says responders use the lanes to get past queues. That is one question, answered by the same response-time records, and two claims, because a single finding across the pair would settle neither and would tar each side with a ruling about the other.',
+    body: 'One argument arrives as many claims. Checking each on its own would spend a panel run on every one and answer the same question several times over. So claims a single investigation would settle are gathered under one question: the same figure in different units, a general claim and an instance of it, a claim together with the claim that contradicts it. Each still gets its own finding. Take the argument about emergency vehicles. One side says the concrete barriers hold responders up. The other says responders use the lanes to get past queues. That is one question, answered by the same response-time records, and two claims, because one finding across the pair would settle neither and would tar each side with a ruling about the other.',
   },
   {
     n: '5',
     name: 'Triage rules on the questions',
-    body: 'The questions go to two readers, one pass each, and neither reader sees the other. Each returns GO, PARK or NO on every one, with a reason short enough to show the person who raised it. Where they disagree the question is kept rather than dropped, because throwing out a real question costs a reader more than holding one too long. Only a GO reaches stage 1 below. The rest are listed anyway, with their reasons beside them, and the questions most people are arguing about are the ones checked first.',
+    body: 'The questions go to two readers, one pass each, and neither reader sees the other. Each returns GO, PARK or NO on every one, with a reason short enough to show the person who raised it. Where they disagree the question is kept rather than dropped, because throwing out a real question costs a reader more than holding one too long. Only a GO reaches stage 1 below. The rest are listed anyway, with their reasons, and the questions most people are arguing about are checked first.',
   },
 ];
 
@@ -45,37 +80,37 @@ const stages = [
   {
     n: '1',
     name: 'Framing',
-    body: 'A written brief fixes the scope of the story and states each claim precisely before any model runs. This is where the arguable words get pinned down — what “lost” means, gross versus net, whose money, and the as-of date that closes the accounting window. Any calculation the verdict depends on is named here. Since v1.7 the brief is written by Stew, the AI steward, from the intake record above, which carries the wordings the extraction captured and where each of them came from, and it is checked before the freeze by a model from a different vendor whose only question is whether the brief tests the claim people actually make, at its strongest fair reading, with definitions both sides would accept before seeing the result. That report is committed beside the brief. The brief is frozen only once the check passes, so nobody can move the goalposts once the answers start arriving.',
+    body: 'A written brief fixes the scope of the question and states each claim precisely before any model runs. This is where the arguable words get pinned down: what “lost” means, gross or net, whose money, and the date that closes the accounting window. Any calculation the finding depends on is named here. Since v1.7 Stew, the AI steward, writes the brief from the intake record, which carries the wordings the extraction captured and where each came from. Before the freeze a model from a different vendor checks it. Its only question is whether the brief tests the claim people actually make, at its strongest fair reading, with definitions both sides would accept before seeing the result. That report is committed beside the brief. The brief is frozen once the check passes, so nobody can move the goalposts once the answers start arriving.',
   },
   {
     n: '2',
     name: 'Blind research round',
-    body: 'Three models — Claude, GPT and Gemini — receive the identical package: the brief, the public reviewer prompt, and a required JSON output schema. Each runs in its own scratch directory with no access to this repo and no sight of the others. Each returns a per-claim verdict, its confidence, the evidence supporting and challenging it, its limitations, what it could not find, and comparison cities with a judgement about whether those cases transfer to Edmonton.',
+    body: 'Three models, Claude, GPT and Gemini, receive the identical package: the brief, the public reviewer prompt, and a required JSON output schema. Each runs in its own scratch directory with no access to this repository and no sight of the others. Each returns a per-claim verdict, its confidence, the evidence supporting and challenging it, its limitations, what it could not find, and comparison cities with a judgement about whether those cases transfer to Edmonton.',
   },
   {
     n: '3',
     name: 'Evidence staging and deterministic merge',
-    body: 'Cited URLs are fetched, hashed and snapshotted. Then a script — no model, no network — validates the three JSON files, de-duplicates the sources, and produces a combined evidence set plus an explicit list of where the models disagree. Accepted sources are added to the evidence registry deliberately, by a separate serialised script, never automatically.',
+    body: 'Cited URLs are fetched, hashed and snapshotted. Then a script, with no model and no network, validates the three JSON files, removes duplicate sources, and produces a combined evidence set plus an explicit list of where the models disagree. Accepted sources are added to the evidence registry deliberately, by a separate script, never automatically.',
   },
   {
     n: '4',
     name: 'Cross-review round',
-    body: 'Each model now sees the combined evidence and the other two sets of findings. The instruction is the opposite of consensus-seeking: find what you missed, find their errors, and state your final position. This is an error-documentation round, not a second vote — since v1.3 nothing said here can move the canonical finding, which removes the incentive to drift toward the majority. Every final position is published beside the round-one one, so a reader can see who moved and why. When this round catches something material — a fabricated citation, evidence that turns out to say something else — the answer is a fresh blind re-run of that claim, not a quiet patch inside the same run.',
+    body: "Each model now sees the combined evidence and the other two sets of findings. The instruction is the opposite of consensus-seeking: find what you missed, find their errors, and state your final position. This is an error-documentation round, not a second vote. Since v1.3 nothing said here can move the canonical finding, which removes the incentive to drift toward the majority. Every final position is published beside the round-one one, so a reader can see who moved and why. When this round catches something material, a fabricated citation or evidence that turns out to say something else, the answer is a fresh blind re-run of that claim, not a quiet patch inside the same run. Since v1.22 that re-run has a fixed shape: all three seats receive the frozen brief again with the claims named and nothing about why, and the first round's answers stay on the record beside the new ones.",
   },
   {
     n: '5',
     name: 'Deterministic synthesis',
-    body: 'A script computes the canonical finding from the three locked round-one verdicts, using a published lookup table over every possible combination. Round one is the only round in which the three reviewers are independent of each other, so it is the only round that can honestly be read as three separate judgements of the record. Model identity never enters the calculation, and the property is tested. A genuinely split panel produces Mixed, with the split shown. Beside the finding the site publishes panel agreement — Unanimous, Adjacent or Split — which replaced a canonical confidence score in v1.3, because agreement is what the method actually measures and confidence implied a probability of truth that nothing here computes. All published arithmetic lives in a tested script, never in prose.',
+    body: 'A script computes the canonical finding from the three locked round-one verdicts, using a published lookup table over every possible combination. Round one is the only round in which the three reviewers are independent of each other, so it is the only round that can honestly be read as three separate judgements of the record. Model identity never enters the calculation, and the property is tested. A genuinely split panel produces Mixed, with the split shown. Beside the finding the site publishes panel agreement, Unanimous, Adjacent or Split. That replaced a confidence score in v1.3, because agreement is what the method actually measures and confidence implied a probability of truth that nothing here computes. All published arithmetic lives in a tested script, never in prose. Since v1.24 a run can also publish fewer claims than it asked. Where a framing concern is right and no repair exists that does not weaken the claim, that claim is parked with a public reason, and its answers stay committed.',
   },
   {
     n: '6',
-    name: 'Drafting and faithfulness check',
-    body: 'Claude drafts the story and the claim records from the merged evidence — a fixed choice, disclosed here. The other two models then check the draft against the evidence sentence by sentence, looking for anything asserted that the evidence does not carry. Flags are fixed before a human sees it.',
+    name: 'Drafting, faithfulness check and plain-speech read',
+    body: 'Claude drafts the question page and the claim records from the merged evidence, a fixed choice disclosed here. The other two models then check the draft against the evidence sentence by sentence, looking for anything asserted that the evidence does not carry. Flags are fixed before a human sees it. Then a model from a different vendor than the drafter reads the answers as a person would: would anyone say this out loud, does it make sense to somebody who has not seen the question, and has anything true been dropped rather than moved down. Its report is committed with the run, and a claim that cannot name its read does not publish.',
   },
   {
     n: '7',
     name: 'Publication gate',
-    body: 'Before publication, a dedicated audit — separate from the models that produced the draft — verifies every statement of fact against the archived bytes of its cited sources (not the live web), and scans the raw review output for personal information and other material unsuitable for public release. Both audit reports are committed alongside the run. Since v1.1 this gate is performed by AI auditors under a standing delegation from Ildar Abdulin, who remains accountable for everything published and can revert any decision. A story may be deployed earlier in pending-review status; it is bannered as such and is not a finding.',
+    body: 'Before publication, a dedicated audit, separate from the models that produced the draft, verifies every statement of fact against the archived bytes of its cited sources, not the live web. It also scans the raw review output for personal information and other material unsuitable for public release. Both audit reports are committed alongside the run. Since v1.1 this gate is performed by AI auditors under a standing delegation from Ildar Abdulin, who remains accountable for everything published and can revert any decision. A question may be deployed earlier in pending-review status; it is bannered as such and is not a finding.',
   },
 ];
 
@@ -131,10 +166,11 @@ const findings = [
   },
 ];
 const sections = toc([
+  { id: 'short', label: 'The short version' },
+  { id: 'vocabulary', label: 'The words we use' },
   { id: 'intake', label: 'How a claim gets in' },
   { id: 'pseudonyms', label: 'Names and quotes' },
   { id: 'stages', label: 'Seven stages' },
-  { id: 'vocabulary', label: 'The words we use' },
   { id: 'synthesis', label: 'Panel agreement' },
   { id: 'questions', label: 'What a question carries' },
   { id: 'limits', label: 'Limits we set' },
@@ -146,19 +182,17 @@ const sections = toc([
 <Base
   sections={sections}
   title="Methodology"
-  description="How YEGFacts produces a finding: a whole source in and every claim in it listed, then a frozen brief, three models researching blind, a deterministic merge, a cross-review round, and a publication gate before anything is published."
+  description="How YEGFacts checks a claim: every claim in a source is listed, a brief is frozen before any research, three AI models research it without seeing each other, a published table turns their verdicts into one finding, and every fact is checked against archived sources before it is published."
 >
   <header class="border-b border-rule pb-6">
     <h1 class="text-[1.75rem] leading-[1.15] font-bold tracking-[-0.022em] sm:text-display">
       Methodology
     </h1>
     <p class="mt-3 max-w-prose text-base leading-relaxed text-muted">
-      AI does the research labour here. It does not carry the authority. Authority comes from a
-      public, auditable process: which claims arrived and what became of each of them, what was
-      asked, which sources answered it, what three independent
-      models each concluded, how those conclusions were combined by a rule written in advance, and
-      what the publication audit checked — against archived source bytes — before it was
-      published. A named human, Ildar Abdulin, remains accountable for all of it.
+      Three AI models from three companies each check a claim against the public record without
+      seeing each other's work. A rule written down in advance turns their three answers into one
+      finding. Nothing is published until every fact in it has been checked against a saved copy of
+      its source, and a named person, Ildar Abdulin, answers for all of it.
     </p>
     <p class="mt-3">
       <a href="/methodology/changes" class="link">Methodology changes</a>
@@ -166,7 +200,88 @@ const sections = toc([
     </p>
   </header>
 
-  <section id="intake" class="mt-11">
+  {/*
+    The short version comes first and the full method follows it, so a stranger
+    can stop after one screen and still have the whole shape of the thing. The
+    numbered list is the same idiom as the intake and stages lists below rather
+    than a treatment of its own.
+  */}
+  <section id="short" class="mt-11">
+    <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">The short version</h2>
+
+    <ol class="mt-6 divide-y divide-rule border-t border-rule">
+      {
+        short.map((step) => (
+          <li class="grid gap-x-5 gap-y-1 py-5 sm:grid-cols-[2rem_1fr]">
+            <span class="text-lg font-bold text-forest tabular">{step.n}</span>
+            <div>
+              <h3 class="font-semibold tracking-[-0.012em] text-forest">{step.name}</h3>
+              <p class="mt-1.5 text-[0.9375rem] leading-relaxed">{step.body}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <h3 class="mt-8 font-semibold tracking-[-0.012em] text-forest">Three things we will not do</h3>
+    <ul class="mt-3 max-w-prose list-disc space-y-2 pl-5 text-[0.9375rem] leading-relaxed">
+      <li>
+        Publish an accusation about a named person. This version of the site checks policies,
+        budgets and outcomes, not people, because it has no way yet for the person to answer.
+      </li>
+      <li>
+        Check a claim nobody made. Every claim we test is one somebody actually wrote, quoted
+        exactly as typed.
+      </li>
+      <li>
+        Give a score. A finding is one of five words with a fixed meaning, set out below. Not
+        established means the record cannot answer yet. It does not mean false.
+      </li>
+    </ul>
+
+    <p class="mt-5 max-w-prose text-[0.9375rem] leading-relaxed">
+      Everything the site runs on is public: the prompts, the table, the three models' raw answers,
+      the audit reports and every edit ever made, at{' '}
+      <a href={SITE.repo} rel="noopener" class="link">{SITE.repo}</a>. The rest of this page is the
+      same method in full, for a reader who wants to audit it.
+    </p>
+  </section>
+
+  {/*
+    The vocabulary sits directly under the short version because the five words
+    are what a reader has just been promised, and every section below reports
+    its results in them.
+  */}
+  <section id="vocabulary" class="mt-14">
+    <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">The words we use</h2>
+    <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+      No true or false, and no score out of ten. A finding is one of five words. Beside it sit two
+      more things: what kind of record answered the question, and whether the three reviewers
+      agreed. A claim can be Supported on a thin record, or Not established by a panel that agreed
+      unanimously that the record does not exist.
+    </p>
+
+    <dl class="mt-6 divide-y divide-rule border-t border-rule">
+      {
+        findings.map((finding) => (
+          <div class="grid gap-x-6 gap-y-1.5 py-4 sm:grid-cols-[14rem_1fr]">
+            <dt>
+              <Finding finding={finding.word} size="lg" />
+            </dt>
+            <dd class="text-[0.9375rem] leading-relaxed">{finding.body}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <p class="mt-5 max-w-prose border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed">
+      Reviewers may only return the first four words. Mixed is produced by the table, never by a
+      reviewer, and only when the three genuinely divide. A Mixed finding always comes with the
+      split that produced it.
+    </p>
+  </section>
+
+  <section id="intake" class="mt-14">
     <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">
       How a claim gets in
     </h2>
@@ -233,9 +348,9 @@ const sections = toc([
       Seven stages, per question
     </h2>
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
-      One run covers every claim under one question. The state of every run lives in the repo, so
-      any session can pick up where the last one stopped, and so can you. These seven begin once a
-      claim has come through the four steps above and triage has said go.
+      One run covers every claim under one question. The state of every run lives in the
+      repository, so any session can pick up where the last one stopped, and so can you. These
+      seven begin once a question has come through the five steps above and triage has said go.
     </p>
 
     <ol class="mt-6 divide-y divide-rule border-t border-rule">
@@ -255,37 +370,6 @@ const sections = toc([
     <p class="mt-5 max-w-prose border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed">
       Every question published so far passed the AI audit gate under this delegation; none was
       gated by a per-source manual founder review.
-    </p>
-  </section>
-
-  <section id="vocabulary" class="mt-14">
-    <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">The words we use</h2>
-    <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
-      No TRUE/FALSE. No scores out of ten. A finding is a sentence in a controlled vocabulary, and
-      it is reported alongside two separate things: the evidence basis (what kind of record answered
-      the question) and panel agreement (Unanimous, Adjacent or Split). A claim can be Supported on
-      a thin basis, or Not established by a panel that agreed unanimously that the record simply
-      does not exist.
-    </p>
-
-    <dl class="mt-6 divide-y divide-rule border-t border-rule">
-      {
-        findings.map((finding) => (
-          <div class="grid gap-x-6 gap-y-1.5 py-4 sm:grid-cols-[14rem_1fr]">
-            <dt>
-              <Finding finding={finding.word} size="lg" />
-            </dt>
-            <dd class="text-[0.9375rem] leading-relaxed">{finding.body}</dd>
-          </div>
-        ))
-      }
-    </dl>
-
-    <p class="mt-5 max-w-prose border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed">
-      There are two vocabularies, deliberately. A reviewer may only return Supported, Partially
-      supported, Not established or Contradicted. Mixed is a synthesis outcome, not a hedge a model
-      can reach for — which is why a Mixed finding always comes with the panel split that produced
-      it.
     </p>
   </section>
 
@@ -313,7 +397,7 @@ const sections = toc([
 
     <p class="mt-6 max-w-prose text-[0.9375rem] leading-relaxed">
       Where the three do not agree, the lookup table resolves toward the more cautious side of the
-      majority — two Supported and one Partially supported publishes as Partially supported. That
+      majority. Two Supported and one Partially supported publishes as Partially supported. That
       is deliberate. Supported means the proposition as written is affirmatively established, and a
       qualification one reviewer found does not stop existing because the other two missed it. For
       a site whose whole job is not overstating the record, overclaiming is the costlier of the two
@@ -321,9 +405,9 @@ const sections = toc([
     </p>
     <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
       The obvious objection is that this hands a single reviewer a veto. The answer is disclosure
-      rather than averaging: the vote composition is always displayed. Every claim shows what each
-      of the three said, so a reader who thinks the lone qualifier was wrong can see precisely that
-      and weigh it — without the site publishing a stronger claim than every reviewer accepted.
+      rather than averaging. Every claim shows what each of the three said, so a reader who thinks
+      the lone qualifier was wrong can see precisely that and weigh it, without the site publishing
+      a stronger claim than every reviewer accepted.
     </p>
 
     {/*
