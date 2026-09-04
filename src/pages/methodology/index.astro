@@ -328,15 +328,19 @@ const sections = toc([
 
     {/*
       Twenty rows of badge words would drown the search index and two rows share
-      a rationale word for word, so the whole table is ignored. Nothing inside
-      this wrapper may be a `div`: the duplication audit strips a
-      `data-pagefind-ignore` element with a non-greedy same-tag regex, so a
-      nested `div` closes the strip at the first row and the shared rationale
-      comes back as an in-page failure.
+      a rationale word for word, so the whole table is ignored. The wrapper is
+      the disclosure itself, closed by default: twenty rows are a reference, not
+      reading. Nothing inside it may be another `details`: the duplication audit
+      strips a `data-pagefind-ignore` element with a non-greedy same-tag regex,
+      so a nested one would close the strip early and the shared rationale would
+      come back as an in-page failure.
     */}
-    <div data-pagefind-ignore>
-      <h3 class="mt-8 font-semibold tracking-[-0.012em] text-forest">The whole table</h3>
-      <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+    <details class="mt-8 border-y border-rule open:pb-6" data-pagefind-ignore>
+      <summary class="flex min-h-12 cursor-pointer list-none items-baseline justify-between gap-3 py-2">
+        <h3 class="font-semibold tracking-[-0.012em] text-forest">The whole table</h3>
+        <span class="disclosure-state shrink-0 text-sm text-muted"></span>
+      </summary>
+      <p class="mt-1 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
         Three reviewers, four words, twenty possible panels. Every one is written out in
         the script that computes the finding, and this is that script's table, not a copy
         of it. Read down the left for what the three said, across for what is published.
@@ -375,7 +379,7 @@ const sections = toc([
           </>
         ))
       }
-    </div>
+    </details>
   </section>
 
   <section id="questions" class="mt-14">
