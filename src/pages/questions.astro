@@ -52,8 +52,8 @@ const unchecked = rows.some(
 
 const outline = toc([
   { id: 'filters', label: 'Filters' },
-  { id: 'states', label: 'What the states mean' },
   { id: 'register', label: 'Every question' },
+  { id: 'states', label: 'What the states mean' },
 ]);
 
 const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
@@ -120,7 +120,7 @@ function counts(comments: number, claims?: number): string[] {
     <p class="mt-4 max-w-prose text-base leading-relaxed">
       Every question that has reached the site is here, whatever became of it: going ahead, parked,
       declined, published or withdrawn. Each shows the claims under it and the reason for the
-      decision. Nothing is held back. The filters only narrow this list.
+      decision. The filters only narrow this list.
     </p>
   </header>
 
@@ -366,11 +366,10 @@ function counts(comments: number, claims?: number): string[] {
         </dl>
 
         <p class="mt-6 max-w-prose text-[0.9375rem] leading-relaxed">
-          Going ahead, parked and declined say whether a question is worth a check, not whether
-          anything under it is true. Two readers rule on each question, and the reasons use their
-          words: GO, PARK or NO. Both at GO, or one GO and one PARK, goes ahead. Two NOs declines.
-          Anything else parks, because throwing out a real question costs a reader more than holding
-          one too long. Where the two split, the reason says so.
+          Two readers decide each question separately, and the reasons use their words: GO, PARK
+          or NO. A question goes ahead when both say GO, or one says GO and the other PARK. It is
+          declined when both say NO. Anything else parks, because throwing out a real question costs
+          a reader more than holding one too long. Where the two split, the reason says so.
         </p>
         <p class="mt-4 max-w-prose text-[0.9375rem] leading-relaxed">
           The counts are comments, not people. One person can write several, and a comment counted
