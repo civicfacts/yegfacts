@@ -29,3 +29,10 @@ table from the script that computes it.
   script with no literal rows, 20 rows grouped 4, 6 and 10, and contrast
   from 6.75:1 to 14.91:1.
 - Round 3: APPROVED, no findings.
+- After round 3 the founder asked for the table to be collapsed behind
+  a disclosure (cbcdc04: the wrapper is a `details` closed by default,
+  with the h3 in its summary). Round 4 (REVISE, 1 standards + 1 spec):
+  a heading inside a summary is not reliably announced as a heading.
+  Fixed in 820f49a: the h3 and its intro sit above the disclosure, and
+  the summary is its own control.
+- Round 5: APPROVED, no findings.
