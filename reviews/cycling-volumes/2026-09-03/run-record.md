@@ -239,6 +239,15 @@ answers a finding that report raised.
 corrected brief, the run record and all three prior reports. Verdict
 REVISE.
 
+REVISE was the only word the prompt left him. It belongs to the framing
+rounds, where it means the brief goes back for another revision, and this
+report sends nothing back: under v1.20 it ends in the corrections below
+and a freeze. So the word at the head of that report contradicts its own
+outcome. The report is not edited, because it is the checker's text.
+`prompts/framing-check.md` now heads a defect confirmation `DEFECTS
+CONFIRMED` or `DEFECTS REMAIN` and says neither of them parks the brief,
+so the next one will not have to borrow a word that means something else.
+
 All three corrections are confirmed, each labelled `[defect]` by the
 checker. He worked both of claim 1's ladders boundary by boundary and
 states that each assigns exactly one verdict to every possible total; he
@@ -319,19 +328,41 @@ one v1.20 added, on the first brief ever to run it.
 
 **The freeze.** Made by the editor under v1.20, which ends a defect
 confirmation that returns further defects with the editor's correction on
-the record and the brief frozen. **The freeze commit is
-`3e89a6e43ac62ea1632d91bca3c7033f23e0a177`**, which carries the frozen
-text. That SHA was written into this record and into the brief's status
-line by the commit immediately after it, which touches nothing else. The
-status line is the only change to `brief.md` after the freeze: no
-proposition, no cutoff, no verdict rule and no instrument description
-moves again, and any change to one is a new brief with a new check.
+the record and the brief frozen.
 
-That SHA is a commit on the `cycling-volumes` branch, in PR #37. The
-repository squash-merges, so the commit itself does not survive onto
-`main`; the frozen text arrives there in the squashed commit for #37,
-and this record names the branch commit because that is where the freeze
-actually happened.
+**The freeze is the sha256 of `brief.md`, and it is
+`b222574225ea300f924240b715a7332398af5d905a2fc2596d6bc067e33ef700`.**
+One line recomputes it, from the repository root:
+
+    shasum -a 256 reviews/cycling-volumes/2026-09-03/brief.md
+
+A content hash rather than a commit, because this repository squash-merges
+and a branch commit is therefore unreachable from `main`. A reader who
+cannot verify the freeze from the published history has not been given
+one. The hash survives any merge strategy: the bytes the panel received
+are the bytes that command prints, wherever the file comes to rest.
+
+**The branch commit, kept as a convenience and nothing more.** The frozen
+text was committed on the `cycling-volumes` branch as
+`3e89a6e43ac62ea1632d91bca3c7033f23e0a177`, in PR #37. That SHA is
+branch-local, it does not survive the squash, and nothing depends on it.
+It is recorded because it says when the freeze happened in the branch's
+own history.
+
+**What was in the file when it was hashed.** The brief's status line was
+rewritten once more, after that commit and before the digest was taken,
+so that it names where the hash lives instead of naming a commit nobody
+can reach. A file cannot carry its own hash, which is why the digest sits
+here and the brief points at it. That status line is the only text in
+`brief.md` that has moved since the freeze: no proposition, no cutoff, no
+verdict rule and no instrument description moves again, and any change to
+one is a new brief with a new check. The hash is what makes that
+checkable instead of asserted.
+
+Each seat's `prompt_sha256` in `run.yaml` corroborates it from the other
+end. That digest covers the package the seat was handed, the brief is
+inside the package, and a brief edited between the freeze and a seat's
+run would show there as well as here.
 
 The checker's standing objection from report 2, that
 `one-to-two-percent-of-population-rides` and

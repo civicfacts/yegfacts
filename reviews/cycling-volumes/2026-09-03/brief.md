@@ -1,7 +1,9 @@
 # Review brief: How many people in Edmonton cycle, and how much do the bike lanes get used?
 
-Status: **FROZEN 2026-09-03**, at commit
-`3e89a6e43ac62ea1632d91bca3c7033f23e0a177`. The framing check returned
+Status: **FROZEN 2026-09-03**. The freeze is the sha256 of this file,
+recorded in `run-record.md` with the one line that recomputes it, so
+anyone can check the frozen text against the file in front of them. The
+framing check returned
 REVISE on all three permitted reports (`framing/check-1.md`,
 `framing/check-2.md`, `framing/check-3.md`), and all three findings it
 left standing were arithmetic defects inside
