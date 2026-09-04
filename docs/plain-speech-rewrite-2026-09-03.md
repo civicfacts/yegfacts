@@ -19,9 +19,10 @@ on why the meaning did not move. The cases where a plainer sentence *would* have
 moved a finding, and the wording was therefore left alone, are in their own
 section at the end, because those are the ones worth arguing about.
 
-**The read has since run and is applied.** What it changed is at the bottom of
-this file, under "What the read did". Where a string below no longer matches the
-page, the read is the reason and its own record says why.
+**The read has since run and is applied, and so has the faithfulness check that
+follows it.** What each changed is at the bottom of this file, under "What the
+read did" and "What the faithfulness check did". Where a string below no longer
+matches the page, one of those two is the reason and its own record says why.
 
 ## The rule this pass held itself to
 
@@ -500,3 +501,78 @@ in the `infill-prices` standfirst, where "how much more the new housing costs"
 assumed a direction no more established than the magnitude. And "a household on
 a middle income" in the same sentence, which is a different test from the median
 income the claim below it turns on.
+
+---
+
+## What the faithfulness check did
+
+The check ran later on 2026-09-04, after the plain-speech read and on the wording
+that read left behind, as
+`codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check`,
+against a package holding the stage instructions, all thirty-six changed strings
+with their old wording, the ten claims in full with their findings, key facts,
+limitations and unknowns, the published arithmetic and its output, the six
+question pages' frontmatter, and the eighty-nine registry entries behind those
+claims with what each source establishes and the excerpts from its archived
+bytes. It checked thirty-six strings, passed twenty-four and returned sixteen
+items on twelve. Its report is split across the eight review runs that produced
+the claims, at `<run>/faithfulness/gpt-<n>.md`, with every editorial disposition
+written beneath it.
+
+The read asked whether a person would say the words. This one asked whether the
+words are true to the evidence, and it turned out the answer was no in twelve
+places. Nine items were adopted in substance with the wording changed, three
+adopted as the seat proposed them in substance, and every seat-proposed
+replacement was refused as worded, for one of three reasons: it opened an answer
+with something other than the four stance openers the validator enforces, it put
+method vocabulary into a sentence a reader meets first, or it restated a claim's
+answer closely enough to fail the duplication audit.
+
+**The one factual error.** Council did not write the freedom-of-movement clause
+into the district plans. It moved an amendment to section 1 of the District
+Policy, carried 12 to 0, and the sentence it added binds the Policy and the
+plans together. The `fifteen-minute-districts` standfirst and the
+`districts-travel-restrictions` answer both said the wrong instrument, and both
+now name the District Policy. The vote, the quoted words and the finding did not
+move.
+
+**Where a wording said the record cannot answer and the record says nobody
+tried.** The `ip-teardown-price-gap` answer said the City's records "cannot
+show" the price relationship. That claim's own limitations record a reviewer
+documenting that the inputs are published and the join is feasible, so the
+honest statement is that nobody has produced the calculation. The answer, the
+`infill-prices` standfirst and the withdrawal note's last sentence were all
+rewritten to say that instead. This is the one place the two checks of
+2026-09-04 disagree: the plain-speech read passed "the City's records" and said
+in its own report that it should stay, agreeing with item 6 of the deliberate
+non-changes above. The faithfulness check governs, because that wording moved
+the finding.
+
+**Unbounded absences.** Four of them: "no public record shows a net loss of about
+$82 million" on `ebus-82m-loss`, "Edmonton has no measure" on the
+`winter-cycling` standfirst, "No public record says what the housing ... costs"
+in the `infill-prices` withdrawal note, and "nobody set a rule" on
+`ip-infill-affordable`, where the rule that is missing is this site's own. Each
+is now bounded to what has been found or to whose rule it was. None of the
+withdrawal notes softened; bounding a search is not the same as admitting less.
+
+**A characterisation with nothing behind it.** No archived source calls Oulu
+subarctic, and this claim's own limitations say no source supplied a
+standardised Edmonton–Oulu climate comparison at all. The word is gone from both
+the `winter-cycling` standfirst and the `wc-too-cold` answer, replaced by what
+the claim's own key fact carries: a northern Finnish region.
+
+**A figure that was only true of one reading.** "Well over that budget and well
+short of double it" holds at 1.55 against the printed 2022 snow cell and not at
+1.17 or 1.26 against the City's other 2022 figures. The rewrite had dropped the
+denominator to get a plainer sentence; the standfirst now names it and says the
+other figures bring the comparison closer to a single year. The roads figure
+gained the admission its claim's dated note already carries, that the City
+publishes no roads-only total.
+
+**Two things this check did not reach**, recorded so they are not lost. The
+second TL;DR bullet on `fifteen-minute-districts` carries the instrument slip in
+weaker form, and the fifth on `winter-cycling` carries the "each of the cities
+measured here" overclaim in the same words the read borrowed. Neither TL;DR
+changed in this rewrite, so both were context rather than strings under check.
+They belong to the next pass on that layer.
