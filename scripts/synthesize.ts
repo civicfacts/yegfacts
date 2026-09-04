@@ -19,7 +19,10 @@
  * into `round2_positions` so dissent and movement stay on the page — and both
  * rounds are still scanned for the framing halt. A material error caught in
  * round 2 (a fabricated citation, wrong evidence) is not silently averaged in:
- * it triggers a fresh blind re-run of the affected claim.
+ * it triggers a fresh blind re-run of the affected claim. Since methodology
+ * v1.22 that re-run has somewhere to land — a `round1-rerun-<n>/` directory
+ * whose three seats replace `round1/` for the claims they answered, and only
+ * those. See `loadClaimReruns`.
  *
  * Adopting this changed no published finding. Verified on all six published
  * claims before the switch: the round-1 and round-2 multisets resolve to the
@@ -28,11 +31,23 @@
  * A run halts here, nonzero and unsynthesised, when any reviewer flagged
  * `MATERIAL FRAMING CONCERN` against the brief (methodology v1.2). See
  * `framingConcerns` below.
+ *
+ * Since methodology v1.24 a run may also publish fewer claims than it asked.
+ * `run.yaml` carries a `synthesis_scope` naming every claim this run
+ * synthesises and every claim it parks, with the reason each was parked. The
+ * two lists together must account for every round-1 claim exactly once, so a
+ * claim can never fall out of a run by being left unmentioned. See
+ * `loadScope`.
  */
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { listFiles, relative, repoPath, currentMethodologyVersion } from './lib/repo.ts';
-import { validateReviewFile, type Review, type ReviewClaim } from './lib/review-schema.ts';
+import {
+  loadRunManifest,
+  validateReviewFile,
+  type Review,
+  type ReviewClaim,
+} from './lib/review-schema.ts';
 import { synthesize } from './synthesis-matrix.ts';
 import type {
   CanonicalFinding,
@@ -47,9 +62,24 @@ type ReviewerPosition = {
   verdict: ReviewerVerdict;
   confidence: Confidence;
   evidence_basis: string;
-  /** Present only when this reviewer moved between rounds. */
+  /**
+   * Present only when this reviewer moved between rounds, and read from the
+   * committed blind round rather than from the reviewer's own account of it.
+   */
   changed_from?: ReviewerVerdict;
   changed_why?: string;
+  /**
+   * The reviewer's own `verdict_changes` entry for this claim, kept only when
+   * its `from` contradicts the committed blind round. It never reaches
+   * `changed_from`: a seat's account of its own earlier position is not
+   * evidence about that position. It is recorded rather than dropped because a
+   * seat misdescribing its own prior verdict is itself worth seeing.
+   */
+  disputed_self_report?: {
+    claimed_from: string;
+    committed: ReviewerVerdict;
+    why?: string;
+  };
   interpretation_notes?: string;
 };
 
@@ -58,7 +88,14 @@ type ClaimSynthesis = {
   finding: CanonicalFinding;
   panel_agreement: PanelAgreement;
   rationale: string;
-  /** The canonical basis: the three locked round-1 positions. */
+  /**
+   * Which blind round this claim's three positions were read from: `round1`,
+   * or the `round1-rerun-*` directory that superseded it for this claim alone
+   * (methodology v1.22). Named per claim because a re-run covers some claims
+   * and not others, and a reader should not have to work out which.
+   */
+  basis: string;
+  /** The canonical basis: the three locked blind positions named by `basis`. */
   reviewers: ReviewerPosition[];
   /**
    * Each reviewer's final round-2 position, when a round 2 ran. Not an input to
@@ -69,12 +106,46 @@ type ClaimSynthesis = {
   disagreement_notes: string[];
 };
 
+/**
+ * A claim the run asked and does not answer (methodology v1.24).
+ *
+ * It is named here because parking is a decision, not an omission: the seats'
+ * answers stay committed where they were written, and this entry says in the
+ * deterministic artifact that the run dropped the claim and why.
+ */
+type ParkedClaim = {
+  id: string;
+  /** The reason a reader is shown, from the manifest. */
+  reason: string;
+  /** Where its seats' answers live, when they are not in `round1`. */
+  basis?: string;
+  /**
+   * Every framing concern raised on this claim, by round and seat. A concern
+   * on a parked claim does not halt the run — the claim it concerns is not
+   * being published — but it is copied here so that parking can never be a way
+   * to make a halt disappear. The concern's own words stay in the review file.
+   */
+  framing_concerns: string[];
+};
+
 type Synthesis = {
   story: string;
   run: string;
   methodology_version: string;
-  /** Always `round1` since methodology v1.3; kept explicit in the artifact. */
+  /**
+   * Always `round1` since methodology v1.3; kept explicit in the artifact. A
+   * claim answered by a blind re-run says so on its own entry's `basis`, which
+   * names the re-run directory (methodology v1.22).
+   */
   basis: 'round1';
+  /** The `round1-rerun-*` directories read, in name order. Empty when none. */
+  claim_reruns: string[];
+  /**
+   * The claims this run asked and parked rather than answered, in the
+   * manifest's order. Empty when the run synthesises everything it asked,
+   * which is the normal case.
+   */
+  parked_claims: ParkedClaim[];
   /** Whether a cross-review round ran and is reflected in `round2_positions`. */
   round2_documented: boolean;
   generated_at: string;
@@ -83,8 +154,25 @@ type Synthesis = {
 
 type LoadedRound = { provider: string; review: Review };
 
-function loadRound(runDir: string, round: 1 | 2): LoadedRound[] {
-  const dir = path.join(runDir, `round${round}`);
+/** What `run.yaml` says this run answers, and what it parks. */
+type SynthesisScope = { claims: Set<string>; parked: ParkedClaim[] };
+
+/** One reviewer's framing concern, kept with the claim it was raised against. */
+type FramingConcern = {
+  claim: string;
+  /** Round and seat, for the halt message and for the parked claim's record. */
+  where: string;
+  /** The reviewer's own words, whitespace-collapsed. */
+  notes: string;
+};
+
+/**
+ * A claim-scoped blind re-run: one `round1-rerun-*` directory, the claim ids
+ * its seats answered, and the three seats' reviews.
+ */
+type ClaimRerun = { name: string; claims: Set<string>; round: LoadedRound[] };
+
+function loadReviews(dir: string): LoadedRound[] {
   if (!existsSync(dir)) return [];
   const loaded: LoadedRound[] = [];
   for (const file of listFiles(dir, ['.json'])) {
@@ -99,6 +187,73 @@ function loadRound(runDir: string, round: 1 | 2): LoadedRound[] {
   return loaded;
 }
 
+function loadRound(runDir: string, round: 1 | 2): LoadedRound[] {
+  return loadReviews(path.join(runDir, `round${round}`));
+}
+
+/**
+ * Claim-scoped blind re-runs (methodology v1.22).
+ *
+ * Stage 4 has always said that a material catch in cross-review triggers a
+ * fresh blind re-run of the affected claim rather than a correction inside the
+ * run (§4, and the v1.3 entry). This is where such a re-run reaches the
+ * finding. Its three seats answer the frozen brief again, scoped to the claim
+ * and blind to everything the run has since learned, and they write into their
+ * own `round1-rerun-<n>/` directory with their own manifest. `round1/` is never
+ * rewritten: it stays the seats' answers to the package its hash records, and
+ * for a re-run claim it is the superseded record.
+ *
+ * The rules are deliberately strict, because this is the one place a claim's
+ * canonical basis can be replaced. A re-run must carry all three seats, all
+ * three must answer the same claims, and every claim it answers must already
+ * exist in `round1/`. Two re-runs may not both cover one claim. Anything else
+ * throws rather than quietly picking a winner.
+ */
+function loadClaimReruns(runDir: string, round1: LoadedRound[]): ClaimRerun[] {
+  const dirs = existsSync(runDir)
+    ? readdirSync(runDir, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory() && /^round1-rerun-/.test(entry.name))
+        .map((entry) => entry.name)
+        .sort()
+    : [];
+
+  const knownClaims = new Set(round1.flatMap(({ review }) => review.claims.map((claim) => claim.id)));
+  const providers = new Set(round1.map((entry) => entry.provider));
+  const covered = new Map<string, string>();
+  const reruns: ClaimRerun[] = [];
+
+  for (const name of dirs) {
+    const round = loadReviews(path.join(runDir, name));
+    if (round.length !== 3) {
+      throw new Error(
+        `${name}/ holds ${round.length} review(s); a claim re-run is a blind round and needs all 3 seats`,
+      );
+    }
+    for (const { provider } of round) {
+      if (!providers.has(provider)) {
+        throw new Error(`${name}/${provider}.json is not one of round 1's seats (${[...providers].join(', ')})`);
+      }
+    }
+    const claims = new Set(round[0]!.review.claims.map((claim) => claim.id));
+    for (const { provider, review } of round) {
+      const seatClaims = review.claims.map((claim) => claim.id);
+      if (seatClaims.length !== claims.size || seatClaims.some((id) => !claims.has(id))) {
+        throw new Error(
+          `${name}/${provider}.json answers [${seatClaims.join(', ')}], not the re-run's [${[...claims].join(', ')}]`,
+        );
+      }
+    }
+    for (const id of claims) {
+      if (!knownClaims.has(id)) throw new Error(`${name}/ answers claim "${id}", which round 1 never asked`);
+      const already = covered.get(id);
+      if (already) throw new Error(`claim "${id}" is re-run in both ${already}/ and ${name}/`);
+      covered.set(id, name);
+    }
+    reruns.push({ name, claims, round });
+  }
+  return reruns;
+}
+
 /**
  * The halt marker a reviewer writes into `interpretation_notes` when a claim's
  * operationalization in the brief materially changes what the honest answer is
@@ -111,9 +266,14 @@ const FRAMING_HALT_MARKER = 'MATERIAL FRAMING CONCERN';
  * itself is loaded, and computing a canonical finding over it would launder a
  * bad framing into a three-model verdict. So this halts the run rather than
  * degrading it: the brief is revised and round 1 rerun.
+ *
+ * Each concern is kept with the claim it was raised against, because since
+ * methodology v1.24 a run may answer one by dropping that claim rather than by
+ * revising the brief. Only a concern against a claim the run still publishes
+ * halts it, which `loadScope` explains is not the same as ignoring one.
  */
-function framingConcerns(rounds: LoadedRound[], round: number): string[] {
-  const hits: string[] = [];
+function framingConcerns(rounds: LoadedRound[], round: number): FramingConcern[] {
+  const hits: FramingConcern[] = [];
   for (const { provider, review } of rounds) {
     for (const claim of review.claims) {
       const notes = claim.interpretation_notes;
@@ -121,11 +281,81 @@ function framingConcerns(rounds: LoadedRound[], round: number): string[] {
       // the frame held, not raising one; the reviewer prompt now asks them not
       // to write the string at all in that case, and this guards the seam.
       if (notes && new RegExp(`(?<!\\bno\\s)${FRAMING_HALT_MARKER}`, 'i').test(notes)) {
-        hits.push(`round ${round} · ${provider} · claim "${claim.id}": ${notes.replace(/\s+/g, ' ').trim()}`);
+        hits.push({
+          claim: claim.id,
+          where: `round ${round} · ${provider} · claim "${claim.id}"`,
+          notes: notes.replace(/\s+/g, ' ').trim(),
+        });
       }
     }
   }
   return hits;
+}
+
+/**
+ * The run's synthesis scope, from `run.yaml` (methodology v1.24).
+ *
+ * A brief can turn out to have fixed an instrument that cannot carry the claim
+ * it was fixed for. Where the claim cannot be re-framed without weakening it —
+ * and a proposition may be made more precise, never weaker — the honest
+ * outcome is that the run answers the claims it can and parks the one it
+ * cannot. This is where the run is told which is which.
+ *
+ * The rules exist so that parking cannot be quiet. Every claim round 1 asked
+ * appears in exactly one of the two lists, so a claim cannot leave a run by
+ * going unmentioned; a parked claim carries the reason a reader is shown,
+ * because a claim dropped without a public reason cannot be told from a claim
+ * dropped for the answer it gave; and any framing concern raised against it is
+ * copied into `synthesis.json` rather than discarded. What parking does not do
+ * is resolve the concern. The seats' answers stay committed where they were
+ * written, and the register entry says the site tried and could not answer it.
+ */
+function loadScope(runDir: string, round1: LoadedRound[]): SynthesisScope | undefined {
+  const manifest = path.join(runDir, 'run.yaml');
+  if (!existsSync(manifest)) return undefined;
+  const scope = loadRunManifest(manifest).synthesis_scope;
+  if (!scope) return undefined;
+
+  const known = new Set(round1.flatMap(({ review }) => review.claims.map((claim) => claim.id)));
+  const at = `${relative(manifest)} synthesis_scope`;
+  const listed = new Set<string>();
+  const place = (id: string, list: string): void => {
+    if (!known.has(id)) throw new Error(`${at} ${list} names claim "${id}", which round 1 never asked`);
+    if (listed.has(id)) throw new Error(`${at} names claim "${id}" twice; each claim is listed once`);
+    listed.add(id);
+  };
+
+  const claims = new Set<string>();
+  for (const id of scope.claims ?? []) {
+    place(id, 'claims');
+    claims.add(id);
+  }
+
+  const parked: ParkedClaim[] = [];
+  for (const entry of scope.parked ?? []) {
+    const id = entry?.claim ?? '';
+    if (id === '') throw new Error(`${at} parked: every parked entry names the claim it parks`);
+    place(id, 'parked');
+    const reason = (entry.reason ?? '').trim();
+    if (reason === '') {
+      throw new Error(
+        `${at} parked "${id}": a parked claim carries the reason it was parked, in words a reader ` +
+          `can be shown. Without one, a claim dropped because the record cannot answer it reads ` +
+          `exactly like a claim dropped for the answer it gave.`,
+      );
+    }
+    parked.push({ id, reason, ...(entry.basis ? { basis: entry.basis } : {}), framing_concerns: [] });
+  }
+
+  const unlisted = [...known].filter((id) => !listed.has(id));
+  if (unlisted.length > 0) {
+    throw new Error(
+      `${at} neither synthesises nor parks ${unlisted.map((id) => `"${id}"`).join(', ')}. ` +
+        `Every claim round 1 asked is listed once, so none can fall out of a run unmentioned.`,
+    );
+  }
+
+  return { claims, parked };
 }
 
 function claimIds(rounds: LoadedRound[]): string[] {
@@ -153,6 +383,17 @@ function findClaim(review: Review, id: string): ReviewClaim | undefined {
  * moved carries `changed_from`/`changed_why`. A reviewer missing from a round
  * is fatal for round 1 (the canonical basis must be complete) and skipped for
  * round 2, where a reviewer may legitimately not restate every claim.
+ *
+ * Movement is measured file against file, never against the seat's own account
+ * of where it started. This used to prefer the seat's self-reported
+ * `verdict_changes.from`, and on `cycling-volumes` that let one seat write a
+ * cross-review movement that never happened: it reported moving from Not
+ * established on `bike-lanes-look-empty` — describing the halted round on the
+ * superseded brief — where its committed round 1 says Contradicted, and the
+ * synthesis recorded the move. A seat's account of its own earlier position is
+ * not evidence about that position; the committed file is. Where the two
+ * disagree the file wins and the disagreement is written out as
+ * `disputed_self_report` rather than dropped.
  */
 function positionsFor(
   id: string,
@@ -170,15 +411,20 @@ function positionsFor(
     const change = review.round2_notes?.verdict_changes?.find((entry) => entry.claim === id);
     const before = firstRound.find((entry) => entry.provider === provider);
     const previous = before ? findClaim(before.review, id)?.verdict : undefined;
-    const movedFrom = change?.from ?? (previous && previous !== claim.verdict ? previous : undefined);
+    const movedFrom = previous && previous !== claim.verdict ? previous : undefined;
+    const disputed =
+      change && previous && change.from !== previous
+        ? { claimed_from: change.from, committed: previous, ...(change.why ? { why: change.why } : {}) }
+        : undefined;
     out.push({
       provider,
       model_self_reported: review.reviewer.model_self_reported,
       verdict: claim.verdict,
       confidence: claim.confidence,
       evidence_basis: claim.evidence_basis,
-      ...(movedFrom ? { changed_from: movedFrom as ReviewerVerdict } : {}),
-      ...(change?.why ? { changed_why: change.why } : {}),
+      ...(movedFrom ? { changed_from: movedFrom } : {}),
+      ...(movedFrom && change?.why ? { changed_why: change.why } : {}),
+      ...(disputed ? { disputed_self_report: disputed } : {}),
       ...(claim.interpretation_notes ? { interpretation_notes: claim.interpretation_notes } : {}),
     });
   }
@@ -207,15 +453,33 @@ function disagreementNotes(positions: ReviewerPosition[], id: string): string[] 
 export function synthesizeRun(runDir: string): Synthesis {
   const round1 = loadRound(runDir, 1);
   const round2 = loadRound(runDir, 2);
+  const reruns = loadClaimReruns(runDir, round1);
+  const scope = loadScope(runDir, round1);
 
-  const concerns = [...framingConcerns(round1, 1), ...framingConcerns(round2, 2)];
-  if (concerns.length > 0) {
+  const concerns = [
+    ...framingConcerns(round1, 1),
+    ...reruns.flatMap((rerun) => framingConcerns(rerun.round, 1)),
+    ...framingConcerns(round2, 2),
+  ];
+  // A concern against a parked claim does not halt: that claim is not being
+  // published, and the manifest says on the record that it was dropped and
+  // why. A concern against anything this run still answers halts as before.
+  const halting = scope ? concerns.filter((concern) => scope.claims.has(concern.claim)) : concerns;
+  if (halting.length > 0) {
     throw new Error(
       `halted: a reviewer flagged ${FRAMING_HALT_MARKER} against the brief for ` +
         `${relative(runDir)}. Revise the brief and rerun round 1; do not synthesise over a ` +
-        `framing a reviewer says predetermines the answer.\n  - ${concerns.join('\n  - ')}`,
+        `framing a reviewer says predetermines the answer.\n  - ${halting
+          .map((concern) => `${concern.where}: ${concern.notes}`)
+          .join('\n  - ')}`,
     );
   }
+  const parked = (scope?.parked ?? []).map((entry) => ({
+    ...entry,
+    framing_concerns: concerns
+      .filter((concern) => concern.claim === entry.id)
+      .map((concern) => concern.where),
+  }));
 
   if (round1.length === 0) throw new Error(`no round-1 review JSON found under ${relative(runDir)}`);
   if (round1.length !== 3) {
@@ -226,15 +490,26 @@ export function synthesizeRun(runDir: string): Synthesis {
     );
   }
 
-  const claims: ClaimSynthesis[] = claimIds(round1).map((id) => {
-    const reviewers = positionsFor(id, round1);
+  const inScope = (id: string): boolean => !scope || scope.claims.has(id);
+
+  const claims: ClaimSynthesis[] = claimIds(round1).filter(inScope).map((id) => {
+    // A claim answered by a blind re-run reads its three positions from there
+    // and nowhere else. Mixing the superseded round-1 verdict into the multiset
+    // would be the quiet correction inside the run that §4 forbids.
+    const rerun = reruns.find((entry) => entry.claims.has(id));
+    const basisRound = rerun ? rerun.round : round1;
+    const reviewers = positionsFor(id, basisRound);
     const result = synthesize(reviewers.map((reviewer) => reviewer.verdict));
     return {
       id,
       finding: result.finding,
       panel_agreement: result.agreement,
       rationale: result.rationale,
+      basis: rerun ? rerun.name : 'round1',
       reviewers,
+      // Round 2 answered round 1, whatever a later re-run went on to say, so a
+      // seat's movement there is still measured against `round1`. Reading it
+      // against the re-run would report a change nobody made.
       round2_positions: positionsFor(id, round2, round1, { required: false }),
       disagreement_notes: disagreementNotes(reviewers, id),
     };
@@ -245,6 +520,8 @@ export function synthesizeRun(runDir: string): Synthesis {
     run: path.basename(runDir),
     methodology_version: currentMethodologyVersion(),
     basis: 'round1',
+    claim_reruns: reruns.map((rerun) => rerun.name),
+    parked_claims: parked,
     round2_documented: round2.length > 0,
     generated_at: new Date().toISOString(),
     claims,
@@ -265,10 +542,20 @@ function main(): void {
   console.log(
     `wrote ${relative(out)} (basis ${synthesis.basis}` +
       `${synthesis.round2_documented ? ', round 2 documented' : ''}, ` +
-      `${synthesis.claims.length} claims)`,
+      `${synthesis.claims.length} claims` +
+      `${synthesis.parked_claims.length > 0 ? `, ${synthesis.parked_claims.length} parked` : ''})`,
   );
   for (const claim of synthesis.claims) {
-    console.log(`  ${claim.id}: ${claim.finding} / ${claim.panel_agreement}`);
+    const basis = claim.basis === 'round1' ? '' : ` [${claim.basis}]`;
+    console.log(`  ${claim.id}: ${claim.finding} / ${claim.panel_agreement}${basis}`);
+  }
+  // Printed as loudly as a finding, because a claim the run dropped is the
+  // thing an operator is most likely to miss in a list of the ones it kept.
+  for (const claim of synthesis.parked_claims) {
+    const concerns =
+      claim.framing_concerns.length > 0 ? ` [framing concern: ${claim.framing_concerns.join('; ')}]` : '';
+    console.log(`  ${claim.id}: PARKED, not synthesised${concerns}`);
+    console.log(`    ${claim.reason.replace(/\s+/g, ' ').trim()}`);
   }
 }
 

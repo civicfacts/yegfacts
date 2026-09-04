@@ -265,7 +265,13 @@ stopped.
    recorded in `synthesis.json` as `round2_positions` and rendered, so dissent
    and movement stay visible. A material catch here — a fabricated citation,
    wrong evidence — triggers a fresh blind re-run of the affected claim rather
-   than a quiet correction inside the same run.
+   than a quiet correction inside the same run. Since methodology v1.22 that
+   re-run has a shape: `scripts/panel/run-reviewer.sh --claims <id> --into
+   round1-rerun-<n>` hands all three seats the frozen brief again with an
+   instruction naming the claims to answer and nothing about why, and writes
+   their answers and their own manifest into `<run>/round1-rerun-<n>/`.
+   `round1/` is never rewritten; for a re-run claim it is the superseded
+   record, readable beside what replaced it.
 5. **Deterministic synthesis.** A script computes the canonical finding from an
    explicit lookup matrix over the multiset of the three **round-1** reviewer
    verdicts (§5 below). Round 1 is the only round in which the three reviewers
@@ -273,7 +279,17 @@ stopped.
    multiset is no longer three independent readings of the record. Model
    identity never affects the result. Adopting the round-1 basis changed no
    published finding: both multisets resolve identically on all six published
-   claims.
+   claims. A claim answered by a blind re-run is read from that re-run and not
+   from `round1/`, and every claim in `synthesis.json` names its own `basis` so
+   the reader is told which blind round produced it. Since methodology v1.24 a
+   run may also publish fewer claims than it asked: where a framing concern is
+   right and no repair exists that does not make the claim weaker, `run.yaml`
+   carries a `synthesis_scope` naming the claims this run synthesises and the
+   claims it parks, with the reason each was parked. The two lists must account
+   for every round-1 claim exactly once, a parked claim must carry a public
+   reason, and a concern against a claim still being published halts the run as
+   before. The parked claim's answers stay committed, its reason goes on the
+   register, and `synthesis.json` records it beside the findings.
 6. **Drafting, faithfulness check and plain-speech read.** Claude drafts the
    story and claim files from the merged evidence (a fixed, disclosed choice for
    v1). The other two models check the draft against the evidence: every

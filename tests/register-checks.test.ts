@@ -440,6 +440,36 @@ describe('registerProblems: state sits on the question, not the claim', () => {
     );
   });
 
+  // The second exception, and it is the run's: a claim the panel answered that
+  // the record turned out to be unable to carry (methodology v1.24).
+  it('allows a claim parked on the no-instrument ground, keeping its wording', () => {
+    expect(
+      grouped([
+        claim({
+          triage: 'park',
+          ground: 'no-instrument',
+          reason: 'The only instrument covers autumn weekdays; it reopens on a full-year survey.',
+        }),
+        otherSide(),
+      ]),
+    ).toEqual([]);
+  });
+
+  it('refuses a no-instrument ground on anything but a park', () => {
+    expect(
+      grouped([
+        claim({ triage: 'go', ground: 'no-instrument', reason: 'A reason.' }),
+        otherSide(),
+      ]).join('\n'),
+    ).toContain('only ever accompanies a triage of park');
+  });
+
+  it('requires a reason on a no-instrument park, which is what the reader is shown', () => {
+    expect(
+      grouped([claim({ triage: 'park', ground: 'no-instrument' }), otherSide()]).join('\n'),
+    ).toContain('parked on the no-instrument ground, so it needs the reason a reader is shown');
+  });
+
   it('requires a reason on a right-of-reply decline, which is all a reader gets', () => {
     expect(
       grouped([

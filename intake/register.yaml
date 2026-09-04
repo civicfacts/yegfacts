@@ -77,11 +77,18 @@
 #               commenter labels in it, so a wording attributed to a person is
 #               that person's words.
 # seats:        which extractor seats found it.
-# triage/ground: a claim carries no state, with one exception. An accusation
-#               against a named person is declined even inside a question that
-#               is going ahead, because the site has no way to put it to them.
-#               That is `triage: no` with `ground: right-of-reply`, and such a
-#               claim carries no proposition, wording or variations at all.
+# triage/ground: a claim carries no state, with two exceptions, and each names
+#               the ground it stands on. An accusation against a named person is
+#               declined even inside a question that is going ahead, because the
+#               site has no way to put it to them: `triage: no` with
+#               `ground: right-of-reply`, and such a claim carries no
+#               proposition, wording or variations at all. A claim the panel
+#               answered and the run could not publish, because the only
+#               instrument that exists cannot carry the proposition and the
+#               proposition may not be made weaker to fit it, is parked on its
+#               own: `triage: park` with `ground: no-instrument`, keeping its
+#               wording, and carrying the reason and what would reopen it
+#               (methodology v1.24).
 # names_person: the claim names an identifiable individual.
 #
 # A source's fields
@@ -101,7 +108,7 @@ questions:
     source: yegscoop-2026-08-26
     question: "How many people in Edmonton cycle, and how much do the bike lanes get used?"
     topics: [transportation, bike-lanes]
-    lifecycle: registered
+    lifecycle: panel-complete
     triage: go
     publication: unpublished
     reason: "City counters, census commute data and trip surveys can show how often Edmonton’s bike lanes are used and why counts, riders and trip shares are different measures."
@@ -110,6 +117,7 @@ questions:
       total: 25
       for: 5
       against: 21
+    story: cycling-volumes
     run: reviews/intake/yegscoop-2026-08-26
   - id: who-cycles
     recorded: "2026-09-03"
@@ -885,6 +893,9 @@ claims:
       - wording: "usually within a short distance, or for recreational purposes."
         source_id: yegscoop-2026-08-26
         author_name: "Bright Elk G."
+    triage: park
+    ground: no-instrument
+    reason: "We put this to the panel and cannot answer it. The only Edmonton source that records why people cycle is the 2015 regional household travel survey, and it surveyed weekdays between mid-September and mid-December — the least recreational stretch of the riding year. A measure taken there cannot carry a claim about who rides in general, and narrowing the claim to autumn weekdays would answer an easier question than the one people are arguing about. It reopens if a travel survey covering a representative period, and recording why each trip was made, is published for Edmonton."
   - id: under-one-percent-of-commuters-cycle
     recorded: "2026-09-03"
     origin: captured

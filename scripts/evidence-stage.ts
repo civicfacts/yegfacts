@@ -21,7 +21,17 @@ import path from 'node:path';
 import { relative, repoPath, sha256 } from './lib/repo.ts';
 import type { CombinedEvidence } from './merge.ts';
 
-const TIMEOUT_MS = 10_000;
+/**
+ * The whole-request deadline, not a connect deadline: `AbortSignal.timeout`
+ * cancels a download in progress, so a slow server and a large file both hit
+ * it. At the 10 seconds this started with, the `cycling-volumes` run recorded
+ * two sources as unarchivable that were nothing of the kind — Statistics
+ * Canada's survey-instrument pages take about 11 seconds to first byte, and a
+ * full census table CSV is tens of megabytes. A citation the site cannot
+ * verify is a real cost, and manufacturing one out of an impatient client is
+ * the worst way to incur it.
+ */
+const TIMEOUT_MS = 60_000;
 const STAGING_DIR = repoPath('evidence', 'staging');
 const MANIFEST = path.join(STAGING_DIR, 'staging-manifest.json');
 
