@@ -29,11 +29,11 @@ const short = [
   },
   {
     name: 'A table turns three verdicts into one finding',
-    body: 'The table was written down in advance and covers every way three verdicts can combine. Nobody votes and nobody picks. When the three do not agree, the finding is never stronger than the most cautious of the three. When they genuinely split, it is Mixed, and the split is shown.',
+    body: 'The table was written down in advance and covers every way three verdicts can combine. Nobody votes and nobody picks. When the three do not agree, the finding is never stronger than the most cautious of the three. If one reviewer finds a claim supported and another finds it contradicted, the finding is Mixed, and the split is shown.',
   },
   {
     name: 'Every fact is checked against a saved copy of its source',
-    body: 'Before anything is published as a finding, an audit reads the write-up against the archived bytes of the sources it cites, not the live web. What the models said, what they cited and what the audit found are published with it. Ildar Abdulin is the named person accountable for every word, and he can take any of it down.',
+    body: 'Before anything is published as a finding, an audit reads the write-up against the archived bytes of the sources it cites, not the live web. The reviewers' answers, their sources and the audit reports are published with it, after a check that removes personal information. Ildar Abdulin is the named person accountable for every word, and he can take any of it down.',
   },
 ];
 
@@ -206,11 +206,12 @@ const sections = toc([
     </ul>
 
     <p class="mt-5 max-w-prose text-[0.9375rem] leading-relaxed">
-      The prompts, the table, the models' answers, the audit reports and every edit ever made are
-      public, at{' '}
-      <a href={SITE.repo} rel="noopener" class="link">{SITE.repo}</a>. Two things are not, and the
-      sections on names and limits below say which: who is behind a commenter's label, and
-      documents we are not allowed to mirror. The rest of this page is the
+      The prompts, the table, the reviewers' answers, the audit reports and every edit ever made
+      are public, at{' '}
+      <a href={SITE.repo} rel="noopener" class="link">{SITE.repo}</a>. What is not: who is behind a
+      commenter's label, documents we are not allowed to mirror, accusations against named people,
+      and personal information a release check removes. The sections on names and limits below
+      say more. The rest of this page is the
       same method in full, for a reader who wants to audit it.
     </p>
   </section>
