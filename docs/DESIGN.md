@@ -308,7 +308,7 @@ Pinned reviewer commands (methodology v1.6, 2026-09-01; `scripts/panel/run-revie
 
 | Panel seat | Command |
 |---|---|
-| Claude Opus 5 | `claude -p --model opus --effort high` (v1.15; Fable 5.1 before that, pinned in v1.5 and given its effort setting in v1.6). The move is a cost decision, not a judgement about review quality: the founder's Fable allowance on his subscription is nearly exhausted. Runs already published under Fable 5.1 keep the model their manifests record. |
+| Claude Opus 5 | `claude -p --model claude-opus-5 --effort high` (v1.15; Fable 5.1 before that, pinned in v1.5 and given its effort setting in v1.6). The move is a cost decision, not a judgement about review quality: the founder's Fable allowance on his subscription is nearly exhausted. Runs already published under Fable 5.1 keep the model their manifests record. |
 | GPT-5.6 Sol | `codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check` |
 | Gemini 3.1 Pro | `agy --effort high --sandbox --dangerously-skip-permissions --print-timeout 45m -p` (v1.14; before that without the permissions flag, which made the headless seat return nothing on PDF-heavy briefs) |
 
