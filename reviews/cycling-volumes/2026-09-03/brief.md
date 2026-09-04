@@ -1,9 +1,10 @@
 # Review brief: How many people in Edmonton cycle, and how much do the bike lanes get used?
 
-Status: **FROZEN 2026-09-03.** The framing check returned REVISE on all
-three permitted reports (`framing/check-1.md`, `framing/check-2.md`,
-`framing/check-3.md`), and all three findings it left standing were
-arithmetic defects inside
+Status: **FROZEN 2026-09-03**, at commit
+`3e89a6e43ac62ea1632d91bca3c7033f23e0a177`. The framing check returned
+REVISE on all three permitted reports (`framing/check-1.md`,
+`framing/check-2.md`, `framing/check-3.md`), and all three findings it
+left standing were arithmetic defects inside
 verdict ladders. Under methodology v1.20 a defect finding does not park a
 brief: the three were corrected in the checker's own words and the brief
 went back for one defect confirmation, `framing/check-4-defects.md`. That

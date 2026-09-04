@@ -319,11 +319,11 @@ one v1.20 added, on the first brief ever to run it.
 
 **The freeze.** Made by the editor under v1.20, which ends a defect
 confirmation that returns further defects with the editor's correction on
-the record and the brief frozen. The frozen text of this brief is the one
-carried by the commit that introduced this line; its SHA is written into
-this record and into the brief's status line by the next commit, which
-touches nothing else. Every change to `brief.md` after the freeze commit
-is that status line and nothing else: no
+the record and the brief frozen. **The freeze commit is
+`3e89a6e43ac62ea1632d91bca3c7033f23e0a177`**, which carries the frozen
+text. That SHA was written into this record and into the brief's status
+line by the commit immediately after it, which touches nothing else. The
+status line is the only change to `brief.md` after the freeze: no
 proposition, no cutoff, no verdict rule and no instrument description
 moves again, and any change to one is a new brief with a new check.
 
