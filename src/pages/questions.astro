@@ -94,34 +94,33 @@ function counts(comments: number, claims?: number): string[] {
   title="Every question we've considered"
   description="Every question that reached YEGFacts, with the claims under it and what happened to it, including the ones we parked and the ones we declined."
 >
+  {/*
+    Two columns from `lg`: the title, the filters and the register on the left,
+    the key and the outline on the right, starting level with the title so the
+    key is in view before the first row is. The key is reference material a
+    reader consults while reading the rows. It comes after the register in
+    source order, which is where a phone wants it: below the list, not in front
+    of it.
+
+    The page carries its own right-hand column rather than borrowing the
+    layout's 13rem rail, the way the home page does, and the rail is off. The
+    rail is too narrow to hold the key, and a second column beside it left the
+    register 460px wide. The column is a fixed 16rem rather than the home
+    page's ratio because the register's other columns never shrink: they cost
+    the table a flat few hundred pixels whatever the page is doing, so every
+    pixel this column takes comes out of the question title, which is the one
+    thing on the row a reader is actually reading.
+  */}
+  <div class="lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-x-8">
+  <div>
   <header class="border-b border-rule pb-6">
     <h1 class="text-[1.75rem] leading-[1.15] font-bold tracking-[-0.022em] sm:text-display">
       Every question we've considered
     </h1>
     <p class="mt-4 max-w-prose text-base leading-relaxed">
-      A question is the unit of work here: one brief, one body of evidence, one panel run, and one
-      finding for each claim under it. Every question the site has considered is on this page,
-      whatever became of it, with the claims that sit under it and the reason behind the decision.
-    </p>
-    <p class="mt-4 max-w-prose text-base leading-relaxed">
-      When we read a source, a post and every comment on it, three models each write down every
-      factual claim they can find and a fourth folds those lists into one claim for each thing a
-      public record could settle. Those claims are grouped into questions, and the decision is made
-      about the question rather than about any claim on its own. Claims that contradict each other
-      belong to the same question: whether barriers delay emergency vehicles and whether responders
-      ride down the lanes to get past traffic are one question with two claims, investigated
-      together, each still getting its own finding.
-    </p>
-    <p class="mt-4 max-w-prose text-base leading-relaxed">
-      Going ahead, parked and declined are intake answers about whether a question is worth an
-      investigation. They are not rulings on whether anything under them is true. Published and
-      withdrawn say what a reader can see. Nothing is held back: the filters below only narrow a
-      list that is already complete on this page.
-    </p>
-    <p class="mt-4 max-w-prose text-base leading-relaxed">
-      The counts are of comments, not of people: one person can write more than one, and a comment
-      counted under a claim may have been arguing against it. That is why the count says said and
-      not agreed.
+      Every question that has reached the site is here, whatever became of it: going ahead, parked,
+      declined, published or withdrawn. Each shows the claims under it and the reason for the
+      decision. Nothing is held back. The filters only narrow this list.
     </p>
   </header>
 
@@ -201,25 +200,7 @@ function counts(comments: number, claims?: number): string[] {
       </p>
     </noscript>
   </section>
-
-  {/*
-    The register and the key beside it. The key is reference material a reader
-    consults while reading the rows, so from `lg` it sits in its own column
-    alongside them rather than standing between the filters and the table. It
-    comes after the register in source order, which is where a phone wants it:
-    below the list, not in front of it.
-
-    The page carries its own right-hand column rather than borrowing the
-    layout's 13rem rail, the way the home page does, and the rail is off. The
-    rail is too narrow to hold the key, and a second column beside it left the
-    register 460px wide. The column is a fixed 16rem rather than the home
-    page's ratio because the register's other columns never shrink: they cost
-    the table a flat few hundred pixels whatever the page is doing, so every
-    pixel this column takes comes out of the question title, which is the one
-    thing on the row a reader is actually reading.
-  */}
-  <div class="mt-12 lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-x-8">
-    <section id="register" class="scroll-mt-6">
+    <section id="register" class="mt-12 scroll-mt-6">
       <h2 class="section-heading">Every question</h2>
 
       {/*
@@ -345,6 +326,7 @@ function counts(comments: number, claims?: number): string[] {
         }
       </table>
     </section>
+  </div>
 
     <div>
       {/*
@@ -384,12 +366,15 @@ function counts(comments: number, claims?: number): string[] {
         </dl>
 
         <p class="mt-6 max-w-prose text-[0.9375rem] leading-relaxed">
-          Two readers rule on every question, one call each, written GO, PARK or NO. Those are
-          the words some of the reasons in the register use. Going ahead takes both readers at GO,
-          or one GO and one PARK. Declined takes two NOs. Everything else parks, a GO set against a
-          NO included, because throwing out a real question costs the reader more than holding one
-          too long. So a question marked going ahead can be one the two readers did not agree on,
-          and where they split the reason says so.
+          Going ahead, parked and declined say whether a question is worth a check, not whether
+          anything under it is true. Two readers rule on each question, and the reasons use their
+          words: GO, PARK or NO. Both at GO, or one GO and one PARK, goes ahead. Two NOs declines.
+          Anything else parks, because throwing out a real question costs a reader more than holding
+          one too long. Where the two split, the reason says so.
+        </p>
+        <p class="mt-4 max-w-prose text-[0.9375rem] leading-relaxed">
+          The counts are comments, not people. One person can write several, and a comment counted
+          under a claim may have been arguing against it. That is why a count says said, not agreed.
         </p>
 
         {
