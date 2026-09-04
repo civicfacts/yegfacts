@@ -1,6 +1,39 @@
 # Methodology changelog. Every entry bumps the version.
 # CI requires an entry here for any change under prompts/, scripts/merge*,
 # scripts/synthesize*, or methodology/.
+- version: "1.23"
+  date: "2026-09-03"
+  scope: prior-verdict-from-the-committed-file
+  summary: >
+    Synthesis read a seat's own account of its earlier verdict in preference to
+    the file that recorded it, so a seat could write a cross-review movement
+    that never happened and the artifact would carry it. The committed round is
+    now the only authority on what a seat said before, and a self-report that
+    contradicts it is written out beside the position rather than dropped.
+  highlights:
+    - "What the bug allowed. scripts/synthesize.ts computed a reviewer's prior verdict as the from field of that reviewer's own round-2 verdict_changes entry, falling back to the committed round-1 file only when the seat had claimed nothing. A seat's self-report therefore outranked the record. Any seat could report having moved from a verdict it never held, and synthesis.json would publish changed_from as though the movement were a fact about the panel. Nothing checked the two against each other, so a wrong self-report could not be seen in the output at all."
+    - "What it did here. On cycling-volumes the Gemini seat's round 2 reported bike-lanes-look-empty moving from Not established to Contradicted, and gave the brief's revision as the reason. It was describing the halted round on the superseded brief, not the round it was answering: against its own committed round 1 on the re-frozen brief the seat had not moved, and round1/gemini.json says Contradicted. synthesis.json recorded the movement anyway."
+    - "The rule now. A seat's account of its own earlier position is not evidence about that position; the committed blind round is. Movement is read file against file. Where the seat's from disagrees with the file, the file decides the movement and the disagreement is recorded on the same position as disputed_self_report, carrying what the seat claimed, what the file says and the reason it gave. A seat misdescribing its own prior verdict is a fact about the seat and is worth seeing, so it is written down rather than silently discarded. changed_why is now emitted only where a movement the files show actually happened, so a reason can no longer stand alone attached to nothing."
+    - "How it was found, which is the part worth recording. Not by review and not by a test. A seat wrote an account of itself that was anachronistic — true of a round that had been superseded, false of the round it was in — and the synthesis believed it. The wrong entry was visible in synthesis.json for anyone reading it against round1/gemini.json, and it was caught by that comparison. The pipeline has a general rule here already, stated in the runner: models never attest their own identity or run parameters, because a claim by the thing being described is not evidence about it. This is the same rule, and synthesis was the one place still breaking it."
+    - "Pinned by tests/synthesize-self-report.test.ts. A seat claiming a from that contradicts its committed round 1 must record no movement; the contradicted claim must appear as disputed_self_report; a movement the files do show still records its stated reason; and a movement the files show but the seat never reported is still read off the files."
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+    - label: Panel quality record
+      href: /methodology#panel-quality
+  note: >
+    The narrow version of this is a precedence bug in one expression. The wider
+    version is that the artifact had no way to disagree with a reviewer about
+    the reviewer's own history, and so could only repeat it. Preferring the
+    self-report was not obviously wrong when it was written — a seat that says
+    it moved usually did, and the seat's own wording is more informative than a
+    diff of two verdict words. What it cost is that the one case where the two
+    disagree is exactly the case worth reading, and the code resolved it in
+    favour of the party with the least standing to be believed. What would show
+    this correction was wrong is a run where a seat's self-report turns out to
+    describe its committed round better than the file does, which would mean
+    the wrong file was committed and is a different failure with a different
+    fix.
 - version: "1.22"
   date: "2026-09-03"
   scope: claim-level-blind-rerun

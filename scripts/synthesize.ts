@@ -50,9 +50,24 @@ type ReviewerPosition = {
   verdict: ReviewerVerdict;
   confidence: Confidence;
   evidence_basis: string;
-  /** Present only when this reviewer moved between rounds. */
+  /**
+   * Present only when this reviewer moved between rounds, and read from the
+   * committed blind round rather than from the reviewer's own account of it.
+   */
   changed_from?: ReviewerVerdict;
   changed_why?: string;
+  /**
+   * The reviewer's own `verdict_changes` entry for this claim, kept only when
+   * its `from` contradicts the committed blind round. It never reaches
+   * `changed_from`: a seat's account of its own earlier position is not
+   * evidence about that position. It is recorded rather than dropped because a
+   * seat misdescribing its own prior verdict is itself worth seeing.
+   */
+  disputed_self_report?: {
+    claimed_from: string;
+    committed: ReviewerVerdict;
+    why?: string;
+  };
   interpretation_notes?: string;
 };
 
@@ -241,6 +256,17 @@ function findClaim(review: Review, id: string): ReviewClaim | undefined {
  * moved carries `changed_from`/`changed_why`. A reviewer missing from a round
  * is fatal for round 1 (the canonical basis must be complete) and skipped for
  * round 2, where a reviewer may legitimately not restate every claim.
+ *
+ * Movement is measured file against file, never against the seat's own account
+ * of where it started. This used to prefer the seat's self-reported
+ * `verdict_changes.from`, and on `cycling-volumes` that let one seat write a
+ * cross-review movement that never happened: it reported moving from Not
+ * established on `bike-lanes-look-empty` — describing the halted round on the
+ * superseded brief — where its committed round 1 says Contradicted, and the
+ * synthesis recorded the move. A seat's account of its own earlier position is
+ * not evidence about that position; the committed file is. Where the two
+ * disagree the file wins and the disagreement is written out as
+ * `disputed_self_report` rather than dropped.
  */
 function positionsFor(
   id: string,
@@ -258,15 +284,20 @@ function positionsFor(
     const change = review.round2_notes?.verdict_changes?.find((entry) => entry.claim === id);
     const before = firstRound.find((entry) => entry.provider === provider);
     const previous = before ? findClaim(before.review, id)?.verdict : undefined;
-    const movedFrom = change?.from ?? (previous && previous !== claim.verdict ? previous : undefined);
+    const movedFrom = previous && previous !== claim.verdict ? previous : undefined;
+    const disputed =
+      change && previous && change.from !== previous
+        ? { claimed_from: change.from, committed: previous, ...(change.why ? { why: change.why } : {}) }
+        : undefined;
     out.push({
       provider,
       model_self_reported: review.reviewer.model_self_reported,
       verdict: claim.verdict,
       confidence: claim.confidence,
       evidence_basis: claim.evidence_basis,
-      ...(movedFrom ? { changed_from: movedFrom as ReviewerVerdict } : {}),
-      ...(change?.why ? { changed_why: change.why } : {}),
+      ...(movedFrom ? { changed_from: movedFrom } : {}),
+      ...(movedFrom && change?.why ? { changed_why: change.why } : {}),
+      ...(disputed ? { disputed_self_report: disputed } : {}),
       ...(claim.interpretation_notes ? { interpretation_notes: claim.interpretation_notes } : {}),
     });
   }

@@ -82,6 +82,11 @@ wrong, and a drafter must not report it as a cross-review position
 change.** The committed round-1 file is the authority; a seat's account of
 its own earlier verdict is not.
 
+The two sentences above about `synthesize.ts` describe the script as it
+stood when this was written. It was corrected under methodology v1.23 and
+the false entry is gone; **item 5** below says what the bug allowed and
+what replaced it.
+
 ### 2b. The failure as the record held it
 
 Written before the re-run, and left as written. Its present tense
@@ -169,3 +174,34 @@ own `prompt_sha256`, is `round1-rerun-1/run.yaml`.
 returned before, so the multiset and therefore the verdict and the panel
 agreement are the same. The run record's "Stage 6" says what that means
 and why it is worth having anyway.
+
+## 5. The self-report the synthesis believed, and the fix
+
+Item 2a records that `synthesis.json` carried
+`changed_from: "Not established"` for the Gemini seat on
+`bike-lanes-look-empty`, from that seat's own round-2 `verdict_changes`
+entry, against a committed round 1 that says Contradicted. The entry is
+gone. It was not edited out: `scripts/synthesize.ts` was corrected under
+methodology v1.23 and the synthesis regenerated from the same committed
+files, which is the only way a deterministic artifact is allowed to
+change.
+
+**What the code did.** It computed a reviewer's prior verdict as
+`round2_notes.verdict_changes[].from` — the seat's own account — and fell
+back to the committed round-1 file only when the seat had claimed
+nothing. So a seat's self-report outranked the record, and a movement
+nobody made was published as one.
+
+**What it does now.** Movement is read file against file. Where a seat's
+`from` disagrees with the committed round, the file decides and the
+seat's claim is written out on the same position as
+`disputed_self_report`, carrying what it claimed, what the file says and
+the reason it gave. A seat misdescribing its own prior verdict is a fact
+about the seat, so it is recorded rather than dropped. The Gemini
+position on `bike-lanes-look-empty` now reads no movement, with the
+disputed self-report beside it.
+
+**How it was found is worth saying.** Not by a review of the script and
+not by a test. A seat wrote an account of itself that was true of a round
+that had been superseded and false of the round it was answering, and the
+synthesis believed it. The anachronism is what exposed the precedence.
