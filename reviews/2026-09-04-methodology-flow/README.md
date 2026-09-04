@@ -43,8 +43,20 @@ Corrected later).
   non-stopping path under "Stops here". Fixed in 7bb6d24 by claiming
   less: the parked outcome names only the framing case.
 - Round 4: APPROVED, no findings.
+- The founder then looked at the preview and saw artifacts: the spine
+  ran through the digits, and every row divider crossed it, a grid of
+  small crosses down the numeral column. Fix: the numeral carries the
+  paper ground so the spine passes behind it, and the flow list has no
+  row dividers, the spine being what joins the steps. Round 5 (REVISE,
+  1 blocking): both artifacts gone, but the fix was uncommitted. Stew's
+  command chain had gated the commit on a `grep -c` that returned zero,
+  whose exit status stopped the chain; the built page carried the fix
+  under a stale SHA. Committed as 7df1732. Round 6 produced no report
+  (the Codex CLI failed twice on an internal error); what it was to
+  confirm is mechanical and codex-output_6.md records Stew's own
+  verification of it.
 
-Four rounds for ten sentences. Every finding was a sentence saying more
+Four rounds for ten sentences, then two for one visual fix. Every finding was a sentence saying more
 than the method does, the same failure the short version itself drew in
 PR #53, and the reason the page comment now says the shape does not
 make the sentences true.
