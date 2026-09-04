@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import Finding from '../components/Finding.astro';
-import PageToc from '../components/PageToc.astro';
 import RegisterCounts from '../components/RegisterCounts.astro';
 import ReportBox from '../components/ReportBox.astro';
 import StateBadge from '../components/StateBadge.astro';
@@ -50,10 +49,15 @@ const unchecked = rows.some(
   (row) => row.answered.length > 0 && row.registered.length > 0,
 );
 
+/**
+ * No outline. The key sits beside the column from `lg`, level with the title,
+ * so it has no place in a top-to-bottom list of the page and the layout's
+ * active-section marker would sit on it for the whole scroll. Without it the
+ * page has two sections, below the layout's minimum, so `toc()` returns none.
+ */
 const outline = toc([
   { id: 'filters', label: 'Filters' },
   { id: 'register', label: 'Every question' },
-  { id: 'states', label: 'What the states mean' },
 ]);
 
 const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
@@ -96,7 +100,7 @@ function counts(comments: number, claims?: number): string[] {
 >
   {/*
     Two columns from `lg`: the title, the filters and the register on the left,
-    the key and the outline on the right, starting level with the title so the
+    the key on the right, starting level with the title so the
     key is in view before the first row is. The key is reference material a
     reader consults while reading the rows. It comes after the register in
     source order, which is where a phone wants it: below the list, not in front
@@ -389,25 +393,12 @@ function counts(comments: number, claims?: number): string[] {
       </section>
 
       {/*
-        The layout's rail, carried here instead. Below `lg` the layout's own
-        disclosure bar already holds both, so this copy only exists from `lg`
-        up, and it is ignored by the search index the way the rail was.
+        The report box the layout's rail would carry, kept from `lg` up only:
+        below that the page has no rail and no outline bar, and the footer
+        carries the contact. Ignored by the search index the way the rail is.
       */}
-      <div
-        class="hidden lg:sticky lg:top-8 lg:mt-10 lg:block lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto"
-        data-pagefind-ignore
-      >
-        <nav aria-label="On this page">
-          <p class="text-[0.6875rem] font-semibold tracking-[0.11em] text-muted uppercase">
-            On this page
-          </p>
-          <div class="mt-3">
-            <PageToc sections={outline} />
-          </div>
-        </nav>
-        <div class="mt-7">
-          <ReportBox path="/questions" title="Every question we've considered" />
-        </div>
+      <div class="hidden lg:sticky lg:top-8 lg:mt-10 lg:block" data-pagefind-ignore>
+        <ReportBox path="/questions" title="Every question we've considered" />
       </div>
     </div>
   </div>
