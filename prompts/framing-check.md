@@ -122,7 +122,11 @@ pass, it ends the brief.
 
 Output, in Markdown:
 
-- First line: `Verdict: FRAME OK` or `Verdict: REVISE`.
+- First line: `Verdict: FRAME OK` or `Verdict: REVISE`. On a defect
+  confirmation, the fourth report described below, the first line is
+  `Verdict: DEFECTS CONFIRMED` when every correction holds and you find
+  no further defect, or `Verdict: DEFECTS REMAIN` when a correction
+  fails or you find another defect. Neither word parks the brief.
 - For each check above: `OK` or a finding with the quoted brief text and
   the replacement wording you propose. Every finding carries `[framing]`
   or `[defect]`.
@@ -152,9 +156,15 @@ standing after your third report does not park the brief. The editor
 corrects it using the replacement wording you supplied, records the
 correction in the run record against the finding it answers, and the
 brief comes back to you once as a **defect confirmation**. That fourth
-report may only confirm the corrections or name further defects. If it
-raises a framing finding, whether new or revived, the brief is parked
-and no further round exists. Nothing in this exception touches the bound
+report may only confirm the corrections or name further defects, and it
+carries its own two verdict words, `DEFECTS CONFIRMED` and `DEFECTS
+REMAIN`. FRAME OK and REVISE belong to the framing rounds and are not
+available here: REVISE means the brief goes back for another revision,
+and a defect confirmation cannot send it there. Say plainly which of
+the two your report is, and know that neither one parks the brief. If
+it raises a framing finding, whether new or revived, the brief is parked
+and no further round exists, and that is the only thing in this report
+that can park it. Nothing in this exception touches the bound
 above: the value of a cutoff is a framing question, capped at three, and
 is not reopened in a defect round.
 
