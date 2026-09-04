@@ -34,7 +34,7 @@ const short: ReadonlyArray<{ name: string; body: string; exits: readonly Exit[] 
     body: 'A written brief says exactly what the claim means, in words both sides would accept: what counts as lost, whose money, up to what date. A model from a different company checks that the brief is fair to the people making the claim. Then it is frozen, so nobody can move the goalposts once answers start coming in.',
     exits: [
       { kind: 'Loops back', text: 'A brief that fails its fairness check is rewritten before it can be frozen.' },
-      { kind: 'Stops here', text: 'After three reports the check is over. A brief that still fails is parked until new evidence arrives.' },
+      { kind: 'Stops here', text: 'After three reports, a brief that still fails its check is parked until new evidence arrives, unless what remains is a defect of fact, which is corrected and confirmed instead.' },
     ],
   },
   {
@@ -50,14 +50,14 @@ const short: ReadonlyArray<{ name: string; body: string; exits: readonly Exit[] 
     body: 'The table was written down in advance and covers every way three verdicts can combine. Nobody votes and nobody picks. When the three do not agree, the finding is never stronger than the most cautious of the three. If one reviewer finds a claim supported and another finds it contradicted, the finding is Mixed, and the split is shown.',
     exits: [
       { kind: 'Continues', text: 'Supported against Contradicted publishes as Mixed, with the split shown.' },
-      { kind: 'Stops here', text: 'A claim a framing concern was right about, with no fair repair, is parked with a public reason.' },
+      { kind: 'Stops here', text: 'If a framing concern is right and there is no fair repair, the claim is parked with a public reason.' },
     ],
   },
   {
     name: 'Every fact is checked against a saved copy of its source',
     body: "Before anything is published as a finding, an audit reads the write-up against the archived bytes of the sources it cites, not the live web. The reviewers' answers, their sources and the audit reports are published with it, after a check that removes personal information. Ildar Abdulin is the named person accountable for every word, and he can take any of it down.",
     exits: [
-      { kind: 'Fixed first', text: 'A statement the archived source does not carry is fixed before publication.' },
+      { kind: 'Fixed before publication', text: 'A statement the archived source does not carry is corrected before the page goes up.' },
       { kind: 'Corrected later', text: 'A finding that changes after publication is logged on its own page as a dated entry. Nothing is quietly edited.' },
     ],
   },
