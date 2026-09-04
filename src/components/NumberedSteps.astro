@@ -1,0 +1,28 @@
+---
+/**
+ * A numbered list of named steps: a numeral column, a bold name, a body. The
+ * methodology page renders its short version, its intake steps and its seven
+ * stages through this one shape, so a reader who goes on meets a list they have
+ * already seen and a spacing change lands in one place. The numeral is the
+ * position, so a step cannot carry the wrong number.
+ */
+interface Props {
+  steps: ReadonlyArray<{ name: string; body: string }>;
+}
+
+const { steps } = Astro.props;
+---
+
+<ol class="mt-6 divide-y divide-rule border-t border-rule">
+  {
+    steps.map((step, index) => (
+      <li class="grid gap-x-5 gap-y-1 py-5 sm:grid-cols-[2rem_1fr]">
+        <span class="text-lg font-bold text-forest tabular">{index + 1}</span>
+        <div>
+          <h3 class="font-semibold tracking-[-0.012em] text-forest">{step.name}</h3>
+          <p class="mt-1.5 text-[0.9375rem] leading-relaxed">{step.body}</p>
+        </div>
+      </li>
+    ))
+  }
+</ol>
