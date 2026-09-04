@@ -8,9 +8,9 @@ Source: `yegscoop-2026-08-26`.
 ## Story
 
 Fourteen people in one Facebook thread about Edmonton's bike-lane
-expansion made the same two complaints: the City did not ask us, and most
-of us do not want this. All fourteen are on the same side; nobody in that
-source argued back on either point. One of the two complaints can be
+expansion made two complaints between them: the City did not ask us, and
+most of us do not want this. All fourteen are on the same side; nobody in
+that source argued back on either point. One of the two complaints can be
 checked against the City's own records and one cannot, and the whole
 point of this brief is to keep them apart. Topics: transportation,
 bike-lanes, city-hall.
@@ -18,8 +18,8 @@ bike-lanes, city-hall.
 Claims in this question, reviewed and reported separately:
 
 - `ca-route-level-engagement`: whether the City ran public engagement
-  about each specific route with the neighbourhood it runs through,
-  before building it.
+  about each specific route with the people that route affects, before
+  the route was built.
 
 That is one claim. It carries its own verdict, panel agreement and
 evidence-basis label. Reviewer confidence appears only beside the
@@ -34,11 +34,15 @@ of them, in part, and parks the rest with public reasons. Nothing is
 deleted; each disposition below goes on the register when the brief is
 frozen, and on the question's page.
 
-**Tested.** The consultation half of `fast-tracked-without-consultation`
-(four accounts): "relying on old data and zero community consultation";
-"They don't do enough talking to the residents"; "they blatantly ignored
-hermitage area"; "Stakeholder engagement fail as they did not engage
-parents with school kids."
+**Tested.** The consultation half of `fast-tracked-without-consultation`,
+in the general form one account gave it: "relying on old data and zero
+community consultation (admitted to in the City's report)". The three
+other consultation wordings under that claim — "They don't do enough
+talking to the residents", "they blatantly ignored hermitage area",
+"Stakeholder engagement fail as they did not engage parents with school
+kids" — say narrower or different things, and are recorded under
+Circulating forms below rather than folded into the proposition. Two of
+them are about places on no route in the set tested.
 
 **Parked: `most-residents-oppose-lanes`** (ten accounts). "Most residents
 in the affected neighbourhoods, and most Edmontonians, oppose the bike
@@ -84,8 +88,9 @@ does not turn on any individual's conduct.
 
 - Prevalence: fourteen distinct accounts in the captured source took part
   in this question, more than any other question drawn from it except the
-  usage question. Four of them made the consultation complaint in their
-  own words (intake.md).
+  usage question. Five of them complained about consultation in their own
+  words, one of them in the general form the claim below tests
+  (intake.md).
 - Civic importance: on 2026-08-26 the Infrastructure Committee considered
   administration's recommendation to proceed with 13 routes and
   re-evaluate 14, and did not adopt it, so the full programme continues.
@@ -102,16 +107,38 @@ does not turn on any individual's conduct.
 
 The captured forms, with the capture's comment indexes and the
 pseudonyms, are in intake.md, which reviewers do not receive. In summary
-for the panel: four commenters, writing between 2026-08-27 and
-2026-09-01, said in their own words that the City did not consult the
-communities the routes run through — one naming the City's own report as
-conceding it, one naming a specific neighbourhood as ignored, one saying
-parents of school-age children were not engaged, one saying the City does
-not talk to residents enough.
+for the panel: five commenters, writing between 2026-08-27 and
+2026-09-01, complained about consultation on Edmonton's bike routes. They
+did not all say the same thing, and the difference decides which of them
+the proposition below is testing.
 
-**Prevalence:** four accounts in one source. The brief does not claim the
-complaint is common in Edmonton; it claims these four made it publicly,
-in the argument about these routes, days after the committee vote.
+**One account asserts the proposition.** One commenter said the routes
+were built "relying on old data and zero community consultation
+(admitted to in the City's report)", about the routes the committee had
+just declined to pause. That is the general, programme-level assertion —
+no community consultation on this set of routes — and it is what the
+proposition tests.
+
+**Four accounts made narrower or different complaints, and none of them
+is counted as an assertion of the proposition.** One said parents of
+school-age children were not engaged, about two routes in set S: a claim
+about one group, not about the neighbourhood. One said residents were
+not informed about a route in set S: a claim about notification, which
+this brief holds is a different thing from being asked, and the same
+wording names an individual and is declined on right-of-reply grounds.
+One said a neighbourhood was ignored, and that neighbourhood is on no
+route in set S. One said the City does not do "enough talking to the
+residents" about a lane on 119 Avenue, which is neither in set S nor a
+claim this brief can test, because "enough" has no standard. All four
+are recorded on the question's page as circulating forms of the
+consultation complaint. None supports the set-S proposition and none is
+counted toward its prevalence.
+
+**Prevalence:** one account in one source asserts the proposition as
+stated; five took part in the consultation argument. The brief does not
+claim the complaint is common in Edmonton. It is tested because it is the
+checkable core of what fourteen people were arguing about, not because
+many people phrased it this way.
 
 **One-sidedness, stated plainly:** all fourteen accounts on this question
 are against. No captured account argues the City did consult. That is a
@@ -120,11 +147,15 @@ must not shade the reading of the record in either direction.
 
 ## Who asks this
 
-A resident would ask: "Did the city ask the people who live on my street
-before it put a bike lane down it?" A reporter would ask the same thing
-about the routes council pushed ahead in August. The proposition below
-answers that question at the level the record answers it, the route, and
-in those words.
+A resident would ask: "Did the City invite people affected by each route
+to give route-specific input while the route or its design could still
+change?" A reporter would ask the same thing about the routes council
+declined to pause in August. The proposition below answers that question
+by counting documented solicitation of affected residents or their
+representative bodies, distinguishing it from publication and one-way
+notification. An open-to-all neighbourhood process is reported as the
+stricter alternative. The level is the route, which is the level the
+record answers at and the level residents argue about.
 
 The second question people ask under this heading — "do most people
 actually want this?" — is not answered here, and the brief says so above
@@ -135,34 +166,55 @@ rather than answering a measurable cousin of it.
 **As-of date:** 2026-09-03, the date of the run. Anything decided or
 published after it is out of scope. Documents dated on or before it may
 be read later; the council report and its attachments below were dated
-2026-08-26 and were retrieved on 2026-09-04.
+2026-08-26 and were retrieved on 2026-09-04. *Required alternative:*
+2026-08-26, the date of the committee meeting the argument is about.
+Reviewers state whether using it changes any route's classification,
+naming the dated City record that makes the difference.
 
 **Cutoff for "before building it":** for each route, the date construction
 started on that route. For a route on which construction had not started
-by 2026-09-03, the as-of date. Reviewers state which they used for each
-route and their source, and Attachment 3 to IS03688, "Locations & Status
-Updates", is where the City states construction status per route, as of
-2026-08-10. Where Attachment 3 reports that construction has not started
-on a route in S, the two candidate cutoffs coincide for that route and
-the choice between them changes nothing; reviewers say for which routes,
-if any, they do not coincide.
+by the as-of date, the as-of date itself. Attachment 3 to IS03688,
+"Locations & Status Updates", is where the City states construction
+status per route, as of 2026-08-10; reviewers state the cutoff they used
+for each route and its source.
+
+*Required alternative cutoff.* The first documented point at which the
+route's location or material design was no longer open to public
+influence, from dated council records, Attachment 3, procurement or
+tender-award records, and per-route design documents. Reviewers report
+the counts and the classification under this cutoff too, and where the
+decision point cannot be established for a route from published records,
+they say so and count that route as unresolved for this alternative
+only.
+
+*Why the construction cutoff is the primary one.* The alternative is the
+better test of what consultation means and the worse one to compute: a
+date on which a design stopped being open to change is not something the
+City publishes per route. For this set the difference is small, because
+Attachment 3 records that construction has not started on any of the
+fourteen and that five of them have no delivery plan at all. Reviewers
+say for which routes the two cutoffs give different answers.
 
 ## The claim under review
 
 ### Claim, id: `ca-route-level-engagement`
 
 **Normalized proposition:** For the bike routes the City pushed ahead in
-2026, it ran no public engagement about the specific route with the
-neighbourhood that route runs through, before building it.
+2026 — the fourteen in set S below — it ran no public engagement about
+the specific route with the people that route affects, before the route
+was built.
 
-**Why this reading.** The holders' words are "zero community
-consultation" and "they don't do enough talking to the residents", said
-about the routes the committee declined to pause. The proposition keeps
-the generality — it is a claim about the set of routes, not about one
-street — because a claim is tested as its holders assert it, and one
-example neither makes nor breaks a pattern. It keeps the strength, "no
-engagement", rather than softening to "not enough", because "enough" is
-undefinable and softening it would drain the claim. It names the level
+**Why this reading.** The holder's words are "zero community
+consultation", said about the routes the committee declined to pause.
+That is the strongest captured line in the argument and it is the one
+tested. The proposition keeps the generality — it is a claim about the
+set of routes, not about one street — because a claim is tested as its
+holders assert it, and one example neither makes nor breaks a pattern.
+It keeps the strength, "no engagement", rather than softening to "not
+enough", because "enough" is undefinable and softening it would drain
+the claim. Because the proposition is that there was none, no count of
+engagements above zero can establish it: the ladder below has no band
+that reaches Supported with an engagement documented. It names the level
 the record answers at, the route, which is also the level residents argue
 about.
 
@@ -214,81 +266,111 @@ whether the answer changes when the set is the whole remainder.
 Reviewers report the count and the classification for the twenty-seven
 beside the primary. The verdict uses set S.
 
-**"Public engagement about the specific route", fixed here.** An activity
-documented in a City record that meets all three tests:
+**"Public engagement about the specific route", fixed here.** A
+documented, route-specific activity that solicited input about the route
+or its material design from affected residents, affected property
+owners, or a body representing the affected neighbourhood, while the
+relevant decision remained open. Mere notification, publication, or
+consultation about an ancillary matter does not count. In three tests:
 
 1. *Route-specific.* The record names that route or its corridor, rather
    than the Bike Plan, The City Plan, the network as a whole, or a
    programme-wide activity.
-2. *Open to the neighbourhood.* Anyone living in the neighbourhood or
-   neighbourhoods the route runs through could take part — a public open
-   house, a public workshop, an open survey, a posted comment period —
-   rather than an invitation limited to selected property owners, a
-   community league board, or a named stakeholder list.
-3. *Before the build.* It took place on or before the cutoff date fixed
-   above for that route.
+2. *It asked.* The activity invited input on the route or its material
+   design from people affected by it — residents, property owners on it,
+   or a body representing the neighbourhood it runs through. A document
+   that announces work, publishes a design or answers an inquiry is not
+   an activity that asked. Contact about an ancillary matter — whether a
+   marked accessible parking stall is still in use, where a contractor
+   will park — is not input on the route or its design.
+3. *While it was still open.* It took place on or before the cutoff date
+   fixed above for that route, and no City record shows that the route's
+   location or material design had already been closed to change when it
+   happened.
 
-*Why this definition and not another.* The City's own project page draws
-the same line, between "focused public engagement opportunities" for more
-complex route connections and "targeted community members or property
-owner engagement" for less complex ones. The primary reading uses the
-City's first category; the required alternative uses both. Neither side
-has to concede anything about the answer to accept that split, which is
-what makes it usable as a definition.
+*Why this definition and not another.* The claim is about community
+consultation, not about an open public process, and the narrower reading
+would rule out the targeted contact the City itself files under public
+engagement. The City's own project page distinguishes "focused public
+engagement opportunities" from "targeted community members or property
+owner engagement"; it does not say the second is not engagement, and a
+brief that treated it that way would decide part of the answer in the
+definition. So the primary reading counts both, and the open-to-everyone
+reading is the required alternative, reported beside it.
 
-*Required alternative definition.* Drop test 2, so any documented
-route-specific contact counts, including targeted property-owner
-engagement, community-league contact and a mailed or delivered notice
-inviting comment. Reviewers report the count and the classification under
-this definition beside the primary one.
+*Required alternative definition.* Add to test 2 the stricter
+requirement that every resident of the neighbourhood or neighbourhoods
+the route runs through had a publicly accessible opportunity to take
+part — a public open house, a public workshop, an open survey, a posted
+comment period — so that an invitation limited to selected property
+owners, a community league board, or a named stakeholder list does not
+count. Reviewers report the counts and the classification under this
+definition beside the primary one.
 
-**The counts, and the verdict ladder.** For set S, T = 14, and let E be
-the number of routes in S for which the reviewer finds at least one
-qualifying activity under the primary definition. Every route in S is
-either counted in E or not; there is no third bucket and no remainder.
+**The counts, and the verdict ladder.** For set S, T = 14. Every route in
+S goes into exactly one of three buckets, and the third one is the point
+of this ladder:
 
-Apply the Not established condition first, then the proportion:
+- **E**, routes with a confirmed qualifying activity under the primary
+  definition.
+- **N**, routes for which a City record states that no qualifying
+  activity was run.
+- **U**, routes for which the records named in this brief establish
+  neither. Unresolved is not the same as none. A route whose record is
+  silent has not been shown to have had no engagement; it has been shown
+  to have no published engagement record, which is a different fact and
+  is the one the reader is owed.
 
-- **Not established** if the City publishes nothing at route level about
-  engagement on any of the fourteen: no record of a qualifying activity
-  on any route in S, and no City record stating of any route in S that
-  none was run. In that case E = 0 cannot be told apart from a record
-  that was never published, and the difference is the whole claim.
-- Otherwise:
-  - **Supported** if E = 0.
-  - **Partially supported** if E > 0 and E / T is at most 1/2: engagement
-    is documented for some routes but not for most, and the failing part
-    of the proposition is the word "no".
-  - **Contradicted** if E / T is greater than 1/2.
+E + N + U = 14. Then:
 
-At T = 14 the primary set works out as Supported for E = 0; Partially
-supported for E of 1 to 7; Contradicted for E of 8 to 14.
+- **Supported** if E = 0 and U = 0. The claim is that the City ran no
+  qualifying engagement, so it is established only when every route in
+  the set is accounted for and none of them had any.
+- **Partially supported** if E is at least 1 and E + U is at most 7:
+  engagement is confirmed on some routes, confirmed absent on at least
+  half of them, and the failing part of the proposition is the word "no".
+- **Contradicted** if E is at least 8: engagement is confirmed on a
+  majority of the set, whatever the rest of the set turns out to be.
+- **Not established** otherwise. That is the honest answer when too much
+  of the set is unresolved to say either way.
+
+The three positive rules cannot both fire — E ≤ 7 whenever E + U ≤ 7 —
+so no route through the ladder is ambiguous, and every pair (E, U) with
+E + U ≤ 14 lands somewhere.
 
 Alternative cutoffs, results required under both sets: **Supported** if
-E / T is at most 1/7 (no more than one route in seven);
-**Partially supported** if E / T is greater than 1/7 and at most 2/3;
-**Contradicted** if E / T is greater than 2/3. The Not established
-condition is unchanged. At T = 14 the alternative set works out as
-Supported for E of 0, 1 or 2; Partially supported for E of 3 to 9;
-Contradicted for E of 10 to 14.
+E = 0 and U = 0, unchanged, because a proposition that the City ran no
+engagement cannot be established by finding some; **Partially
+supported** if E is at least 1 and E + U is at most 9; **Contradicted**
+if E is at least 10 (more than two thirds of the set); **Not
+established** otherwise.
 
 Neither cutoff set is drawn from an identified pre-existing standard.
-Under the primary set, "no engagement" is read strictly, and a majority
-of routes with engagement is where the claim stops describing the
-programme. Under the alternative set, one exception in seven is read as
-not disturbing a pattern, and two thirds is where a majority becomes a
-clear one. No cutoff may be changed after the counts are seen.
+Under the primary set, a majority of routes with engagement is where the
+claim stops describing the programme. Under the alternative set, two
+thirds is where a majority becomes a clear one. No cutoff may be changed
+after the counts are seen.
+
+*Reported separately, and never as a verdict.* Where E is small but not
+zero, reviewers state whether E / T is at most 1/7 — no more than one
+route in seven — and report it under the label "route-level engagement
+was rare". That is a different reading from the one under review, which
+is that there was none, and it goes in `interpretation_notes`. It may
+not be reported as Supported.
 
 **Qualifications reported, never carrying the verdict:**
 
-1. E, E / T and the classification under the required alternative
-   definition of engagement (test 2 dropped), under both cutoff sets.
-2. E, E / T and the classification for the required alternative route
+1. E, N, U and the classification under the required alternative
+   definition of engagement (the open-to-everyone reading), under both
+   cutoff sets and both as-of dates.
+2. E, N, U and the classification for the required alternative route
    set, all twenty-seven remaining routes in Attachment 5, under both
    definitions of engagement and both cutoff sets.
 3. For each route in S, every qualifying activity with its date, its
-   form, and the record it comes from; and for each route with none, what
-   records were checked.
+   form, and the record it comes from; for each route counted in N, the
+   City record that states no engagement was run; and for each route
+   counted in U, which records were checked and what each of them was
+   silent about.
 4. What the City's own engagement records report about the balance of
    feedback on any route in S, where they report it: the number of
    participants and the reported split. Stated as the balance among the
@@ -303,10 +385,23 @@ clear one. No cutoff may be changed after the counts are seen.
 6. Whether any route in S has a project page or comment period on the
    City's engagement portal, https://engaged.edmonton.ca, with dates.
 
-**What this claim does not test.** Whether the engagement the City ran
-was good, sufficient, or fairly timed; whether residents were persuaded;
-whether the routes should be built; whether council should have adopted
-the modified approach; what most residents or most Edmontonians think.
+**What this claim does not test.** Whether the amount of engagement was
+adequate; whether the City gave appropriate weight to the responses;
+whether residents were persuaded; whether the routes should be built;
+whether council should have adopted the modified approach; what most
+residents or most Edmontonians think.
+
+In scope, and only for classifying an activity: whether it solicited
+route-specific input before the route was fixed. That is part of whether
+the City asked, not a judgement about how well it asked, and the
+difference is the line between test 3 above and the adequacy questions
+this claim leaves alone.
+
+Also not tested, and not folded in: the complaint about 119 Avenue, the
+complaint that residents were not informed, and the complaint that
+parents of school-age children were not engaged. Each is a separate
+disposition recorded on the question's page, and none of them supports
+or undermines the proposition on set S.
 
 ## What this brief will not claim, and the story may not either
 
@@ -322,37 +417,35 @@ story may not later claim it.
 
 ## Stakes
 
-**Supported** would mean the City set these route locations without
-asking the streets they run down, on its own records. That is the
-opposition's central factual charge, and it would stand. Supporters would
-have to argue that the Bike Plan's own mandate was authority enough,
-which is a different and harder argument than saying consultation
-happened.
+**Supported.** The holder could say the strict route-level allegation is
+established for set S. The opponent could no longer say that qualifying
+route-specific consultation occurred, but could still argue that
+plan-level authority justified proceeding.
 
-**Contradicted** would mean route-specific public engagement is
-documented for most of the set, and the most-repeated line in the
-argument, "zero community consultation", is false against the City's own
-record. Opponents would have to move from "we were never asked" to "we
-were asked and ignored", which is a claim about weight given rather than
-process run, and a different fight.
+**Partially supported.** The holder could cite confirmed route-level
+gaps but would have to abandon the universal "no engagement" wording.
+The opponent could cite confirmed engagement but could not generalize it
+to the whole set.
 
-**Partially supported** would mean the pattern holds for some routes and
-not others: a real gap in the City's engagement, and an overstatement in
-the word "no". Both sides would get something they can use and something
-they have to concede.
+**Contradicted.** The opponent could reject the programme-level
+no-engagement allegation because qualifying engagement is confirmed for
+most routes. The holder would have to move to a distinct claim about
+adequacy, influence, timing or omitted groups.
 
-**Not established** would mean the City cannot show what it asked, on a
-programme whose own council report puts engagement at the centre of the
-dispute. That is a finding about the City's record-keeping and it would
-be news.
+**Not established.** The holder could not treat missing public records as
+proof that engagement never occurred. The opponent could not claim that
+qualifying engagement was demonstrated. Additional route-specific records
+could move the result either way; no record-keeping failure is inferred
+unless separate evidence establishes one.
 
 Each of the four is reachable on the documents named below, and each
 changes something for someone.
 
 **Definition sensitivity.** The verdict applies under the primary
-definition of engagement and set S, the fourteen re-evaluation routes.
-If the required alternative definition or the twenty-seven-route set
-produces a different classification, the finding is
+definition of engagement, set S, the construction-start cutoff and the
+2026-09-03 as-of date. If the required alternative definition, the
+twenty-seven-route set, the decision-point cutoff or the 2026-08-26
+as-of date produces a different classification, the finding is
 definition-sensitive, the story says so beside the verdict, and neither
 side can fairly cite the verdict without that qualification.
 
@@ -455,11 +548,14 @@ which document and which section it came from.
   the attachment gives it, its neighbourhoods, its construction status,
   and T. The same for the twenty-seven-route alternative set.
 - Per route in S: the cutoff date used (construction start, or the as-of
-  date) and its source.
-- E and E / T under the primary definition and under the required
-  alternative, for set S and for the twenty-seven-route set: four
-  counts, each with the routes it counts, each with its classification
-  under both cutoff sets. Show the arithmetic.
+  date) and its source; and the date under the required alternative
+  cutoff, or a statement that the published record does not fix one.
+- E, N and U under the primary definition and under the required
+  alternative definition, for set S and for the twenty-seven-route set:
+  four sets of three counts, each naming the routes it counts, each with
+  its classification under both cutoff sets, both cutoff dates and both
+  as-of dates. Show the arithmetic, and show that E + N + U comes to the
+  size of the set every time.
 - The engagement-record balance figures of qualification 4 and the
   inquiry volume of qualification 5, each with its source document, date
   and period, each labelled with what it counts.
@@ -488,8 +584,9 @@ which document and which section it came from.
   community-league record. Say which of those you checked for each route.
 - Where a route in S has no documented engagement, say whether the record
   is silent or whether a City document affirmatively states none was
-  done. That difference belongs in `limitations`, and it is what
-  separates a strong absence from a weak one.
+  done. That is the difference between U and N in the ladder, it decides
+  the verdict, and it is not a matter of judgement: N needs a City record
+  you can quote. If you cannot quote one, the route is U.
 - Quote operative statements from the City's own documents and name the
   document, its report number or title, its page or section, and its
   date. A news figure is a lead to the document behind it, never the
@@ -497,10 +594,17 @@ which document and which section it came from.
 - Record every source URL in full; you have no repository access. Where a
   council document is reached through the City's meeting portal, give the
   meeting agenda page as well as the attachment URL.
-- Report one verdict for this claim, under the primary definition, set S
-  and the primary cutoff set. Every alternative
+- Report one verdict for this claim, under the primary definition, set S,
+  the primary cutoff and the primary cutoff set. Every alternative
   reading's result goes in `interpretation_notes` or `limitations`. The
   schema carries one verdict per claim.
+- A programme-wide statement about how engagement was done counts as N
+  for a route only where it says, without qualification, that no
+  qualifying activity was run on every route it covers. A statement that
+  engagement took a particular form, or was done where required or where
+  needed, settles no individual street: it describes an approach rather
+  than recording what happened on a route. Quote it either way, and say
+  which of the two it is.
 - If a definition, cutoff, route set or date in this brief changes what
   the honest answer is, record a MATERIAL FRAMING CONCERN per
   prompts/reviewer.md and answer the claim as posed alongside it.
