@@ -1,11 +1,17 @@
 # Review brief: Are Edmonton's roads in poor shape, could the $100 million for bike lanes have gone to road renewal, and how large was it beside what the City says it is short of?
 
-Status: DRAFTED 2026-09-03 by Stew under D-0019, revised 2026-09-03 under
-framing check 1 (framing/check-1.md, REVISE; response in
-framing/response-1.md), revised again 2026-09-03 under framing check 2
-(framing/check-2.md, REVISE; editor's resolution in
-framing/resolution.md), framing check 3 pending, NOT frozen. Methodology:
-v1.19. Register question `infrastructure-deficit` (intake/register.yaml),
+Status: PARKED 2026-09-03 on framing check 3 REVISE. NOT frozen, and no
+panel may run on it. History: DRAFTED 2026-09-03 by Stew under D-0019;
+framing check 1 REVISE (framing/check-1.md), author's response
+(framing/response-1.md), first revision; framing check 2 REVISE
+(framing/check-2.md), editor's resolution under the cap
+(framing/resolution.md), second revision; framing check 3 REVISE
+(framing/check-3.md) with one finding standing, which under
+prompts/framing-check.md and methodology v1.12 parks the brief. It reopens
+only on new intake evidence, never on a further revision of this brief.
+The standing finding and what it would take are in run-record.md.
+Methodology: v1.19. Register question `infrastructure-deficit`
+(intake/register.yaml),
 triage GO from both readers
 (reviews/intake/yegscoop-2026-08-26/triage-stories.md). Intake record:
 intake.md in this directory, which reviewers do not receive.

@@ -1,4 +1,4 @@
-# Run record: `infrastructure-deficit`, drafted 2026-09-03
+# Run record: `infrastructure-deficit`, drafted and parked 2026-09-03
 
 What is in this directory, what state it is in, what it deliberately does
 not do, and what has to happen next.
@@ -7,169 +7,270 @@ not do, and what has to happen next.
 
 | Artifact | State |
 | --- | --- |
-| `intake.md` | Recorded 2026-09-03. Every quoted wording re-checked against the capture in this session and confirmed an exact substring of the comment attributed to it. |
-| `brief.md` | DRAFTED 2026-09-03, **not frozen**. |
-| Framing check | **Not run.** No report exists. The brief has been through no independent read of any kind. |
-| Panel | Not run. No package assembled, no seats invoked, no `run.yaml`. |
-| Register | Untouched. `intake/register.yaml` still shows this question at `lifecycle: registered`, and this session did not edit it. |
+| `intake.md` | Recorded 2026-09-03. Every quoted wording re-checked against the capture and confirmed an exact substring of the comment attributed to it. Unchanged by the framing check. |
+| `brief.md` | **PARKED 2026-09-03 on framing check 3 REVISE. Not frozen.** Three drafts: drafted, revised under check 1, revised again under the editor's resolution after check 2. |
+| Framing check | **Run three times, the full cap.** check-1.md REVISE, response-1.md, check-2.md REVISE, resolution.md, check-3.md REVISE. All three reports are verbatim. |
+| Panel | Not run. No package assembled, no seats invoked, no `run.yaml`. Nothing here may go to a panel while the brief is parked. |
+| Register | Untouched. `intake/register.yaml` still shows this question at `lifecycle: registered`. See "Why the register was not touched". |
 | Site content | Untouched. Nothing under `src/content/` was created or modified. |
 
-The brief was drafted by a Claude session. The framing check must go to a
-model from a different vendor, per `prompts/framing-check.md`; that check
-was not run in this session and no non-Anthropic tool was invoked.
+The brief was drafted by a Claude session. Every framing check went to
+OpenAI gpt-5.6-sol, a different vendor, per `prompts/framing-check.md`.
+The pinned command is recorded in the HTML comment at the top of each
+report; the model name inside a report is the checker's self-report and
+the command is what the run log records.
+
+## Why it is parked
+
+`prompts/framing-check.md` caps the check at three reports for one brief
+(methodology v1.12, carried into v1.19). The third report is a
+confirmation: FRAME OK freezes the brief with the editor's resolution
+beside it; REVISE parks it, and it reopens only on new intake evidence,
+never on a further revision of the same brief.
+
+Report 3 came back REVISE. Twenty-eight findings across the three reports
+are marked RESOLVED. Exactly one stands.
+
+### The one finding that stands
+
+Check 9, on Claim 1's proposition. The brief asks the panel to classify:
+
+> Edmonton's roads are in poor condition.
+
+The City's latest published condition rating describes the network as of a
+date well before the claims were made in August 2026. The brief says so at
+four places — the Dates section, "Who asks this", a paragraph inside Claim
+1, and the scope section — and binds the story to print the inventory date
+wherever it prints the verdict. The checker's finding is that none of that
+changes what the reviewer is formally asked to classify: a present-tense
+proposition, on evidence that stops earlier, which a reviewer could return
+Supported on while the brief separately forbids the story from saying the
+roads were in that condition in 2026.
+
+Its proposed replacement:
+
+> The City's latest published condition ratings available by 2026-09-03
+> show that Edmonton's Roads asset class was in poor condition as of the
+> inventory date those ratings describe.
+
+**The editor's position, for the record: the checker is right and the
+resolution was wrong.** The refusal in `framing/resolution.md` rested on
+check 9's own warning against propositions stated in the units the record
+happens to publish. The checker answered that directly — the replacement
+is more precise, not weaker, which is what the framing prompt's override
+rule requires, and it leaves the natural present-tense question in the
+title and in "Who asks this", where a reader meets it. That is the better
+argument. The resolution spent the one editorial intervention the cap
+allows defending the weaker position, and the park is the honest
+consequence of that, not a defect in the check.
+
+### What this is not
+
+It is **not** an arithmetic ladder defect. Check 4 is fully RESOLVED
+across all three claims: every cutoff has one alternative with results
+required under both, every ladder is exhaustive and disjoint, the
+divide-by-zero band in Claim 3 and the empty-set routing in Claims 1 and 2
+were walked boundary by boundary and survive. So the correction-plus-one-
+confirmation route that v1.20 opens for arithmetic defects (PR #37, not on
+this branch) does not reach this finding, and this run did not try to use
+it.
+
+## What would unpark it, and what would not
+
+Under the rule as written, a further revision of this brief would not.
+Only new intake evidence reopens it.
+
+Three routes exist, and the choice is the founder's, not this session's:
+
+1. **Leave it parked.** The cap did what a cap is for. The cost is that a
+   question fifteen people argued goes unanswered over one sentence's
+   tense, when the editor agrees with the fix.
+2. **New intake evidence.** If a later capture records somebody making the
+   road-condition claim in a form tied to a date, that is new intake, and
+   the question reopens with a new brief on the normal route.
+3. **A methodology question worth putting to the founder.** v1.20 was
+   written because the cap could park a brief over an arithmetic slip that
+   one confirmation would fix. This park is the same shape without being
+   the same defect: a single, fully specified wording change that the
+   editor accepts and the checker has already drafted, with no route to
+   apply it. Whether v1.20's correction-plus-one-confirmation should
+   extend beyond arithmetic to any finding the editor concedes is a
+   methodology decision. **This session did not make it, did not touch
+   `methodology/changelog.yaml`, and did not apply the fix.** It is
+   recorded here so the morning can decide with the whole trail in front
+   of it.
+
+## Why the register was not touched
+
+The register work — `lifecycle` to `briefed`, the claim dispositions —
+belongs to a frozen brief. This brief is parked, and a parked brief cannot
+go to a panel, so `briefed` would misdescribe the state. The question
+stays at `lifecycle: registered` with its five claims and its GO triage,
+exactly as this session found it. No claim id was added, no proposition
+edited, no question title changed in the register. If the brief later
+freezes, the register work is still owed and is listed under "Next steps".
+
+One consequence worth naming: the brief's title changed twice during the
+check and no longer matches the register's question wording, which is
+still "Is Edmonton letting roads, alleys and drainage go while it funds
+bike lanes?" — the wording the checker found asserts a trend the brief
+does not test and names drainage the brief does not test. That mismatch is
+deliberate for now. Changing the register's question wording is a change
+to a published address's title and belongs with the freeze, not with a
+park.
 
 ## The claims and where they came from
 
-Three claims, from two of the five registered claims on this question.
+Three brief claims, from two of the five registered claims on this
+question. The ids changed during the check and the mapping is:
 
-| Brief claim | Register claim(s) | Accounts behind it |
-| --- | --- | --- |
-| `infra-roads-alleys-condition` | `basic-services-in-poor-condition` | 10 |
-| `infra-bike-money-from-renewal` | `spending-100-million-despite-deficit` | 2 |
-| `infra-hundred-million-vs-shortfall` | `spending-100-million-despite-deficit` | 2 |
+| Brief claim (final draft) | Was | Register claim(s) | Accounts |
+| --- | --- | --- | --- |
+| `infra-roads-condition` | `infra-roads-alleys-condition` | `basic-services-in-poor-condition` | 8 of the 10 |
+| `infra-bike-money-renewal-eligible` | `infra-bike-money-from-renewal` | `spending-100-million-despite-deficit` | 2 |
+| `infra-hundred-million-vs-shortfall` | unchanged | `spending-100-million-despite-deficit` | 2 |
 
-Two brief claims come out of one register claim. That is deliberate and it
-follows v1.16: the register claim asserts one thing (the City is spending
-$100 million while claiming a deficit) whose contested content is two
-separate assertions with different predicates — where the money came from,
-and whether it is big enough to matter. One finding over both would state
-neither. They are one question and two claims, which is exactly the shape
-v1.16 requires.
+None of these ids has ever been published, so none of them is an address
+that moved.
 
-Three registered claims are not in the brief. `rec-centre-money-diverted`
-needs a named facility's own project history, a different body of
-evidence. `drainage-damage-to-homeowners` and
-`new-streetlights-added-costs` are, as captured, assertions nobody in the
-argument disputes, so no verdict on either would surprise anyone — the
-test v1.19 was written about. The reasons are in `intake.md` under "What
-was left out of the brief, and why", where the framing check will read
-them, and the brief's scope section forbids the story from claiming any of
-them anyway.
+Three registered claims are not in the brief, for the reasons in
+`intake.md` under "What was left out of the brief, and why":
+`rec-centre-money-diverted` needs a named facility's own project history;
+`drainage-damage-to-homeowners` and `new-streetlights-added-costs` are, as
+captured, assertions nobody in the argument disputes.
+
+## What the three checks changed
+
+Recorded because the brief that parked is a much better brief than the one
+that was drafted, and the record should say what the check bought.
+
+**Basis rules.** None was loosened at any point. B2 was tightened once — a
+verdict-bearing ratio now requires both sides on 2023-2026, and a
+differently spanned figure is reported, labelled and left unclassified,
+which closed a conflict between B2 and Claim 3 that would have reproduced
+the exact defect that withdrew `at-100m-vs-snow`. B3 was tightened twice.
+B4 gained an explicit statement that no actual goes on either side of a
+classified ratio. B6 was reduced to a pure prohibition.
+
+**Two refusals, both argued in writing.** The check asked that the
+magnitude claim also be classified on cumulative actuals through 2025;
+refused, because three years of actuals against a four-year requirement is
+the span mismatch B2 exists to forbid and no same-span actual exists at
+this freeze date. Check 2 and check 3 both marked that refusal justified.
+The check also reported the two open-data assets as empty, private or
+deleted; refused after testing them, because both resolve publicly, the
+dataset carries 137 rows under the name the brief gives it, and the map is
+a view derived from it. Check 3 marked that RESOLVED on the editor's
+evidence.
+
+**Two defects the check found that the drafter had missed entirely.**
+Source 9 named Bylaw 19627 as the instrument under which drainage sits; it
+is a rate bylaw, it covered 2022-04-01 to 2025-03-31, and it had been
+replaced. And Claim 2's original renewal set counted whole capital
+profiles, sweeping in growth allocations and sidewalks, signals and
+streetlight work, when the profile sheets publish the split.
+
+**One defect found by checking the check.** Claim 1 originally defined its
+asset set as "the paved driving surfaces the City owns" — a boundary the
+drafter was drawing, not one the City publishes. That is the same
+manoeuvre that took `at-100m-vs-roads` off the findings board, inside the
+brief written to prevent it. Claim 1 now takes the City's own road class
+at the level the City publishes it and forbids adding, dropping or
+carving.
+
+**Two claims substantially reframed.** Claim 2 stopped testing whether a
+bookkeeping transfer occurred — a test a holder could lose while going on
+making the same argument — and now tests whether the money could have gone
+to road or alley renewal at all, which is the answerable half of the
+opportunity-cost argument. Claim 3's denominator moved from a
+roads-and-alleys shortfall the drafter chose because it favoured the
+claim, to the whole-infrastructure shortfall the captured wording actually
+invokes.
+
+## Open questions
+
+Six were recorded before the check. Four are settled by it.
+
+1. **The condition denominator — settled.** Replacement value carries the
+   verdict, length is the required alternative, count is a last resort. It
+   was also confirmed that the City rates roads as a class and does not
+   rate alleys as one, which is why Claim 1 narrowed to roads and alleys
+   became a required calculation rather than half a subject.
+2. **A roads-and-alleys unfunded renewal figure — settled by becoming
+   moot.** Claim 3's primary denominator is now the whole-city figure the
+   holders' words invoke, which the adopted 2023-2026 Capital Budget
+   publishes on the same four years as the numerator. Any
+   roads-and-alleys figure is the required alternative, and the brief tells
+   the panel to say plainly if there is none.
+3. **Drainage — settled.** It is out of the title, out of every claim, out
+   of the sources and out of the required calculations. B6 remains as a
+   prohibition binding every claim and commissioning nothing.
+4. **No captured wording asserts deterioration over time — unchanged.**
+   The trend stays a qualification. A later source capturing somebody
+   saying the roads are getting worse is new intake, not an edit to this
+   brief. It would also be the new intake evidence that reopens this park.
+5. **Three registered claims this brief does not test — unchanged.** They
+   keep their rows. Nothing was re-triaged and the register was not
+   edited.
+6. **The re-run of `at-100m-vs-snow` and `at-100m-vs-roads` is still
+   owed**, on the basis v1.19 promised. This brief does not discharge it,
+   and parking changes nothing about that. The basis section here is the
+   one that re-run should take, and it is now three drafts better tested
+   than when it was written.
+
+And one new:
+
+7. **Should the cap's park extend to a finding the editor concedes?** See
+   "What would unpark it". A decision for the founder, not for this
+   session.
 
 ## Does this supersede `at-100m-vs-snow` and `at-100m-vs-roads`?
 
-**No. It sits beside them, and it supersedes neither.** The argument, in
-full, because the answer determines whether two withdrawn claims are ever
-re-run:
+**No. It sits beside them, and it supersedes neither.** The argument in
+full, unchanged by the framing check, because the answer determines
+whether two withdrawn claims are ever re-run:
 
 **1. Different holders, different assertions, different moment.** The two
 withdrawn claims are propositions two identified parties made in December
 2022 during the budget debate: a campaign page comparing the programme
 with a year of snow clearing, and a councillor comparing it with a roads
-figure. This question is an argument fifteen people made in a thread in
+figure. This question is an argument fifteen accounts made in a thread in
 August 2026, and none of them made either comparison. Nothing in this
 brief tests either proposition, and nothing in it could produce a verdict
-on either. A finding here cannot be reported as an answer to a question it
-never asked.
+on either.
 
 **2. v1.19 already said what happens to them, and it is not this.** The
 v1.19 entry says of both claims that they are "queued for a re-run on a
 common, defined basis". That re-run is a re-brief of the claims under
 their own question, and it is still owed. If this brief were treated as
 their replacement, the site would have retired two published claims by
-answering a different question and then pointed at the answer. That is the
-manoeuvre the withdrawal notes were written to prevent, and doing it in
-the same week would be worse than not withdrawing them at all.
+answering a different question and then pointed at the answer.
 
 **3. What this question does supersede is the argument underneath them,
 and that is a different thing from the claims.** The dated note on both
 withdrawn claims says their figures "are the arithmetic under an argument
-the site has not checked, which is whether Edmonton is letting roads,
-alleys and basic services go while it funds bike lanes". This brief checks
-that argument. So the relationship runs the other way from supersession:
-the withdrawn claims were arithmetic offered in support of this question,
-and the arithmetic still needs its own defined basis whatever this panel
-finds. If this question came back Contradicted on all three claims, the
-snow and roads comparisons would still be unresolved arithmetic; if it
-came back Supported, they would still be unresolved arithmetic.
+the site has not checked". This brief checks that argument. The
+arithmetic still needs its own defined basis whatever this panel finds —
+and this panel has not run.
 
-**4. The overlap is in the basis, not in the findings.** This brief's
-section "The basis, fixed before any figure" is written directly out of
-what those two claims got wrong: never capital against operating, never a
-category the City does not publish, never a span rescaled to match. If the
-re-run of the two withdrawn claims is drafted later, it should take the
-same basis rules, and the two runs will then be comparable. That is a
-shared method, not a shared finding.
+**4. The overlap is in the basis, not in the findings.** "The basis, fixed
+before any figure" is written directly out of what those two claims got
+wrong. That is a shared method, not a shared finding.
 
 **Concretely, this session changed nothing about them.** Neither claim
 file was edited. Neither `board_withdrawn` note was touched. Nothing in
-`methodology/changelog.yaml` was touched. Both claims remain at their
-addresses with their findings, their evidence and their dated notes, as
-v1.19 left them.
-
-## What the brief is betting on, and could be wrong about
-
-Written down before the framing check, so the check can hit them rather
-than discover them.
-
-- **Claim 2 may be the weak form of the claim.** The holders' argument is
-  about fungibility — you had the money, you should have fixed my street.
-  The record cannot answer a counterfactual, so the brief tests whether
-  the approval reduced budgeted renewal, and reports the funding
-  instrument and whether it permitted renewal use as the qualification
-  that answers what the verdict cannot. A framing checker may reasonably
-  say that this makes Contradicted the likely and near-empty answer. The
-  brief's response, stated inside it, is that the qualification carries
-  the fungibility answer and the story must print it with the verdict. If
-  the checker does not accept that, the honest fix is to make the funding
-  instrument the verdict figure rather than a qualification, and that
-  would be a rewrite of the claim rather than an edit to it.
-- **Claim 3's likely answer is Contradicted, and that is the point.** If
-  Edmonton's reported shortfall for roads and alleys runs to the billions,
-  $100 million will not reach a twentieth of it. That verdict is not
-  uninformative — it is the answer the people who raised this claim most
-  need and least expect — but a framing checker should test whether
-  Supported is genuinely reachable, which is why the primary denominator
-  is the narrower roads-and-alleys shortfall rather than the whole-city
-  gap the holders actually invoked.
-- **Claim 1's cutoffs are judgements.** 25 and 10 per cent are not drawn
-  from any standard. The brief requires reviewers to report the City's own
-  condition target if one exists, on the view that a published target
-  beats an invented cutoff and the story should say so.
-- **The intake is one-sided.** All fifteen accounts argue the same way.
-  The brief names this as a hazard and requires every ladder to be able to
-  reach Contradicted on City documents. Whether it has succeeded at that
-  is a thing to check, not a thing to assert.
-
-## Open questions
-
-1. **The condition denominator is not confirmed.** The brief sets a
-   priority order — replacement value, then length, then count — without
-   knowing which of them the City publishes for roadways and alleys, or
-   whether alleys are rated as a class at all. If they are not, Claim 1
-   loses half its subject and the proposition needs narrowing to roads. A
-   framing checker is required by `prompts/framing-check.md` to verify
-   that every dataset and definition a brief relies on exists as described
-   on the as-of date; this is the item most likely to fail that.
-2. **Whether the City publishes a roads-and-alleys-specific unfunded
-   renewal figure at all.** Claim 3's primary denominator depends on it.
-   If only a whole-asset gap is published, the required alternative
-   becomes the only figure and the claim should be re-worded to match
-   rather than left with a primary definition the record cannot meet.
-3. **Drainage sits in the question's title and in no claim.** Required
-   calculation 5 makes the panel establish which body funds Edmonton's
-   drainage and under which bylaw, and report it without a verdict. That
-   may well be the single most useful fact this question produces for a
-   reader, and it will arrive as a reported calculation rather than as a
-   finding. Whether that is the right home for it is worth a decision.
-4. **No captured wording asserts deterioration over time**, so the trend
-   is a qualification rather than a claim, even though "letting go" in the
-   question's own title is a trend word. If a later source captures
-   somebody saying the roads are getting worse, that is a new claim for
-   intake, not an edit to this brief.
-5. **The register still shows three claims on this question that this
-   brief does not test.** They keep their rows. Whether they should be
-   re-triaged, briefed separately or left is not decided here, and this
-   session did not edit `intake/register.yaml`.
-6. **The re-run of `at-100m-vs-snow` and `at-100m-vs-roads` is still
-   owed**, on the basis v1.19 promised. This brief does not discharge it.
+`methodology/changelog.yaml` was touched.
 
 ## Next steps, in order
 
-1. Framing check, a model from a different vendor than the drafter, on
-   `prompts/framing-check.md`, with `intake.md` and `brief.md` as input.
-   Report committed beside the brief as `framing/check-1.md`.
-2. Revise, re-check; the check is capped at three reports under v1.12.
-3. Freeze the brief only on FRAME OK, then assemble the panel package.
+1. **A decision on the park**, per "What would unpark it". Nothing below
+   happens until that is made.
+2. If the brief ever freezes: rewrite the status line to FROZEN with its
+   history, record the sha256 of `brief.md` computed after that edit, and
+   only then do the register work — `lifecycle` to `briefed`, the question
+   wording brought into line with the brief's title, and the dispositions
+   of the three untested registered claims recorded in the register's own
+   schema.
+3. Then, and only then, assemble the panel package.
 
-Nothing in this directory may go to a panel before step 3.
+Nothing in this directory may go to a panel in its current state.
