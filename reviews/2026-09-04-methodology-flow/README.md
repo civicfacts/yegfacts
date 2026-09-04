@@ -10,9 +10,12 @@ Corrected later).
 
 - Reviewer: OpenAI Codex CLI, model gpt-5.6-sol, reasoning effort high,
   read-only sandbox, a fresh session per round, run from the branch's
-  worktree with rendered screenshots attached as images. Screenshots
-  are not committed, by the convention of the earlier review
-  directories.
+  worktree with rendered screenshots attached as images. The two
+  screenshots of the final state (flow-1280.png, flow-390.png) are
+  committed here, against the convention of the earlier review
+  directories: Stew's `git add` of the directory took them along with
+  the round-5 record, and since they are what the founder's two looks
+  and the Gemini read judged, they stay as the record of that.
 - codex-review_N.md is the context Stew handed the reviewer for round N;
   codex-output_N.md is the reviewer's report, with local machine paths
   made repo-relative before commit.
