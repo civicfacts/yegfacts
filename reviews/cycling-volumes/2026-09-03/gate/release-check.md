@@ -33,11 +33,14 @@ exposure-audit: 735 tracked text files scanned (16 binary skipped, 751 tracked t
 **This run adds none of the 36.** Every PII warning is in
 `reviews/active-transportation/` or `reviews/low-density-history/`, and each
 is a street address inside a budget line or a heritage Statement of
-Significance — "CM-99-9600 Yellowhead Trail Freeway Conversion", "the Holgate
-Residence, 6210 Ada Boulevard", "the Hardisty Residence, 10549 126 Street
-NW". They are civic addresses of public buildings and named capital projects,
-already dispositioned as accepted in the records for those runs. Filtering
-the audit output for `cycling-volumes` or `cv-` returns nothing.
+Significance — a named capital profile on Yellowhead Trail, and two
+designated heritage residences given with their municipal addresses, one on
+Ada Boulevard and one in Westmount. They are civic addresses of public
+buildings and named capital projects, already dispositioned as accepted in
+the records for those runs. The addresses are not repeated here: a release
+check that pasted a live match verbatim would republish the thing the audit
+exists to find, and would flag itself on the next run. Filtering the audit
+output for `cycling-volumes` or `cv-` returns nothing.
 
 ## Findings
 
@@ -50,7 +53,12 @@ Checked and clear:
   registry entries. The two check seats' scratch directories stayed outside
   the repository and their raw stdout is not committed; both reports are
   committed as edited Markdown, and the tool-narration preamble the Gemini
-  seat printed was stripped rather than published.
+  seat printed was stripped rather than published. The audit was re-run after
+  these three gate reports were written, because a report is part of the
+  release: the first draft of the source verification pasted an absolute home
+  path into a quoted command, and the first draft of this report quoted two of
+  the 36 warned addresses verbatim. Both are repaired, and the numbers in this
+  section are from the run after that.
 - **No contact details.** No email address, phone number, postal code or
   street address anywhere in the run directory or the claim records.
 - **No real names from capture data.** Every commenter in `intake.md` and in

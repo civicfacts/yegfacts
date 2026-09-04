@@ -43,12 +43,12 @@ in the main checkout. Command:
 
 ```
 python3 -c "
-import hashlib,pathlib,re
+import hashlib,os,pathlib,re
 for i in ['0026']+[f'{n:04d}' for n in range(141,163)]:
     reg=pathlib.Path(f'evidence/registry/YF-EV-{i}.yaml').read_text()
     sha=re.search(r'sha256:\s*(\S+)',reg).group(1)
     rel=re.search(r'path:\s*(\S+)',reg).group(1)
-    for base in ('.','/Users/iabdulin/Sites/yegfacts'):
+    for base in ('.', os.path.expanduser('~/Sites/yegfacts')):
         f=pathlib.Path(base)/rel
         if f.exists():
             h=hashlib.sha256(f.read_bytes()).hexdigest()
