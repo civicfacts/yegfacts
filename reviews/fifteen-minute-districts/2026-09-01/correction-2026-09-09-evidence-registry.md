@@ -59,11 +59,14 @@ A dated `correction` entry was added to the story changelog.
   rights are all untouched.
 - The 12-0 vote count, the quoted clause and every other evidence entry.
 
-## Still open
+## Independent verification
 
-The independent release review passed. The source review verified the
+The dedicated release review passed. The source review verified the
 substantive correction and found one page-pointer error in this record:
 Amendment 1 begins on p.27 but its result is on p.28. The pointer now spans
-both pages. A focused confirmation is pending. Reports are preserved in
-`gate/correction-2026-09-09-source-1.md` and
-`gate/correction-2026-09-09-release.md`.
+both pages, and the source auditor's focused confirmation passed.
+
+Reports are preserved in `gate/correction-2026-09-09-source-1.md`,
+`gate/correction-2026-09-09-source-2.md` and
+`gate/correction-2026-09-09-release.md`. The initial failed source report
+remains beside the confirmation; no failed check was overwritten.
