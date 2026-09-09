@@ -473,9 +473,8 @@ limits and the editorial disposition, and `verification/procedure-review.md`
 for the independent procedural review.
 
 The brief and both framing reports are unchanged. No third framing report
-is being commissioned. An independent source-existence audit is checking
-the omitted obligation; no panel will start while an essential dependency
-remains unverified.
+is being commissioned. An independent source-existence audit is commissioned but has not yet run;
+no panel will start while an essential dependency remains unverified.
 
 The Google audit attempt on 2026-09-09 stopped at the provider's account
 quota before research. Execution remains blocked pending independent

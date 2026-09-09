@@ -83,8 +83,8 @@ original freeze remains the historical record, not permission to skip
 the omitted lookup. No panel has started, no new finding is published,
 and this is neither a framing PARK nor a third framing report.
 
-To resume, assemble the preserved request, then the literal heading
-`## Frozen brief` followed by a blank line, then the unchanged `brief.md`.
+To resume, assemble the preserved request, a blank line, the literal heading
+`## Frozen brief`, another blank line, then the unchanged `brief.md`.
 Match the recorded package hash before invoking the recorded Google
 command in an isolated directory. Preserve any failed attempts separately.
 Verify the audit against its actual retrieval activity. Continue to the
