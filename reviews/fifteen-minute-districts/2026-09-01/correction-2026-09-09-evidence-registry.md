@@ -26,7 +26,7 @@ is unchanged.
 
 Printed page numbers match PDF page numbers.
 
-- **p.27.** E. Rutherford moves "That Charter Bylaw 24000 and Bylaw 24100
+- **pp.27-28.** E. Rutherford moves "That Charter Bylaw 24000 and Bylaw 24100
   be read a first time." Amendment 1 (section 2.5.2.6 scale criteria)
   follows and carries 11 to 1.
 - **p.28.** Amendment 2, the 118 Avenue to North Central name change,
@@ -61,6 +61,9 @@ A dated `correction` entry was added to the story changelog.
 
 ## Still open
 
-Independent verification of this correction has not happened. One
-implementer read the archive and made the change. The source and release
-review is pending.
+The independent release review passed. The source review verified the
+substantive correction and found one page-pointer error in this record:
+Amendment 1 begins on p.27 but its result is on p.28. The pointer now spans
+both pages. A focused confirmation is pending. Reports are preserved in
+`gate/correction-2026-09-09-source-1.md` and
+`gate/correction-2026-09-09-release.md`.
