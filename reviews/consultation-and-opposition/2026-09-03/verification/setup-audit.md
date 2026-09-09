@@ -94,3 +94,18 @@ mismatch or unresolved essential dependency keeps execution stopped.
 The provider reported a reset in 50h54m44s, approximately 2026-09-11
 20:18 UTC. That is a provider estimate, not a scheduled retry or a claim
 that capacity will be available then.
+
+## Execution rule update, September 9, 2026 (methodology v1.28)
+
+The resume instruction above is superseded: **do not invoke the historical
+Google command in a scratch directory.** A working directory alone does not
+exclude host instructions. The shared reviewer launcher must have a demonstrated
+Google execution profile before the preserved package can be sent again. No
+such profile is available in v1.28, so restored provider capacity alone will not
+unblock this audit. No new quota or source-retrieval result is claimed here.
+
+The exact frozen brief, framing reports and source-audit request remain
+unchanged. Verify the same package hash when both execution and capacity permit
+resumption. The required independent source-existence audit and three-vendor
+panel have not run successfully. This remains an execution block, not a framing
+PARK, a new framing report or a finding.

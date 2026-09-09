@@ -14,6 +14,34 @@
 # The sentence above used to describe a check that did not exist: the rule sat
 # as a TODO in scripts/validate.ts, and a change under methodology/ shipped
 # clean. It runs now.
+- version: "1.28"
+  date: "2026-09-09"
+  scope: reviewer-execution-and-retention
+  summary: >
+    A scratch directory did not keep private instructions out of a reviewer.
+    The roads framing audit found private project memory outside the declared package; the third report read and cited it.
+    New reviewer launches must pass an execution check, and complete responses
+    are retained before a report or JSON extract is made from them.
+  highlights:
+    - "Correction to v1.14 and the methodology page: a fresh working directory and an undisclosed repository path are not an isolation boundary. The roads audit observed injected memory, but no repository read; absence of a repository read was not proven. Every finding published before this change predates the new execution check. None is retroactively certified, and this audit does not establish that every historical run received private context."
+    - "Admission requires suppression of host customizations, a public-web search/fetch tool limit, and observed request and tool evidence. Before a future research attempt can be admitted, a separate synthetic canary under the same profile must show a working public fetch and an unavailable local fixture. This is evidence about the tested execution, not a guarantee about the vendor or future CLI releases. Unsupported versions and unverified profiles stop before research; candidate diagnostics cannot return an admitted review."
+    - "The Claude Code 2.1.266/2.1.267 candidate uses Opus 5 at high effort, but its startup inventory does not expose injected instruction text and its debug log does not contain request bodies. That is insufficient context proof. The tested Codex 0.153.4 profile still received host instructions and lost working web access; that test does not rule out every possible configuration. No Google profile has been demonstrated. No research provider is admitted in this release; new panels and source audits remain blocked. Model pins, the three-seat requirement and framing-check caps do not change."
+    - "This revises the shell-access practice recorded in v1.14: shell and local-file tools are no longer available to new reviewers without a separately demonstrated boundary. Public-web tools may not retrieve PDFs or other records a shell could retrieve. Budget, roads and infrastructure checks may be blocked as a result. An inaccessible essential source stops the run; it is not grounds for a Not established finding."
+    - "Every launch attempt retains its exact package and execution metadata, even when refused. Diagnostic output, including stdout, stderr, the complete final response and check evidence, is kept privately outside Git worktrees. Future research profiles must retain the same complete record before extraction, including trailing provenance and known exit status. Retries have separate artifacts. Nonzero CLI exits, denied or unexpected tools, missing final responses and failed execution checks cannot become successful reviews merely because JSON can be extracted. Existing successful reports are not overwritten."
+    - "New public run records must carry attempt identifiers, status, known exit codes, profile and proof results, and artifact hashes, not private paths or raw traces. Historical run records are not backfilled. Complete artifacts are retained while the associated public record exists, with no automatic deletion. Ildar Abdulin is responsible for the archive; inspection requests go to research@yegfacts.ca. Hash comparisons and redacted excerpts can be provided after privacy and rights review. A hash is not public access to the underlying file, and this policy cannot recover artifacts previously deleted."
+    - "The journal now corrects its claim to have captured the whole 621-comment thread. The browser displayed 669 comments and extraction produced 621 records; the difference remains unresolved. The original entry is preserved below a dated correction. The intake summary and cycling article now also distinguish the capture count from the size of the thread; the article records a correction without changing any finding."
+  links:
+    - label: Reviewer execution and retention
+      href: /methodology#reviewer-execution
+    - label: Review memos and dispositions
+      href: https://github.com/civicfacts/yegfacts/blob/main/methodology/reviews/2026-09-09-reviewer-execution/DISPOSITIONS.md
+    - label: Roads framing trace audit
+      href: https://github.com/civicfacts/yegfacts/blob/main/reviews/who-pays-for-roads/2026-09-03/verification/audit-2026-09-09.md
+  note: >
+    The roads reports were made with ad-hoc commands, not the panel wrapper.
+    Their original session traces survived and made the audit possible. The
+    omitted footer and the wrapper's loss of raw output are separate observed
+    defects; the audit did not establish who or what removed the footer.
 - version: "1.27"
   date: "2026-09-03"
   scope: enforcement

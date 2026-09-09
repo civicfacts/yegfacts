@@ -245,11 +245,15 @@ stopped.
    arrive.
 2. **Blind research round.** Three models independently receive the identical
    package — brief, `prompts/reviewer.md`, and the required output schema
-   `prompts/review-schema.json`. Each runs in a fresh `mktemp -d` working
-   directory containing only that package; no repo path is passed, so no
-   reviewer can see the others' work, the published content, or the pipeline.
-   Web research is allowed and expected. Output is validated against the schema
-   with exactly one retry.
+   `prompts/review-schema.json`. From v1.28, the shared launcher must check the
+   execution profile and a separate per-attempt canary before research. The
+   candidate Claude profile suppresses host customizations and exposes only
+   public-web search and fetch. A scratch directory alone never established
+   isolation; the earlier text claiming it did was wrong. Public-web research
+   is allowed and expected, but retrieval can be more limited without shell
+   tools. Missing essential sources stop a run, not produce a finding. Output
+   is validated against the schema with at most one schema retry. Unverified
+   provider profiles block the three-seat panel; they are not replaced.
 3. **Evidence staging, then deterministic merge.** Split in two because network
    work is not deterministic. Staging fetches the cited URLs, hashes them and
    snapshots them; a failed fetch is recorded, not fatal. The merge
@@ -320,13 +324,47 @@ stopped.
    the gate. A story may be deployed in `pending-review` status with a visible
    banner before it; `published` requires it.
 
-Pinned reviewer commands (methodology v1.6, 2026-09-01; `scripts/panel/run-reviewer.sh`):
+Historical reviewer commands (last used before methodology v1.28). These
+record earlier execution, **not commands approved for new runs**:
 
 | Panel seat | Command |
 |---|---|
 | Claude Opus 5 | `claude -p --model claude-opus-5 --effort high` (v1.15; Fable 5.1 before that, pinned in v1.5 and given its effort setting in v1.6). The move is a cost decision, not a judgement about review quality: the founder's Fable allowance on his subscription is nearly exhausted. Runs already published under Fable 5.1 keep the model their manifests record. |
 | GPT-5.6 Sol | `codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check` |
 | Gemini 3.8 Flash | `agy --model gemini-3.8-flash-high --effort high --sandbox --dangerously-skip-permissions --print-timeout 45m -p` (v1.26; Gemini 3.1 Pro before that, and v1.14 added the permissions flag, without which the headless seat returned nothing on PDF-heavy briefs). The founder retired 3.1 Pro from every seat on this site after the intake extraction run, where 3.8 Flash at high turned the weakest extractor seat into the cleanest; no panel-round comparison of the two exists. Runs already published under 3.1 Pro keep the model their manifests record. |
+
+From v1.28, `scripts/panel/invoke-reviewer.sh` is the common execution path for
+panel reviews and package-in/report-out framing or source audits. There is no
+unrestricted fallback. The candidate Claude Code 2.1.266/2.1.267 profile uses safe mode,
+empty settings sources, strict MCP configuration, no slash commands or session
+persistence, and an explicit WebSearch/WebFetch allowlist. Actual request and tool
+evidence, plus a separate synthetic canary for each attempt, must pass before a
+result is admitted. This is not a filesystem jail or a vendor-wide guarantee.
+No provider has an approved research profile in this release, so new panels stop.
+Claude's candidate startup inventory does not reveal injected instruction text,
+and its debug log does not contain request bodies. An empty inventory is not
+sufficient context proof. Candidate diagnostics do not authorize a research run.
+A source-audit helper does not authorize another framing check or reset a cap.
+
+This changes the shell-access practice described in v1.14. A reviewer may be
+unable to retrieve a PDF that the earlier shell-enabled command could read.
+Essential-source access must be resolved before the run continues. The model
+pins above and the three-vendor synthesis rule remain unchanged.
+
+Every launch attempt retains its package and execution metadata in a private
+archive outside Git worktrees; any diagnostic output remains there too. A future
+research profile must retain stdout, stderr, the complete final response
+(including provenance after the report), request/stream evidence, diagnostics,
+known exit status and hashes before extraction. The
+schema JSON or published Markdown is a derivative, never the retained original.
+A retry gets a new archive. A nonzero process exit, denied or unexpected tool,
+missing final response or failed execution check cannot be accepted as a review.
+Public manifests carry opaque attempt identifiers and hashes, not archive paths.
+Artifacts are retained while their associated public record exists, with no
+automatic deletion. Ildar Abdulin handles inspection requests at
+research@yegfacts.ca; hash comparisons and redacted excerpts are subject to
+privacy and rights review. Earlier deleted artifacts are not recoverable by this
+policy. See the [v1.28 review and disposition](../methodology/reviews/2026-09-09-reviewer-execution/DISPOSITIONS.md).
 
 Every seat runs at its vendor's `high` reasoning setting — the highest level the
 three CLIs share, since `agy` stops there — and the runner records it in

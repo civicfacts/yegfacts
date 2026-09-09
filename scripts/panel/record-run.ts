@@ -36,8 +36,18 @@ type RunEntry = {
   started_at: string;
   finished_at: string;
   attempts: number;
-  status: 'ok' | 'failed';
+  status: 'ok' | 'failed' | 'blocked';
   package_files?: string[];
+  /**
+   * One row per attempt (methodology v1.28): opaque attempt id, the isolation
+   * profile it ran under, the canary and boundary verdicts, the exact exit code
+   * and content hashes. Absent on every manifest written before v1.28, and a
+   * missing value means "not recorded" — never "passed".
+   *
+   * Deliberately no filesystem path. The raw bytes live in a private archive
+   * outside every repository; the id is what an auditor quotes to ask for them.
+   */
+  attempts_detail?: Record<string, unknown>[];
 };
 
 type Manifest = {
@@ -64,6 +74,24 @@ function required(values: Record<string, string>, key: string): string {
   const value = values[key];
   if (value === undefined || value === '') throw new Error(`--${key} is required`);
   return value;
+}
+
+function parseStatus(value: string | undefined): RunEntry['status'] {
+  if (value === 'ok' || value === 'failed' || value === 'blocked') return value;
+  throw new Error(`--status must be ok, failed or blocked, got "${value ?? ''}"`);
+}
+
+/**
+ * The per-attempt rows arrive as JSON on the command line, because the runner
+ * that assembles them is a shell script. Malformed JSON throws rather than
+ * being dropped: a manifest that silently loses the record of what ran is the
+ * problem this field exists to fix.
+ */
+function attemptsDetail(value: string | undefined): { attempts_detail: Record<string, unknown>[] } | undefined {
+  if (!value || value === '[]') return undefined;
+  const parsed: unknown = JSON.parse(value);
+  if (!Array.isArray(parsed)) throw new Error('--attempts-detail must be a JSON array');
+  return { attempts_detail: parsed as Record<string, unknown>[] };
 }
 
 const values = parseArgs(process.argv.slice(2));
@@ -93,8 +121,9 @@ const entry: RunEntry = {
   started_at: required(values, 'started-at'),
   finished_at: required(values, 'finished-at'),
   attempts: Number(values.attempts ?? '1'),
-  status: values.status === 'failed' ? 'failed' : 'ok',
+  status: parseStatus(values.status),
   ...(values['package-files'] ? { package_files: values['package-files'].split(',') } : {}),
+  ...(attemptsDetail(values['attempts-detail']) ?? {}),
 };
 
 const existing = manifest.runs.findIndex(

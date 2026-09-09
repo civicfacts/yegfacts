@@ -73,7 +73,7 @@ const short: ReadonlyArray<{ name: string; body: string; exits: readonly Exit[] 
 const intake = [
   {
     name: 'A source arrives',
-    body: 'The unit is a whole source: a post and every comment under it, an article, a discussion someone sends us. Anyone can send one, and you do not have to say which part of it you think is wrong. The whole thing is captured, with its address and the date it was taken, and kept.',
+    body: 'The unit is a whole source: a post and every comment under it, an article, a discussion someone sends us. Anyone can send one, and you do not have to say which part of it you think is wrong. The accessible material is captured with its address, capture date and known limits, and kept. A capture is not necessarily the complete source.',
   },
   {
     name: 'Every claim in it is written down',
@@ -100,7 +100,7 @@ const stages = [
   },
   {
     name: 'Blind research round',
-    body: 'Three models, Claude, GPT and Gemini, receive the identical package: the brief, the public reviewer prompt, and a required JSON output schema. Each runs in its own scratch directory with no access to this repository and no sight of the others. Each returns a per-claim verdict, its confidence, the evidence supporting and challenging it, its limitations, what it could not find, and comparison cities with a judgement about whether those cases transfer to Edmonton.',
+    body: 'Three models, Claude, GPT and Gemini, receive the identical package: the brief, the public reviewer prompt, and a required JSON output schema. New runs must pass an execution check intended to keep host instructions and private files out of the review. A separate working directory alone did not provide that protection; the limitation and current pause are recorded below. Each returns a per-claim verdict, its confidence, the evidence supporting and challenging it, its limitations, what it could not find, and comparison cities with a judgement about whether those cases transfer to Edmonton.',
   },
   {
     name: 'Evidence staging and deterministic merge',
@@ -112,7 +112,7 @@ const stages = [
   },
   {
     name: 'Deterministic synthesis',
-    body: 'A script computes the canonical finding from the three locked round-one verdicts, using a published lookup table over every possible combination. Round one is the only round in which the three reviewers are independent of each other, so it is the only round that can honestly be read as three separate judgements of the record. Model identity never enters the calculation, and the property is tested. A genuinely split panel produces Mixed, with the split shown. Beside the finding the site publishes panel agreement, Unanimous, Adjacent or Split. That replaced a confidence score in v1.3, because agreement is what the method actually measures and confidence implied a probability of truth that nothing here computes. All published arithmetic lives in a tested script, never in prose. Since v1.24 a run can also publish fewer claims than it asked. Where a framing concern is right and no repair exists that does not weaken the claim, that claim is parked with a public reason, and its answers stay committed.',
+    body: 'A script computes the canonical finding from the three locked round-one verdicts, using a published lookup table over every possible combination. Round one is designed to keep the three judgements separate, so only its verdicts enter the calculation. The execution limits below qualify that claim of independence. Model identity never enters the calculation, and the property is tested. A genuinely split panel produces Mixed, with the split shown. Beside the finding the site publishes panel agreement, Unanimous, Adjacent or Split. That replaced a confidence score in v1.3, because agreement is what the method actually measures and confidence implied a probability of truth that nothing here computes. All published arithmetic lives in a tested script, never in prose. Since v1.24 a run can also publish fewer claims than it asked. Where a framing concern is right and no repair exists that does not weaken the claim, that claim is parked with a public reason, and its answers stay committed.',
   },
   {
     name: 'Drafting, faithfulness check and plain-speech read',
@@ -181,6 +181,7 @@ const sections = toc([
   { id: 'intake', label: 'How a claim gets in' },
   { id: 'pseudonyms', label: 'Names and quotes' },
   { id: 'stages', label: 'Seven stages' },
+  { id: 'reviewer-execution', label: 'Reviewer execution' },
   { id: 'synthesis', label: 'Panel agreement' },
   { id: 'questions', label: 'What a question carries' },
   { id: 'limits', label: 'Limits we set' },
@@ -343,6 +344,45 @@ const sections = toc([
     <p class="mt-5 max-w-prose border-l-2 border-gold pl-3.5 text-[0.9375rem] leading-relaxed">
       Every question published so far passed the AI audit gate under this delegation; none was
       gated by a per-source manual founder review.
+    </p>
+  </section>
+
+  <section id="reviewer-execution" class="mt-14 scroll-mt-6">
+    <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">
+      Reviewer execution: correction and current limit
+    </h2>
+    <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed">
+      September 9, 2026: this page said a separate working directory kept each reviewer
+      out of the repository. It did not. An{' '}
+      <a href={repoPath('reviews/who-pays-for-roads/2026-09-03/verification/audit-2026-09-09.md')} rel="noopener" class="link">audit of the roads framing checks</a>{' '}
+      found private project memory supplied outside the declared package; the third
+      report read and cited it. No repository read
+      was observed, but its absence was not proven. All findings published before this
+      change predate the new check; they have not been retroactively cleared by it.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      New attempts must suppress host customizations and pass a separate test that public-web
+      access works and local files stay unreachable under the same execution profile. This is
+      a check of that execution, not a guarantee about a vendor. No provider yet has a
+      demonstrated profile meeting the full requirement, so new panels and source audits
+      are paused. The candidate Claude setup reports its tools, but does not expose the
+      instruction text needed to check for injected context. Restricting tools
+      can also prevent access to PDFs needed for budget, roads or infrastructure questions.
+      An essential source that cannot be read blocks the run; it does not become a finding
+      that the claim is not established.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      Each launch attempt keeps its package and execution record privately, even when it
+      is refused. The diagnostic's complete response is retained too. When reviewers can
+      run again, their full responses, including trailing provenance, must be retained
+      before a report is extracted; the public run record will carry the hashes and
+      execution results. Ildar Abdulin retains the originals while
+      the associated public record exists. For inspection, write to{' '}
+      <a href={`mailto:${SITE.researchEmail}`} class="link">{SITE.researchEmail}</a>; hash comparisons and
+      redacted excerpts are subject to privacy and rights review. A published hash does not
+      itself give access to a private file. Earlier deleted output cannot be recovered by
+      this policy. The{' '}<a href="/methodology/changes" class="link">methodology changelog</a>{' '}records
+      the change and the independent reviews.
     </p>
   </section>
 

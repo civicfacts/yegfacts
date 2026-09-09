@@ -14,7 +14,8 @@
  * validation errors on stdout, which `run-reviewer.sh` feeds back into its one
  * retry.
  */
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, realpathSync, writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { validateReviewText } from '../lib/review-schema.ts';
 
 /**
@@ -93,7 +94,26 @@ export function extractReview(raw: string): { ok: true; json: unknown } | { ok: 
   return { ok: false, errors: bestErrors ?? ['no JSON object found in the reviewer output'] };
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+/**
+ * True when this file is the script node was told to run.
+ *
+ * Comparing `import.meta.url` to `process.argv[1]` directly is the usual idiom
+ * and it is wrong through a symlink: node reports the resolved path while argv
+ * keeps the link, the comparison quietly fails, and the script exits 0 having
+ * done nothing. A caller reading its exit status then treats "did not run" as
+ * "validated cleanly".
+ */
+function isEntryPoint(): boolean {
+  const invoked = process.argv[1];
+  if (!invoked) return false;
+  try {
+    return realpathSync(invoked) === realpathSync(fileURLToPath(import.meta.url));
+  } catch {
+    return false;
+  }
+}
+
+if (isEntryPoint()) {
   const [rawFile, outFile] = process.argv.slice(2);
   if (!rawFile || !outFile) {
     console.error('usage: tsx scripts/panel/extract-review.ts <raw-stdout-file> <output.json>');
