@@ -369,3 +369,18 @@ committed, and the register is untouched.
   nothing published under this question states a finding about whether
   cyclists pay taxes, about taxes funding services people do not use, or
   about what share of the roads property taxes pay.
+
+
+## 2026-09-09 correction and current disposition
+
+The [original-trace audit](verification/audit-2026-09-09.md) supersedes the
+HELD rationale above. All three checks used web tools. The disputed count
+came from private extraction notes that report 3 cited in its original
+response; the committed copy omitted that citation footer. The editor
+withdraws the fabrication and no-web allegations.
+
+The brief is now recorded as PARKED under the existing three-report cap.
+No fourth report, cap reset, fresh brief or panel run is authorized by this
+audit. The historical reports and substantive brief text remain unchanged.
+The capture README now states the supported completeness limitation. The
+audit contains the trace hashes, evidence limits and procedural review.

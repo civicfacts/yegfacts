@@ -1,6 +1,6 @@
 # Capture: Yegscoop Facebook thread, 2026-08-26 committee decision
 
-The full comment thread on the Yegscoop post about council's bike-lane
+The accessible comments on the Yegscoop post about council's bike-lane
 decision, as one JSONL file. This is the input to the whole-source intake
 pilot: the unit of intake is the source, not a claim an editor picked out
 of it.
@@ -9,6 +9,17 @@ of it.
 - **Post date:** 2026-08-26 (the Infrastructure Committee decision the post reports)
 - **Captured by:** the founder, 2026-09-02
 - **Comments:** 621
+
+## Capture limitation, corrected 2026-09-09
+
+The original browser session displayed 669 comments and later extracted
+621 records. The 48-count discrepancy was not resolved. This does not
+identify 48 missing unique comments, and the archive is not proof of a
+complete thread. Counts and comparisons based on this file describe the
+accessible capture. The earlier description, "full comment thread", was
+too strong. No captured records have changed. See the
+[dated trace audit](../../../reviews/who-pays-for-roads/2026-09-03/verification/audit-2026-09-09.md)
+for the evidence and its limits.
 
 ## What is in `comments.jsonl`
 
