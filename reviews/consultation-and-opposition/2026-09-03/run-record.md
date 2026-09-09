@@ -461,3 +461,24 @@ Two framing checks ran, both `codex exec -m gpt-5.6-sol -c
 model_reasoning_effort=high -s read-only --skip-git-repo-check`, from a
 scratch directory outside the repository, with no repository access.
 **No panel ran. Round 1 has not started.**
+
+## 2026-09-09: verification before resuming
+
+Before round 1, the editor inspected the original framing traces. Check 1
+used web tools but could not retrieve the core eScribe documents. Check 2,
+which returned FRAME OK, made no tool calls and relied on the intake for
+source existence. The missing --search flag was not the cause established
+by this audit. See `verification/setup-audit.md` for evidence, provenance
+limits and the editorial disposition, and `verification/procedure-review.md`
+for the independent procedural review.
+
+The brief and both framing reports are unchanged. No third framing report
+is being commissioned. An independent source-existence audit is checking
+the omitted obligation; no panel will start while an essential dependency
+remains unverified.
+
+The Google audit attempt on 2026-09-09 stopped at the provider's account
+quota before research. Execution remains blocked pending independent
+source verification. The request and attempt metadata are preserved under
+`verification/`; no panel result or source-audit result exists. This does
+not change the historical freeze or mark the brief PARKED.
