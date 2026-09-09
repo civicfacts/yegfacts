@@ -7,20 +7,36 @@
 #
 # Providers: claude | codex | agy  (aliases: anthropic, gpt/openai, gemini/google)
 #
-# Isolation, per spec §5.2: the reviewer runs with a fresh mktemp -d as its
-# working directory, containing ONLY the package it needs. No repo path is ever
-# passed to a model, so a reviewer cannot read another reviewer's answer, the
-# published content, or this script. Each CLI still reads its own auth from
-# $HOME, and web research is allowed and expected.
+# NO SEAT CAN RUN IN THIS RELEASE, and this script's job is now to fail cleanly
+# and keep the evidence of having done so.
 #
-# The output is extracted, validated against prompts/review-schema.json, and on
-# failure retried EXACTLY once with the validation errors appended to the
-# package. A reviewer still invalid after that retry exits nonzero, which halts
-# the run: the synthesis matrix is defined for exactly three verdicts, so a
-# two-reviewer panel must not proceed.
+# Isolation is NOT this script's business any more, and the older version of this
+# comment claiming a fresh mktemp -d was the boundary was wrong: a CLI loads its
+# user-level instructions from $HOME whatever its working directory is. Every
+# invocation goes through scripts/panel/invoke-reviewer.sh, which refuses every
+# provider for research because nothing on any inspected path emits the outgoing
+# request, so what actually reached the model cannot be shown. Read that file for
+# the full argument. The assembler below still works, the package is still built
+# and hashed and retained, and the run stops at the admission gate.
 #
-# --dry-run assembles the package and prints the command without executing any
-# CLI, and without writing into reviews/.
+# The retained final message is extracted, validated against
+# prompts/review-schema.json, and on failure retried EXACTLY once with the
+# validation errors appended to the package. A reviewer still invalid after that
+# retry exits nonzero, which halts the run: the synthesis matrix is defined for
+# exactly three verdicts, so a two-reviewer panel must not proceed.
+#
+# A failed invocation cannot produce a review. The extracted JSON is staged in a
+# scratch file and installed only once the run has passed the boundary check,
+# exited zero and validated, and the install itself is exclusive, so nothing
+# under reviews/ is ever replaced.
+#
+# An existing review makes this refuse outright, before the launcher runs and
+# before the manifest is touched: a completed review and its manifest row are
+# the output of a research run that cannot be reproduced bit for bit, and a
+# re-run does not get to overwrite either. Use --into to record one beside it.
+#
+# --dry-run assembles the package and prints what would be invoked without
+# executing any CLI, without writing into reviews/, and without that refusal.
 
 set -euo pipefail
 
@@ -84,12 +100,10 @@ case "$PROVIDER_ARG" in
     # record.
     SLOT="claude"; CLI="claude"; MODEL_ID="claude-opus-5"
     PROVIDER_CANONICAL="anthropic"; SEAT="Claude Opus 5"
-    CMD=(claude -p --model claude-opus-5 --effort "$EFFORT")
     ;;
   codex|gpt|openai)
     SLOT="gpt"; CLI="codex"; MODEL_ID="gpt-5.6-sol"
     PROVIDER_CANONICAL="openai"; SEAT="GPT-5.6 Sol"
-    CMD=(codex exec -m gpt-5.6-sol -c model_reasoning_effort="$EFFORT" -s read-only --skip-git-repo-check)
     ;;
   agy|gemini|google)
     # v1.20 (2026-09-03): the seat moves from Gemini 3.1 Pro to Gemini 3.8
@@ -100,22 +114,13 @@ case "$PROVIDER_ARG" in
     # the model their manifests record.
     SLOT="gemini"; CLI="agy"; MODEL_ID="gemini-3.8-flash-high"
     PROVIDER_CANONICAL="google"; SEAT="Gemini 3.8 Flash"
-    # agy takes the prompt as the argument of -p and does not read stdin;
-    # `-p --effort` made it treat "--effort" as the prompt. --sandbox and the
-    # long print timeout are what the four published runs used.
-    #
-    # --dangerously-skip-permissions (methodology v1.14, founder decision
-    # 2026-09-02): in headless mode agy auto-denies any tool that needs a
-    # permission prompt, and this seat reaches for a shell (curl, wget,
-    # python3) whenever a brief names PDF sources its URL tool cannot read;
-    # it then returns nothing, six times running on the active-transportation
-    # brief, including twice with the documents pre-fetched as text. The flag
-    # approves its tool calls; --sandbox keeps the terminal restrictions. The
-    # other two seats already run with a shell (Claude's Bash tool, Codex's
-    # read-only sandbox), so this levels the seats rather than loosening one.
-    # Isolation still comes from the scratch directory, which holds only the
-    # package.
-    CMD=(agy --model "$MODEL_ID" --effort "$EFFORT" --sandbox --dangerously-skip-permissions --print-timeout 45m -p)
+    # The command this seat used for its four published runs carried
+    # --dangerously-skip-permissions (methodology v1.14) so it could reach a
+    # shell for PDFs its URL tool would not read. That command is retired, not
+    # re-tuned: agy exposes no way to suppress its global instruction and plugin
+    # loading, so there is nothing to grant a shell inside. The seat refuses in
+    # invoke-reviewer.sh and this row exists only to name the model the manifest
+    # would record if a profile is ever demonstrated.
     ;;
   *)
     echo "unknown provider: $PROVIDER_ARG" >&2; usage
@@ -151,7 +156,11 @@ fi
 [ -f "$PROMPT_FILE" ] || { echo "prompt not found: $PROMPT_FILE" >&2; exit 1; }
 
 # ---------------------------------------------------------------------------
-# Scratch directory: everything the reviewer may see, and nothing else.
+# Scratch directory: where the package is assembled and the extracted review is
+# staged. It is no longer the isolation boundary and no longer holds the only
+# copy of anything — invoke-reviewer.sh archives each attempt's package, raw
+# stream and final message before this is deleted — so removing it on the way
+# out costs nothing. KEEP_SCRATCH=1 keeps it for debugging the assembler.
 # ---------------------------------------------------------------------------
 SCRATCH="$(mktemp -d "${TMPDIR:-/tmp}/yegfacts-$SLOT-r$ROUND-XXXXXX")"
 cleanup() { [ "${KEEP_SCRATCH:-0}" = "1" ] || rm -rf "$SCRATCH"; }
@@ -256,68 +265,130 @@ PACKAGE="$SCRATCH/package.md"
 } > "$PACKAGE"
 
 PROMPT_SHA="$(shasum -a 256 "$PACKAGE" | cut -d' ' -f1)"
-if [ "$CLI" = "agy" ]; then
-  COMMAND_STRING="${CMD[*]} \"\$(cat package.md)\""
-else
-  COMMAND_STRING="${CMD[*]} < package.md"
-fi
+INVOKE="$REPO_ROOT/scripts/panel/invoke-reviewer.sh"
+COMMAND_STRING="scripts/panel/invoke-reviewer.sh --provider $PROVIDER_CANONICAL --model $MODEL_ID --effort $EFFORT --package package.md"
+
+# Each attempt lands in its own directory under the private archive, keyed by a
+# fresh timestamp, so a re-run of a round never lands on top of the last one.
+ARCHIVE_ROOT="$("$INVOKE" --archive-root)"
+RUN_STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
+ATTEMPT_BASE="$ARCHIVE_ROOT/$STORY/$RUN_DATE/${INTO:-round$ROUND}/$SLOT/$RUN_STAMP"
 
 if [ "$DRY_RUN" = "1" ]; then
   echo "DRY RUN — no CLI executed, nothing written under reviews/"
   echo
-  echo "provider:      $PROVIDER_ARG (slot: $SLOT)"
+  echo "provider:      $PROVIDER_ARG (slot: $SLOT, canonical: $PROVIDER_CANONICAL)"
   echo "model:         $MODEL_ID"
   echo "effort:        $EFFORT"
   echo "round:         $ROUND"
   echo "scratch dir:   $SCRATCH"
+  echo "attempt dirs:  $ATTEMPT_BASE/attempt-N"
   echo "package files: $PACKAGE_FILES"
   echo "package bytes: $(wc -c < "$PACKAGE" | tr -d ' ')"
   echo "prompt sha256: $PROMPT_SHA"
   echo "would write:   ${OUT_FILE#"$REPO_ROOT"/}"
   echo "would update:  ${MANIFEST#"$REPO_ROOT"/}"
   echo
-  echo "command (run with cwd = scratch dir):"
+  echo "invocation (the helper decides whether this provider may run at all):"
   echo "  $COMMAND_STRING"
   exit 0
 fi
 
-command -v "$CLI" >/dev/null 2>&1 || { echo "$CLI is not on PATH" >&2; exit 1; }
-CLI_VERSION="$("$CLI" --version 2>/dev/null | head -1 | tr -d '\r' || echo unknown)"
+# A completed review, and the manifest row describing it, are the output of a
+# research run that cost money and cannot be reproduced bit for bit. Neither is
+# re-derivable, so a re-run does not get to touch either: it refuses here,
+# before the launcher is called and before record-run.ts rewrites the row.
+# A claim-scoped re-run has --into for exactly this, and it writes its own
+# directory and its own manifest. -L as well as -e, because a dangling symlink
+# at the destination is still something a person put there.
+if [ -e "$OUT_FILE" ] || [ -L "$OUT_FILE" ]; then
+  echo "[$SLOT round $ROUND] ${OUT_FILE#"$REPO_ROOT"/} already exists." >&2
+  echo "[$SLOT round $ROUND] Refusing: a re-run would replace both it and its manifest row." >&2
+  echo "[$SLOT round $ROUND] Use --into <dirname> to record a re-run beside it." >&2
+  exit 1
+fi
+
+CLI_VERSION="unknown"
+if command -v "$CLI" >/dev/null 2>&1; then
+  CLI_VERSION="$("$CLI" --version 2>/dev/null | head -1 | tr -d '\r' || echo unknown)"
+fi
 [ -n "$CLI_VERSION" ] || CLI_VERSION="unknown"
 
 mkdir -p "$OUT_DIR"
 STARTED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-RAW="$SCRATCH/raw-stdout.txt"
 ERRORS="$SCRATCH/validation-errors.txt"
 STATUS="failed"
 ATTEMPTS=0
+DETAILS=""
+
+# Per-attempt public record, built from the private attempt directory by the one
+# script that knows which fields may leave it. Appended even for an attempt that
+# never reached the CLI, so a refusal is on the record rather than absent from it.
+add_detail() {
+  local record
+  record="$(npx tsx "$REPO_ROOT/scripts/panel/attempt-record.ts" "$1" --attempt "$2" --schema "$3")"
+  # An empty record means the recorder ran and said nothing, which is how a
+  # manifest ends up describing a run without describing the attempt it made.
+  # Better to stop the whole run than to publish a row with the evidence
+  # silently missing.
+  [ -n "$record" ] || { echo "attempt-record produced nothing for $1" >&2; exit 1; }
+  DETAILS="${DETAILS:+$DETAILS,}$record"
+}
+
+# The extracted JSON is staged here and only ever moved into reviews/ on a fully
+# successful attempt. Writing straight to $OUT_FILE is how a failed re-run used
+# to be able to damage a good review.
+STAGED="$SCRATCH/staged-review.json"
 
 for attempt in 1 2; do
   ATTEMPTS="$attempt"
-  echo "[$SLOT round $ROUND] attempt $attempt: ${CMD[*]}" >&2
+  ATTEMPT_DIR="$ATTEMPT_BASE/attempt-$attempt"
+  echo "[$SLOT round $ROUND] attempt $attempt: $COMMAND_STRING" >&2
 
-  # Run from INSIDE the scratch dir so the CLI's working directory contains
-  # only the package. A nonzero exit is not fatal on attempt 1 — a CLI can
-  # fail late having already printed a usable answer.
-  if [ "$CLI" = "agy" ]; then
-    ( cd "$SCRATCH" && "${CMD[@]}" "$(cat package.md)" < /dev/null ) > "$RAW" 2>"$SCRATCH/stderr.txt" || \
-      echo "[$SLOT round $ROUND] CLI exited nonzero; still checking its output" >&2
-  else
-    ( cd "$SCRATCH" && "${CMD[@]}" < package.md ) > "$RAW" 2>"$SCRATCH/stderr.txt" || \
-      echo "[$SLOT round $ROUND] CLI exited nonzero; still checking its output" >&2
+  INVOKE_OK=1
+  "$INVOKE" --purpose research --provider "$PROVIDER_CANONICAL" --package "$PACKAGE" \
+    --attempt-dir "$ATTEMPT_DIR" --model "$MODEL_ID" --effort "$EFFORT" \
+    --label "$SLOT round $ROUND" || INVOKE_OK=0
+
+  if [ "$INVOKE_OK" != "1" ]; then
+    # Fail closed and stop. A refusal is not a schema failure: re-sending the
+    # same package to a profile that just refused it, or to a run that just
+    # broke its boundary, spends money to be refused again. The retry budget
+    # exists for a reviewer that answered badly, not for one that never ran.
+    # In this release the admission gate refuses everything, so this is the
+    # path every run takes.
+    add_detail "$ATTEMPT_DIR" "$attempt" "not-reached"
+    # A run refused by policy is not a run that went wrong, and the top line of
+    # the manifest row should say which of the two happened.
+    if [ "$(cat "$ATTEMPT_DIR/status.txt" 2>/dev/null || echo failed)" = "blocked" ]; then
+      STATUS="blocked"
+    else
+      STATUS="failed"
+    fi
+    break
   fi
 
-  if npx tsx "$REPO_ROOT/scripts/panel/extract-review.ts" "$RAW" "$OUT_FILE" > "$ERRORS"; then
+  # The launcher's research output contract: a top-level `final-message.txt`
+  # holding the complete response. Nothing else is read, and the diagnostic
+  # path's `canary/` files are deliberately not it.
+  if npx tsx "$REPO_ROOT/scripts/panel/extract-review.ts" \
+       "$ATTEMPT_DIR/final-message.txt" "$STAGED" > "$ERRORS"; then
+    add_detail "$ATTEMPT_DIR" "$attempt" "valid"
     STATUS="ok"
     break
   fi
 
+  cp "$ERRORS" "$ATTEMPT_DIR/validation-errors.txt"
+  add_detail "$ATTEMPT_DIR" "$attempt" "invalid"
   echo "[$SLOT round $ROUND] output failed schema validation:" >&2
   sed 's/^/  /' "$ERRORS" >&2
 
   if [ "$attempt" = "2" ]; then break; fi
 
   # The one retry: same package, plus exactly what was wrong with the last try.
+  # Appending in place is safe now that each attempt copies the package into its
+  # own directory before invoking, so attempt 1's bytes and hash survive
+  # attempt 2 rather than being overwritten by it.
   {
     echo
     echo "---"
@@ -364,7 +435,11 @@ if [ "$STATUS" = "ok" ]; then
       runner_effort: effort,
     };
     fs.writeFileSync(file, JSON.stringify(review, null, 2) + "\n");
-  ' "$OUT_FILE" "$PROVIDER_CANONICAL" "$MODEL_ID" "$SEAT" "$EFFORT"
+  ' "$STAGED" "$PROVIDER_CANONICAL" "$MODEL_ID" "$SEAT" "$EFFORT"
+  # Only now does anything under reviews/ change, and it changes exclusively:
+  # the destination was clear when this run started, and if a concurrent session
+  # has filled it since, this fails rather than deciding whose answer wins.
+  npx tsx "$REPO_ROOT/scripts/panel/install-output.ts" "$STAGED" "$OUT_FILE"
 fi
 
 npx tsx "$REPO_ROOT/scripts/panel/record-run.ts" \
@@ -383,11 +458,15 @@ npx tsx "$REPO_ROOT/scripts/panel/record-run.ts" \
   --finished-at "$FINISHED_AT" \
   --attempts "$ATTEMPTS" \
   --status "$STATUS" \
-  --package-files "$PACKAGE_FILES"
+  --package-files "$PACKAGE_FILES" \
+  --attempts-detail "[$DETAILS]"
 
 if [ "$STATUS" != "ok" ]; then
-  echo "[$SLOT round $ROUND] FAILED after $ATTEMPTS attempts. Scratch kept at $SCRATCH" >&2
-  KEEP_SCRATCH=1
+  echo "[$SLOT round $ROUND] FAILED after $ATTEMPTS attempt(s)." >&2
+  echo "[$SLOT round $ROUND] Every attempt is retained under $ATTEMPT_BASE" >&2
+  if [ -f "$OUT_FILE" ]; then
+    echo "[$SLOT round $ROUND] ${OUT_FILE#"$REPO_ROOT"/} now holds another session's review; this attempt's output is in the archive" >&2
+  fi
   exit 1
 fi
 

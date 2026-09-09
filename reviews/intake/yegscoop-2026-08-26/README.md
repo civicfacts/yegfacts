@@ -1,8 +1,13 @@
 # Whole-source intake: the Yegscoop thread of 2026-08-26
 
-The first source read end to end under methodology v1.15. A Facebook post on
-Council's 2026-08-26 bike lane decision, with all 621 comments. Nobody chose
-which claims in it to look at.
+The first capture read end to end under methodology v1.15. A Facebook post on
+Council's 2026-08-26 bike lane decision, from which 621 comment records were
+captured. Nobody chose which claims in the capture to look at.
+
+**Correction, September 9, 2026:** this introduction previously said "all 621
+comments". The browser displayed 669 comments; the extraction returned 621
+records. The difference is unresolved, and completeness is not established.
+See the [trace audit](../../who-pays-for-roads/2026-09-03/verification/audit-2026-09-09.md).
 
 ## What came out
 
@@ -123,8 +128,8 @@ of 99 before, which is the clearest evidence the grouping had been wrong.
 
 Haiku found the fewest claims by a wide margin and lost the most forms to the
 quote gate. A first run of this thread on Gemini 3.6 Flash at low effort
-produced 32 claims and cited comment numbers past the end of a 621-comment
-thread; moving that seat to 3.8 Flash at high effort turned the weakest seat
+produced 32 claims and cited comment numbers past the end of the 621-record
+capture; moving that seat to 3.8 Flash at high effort turned the weakest seat
 into the cleanest. Both facts are arguments for three seats rather than one.
 
 ## The quote gate

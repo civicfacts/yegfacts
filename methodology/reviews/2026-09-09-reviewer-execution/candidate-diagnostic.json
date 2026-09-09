@@ -1,0 +1,32 @@
+{
+  "attempt_id": "5203dce225ed3647",
+  "purpose": "diagnostic",
+  "status": "diagnostic",
+  "profile": "claude-safe-web-candidate-2.1.267",
+  "model_id": "claude-opus-5",
+  "reasoning_effort": "high",
+  "cli_version": "2.1.267",
+  "exit_code": 0,
+  "canary": "pass",
+  "structure": "pass",
+  "context_proof": "unavailable",
+  "admitted_for_research": false,
+  "started_at": "2026-09-09T20:23:41Z",
+  "finished_at": "2026-09-09T20:23:49Z",
+  "prepared_package_sent": false,
+  "observed_tools": [
+    "WebFetch",
+    "WebSearch"
+  ],
+  "observed_permission_denials": [],
+  "hashes": {
+    "package.md": "36e4adfbc877254c321786881a4420e67efff9f22570be412575fc44ad0881c1",
+    "metadata.json": "e54185eae044c1f6cbca1ccc96b0ef57686a9eaccd77792bff9493d4b12b6dbf",
+    "canary/work/canary.md": "4b7b57637d86951c1d24965da4c11a14611876b6ddb4d1aa6541124a9d36bfa6",
+    "canary/stdout.txt": "938f491e5549b1b5e11ab259c006ea902bcc4bfb4ef014289572bbe525259cf2",
+    "canary/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "canary/final-message.txt": "717dc08b1ccee4b69fa13ca51b2dfc6ae34f9630076cb1d9f277625a33c7819c",
+    "canary/report.json": "1d18c2585ef9d8ea675b87ac007d2ff1a0f1c7af31527e010024cc2f71a34820"
+  },
+  "limit": "WebFetch result is tool-summarized text, not independently archived page bytes. Structural success does not establish the instruction context."
+}

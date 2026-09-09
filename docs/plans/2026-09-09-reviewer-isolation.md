@@ -41,3 +41,15 @@ Add tests using stub executables for complete footer retention, two distinct ret
 Methodology v1.28 records the execution contract and reduced retrieval, corrects the old scratch-isolation claim, preserves historical commands and makes no claim about uninspected historical runs. Update `docs/DESIGN.md` and the live methodology disclosure. Publish the independent board memos with an editorial disposition preserving disagreements and correcting unsupported suggestions. Retain raw evidence while the associated public record exists; inspection requests go to research@yegfacts.ca, with privacy/rights review before sharing.
 
 Run validation, relevant tests, full suite, type check, build, exposure, duplication and sitemap checks. Get independent critique of the code and reader-facing correction, PR on the branch, merge only on green, then verify production and update the private board locally.
+
+## Verification correction during implementation
+
+Inspection of the Claude diagnostic log found that it contains request identifiers,
+not outgoing request bodies. Absence of private text in that log is therefore no
+evidence that the text was absent from the request. The structured startup
+inventory shows tools and some customizations, but does not expose injected
+CLAUDE.md or memory text. The initial candidate assessment above overstated the
+proof. Do not admit Claude research unless actual context evidence can meet the
+contract. The approved fallback is to block all research providers, retain a
+candidate-only diagnostic and the capture plumbing, and record that limit. No
+filesystem jail, credential changes or convention-only exception is authorized.
