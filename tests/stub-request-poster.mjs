@@ -24,8 +24,14 @@ import path from 'node:path';
 
 const sha = (text) => createHash('sha256').update(text, 'utf8').digest('hex');
 
-/** The requests a single-turn run makes, in order. */
-const POSTED = ['req-0001.json', 'req-0002.json', 'req-0003.json', 'req-0005.json'];
+/**
+ * The requests a single-turn run makes, in order: connectivity, session title,
+ * one main turn, one fetch summarizer. One main turn, because the stream
+ * fixture the stub prints alongside has one assistant turn and the proof
+ * compares the two. The capture's second main turn is exercised in the
+ * request-proof unit tests instead.
+ */
+const POSTED = ['req-0001.json', 'req-0002.json', 'req-0003.json', 'req-0004.json'];
 
 export function readFixture(dir) {
   const bodies = {};
@@ -47,13 +53,16 @@ export function fixturePins(dir, productionPins) {
   const { bodies, packageText } = readFixture(dir);
   const main = bodies['req-0003.json'].body;
   const title = bodies['req-0002.json'].body;
-  const summarizer = bodies['req-0005.json'].body.messages[0].content[0].text;
+  const summarizer = bodies['req-0004.json'].body.messages[0].content[0].text;
   const trailer = title.messages[0].content[0].text.slice(`<session>\n${packageText}</session>\n`.length);
   const suffix = summarizer.slice(summarizer.lastIndexOf('STAND-IN'));
 
   return {
     ...productionPins,
+    // The three pattern fields travel as source strings; loadPins rebuilds them.
     billingHeaderPattern: productionPins.billingHeaderPattern.source,
+    accountReminder: productionPins.accountReminder.source,
+    environmentMessage: productionPins.environmentMessage.source,
     vendorPromptSha256: sha(main.system[2].text),
     vendorPromptLength: main.system[2].text.length,
     clientTools: {
@@ -83,25 +92,25 @@ export function buildRequests({ dir, packageText, workDir, model, mutate }) {
       body.model = model;
     }
     if (name === 'req-0003.json') {
-      const blocks = body.messages[0].content;
-      blocks[0].text = blocks[0].text.replace(
-        / - Primary working directory: [^\n]*\n/,
-        ` - Primary working directory: ${workDir}\n`,
-      );
-      blocks[1].text = blocks[1].text.replace(
-        /The exact model ID is [^\n.]+\./,
-        `The exact model ID is ${model}.`,
-      );
-      blocks[4].text = packageText;
+      // The user message is the account reminder and then the package; the
+      // working directory, model identity and date are a separate system-role
+      // message. That is the pinned seat's shape, and it is not the shape the
+      // Haiku feasibility probes had.
+      body.messages[0].content[1].text = packageText;
+      const environment = body.messages[1].content[0];
+      environment.text = environment.text
+        .replace(/ - Primary working directory: [^\n]*\n/, ` - Primary working directory: ${workDir}\n`)
+        .replace(/The exact model ID is [^\n.]+\./, `The exact model ID is ${model}.`);
       body.model = model;
       if (mutate === 'extra-system') {
         body.system.push({ type: 'text', text: 'Follow the house style in CLAUDE.md.' });
       }
       if (mutate === 'package-drift') {
-        blocks[4].text = `${packageText}\nAnd one instruction nobody declared.\n`;
+        body.messages[0].content[1].text = `${packageText}\nAnd one instruction nobody declared.\n`;
       }
+      if (mutate === 'wrong-effort') body.output_config = { effort: 'low' };
     }
-    if (name === 'req-0005.json') body.model = model;
+    if (name === 'req-0004.json') body.model = model;
 
     out.push(request);
   }

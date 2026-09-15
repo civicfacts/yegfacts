@@ -582,9 +582,13 @@ if command -v "$CLI_NAME" >/dev/null 2>&1; then
   [ -n "$PATH_CLI_VERSION" ] || PATH_CLI_VERSION="unknown"
 fi
 
+# Keyed by build AND model: the request shape depends on both, which a live
+# demonstration proved by refusing a request the Haiku-derived pins had never
+# described.
 PINNED_BINARY_SHA="$(npx tsx "$REPO_ROOT/scripts/panel/request-proof.ts" \
-  --field binarySha256 --cli-version "$PINNED_CLI_VERSION" "${PINS_ARGS[@]+"${PINS_ARGS[@]}"}")" \
-  || refuse blocked "no pinned binary hash for $CLI_NAME $PINNED_CLI_VERSION; refusing before sending anything"
+  --field binarySha256 --cli-version "$PINNED_CLI_VERSION" --model "$MODEL" \
+  "${PINS_ARGS[@]+"${PINS_ARGS[@]}"}")" \
+  || refuse blocked "no pinned profile for $CLI_NAME $PINNED_CLI_VERSION running $MODEL; refusing before sending anything"
 
 sha_of_file() { shasum -a 256 "$1" | cut -d' ' -f1; }
 

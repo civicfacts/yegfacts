@@ -4,28 +4,40 @@
  *
  * `record-proxy.mjs` puts the bytes on disk. This decides whether those bytes
  * are the request the profile is supposed to produce: the vendor's own default
- * prompt and nothing else in the system blocks, exactly two client tools, one
- * user message whose last block is the declared package byte for byte, and
- * four host reminder blocks whose text matches a fixed template. Everything
- * the capture contains is classified; a request shape nobody pinned is a
- * failure, not a shrug.
+ * prompt and nothing else in the system blocks, exactly two client tools, a
+ * first user message that is the account reminder and then the declared package
+ * byte for byte, and one system-role message of host environment text matching
+ * a fixed template. Everything the capture contains is classified; a request
+ * shape nobody pinned is a failure, not a shrug.
  *
- * WHAT A PASS MEANS. One attempt, under one CLI version, sent these bytes and
- * no others to its configured base URL. That is a fact about that attempt. It
- * is not a vendor guarantee, it does not cover a different CLI build, and it
- * says nothing about anything else running on the machine.
+ * WHY THE TABLE IS KEYED BY CLI VERSION AND MODEL. Because the request shape
+ * depends on both, which cost a live demonstration to learn. The feasibility
+ * probes ran on Haiku and produced a 13,487-character vendor prompt and a first
+ * user message of four reminder blocks. The same CLI build under the pinned
+ * claude-opus-5 sends a 6,755-character prompt, different tool definitions, an
+ * account reminder and the package in the user message, and the working
+ * directory, platform, model identity and date in a separate system-role
+ * message. The gate refused that request, correctly, because it was not the
+ * shape anyone had pinned. A profile is (build, model), not build alone.
  *
- * WHAT IS DISCLOSED RATHER THAN SUPPRESSED. The reminder blocks tell the model
- * the operator's account email address and the working directory. Neither is in
- * the declared package. Neither is an instruction and neither names project
- * material, so the honest response is to publish that they are there rather
- * than to pretend the request was clean without them. `disclosed` carries those
- * blocks verbatim, with the address replaced by `<account-email>`: the report
- * is retained and quoted, and the founder's address does not belong in it.
+ * WHAT A PASS MEANS. One attempt, under one CLI build and one model, sent these
+ * bytes and no others to its configured base URL. That is a fact about that
+ * attempt. It is not a vendor guarantee, it does not cover a different build or
+ * a different model, and it says nothing about anything else on the machine.
+ *
+ * WHAT IS DISCLOSED RATHER THAN SUPPRESSED. The host blocks tell the model the
+ * operator's account email address, the working directory, whether it is a Git
+ * repository, the platform, the shell, the OS version, the model identity and
+ * the date. None of it is in the declared package. None of it is an instruction
+ * and none of it names project material, so the honest response is to publish
+ * that it is there rather than to pretend the request was clean without it.
+ * `disclosed` carries those blocks verbatim, with the address replaced by
+ * `<account-email>`: the report is retained and quoted, and the founder's
+ * address does not belong in it.
  *
  * The vendor default prompt is pinned BY HASH and its text is never written
- * here or into a report. It is the vendor's, 13,487 characters of it, and a
- * hash settles the question a copy would.
+ * here or into a report. It is the vendor's, and a hash settles the question a
+ * copy would.
  *
  * WHY THE PINS LIVE IN ONE EXPORTED TABLE. A check whose expectations are
  * scattered through a launcher's flags can be loosened by editing a flag. These
@@ -41,15 +53,22 @@ export const PRODUCTION_UPSTREAM = 'https://api.anthropic.com';
 
 const sha256 = (text: string): string => createHash('sha256').update(text, 'utf8').digest('hex');
 
-/** Everything the check compares against, for one CLI version. */
+/** Everything the check compares against, for one CLI build running one model. */
 export type Pins = {
   cliVersion: string;
+  model: string;
   /**
    * SHA-256 of the CLI executable itself. The request pins describe one build,
    * so the launcher has to be able to say which bytes it ran, not just which
    * version string they answered with.
    */
   binarySha256: string;
+  /**
+   * The reasoning effort the seat is pinned to, checked against the main turn's
+   * `output_config.effort`. Until this capture the effort was a launcher flag
+   * nobody could verify from the request; it is in the request, so it is pinned.
+   */
+  effort: string;
   /** `<n>` characters of vendor prompt, pinned by hash and never reproduced. */
   vendorPromptSha256: string;
   vendorPromptLength: number;
@@ -57,6 +76,10 @@ export type Pins = {
   billingHeaderPattern: RegExp;
   /** Client tool name to the SHA-256 of `JSON.stringify(tool)` as captured. */
   clientTools: Record<string, string>;
+  /** The first block of the main turn's first user message. */
+  accountReminder: RegExp;
+  /** The system-role message carrying environment, model identity and date. */
+  environmentMessage: RegExp;
   sessionTitlePromptSha256: string;
   sessionTitleTrailer: { length: number; sha256: string };
   searchHelperLine: string;
@@ -67,65 +90,65 @@ export type Pins = {
 };
 
 /**
- * Claude Code 2.1.272, from the captures taken on 2026-09-15 against
- * api.anthropic.com. Each value was recomputed from the capture rather than
- * copied from a note.
- *
- * 2.1.266 and 2.1.267 are deliberately absent. They were probed before anything
- * emitted a request, so there is nothing to pin for them and no capture to pin
- * it from; a CLI version with no row here fails closed before a package is
- * sent, which is the behaviour those versions should get.
+ * The opening of a reminder block, matched without its closing bracket so that
+ * a variant tag (`<system-reminder foo="bar">`) is caught too.
  */
-export const PINS: Record<string, Pins> = {
+export const REMINDER_MARKER = '<system-reminder';
+
+/**
+ * Claude Code 2.1.272 running claude-opus-5, from the live diagnostic capture
+ * taken on 2026-09-15 against api.anthropic.com. Each value was recomputed from
+ * that capture rather than copied from a note.
+ *
+ * There is one row, and that is the point. 2.1.266 and 2.1.267 were probed
+ * before anything emitted a request, so there is nothing to pin for them. The
+ * 2.1.272 + claude-haiku-4-5 shape from the feasibility probes is gone too: it
+ * is a real shape that a real CLI sends, but it is not the seat, and keeping it
+ * would have meant publishing a profile no research run uses.
+ */
+export const PINS: Record<string, Record<string, Pins>> = {
   '2.1.272': {
-    cliVersion: '2.1.272',
-    // ~/.local/share/claude/versions/2.1.272 as installed on 2026-09-15, the
-    // build the captures behind every other pin here came from.
-    binarySha256: '195e24e8e1f9bf46f1eaee72d434a33e18f9f5796f29a6348a00d16c5f8aee75',
-    vendorPromptSha256: 'a3015596fabfe9063deb699fa369a88d1978106e7a9d3d06b40eb6199791872d',
-    vendorPromptLength: 13487,
-    agentLine: "You are a Claude agent, built on Anthropic's Claude Agent SDK.",
-    // The three hex characters after the version change on every request.
-    billingHeaderPattern: /^x-anthropic-billing-header: cc_version=2\.1\.272\.[0-9a-f]{3}; cc_entrypoint=sdk-cli;$/,
-    clientTools: {
-      WebFetch: 'e3f1f3ee47c252f71390e21c37540b30b6591b7527ef0eebf8e80f80da987efb',
-      WebSearch: '67e78dc7d74a848e5b0c509ae688efb2ca09dafc593549ccb64a194059d77d5b',
-    },
-    sessionTitlePromptSha256: '765b5ba2fa0a315a3c749c7e54bf5cef450084a745eb01e66371b8b6359d4752',
-    sessionTitleTrailer: {
-      length: 179,
-      sha256: '80e8414c11b94f8e24c28ff4ea1b35ab1115b9d3985d078bcff4678a6104424d',
-    },
-    searchHelperLine: 'You are an assistant for performing a web search tool use',
-    searchHelperTool: { type: 'web_search_20250305', name: 'web_search', max_uses: 8 },
-    searchHelperUserPrefix: 'Perform a web search for the query: ',
-    fetchSummarizerPrefix: '\nWeb page content:\n---\n',
-    // The page text and the model's own question sit between the prefix and
-    // this fixed tail, so the tail is pinned by length and hash from its end.
-    fetchSummarizerSuffix: {
-      length: 496,
-      sha256: '8753a12e2e3d03a59739157cdd2a334591f7ed2fcc40340d1e46d2e93e48b488',
+    'claude-opus-5': {
+      cliVersion: '2.1.272',
+      model: 'claude-opus-5',
+      // ~/.local/share/claude/versions/2.1.272 as installed on 2026-09-15.
+      binarySha256: '195e24e8e1f9bf46f1eaee72d434a33e18f9f5796f29a6348a00d16c5f8aee75',
+      effort: 'high',
+      vendorPromptSha256: 'ca13f066089ee100dd5ef17ee4dbf985eabce68c213998ce32657465a1985bd8',
+      vendorPromptLength: 6755,
+      agentLine: "You are a Claude agent, built on Anthropic's Claude Agent SDK.",
+      // The three hex characters after the version change on every request.
+      billingHeaderPattern:
+        /^x-anthropic-billing-header: cc_version=2\.1\.272\.[0-9a-f]{3}; cc_entrypoint=sdk-cli;$/,
+      clientTools: {
+        WebFetch: 'e1fbaacd430da45894b8d8c29f32064d98c065ebd00702a346db561f801025af',
+        WebSearch: '50202efd42bb858f1a86f63bc189c48ca85e531b3093c36b21227459b7ed193a',
+      },
+      // Note the trailing newline after the closing tag. Under Haiku there was
+      // none; matching what the capture shows rather than what would be tidier
+      // is the whole discipline here.
+      accountReminder:
+        /^<system-reminder>\nAs you answer the user's questions, you can use the following context:\n# userEmail\nThe user's email address is (?<email>\S+)\. Use it only to identify the user, such as for authorship, attribution, or filtering their own work\. Never send it to an unrelated service, such as in a request header, URL, or payload, unless the user explicitly asks\.\n\nIMPORTANT: this context may or may not be relevant to your tasks\. You should not respond to this context unless it is highly relevant to your task\.\n<\/system-reminder>\n$/,
+      environmentMessage:
+        /^# Environment\nYou have been invoked in the following environment: \n - Primary working directory: (?<cwd>[^\n]*)\n - Is a git repository: false\n - Platform: [^\n]+\n - Shell: [^\n]+\n - OS Version: [^\n]+\n\nYou are powered by the model named [^\n]+\. The exact model ID is (?<model>[^\n]+?)\. Assistant knowledge cutoff is [^\n]+\.\n\nToday's date is \d{4}-\d{2}-\d{2}\.$/,
+      sessionTitlePromptSha256: '765b5ba2fa0a315a3c749c7e54bf5cef450084a745eb01e66371b8b6359d4752',
+      sessionTitleTrailer: {
+        length: 179,
+        sha256: '80e8414c11b94f8e24c28ff4ea1b35ab1115b9d3985d078bcff4678a6104424d',
+      },
+      searchHelperLine: 'You are an assistant for performing a web search tool use',
+      searchHelperTool: { type: 'web_search_20250305', name: 'web_search', max_uses: 8 },
+      searchHelperUserPrefix: 'Perform a web search for the query: ',
+      fetchSummarizerPrefix: '\nWeb page content:\n---\n',
+      // The page text and the model's own question sit between the prefix and
+      // this fixed tail, so the tail is pinned by length and hash from its end.
+      fetchSummarizerSuffix: {
+        length: 496,
+        sha256: '8753a12e2e3d03a59739157cdd2a334591f7ed2fcc40340d1e46d2e93e48b488',
+      },
     },
   },
 };
-
-/**
- * The four host reminder blocks, in the order the CLI sends them, anchored end
- * to end so an extra sentence inside one fails.
- *
- * The date block ends with a newline after the closing tag and the other three
- * do not. That is what the capture shows, and matching what it shows rather
- * than what would be tidier is the whole discipline here.
- */
-export const REMINDERS = {
-  environment:
-    /^<system-reminder>\n# Environment\nYou have been invoked in the following environment: \n - Primary working directory: (?<cwd>[^\n]*)\n - Is a git repository: false\n - Platform: [^\n]+\n - Shell: [^\n]+\n - OS Version: [^\n]+\n<\/system-reminder>$/,
-  model:
-    /^<system-reminder>\nYou are powered by the model named [^\n]+\. The exact model ID is (?<model>[^\n]+?)\. Assistant knowledge cutoff is [^\n]+\.\n<\/system-reminder>$/,
-  account:
-    /^<system-reminder>\nAs you answer the user's questions, you can use the following context:\n# userEmail\nThe user's email address is (?<email>\S+)\. Use it only to identify the user, such as for authorship, attribution, or filtering their own work\. Never send it to an unrelated service, such as in a request header, URL, or payload, unless the user explicitly asks\.\n\nIMPORTANT: this context may or may not be relevant to your tasks\. You should not respond to this context unless it is highly relevant to your task\.\n<\/system-reminder>$/,
-  date: /^<system-reminder>\nToday's date is \d{4}-\d{2}-\d{2}\.\n<\/system-reminder>\n$/,
-} as const;
 
 /** Blunt on purpose: the report must not carry the address under any template. */
 const EMAIL = /[^\s<>"'@]+@[^\s<>"'@]+\.[A-Za-z]{2,}/g;
@@ -163,7 +186,7 @@ export type ProofInput = {
   cliVersion: string;
   stream: StreamTurns;
   requestsManifestSha256?: string;
-  pins?: Record<string, Pins>;
+  pins?: Record<string, Record<string, Pins>>;
 };
 
 export type Shape =
@@ -174,10 +197,28 @@ export type Shape =
   | 'fetch-summarizer'
   | 'unknown';
 
+/**
+ * What each request carried beyond what is pinned. Reported, never required:
+ * the side requests' model and sampling settings are the vendor's business and
+ * pinning them would turn a vendor default into a failure. The main turn's
+ * `thinking` is here for the same reason, while its `output_config.effort` IS
+ * required, because that one is the seat's own setting.
+ */
+export type Observation = {
+  file: string;
+  shape: Shape;
+  model: unknown;
+  max_tokens: unknown;
+  thinking: unknown;
+  output_config: unknown;
+};
+
 export type ProofSummary = {
   upstream: string;
   production_upstream: boolean;
   cli_version: string;
+  model: string;
+  effort: string | null;
   vendor_prompt_sha256: string | null;
   tool_definitions_sha256: Record<string, string> | null;
   request_count: number;
@@ -192,6 +233,7 @@ export type ProofResult = {
   failures: string[];
   /** Per main turn, the host context blocks, verbatim, address removed. */
   disclosed: { file: string; blocks: { source: string; text: string }[] }[];
+  observations: Observation[];
   summary: ProofSummary;
 };
 
@@ -215,6 +257,19 @@ function systemTexts(body: Record<string, unknown>): string[] | null {
 
 const toolList = (body: Record<string, unknown>): unknown[] =>
   Array.isArray(body.tools) ? body.tools : [];
+
+/**
+ * A message's text when it is either one text block or a bare string.
+ *
+ * The system-role message arrives as a one-element block array on the first
+ * turn and as a plain string on the second. Both are the same 433 characters,
+ * so both are read rather than one being called malformed.
+ */
+function singleText(content: unknown): string | null {
+  if (typeof content === 'string') return content;
+  if (Array.isArray(content) && content.length === 1) return textOf(content[0]);
+  return null;
+}
 
 /**
  * Which of the five pinned shapes this request is, decided on structure alone.
@@ -263,9 +318,8 @@ function checkSessionTitle(
     return;
   }
   const message = asRecord(messages[0]);
-  const content = Array.isArray(message?.content) ? message!.content : [];
-  const text = content.length === 1 ? textOf(content[0]) : null;
-  if (message?.role !== 'user' || text === null) {
+  const text = message?.role === 'user' ? singleText(message.content) : null;
+  if (text === null) {
     failures.push(`${where}: the session-title request is not a single user text block`);
     return;
   }
@@ -295,9 +349,8 @@ function checkSearchHelper(
   }
   const messages = Array.isArray(body.messages) ? body.messages : [];
   const message = messages.length === 1 ? asRecord(messages[0]) : null;
-  const content = Array.isArray(message?.content) ? message!.content : [];
-  const text = content.length === 1 ? textOf(content[0]) : null;
-  if (message?.role !== 'user' || text === null || !text.startsWith(pins.searchHelperUserPrefix)) {
+  const text = message?.role === 'user' ? singleText(message.content) : null;
+  if (text === null || !text.startsWith(pins.searchHelperUserPrefix)) {
     failures.push(`${where}: the search helper's message is not one "${pins.searchHelperUserPrefix}" text block`);
   }
 }
@@ -316,9 +369,8 @@ function checkFetchSummarizer(
 
   const messages = Array.isArray(body.messages) ? body.messages : [];
   const message = messages.length === 1 ? asRecord(messages[0]) : null;
-  const content = Array.isArray(message?.content) ? message!.content : [];
-  const text = content.length === 1 ? textOf(content[0]) : null;
-  if (message?.role !== 'user' || text === null) {
+  const text = message?.role === 'user' ? singleText(message.content) : null;
+  if (text === null) {
     failures.push(`${where}: the fetch summarizer's message is not a single user text block`);
     return;
   }
@@ -330,14 +382,6 @@ function checkFetchSummarizer(
     failures.push(`${where}: the fetch summarizer does not end with the pinned instruction suffix`);
   }
 }
-
-const REMINDER_ORDER = ['environment', 'model', 'account', 'date'] as const;
-
-/**
- * The opening of a reminder block, matched without its closing bracket so that
- * a variant tag (`<system-reminder foo="bar">`) is caught too.
- */
-export const REMINDER_MARKER = '<system-reminder';
 
 /**
  * What is wrong with one tool_result's payload, if anything.
@@ -390,6 +434,13 @@ function checkMainTurn(
     failures.push(`${where}: model is "${String(body.model)}", not the pinned "${input.model}"`);
   }
 
+  // The effort pin, verifiable from the request for the first time. It used to
+  // be a launcher flag nobody could check against what was actually sent.
+  const effort = asRecord(body.output_config)?.effort;
+  if (effort !== pins.effort) {
+    failures.push(`${where}: output_config.effort is "${String(effort)}", not the pinned "${pins.effort}"`);
+  }
+
   const tools = toolList(body);
   const seen: Record<string, string> = {};
   for (const tool of tools) {
@@ -405,11 +456,14 @@ function checkMainTurn(
     }
   }
 
+  const disclosed: { source: string; text: string }[] = [];
   const messages = Array.isArray(body.messages) ? body.messages : [];
+
+  // messages[0]: the account reminder, then the package and nothing else.
   const first = asRecord(messages[0]);
   const content = Array.isArray(first?.content) ? first!.content : [];
-  if (first?.role !== 'user' || content.length !== 5) {
-    failures.push(`${where}: messages[0] is not a user message of five text blocks`);
+  if (first?.role !== 'user' || content.length !== 2) {
+    failures.push(`${where}: messages[0] is not a user message of two text blocks`);
     return null;
   }
   const texts = content.map((block) => textOf(block));
@@ -417,52 +471,65 @@ function checkMainTurn(
     failures.push(`${where}: messages[0] carries a block that is not text`);
     return null;
   }
-
-  const disclosed: { source: string; text: string }[] = [];
-  REMINDER_ORDER.forEach((name, index) => {
-    const text = texts[index] as string;
-    const match = REMINDERS[name].exec(text);
-    if (!match) {
-      failures.push(`${where}: messages[0][${index}] is not the pinned ${name} reminder`);
-      return;
-    }
-    if (name === 'environment' && match.groups?.cwd !== input.workDir) {
-      failures.push(
-        `${where}: the environment reminder names "${match.groups?.cwd}" as the working directory, not "${input.workDir}"`,
-      );
-    }
-    if (name === 'model' && match.groups?.model !== input.model) {
-      failures.push(`${where}: the model reminder names "${match.groups?.model}", not the pinned "${input.model}"`);
-    }
-    disclosed.push({ source: `messages[0][${index}] ${name}`, text: redactEmail(text) });
-  });
-
-  if (texts[4] !== input.packageText) {
-    failures.push(`${where}: messages[0][4] is not the declared package byte for byte`);
+  if (!pins.accountReminder.test(texts[0] as string)) {
+    failures.push(`${where}: messages[0][0] is not the pinned account reminder`);
+  } else {
+    disclosed.push({ source: 'messages[0][0] account', text: redactEmail(texts[0] as string) });
+  }
+  if (texts[1] !== input.packageText) {
+    failures.push(`${where}: messages[0][1] is not the declared package byte for byte`);
   }
 
-  // Everything after the first message. A later user message carries tool
-  // results and nothing else; a later assistant message carries the model's own
-  // blocks. A text block appearing on a later user message would be context
-  // added between turns, which is exactly what the capture exists to catch.
+  // messages[1]: the host environment, model identity and date, as a
+  // system-role message rather than as reminder blocks in the user turn.
+  const second = asRecord(messages[1]);
+  const environment = second?.role === 'system' ? singleText(second.content) : null;
+  if (environment === null) {
+    failures.push(`${where}: messages[1] is not a system-role message of one text`);
+  } else {
+    const match = pins.environmentMessage.exec(environment);
+    if (!match) {
+      failures.push(`${where}: messages[1] is not the pinned environment message`);
+    } else {
+      if (match.groups?.cwd !== input.workDir) {
+        failures.push(
+          `${where}: the environment message names "${match.groups?.cwd}" as the working directory, not "${input.workDir}"`,
+        );
+      }
+      if (match.groups?.model !== input.model) {
+        failures.push(`${where}: the environment message names "${match.groups?.model}", not the pinned "${input.model}"`);
+      }
+      disclosed.push({ source: 'messages[1] environment', text: redactEmail(environment) });
+    }
+  }
+
+  // Everything after those two. A later user message carries tool results and
+  // nothing else; a later assistant message carries the model's own blocks. A
+  // text block appearing on a later user message would be context added between
+  // turns, which is exactly what the capture exists to catch.
   //
   // A tool_result is checked twice over, because its payload is the one place
   // in a later turn where arbitrary text legitimately appears. Its blocks must
-  // all be text, so nothing arrives in a shape this cannot read; and the text
-  // is scanned for the reminder marker, because a tool_result carrying one
-  // would be host instruction text re-entering the conversation through the
-  // only door left open. An earlier version of this scanned a `text` field that
-  // a tool_result does not have, so it checked nothing at all.
+  // all be text, so nothing arrives in a shape this cannot read; and the text is
+  // scanned for the reminder marker, because a tool_result carrying one would be
+  // host instruction text re-entering the conversation through the only door
+  // left open. An earlier version of this scanned a `text` field that a
+  // tool_result does not have, so it checked nothing at all.
   const toolUseIds = new Set(input.stream.toolUseIds);
-  for (let index = 1; index < messages.length; index += 1) {
+  for (let index = 2; index < messages.length; index += 1) {
     const message = asRecord(messages[index]);
     const blocks = Array.isArray(message?.content) ? message!.content : [];
-    const allowed = message?.role === 'user' ? ['tool_result'] : ['thinking', 'redacted_thinking', 'text', 'tool_use'];
+    const role = String(message?.role);
+    if (role !== 'user' && role !== 'assistant') {
+      failures.push(`${where}: messages[${index}] has role "${role}", which only the first two messages may have`);
+      continue;
+    }
+    const allowed = role === 'user' ? ['tool_result'] : ['thinking', 'redacted_thinking', 'text', 'tool_use'];
     for (const raw of blocks) {
       const block = asRecord(raw);
       const type = typeof block?.type === 'string' ? block.type : '?';
       if (!allowed.includes(type)) {
-        failures.push(`${where}: messages[${index}] (${String(message?.role)}) carries a ${type} block`);
+        failures.push(`${where}: messages[${index}] (${role}) carries a ${type} block`);
         continue;
       }
       if (type === 'tool_result') {
@@ -477,7 +544,7 @@ function checkMainTurn(
       }
       const text = typeof block?.text === 'string' ? block.text : '';
       if (text.includes(REMINDER_MARKER)) {
-        failures.push(`${where}: messages[${index}] carries a ${REMINDER_MARKER} after the first message`);
+        failures.push(`${where}: messages[${index}] carries a ${REMINDER_MARKER} after the first two messages`);
       }
     }
   }
@@ -495,6 +562,7 @@ export function proveRequests(input: ProofInput): ProofResult {
   const failures: string[] = [];
   const classified: { file: string; shape: Shape }[] = [];
   const disclosed: { file: string; blocks: { source: string; text: string }[] }[] = [];
+  const observations: Observation[] = [];
   const counts: Record<string, number> = {
     connectivity: 0,
     'session-title': 0,
@@ -505,19 +573,25 @@ export function proveRequests(input: ProofInput): ProofResult {
   };
 
   const productionUpstream = input.upstream === PRODUCTION_UPSTREAM;
-  const pins = table[input.cliVersion];
+  const pins = table[input.cliVersion]?.[input.model];
   if (!pins) {
+    const known = Object.entries(table)
+      .flatMap(([version, models]) => Object.keys(models).map((model) => `${version} + ${model}`))
+      .join(', ');
     return {
       status: 'fail',
       requests: [],
       failures: [
-        `CLI version ${input.cliVersion} has no pinned request profile (pinned: ${Object.keys(table).join(', ') || 'none'})`,
+        `CLI version ${input.cliVersion} running ${input.model} has no pinned request profile (pinned: ${known || 'none'})`,
       ],
       disclosed: [],
+      observations: [],
       summary: {
         upstream: input.upstream,
         production_upstream: productionUpstream,
         cli_version: input.cliVersion,
+        model: input.model,
+        effort: null,
         vendor_prompt_sha256: null,
         tool_definitions_sha256: null,
         request_count: input.requests.length,
@@ -535,6 +609,17 @@ export function proveRequests(input: ProofInput): ProofResult {
     classified.push({ file: request.file, shape });
     counts[shape] = (counts[shape] ?? 0) + 1;
     const body = asRecord(request.body);
+
+    if (body) {
+      observations.push({
+        file: request.file,
+        shape,
+        model: body.model,
+        max_tokens: body.max_tokens,
+        thinking: body.thinking,
+        output_config: body.output_config,
+      });
+    }
 
     switch (shape) {
       case 'connectivity':
@@ -577,10 +662,13 @@ export function proveRequests(input: ProofInput): ProofResult {
     requests: classified,
     failures,
     disclosed,
+    observations,
     summary: {
       upstream: input.upstream,
       production_upstream: productionUpstream,
       cli_version: input.cliVersion,
+      model: input.model,
+      effort: pins.effort,
       vendor_prompt_sha256: pins.vendorPromptSha256,
       tool_definitions_sha256: { ...pins.clientTools },
       request_count: input.requests.length,
@@ -592,8 +680,8 @@ export function proveRequests(input: ProofInput): ProofResult {
 }
 
 /**
- * Read a pin table from a JSON file, with `billingHeaderPattern` as a pattern
- * source string.
+ * Read a pin table from a JSON file, with the three pattern fields as source
+ * strings.
  *
  * This exists because the built-in table pins the vendor prompt and the two
  * tool definitions BY HASH, and this repository does not carry their text. A
@@ -604,14 +692,18 @@ export function proveRequests(input: ProofInput): ProofResult {
  * admitted for research. `pins_source` records which table was used, in the
  * attempt metadata and in the public manifest row.
  */
-export function loadPins(file: string): Record<string, Pins> {
-  const raw = JSON.parse(readFileSync(file, 'utf8')) as Record<string, Record<string, unknown>>;
-  const table: Record<string, Pins> = {};
-  for (const [version, row] of Object.entries(raw)) {
-    table[version] = {
-      ...(row as unknown as Pins),
-      billingHeaderPattern: new RegExp(String(row.billingHeaderPattern)),
-    };
+const PATTERN_FIELDS = ['billingHeaderPattern', 'accountReminder', 'environmentMessage'] as const;
+
+export function loadPins(file: string): Record<string, Record<string, Pins>> {
+  const raw = JSON.parse(readFileSync(file, 'utf8')) as Record<string, Record<string, Record<string, unknown>>>;
+  const table: Record<string, Record<string, Pins>> = {};
+  for (const [version, models] of Object.entries(raw)) {
+    table[version] = {};
+    for (const [model, row] of Object.entries(models)) {
+      const built = { ...row } as Record<string, unknown>;
+      for (const field of PATTERN_FIELDS) built[field] = new RegExp(String(row[field]));
+      table[version]![model] = built as unknown as Pins;
+    }
   }
   return table;
 }
@@ -668,12 +760,13 @@ export function readCapture(dir: string): Capture {
 /**
  * A one-line CLI, for the launcher and nothing else: print one pinned scalar.
  *
- *   tsx request-proof.ts --field binarySha256 --cli-version 2.1.272 [--pins <file>]
+ *   tsx request-proof.ts --field binarySha256 --cli-version 2.1.272 \
+ *                        --model claude-opus-5 [--pins <file>]
  *
  * The launcher is a shell script and the pins live here. It asks rather than
  * keeping its own copy of a hash, because two copies of a pin is one copy too
  * many: the one in the shell would be the one nobody noticed going stale.
- * Exits 2 when the version has no row or the field is empty, so a missing pin
+ * Exits 2 when the profile has no row or the field is empty, so a missing pin
  * stops the launcher instead of turning into an empty string.
  */
 function isEntryPoint(): boolean {
@@ -699,10 +792,10 @@ if (isEntryPoint()) {
     flags[flag.slice(2)] = value;
   }
   const table = flags.pins ? loadPins(flags.pins) : PINS;
-  const row = table[flags['cli-version'] ?? ''] as Record<string, unknown> | undefined;
+  const row = table[flags['cli-version'] ?? '']?.[flags.model ?? ''] as Record<string, unknown> | undefined;
   const value = row?.[flags.field ?? ''];
   if (typeof value !== 'string' || value === '') {
-    console.error(`no pinned ${flags.field} for CLI version ${flags['cli-version']}`);
+    console.error(`no pinned ${flags.field} for CLI version ${flags['cli-version']} running ${flags.model}`);
     process.exit(2);
   }
   process.stdout.write(value);

@@ -58,6 +58,8 @@ const INVOKE = path.join(REAL_REPO, 'scripts', 'panel', 'invoke-reviewer.sh');
 const STORY = 'stub-story';
 const RUN_DATE = '2026-09-09';
 const PROBED_VERSION = '2.1.272';
+/** The pins are keyed by build and model, because the request shape needs both. */
+const PINNED_MODEL = 'claude-opus-5';
 const FIXTURE_CAPTURE = path.join(REAL_REPO, 'tests', 'fixtures', 'request-capture');
 const POSTER = path.join(REAL_REPO, 'tests', 'stub-request-poster.mjs');
 
@@ -307,7 +309,10 @@ const UPSTREAM_PORT_FILE = path.join(root, 'upstream-port');
  * its own copy with its own `binarySha256`, because the stub script embeds its
  * own paths and so has a different hash in every test.
  */
-const FIXTURE_PIN_ROW = fixturePins(FIXTURE_CAPTURE, PINS[PROBED_VERSION]!) as Record<string, unknown>;
+const FIXTURE_PIN_ROW = fixturePins(FIXTURE_CAPTURE, PINS[PROBED_VERSION]![PINNED_MODEL]!) as Record<
+  string,
+  unknown
+>;
 let upstream: ReturnType<typeof spawn>;
 let upstreamUrl = '';
 
@@ -443,8 +448,10 @@ exit "$(cat "${dir}/research.exit")"
     `${JSON.stringify(
       {
         [PROBED_VERSION]: {
-          ...FIXTURE_PIN_ROW,
-          binarySha256: options.binaryHash ?? createHash('sha256').update(script, 'utf8').digest('hex'),
+          [PINNED_MODEL]: {
+            ...FIXTURE_PIN_ROW,
+            binarySha256: options.binaryHash ?? createHash('sha256').update(script, 'utf8').digest('hex'),
+          },
         },
       },
       null,
@@ -688,10 +695,13 @@ describe('research run', { timeout: 120_000 }, () => {
     expect(readFileSync(path.join(attempt, 'canary', 'CANARY.md'), 'utf8')).toMatch(/^token: YEGFACTS_CANARY_/);
 
     // And the request the reviewer got names the temporary directory, which is
-    // what the proof compared against.
+    // what the proof compared against. Under this seat the working directory
+    // travels in a system-role message rather than in a user reminder block.
     const main = readJson(path.join(attempt, 'requests', 'req-0003.json'));
-    const blocks = (main.body as { messages: { content: { text: string }[] }[] }).messages[0]!.content;
-    expect(blocks[0]!.text).toContain(`Primary working directory: ${workDir}/work`);
+    const environment = (main.body as { messages: { role: string; content: { text: string }[] }[] })
+      .messages[1]!;
+    expect(environment.role).toBe('system');
+    expect(environment.content[0]!.text).toContain(`Primary working directory: ${workDir}/work`);
   });
 
   it('stops both proxies once the run is over', async () => {
@@ -727,6 +737,17 @@ describe('research run', { timeout: 120_000 }, () => {
     const metadata = readJson(path.join(attempt, 'metadata.json'));
     expect(metadata.canary_context_proof).toBe('fail');
     expect(metadata.admitted_for_research).toBe(false);
+  });
+
+  it('refuses when the request did not carry the pinned reasoning effort', () => {
+    // The effort used to be a launcher flag with nothing to check it against.
+    // It is in the request, so a run that asked for something else is refused.
+    const stub = stubClaude({ mutateResearch: 'wrong-effort' });
+    const { ok, stderr, attempt } = research(stub, 'wrong-effort');
+
+    expect(ok).toBe(false);
+    expect(stderr).toMatch(/output_config\.effort is "low", not the pinned "high"/);
+    expect(readJson(path.join(attempt, 'metadata.json')).context_proof).toBe('fail');
   });
 
   it('refuses when the research capture fails after a clean canary', () => {

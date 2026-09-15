@@ -136,10 +136,13 @@ describe('research admission', () => {
     requests: [],
     failures: [],
     disclosed: [],
+    observations: [],
     summary: {
       upstream: 'https://api.anthropic.com',
       production_upstream: true,
       cli_version: PROBED,
+      model: 'claude-opus-5',
+      effort: 'high',
       vendor_prompt_sha256: 'a'.repeat(64),
       tool_definitions_sha256: { WebFetch: 'b'.repeat(64), WebSearch: 'c'.repeat(64) },
       request_count: 3,
