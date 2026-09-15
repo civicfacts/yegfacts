@@ -201,21 +201,83 @@ describe('research admission', () => {
 });
 
 describe('assistant turns', () => {
-  it('counts runs of consecutive assistant events, not the events', () => {
+  const block = (content: Record<string, unknown>, id?: string) =>
+    JSON.stringify({
+      type: 'assistant',
+      message: { role: 'assistant', ...(id ? { id } : {}), content: [content] },
+    });
+  const result = (id: string, content = 'ok') =>
+    JSON.stringify({
+      type: 'user',
+      message: { role: 'user', content: [{ type: 'tool_result', tool_use_id: id, content }] },
+    });
+  const use = (id: string, messageId?: string) =>
+    block({ type: 'tool_use', id, name: 'WebFetch', input: { url: 'https://example.com/' } }, messageId);
+
+  it('counts runs of consecutive assistant events when the stream carries no message ids', () => {
     // The CLI emits one assistant event per content block, so a turn that
-    // thought and then called two tools is three events and one turn. The
-    // request capture has to agree with the turn count, not the block count.
-    const thinking = JSON.stringify({
-      type: 'assistant',
-      message: { role: 'assistant', content: [{ type: 'thinking', thinking: 'weighing it up' }] },
-    });
-    const answer = JSON.stringify({
-      type: 'assistant',
-      message: { role: 'assistant', content: [{ type: 'text', text: 'done' }] },
-    });
-    const twoTurns = [init(), thinking, fetchUse, fetchResult('The h1 is "Example Domain"'), answer, done()].join('\n');
+    // thought and then called a tool is two events and one turn. The request
+    // capture has to agree with the turn count, not the block count.
+    const twoTurns = [
+      init(),
+      block({ type: 'thinking', thinking: 'weighing it up' }),
+      fetchUse,
+      fetchResult('The h1 is "Example Domain"'),
+      block({ type: 'text', text: 'done' }),
+      done(),
+    ].join('\n');
 
     expect(readStream(twoTurns).assistant_turns).toBe(2);
     expect(readStream(cleanStream).assistant_turns).toBe(1);
+  });
+
+  it('steps over a rate-limit event and a system event inside a turn', () => {
+    const rateLimit = JSON.stringify({ type: 'rate_limit_event', status: 'allowed' });
+    const noise = JSON.stringify({ type: 'system', subtype: 'thinking_tokens' });
+    const oneTurn = [
+      init(),
+      use('t1'),
+      rateLimit,
+      noise,
+      use('t2'),
+      result('t1'),
+      result('t2'),
+      block({ type: 'text', text: 'done' }),
+      done(),
+    ].join('\n');
+
+    // Two turns: the tool calls, then the answer. Not three, and not five.
+    expect(readStream(oneTurn).assistant_turns).toBe(2);
+  });
+
+  /**
+   * The case a live research run found. One tool's result arrived before the
+   * model's last tool_use block of the SAME turn was emitted, so grouping runs
+   * of assistant events split one turn in two: 8 turns against 7 main-turn
+   * requests. The message id is the API's own record of where a turn ends, and
+   * it does not care what order the blocks reached the stream in.
+   */
+  it('counts interleaved tool results as one turn, by message id', () => {
+    const interleaved = [
+      init(),
+      use('t1', 'msg_01'),
+      use('t2', 'msg_01'),
+      result('t1'),
+      // The third tool_use of the same API turn, after a result already came back.
+      use('t3', 'msg_01'),
+      result('t2'),
+      result('t3'),
+      block({ type: 'text', text: 'done' }, 'msg_02'),
+      done(),
+    ].join('\n');
+
+    expect(readStream(interleaved).assistant_turns).toBe(2);
+  });
+
+  it('falls back to run grouping when only some events carry an id', () => {
+    // Neither count can be trusted then, so the one that does not silently
+    // invent turns wins and any disagreement surfaces as a turn-count failure.
+    const mixed = [init(), use('t1', 'msg_01'), use('t2'), result('t1'), result('t2'), done()].join('\n');
+    expect(readStream(mixed).assistant_turns).toBe(1);
   });
 });

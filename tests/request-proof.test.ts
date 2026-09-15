@@ -512,8 +512,9 @@ describe('what fails', () => {
  * rather than for being wrong.
  */
 describe('the search helper, unobserved under this seat', () => {
-  const searchHelper = (over: Record<string, unknown> = {}): CapturedRequest => ({
-    file: 'req-0006.json',
+  const HELPER = 'req-0006.json';
+  const searchHelper = (tool: Record<string, unknown> = { max_uses: 8 }): CapturedRequest => ({
+    file: HELPER,
     method: 'POST',
     url: '/v1/messages?beta=true',
     headers: {},
@@ -527,39 +528,74 @@ describe('the search helper, unobserved under this seat', () => {
         { type: 'text', text: PINS[VERSION]![MODEL]!.agentLine },
         { type: 'text', text: PINS[VERSION]![MODEL]!.searchHelperLine },
       ],
-      tools: [PINS[VERSION]![MODEL]!.searchHelperTool],
+      tools: [{ type: 'web_search_20250305', name: 'web_search', ...tool }],
       messages: [
         {
           role: 'user',
           content: [{ type: 'text', text: 'Perform a web search for the query: City of Edmonton open data portal' }],
         },
       ],
-      ...over,
     },
   });
 
+  const withHelper = (request: CapturedRequest) =>
+    proveRequests(input({ requests: [...clone(capture.requests), request] }));
+
   it('classifies and passes whatever model and output_config it carries', () => {
-    const result = proveRequests(input({ requests: [...clone(capture.requests), searchHelper()] }));
+    const result = withHelper(searchHelper());
     expect(result.failures).toEqual([]);
-    expect(result.requests.find((r) => r.file === 'req-0006.json')!.shape).toBe('search-helper');
+    expect(result.requests.find((r) => r.file === HELPER)!.shape).toBe('search-helper');
     // Reported, not required.
-    const seen = result.observations.find((o) => o.file === 'req-0006.json')!;
+    const seen = result.observations.find((o) => o.file === HELPER)!;
     expect(seen.model).toBe('claude-some-future-model');
     expect(seen.output_config).toEqual({ effort: 'medium', format: { type: 'text' } });
   });
 
-  it('fails when it is handed more than its own server tool', () => {
+  /**
+   * A live research run failed here. The model's own WebSearch input travels
+   * into the server tool definition, so a domain-scoped search carries
+   * `allowed_domains`. Pinning the exact JSON refused a real run for doing
+   * something ordinary; the type and the name are pinned and the search scope
+   * is recorded.
+   */
+  it('permits the search scope the model asked for, and records it', () => {
+    const domains = ['www12.statcan.gc.ca', 'statcan.gc.ca'];
+    const result = withHelper(searchHelper({ allowed_domains: domains, max_uses: 8 }));
+    expect(result.failures).toEqual([]);
+    expect(result.observations.find((o) => o.file === HELPER)!.search_tool).toEqual({
+      type: 'web_search_20250305',
+      name: 'web_search',
+      allowed_domains: domains,
+      max_uses: 8,
+    });
+  });
+
+  it('permits blocked_domains and a tool with no options at all', () => {
+    expect(withHelper(searchHelper({ blocked_domains: ['example.com'] })).failures).toEqual([]);
+    expect(withHelper(searchHelper({})).failures).toEqual([]);
+  });
+
+  it('fails on a key nobody pinned', () => {
+    const result = withHelper(searchHelper({ max_uses: 8, cache_control: { type: 'ephemeral' } }));
+    expect(result.failures.join()).toMatch(/tool carries unpinned key\(s\): cache_control/);
+  });
+
+  it('fails on a tool of another type or name', () => {
     const request = searchHelper();
-    (request.body as Record<string, any>).tools.push({ name: 'WebFetch' });
-    const result = proveRequests(input({ requests: [...clone(capture.requests), request] }));
-    expect(result.failures.join()).toMatch(/search helper's tools are not exactly the pinned server tool/);
+    (request.body as Record<string, any>).tools = [{ type: 'code_execution_20250522', name: 'bash' }];
+    expect(withHelper(request).failures.join()).toMatch(/not the pinned server tool/);
+  });
+
+  it('fails when it is handed a second tool', () => {
+    const request = searchHelper();
+    (request.body as Record<string, any>).tools.push({ type: 'web_search_20250305', name: 'web_search' });
+    expect(withHelper(request).failures.join()).toMatch(/carried 2 tools, not 1/);
   });
 
   it('fails when its user text is not the pinned query prefix', () => {
     const request = searchHelper();
     (request.body as Record<string, any>).messages[0].content[0].text = 'Do something else entirely.';
-    const result = proveRequests(input({ requests: [...clone(capture.requests), request] }));
-    expect(result.failures.join()).toMatch(/is not one "Perform a web search for the query: " text block/);
+    expect(withHelper(request).failures.join()).toMatch(/is not one "Perform a web search for the query: " text block/);
   });
 });
 

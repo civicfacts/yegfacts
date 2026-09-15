@@ -85,10 +85,24 @@ export type StreamFacts = {
   agents: string[] | null;
   tool_calls: ToolCall[];
   /**
-   * Maximal runs of consecutive assistant events. The CLI emits one assistant
-   * event per content block, so counting events counts blocks; a run between
-   * two user events is one API turn, and that is the number the request capture
-   * has to agree with.
+   * How many API turns the assistant took, which is the number the request
+   * capture has to agree with.
+   *
+   * Counted by distinct `message.id`, because that is the API's own record of
+   * where one turn ends: the CLI emits one assistant event per content block
+   * and every block of a turn carries that turn's message id.
+   *
+   * The obvious alternative, grouping maximal runs of consecutive assistant
+   * events, is wrong and a live research run proved it. That run's stream has
+   * `user[tool_result]`, `assistant[tool_use]`, `user[tool_result]`,
+   * `user[tool_result]`: one tool's result arrived before the model's last
+   * tool_use block of the same turn was emitted. Run-grouping split that turn
+   * in two and reported 8 turns against 7 main-turn requests, whether or not
+   * the interleaved `rate_limit_event` and `system/*` events were ignored.
+   *
+   * Run-grouping survives as the fallback for a stream whose assistant events
+   * carry no message id, and there it ignores every non-message event so that
+   * only a user event ends a turn.
    */
   assistant_turns: number;
   duplicate_tool_use_ids: string[];
@@ -142,6 +156,10 @@ export function readStream(text: string): StreamFacts {
   };
 
   const byId = new Map<string, ToolCall>();
+  // Both counts are kept; which one is reported is decided at the end.
+  const assistantMessageIds = new Set<string>();
+  let assistantEventsWithoutId = 0;
+  let assistantRuns = 0;
   let lastRole: 'assistant' | 'user' | null = null;
 
   for (const line of text.split('\n')) {
@@ -180,8 +198,16 @@ export function readStream(text: string): StreamFacts {
       continue;
     }
 
+    // Only a message event can end an assistant turn. Everything else in the
+    // stream — system/*, rate_limit_event, anything a future CLI adds — is
+    // stepped over rather than treated as a break.
     if (type === 'assistant' || type === 'user') {
-      if (type === 'assistant' && lastRole !== 'assistant') facts.assistant_turns += 1;
+      if (type === 'assistant') {
+        if (lastRole !== 'assistant') assistantRuns += 1;
+        const id = asRecord(event.message)?.id;
+        if (typeof id === 'string' && id !== '') assistantMessageIds.add(id);
+        else assistantEventsWithoutId += 1;
+      }
       lastRole = type;
     }
 
@@ -226,6 +252,13 @@ export function readStream(text: string): StreamFacts {
       facts.subagents_spawned = typeof stats?.spawned === 'number' ? stats.spawned : null;
     }
   }
+
+  // The message ids when every assistant event carried one, and the run count
+  // otherwise. A stream that carries ids for some events and not others is the
+  // one case where neither number can be trusted, so the run count is used and
+  // the mismatch shows up as a turn-count failure rather than as a silent guess.
+  facts.assistant_turns =
+    assistantEventsWithoutId === 0 && assistantMessageIds.size > 0 ? assistantMessageIds.size : assistantRuns;
 
   return facts;
 }

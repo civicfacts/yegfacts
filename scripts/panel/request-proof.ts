@@ -83,7 +83,13 @@ export type Pins = {
   sessionTitlePromptSha256: string;
   sessionTitleTrailer: { length: number; sha256: string };
   searchHelperLine: string;
-  searchHelperTool: { type: string; name: string; max_uses: number };
+  /**
+   * The server tool the search helper carries. Its `type` and `name` are fixed;
+   * the rest of its keys are the model's own WebSearch input passed through, so
+   * they are permitted and recorded rather than pinned. A key outside this list,
+   * or a second tool, fails.
+   */
+  searchHelperTool: { type: string; name: string; optionalKeys: string[] };
   searchHelperUserPrefix: string;
   fetchSummarizerPrefix: string;
   fetchSummarizerSuffix: { length: number; sha256: string };
@@ -137,7 +143,14 @@ export const PINS: Record<string, Record<string, Pins>> = {
         sha256: '80e8414c11b94f8e24c28ff4ea1b35ab1115b9d3985d078bcff4678a6104424d',
       },
       searchHelperLine: 'You are an assistant for performing a web search tool use',
-      searchHelperTool: { type: 'web_search_20250305', name: 'web_search', max_uses: 8 },
+      searchHelperTool: {
+        type: 'web_search_20250305',
+        name: 'web_search',
+        // Observed in the live research run: the model's own WebSearch input
+        // travels into the server tool definition, so one search carried
+        // allowed_domains with two hosts and another with three.
+        optionalKeys: ['max_uses', 'allowed_domains', 'blocked_domains'],
+      },
       searchHelperUserPrefix: 'Perform a web search for the query: ',
       fetchSummarizerPrefix: '\nWeb page content:\n---\n',
       // The page text and the model's own question sit between the prefix and
@@ -211,6 +224,14 @@ export type Observation = {
   max_tokens: unknown;
   thinking: unknown;
   output_config: unknown;
+  /**
+   * The search helper's server tool, verbatim. Recorded only for that shape,
+   * because its `allowed_domains` and `blocked_domains` say which hosts a
+   * reviewer scoped a search to, which is worth having on the record and is not
+   * something to pin. The main turn's two client tools are pinned by hash and
+   * deliberately not reproduced here.
+   */
+  search_tool?: unknown;
 };
 
 export type ProofSummary = {
@@ -343,9 +364,26 @@ function checkSearchHelper(
   const where = request.file;
   checkPreamble(systemTexts(body) ?? [], pins, where, failures);
 
+  // One server tool, of the pinned type and name. Its remaining keys are the
+  // model's own search input passed through — allowed_domains on a domain-scoped
+  // search, and blocked_domains by the same route — so they are permitted and
+  // reported rather than pinned. Pinning the exact JSON refused a real research
+  // run for doing something ordinary.
   const tools = toolList(body);
-  if (JSON.stringify(tools) !== JSON.stringify([pins.searchHelperTool])) {
-    failures.push(`${where}: the search helper's tools are not exactly the pinned server tool`);
+  if (tools.length !== 1) {
+    failures.push(`${where}: the search helper carried ${tools.length} tools, not 1`);
+  } else {
+    const tool = asRecord(tools[0]) ?? {};
+    if (tool.type !== pins.searchHelperTool.type || tool.name !== pins.searchHelperTool.name) {
+      failures.push(
+        `${where}: the search helper's tool is {type: ${JSON.stringify(tool.type)}, name: ${JSON.stringify(tool.name)}}, not the pinned server tool`,
+      );
+    }
+    const allowed = new Set(['type', 'name', ...pins.searchHelperTool.optionalKeys]);
+    const extra = Object.keys(tool).filter((key) => !allowed.has(key));
+    if (extra.length > 0) {
+      failures.push(`${where}: the search helper's tool carries unpinned key(s): ${extra.sort().join(', ')}`);
+    }
   }
   const messages = Array.isArray(body.messages) ? body.messages : [];
   const message = messages.length === 1 ? asRecord(messages[0]) : null;
@@ -618,6 +656,7 @@ export function proveRequests(input: ProofInput): ProofResult {
         max_tokens: body.max_tokens,
         thinking: body.thinking,
         output_config: body.output_config,
+        ...(shape === 'search-helper' ? { search_tool: toolList(body)[0] } : {}),
       });
     }
 
