@@ -25,9 +25,13 @@
 # response to the attempt directory and forwards them unchanged to
 # https://api.anthropic.com. scripts/panel/request-proof.ts then checks the
 # capture against a pinned description of a clean request: the vendor default
-# prompt by hash, exactly two client tool definitions by hash, four host
-# reminder blocks matching a fixed template, and the declared package byte for
-# byte as the last block of the first user message.
+# prompt by hash, exactly two client tool definitions by hash, the reasoning
+# effort the seat is pinned to, a first user message of the account reminder and
+# then the declared package byte for byte, and one system-role message of host
+# environment text matching a fixed template. The body's top-level keys and its
+# metadata keys are allowlisted, so a field nobody described is a failure rather
+# than something read past. The HTTP headers are captured and retained but not
+# compared.
 #
 # The package leaves twice per research attempt, and no message here pretends
 # otherwise. Before the main turn the CLI sends a session-naming request that
@@ -535,18 +539,21 @@ fi
 # does not carry their text, so a fixture cannot reproduce them. It is gated on
 # the loopback upstream, so it cannot be used against the API, and a run that
 # used it is never admitted. Both facts are recorded.
+#
+# What counts as loopback is asked of record-proxy.mjs rather than matched here.
+# A shell glob of `http://127.0.0.1*` is a looser rule than the proxy's: it
+# matches http://127.0.0.1.example.com, which is somebody else's host. Two rules
+# for one question is how the looser one ends up being the one that decides.
 PINS_SOURCE="built-in"
 PINS_ARGS=()
 if [ -n "${YEGFACTS_REVIEW_PINS:-}" ]; then
-  case "${YEGFACTS_REVIEW_UPSTREAM:-}" in
-    http://127.0.0.1*|http://localhost*)
-      PINS_SOURCE="override"
-      PINS_ARGS=(--pins "$YEGFACTS_REVIEW_PINS")
-      ;;
-    *)
-      refuse blocked "YEGFACTS_REVIEW_PINS was set without a loopback YEGFACTS_REVIEW_UPSTREAM: a substitute pin table is a test fixture and must never be used against the API"
-      ;;
-  esac
+  UPSTREAM_KIND="$(node "$PROXY_SCRIPT" --classify-upstream "${YEGFACTS_REVIEW_UPSTREAM:-}" 2>/dev/null || true)"
+  if [ "$UPSTREAM_KIND" = "loopback" ]; then
+    PINS_SOURCE="override"
+    PINS_ARGS=(--pins "$YEGFACTS_REVIEW_PINS")
+  else
+    refuse blocked "YEGFACTS_REVIEW_PINS was set without a loopback YEGFACTS_REVIEW_UPSTREAM: a substitute pin table is a test fixture and must never be used against the API"
+  fi
 fi
 
 # WHICH BYTES RUN, which is a different question from which version is on PATH.

@@ -25,6 +25,17 @@
  * attempt. It is not a vendor guarantee, it does not cover a different build or
  * a different model, and it says nothing about anything else on the machine.
  *
+ * WHAT IS CHECKED AND WHAT IS ONLY RECORDED. Checked: the system blocks, the
+ * tool definitions, the model, the reasoning effort, the messages, the
+ * top-level body keys and the keys inside `metadata`. Everything in the body is
+ * therefore either compared against a pin or named in an allowlist, so a field
+ * nobody described is a failure rather than something read past.
+ *
+ * NOT checked: the HTTP headers. `record-proxy.mjs` captures them, with the
+ * credential headers redacted, and they are retained with the attempt for a
+ * person to read. Nothing here compares them, so "this request matched the
+ * pinned profile" is a statement about the body and not about the headers.
+ *
  * WHAT IS DISCLOSED RATHER THAN SUPPRESSED. The host blocks tell the model the
  * operator's account email address, the working directory, whether it is a Git
  * repository, the platform, the shell, the OS version, the model identity and
@@ -93,6 +104,14 @@ export type Pins = {
   searchHelperUserPrefix: string;
   fetchSummarizerPrefix: string;
   fetchSummarizerSuffix: { length: number; sha256: string };
+  /**
+   * The top-level body keys each POST shape may carry, as observed. Anything
+   * else fails. Without this the check read the keys it knew about and ignored
+   * the rest, so a body could carry an extra top-level field and pass.
+   */
+  topLevelKeys: Record<'main-turn' | 'session-title' | 'search-helper' | 'fetch-summarizer', string[]>;
+  /** The keys inside the JSON string at `metadata.user_id`. Exactly these. */
+  metadataIdentifiers: string[];
 };
 
 /**
@@ -159,6 +178,56 @@ export const PINS: Record<string, Record<string, Pins>> = {
         length: 496,
         sha256: '8753a12e2e3d03a59739157cdd2a334591f7ed2fcc40340d1e46d2e93e48b488',
       },
+      topLevelKeys: {
+        'main-turn': [
+          'context_management',
+          'max_tokens',
+          'messages',
+          'metadata',
+          'model',
+          'output_config',
+          'stream',
+          'system',
+          'thinking',
+          'tools',
+        ],
+        'session-title': [
+          'max_tokens',
+          'messages',
+          'metadata',
+          'model',
+          'output_config',
+          'stream',
+          'system',
+          'thinking',
+          'tools',
+        ],
+        // The only shape that pins the model's hand with `tool_choice`.
+        'search-helper': [
+          'max_tokens',
+          'messages',
+          'metadata',
+          'model',
+          'output_config',
+          'stream',
+          'system',
+          'thinking',
+          'tool_choice',
+          'tools',
+        ],
+        'fetch-summarizer': [
+          'max_tokens',
+          'messages',
+          'metadata',
+          'model',
+          'output_config',
+          'stream',
+          'system',
+          'thinking',
+          'tools',
+        ],
+      },
+      metadataIdentifiers: ['account_uuid', 'device_id', 'session_id'],
     },
   },
 };
@@ -180,9 +249,10 @@ export type StreamTurns = {
   /** Every `tool_use` id the CLI reported, in any turn. */
   toolUseIds: string[];
   /**
-   * Maximal runs of consecutive assistant events. The CLI emits one assistant
-   * event per content block, so counting events would count blocks; a run
-   * between two user events is one API turn.
+   * How many API turns the assistant took. `stream-boundary.ts` counts distinct
+   * assistant `message.id` values, which is the API's own record of where a turn
+   * ends, and falls back to grouping runs of consecutive assistant events only
+   * when the stream carries no ids.
    */
   assistantTurns: number;
 };
@@ -312,6 +382,69 @@ function classify(request: CapturedRequest, pins: Pins): Shape {
   return 'unknown';
 }
 
+/**
+ * The request envelope: which top-level keys the body carries, and what is in
+ * `metadata`.
+ *
+ * This is the check that was missing. Everything else reads named fields, so a
+ * body could grow a top-level key nobody had described and pass without a
+ * complaint. An allowlist per shape closes that: a key outside it fails, which
+ * is the behaviour a reader of "fails closed on anything it does not
+ * recognise" would already have assumed.
+ *
+ * `metadata` is exactly `{user_id: <JSON string>}`, and that string parses to
+ * exactly a device id, an account uuid and a session id. Returns the identifier
+ * names when it does, so a caller can record that they were there. The values
+ * are never read into anything this returns, and never reach the report.
+ */
+function checkEnvelope(
+  where: string,
+  body: Record<string, unknown>,
+  allowed: string[],
+  pins: Pins,
+  failures: string[],
+): string[] | null {
+  const permitted = new Set(allowed);
+  const extra = Object.keys(body).filter((key) => !permitted.has(key));
+  if (extra.length > 0) {
+    failures.push(`${where}: the body carries top-level key(s) nobody pinned: ${extra.sort().join(', ')}`);
+  }
+
+  const metadata = asRecord(body.metadata);
+  if (!metadata) {
+    failures.push(`${where}: metadata is not an object`);
+    return null;
+  }
+  const metadataKeys = Object.keys(metadata).sort();
+  if (metadataKeys.length !== 1 || metadataKeys[0] !== 'user_id') {
+    failures.push(`${where}: metadata keys are [${metadataKeys.join(', ')}], expected exactly [user_id]`);
+    return null;
+  }
+  if (typeof metadata.user_id !== 'string') {
+    failures.push(`${where}: metadata.user_id is not a string`);
+    return null;
+  }
+  let identifiers: Record<string, unknown> | null = null;
+  try {
+    identifiers = asRecord(JSON.parse(metadata.user_id));
+  } catch {
+    identifiers = null;
+  }
+  if (!identifiers) {
+    failures.push(`${where}: metadata.user_id is not a JSON object`);
+    return null;
+  }
+  const names = Object.keys(identifiers).sort();
+  const wanted = [...pins.metadataIdentifiers].sort();
+  if (names.join(',') !== wanted.join(',')) {
+    failures.push(
+      `${where}: metadata.user_id carries [${names.join(', ')}], expected exactly [${wanted.join(', ')}]`,
+    );
+    return null;
+  }
+  return names;
+}
+
 /** The two blocks every shape opens with. */
 function checkPreamble(system: string[], pins: Pins, where: string, failures: string[]): void {
   if (!pins.billingHeaderPattern.test(system[0] ?? '')) {
@@ -330,6 +463,7 @@ function checkSessionTitle(
   failures: string[],
 ): void {
   const where = request.file;
+  checkEnvelope(where, body, pins.topLevelKeys['session-title'], pins, failures);
   checkPreamble(systemTexts(body) ?? [], pins, where, failures);
   if (toolList(body).length > 0) failures.push(`${where}: the session-title request carried tools`);
 
@@ -362,6 +496,7 @@ function checkSearchHelper(
   failures: string[],
 ): void {
   const where = request.file;
+  checkEnvelope(where, body, pins.topLevelKeys['search-helper'], pins, failures);
   checkPreamble(systemTexts(body) ?? [], pins, where, failures);
 
   // One server tool, of the pinned type and name. Its remaining keys are the
@@ -400,6 +535,7 @@ function checkFetchSummarizer(
   failures: string[],
 ): void {
   const where = request.file;
+  checkEnvelope(where, body, pins.topLevelKeys['fetch-summarizer'], pins, failures);
   const system = systemTexts(body) ?? [];
   checkPreamble(system, pins, where, failures);
   if (system.length !== 2) failures.push(`${where}: the fetch summarizer carried ${system.length} system blocks, not 2`);
@@ -462,6 +598,7 @@ function checkMainTurn(
   failures: string[],
 ): { file: string; blocks: { source: string; text: string }[] } | null {
   const where = request.file;
+  const identifiers = checkEnvelope(where, body, pins.topLevelKeys['main-turn'], pins, failures);
   const system = systemTexts(body) ?? [];
   checkPreamble(system, pins, where, failures);
   if (system[2]!.length !== pins.vendorPromptLength) {
@@ -539,6 +676,17 @@ function checkMainTurn(
       }
       disclosed.push({ source: 'messages[1] environment', text: redactEmail(environment) });
     }
+  }
+
+  // The third piece of host context, and the only one recorded by name rather
+  // than by text. A device id, an account uuid and a session id travel in
+  // `metadata.user_id`. That they are sent is worth publishing; what they are is
+  // not, so the values are never read into the report.
+  if (identifiers) {
+    disclosed.push({
+      source: 'metadata.user_id identifiers',
+      text: `present, values not recorded: ${identifiers.join(', ')}`,
+    });
   }
 
   // Everything after those two. A later user message carries tool results and

@@ -191,6 +191,22 @@ if (invoked === self) {
     }
     flags[flag.slice(2)] = value;
   }
+  // One rule for what counts as loopback, asked for rather than copied. The
+  // launcher needs the same answer to decide whether a substitute pin table may
+  // be used, and a shell glob of `http://127.0.0.1*` is not the same rule: it
+  // matches http://127.0.0.1.example.com.
+  if (flags['classify-upstream'] !== undefined) {
+    try {
+      const value = flags['classify-upstream'];
+      resolveUpstream(value);
+      process.stdout.write(value === undefined || value === '' ? 'production' : 'loopback');
+      process.exit(0);
+    } catch (error) {
+      console.error(`record-proxy: ${error.message}`);
+      process.exit(2);
+    }
+  }
+
   if (!flags.out || !flags['port-file']) {
     console.error('usage: node scripts/panel/record-proxy.mjs --out <dir> --port-file <file>');
     process.exit(2);

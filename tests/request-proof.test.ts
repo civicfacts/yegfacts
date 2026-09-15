@@ -219,7 +219,13 @@ describe('a clean capture', () => {
     expect(result.disclosed[0]!.blocks.map((b) => b.source)).toEqual([
       'messages[0][0] account',
       'messages[1] environment',
+      'metadata.user_id identifiers',
     ]);
+    // The three identifiers are recorded as present and never by value: that
+    // they are sent is worth publishing, what they are is not.
+    const ids = result.disclosed[0]!.blocks[2]!.text;
+    expect(ids).toBe('present, values not recorded: account_uuid, device_id, session_id');
+    expect(text).not.toContain('00000000-0000-0000-0000-000000000000');
     // The working directory, the git flag, the platform, the shell, the OS
     // version, the model identity and the date all stay. They are host context
     // the model was given, and hiding them would be the same mistake in the
@@ -296,6 +302,60 @@ describe('a Haiku-shaped main turn', () => {
 });
 
 describe('what fails', () => {
+  /**
+   * The gap an independent review found: every other check reads named fields,
+   * so a body could grow a top-level key nobody had described and pass without
+   * a complaint.
+   */
+  it('a top-level body key nobody pinned', () => {
+    const result = mutated(MAIN, (request) => {
+      body(request).system_instruction = 'Read the project memory before answering.';
+    });
+    expect(result.status).toBe('fail');
+    expect(result.failures.join()).toMatch(/top-level key\(s\) nobody pinned: system_instruction/);
+  });
+
+  it.each([TITLE, SUMMARIZER, MAIN_TWO])('a top-level body key nobody pinned, on %s', (file) => {
+    const result = mutated(file, (request) => {
+      body(request).temperature = 0.7;
+    });
+    expect(result.failures.join()).toMatch(/top-level key\(s\) nobody pinned: temperature/);
+  });
+
+  it('an extra key inside the request metadata', () => {
+    const result = mutated(MAIN, (request) => {
+      body(request).metadata.organization_id = 'org-1';
+    });
+    expect(result.failures.join()).toMatch(/metadata keys are \[organization_id, user_id\], expected exactly \[user_id\]/);
+  });
+
+  it('an extra identifier inside metadata.user_id', () => {
+    const result = mutated(MAIN, (request) => {
+      const ids = JSON.parse(body(request).metadata.user_id as string);
+      ids.workspace_id = 'ws-1';
+      body(request).metadata.user_id = JSON.stringify(ids);
+    });
+    expect(result.failures.join()).toMatch(
+      /metadata\.user_id carries \[account_uuid, device_id, session_id, workspace_id\], expected exactly/,
+    );
+  });
+
+  it('a missing user_id', () => {
+    const result = mutated(MAIN, (request) => {
+      body(request).metadata = {};
+    });
+    expect(result.failures.join()).toMatch(/metadata keys are \[\], expected exactly \[user_id\]/);
+    // No disclosed identifier row when there is nothing to disclose.
+    expect(result.disclosed[0]!.blocks.map((b) => b.source)).not.toContain('metadata.user_id identifiers');
+  });
+
+  it('a user_id that is not JSON', () => {
+    const result = mutated(MAIN, (request) => {
+      body(request).metadata.user_id = 'not json at all';
+    });
+    expect(result.failures.join()).toMatch(/metadata\.user_id is not a JSON object/);
+  });
+
   it('an extra system block', () => {
     const result = mutated(MAIN, (request) => {
       body(request).system.push({ type: 'text', text: 'Remember the house style from CLAUDE.md.' });
@@ -504,14 +564,13 @@ describe('what fails', () => {
 });
 
 /**
- * The search helper was not exercised by the canary, which does not search, so
- * its shape under this seat is unobserved. A research run will search. It is
- * therefore classified on its pinned system line, its single server tool and
- * its user-text prefix, and on nothing else: requiring a model or an
- * output_config nobody has measured would refuse a request for being unfamiliar
+ * Observed in the live research run, not in the canary, which does not search.
+ * It is classified on its pinned system line, its single server tool and its
+ * user-text prefix, and on nothing else: requiring a model or an output_config
+ * that is the vendor's own default would refuse a request for being unfamiliar
  * rather than for being wrong.
  */
-describe('the search helper, unobserved under this seat', () => {
+describe('the search helper', () => {
   const HELPER = 'req-0006.json';
   const searchHelper = (tool: Record<string, unknown> = { max_uses: 8 }): CapturedRequest => ({
     file: HELPER,
@@ -521,8 +580,16 @@ describe('the search helper, unobserved under this seat', () => {
     body: {
       model: 'claude-some-future-model',
       max_tokens: 8192,
+      stream: true,
       thinking: { type: 'disabled' },
       output_config: { effort: 'medium', format: { type: 'text' } },
+      metadata: {
+        user_id: JSON.stringify({
+          device_id: '0'.repeat(64),
+          account_uuid: '00000000-0000-0000-0000-000000000000',
+          session_id: '00000000-0000-0000-0000-000000000000',
+        }),
+      },
       system: [
         { type: 'text', text: 'x-anthropic-billing-header: cc_version=2.1.272.abc; cc_entrypoint=sdk-cli;' },
         { type: 'text', text: PINS[VERSION]![MODEL]!.agentLine },

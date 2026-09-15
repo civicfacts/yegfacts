@@ -377,8 +377,19 @@ tool list and user-text prefix. Their model, `thinking`, `output_config` and
 vendor defaults. The search helper's server tool is pinned by `type` and `name`
 only: `max_uses`, `allowed_domains` and `blocked_domains` carry the model's own
 search input and are recorded rather than pinned, which a live research run
-established by being refused for scoping a search to two hosts. The search helper in particular is unobserved under this seat,
-since the canary does not search and a research run will.
+established by being refused for scoping a search to two hosts.
+
+**What is checked and what is only recorded.** Checked: the system blocks, the
+tool definitions, the model, `output_config.effort`, the messages, the top-level
+body keys and the keys inside `metadata`. Every field in the body is therefore
+either compared against a pin or named in a per-shape allowlist, so a key nobody
+described fails rather than being read past. `metadata` must be exactly
+`{user_id}` whose JSON carries exactly a device id, an account uuid and a
+session id; the proof records that those three were sent and never their values.
+NOT checked: the HTTP headers. `record-proxy.mjs` captures them with the
+credential headers redacted and they are retained with the attempt, but nothing
+compares them, so "this request matched the pinned profile" is a statement about
+the body.
 
 The host context the request carries beyond the package, in full: the working
 directory, whether it is a Git repository, the platform, the shell and the OS

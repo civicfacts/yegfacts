@@ -147,36 +147,49 @@ Pass requires all of:
   billing-header pattern, the exact agent line, and the pinned vendor prompt
   hash; its `tools` are exactly the two pinned tool definitions by hash; its
   `model` is the pinned research model (the canary is run with the same pin);
-- every main turn's `messages[0]` is exactly the four reminder blocks matched
-  by anchored regular expressions (cwd must equal the run's work directory,
-  which is an opaque temporary path named only by the attempt id;
-  the model reminder must name the pinned model) followed by one text block
-  equal to the package bytes; every later user message contains only
-  `tool_result` blocks and every later assistant message only `thinking`,
-  `text`, `tool_use` blocks; no other text block, no `<system-reminder>`
-  anywhere after the first message;
+- every main turn's `output_config.effort` equals the seat's pinned effort;
+- every main turn's `messages[0]` is exactly two text blocks, the account
+  reminder matched by an anchored regular expression and then the package bytes,
+  and `messages[1]` is a system-role message of one text matching the anchored
+  environment pattern (cwd must equal the run's work directory, which is an
+  opaque temporary path named only by the attempt id; the model identity must
+  name the pinned model). It arrives as a one-element block array on the first
+  turn and as a bare string later; both are read. Every later user message
+  contains only `tool_result` blocks, whose content must be text and is scanned
+  for the reminder marker, and every later assistant message only `thinking`,
+  `text`, `tool_use` blocks; no other block type, no `<system-reminder>`
+  anywhere after the first two messages, and no further system-role message;
+- every request's top-level body keys are within the allowlist for its shape,
+  and its `metadata` is exactly `{user_id}` whose JSON carries exactly a device
+  id, an account uuid and a session id. The HTTP headers are captured and
+  retained but not compared;
 - each main turn's tool_result ids correspond to tool_use ids that appear in
-  the stream, and the number of main-turn requests equals the number of
-  assistant messages in the stream (the stream's own record of turns);
+  the stream, and the number of main-turn requests equals the number of distinct
+  assistant `message.id` values in the stream (the API's own record of turns);
 - search-helper and fetch-summarizer requests match their shapes exactly;
 - the upstream recorded for the capture is `https://api.anthropic.com`
   (a test upstream yields `pass` for the request check but the launcher marks
   `admitted_for_research` false unless the upstream is production, and records
   why; tests assert both branches).
 
-`disclosed` lists, per main turn, the verbatim non-package, non-vendor blocks
-with the email address replaced by `<account-email>` and the cwd left in. The
-report never contains the address. `contextProof()` in `stream-boundary.ts`
-stops being a constant: it takes the proof result and returns `pass`, `fail`,
-or `unavailable` (no capture directory), with the reason.
+`disclosed` lists, per main turn, the account reminder and the environment
+message verbatim with the email address replaced by `<account-email>` and the
+cwd left in, and a third row naming the three identifiers in `metadata.user_id`
+as present without their values. The report never contains the address.
+`contextProof()` in `stream-boundary.ts` stops being a constant: it takes the
+proof result and returns `pass`, `fail`, or `unavailable` (no capture
+directory), with the reason.
 
-**Pins.** The profile table lives in one place (`request-proof.ts`, exported):
-CLI version `2.1.272`, vendor prompt hash, both tool definition hashes, the
-agent line, billing-header pattern, the session-title prompt hash, the search
-helper line, the fetch summarizer prefix and suffix, the reminder patterns.
-2.1.266 and 2.1.267 are removed from the probed list: they have no pinned
-hashes and are no longer installed. A CLI version without pins fails closed
-before anything is sent, as today.
+**Pins.** The profile table lives in one place (`request-proof.ts`, exported)
+and is keyed by CLI version AND model, because the request shape depends on
+both: CLI version `2.1.272` running `claude-opus-5`, the executable's own
+SHA-256, the pinned effort, vendor prompt hash, both tool definition hashes, the
+agent line, billing-header pattern, the account-reminder and environment
+patterns, the session-title prompt hash, the search helper line and server-tool
+kind, the fetch summarizer prefix and suffix, the per-shape top-level key
+allowlists and the metadata identifier names. 2.1.266 and 2.1.267 are removed:
+they have no pinned hashes and are no longer installed. The Haiku row is removed
+too. A (version, model) pair without a row fails closed before anything is sent.
 
 **Admission.** In `invoke-reviewer.sh`, provider `anthropic`, `--purpose
 research`: (1) version check; (2) canary through its own proxy under
