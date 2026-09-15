@@ -351,23 +351,41 @@ v1.29 changes that for Claude and only for Claude. The CLI runs with
 response and forwards them unchanged to `https://api.anthropic.com`.
 `scripts/panel/request-proof.ts` then classifies every captured request into one
 of five pinned shapes and checks the main turn against the pinned vendor prompt
-hash, the two pinned tool-definition hashes, the four host reminder templates
-and the declared package bytes. In later messages a user message may carry no
-block other than tool results, and each tool result's own content must be text
-and is scanned for the host's reminder markup: a block-type and marker-string
-check, not a general test for instruction text. A seat is admitted only when the
-canary and the research run each pass their structural check and their request
-check, the CLI exited zero, the capture was taken against the production API,
-and the built-in pin table was used. Note that the package leaves twice per
-attempt: the session-naming request carries the whole package, with no tools,
-before the main turn does.
+hash, the two pinned tool-definition hashes, `output_config.effort`, the two
+blocks of the first user message, the system-role environment message and the
+declared package bytes. In later messages a user message may carry no block
+other than tool results, and each tool result's own content must be text and is
+scanned for the host's reminder markup: a block-type and marker-string check,
+not a general test for instruction text. A seat is admitted only when the canary
+and the research run each pass their structural check and their request check,
+the CLI exited zero, the capture was taken against the production API, and the
+built-in pin table was used. Note that the package leaves twice per attempt: the
+session-naming request carries the whole package, with no tools, before the main
+turn does.
+
+**The pins are keyed by (CLI version, model), and that cost a live run to
+learn.** The feasibility probes used Haiku; the first real diagnostic under
+`claude-opus-5` was refused with `the request matches no pinned shape` on both
+main turns. The same build sends a 6,755-character vendor prompt under Opus
+against 13,487 under Haiku, different `WebFetch`/`WebSearch` definitions, and
+the host environment in a system-role message rather than as reminder blocks in
+the user turn. The gate was right; the table was wrong. The only row is 2.1.272
++ claude-opus-5 and the Haiku-derived main-turn pins are gone rather than kept
+alongside. The three side requests are classified structurally — system texts,
+tool list, user-text prefix — and their model, `thinking`, `output_config` and
+`max_tokens` are recorded as observations and never required, because they are
+vendor defaults. The search helper in particular is unobserved under this seat,
+since the canary does not search and a research run will.
 
 The host context the request carries beyond the package, in full: the working
 directory, whether it is a Git repository, the platform, the shell and the OS
 version; the model name and knowledge cutoff; the date; the account email
 address; and, in `metadata.user_id`, a device id, an account uuid and a session
-id. It is recorded as disclosed host context rather than treated as absent, with
-the email address replaced in the report. The working directory is an opaque
+id. Under the pinned seat the email reminder is the first block of the first
+user message and the rest is one system-role message, which arrives as a
+one-element block array on the first turn and as a bare string on later ones.
+It is recorded as disclosed host context rather than treated as absent, with the
+email address replaced in the report. The working directory is an opaque
 `${TMPDIR}/attempt-<id>` path created for the run and removed afterwards, so it
 no longer names the story, the round or the seat.
 

@@ -17,61 +17,95 @@ CLI. One new Node script (the recording proxy) with no dependencies.
 ## What the demonstration found (2026-09-15, Stew, main session)
 
 Claude Code 2.1.272 honours `ANTHROPIC_BASE_URL` under the candidate profile
-with subscription OAuth. Two Haiku probes were run through a local recording
-proxy that forwards to `https://api.anthropic.com` unchanged and writes each
-request (authorization redacted) and response to disk. Everything the CLI sent
-to the API went through it. The retained captures are at
-`<scratchpad>/probe/run-KCrItz/out` (plain reply) and
-`<scratchpad>/probe/run-lVZORa/out` (fetch + search + file-read canary). They
-contain the founder's account email, account UUID and device id and MUST NOT be
-copied into the repository; fixtures derived from them are sanitized.
+with subscription OAuth. Everything the CLI sent to the API went through a local
+recording proxy that forwards to `https://api.anthropic.com` unchanged and
+writes each request (authorization redacted) and response to disk. Every
+retained capture contains the founder's account email, account UUID and device
+id and MUST NOT be copied into the repository; fixtures derived from them are
+sanitized.
 
-Five request shapes were observed, and nothing else:
+**Correction, 2026-09-15, after the first live diagnostic.** The feasibility
+probes ran on Haiku, and the pins were built from them. The request shape
+depends on the model as well as the CLI build, so the first real run under the
+pinned `claude-opus-5` was refused by the gate: `the request matches no pinned
+shape` on both main turns, and `the capture holds no main turn`. The gate was
+right and the pins were wrong. They are now keyed by (CLI version, model), the
+only row is 2.1.272 + claude-opus-5, and the Haiku-derived main-turn pins are
+gone. What follows describes the pinned seat; the Haiku shape is recorded below
+only as the thing that was mistaken for it.
+
+Five request shapes were observed under the pinned seat, and nothing else:
 
 1. `HEAD /api/hello`: connectivity check, no body.
 2. **Session title.** `POST /v1/messages`, no tools, system = billing header,
    agent line, a 3059-char naming prompt beginning "You are naming a coding
    session". One user message: the package wrapped in `<session>` tags plus a
    fixed trailer. Sent once, before the main turn, even with
-   `--no-session-persistence`. It produces no research output.
+   `--no-session-persistence`. It produces no research output, and it means the
+   package leaves twice per attempt.
 3. **Main turn.** `POST /v1/messages`. System = three blocks:
    `x-anthropic-billing-header: cc_version=2.1.272.<3 hex>; cc_entrypoint=sdk-cli;`
    (the hex suffix varies per request), the line
    `You are a Claude agent, built on Anthropic's Claude Agent SDK.`, and the
-   13,487-char vendor default prompt, byte-identical across runs and turns,
-   SHA-256 `a3015596fabfe9063deb699fa369a88d1978106e7a9d3d06b40eb6199791872d`.
+   6755-char vendor default prompt, byte-identical across turns, SHA-256
+   `ca13f066089ee100dd5ef17ee4dbf985eabce68c213998ce32657465a1985bd8`.
    It contains no memory paths, no CLAUDE.md content and no project text (the
    string "CLAUDE.md" appears once, in a generic sentence about durable
    instructions). Its text is not reproduced here or anywhere else in this
    repository. Tools = exactly two client tool definitions, `WebFetch` and
-   `WebSearch` (SHA-256 of their JSON: `e3f1f3ee…987efb` and `67e78dc…77d5b`,
-   record the full hashes). `messages[0]` is a user message of five text
-   blocks, in this order:
-   - environment reminder: cwd, "Is a git repository: false", platform, shell,
-     OS version;
-   - model identity reminder naming the model id and its knowledge cutoff;
-   - **account email reminder**: "# userEmail / The user's email address is
-     <address>. Use it only to identify the user…" with the founder's address;
-   - date reminder "Today's date is YYYY-MM-DD.";
+   `WebSearch` (SHA-256 of their JSON:
+   `e1fbaacd430da45894b8d8c29f32064d98c065ebd00702a346db561f801025af` and
+   `50202efd42bb858f1a86f63bc189c48ca85e531b3093c36b21227459b7ed193a`).
+   `messages[0]` is a user message of exactly two text blocks:
+   - the **account email reminder**: "# userEmail / The user's email address is
+     <address>. Use it only to identify the user…" with the founder's address,
+     ending in a newline after the closing tag;
    - the package text, byte-for-byte.
-   Later turns append an assistant message (thinking, text, tool_use blocks)
-   and a user message of tool_result blocks only. `thinking` is enabled with
-   `budget_tokens` 31999; `context_management` clears old thinking. Metadata
-   carries device id, account UUID and session id.
+
+   `messages[1]` has role `system` and carries one text: the environment block
+   (working directory, "Is a git repository: false", platform, shell, OS
+   version), then the model identity and knowledge cutoff, then the date. On the
+   first turn it arrives as a one-element block array with `cache_control`
+   ephemeral; on later turns as a bare string with the same 433 characters.
+   Later turns append an assistant message (thinking, tool_use) and a user
+   message of tool_result blocks only. `thinking` is `{"type":"adaptive"}`,
+   `output_config` is `{"effort":"high"}` — the effort pin, checkable from the
+   request for the first time — `max_tokens` is 64000, and
+   `context_management` clears old thinking. Metadata carries device id, account
+   UUID and session id.
 4. **Search helper.** System = billing header, agent line, and the 57-char
    line "You are an assistant for performing a web search tool use". Tools =
    one server tool `{type: web_search_20250305, name: web_search, max_uses: 8}`.
-   One user message: "Perform a web search for the query: <query>".
+   One user message: "Perform a web search for the query: <query>". NOT observed
+   under the pinned seat: the canary does not search. It is classified on those
+   three things and on nothing else, because requiring a model or an
+   `output_config` nobody has measured would refuse a request for being
+   unfamiliar rather than for being wrong.
 5. **Fetch summarizer.** System = billing header and agent line only. No
    tools. One user message beginning "\nWeb page content:\n---\n" with the
    fetched page text and a fixed extraction/quoting instruction after it.
 
-The account email and the working-directory path are host context that is not
-in the declared package. They are not instructions and they name no project
-material. They are disclosed, not suppressed: the proxy records and forwards,
-it never rewrites a request. The `claude` on PATH is a cmux shim around
-`~/.local/share/claude/versions/2.1.272`; the launcher records the resolved
-executable path privately.
+The side requests run on the same model as the main turn, with thinking
+disabled, and the session-title one carries a `json_schema` output format. None
+of that is pinned: the model, thinking, `output_config` and `max_tokens` of a
+side request are recorded as observations, because they are the vendor's own
+settings and pinning them would turn a vendor default into a failure.
+
+**The Haiku shape, for the record.** Under `claude-haiku-4-5-20251001` the same
+CLI build sends a 13,487-char vendor prompt
+(`a3015596fabfe9063deb699fa369a88d1978106e7a9d3d06b40eb6199791872d`), different
+`WebFetch`/`WebSearch` definitions, `thinking` enabled with `budget_tokens`
+31999, and a first user message of five text blocks: environment, model
+identity, account email and date reminders, then the package. No system-role
+message. It is a real shape that a real CLI sends. It is not this seat's, and it
+is not pinned.
+
+The account email and the environment block are host context that is not in the
+declared package. They are not instructions and they name no project material.
+They are disclosed, not suppressed: the proxy records and forwards, it never
+rewrites a request. The `claude` on PATH is a cmux shim that follows the
+installer; the launcher runs the pinned build by hash from its own archived
+copy and records the executable path and hash privately.
 
 ## Design
 
