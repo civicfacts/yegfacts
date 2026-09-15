@@ -40,11 +40,10 @@ Five request shapes were observed, and nothing else:
    `You are a Claude agent, built on Anthropic's Claude Agent SDK.`, and the
    13,487-char vendor default prompt, byte-identical across runs and turns,
    SHA-256 `a3015596fabfe9063deb699fa369a88d1978106e7a9d3d06b40eb6199791872d`.
-   Its headings: System, Doing tasks, Executing actions with care, Using your
-   tools, Tone and style, Text output, Environment, Context management. It
-   contains no memory paths, no CLAUDE.md content and no project text (the
+   It contains no memory paths, no CLAUDE.md content and no project text (the
    string "CLAUDE.md" appears once, in a generic sentence about durable
-   instructions). Tools = exactly two client tool definitions, `WebFetch` and
+   instructions). Its text is not reproduced here or anywhere else in this
+   repository. Tools = exactly two client tool definitions, `WebFetch` and
    `WebSearch` (SHA-256 of their JSON: `e3f1f3ee…987efb` and `67e78dc…77d5b`,
    record the full hashes). `messages[0]` is a user message of five text
    blocks, in this order:
@@ -104,7 +103,8 @@ Pass requires all of:
   hash; its `tools` are exactly the two pinned tool definitions by hash; its
   `model` is the pinned research model (the canary is run with the same pin);
 - every main turn's `messages[0]` is exactly the four reminder blocks matched
-  by anchored regular expressions (cwd must equal the attempt's work directory;
+  by anchored regular expressions (cwd must equal the run's work directory,
+  which is an opaque temporary path named only by the attempt id;
   the model reminder must name the pinned model) followed by one text block
   equal to the package bytes; every later user message contains only
   `tool_result` blocks and every later assistant message only `thinking`,
@@ -204,7 +204,9 @@ The proxy sees what the CLI addresses to its configured base URL. Nothing
 else on the machine is monitored. The check pins the vendor prompt by hash and
 does not publish its text. The reviewer is told the operator's account email
 and working directory by the vendor's own reminder blocks; that is disclosed
-as host context, not treated as isolation. A passing proof is evidence about
+as host context, not treated as isolation. The working directory is an opaque
+temporary path named only by the attempt id, so it no longer hands a blind
+reviewer the story, the round and the seat. A passing proof is evidence about
 one attempt under one CLI version, not a vendor guarantee. Codex and Google
 have no capture-backed profile yet; the three-seat panel therefore still
 cannot run, and consultation's Google source audit remains blocked.

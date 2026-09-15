@@ -26,6 +26,12 @@
 export interface Exit {
   kind: 'Stops here' | 'Loops back' | 'Continues' | 'Fixed before publication' | 'Corrected later';
   text: string;
+  /**
+   * Where a reader goes for the detail behind this exit. Optional, and the only
+   * markup any of these strings may carry: the rest stay plain text so the
+   * copy checks can read them.
+   */
+  link?: { href: string; text: string };
 }
 
 interface Props {
@@ -53,6 +59,15 @@ const { steps, flow = false } = Astro.props;
               {step.exits.map((exit) => (
                 <li class="border-l-2 border-rule pl-3 text-[0.875rem] leading-relaxed text-muted">
                   <span class="font-semibold text-ink">{exit.kind}.</span> {exit.text}
+                  {exit.link && (
+                    <>
+                      {' '}
+                      <a href={exit.link.href} class="link">
+                        {exit.link.text}
+                      </a>
+                      .
+                    </>
+                  )}
                 </li>
               ))}
             </ul>

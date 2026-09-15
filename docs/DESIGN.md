@@ -352,23 +352,42 @@ response and forwards them unchanged to `https://api.anthropic.com`.
 `scripts/panel/request-proof.ts` then classifies every captured request into one
 of five pinned shapes and checks the main turn against the pinned vendor prompt
 hash, the two pinned tool-definition hashes, the four host reminder templates
-and the declared package bytes. A seat is admitted only when the canary and the
-research run each pass their structural check and their request check, the CLI
-exited zero, the capture was taken against the production API, and the built-in
-pin table was used. The proxy sees only what the CLI addresses to its base URL;
-the vendor prompt is pinned by hash and never published; the account email and
-working directory the vendor reminder blocks carry are recorded as disclosed
-host context rather than treated as absent. A pass covers one attempt under one
-CLI version and certifies no historical run. 2.1.266 and 2.1.267 have no pinned
-profile and now stop before anything is sent. Because the pins describe one
-build, the launcher runs `~/.local/share/claude/versions/<pinned version>` when
-it is installed rather than the `claude` on PATH, checks `--version` on whatever
-it resolved, and refuses anything but the pinned build: 2.1.273 was already on
-PATH when v1.29 shipped, and a new version needs a fresh capture and a new pin
-row before it can run. Codex and Google have no
-capture-backed profile and stay blocked, so the three-seat panel still cannot
-run. Candidate diagnostics do not authorize a research run, and a source-audit
-helper does not authorize another framing check or reset a cap.
+and the declared package bytes. In later messages a user message may carry no
+block other than tool results, and each tool result's own content must be text
+and is scanned for the host's reminder markup: a block-type and marker-string
+check, not a general test for instruction text. A seat is admitted only when the
+canary and the research run each pass their structural check and their request
+check, the CLI exited zero, the capture was taken against the production API,
+and the built-in pin table was used. Note that the package leaves twice per
+attempt: the session-naming request carries the whole package, with no tools,
+before the main turn does.
+
+The host context the request carries beyond the package, in full: the working
+directory, whether it is a Git repository, the platform, the shell and the OS
+version; the model name and knowledge cutoff; the date; the account email
+address; and, in `metadata.user_id`, a device id, an account uuid and a session
+id. It is recorded as disclosed host context rather than treated as absent, with
+the email address replaced in the report. The working directory is an opaque
+`${TMPDIR}/attempt-<id>` path created for the run and removed afterwards, so it
+no longer names the story, the round or the seat.
+
+The limits run two ways. On this machine the proxy sees only what the CLI
+addresses to its base URL, nothing else is monitored, and the vendor prompt is
+pinned by hash and never published. On the vendor's side the capture shows what
+the CLI attached here and cannot show anything attached to this account after
+the request leaves. A pass covers one attempt under one CLI build and certifies
+no historical run. 2.1.266 and 2.1.267 have no pinned profile and now stop
+before anything is sent. Because the pins describe one build, the build is
+pinned by the SHA-256 of the executable: the launcher runs
+`$ARCHIVE_ROOT/cli/claude-<version>` when its hash matches, otherwise copies
+`~/.local/share/claude/versions/<version>` there once (0700 directory, 0500
+file) and runs the copy, and otherwise refuses. There is no PATH fallback;
+2.1.273 was on PATH when v1.29 shipped, the run record carries both
+`cli_version` and `path_cli_version`, and a new version needs a fresh capture
+and a new pin row before it can run. Codex and Google have no capture-backed
+profile and stay blocked, so the three-seat panel still cannot run. Candidate
+diagnostics do not authorize a research run, and a source-audit helper does not
+authorize another framing check or reset a cap.
 
 This changes the shell-access practice described in v1.14. A reviewer may be
 unable to retrieve a PDF that the earlier shell-enabled command could read.

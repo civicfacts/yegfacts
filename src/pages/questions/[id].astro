@@ -212,6 +212,17 @@ const states = [
   },
 ];
 
+/**
+ * Whether this entry's reason says the review is paused.
+ *
+ * Read off the text, because the register has no paused lifecycle state and
+ * inventing one to carry a link would be the wrong way round. The reason itself
+ * is plain text, so the link goes beside it rather than inside the YAML string:
+ * a register field that had to be parsed as markup would be a worse thing to
+ * live with than this test.
+ */
+const paused = /\bReview is paused as of\b/.test(question.reason ?? '');
+
 const Content = rendered?.Content;
 ---
 
@@ -769,6 +780,13 @@ const Content = rendered?.Content;
                 data-record
               >
                 {question.reason}
+              </p>
+            )}
+
+            {paused && (
+              <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed text-muted" data-record>
+                What has to be true before the models can run again is set out under{' '}
+                <a href="/methodology#reviewer-execution" class="link">reviewer execution</a>.
               </p>
             )}
 
