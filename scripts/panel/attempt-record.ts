@@ -38,6 +38,12 @@ export type AttemptRecord = {
   model_id?: string;
   reasoning_effort?: string;
   cli_version?: string;
+  /**
+   * What `claude --version` on PATH reported, or "absent". From v1.29 the
+   * launcher runs the pinned build rather than the PATH command, so the two can
+   * differ and a reader should be able to see that they did.
+   */
+  path_cli_version?: string;
   canary?: string;
   structure?: string;
   context_proof?: string;
@@ -152,6 +158,7 @@ function attemptRecord(dir: string, attempt: number, schema?: string): AttemptRe
     ...(text('model_id') ? { model_id: text('model_id') } : {}),
     ...(text('reasoning_effort') ? { reasoning_effort: text('reasoning_effort') } : {}),
     ...(text('cli_version') ? { cli_version: text('cli_version') } : {}),
+    ...(text('path_cli_version') ? { path_cli_version: text('path_cli_version') } : {}),
     ...(text('canary') ? { canary: text('canary') } : {}),
     ...(text('structure') ? { structure: text('structure') } : {}),
     // Defaulted, not optional: a row that omits these reads as if the question
@@ -185,8 +192,9 @@ function attemptRecord(dir: string, attempt: number, schema?: string): AttemptRe
       : {}),
     // The request-capture fields (methodology v1.29). Every one is optional and
     // a missing one means the capture was not taken or not recorded, never that
-    // it passed. `cli_executable` is deliberately not among them: it names a
-    // path on the founder's machine and stays in the private archive.
+    // it passed. `cli_executable`, `cli_executable_sha256` and `work_dir` are
+    // deliberately not among them: they name paths on the founder's machine and
+    // stay in the private archive. Which build ran is public as `cli_version`.
     ...copy(metadata, [
       'upstream',
       'canary_upstream',

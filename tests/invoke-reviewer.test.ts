@@ -28,6 +28,7 @@
  * the test.
  */
 import { spawn, spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import http from 'node:http';
 import {
   chmodSync,
@@ -39,7 +40,9 @@ import {
   readdirSync,
   realpathSync,
   rmSync,
+  statSync,
   symlinkSync,
+  unlinkSync,
   writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -298,8 +301,13 @@ const validReview = (() => {
 // The stub upstream. The recording proxy forwards to it, so no test reaches the
 // network and every test still goes through the proxy for real.
 // ---------------------------------------------------------------------------
-const PINS_FILE = path.join(root, 'fixture-pins.json');
 const UPSTREAM_PORT_FILE = path.join(root, 'upstream-port');
+/**
+ * The substitute pin row every stub run is checked against. Each stub writes
+ * its own copy with its own `binarySha256`, because the stub script embeds its
+ * own paths and so has a different hash in every test.
+ */
+const FIXTURE_PIN_ROW = fixturePins(FIXTURE_CAPTURE, PINS[PROBED_VERSION]!) as Record<string, unknown>;
 let upstream: ReturnType<typeof spawn>;
 let upstreamUrl = '';
 
@@ -314,10 +322,6 @@ beforeAll(async () => {
     await new Promise((resolve) => setTimeout(resolve, 50));
   }
   upstreamUrl = `http://127.0.0.1:${readFileSync(UPSTREAM_PORT_FILE, 'utf8').trim()}`;
-  writeFileSync(
-    PINS_FILE,
-    `${JSON.stringify({ [PROBED_VERSION]: fixturePins(FIXTURE_CAPTURE, PINS[PROBED_VERSION]) }, null, 2)}\n`,
-  );
 });
 afterAll(() => upstream?.kill('SIGKILL'));
 
@@ -332,15 +336,24 @@ type Stub = { dir: string; archive: string; env: NodeJS.ProcessEnv };
  *
  * HOME is always a directory inside the stub, so a test decides whether a
  * versioned install exists rather than inheriting whatever this machine has
- * under `~/.local/share/claude/versions`. `installedVersion` puts the same
- * script there, and the script records which of the two copies was run.
+ * under `~/.local/share/claude/versions`. By default the install is there, at
+ * the pinned version, because from v1.29 there is no PATH fallback: the PATH
+ * copy exists only to be asked its version. `installVersion: null` takes the
+ * install away, `version` is what the install (and the archived copy of it)
+ * reports, `pathVersion` is what the PATH copy reports, and `binaryHash`
+ * substitutes a wrong hash into the stub's own pin row.
+ *
+ * The script records which copy ran — "archived", "installed" or "path" — so a
+ * test can see that the pin was held rather than inferring it.
  */
 function stubClaude(
   options: {
     canary?: string;
     canaryExit?: number;
     version?: string;
-    installedVersion?: string;
+    pathVersion?: string;
+    installVersion?: string | null;
+    binaryHash?: string;
     research?: string;
     researchExit?: number;
     mutateCanary?: string;
@@ -352,8 +365,12 @@ function stubClaude(
   mkdirSync(bin);
   const home = path.join(dir, 'home');
   mkdirSync(home);
-  writeFileSync(path.join(dir, 'version-path'), `${options.version ?? PROBED_VERSION} (Claude Code)\n`);
-  writeFileSync(path.join(dir, 'version-installed'), `${options.installedVersion ?? PROBED_VERSION} (Claude Code)\n`);
+  const reports = `${options.version ?? PROBED_VERSION} (Claude Code)\n`;
+  writeFileSync(path.join(dir, 'version-path'), `${options.pathVersion ?? PROBED_VERSION} (Claude Code)\n`);
+  writeFileSync(path.join(dir, 'version-installed'), reports);
+  // The archived copy is a byte copy of the installed file, so it answers the
+  // same way and hashes the same way.
+  writeFileSync(path.join(dir, 'version-archived'), reports);
   writeFileSync(path.join(dir, 'canary.jsonl'), options.canary ?? goodCanary);
   writeFileSync(path.join(dir, 'canary.exit'), String(options.canaryExit ?? 0));
   writeFileSync(path.join(dir, 'research.jsonl'), options.research ?? researchRun('the package was sent'));
@@ -362,6 +379,7 @@ function stubClaude(
   const script = `#!/usr/bin/env bash
 set -u
 case "$0" in
+  */cli/claude-*) me=archived ;;
   */versions/*) me=installed ;;
   *) me=path ;;
 esac
@@ -408,13 +426,31 @@ exit "$(cat "${dir}/research.exit")"
   writeFileSync(claude, script);
   chmodSync(claude, 0o755);
 
-  if (options.installedVersion) {
+  const installVersion = options.installVersion === undefined ? PROBED_VERSION : options.installVersion;
+  if (installVersion) {
     const versions = path.join(home, '.local', 'share', 'claude', 'versions');
     mkdirSync(versions, { recursive: true });
-    const installed = path.join(versions, options.installedVersion);
+    const installed = path.join(versions, installVersion);
     writeFileSync(installed, script);
     chmodSync(installed, 0o755);
   }
+
+  // The stub's own pin row, because the stub script embeds its own paths and so
+  // hashes differently in every test.
+  const pinsFile = path.join(dir, 'pins.json');
+  writeFileSync(
+    pinsFile,
+    `${JSON.stringify(
+      {
+        [PROBED_VERSION]: {
+          ...FIXTURE_PIN_ROW,
+          binarySha256: options.binaryHash ?? createHash('sha256').update(script, 'utf8').digest('hex'),
+        },
+      },
+      null,
+      2,
+    )}\n`,
+  );
 
   const archive = mkdtempSync(path.join(root, 'archive-'));
   return {
@@ -426,7 +462,7 @@ exit "$(cat "${dir}/research.exit")"
       PATH: `${bin}:${process.env.PATH ?? ''}`,
       YEGFACTS_REVIEW_ARCHIVE: archive,
       YEGFACTS_REVIEW_UPSTREAM: upstreamUrl,
-      YEGFACTS_REVIEW_PINS: PINS_FILE,
+      YEGFACTS_REVIEW_PINS: pinsFile,
       ...(options.mutateCanary ? { STUB_MUTATE_CANARY: options.mutateCanary } : {}),
       ...(options.mutateResearch ? { STUB_MUTATE_RESEARCH: options.mutateResearch } : {}),
     },
@@ -622,6 +658,40 @@ describe('research run', { timeout: 120_000 }, () => {
     expect(row.cli_executable).toBeUndefined();
     expect(JSON.stringify(row)).not.toContain(stub.archive);
     expect(JSON.stringify(row)).not.toContain('/Users/');
+  });
+
+  /**
+   * The working directory is context the reviewer receives, because the
+   * vendor's environment reminder puts it in every request. Running inside the
+   * attempt directory handed a blind reviewer the story, the round and the seat
+   * in that one line.
+   */
+  it('works in an opaque temporary directory and takes it away afterwards', () => {
+    const stub = stubClaude();
+    const { ok, attempt } = research(stub, 'work-dir');
+    expect(ok).toBe(true);
+
+    const metadata = readJson(path.join(attempt, 'metadata.json'));
+    const workDir = String(metadata.work_dir);
+    expect(path.basename(workDir)).toMatch(/^attempt-[0-9a-f]{16}$/);
+    // Nothing in the path names the project, the story, the round or the seat.
+    for (const leak of [STORY, RUN_DATE, 'round1', 'claude', 'yegfacts', stub.archive, stub.dir]) {
+      expect(workDir).not.toContain(leak);
+    }
+    // Removed after the run: only the files the launcher made, and only the
+    // directories it made.
+    expect(existsSync(workDir)).toBe(false);
+
+    // The prompt and the synthetic fixture are still retained where they were
+    // written, which is the point of copying rather than moving.
+    expect(readFileSync(path.join(attempt, 'canary', 'work', 'canary.md'), 'utf8')).toContain('../CANARY.md');
+    expect(readFileSync(path.join(attempt, 'canary', 'CANARY.md'), 'utf8')).toMatch(/^token: YEGFACTS_CANARY_/);
+
+    // And the request the reviewer got names the temporary directory, which is
+    // what the proof compared against.
+    const main = readJson(path.join(attempt, 'requests', 'req-0003.json'));
+    const blocks = (main.body as { messages: { content: { text: string }[] }[] }).messages[0]!.content;
+    expect(blocks[0]!.text).toContain(`Primary working directory: ${workDir}/work`);
   });
 
   it('stops both proxies once the run is over', async () => {
@@ -898,40 +968,84 @@ describe('candidate diagnostic', { timeout: 60_000 }, () => {
   });
 
   /**
-   * Which build runs, which is not the same question as which one is on PATH.
-   * The pins describe one build; the PATH shim follows the installer and had
-   * already moved on to 2.1.273 by the time this shipped.
+   * Which bytes run, which is not the same question as which version is on
+   * PATH. The pins describe one build; the PATH shim follows the installer and
+   * had already moved on to 2.1.273 by the time this shipped.
    */
-  it('runs the installed pinned build in preference to a newer one on PATH', () => {
-    const stub = stubClaude({ version: '2.1.273', installedVersion: PROBED_VERSION });
+  it('copies the pinned build into the archive and runs the copy, not PATH', () => {
+    const stub = stubClaude({ pathVersion: '2.1.273' });
     const { ok, attempt } = diagnose(stub, 'pinned-build');
 
     expect(ok).toBe(true);
-    expect(invokedAs(stub)).toEqual(['installed', 'installed']);
-    expect(readJson(path.join(attempt, 'metadata.json')).cli_version).toBe(PROBED_VERSION);
-    // Recorded privately, and it is the versioned binary rather than the shim.
-    expect(String(readJson(path.join(attempt, 'metadata.json')).cli_executable)).toContain(
-      `/versions/${PROBED_VERSION}`,
-    );
+    // PATH was asked its version and never run; everything else was the copy.
+    expect(new Set(invokedAs(stub))).toEqual(new Set(['path', 'archived']));
+    expect(invokedAs(stub).filter((one) => one === 'path')).toHaveLength(1);
+    expect(invokedAs(stub)).not.toContain('installed');
+
+    const metadata = readJson(path.join(attempt, 'metadata.json'));
+    expect(metadata.cli_version).toBe(PROBED_VERSION);
+    // Both versions on the record, which is how a reader sees the pin was held.
+    expect(metadata.path_cli_version).toBe('2.1.273');
+    // Private: the path and the hash of the bytes that ran.
+    expect(String(metadata.cli_executable)).toContain(`/cli/claude-${PROBED_VERSION}`);
+    expect(metadata.cli_executable_sha256).toMatch(/^[0-9a-f]{64}$/);
+
+    // The archived copy is what a later attempt will reuse, and it is read-only.
+    const archived = path.join(stub.archive, 'cli', `claude-${PROBED_VERSION}`);
+    expect(existsSync(archived)).toBe(true);
+    expect(statSync(archived).mode & 0o777).toBe(0o500);
+    expect(statSync(path.join(stub.archive, 'cli')).mode & 0o777).toBe(0o700);
   });
 
-  it('falls back to the PATH command when the pinned build is not installed', () => {
+  it('prefers the archived copy once it exists, even with the installer gone', () => {
     const stub = stubClaude();
-    const { ok } = diagnose(stub, 'path-fallback');
-    expect(ok).toBe(true);
-    expect(invokedAs(stub)).toEqual(['path', 'path']);
+    expect(diagnose(stub, 'archive-first').ok).toBe(true);
+
+    // The installer removes and replaces builds on its own schedule. The
+    // archived copy is the point: the same bytes stay runnable afterwards.
+    unlinkSync(path.join(stub.dir, 'home', '.local', 'share', 'claude', 'versions', PROBED_VERSION));
+    const second = diagnose(stub, 'archive-second');
+
+    expect(second.ok).toBe(true);
+    expect(invokedAs(stub)).not.toContain('installed');
+    expect(String(readJson(path.join(second.attempt, 'metadata.json')).cli_executable)).toContain('/cli/claude-');
   });
 
-  it('refuses a newer CLI on PATH when the pinned build is not installed', () => {
-    const stub = stubClaude({ version: '2.1.273' });
-    const { ok, stderr, attempt } = diagnose(stub, 'newer-on-path');
+  it('refuses when the pinned build is neither installed nor archived', () => {
+    const stub = stubClaude({ installVersion: null, pathVersion: '2.1.273' });
+    const { ok, stderr, attempt } = diagnose(stub, 'not-installed');
 
     expect(ok).toBe(false);
-    expect(stderr).toMatch(/2\.1\.273 has never been probed/);
-    // It was asked its version and nothing else.
+    expect(stderr).toMatch(new RegExp(`pinned build ${PROBED_VERSION} is not installed and no archived copy exists`));
+    // A distinct refusal from the unprobed-version one, and nothing was run.
+    expect(stderr).not.toMatch(/has never been probed/);
     expect(invokedAs(stub)).toEqual(['path']);
     expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
     expect(readJson(path.join(attempt, 'metadata.json')).status).toBe('blocked');
+  });
+
+  it('refuses a build whose bytes do not hash to the pin', () => {
+    const stub = stubClaude({ binaryHash: 'a'.repeat(64) });
+    const { ok, stderr, attempt } = diagnose(stub, 'wrong-bytes');
+
+    expect(ok).toBe(false);
+    expect(stderr).toMatch(/hashes to [0-9a-f]{64}, not the pinned a{64}/);
+    expect(invokedAs(stub)).toEqual(['path']);
+    expect(existsSync(path.join(stub.archive, 'cli'))).toBe(false);
+    expect(readJson(path.join(attempt, 'metadata.json')).status).toBe('blocked');
+  });
+
+  it('refuses an archived copy whose bytes changed under it', () => {
+    const stub = stubClaude();
+    expect(diagnose(stub, 'archive-ok').ok).toBe(true);
+
+    const archived = path.join(stub.archive, 'cli', `claude-${PROBED_VERSION}`);
+    chmodSync(archived, 0o700);
+    writeFileSync(archived, '#!/usr/bin/env bash\nexit 0\n');
+    const second = diagnose(stub, 'archive-tampered');
+
+    expect(second.ok).toBe(false);
+    expect(second.stderr).toMatch(/the archived copy of build .* hashes to/);
   });
 
   it('keeps the output of a nonzero exit without ever admitting it', () => {

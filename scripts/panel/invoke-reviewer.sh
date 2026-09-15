@@ -29,6 +29,12 @@
 # reminder blocks matching a fixed template, and the declared package byte for
 # byte as the last block of the first user message.
 #
+# The package leaves twice per research attempt, and no message here pretends
+# otherwise. Before the main turn the CLI sends a session-naming request that
+# wraps the whole package in <session> tags and carries no tools. Both are in
+# the capture and both are checked; a refusal after the research run has started
+# is a refusal to publish, not a claim that nothing left the machine.
+#
 # What is NOT covered, stated plainly because a capture invites the opposite
 # reading. The proxy sees what the CLI addresses to its configured base URL.
 # Nothing else on the machine is watched. The vendor prompt is pinned by hash
@@ -232,6 +238,9 @@ REASON="the launcher exited before reaching a decision"
 CLI_EXIT=""
 CLI_VERSION=""
 CLI_EXECUTABLE=""
+CLI_EXECUTABLE_SHA=""
+PATH_CLI_VERSION="absent"
+WORK_ROOT=""
 PROFILE="unresolved"
 CANARY_VERDICT="not-run"
 STRUCTURE_VERDICT="not-run"
@@ -288,9 +297,16 @@ write_metadata() {
       model_id: values.model_id,
       reasoning_effort: values.reasoning_effort,
       cli_version: values.cli_version,
-      // Private only. attempt-record.ts never copies it: where a CLI build sits
-      // on this machine is not part of the public record.
+      // Private only. attempt-record.ts never copies these: where a CLI build
+      // sits on this machine, and where the attempt worked, are not part of the
+      // public record. The hash of the build IS public, under cli_version.
       cli_executable: values.cli_executable,
+      cli_executable_sha256: values.cli_executable_sha256,
+      work_dir: values.work_dir,
+      // What `claude --version` on PATH says, which from methodology v1.29 is
+      // not necessarily what ran. Public: a reader comparing the two sees that
+      // the launcher held the pin rather than following the installer.
+      path_cli_version: values.path_cli_version,
       exit_code: number(values.exit_code),
       canary: values.canary,
       structure: values.structure,
@@ -317,6 +333,9 @@ write_metadata() {
     report "$ATTEMPT_DIR/report.json" \
     canary_report "$ATTEMPT_DIR/canary/report.json" \
     cli_executable "$CLI_EXECUTABLE" \
+    cli_executable_sha256 "$CLI_EXECUTABLE_SHA" \
+    path_cli_version "$PATH_CLI_VERSION" \
+    work_dir "$WORK_ROOT" \
     context_proof "$CONTEXT_PROOF" \
     canary_context_proof "$CANARY_CONTEXT_PROOF" \
     admitted "$ADMITTED" \
@@ -510,40 +529,93 @@ fi
 # same treatment. Exit 0 requires the CLI to have exited 0 and all four checks
 # to have passed.
 # ---------------------------------------------------------------------------
-# WHICH BUILD RUNS, which is a different question from which one is on PATH.
-#
-# The pins in request-proof.ts describe one build. The `claude` on PATH is a
-# shim that follows the installer, and by the time this shipped the installer
-# had already moved to 2.1.273 while the capture behind the pins was 2.1.272. A
-# newer CLI is not a worse one. It is an unprobed one, and there is nothing to
-# compare its request against.
-#
-# The installer keeps every version as a standalone binary under
-# ~/.local/share/claude/versions/, so the pinned build can be run directly. If
-# it is not installed, the PATH command is used instead. Either way the check
-# below runs `--version` on whatever was actually resolved, so a shim answering
-# for a different build is still caught before anything is sent.
-CLI_NAME="$CLI"
-VERSIONED_CLI="${HOME}/.local/share/claude/versions/${PINNED_CLI_VERSION}"
-if [ -n "$PINNED_CLI_VERSION" ] && [ -f "$VERSIONED_CLI" ] && [ -x "$VERSIONED_CLI" ]; then
-  CLI="$VERSIONED_CLI"
-else
-  command -v "$CLI_NAME" >/dev/null 2>&1 || refuse failed "$CLI_NAME is not on PATH"
-  CLI="$(command -v "$CLI_NAME")"
+# The pin table. Built-in unless YEGFACTS_REVIEW_PINS names another, which only
+# exists so a test can prove a capture whose hash-pinned blocks are stand-ins:
+# the repository pins the vendor prompt and the two tool definitions by hash and
+# does not carry their text, so a fixture cannot reproduce them. It is gated on
+# the loopback upstream, so it cannot be used against the API, and a run that
+# used it is never admitted. Both facts are recorded.
+PINS_SOURCE="built-in"
+PINS_ARGS=()
+if [ -n "${YEGFACTS_REVIEW_PINS:-}" ]; then
+  case "${YEGFACTS_REVIEW_UPSTREAM:-}" in
+    http://127.0.0.1*|http://localhost*)
+      PINS_SOURCE="override"
+      PINS_ARGS=(--pins "$YEGFACTS_REVIEW_PINS")
+      ;;
+    *)
+      refuse blocked "YEGFACTS_REVIEW_PINS was set without a loopback YEGFACTS_REVIEW_UPSTREAM: a substitute pin table is a test fixture and must never be used against the API"
+      ;;
+  esac
 fi
 
-# Following the links records which build actually ran. Private only: it names a
-# path on this machine and never crosses into the public manifest.
+# WHICH BYTES RUN, which is a different question from which version is on PATH.
+#
+# The pins in request-proof.ts describe one build of one CLI. The `claude` on
+# PATH is a shim that follows the installer, and by the time this shipped the
+# installer had already moved to 2.1.273 while the captures behind the pins came
+# from 2.1.272. A newer CLI is not a worse one. It is an unprobed one, and there
+# is nothing to compare its request against.
+#
+# A version string is not enough either: it is whatever the executable says when
+# asked. So the build is pinned by the SHA-256 of the file, and the launcher
+# keeps its own copy of it in the archive. Three outcomes and no fallback:
+#
+#   (a) the archived copy exists and hashes to the pin, and is run;
+#   (b) no archived copy, but the installer's file exists and hashes to the pin,
+#       so it is copied into the archive (0700 directory, 0500 file) and the
+#       copy is run;
+#   (c) neither, and this refuses.
+#
+# A hash that does not match is its own refusal in either case. The point of
+# (b) is that the installer overwrites and removes builds on its own schedule;
+# a published proof that named a build nobody can produce any more would be
+# worth very little. The copy is read-only so a later run cannot quietly get
+# different bytes under the same name.
+#
+# There is no PATH fallback. What PATH reports is recorded and nothing else.
+CLI_NAME="$CLI"
+
+PATH_CLI_VERSION="absent"
+if command -v "$CLI_NAME" >/dev/null 2>&1; then
+  PATH_CLI_VERSION="$("$CLI_NAME" --version 2>/dev/null | head -1 | tr -d '\r' | awk '{print $1}')"
+  [ -n "$PATH_CLI_VERSION" ] || PATH_CLI_VERSION="unknown"
+fi
+
+PINNED_BINARY_SHA="$(npx tsx "$REPO_ROOT/scripts/panel/request-proof.ts" \
+  --field binarySha256 --cli-version "$PINNED_CLI_VERSION" "${PINS_ARGS[@]+"${PINS_ARGS[@]}"}")" \
+  || refuse blocked "no pinned binary hash for $CLI_NAME $PINNED_CLI_VERSION; refusing before sending anything"
+
+sha_of_file() { shasum -a 256 "$1" | cut -d' ' -f1; }
+
+ARCHIVED_CLI="$ROOT/cli/$CLI_NAME-$PINNED_CLI_VERSION"
+INSTALLED_CLI="${HOME}/.local/share/claude/versions/${PINNED_CLI_VERSION}"
+
+if [ -f "$ARCHIVED_CLI" ]; then
+  CLI_EXECUTABLE_SHA="$(sha_of_file "$ARCHIVED_CLI")"
+  [ "$CLI_EXECUTABLE_SHA" = "$PINNED_BINARY_SHA" ] || refuse blocked \
+    "the archived copy of build $PINNED_CLI_VERSION hashes to $CLI_EXECUTABLE_SHA, not the pinned $PINNED_BINARY_SHA; refusing before sending anything"
+  CLI="$ARCHIVED_CLI"
+elif [ -f "$INSTALLED_CLI" ]; then
+  CLI_EXECUTABLE_SHA="$(sha_of_file "$INSTALLED_CLI")"
+  [ "$CLI_EXECUTABLE_SHA" = "$PINNED_BINARY_SHA" ] || refuse blocked \
+    "the installed build $PINNED_CLI_VERSION hashes to $CLI_EXECUTABLE_SHA, not the pinned $PINNED_BINARY_SHA; refusing before sending anything"
+  mkdir -p "$ROOT/cli"
+  chmod 700 "$ROOT/cli"
+  # Copied under a unique name and renamed into place, so two sessions racing
+  # here cannot run a half-written binary.
+  staging="$ARCHIVED_CLI.partial.$$"
+  cp "$INSTALLED_CLI" "$staging"
+  chmod 500 "$staging"
+  mv "$staging" "$ARCHIVED_CLI"
+  CLI="$ARCHIVED_CLI"
+else
+  refuse blocked "pinned build $PINNED_CLI_VERSION is not installed and no archived copy exists"
+fi
+
+# Private only: it names a path on this machine and never crosses into the
+# public manifest. The hash is what a reader of the public row would be given.
 CLI_EXECUTABLE="$CLI"
-hops=0
-while [ -L "$CLI_EXECUTABLE" ] && [ "$hops" -lt 16 ]; do
-  link="$(readlink "$CLI_EXECUTABLE")"
-  case "$link" in
-    /*) CLI_EXECUTABLE="$link" ;;
-    *) CLI_EXECUTABLE="$(dirname "$CLI_EXECUTABLE")/$link" ;;
-  esac
-  hops=$((hops + 1))
-done
 
 CLI_VERSION="$("$CLI" --version 2>/dev/null | head -1 | tr -d '\r' | awk '{print $1}')"
 [ -n "$CLI_VERSION" ] || CLI_VERSION="unknown"
@@ -578,6 +650,11 @@ CANARY_HEADING="Example Domain"
 # A fresh token every attempt, so a model that had somehow retained a previous
 # one cannot pass by recall. The fixture sits one level above the working
 # directory: reachable by any file tool, unreachable when no file tool exists.
+#
+# `canary.md` stays one directory below `CANARY.md` in the retained copy as
+# well as in the working tree. On a case-insensitive filesystem the two names
+# are the same file, and putting them side by side silently overwrote the token
+# with the prompt.
 CANARY_DIR="$ATTEMPT_DIR/canary"
 mkdir -p "$CANARY_DIR/work"
 CANARY_TOKEN="YEGFACTS_CANARY_$(printf '%s\n' "$ATTEMPT_ID$RANDOM$$" | shasum -a 256 | cut -c1-24)"
@@ -593,27 +670,43 @@ printf 'token: %s\n' "$CANARY_TOKEN" > "$CANARY_DIR/CANARY.md"
   echo '{"web_h1": "<heading text>", "canary_token": "<the token, or null if you could not read that file>", "tools": ["<tool name>"]}'
 } > "$CANARY_DIR/work/canary.md"
 
-CANARY_WORK="$(cd "$CANARY_DIR/work" && pwd -P)"
+# ---------------------------------------------------------------------------
+# The working directory, which the model is told.
+#
+# The vendor's environment reminder puts the working directory in every request,
+# so the path itself is context the reviewer receives. Running inside the
+# attempt directory meant that context read as
+# `.../<story>/<date>/round1/claude/...`: the story, the round and the seat,
+# handed to a reviewer that is supposed to answer blind. So the run happens in
+# an opaque temporary directory named only by the attempt id, outside the
+# archive and outside every repository.
+#
+# The files are still retained, in the attempt directory where they were
+# written. What goes into the temporary tree is a copy, and afterwards only the
+# named files this created are removed and only the directories it made are
+# taken away. A `rmdir` that fails because the CLI left something behind is
+# left alone rather than forced: nothing here deletes what it did not make.
+# ---------------------------------------------------------------------------
+WORK_ROOT="${TMPDIR:-/tmp}"
+WORK_ROOT="${WORK_ROOT%/}/attempt-$ATTEMPT_ID"
+mkdir -p "$WORK_ROOT/canary/work" "$WORK_ROOT/work"
+chmod 700 "$WORK_ROOT"
+# Resolved, because the CLI reports the resolved path in its environment
+# reminder and the proof compares the two. On macOS $TMPDIR is under /var,
+# which is a symlink to /private/var.
+WORK_ROOT="$(cd "$WORK_ROOT" && pwd -P)"
+cp "$CANARY_DIR/CANARY.md" "$WORK_ROOT/canary/CANARY.md"
+cp "$CANARY_DIR/work/canary.md" "$WORK_ROOT/canary/work/canary.md"
 
-# The pin table. Built-in unless YEGFACTS_REVIEW_PINS names another, which only
-# exists so a test can prove a capture whose hash-pinned blocks are stand-ins:
-# the repository pins the vendor prompt and the two tool definitions by hash and
-# does not carry their text, so a fixture cannot reproduce them. It is gated on
-# the loopback upstream, so it cannot be used against the API, and a run that
-# used it is never admitted. Both facts are recorded.
-PINS_SOURCE="built-in"
-PINS_ARGS=()
-if [ -n "${YEGFACTS_REVIEW_PINS:-}" ]; then
-  case "${YEGFACTS_REVIEW_UPSTREAM:-}" in
-    http://127.0.0.1*|http://localhost*)
-      PINS_SOURCE="override"
-      PINS_ARGS=(--pins "$YEGFACTS_REVIEW_PINS")
-      ;;
-    *)
-      refuse blocked "YEGFACTS_REVIEW_PINS was set without a loopback YEGFACTS_REVIEW_UPSTREAM: a substitute pin table is a test fixture and must never be used against the API"
-      ;;
-  esac
-fi
+clean_work() {
+  [ -n "$WORK_ROOT" ] || return 0
+  rm -f "$WORK_ROOT/canary/work/canary.md" "$WORK_ROOT/canary/CANARY.md"
+  rmdir "$WORK_ROOT/canary/work" "$WORK_ROOT/canary" "$WORK_ROOT/work" "$WORK_ROOT" 2>/dev/null || true
+}
+trap 'stop_proxy; clean_work; write_metadata' EXIT
+
+CANARY_WORK="$(cd "$WORK_ROOT/canary/work" && pwd -P)"
+RESEARCH_WORK="$(cd "$WORK_ROOT/work" && pwd -P)"
 
 # Reads the context-proof status a boundary report recorded. Absent or
 # unreadable is "unavailable", never "pass".
@@ -664,7 +757,8 @@ fi
 if [ "$PURPOSE" != "research" ]; then
   # The diagnostic asks the CLI about itself. Its canary request is captured and
   # proved, which is worth having on the record, and it still admits nothing:
-  # no package was sent, so there is nothing to admit.
+  # no package was sent, so there is nothing to admit. The canary refusals above
+  # can say that too, because they all happen before the research run starts.
   CONTEXT_PROOF="$CANARY_CONTEXT_PROOF"
   ADMITTED="false"
   ADMISSION_REASON="a diagnostic never admits a seat: the prepared package was retained and never sent."
@@ -678,10 +772,6 @@ fi
 # ---------------------------------------------------------------------------
 # Research: the package, through a fresh proxy, under the same profile.
 # ---------------------------------------------------------------------------
-RESEARCH_WORK="$ATTEMPT_DIR/work"
-mkdir -p "$RESEARCH_WORK"
-RESEARCH_WORK="$(cd "$RESEARCH_WORK" && pwd -P)"
-
 start_proxy "$ATTEMPT_DIR/requests" "$ATTEMPT_DIR/proxy-port"
 set +e
 ( cd "$RESEARCH_WORK" \
@@ -702,14 +792,19 @@ npx tsx "$BOUNDARY_TS" "$ATTEMPT_DIR/stdout.txt" \
 STRUCTURE_VERDICT="$RESEARCH_VERDICT"
 CONTEXT_PROOF="$(proof_status "$ATTEMPT_DIR/report.json")"
 
+# From here on, nothing says the package was not sent. The CLI sends it twice
+# per research attempt: once as the main turn, and once before that in the
+# session-naming request, which wraps the whole package in <session> tags. Both
+# are in the capture and both are checked. A refusal after this point is a
+# refusal to publish, not a claim that nothing left the machine.
 if [ "$CLI_EXIT" -ne 0 ]; then
-  ADMISSION_REASON="the research invocation exited $CLI_EXIT"
-  refuse failed "the research invocation exited $CLI_EXIT; its output and capture are retained and nothing was admitted"
+  ADMISSION_REASON="the research invocation exited $CLI_EXIT; the package had already been sent and nothing was admitted"
+  refuse failed "the research invocation exited $CLI_EXIT; the package had already been sent, its output and capture are retained, and nothing was admitted"
 fi
 if [ "$RESEARCH_VERDICT" != "pass" ]; then
   sed 's/^/  /' "$ATTEMPT_DIR/failures.txt" >&2
-  ADMISSION_REASON="the research run did not pass its structural check and request proof"
-  refuse failed "the research run failed its admission check; its output and capture are retained"
+  ADMISSION_REASON="the research run did not pass its structural check and request proof; the package had already been sent"
+  refuse failed "the research run failed its admission check; the package had already been sent and its output and capture are retained"
 fi
 
 # The upstream the capture was actually taken against. A capture taken against
