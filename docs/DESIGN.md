@@ -371,10 +371,13 @@ against 13,487 under Haiku, different `WebFetch`/`WebSearch` definitions, and
 the host environment in a system-role message rather than as reminder blocks in
 the user turn. The gate was right; the table was wrong. The only row is 2.1.272
 + claude-opus-5 and the Haiku-derived main-turn pins are gone rather than kept
-alongside. The three side requests are classified structurally — system texts,
-tool list, user-text prefix — and their model, `thinking`, `output_config` and
+alongside. The three side requests are classified structurally, on system texts,
+tool list and user-text prefix. Their model, `thinking`, `output_config` and
 `max_tokens` are recorded as observations and never required, because they are
-vendor defaults. The search helper in particular is unobserved under this seat,
+vendor defaults. The search helper's server tool is pinned by `type` and `name`
+only: `max_uses`, `allowed_domains` and `blocked_domains` carry the model's own
+search input and are recorded rather than pinned, which a live research run
+established by being refused for scoping a search to two hosts. The search helper in particular is unobserved under this seat,
 since the canary does not search and a research run will.
 
 The host context the request carries beyond the package, in full: the working

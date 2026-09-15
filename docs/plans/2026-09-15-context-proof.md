@@ -68,19 +68,20 @@ Five request shapes were observed under the pinned seat, and nothing else:
    first turn it arrives as a one-element block array with `cache_control`
    ephemeral; on later turns as a bare string with the same 433 characters.
    Later turns append an assistant message (thinking, tool_use) and a user
-   message of tool_result blocks only. `thinking` is `{"type":"adaptive"}`,
-   `output_config` is `{"effort":"high"}` — the effort pin, checkable from the
-   request for the first time — `max_tokens` is 64000, and
-   `context_management` clears old thinking. Metadata carries device id, account
-   UUID and session id.
+   message of tool_result blocks only. `thinking` is `{"type":"adaptive"}` and
+   `max_tokens` is 64000. `output_config` is `{"effort":"high"}`: the effort pin,
+   checkable from the request for the first time. `context_management` clears
+   old thinking. Metadata carries device id, account UUID and session id.
 4. **Search helper.** System = billing header, agent line, and the 57-char
    line "You are an assistant for performing a web search tool use". Tools =
-   one server tool `{type: web_search_20250305, name: web_search, max_uses: 8}`.
-   One user message: "Perform a web search for the query: <query>". NOT observed
-   under the pinned seat: the canary does not search. It is classified on those
-   three things and on nothing else, because requiring a model or an
-   `output_config` nobody has measured would refuse a request for being
-   unfamiliar rather than for being wrong.
+   one server tool of type `web_search_20250305` and name `web_search`. One user
+   message: "Perform a web search for the query: <query>". Observed in the live
+   research run, not in the canary, which does not search. The tool's remaining
+   keys are the model's own WebSearch input passed through: one search carried
+   `allowed_domains` with two hosts and another with three, alongside
+   `max_uses`. So `max_uses`, `allowed_domains` and `blocked_domains` are
+   permitted and recorded; any other key, or a second tool, fails. Pinning the
+   exact JSON refused a real research run for scoping a search to two hosts.
 5. **Fetch summarizer.** System = billing header and agent line only. No
    tools. One user message beginning "\nWeb page content:\n---\n" with the
    fetched page text and a fixed extraction/quoting instruction after it.
@@ -90,6 +91,16 @@ disabled, and the session-title one carries a `json_schema` output format. None
 of that is pinned: the model, thinking, `output_config` and `max_tokens` of a
 side request are recorded as observations, because they are the vendor's own
 settings and pinning them would turn a vendor default into a failure.
+
+**How many turns there were.** The number of main-turn requests is checked
+against the number of distinct assistant `message.id` values in the stream. The
+first rule tried was maximal runs of consecutive assistant events, and the live
+research run broke it: its stream carries `user[tool_result]`,
+`assistant[tool_use]`, `user[tool_result]`, `user[tool_result]`, so one tool's
+result arrived before the model's last tool_use block of the same turn was
+emitted. Run-grouping split that turn in two and reported 8 against 7 requests,
+with or without the interleaved `rate_limit_event` ignored. The message id is
+the API's own record of where a turn ends and does not depend on arrival order.
 
 **The Haiku shape, for the record.** Under `claude-haiku-4-5-20251001` the same
 CLI build sends a 13,487-char vendor prompt
