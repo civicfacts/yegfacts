@@ -136,7 +136,7 @@ capture before the check runs. Any upstream error is recorded, never hidden.
 
 **Proof.** `scripts/panel/request-proof.ts`: reads a `requests/` directory, the
 exact package bytes, the stream facts from `stream-boundary.ts`, and a pinned
-profile table keyed by CLI version. It classifies every captured request into
+profile table keyed by CLI version and model. It classifies every captured request into
 one of the five shapes above by exact structure, and returns
 `{status: 'pass' | 'fail', requests: [...], failures: [...], disclosed: [...]}`.
 Pass requires all of:
