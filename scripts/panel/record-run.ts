@@ -41,11 +41,17 @@ type RunEntry = {
   /**
    * One row per attempt (methodology v1.28): opaque attempt id, the isolation
    * profile it ran under, the canary and boundary verdicts, the exact exit code
-   * and content hashes. Absent on every manifest written before v1.28, and a
-   * missing value means "not recorded" — never "passed".
+   * and content hashes. From v1.29 a row also carries the request-capture
+   * fields — the context-proof status, whether the run was admitted for
+   * research and why, the upstream the capture was taken against, the pinned
+   * vendor-prompt and tool-definition hashes, the request and main-turn counts,
+   * and the capture manifest hash. Absent on every manifest written before
+   * v1.28, each v1.29 field absent on every manifest written before v1.29, and
+   * a missing value means "not recorded" — never "passed".
    *
-   * Deliberately no filesystem path. The raw bytes live in a private archive
-   * outside every repository; the id is what an auditor quotes to ask for them.
+   * Deliberately no filesystem path and no CLI executable path. The raw bytes
+   * live in a private archive outside every repository; the id is what an
+   * auditor quotes to ask for them.
    */
   attempts_detail?: Record<string, unknown>[];
 };

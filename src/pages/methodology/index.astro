@@ -42,6 +42,11 @@ const short: ReadonlyArray<{ name: string; body: string; exits: readonly Exit[] 
     body: "Claude, GPT and Gemini each get the same brief and search the public record on their own, without seeing each other's work. Each comes back with a verdict, the evidence for and against, and what it could not find.",
     exits: [
       { kind: 'Stops here', text: 'A reviewer that returns nothing after its retry halts the run before any finding.' },
+      {
+        kind: 'Stops here',
+        text: 'As of September 15, 2026 no panel has run since September 4. One of the three seats has passed the check on how a model is run; the other two have not, and a finding needs all three.',
+        link: { href: '#reviewer-execution', text: 'What the check is, and what it does not show' },
+      },
       { kind: 'Loops back', text: "Afterwards the three read each other's work. A fabricated citation caught there sends that claim back for a fresh blind round." },
     ],
   },
@@ -361,15 +366,76 @@ const sections = toc([
       change predate the new check; they have not been retroactively cleared by it.
     </p>
     <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
-      New attempts must suppress host customizations and pass a separate test that public-web
-      access works and local files stay unreachable under the same execution profile. This is
-      a check of that execution, not a guarantee about a vendor. No provider yet has a
-      demonstrated profile meeting the full requirement, so new panels and source audits
-      are paused. The candidate Claude setup reports its tools, but does not expose the
-      instruction text needed to check for injected context. Restricting tools
-      can also prevent access to PDFs needed for budget, roads or infrastructure questions.
-      An essential source that cannot be read blocks the run; it does not become a finding
-      that the claim is not established.
+      That change required every new attempt to suppress host customizations and pass a
+      separate test that public-web access works and local files stay unreachable under the
+      same execution profile. It is a check of that execution, not a guarantee about a vendor.
+      On that date no provider had a demonstrated profile meeting the full requirement, so new
+      panels and source audits were paused: the candidate Claude setup reported its tools but
+      did not expose the instruction text needed to check for injected context. An essential
+      source that cannot be read blocks the run; it does not become a finding that the claim is
+      not established.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      September 15, 2026: two of the three seats are still stopped. The Codex and Gemini seats
+      have no equivalent evidence, so the three-model panel cannot run and the Gemini source
+      check commissioned for the consultation question is still blocked. What changed is the
+      Claude seat, and only the Claude seat.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      The change is that the outgoing request is now kept. Each Claude reviewer launch runs
+      through a small program on this machine that writes down every request the tool sends to
+      the address it was given for the model, and passes it on unchanged. A check then compares
+      that request against a written-down description of what a clean one contains: the maker's
+      own standard instructions and nothing added to them, only web search and web fetch as
+      tools, and the declared package word for word. The seat may run when a test invocation
+      and the real one both pass.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      What the request carries that the package does not, in full: the folder the tool was
+      started in, whether that folder is a code repository, the computer's platform, shell and
+      operating-system version; the name of the model and the date its knowledge stops; today's
+      date; the account email address of the person running it; and an identifier for the
+      device, one for the account and one for the session. The email address arrives in the same
+      message as the package, and the folder, platform, model name and date in a separate
+      message of their own. The three identifiers are not in any message: they are attached to
+      the request alongside it, the way a return address is attached to an envelope. All of it
+      comes from the maker's own text, not from this project. The record keeps the two messages
+      word for word with the email address taken out, and notes that the three identifiers were
+      sent without recording what they are. We publish the whole list rather than trimming it. A
+      reviewer was told these things, and a shorter list would be a nicer story than the truth. The folder is now a scratch folder named after
+      the attempt and nothing else, so it no longer tells a reviewer which story or which round
+      it is working on.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      The description is written per model, not just per version of the tool, and finding that
+      out cost the first real run. The description had been written from trial runs on a
+      smaller, cheaper model. The first run on the model the panel actually uses was refused,
+      because the same tool sends a different request for each model: a different set of
+      standing instructions, different tool descriptions, and the folder and date in a different
+      place. Nothing went out that should not have; the check stopped the run and said what did
+      not match. The description now names the model as well as the version, and the one written
+      from the trial runs was removed rather than kept beside it.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      The package reaches the maker twice per attempt: once as the research request, and once
+      before that in a short request that asks the model to name the session, which carries the
+      whole package and no tools. Both are written down and both are checked.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      What this does not show, on two sides. On this side: the program sees only what the tool
+      sends to the one address it was given for the model. Anything the tool sent somewhere
+      else, and everything else happening on the machine, is outside what it can see. The
+      maker's standard instructions are matched by fingerprint, not read or republished, and
+      the request's delivery headers are kept but not compared, so a pass is a statement about
+      the body of the request. On the maker's side: it shows what the tool added on this
+      computer and cannot show anything the company attaches to this account after the request
+      leaves. A pass is evidence about one run under one version of the tool,
+      not a promise from the company that makes it, and it clears nothing published before this
+      date. Because the description was written from one version, the launcher runs that exact
+      version even when a newer one is installed, as one was on the day this shipped; the run
+      record shows both the version that ran and the version the computer would otherwise have
+      used, and a new version has to be recorded and described again before it can run at all.
+      The tool limit set out above still applies, PDFs included.
     </p>
     <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
       Each launch attempt keeps its package and execution record privately, even when it

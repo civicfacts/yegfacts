@@ -7,17 +7,24 @@
 #
 # Providers: claude | codex | agy  (aliases: anthropic, gpt/openai, gemini/google)
 #
-# NO SEAT CAN RUN IN THIS RELEASE, and this script's job is now to fail cleanly
-# and keep the evidence of having done so.
-#
-# Isolation is NOT this script's business any more, and the older version of this
-# comment claiming a fresh mktemp -d was the boundary was wrong: a CLI loads its
+# Isolation is NOT this script's business, and the older version of this comment
+# claiming a fresh mktemp -d was the boundary was wrong: a CLI loads its
 # user-level instructions from $HOME whatever its working directory is. Every
-# invocation goes through scripts/panel/invoke-reviewer.sh, which refuses every
-# provider for research because nothing on any inspected path emits the outgoing
-# request, so what actually reached the model cannot be shown. Read that file for
-# the full argument. The assembler below still works, the package is still built
-# and hashed and retained, and the run stops at the admission gate.
+# invocation goes through scripts/panel/invoke-reviewer.sh, which from
+# methodology v1.29 runs the pinned CLI build through a recording proxy and
+# checks the captured outgoing request against a pinned profile before it admits
+# anything. Read that file for what the capture covers and, just as importantly,
+# what it does not. The Claude seat can run when its canary and its research run
+# both pass; the Codex and Gemini seats have no capture-backed profile and
+# remain blocked, so the three-seat panel still cannot run.
+#
+# A zero exit from the launcher is not admission. This script reads
+# `admitted_for_research` from the attempt metadata and installs nothing unless
+# it is exactly true: a run whose capture went to a test upstream, or whose
+# request was checked against a substitute pin table, passes every check it can
+# pass and is still not research. That attempt is recorded with schema
+# "not-reached" and the run stops without spending the retry, which exists for a
+# reviewer that answered badly rather than for one that was never admitted.
 #
 # The retained final message is extracted, validated against
 # prompts/review-schema.json, and on failure retried EXACTLY once with the
@@ -365,6 +372,31 @@ for attempt in 1 2; do
     else
       STATUS="failed"
     fi
+    break
+  fi
+
+  # A zero exit means every check passed. It does not mean the run was admitted.
+  # A capture taken against a test upstream, or checked against a substitute pin
+  # table, passes the request check and is still not a research run, and the
+  # launcher says so in `admitted_for_research`. Reading it here is what stops a
+  # response from such a run being published as a review.
+  #
+  # No retry: this is not a reviewer that answered badly, so re-sending the same
+  # package would only produce the same unadmitted run again.
+  # Metadata that is missing or unreadable reads as "not admitted". A row the
+  # launcher never finished writing is not permission to publish.
+  ADMITTED="$(node -e '
+    const fs = require("node:fs");
+    let metadata = {};
+    try { metadata = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); } catch {}
+    const ok = metadata.admitted_for_research === true;
+    if (!ok) process.stderr.write("  " + (metadata.admission_reason || "no admission decision was recorded") + "\n");
+    process.stdout.write(ok ? "true" : "false");
+  ' "$ATTEMPT_DIR/metadata.json")"
+  if [ "$ADMITTED" != "true" ]; then
+    echo "[$SLOT round $ROUND] not admitted for research; nothing was extracted or installed." >&2
+    add_detail "$ATTEMPT_DIR" "$attempt" "not-reached"
+    STATUS="failed"
     break
   fi
 
