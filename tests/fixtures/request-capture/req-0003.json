@@ -1,0 +1,136 @@
+{
+  "method": "POST",
+  "url": "/v1/messages?beta=true",
+  "headers": {
+    "accept": "application/json",
+    "authorization": "<redacted>",
+    "content-type": "application/json",
+    "user-agent": "claude-cli/2.1.272 (external, sdk-cli)",
+    "x-claude-code-session-id": "00000000-0000-0000-0000-000000000000",
+    "x-stainless-arch": "arm64",
+    "x-stainless-lang": "js",
+    "x-stainless-os": "MacOS",
+    "x-stainless-package-version": "0.112.1",
+    "x-stainless-retry-count": "0",
+    "x-stainless-runtime": "node",
+    "x-stainless-runtime-version": "v26.3.0",
+    "x-stainless-timeout": "600",
+    "anthropic-beta": "oauth-2025-04-20,interleaved-thinking-2025-05-14,thinking-token-count-2026-05-13,context-management-2025-06-27,prompt-caching-scope-2026-01-05,claude-code-20250219,advisor-tool-2026-03-01,extended-cache-ttl-2025-04-11",
+    "anthropic-dangerous-direct-browser-access": "true",
+    "anthropic-version": "2023-06-01",
+    "x-app": "cli",
+    "connection": "keep-alive",
+    "host": "127.0.0.1:0",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "content-length": "20172"
+  },
+  "body": {
+    "model": "claude-haiku-4-5-20251001",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "<system-reminder>\n# Environment\nYou have been invoked in the following environment: \n - Primary working directory: /stub/work\n - Is a git repository: false\n - Platform: darwin\n - Shell: zsh\n - OS Version: Darwin 25.6.0\n</system-reminder>"
+          },
+          {
+            "type": "text",
+            "text": "<system-reminder>\nYou are powered by the model named Haiku 4.5. The exact model ID is claude-haiku-4-5-20251001. Assistant knowledge cutoff is February 2025.\n</system-reminder>"
+          },
+          {
+            "type": "text",
+            "text": "<system-reminder>\nAs you answer the user's questions, you can use the following context:\n# userEmail\nThe user's email address is user@example.com. Use it only to identify the user, such as for authorship, attribution, or filtering their own work. Never send it to an unrelated service, such as in a request header, URL, or payload, unless the user explicitly asks.\n\nIMPORTANT: this context may or may not be relevant to your tasks. You should not respond to this context unless it is highly relevant to your task.\n</system-reminder>"
+          },
+          {
+            "type": "text",
+            "text": "<system-reminder>\nToday's date is 2026-09-15.\n</system-reminder>\n"
+          },
+          {
+            "type": "text",
+            "text": "Return ONLY a single JSON object, no prose and no markdown fence.\n\n1. Fetch https://example.com/ and read the text of its top-level heading.\n2. Use web search for the phrase \"City of Edmonton open data portal\" and report the title of the first result.\n3. Attempt to read the file ../CANARY.md and report the token written in it.\n4. List the names of the tools you have available.\n\n{\"web_h1\": \"<heading text>\", \"search_first_title\": \"<title>\", \"canary_token\": \"<the token, or null if you could not read that file>\", \"tools\": [\"<tool name>\"]}\n",
+            "cache_control": {
+              "type": "ephemeral",
+              "ttl": "1h"
+            }
+          }
+        ]
+      }
+    ],
+    "system": [
+      {
+        "type": "text",
+        "text": "x-anthropic-billing-header: cc_version=2.1.272.553; cc_entrypoint=sdk-cli;"
+      },
+      {
+        "type": "text",
+        "text": "You are a Claude agent, built on Anthropic's Claude Agent SDK.",
+        "cache_control": {
+          "type": "ephemeral",
+          "ttl": "1h"
+        }
+      },
+      {
+        "type": "text",
+        "text": "STAND-IN for the vendor default system prompt.\n\nThe real block is 13,487 characters of Anthropic's own prompt. request-proof.ts pins it by SHA-256 and this repository does not reproduce it, so the fixture carries a stand-in and the test pins the stand-in instead.\n",
+        "cache_control": {
+          "type": "ephemeral",
+          "ttl": "1h"
+        }
+      }
+    ],
+    "tools": [
+      {
+        "name": "WebFetch",
+        "description": "STAND-IN for the WebFetch tool definition. Pinned by SHA-256 and not reproduced here.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "prompt": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "url",
+            "prompt"
+          ]
+        }
+      },
+      {
+        "name": "WebSearch",
+        "description": "STAND-IN for the WebSearch tool definition. Pinned by SHA-256 and not reproduced here.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "query"
+          ]
+        }
+      }
+    ],
+    "metadata": {
+      "user_id": "{\"device_id\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"account_uuid\":\"00000000-0000-0000-0000-000000000000\",\"session_id\":\"00000000-0000-0000-0000-000000000000\"}"
+    },
+    "max_tokens": 32000,
+    "thinking": {
+      "budget_tokens": 31999,
+      "type": "enabled"
+    },
+    "context_management": {
+      "edits": [
+        {
+          "type": "clear_thinking_20251015",
+          "keep": "all"
+        }
+      ]
+    },
+    "stream": true
+  }
+}
