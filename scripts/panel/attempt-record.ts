@@ -11,9 +11,12 @@
  * bytes; nobody needs to learn where on the founder's machine they live, and a
  * hash of a package is not the package.
  *
- * `context_proof` and `admitted_for_research` are carried deliberately. A future
- * reader looking at a manifest row should be able to see, without reading any
- * code, that the run was never certified as isolated.
+ * `context_proof` and `admitted_for_research` are carried deliberately, and
+ * from methodology v1.29 so are `upstream`, `pins_source` and the request
+ * counts. A reader of a manifest row should be able to see, without reading any
+ * code, whether the outgoing request was captured and checked, what it was
+ * checked against, and whether the run was admitted. A proved request and an
+ * admitted run are different facts and the row shows both.
  *
  * A directory from a refusal has almost nothing in it, and that is the correct
  * record: an id, a blocked status, a reason, the package hash, and no output
@@ -38,15 +41,41 @@ export type AttemptRecord = {
   canary?: string;
   structure?: string;
   context_proof?: string;
+  canary_context_proof?: string;
   admitted_for_research?: boolean;
+  /** Why a run that passed every check was or was not admitted. */
+  admission_reason?: string;
+  /** "built-in" or "override": which pin table the request proof compared against. */
+  pins_source?: string;
+  /**
+   * The base URL the capture was taken against. Carried because a proof taken
+   * against a loopback stub reads exactly like one taken against the API unless
+   * the row says which it was. Absent on manifests written before v1.29.
+   */
+  upstream?: string;
+  canary_upstream?: string;
+  vendor_prompt_sha256?: string;
+  canary_vendor_prompt_sha256?: string;
+  tool_definitions_sha256?: Record<string, string>;
+  canary_tool_definitions_sha256?: Record<string, string>;
+  request_count?: number;
+  canary_request_count?: number;
+  main_turn_count?: number;
+  canary_main_turn_count?: number;
+  side_request_counts?: Record<string, number>;
+  canary_side_request_counts?: Record<string, number>;
+  /** Hash over the sorted list of every capture file and its own hash. */
+  requests_manifest_sha256?: string;
+  canary_requests_manifest_sha256?: string;
+  /** The report the context proof was read off. */
+  proof_report_sha256?: string;
   /** Whether a retained final message passed `prompts/review-schema.json`. */
   schema?: string;
   reason?: string;
   package_sha256?: string;
   /**
-   * The research stdout and final message. Absent in this release, because no
-   * provider is admitted and nothing is ever sent; present in the shape a
-   * future admitted run would fill in.
+   * The research stdout and final message. Absent on every attempt that never
+   * sent a package: a refusal, or a diagnostic.
    */
   stdout_sha256?: string;
   final_message_sha256?: string;
@@ -70,6 +99,21 @@ const readMaybe = (file: string): string | undefined =>
 /** Hashes the launcher records as the literal string "absent" are not hashes. */
 const realHash = (value: unknown): string | undefined =>
   typeof value === 'string' && value !== 'absent' && value !== '' ? value : undefined;
+
+/**
+ * Copy the named keys that are actually present. A key the launcher never wrote
+ * stays out of the row entirely, so a reader can tell "not recorded" from a
+ * value, which is the rule every optional manifest field here follows.
+ */
+const copy = (metadata: Record<string, unknown>, keys: string[]): Record<string, unknown> => {
+  const out: Record<string, unknown> = {};
+  for (const key of keys) {
+    const value = metadata[key];
+    if (value === undefined || value === null || value === '' || value === 'absent') continue;
+    out[key] = value;
+  }
+  return out;
+};
 
 function attemptRecord(dir: string, attempt: number, schema?: string): AttemptRecord {
   let metadata: Record<string, unknown> = {};
@@ -114,6 +158,9 @@ function attemptRecord(dir: string, attempt: number, schema?: string): AttemptRe
     // was never asked, and it always is.
     context_proof: text('context_proof') ?? 'unavailable',
     admitted_for_research: metadata.admitted_for_research === true,
+    ...(text('canary_context_proof') ? { canary_context_proof: text('canary_context_proof') } : {}),
+    ...(text('admission_reason') ? { admission_reason: text('admission_reason') } : {}),
+    ...(text('pins_source') ? { pins_source: text('pins_source') } : {}),
     ...(schema ? { schema } : {}),
     ...(text('reason') ? { reason: text('reason') } : {}),
     ...(realHash(metadata.package_sha256) ? { package_sha256: metadata.package_sha256 as string } : {}),
@@ -133,6 +180,29 @@ function attemptRecord(dir: string, attempt: number, schema?: string): AttemptRe
     ...(realHash(metadata.canary_report_sha256)
       ? { canary_report_sha256: metadata.canary_report_sha256 as string }
       : {}),
+    ...(realHash(metadata.proof_report_sha256)
+      ? { proof_report_sha256: metadata.proof_report_sha256 as string }
+      : {}),
+    // The request-capture fields (methodology v1.29). Every one is optional and
+    // a missing one means the capture was not taken or not recorded, never that
+    // it passed. `cli_executable` is deliberately not among them: it names a
+    // path on the founder's machine and stays in the private archive.
+    ...copy(metadata, [
+      'upstream',
+      'canary_upstream',
+      'vendor_prompt_sha256',
+      'canary_vendor_prompt_sha256',
+      'tool_definitions_sha256',
+      'canary_tool_definitions_sha256',
+      'request_count',
+      'canary_request_count',
+      'main_turn_count',
+      'canary_main_turn_count',
+      'side_request_counts',
+      'canary_side_request_counts',
+      'requests_manifest_sha256',
+      'canary_requests_manifest_sha256',
+    ]),
     ...(validationErrors === undefined ? {} : { validation_errors_sha256: validationErrors }),
   };
 }

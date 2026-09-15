@@ -15,10 +15,13 @@
 # anything about framing. Whatever the seat returned is what lands in the report;
 # reading it and drawing a conclusion is a person's job.
 #
-# It will refuse in this release, because the admission gate refuses every
-# provider for research. That is the intended behaviour, not a gap: the whole
-# reason a framing check once read the founder's private memory is that it had
-# its own invocation and its own idea of what was safe.
+# Whether it runs at all is the launcher's decision, not this script's. From
+# methodology v1.29 the launcher captures the CLI's outgoing request and checks
+# it against a pinned profile, so an anthropic audit can complete; openai and
+# google have no capture-backed profile and are still refused, which is why the
+# consultation's commissioned Google audit remains blocked. The whole reason a
+# framing check once read the founder's private memory is that it had its own
+# invocation and its own idea of what was safe.
 #
 # --provider exists because an audit commissioned from one vendor must be
 # RECORDED against that vendor even when it is refused. The consultation's

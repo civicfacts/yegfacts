@@ -1,5 +1,6 @@
 /**
- * The admission gate, the retention, and what the stream can and cannot settle.
+ * The admission gate, the retention, and what the stream and the capture each
+ * settle.
  *
  * Every test here puts a stub `claude` first on PATH, so nothing is paid for and
  * nothing is asked of a model. The stub is a real shell script with real
@@ -7,17 +8,27 @@
  * to leak, the stub genuinely reads the synthetic fixture off disk and prints
  * the token it finds, rather than pretending to.
  *
- * The fixture events copy the shapes of a real 2.1.267 stream captured on
- * 2026-09-09, including the `system/thinking_tokens` events that show up
- * between the interesting ones and the `tool_result` blocks that arrive on
- * `user` events. None of it is invented; a parser tested only against fixtures
- * a CLI cannot emit tests nothing.
+ * It also makes real HTTP requests. `$ANTHROPIC_BASE_URL` points at the real
+ * recording proxy, the proxy forwards to a stub upstream this file started, and
+ * what the stub posts is the sanitized 2026-09-15 capture fixture. So the
+ * capture the proof reads was produced by an actual request through the actual
+ * proxy, rather than by a file a test wrote where the capture should be.
  *
- * The central claim under test is negative: no provider is admitted for
- * research, so no package is ever sent, and the launcher still keeps the exact
- * package and a metadata row for the attempt that did not happen.
+ * The stream fixtures copy the shapes of a real stream, including the
+ * `system/thinking_tokens` events that show up between the interesting ones and
+ * the `tool_result` blocks that arrive on `user` events. None of it is invented;
+ * a parser tested only against fixtures a CLI cannot emit tests nothing.
+ *
+ * TWO THINGS EVERY RUN HERE FALLS SHORT OF, on purpose. The upstream is a stub,
+ * not api.anthropic.com. And the pin table is a substitute, because the built-in
+ * one pins the vendor prompt and the tool definitions by hash and this
+ * repository does not carry their text. Either one alone means
+ * `admitted_for_research` is false however cleanly everything else passes, and
+ * the reason is recorded. That is the behaviour under test, not a limitation of
+ * the test.
  */
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
+import http from 'node:http';
 import {
   chmodSync,
   cpSync,
@@ -34,14 +45,18 @@ import {
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { afterAll, beforeEach, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import YAML from 'yaml';
+import { PINS } from '../scripts/panel/request-proof.ts';
+import { fixturePins } from './stub-request-poster.mjs';
 
 const REAL_REPO = fileURLToPath(new URL('..', import.meta.url));
 const INVOKE = path.join(REAL_REPO, 'scripts', 'panel', 'invoke-reviewer.sh');
 const STORY = 'stub-story';
 const RUN_DATE = '2026-09-09';
-const PROBED_VERSION = '2.1.267';
+const PROBED_VERSION = '2.1.272';
+const FIXTURE_CAPTURE = path.join(REAL_REPO, 'tests', 'fixtures', 'request-capture');
+const POSTER = path.join(REAL_REPO, 'tests', 'stub-request-poster.mjs');
 
 // realpath, because macOS hands out /var/folders paths that are symlinks into
 // /private, and the launcher resolves before it compares.
@@ -248,6 +263,22 @@ const goodCanary = stream(
   resultEvent(canaryAnswer),
 );
 
+const assistantTextEvent = (text: string) =>
+  JSON.stringify({
+    type: 'assistant',
+    message: { role: 'assistant', content: [{ type: 'text', text }] },
+    session_id: 'stub-session',
+  });
+
+/**
+ * A research run with one assistant turn, which is what the stub's one main
+ * turn has to agree with. The proof compares the number of main-turn requests
+ * against the number of assistant turns in the stream, so the two fixtures are
+ * one fixture in two halves.
+ */
+const researchRun = (text: string) =>
+  stream(initEvent(), noiseEvent(), assistantTextEvent(text), resultEvent(text));
+
 /**
  * A review the schema accepts, borrowed from a real published run rather than
  * hand-written, so the retry tests validate against the same shape a seat
@@ -260,34 +291,100 @@ const validReview = (() => {
 })();
 
 // ---------------------------------------------------------------------------
+// The stub upstream. The recording proxy forwards to it, so no test reaches the
+// network and every test still goes through the proxy for real.
+// ---------------------------------------------------------------------------
+const PINS_FILE = path.join(root, 'fixture-pins.json');
+const UPSTREAM_PORT_FILE = path.join(root, 'upstream-port');
+let upstream: ReturnType<typeof spawn>;
+let upstreamUrl = '';
+
+beforeAll(async () => {
+  // Its own process, because the launcher is driven with spawnSync and that
+  // blocks this worker's event loop: an upstream listening here would never
+  // answer and every run would deadlock behind its own first request.
+  upstream = spawn(process.execPath, [path.join(REAL_REPO, 'tests', 'stub-upstream.mjs'), '--port-file', UPSTREAM_PORT_FILE], {
+    stdio: 'ignore',
+  });
+  for (let waited = 0; waited < 100 && !existsSync(UPSTREAM_PORT_FILE); waited += 1) {
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  }
+  upstreamUrl = `http://127.0.0.1:${readFileSync(UPSTREAM_PORT_FILE, 'utf8').trim()}`;
+  writeFileSync(
+    PINS_FILE,
+    `${JSON.stringify({ [PROBED_VERSION]: fixturePins(FIXTURE_CAPTURE, PINS[PROBED_VERSION]) }, null, 2)}\n`,
+  );
+});
+afterAll(() => upstream?.kill('SIGKILL'));
+
 type Stub = { dir: string; archive: string; env: NodeJS.ProcessEnv };
 
-function stubClaude(options: { canary?: string; canaryExit?: number; version?: string } = {}): Stub {
+/**
+ * The stub `claude`. It posts the capture fixture to whatever
+ * `$ANTHROPIC_BASE_URL` names and writes a stream-json fixture to stdout, which
+ * is the pair of things a real invocation produces and the pair the launcher
+ * checks. `mutate` breaks one piece of the request on purpose, per run, so the
+ * canary and the research run can be made to fail independently.
+ */
+function stubClaude(
+  options: {
+    canary?: string;
+    canaryExit?: number;
+    version?: string;
+    research?: string;
+    researchExit?: number;
+    mutateCanary?: string;
+    mutateResearch?: string;
+  } = {},
+): Stub {
   const dir = mkdtempSync(path.join(root, 'stub-'));
   const bin = path.join(dir, 'bin');
   mkdirSync(bin);
   writeFileSync(path.join(dir, 'version'), `${options.version ?? PROBED_VERSION} (Claude Code)\n`);
   writeFileSync(path.join(dir, 'canary.jsonl'), options.canary ?? goodCanary);
   writeFileSync(path.join(dir, 'canary.exit'), String(options.canaryExit ?? 0));
+  writeFileSync(path.join(dir, 'research.jsonl'), options.research ?? researchRun('the package was sent'));
+  writeFileSync(path.join(dir, 'research.exit'), String(options.researchExit ?? 0));
 
   const script = `#!/usr/bin/env bash
 set -u
 if [ "\${1:-}" = "--version" ]; then cat "${dir}/version"; exit 0; fi
-input="$(cat)"
+
+model=""
+prev=""
+for arg in "$@"; do
+  if [ "$prev" = "--model" ]; then model="$arg"; fi
+  prev="$arg"
+done
+
 count=$(( $(cat "${dir}/calls" 2>/dev/null || echo 0) + 1 ))
 echo "$count" > "${dir}/calls"
-printf '%s' "$input" > "${dir}/stdin-$count.txt"
-case "$input" in
-  *CANARY.md*)
-    # A real read of the real fixture: a scenario that claims to leak, leaks.
-    token="$(sed -n 's/^token: //p' ../CANARY.md 2>/dev/null || true)"
-    sed "s|__TOKEN__|\${token:-MISSING}|" "${dir}/canary.jsonl"
-    exit "$(cat "${dir}/canary.exit")"
-    ;;
+stdin="${dir}/stdin-$count.txt"
+cat > "$stdin"
+
+kind=research
+case "$(cat "$stdin")" in
+  *CANARY.md*) kind=canary ;;
 esac
-printf '%s' "$input" > "${dir}/package-sent.txt"
-echo '{"type":"result","subtype":"success","result":"the package was sent"}'
-exit 0
+if [ "$kind" = canary ]; then mutate="\${STUB_MUTATE_CANARY:-}"; else mutate="\${STUB_MUTATE_RESEARCH:-}"; fi
+
+# The part that makes the capture real: an actual request, through the actual
+# proxy, from the directory the launcher chose.
+if [ -n "\${ANTHROPIC_BASE_URL:-}" ]; then
+  "${process.execPath}" "${POSTER}" --base "$ANTHROPIC_BASE_URL" --fixture "${FIXTURE_CAPTURE}" \
+    --package "$stdin" --work-dir "$(pwd -P)" --model "$model" --mutate "$mutate"
+fi
+
+if [ "$kind" = canary ]; then
+  # A real read of the real fixture: a scenario that claims to leak, leaks.
+  token="$(sed -n 's/^token: //p' ../CANARY.md 2>/dev/null || true)"
+  sed "s|__TOKEN__|\${token:-MISSING}|" "${dir}/canary.jsonl"
+  exit "$(cat "${dir}/canary.exit")"
+fi
+
+cp "$stdin" "${dir}/package-sent.txt"
+cat "${dir}/research.jsonl"
+exit "$(cat "${dir}/research.exit")"
 `;
   const claude = path.join(bin, 'claude');
   writeFileSync(claude, script);
@@ -297,7 +394,15 @@ exit 0
   return {
     dir,
     archive,
-    env: { ...process.env, PATH: `${bin}:${process.env.PATH ?? ''}`, YEGFACTS_REVIEW_ARCHIVE: archive },
+    env: {
+      ...process.env,
+      PATH: `${bin}:${process.env.PATH ?? ''}`,
+      YEGFACTS_REVIEW_ARCHIVE: archive,
+      YEGFACTS_REVIEW_UPSTREAM: upstreamUrl,
+      YEGFACTS_REVIEW_PINS: PINS_FILE,
+      ...(options.mutateCanary ? { STUB_MUTATE_CANARY: options.mutateCanary } : {}),
+      ...(options.mutateResearch ? { STUB_MUTATE_RESEARCH: options.mutateResearch } : {}),
+    },
   };
 }
 
@@ -327,7 +432,6 @@ const readJson = (file: string) => JSON.parse(readFileSync(file, 'utf8')) as Rec
 // ---------------------------------------------------------------------------
 describe('research admission', { timeout: 60_000 }, () => {
   it.each([
-    ['anthropic', 'claude-opus-5', /no candidate has a demonstrated context boundary/],
     ['openai', 'gpt-5.6-sol', /one tested configuration, not every possible one/],
     ['google', 'gemini-3.8-flash-high', /agy 1\.1\.28 exposes no customization-suppression/],
     ['mystery-vendor', 'claude-opus-5', /unknown provider/],
@@ -360,7 +464,6 @@ describe('research admission', { timeout: 60_000 }, () => {
   });
 
   it.each([
-    ['anthropic', 'claude-opus-5', /no candidate has a demonstrated context boundary/],
     ['openai', 'gpt-5.6-sol', /codex exec --ignore-user-config/],
     ['google', 'gemini-3.8-flash-high', /agy 1\.1\.28 exposes no customization-suppression/],
   ])('records %s with its own seat and its own reason when no model is named', (provider, model, expected) => {
@@ -405,6 +508,164 @@ describe('research admission', { timeout: 60_000 }, () => {
   });
 });
 
+/**
+ * The research path, end to end, through the real proxy.
+ *
+ * "End to end" stops short of admission on purpose, twice over: the upstream is
+ * a stub and the pin table is a substitute. Both are recorded and either one
+ * makes `admitted_for_research` false, which is the property these tests are
+ * really about — a run can pass every check it is capable of passing and still
+ * not be admitted, and the row has to say why.
+ */
+describe('research run', { timeout: 120_000 }, () => {
+  const research = (stub: Stub, name: string, extra: string[] = []) => {
+    const attempt = path.join(stub.archive, 'research', name);
+    const pkg = writePackage(`research-${name}.md`);
+    const result = run(
+      [INVOKE, '--purpose', 'research', '--provider', 'anthropic', '--package', pkg,
+        '--attempt-dir', attempt, '--model', 'claude-opus-5', '--effort', 'high', ...extra],
+      stub.env,
+    );
+    return { ...result, attempt, pkg };
+  };
+
+  it('captures and proves both runs, sends the package, and leaves the contract files', () => {
+    const stub = stubClaude({ research: researchRun('a report a reader could use') });
+    const { ok, stderr, attempt, pkg } = research(stub, 'happy');
+
+    expect(stderr).toBe(stderr);
+    expect(ok).toBe(true);
+
+    // The output contract run-reviewer.sh is coded against.
+    expect(readFileSync(path.join(attempt, 'final-message.txt'), 'utf8')).toBe('a report a reader could use');
+    expect(existsSync(path.join(attempt, 'stdout.txt'))).toBe(true);
+    expect(readFileSync(path.join(attempt, 'package.md'), 'utf8')).toBe(readFileSync(pkg, 'utf8'));
+    expect(readFileSync(path.join(stub.dir, 'package-sent.txt'), 'utf8')).toBe(readFileSync(pkg, 'utf8'));
+
+    // Two captures, from two proxies, kept apart.
+    const captured = (dir: string) => readdirSync(dir).filter((f) => f.startsWith('req-')).sort();
+    expect(captured(path.join(attempt, 'requests'))).toEqual([
+      'req-0001.json', 'req-0002.json', 'req-0003.json', 'req-0004.json',
+    ]);
+    expect(captured(path.join(attempt, 'canary', 'requests'))).toHaveLength(4);
+    // Redacted in the capture, and only in the capture.
+    const first = readJson(path.join(attempt, 'requests', 'req-0002.json'));
+    expect((first.headers as Record<string, string>).authorization).toBe('<redacted>');
+    expect(JSON.stringify(first)).not.toContain('stub-oauth-token');
+
+    const metadata = readJson(path.join(attempt, 'metadata.json'));
+    expect(metadata.status).toBe('ok');
+    expect(metadata.canary).toBe('pass');
+    expect(metadata.structure).toBe('pass');
+    expect(metadata.context_proof).toBe('pass');
+    expect(metadata.canary_context_proof).toBe('pass');
+    expect(metadata.main_turn_count).toBe(1);
+    expect(metadata.request_count).toBe(4);
+    expect(metadata.upstream).toBe(upstreamUrl);
+    expect(metadata.requests_manifest_sha256).toMatch(/^[0-9a-f]{64}$/);
+    expect(metadata.proof_report_sha256).toMatch(/^[0-9a-f]{64}$/);
+    // Recorded privately and never anywhere else.
+    expect(metadata.cli_executable).toContain('claude');
+
+    // Every check passed and the run is still not admitted, for the two stated
+    // reasons. This is the assertion the whole release turns on.
+    expect(metadata.admitted_for_research).toBe(false);
+    expect(metadata.pins_source).toBe('override');
+    expect(String(metadata.admission_reason)).toMatch(/substitute pin table|rather than https:\/\/api\.anthropic\.com/);
+
+    const row = JSON.parse(
+      run([
+        'npx', 'tsx', path.join(REAL_REPO, 'scripts', 'panel', 'attempt-record.ts'),
+        attempt, '--attempt', '1', '--schema', 'not-reached',
+      ], stub.env).stdout || '{}',
+    ) as Record<string, unknown>;
+    expect(row.context_proof).toBe('pass');
+    expect(row.admitted_for_research).toBe(false);
+    expect(row.upstream).toBe(upstreamUrl);
+    expect(row.pins_source).toBe('override');
+    expect(row.main_turn_count).toBe(1);
+    expect(row.tool_definitions_sha256).toEqual(metadata.tool_definitions_sha256);
+    // Nothing that names this machine crosses into the public row.
+    expect(row.cli_executable).toBeUndefined();
+    expect(JSON.stringify(row)).not.toContain(stub.archive);
+    expect(JSON.stringify(row)).not.toContain('/Users/');
+  });
+
+  it('stops both proxies once the run is over', async () => {
+    const stub = stubClaude();
+    const { attempt } = research(stub, 'ports');
+
+    const ports = [
+      readFileSync(path.join(attempt, 'proxy-port'), 'utf8').trim(),
+      readFileSync(path.join(attempt, 'canary', 'proxy-port'), 'utf8').trim(),
+    ];
+    for (const port of ports) {
+      expect(port).toMatch(/^\d+$/);
+      const refused = await new Promise<string>((resolve) => {
+        const probe = http.request({ host: '127.0.0.1', port: Number(port), method: 'HEAD', path: '/' }, () =>
+          resolve('answered'),
+        );
+        probe.on('error', (error: NodeJS.ErrnoException) => resolve(error.code ?? 'error'));
+        probe.end();
+      });
+      expect(refused).toBe('ECONNREFUSED');
+    }
+  });
+
+  it('refuses when the canary request proof fails, and never sends the package', () => {
+    const stub = stubClaude({ mutateCanary: 'extra-system' });
+    const { ok, stderr, attempt } = research(stub, 'canary-proof');
+
+    expect(ok).toBe(false);
+    expect(stderr).toMatch(/matches no pinned shape/);
+    expect(stderr).toMatch(/failed its canary/);
+    expect(packageWasSent(stub)).toBe(false);
+    expect(existsSync(path.join(attempt, 'final-message.txt'))).toBe(false);
+    const metadata = readJson(path.join(attempt, 'metadata.json'));
+    expect(metadata.canary_context_proof).toBe('fail');
+    expect(metadata.admitted_for_research).toBe(false);
+  });
+
+  it('refuses when the research capture fails after a clean canary', () => {
+    const stub = stubClaude({ mutateResearch: 'package-drift' });
+    const { ok, stderr, attempt } = research(stub, 'research-proof');
+
+    expect(ok).toBe(false);
+    expect(stderr).toMatch(/is not the declared package byte for byte/);
+    // The canary passed; the run that mattered did not.
+    const metadata = readJson(path.join(attempt, 'metadata.json'));
+    expect(metadata.canary_context_proof).toBe('pass');
+    expect(metadata.context_proof).toBe('fail');
+    expect(metadata.admitted_for_research).toBe(false);
+    // The bytes of the run that failed are kept, capture included.
+    expect(existsSync(path.join(attempt, 'stdout.txt'))).toBe(true);
+    expect(readdirSync(path.join(attempt, 'requests')).length).toBeGreaterThan(0);
+  });
+
+  it('refuses a substitute pin table without a loopback upstream', () => {
+    const stub = stubClaude();
+    const attempt = path.join(stub.archive, 'research', 'pins-without-stub');
+    const result = run(
+      [INVOKE, '--purpose', 'research', '--provider', 'anthropic', '--package', writePackage('pins.md'),
+        '--attempt-dir', attempt, '--model', 'claude-opus-5', '--effort', 'high'],
+      { ...stub.env, YEGFACTS_REVIEW_UPSTREAM: '' },
+    );
+    expect(result.ok).toBe(false);
+    expect(result.stderr).toMatch(/must never be used against the API/);
+    expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
+  });
+
+  it('keeps the output of a nonzero research exit without admitting it', () => {
+    const stub = stubClaude({ researchExit: 4 });
+    const { ok, stderr, attempt } = research(stub, 'nonzero');
+    expect(ok).toBe(false);
+    expect(stderr).toMatch(/the research invocation exited 4/);
+    const metadata = readJson(path.join(attempt, 'metadata.json'));
+    expect(metadata.exit_code).toBe(4);
+    expect(metadata.admitted_for_research).toBe(false);
+  });
+});
+
 describe('candidate diagnostic', { timeout: 60_000 }, () => {
   const diagnose = (stub: Stub, name: string, extra: string[] = []) => {
     const attempt = path.join(stub.archive, 'diag', name);
@@ -417,21 +678,29 @@ describe('candidate diagnostic', { timeout: 60_000 }, () => {
     return { ...result, attempt, pkg };
   };
 
-  it('runs the canary, keeps its evidence, and still refuses to admit the profile', () => {
+  it('runs the canary, proves its request, and still admits nothing', () => {
     const stub = stubClaude();
     const { ok, stderr, attempt, pkg } = diagnose(stub, 'happy');
 
     expect(ok).toBe(true);
-    expect(stderr).toMatch(/Context proof: UNAVAILABLE/);
+    expect(stderr).toMatch(/Canary context proof: pass/);
     expect(stderr).toMatch(/Not admitted for research/);
 
     const metadata = readJson(path.join(attempt, 'metadata.json'));
     expect(metadata.status).toBe('diagnostic');
     expect(metadata.canary).toBe('pass');
     expect(metadata.structure).toBe('pass');
+    // The canary's own request was captured and proved. It still admits
+    // nothing: a diagnostic sends no package, so there is nothing to admit.
     expect(metadata.admitted_for_research).toBe(false);
-    expect(metadata.context_proof).toBe('unavailable');
+    expect(metadata.context_proof).toBe('pass');
+    expect(metadata.canary_context_proof).toBe('pass');
+    expect(metadata.canary_main_turn_count).toBe(1);
+    expect(metadata.canary_upstream).toBe(upstreamUrl);
+    expect(String(metadata.admission_reason)).toMatch(/a diagnostic never admits a seat/);
     expect(metadata.exit_code).toBe(0);
+    // Nothing is left at the top level where the runner looks for a review.
+    expect(existsSync(path.join(attempt, 'final-message.txt'))).toBe(false);
     // The complete final message, the stderr and the report the verdict was
     // read off are all hashed, so the published row can be checked against the
     // retained bytes rather than merely pointing at them.
@@ -687,32 +956,42 @@ describe('run-reviewer', { timeout: 120_000 }, () => {
   const runReviewer = (stub: Stub) =>
     run([path.join(repo, 'scripts', 'panel', 'run-reviewer.sh'), 'claude', STORY, RUN_DATE, '1'], stub.env);
 
-  it('assembles the package, stops at the gate, and writes no review', () => {
-    const stub = stubClaude();
+  it('assembles the package, runs it through the launcher, and records what happened', () => {
+    const stub = stubClaude({ research: researchRun(validReview) });
     const result = runReviewer(stub);
 
-    expect(result.ok).toBe(false);
-    expect(result.stderr).toMatch(/no provider is admitted for research/);
-    expect(existsSync(reviewPath())).toBe(false);
-    expect(packageWasSent(stub)).toBe(false);
+    expect(result.ok).toBe(true);
+    expect(packageWasSent(stub)).toBe(true);
+    expect(JSON.parse(readFileSync(reviewPath(), 'utf8')).story).toBe(STORY);
 
     const entry = manifest().runs[0]!;
-    // Blocked, not failed: refused by policy is a different thing from went
-    // wrong, and the top line of the row should say which.
-    expect(entry.status).toBe('blocked');
-    // One attempt, not two: a refusal is not a schema failure, so the retry
-    // budget is not spent being refused a second time.
+    expect(entry.status).toBe('ok');
     expect(entry.attempts).toBe(1);
     const detail = entry.attempts_detail as Record<string, unknown>[];
     expect(detail).toHaveLength(1);
-    expect(detail[0]!.status).toBe('blocked');
-    expect(detail[0]!.admitted_for_research).toBe(false);
-    expect(detail[0]!.context_proof).toBe('unavailable');
-    expect(detail[0]!.schema).toBe('not-reached');
+    expect(detail[0]!.context_proof).toBe('pass');
+    expect(detail[0]!.canary_context_proof).toBe('pass');
+    expect(detail[0]!.schema).toBe('valid');
     expect(detail[0]!.attempt_id).toMatch(/^[0-9a-f]{16}$/);
+    // The row says the capture was proved AND that the run was not admitted,
+    // because the upstream was a stub and the pins were substitutes. A reader
+    // of the manifest can see both without reading any code.
+    expect(detail[0]!.admitted_for_research).toBe(false);
+    expect(detail[0]!.upstream).toBe(upstreamUrl);
+    expect(detail[0]!.pins_source).toBe('override');
     // No filesystem path crosses into the public manifest.
     expect(JSON.stringify(detail)).not.toContain(stub.archive);
     expect(JSON.stringify(detail)).not.toContain('/Users/');
+  });
+
+  it('writes no review when the launcher refuses', () => {
+    const stub = stubClaude({ mutateCanary: 'extra-system' });
+    const result = runReviewer(stub);
+
+    expect(result.ok).toBe(false);
+    expect(existsSync(reviewPath())).toBe(false);
+    expect(packageWasSent(stub)).toBe(false);
+    expect(manifest().runs[0]!.status).toBe('failed');
   });
 
   it('leaves an existing review exactly where it was', () => {
@@ -887,16 +1166,29 @@ describe('retry mechanics', { timeout: 120_000 }, () => {
 describe('audit-package', { timeout: 60_000 }, () => {
   const script = path.join(REAL_REPO, 'scripts', 'panel', 'audit-package.sh');
 
-  it('refuses at the gate and writes no report', () => {
-    const stub = stubClaude();
-    const report = path.join(root, 'audit-refused.md');
+  it('sends the package and writes the complete response as the report', () => {
+    const stub = stubClaude({ research: researchRun('The audit found one framing problem.') });
+    const report = path.join(root, 'audit-written.md');
     const result = run(
       [script, '--package', writePackage('audit.md'), '--report', report, '--label', 'framing-check'],
       stub.env,
     );
 
+    expect(result.ok).toBe(true);
+    expect(readFileSync(report, 'utf8')).toBe('The audit found one framing problem.');
+    expect(packageWasSent(stub)).toBe(true);
+  });
+
+  it('writes no report when the launcher refuses', () => {
+    const stub = stubClaude({ mutateCanary: 'extra-system' });
+    const report = path.join(root, 'audit-refused.md');
+    const result = run(
+      [script, '--package', writePackage('audit-refused-package.md'), '--report', report, '--label', 'framing-check'],
+      stub.env,
+    );
+
     expect(result.ok).toBe(false);
-    expect(result.stderr).toMatch(/no provider is admitted for research/);
+    expect(result.stderr).toMatch(/failed its canary/);
     expect(existsSync(report)).toBe(false);
     expect(packageWasSent(stub)).toBe(false);
   });
@@ -961,15 +1253,19 @@ describe('audit-package', { timeout: 60_000 }, () => {
 
 /**
  * The one live test, opt-in because it spends real money on a real subscription.
- * Run it deliberately with YEGFACTS_LIVE_CANARY=1. It asserts the candidate
- * profile's structural canary against the installed CLI and, just as
- * importantly, that passing it still does not admit the profile.
+ * Run it deliberately with YEGFACTS_LIVE_CANARY=1. It runs the candidate
+ * profile's diagnostic against the installed CLI and the real API, with no stub
+ * upstream and no substitute pins, and asserts what a real capture shows.
  */
 describe.runIf(process.env.YEGFACTS_LIVE_CANARY === '1')('live candidate diagnostic', { timeout: 240_000 }, () => {
-  it('passes the structural canary and is still refused for research', () => {
+  it('passes the structural canary and proves its own request', () => {
     const archive = mkdtempSync(path.join(root, 'live-archive-'));
     const attempt = path.join(archive, 'live', 'attempt-1');
-    const env = { ...process.env, YEGFACTS_REVIEW_ARCHIVE: archive };
+    // Deliberately no YEGFACTS_REVIEW_UPSTREAM and no YEGFACTS_REVIEW_PINS: the
+    // point of this test is the production upstream and the built-in pins.
+    const env: NodeJS.ProcessEnv = { ...process.env, YEGFACTS_REVIEW_ARCHIVE: archive };
+    delete env.YEGFACTS_REVIEW_UPSTREAM;
+    delete env.YEGFACTS_REVIEW_PINS;
 
     const diagnostic = run(
       [INVOKE, '--purpose', 'diagnostic', '--provider', 'anthropic', '--package', writePackage('live.md'),
@@ -985,23 +1281,22 @@ describe.runIf(process.env.YEGFACTS_LIVE_CANARY === '1')('live candidate diagnos
     expect(facts.skills).toEqual([]);
     expect(facts.plugins).toEqual([]);
     expect(facts.mcp_servers).toEqual([]);
-    expect((report.context_proof as Record<string, unknown>).status).toBe('unavailable');
+    expect((report.context_proof as Record<string, unknown>).status).toBe('pass');
 
     const metadata = readJson(path.join(attempt, 'metadata.json'));
     expect(metadata.canary).toBe('pass');
     expect(metadata.reasoning_effort).toBe('high');
+    expect(metadata.canary_upstream).toBe('https://api.anthropic.com');
+    expect(metadata.pins_source).toBe('built-in');
+    // A diagnostic never admits, whatever its proof says: no package was sent.
     expect(metadata.admitted_for_research).toBe(false);
-    // The package was retained and never sent, even on the happy path: the
-    // launcher records "absent" where a research stdout would have been hashed.
     expect(metadata.stdout_sha256).toBe('absent');
     expect(metadata.canary_stdout_sha256).toMatch(/^[0-9a-f]{64}$/);
 
-    const research = run(
-      [INVOKE, '--purpose', 'research', '--provider', 'anthropic', '--package', writePackage('live2.md'),
-        '--attempt-dir', path.join(archive, 'live', 'attempt-2'), '--model', 'claude-opus-5', '--effort', 'high'],
-      env,
-    );
-    expect(research.ok).toBe(false);
-    expect(research.stderr).toMatch(/no candidate has a demonstrated context boundary/);
+    // The disclosed host context, with the address removed, is on the record.
+    const proof = report.request_proof as { disclosed: { blocks: { text: string }[] }[] };
+    const disclosed = JSON.stringify(proof.disclosed);
+    expect(disclosed).toContain('<account-email>');
+    expect(disclosed).not.toMatch(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/);
   });
 });

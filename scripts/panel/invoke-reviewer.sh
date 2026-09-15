@@ -9,29 +9,35 @@
 #     --package <file> --attempt-dir <dir> --model <id> --effort <level>
 #   scripts/panel/invoke-reviewer.sh --archive-root
 #
-# EVERY PROVIDER IS BLOCKED FOR RESEARCH IN THIS RELEASE.
+# WHAT IS CAPTURED, AND WHAT IS NOT.
 #
 # The old promise was that a fresh `mktemp -d` working directory isolated a
 # reviewer. It never did: a CLI loads its user-level instructions from $HOME
 # whatever its working directory is. The replacement candidate was the vendor's
 # own customization suppression, checked against the CLI's `system/init`
-# inventory. That check is worth having and it is implemented here, but it
-# cannot carry the claim: an empty plugin list proves plugins were not loaded,
-# not that no CLAUDE.md, memory or host instruction reached the model.
+# inventory. That check is worth having and it is implemented here, but it never
+# carried the claim on its own: an empty plugin list proves plugins were not
+# loaded, not that no CLAUDE.md, memory or host instruction reached the model.
 #
-# What would settle it for the Claude candidate is the outgoing request, and
-# nothing in Claude Code 2.1.267 emits it. That CLI's debug log never writes a
-# request body — its most detailed line records {model, thinking, output_config,
-# temperature, betas} — so a denylist of private phrases run over that log
-# passes by construction. Meanwhile its own help for
-# --exclude-dynamic-system-prompt-sections says the default system prompt
-# carries memory paths. That is a statement about this CLI, not about every
-# vendor: codex, for one, renders a prompt you can read, and what it shows is
-# the reason its seat is blocked.
+# What settles it is the outgoing request, and from 2026-09-15 this launcher
+# keeps it. Claude Code 2.1.272 honours ANTHROPIC_BASE_URL, so every invocation
+# runs through scripts/panel/record-proxy.mjs, which writes each request and
+# response to the attempt directory and forwards them unchanged to
+# https://api.anthropic.com. scripts/panel/request-proof.ts then checks the
+# capture against a pinned description of a clean request: the vendor default
+# prompt by hash, exactly two client tool definitions by hash, four host
+# reminder blocks matching a fixed template, and the declared package byte for
+# byte as the last block of the first user message.
 #
-# Absent a demonstrated boundary for any candidate, `--purpose research` refuses
-# every provider before spending anything, and no old run is retroactively
-# certified.
+# What is NOT covered, stated plainly because a capture invites the opposite
+# reading. The proxy sees what the CLI addresses to its configured base URL.
+# Nothing else on the machine is watched. The vendor prompt is pinned by hash
+# and never read. The request tells the model the operator's account email and
+# working directory through the vendor's own reminder blocks: those are
+# recorded and published as disclosed host context, not suppressed and not
+# counted as isolation. A passing proof is evidence about one attempt under one
+# CLI version. It is not a vendor guarantee, and no historical run is
+# retroactively certified.
 #
 #   openai (codex 0.153.4): tested on 2026-09-09 and failed. See BLOCK_REASON in
 #   the profile table for the exact flag set; it still rendered the global
@@ -42,10 +48,11 @@
 #   flag, so no boundary has been demonstrated for it. It has not been probed
 #   live, and "not demonstrated" is not "impossible".
 #
-#   anthropic (claude 2.1.266/2.1.267): a candidate profile whose structural
-#   checks pass and whose context boundary is undemonstrated. `--purpose
-#   diagnostic` exercises it against a synthetic canary and retains the
-#   evidence. It never sends the package and never produces a review.
+#   anthropic (claude 2.1.272): the candidate profile, admitted for research
+#   only when the canary and the research run each pass their structural check
+#   AND their request proof, and only when the upstream was production.
+#   `--purpose diagnostic` runs the canary alone, captures and proves its
+#   request, and never sends the package.
 #
 # RETENTION
 #
@@ -224,9 +231,17 @@ STATUS="incomplete"
 REASON="the launcher exited before reaching a decision"
 CLI_EXIT=""
 CLI_VERSION=""
+CLI_EXECUTABLE=""
 PROFILE="unresolved"
 CANARY_VERDICT="not-run"
 STRUCTURE_VERDICT="not-run"
+# "unavailable" until a capture has actually been proved, so every exit path
+# before that records the honest answer rather than an optimistic default.
+CONTEXT_PROOF="unavailable"
+CANARY_CONTEXT_PROOF="unavailable"
+PINS_SOURCE="built-in"
+ADMITTED="false"
+ADMISSION_REASON="the launcher exited before reaching a decision"
 
 sha_of() { if [ -f "$1" ]; then shasum -a 256 "$1" | cut -d' ' -f1; else printf 'absent'; fi; }
 
@@ -242,6 +257,27 @@ write_metadata() {
     const values = {};
     for (let i = 0; i < rest.length; i += 2) values[rest[i]] = rest[i + 1];
     const number = (value) => (value === "" ? null : Number(value));
+    // The proof summary is read back out of the report the check wrote rather
+    // than shuttled through a dozen shell variables. A report that is missing,
+    // truncated or from a run that never reached the check leaves every field
+    // absent, which reads as "not recorded" everywhere downstream.
+    const summary = (file) => {
+      try {
+        const report = JSON.parse(fs.readFileSync(file, "utf8"));
+        return report.request_proof && report.request_proof.summary ? report.request_proof.summary : null;
+      } catch { return null; }
+    };
+    const research = summary(values.report);
+    const canary = summary(values.canary_report);
+    const spread = (prefix, value) => (value === null ? {} : {
+      [prefix + "upstream"]: value.upstream,
+      [prefix + "vendor_prompt_sha256"]: value.vendor_prompt_sha256,
+      [prefix + "tool_definitions_sha256"]: value.tool_definitions_sha256,
+      [prefix + "request_count"]: value.request_count,
+      [prefix + "main_turn_count"]: value.main_turn_count,
+      [prefix + "side_request_counts"]: value.side_request_counts,
+      [prefix + "requests_manifest_sha256"]: value.requests_manifest_sha256 ?? null,
+    });
     fs.writeFileSync(out, JSON.stringify({
       attempt_id: values.attempt_id,
       purpose: values.purpose,
@@ -252,22 +288,41 @@ write_metadata() {
       model_id: values.model_id,
       reasoning_effort: values.reasoning_effort,
       cli_version: values.cli_version,
+      // Private only. attempt-record.ts never copies it: where a CLI build sits
+      // on this machine is not part of the public record.
+      cli_executable: values.cli_executable,
       exit_code: number(values.exit_code),
       canary: values.canary,
       structure: values.structure,
-      context_proof: "unavailable",
-      admitted_for_research: false,
+      context_proof: values.context_proof,
+      admitted_for_research: values.admitted === "true",
+      admission_reason: values.admission_reason,
+      pins_source: values.pins_source,
       started_at: values.started_at,
       finished_at: values.finished_at,
       package_sha256: values.package_sha256,
       stdout_sha256: values.stdout_sha256,
       final_message_sha256: values.final_message_sha256,
+      proof_report_sha256: values.proof_report_sha256,
       canary_stdout_sha256: values.canary_stdout_sha256,
       canary_stderr_sha256: values.canary_stderr_sha256,
       canary_final_message_sha256: values.canary_final_message_sha256,
+      // The canary boundary report is also its proof report: one file, one hash.
       canary_report_sha256: values.canary_report_sha256,
+      canary_context_proof: values.canary_context_proof,
+      ...spread("", research),
+      ...spread("canary_", canary),
     }, null, 2) + "\n");
   ' "$ATTEMPT_DIR/metadata.json" \
+    report "$ATTEMPT_DIR/report.json" \
+    canary_report "$ATTEMPT_DIR/canary/report.json" \
+    cli_executable "$CLI_EXECUTABLE" \
+    context_proof "$CONTEXT_PROOF" \
+    canary_context_proof "$CANARY_CONTEXT_PROOF" \
+    admitted "$ADMITTED" \
+    admission_reason "$ADMISSION_REASON" \
+    pins_source "$PINS_SOURCE" \
+    proof_report_sha256 "$(sha_of "$ATTEMPT_DIR/report.json")" \
     attempt_id "$ATTEMPT_ID" \
     purpose "$PURPOSE" \
     provider "$PROVIDER" \
@@ -291,9 +346,60 @@ write_metadata() {
     canary_report_sha256 "$(sha_of "$ATTEMPT_DIR/canary/report.json")"
   printf '%s\n' "$STATUS" > "$ATTEMPT_DIR/status.txt"
   printf '%s\n' "$REASON" > "$ATTEMPT_DIR/reason.txt"
-  printf '%s\n' "unavailable" > "$ATTEMPT_DIR/context-proof.txt"
+  printf '%s\n' "$CONTEXT_PROOF" > "$ATTEMPT_DIR/context-proof.txt"
 }
-trap write_metadata EXIT
+
+# ---------------------------------------------------------------------------
+# The recording proxy.
+#
+# One per invocation, never shared: the canary and the research run each get
+# their own capture directory, so a research proof can never be satisfied by
+# the canary's requests. ANTHROPIC_BASE_URL is set on the CLI subprocess only,
+# as a prefix assignment on the command itself. It is never exported into this
+# shell and never written to a configuration file, so nothing outside the
+# subprocess is redirected and nothing survives this run.
+#
+# The port is chosen by the kernel and reported back through a file the proxy
+# renames into place once it is listening. Picking a port in bash and hoping
+# would be a race, and a proxy that was not yet listening when the CLI started
+# would send the first request straight past the capture.
+# ---------------------------------------------------------------------------
+PROXY_SCRIPT="$REPO_ROOT/scripts/panel/record-proxy.mjs"
+PROXY_PID=""
+PROXY_PORT=""
+
+start_proxy() {
+  local out="$1" portfile="$2"
+  mkdir -p "$out"
+  node "$PROXY_SCRIPT" --out "$out" --port-file "$portfile" &
+  PROXY_PID=$!
+  local waited=0
+  while [ ! -f "$portfile" ]; do
+    if ! kill -0 "$PROXY_PID" 2>/dev/null; then
+      PROXY_PID=""
+      refuse failed "the recording proxy exited before it started listening; nothing was sent"
+    fi
+    sleep 0.1
+    waited=$((waited + 1))
+    if [ "$waited" -ge 100 ]; then
+      stop_proxy
+      refuse failed "the recording proxy did not start listening within ten seconds; nothing was sent"
+    fi
+  done
+  PROXY_PORT="$(tr -d '\r\n' < "$portfile")"
+}
+
+# Waited on, not merely signalled. The proxy writes a response capture when the
+# response ends, so "the CLI exited" is not "the files are on disk"; waiting for
+# the proxy process to go is what makes the check read a complete capture.
+stop_proxy() {
+  [ -n "$PROXY_PID" ] || return 0
+  kill "$PROXY_PID" 2>/dev/null || true
+  wait "$PROXY_PID" 2>/dev/null || true
+  PROXY_PID=""
+}
+
+trap 'stop_proxy; write_metadata' EXIT
 
 refuse() {
   STATUS="$1"; shift
@@ -319,10 +425,11 @@ case "$PROVIDER" in
   anthropic)
     CLI="claude"
     PROFILE_NAME="claude-safe-web-candidate"
-    # 2.1.266 was probed by the original diagnosis; 2.1.267 by the canary-shape
-    # capture and the high-effort candidate diagnostic on 2026-09-09. Both
-    # produced the same inventory and tool behaviour. Neither is admitted.
-    PROBED_VERSIONS="2.1.266,2.1.267"
+    # Only versions with a pinned request profile in request-proof.ts. 2.1.266
+    # and 2.1.267 are gone: they were probed before anything emitted a request,
+    # so there is nothing to pin for them and no capture to pin it from. A
+    # version with no row fails closed here, before a package is sent.
+    PROBED_VERSIONS="2.1.272"
     ALLOWED_TOOLS="WebFetch,WebSearch"
     PINNED_MODELS="claude-opus-5"
     DEFAULT_MODEL="claude-opus-5"
@@ -375,33 +482,45 @@ if [ -n "$BLOCK_REASON" ]; then
 fi
 
 # ---------------------------------------------------------------------------
-# The admission gate. Nothing gets past it in this release.
+# The admission gate.
 #
-# THE OUTPUT CONTRACT, for whoever admits a provider later. A research
-# invocation that exits 0 must leave, at the TOP LEVEL of the attempt directory:
+# THE OUTPUT CONTRACT. A research invocation that exits 0 leaves, at the TOP
+# LEVEL of the attempt directory:
 #
 #   package.md         the exact bytes sent          (already written above)
 #   final-message.txt  the complete final response, footer and all
 #   stdout.txt         the raw stream
-#   exit-code, status.txt, metadata.json             (already written by the trap)
+#   requests/          the captured outgoing requests and responses
+#   report.json        the structural verdict and the request proof
+#   exit-code, status.txt, metadata.json             (written by the trap)
 #
 # `run-reviewer.sh` extracts the review from `final-message.txt` and nothing
-# else. The diagnostic path below writes its files under `canary/` deliberately:
-# those are evidence about the CLI, never a reviewer's answer, and putting them
-# where the runner looks is how a self-test would get published as a review.
-# `tests/invoke-reviewer.test.ts` holds a fixture launcher that implements this
-# contract, which is what keeps the runner's retry mechanics honest while every
-# real profile is blocked.
-# ---------------------------------------------------------------------------
-if [ "$PURPOSE" = "research" ]; then
-  refuse blocked "no provider is admitted for research: no candidate has a demonstrated context boundary. For the Claude candidate specifically, no inspected path in Claude Code 2.1.267 emits the outgoing request, so an empty plugin and skills inventory shows what was not loaded and cannot show what was sent. Run --purpose diagnostic to exercise the candidate profile and retain the evidence."
-fi
-
-# ---------------------------------------------------------------------------
-# Diagnostic: the candidate profile, a synthetic canary, and nothing else. The
-# prepared package is retained and never sent.
+# else. The canary's files live under `canary/` deliberately: those are evidence
+# about the CLI, never a reviewer's answer, and putting them where the runner
+# looks is how a self-test would get published as a review.
+#
+# THE ORDER, which is the whole gate. Version check first, so an unpinned CLI
+# stops before anything is spent. Then the canary through its own proxy, with
+# both its structural check and its request proof. Only if both pass does the
+# package go anywhere, and then through a fresh proxy whose capture gets the
+# same treatment. Exit 0 requires the CLI to have exited 0 and all four checks
+# to have passed.
 # ---------------------------------------------------------------------------
 command -v "$CLI" >/dev/null 2>&1 || refuse failed "$CLI is not on PATH"
+
+# The `claude` on PATH is usually a shim around a versioned install. Following
+# the links records which build actually ran. Private only: it names a path on
+# this machine and never crosses into the public manifest.
+CLI_EXECUTABLE="$(command -v "$CLI")"
+hops=0
+while [ -L "$CLI_EXECUTABLE" ] && [ "$hops" -lt 16 ]; do
+  link="$(readlink "$CLI_EXECUTABLE")"
+  case "$link" in
+    /*) CLI_EXECUTABLE="$link" ;;
+    *) CLI_EXECUTABLE="$(dirname "$CLI_EXECUTABLE")/$link" ;;
+  esac
+  hops=$((hops + 1))
+done
 
 CLI_VERSION="$("$CLI" --version 2>/dev/null | head -1 | tr -d '\r' | awk '{print $1}')"
 [ -n "$CLI_VERSION" ] || CLI_VERSION="unknown"
@@ -448,11 +567,49 @@ printf 'token: %s\n' "$CANARY_TOKEN" > "$CANARY_DIR/CANARY.md"
   echo '{"web_h1": "<heading text>", "canary_token": "<the token, or null if you could not read that file>", "tools": ["<tool name>"]}'
 } > "$CANARY_DIR/work/canary.md"
 
+CANARY_WORK="$(cd "$CANARY_DIR/work" && pwd -P)"
+
+# The pin table. Built-in unless YEGFACTS_REVIEW_PINS names another, which only
+# exists so a test can prove a capture whose hash-pinned blocks are stand-ins:
+# the repository pins the vendor prompt and the two tool definitions by hash and
+# does not carry their text, so a fixture cannot reproduce them. It is gated on
+# the loopback upstream, so it cannot be used against the API, and a run that
+# used it is never admitted. Both facts are recorded.
+PINS_SOURCE="built-in"
+PINS_ARGS=()
+if [ -n "${YEGFACTS_REVIEW_PINS:-}" ]; then
+  case "${YEGFACTS_REVIEW_UPSTREAM:-}" in
+    http://127.0.0.1*|http://localhost*)
+      PINS_SOURCE="override"
+      PINS_ARGS=(--pins "$YEGFACTS_REVIEW_PINS")
+      ;;
+    *)
+      refuse blocked "YEGFACTS_REVIEW_PINS was set without a loopback YEGFACTS_REVIEW_UPSTREAM: a substitute pin table is a test fixture and must never be used against the API"
+      ;;
+  esac
+fi
+
+# Reads the context-proof status a boundary report recorded. Absent or
+# unreadable is "unavailable", never "pass".
+proof_status() {
+  node -e '
+    const fs = require("node:fs");
+    try {
+      const report = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+      process.stdout.write(String(report.context_proof.status));
+    } catch { process.stdout.write("unavailable"); }
+  ' "$1"
+}
+
+start_proxy "$CANARY_DIR/requests" "$CANARY_DIR/proxy-port"
 set +e
-( cd "$CANARY_DIR/work" && "${CMD[@]}" < canary.md ) \
+( cd "$CANARY_WORK" \
+    && ANTHROPIC_BASE_URL="http://127.0.0.1:$PROXY_PORT" "${CMD[@]}" < canary.md ) \
   > "$CANARY_DIR/stdout.txt" 2> "$CANARY_DIR/stderr.txt"
 CLI_EXIT=$?
 set -e
+stop_proxy
+printf '%s\n' "$CLI_EXIT" > "$CANARY_DIR/exit-code"
 printf '%s\n' "$CLI_EXIT" > "$ATTEMPT_DIR/exit-code"
 
 # Parse and retain regardless of exit status. A run that exited nonzero still
@@ -462,19 +619,92 @@ npx tsx "$BOUNDARY_TS" "$CANARY_DIR/stdout.txt" \
   --report "$CANARY_DIR/report.json" --final "$CANARY_DIR/final-message.txt" \
   --check canary --tools "$ALLOWED_TOOLS" --versions "$PROBED_VERSIONS" \
   --token "$CANARY_TOKEN" --expect-url "$CANARY_URL" --expect-heading "$CANARY_HEADING" \
+  --requests "$CANARY_DIR/requests" --package "$CANARY_DIR/work/canary.md" \
+  --work-dir "$CANARY_WORK" --model "$MODEL" "${PINS_ARGS[@]+"${PINS_ARGS[@]}"}" \
   2> "$CANARY_DIR/failures.txt" && CANARY_VERDICT=pass
 printf '%s\n' "$CANARY_VERDICT" > "$ATTEMPT_DIR/canary.txt"
 STRUCTURE_VERDICT="$CANARY_VERDICT"
+CANARY_CONTEXT_PROOF="$(proof_status "$CANARY_DIR/report.json")"
+printf '%s\n' "$CANARY_CONTEXT_PROOF" > "$CANARY_DIR/context-proof.txt"
 
 if [ "$CLI_EXIT" -ne 0 ]; then
   refuse failed "the canary invocation exited $CLI_EXIT; its output is retained and the package was never sent"
 fi
 if [ "$CANARY_VERDICT" != "pass" ]; then
   sed 's/^/  /' "$CANARY_DIR/failures.txt" >&2
-  refuse failed "the candidate profile failed its structural canary; the package was never sent"
+  refuse failed "the candidate profile failed its canary: the structural check or the request proof did not pass. The package was never sent."
 fi
 
-STATUS="diagnostic"
-REASON="candidate profile passed its structural canary and is NOT admitted for research: context proof unavailable, so nothing establishes what the request actually contained. The prepared package was retained and never sent."
-echo "[$LABEL] diagnostic complete under $PROFILE, attempt $ATTEMPT_ID" >&2
-echo "[$LABEL] structural canary: pass. Context proof: UNAVAILABLE. Not admitted for research." >&2
+if [ "$PURPOSE" != "research" ]; then
+  # The diagnostic asks the CLI about itself. Its canary request is captured and
+  # proved, which is worth having on the record, and it still admits nothing:
+  # no package was sent, so there is nothing to admit.
+  CONTEXT_PROOF="$CANARY_CONTEXT_PROOF"
+  ADMITTED="false"
+  ADMISSION_REASON="a diagnostic never admits a seat: the prepared package was retained and never sent."
+  STATUS="diagnostic"
+  REASON="candidate profile passed its structural canary with context proof $CANARY_CONTEXT_PROOF. It is not admitted for research: a diagnostic sends no package and produces no review."
+  echo "[$LABEL] diagnostic complete under $PROFILE, attempt $ATTEMPT_ID" >&2
+  echo "[$LABEL] structural canary: pass. Canary context proof: $CANARY_CONTEXT_PROOF. Not admitted for research." >&2
+  exit 0
+fi
+
+# ---------------------------------------------------------------------------
+# Research: the package, through a fresh proxy, under the same profile.
+# ---------------------------------------------------------------------------
+RESEARCH_WORK="$ATTEMPT_DIR/work"
+mkdir -p "$RESEARCH_WORK"
+RESEARCH_WORK="$(cd "$RESEARCH_WORK" && pwd -P)"
+
+start_proxy "$ATTEMPT_DIR/requests" "$ATTEMPT_DIR/proxy-port"
+set +e
+( cd "$RESEARCH_WORK" \
+    && ANTHROPIC_BASE_URL="http://127.0.0.1:$PROXY_PORT" "${CMD[@]}" < "$ATTEMPT_DIR/package.md" ) \
+  > "$ATTEMPT_DIR/stdout.txt" 2> "$ATTEMPT_DIR/stderr.txt"
+CLI_EXIT=$?
+set -e
+stop_proxy
+printf '%s\n' "$CLI_EXIT" > "$ATTEMPT_DIR/exit-code"
+
+RESEARCH_VERDICT=fail
+npx tsx "$BOUNDARY_TS" "$ATTEMPT_DIR/stdout.txt" \
+  --report "$ATTEMPT_DIR/report.json" --final "$ATTEMPT_DIR/final-message.txt" \
+  --check research --tools "$ALLOWED_TOOLS" --versions "$PROBED_VERSIONS" \
+  --requests "$ATTEMPT_DIR/requests" --package "$ATTEMPT_DIR/package.md" \
+  --work-dir "$RESEARCH_WORK" --model "$MODEL" "${PINS_ARGS[@]+"${PINS_ARGS[@]}"}" \
+  2> "$ATTEMPT_DIR/failures.txt" && RESEARCH_VERDICT=pass
+STRUCTURE_VERDICT="$RESEARCH_VERDICT"
+CONTEXT_PROOF="$(proof_status "$ATTEMPT_DIR/report.json")"
+
+if [ "$CLI_EXIT" -ne 0 ]; then
+  ADMISSION_REASON="the research invocation exited $CLI_EXIT"
+  refuse failed "the research invocation exited $CLI_EXIT; its output and capture are retained and nothing was admitted"
+fi
+if [ "$RESEARCH_VERDICT" != "pass" ]; then
+  sed 's/^/  /' "$ATTEMPT_DIR/failures.txt" >&2
+  ADMISSION_REASON="the research run did not pass its structural check and request proof"
+  refuse failed "the research run failed its admission check; its output and capture are retained"
+fi
+
+# The upstream the capture was actually taken against. A capture taken against
+# a loopback stub can pass the request proof, because the proof is about the
+# shape of what the CLI sent and the CLI does not know where it went. So the
+# proof is reported honestly AND the run is not admitted, with the reason on the
+# record. Every check passing is what earns exit 0; production upstream is what
+# earns `admitted_for_research`, and they are different questions.
+UPSTREAM="$(tr -d '\r\n' < "$ATTEMPT_DIR/requests/upstream.txt" 2>/dev/null || true)"
+STATUS="ok"
+if [ "$UPSTREAM" != "https://api.anthropic.com" ]; then
+  ADMITTED="false"
+  ADMISSION_REASON="every check passed, but the capture was taken against $UPSTREAM rather than https://api.anthropic.com, so this run is not admitted for research."
+elif [ "$PINS_SOURCE" != "built-in" ]; then
+  ADMITTED="false"
+  ADMISSION_REASON="every check passed, but it was run against a substitute pin table rather than the built-in one, so this run is not admitted for research."
+else
+  ADMITTED="true"
+  ADMISSION_REASON="the canary and the research run each passed their structural check and their request proof against https://api.anthropic.com under $PROFILE."
+fi
+REASON="$ADMISSION_REASON"
+echo "[$LABEL] research complete under $PROFILE, attempt $ATTEMPT_ID" >&2
+echo "[$LABEL] canary: pass. Research structure: pass. Context proof: $CONTEXT_PROOF." >&2
+echo "[$LABEL] admitted for research: $ADMITTED. $ADMISSION_REASON" >&2
