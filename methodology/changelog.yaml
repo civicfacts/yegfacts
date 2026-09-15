@@ -14,6 +14,33 @@
 # The sentence above used to describe a check that did not exist: the rule sat
 # as a TODO in scripts/validate.ts, and a change under methodology/ shipped
 # clean. It runs now.
+- version: "1.29"
+  date: "2026-09-15"
+  scope: context-proof-admission
+  summary: >
+    v1.28 said the context boundary was undemonstrated because nothing emitted
+    the outgoing request. The reviewer CLI now runs through a local recording
+    proxy, every request it sends to the API is retained and checked against a
+    pinned description, and the Claude seat is admitted for research only when
+    that check passes on a canary run and on the research run.
+  highlights:
+    - "Every launch of the Claude reviewer goes through a loopback recording proxy that writes each outgoing request and response to the private archive and forwards them to https://api.anthropic.com unchanged. The proxy never rewrites a request. Authorization, API-key and cookie headers are replaced with a placeholder in the retained copy only. Claude Code 2.1.272 honours the base-URL setting under the candidate profile, which is what makes this possible; no global authentication or configuration was changed and no filesystem restriction was added."
+    - "The check classifies every captured request into one of five observed shapes and fails if any request matches none of them. A passing run requires: one session-naming request whose body is the declared package; at least one main turn whose system blocks are the vendor default prompt (pinned by SHA-256, not published), the vendor agent line and a version-stamped billing header; exactly two client tool definitions, WebFetch and WebSearch, pinned by SHA-256; a first user message of four host reminder blocks matching fixed templates followed by the package byte for byte; and later messages carrying only tool results and the model's own blocks, with no instruction text added between turns."
+    - "The request tells the reviewer the operator's account email address and the working directory, in the vendor's own reminder blocks. Neither is in the declared package. They are disclosed, not suppressed: the proof report records those blocks verbatim with the address replaced by a placeholder, and the working directory left in. This is host context that was supplied, not evidence of isolation."
+    - "Limits, stated because a capture invites the opposite reading. The proxy sees only what the CLI addresses to its configured base URL; nothing else on the machine is monitored. The vendor prompt is pinned by hash and its text is not read or published. A passing check is evidence about one attempt under one CLI version. It is not a vendor guarantee and does not cover a different build. Claude Code 2.1.266 and 2.1.267 have no pinned profile and now stop before anything is sent."
+    - "Admission is narrower than the check. A run is admitted for research only when the canary and the research run each pass both their execution check and their request check, the CLI exited zero, the capture was taken against the production API, and the built-in pinned profile was used. The public run record carries the check result, whether the run was admitted, the reason, the upstream the capture was taken against, which pin table was used, the request and turn counts, and hashes of the capture and the report. It does not carry an archive path or the path of the CLI executable."
+    - "No historical run is certified by this. Every finding published before this change predates the capture, and a check that did not exist cannot have passed."
+    - "Codex and Google are unchanged and still blocked: neither has a capture-backed profile, so the three-seat panel cannot run and the consultation's commissioned Google source audit remains blocked. The model pins, the reasoning-effort pin and the framing-check caps do not change."
+  links:
+    - label: Reviewer execution and current limit
+      href: /methodology#reviewer-execution
+    - label: Review memos and dispositions
+      href: https://github.com/civicfacts/yegfacts/blob/main/methodology/reviews/2026-09-09-reviewer-execution/DISPOSITIONS.md
+  note: >
+    What changed is the evidence, not the confidence. v1.28 refused every seat
+    because an empty plugin list shows what was not loaded and cannot show what
+    was sent. The request is now retained, so that question has an answer for
+    the attempts that were captured, and only for those.
 - version: "1.28"
   date: "2026-09-09"
   scope: reviewer-execution-and-retention

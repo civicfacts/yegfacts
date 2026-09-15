@@ -249,11 +249,14 @@ stopped.
    execution profile and a separate per-attempt canary before research. The
    candidate Claude profile suppresses host customizations and exposes only
    public-web search and fetch. A scratch directory alone never established
-   isolation; the earlier text claiming it did was wrong. Public-web research
+   isolation; the earlier text claiming it did was wrong. From v1.29 the
+   launcher also runs the CLI through a local recording proxy and checks the
+   captured outgoing request against a pinned profile, on the canary and on the
+   research run. Both must pass before a result is admitted. Public-web research
    is allowed and expected, but retrieval can be more limited without shell
    tools. Missing essential sources stop a run, not produce a finding. Output
-   is validated against the schema with at most one schema retry. Unverified
-   provider profiles block the three-seat panel; they are not replaced.
+   is validated against the schema with at most one schema retry. Providers with
+   no capture-backed profile block the three-seat panel; they are not replaced.
 3. **Evidence staging, then deterministic merge.** Split in two because network
    work is not deterministic. Staging fetches the cited URLs, hashes them and
    snapshots them; a failed fetch is recorded, not fatal. The merge
@@ -335,16 +338,32 @@ record earlier execution, **not commands approved for new runs**:
 
 From v1.28, `scripts/panel/invoke-reviewer.sh` is the common execution path for
 panel reviews and package-in/report-out framing or source audits. There is no
-unrestricted fallback. The candidate Claude Code 2.1.266/2.1.267 profile uses safe mode,
-empty settings sources, strict MCP configuration, no slash commands or session
-persistence, and an explicit WebSearch/WebFetch allowlist. Actual request and tool
-evidence, plus a separate synthetic canary for each attempt, must pass before a
-result is admitted. This is not a filesystem jail or a vendor-wide guarantee.
-No provider has an approved research profile in this release, so new panels stop.
-Claude's candidate startup inventory does not reveal injected instruction text,
-and its debug log does not contain request bodies. An empty inventory is not
-sufficient context proof. Candidate diagnostics do not authorize a research run.
-A source-audit helper does not authorize another framing check or reset a cap.
+unrestricted fallback. The Claude Code 2.1.272 profile uses safe mode, empty
+settings sources, strict MCP configuration, no slash commands or session
+persistence, and an explicit WebSearch/WebFetch allowlist. This is not a
+filesystem jail or a vendor-wide guarantee.
+
+v1.28 refused every seat because an empty startup inventory shows what was not
+loaded and cannot show what was sent, and no inspected path emitted the request.
+v1.29 changes that for Claude and only for Claude. The CLI runs with
+`ANTHROPIC_BASE_URL` set on its subprocess alone, pointed at
+`scripts/panel/record-proxy.mjs`, which retains every outgoing request and
+response and forwards them unchanged to `https://api.anthropic.com`.
+`scripts/panel/request-proof.ts` then classifies every captured request into one
+of five pinned shapes and checks the main turn against the pinned vendor prompt
+hash, the two pinned tool-definition hashes, the four host reminder templates
+and the declared package bytes. A seat is admitted only when the canary and the
+research run each pass their structural check and their request check, the CLI
+exited zero, the capture was taken against the production API, and the built-in
+pin table was used. The proxy sees only what the CLI addresses to its base URL;
+the vendor prompt is pinned by hash and never published; the account email and
+working directory the vendor reminder blocks carry are recorded as disclosed
+host context rather than treated as absent. A pass covers one attempt under one
+CLI version and certifies no historical run. 2.1.266 and 2.1.267 have no pinned
+profile and now stop before anything is sent. Codex and Google have no
+capture-backed profile and stay blocked, so the three-seat panel still cannot
+run. Candidate diagnostics do not authorize a research run, and a source-audit
+helper does not authorize another framing check or reset a cap.
 
 This changes the shell-access practice described in v1.14. A reviewer may be
 unable to retrieve a PDF that the earlier shell-enabled command could read.
@@ -352,7 +371,12 @@ Essential-source access must be resolved before the run continues. The model
 pins above and the three-vendor synthesis rule remain unchanged.
 
 Every launch attempt retains its package and execution metadata in a private
-archive outside Git worktrees; any diagnostic output remains there too. A future
+archive outside Git worktrees; any diagnostic output remains there too. From
+v1.29 the retained record also holds the captured requests and responses and the
+proof report, and the public row gains the context-proof status, whether the run
+was admitted and why, the upstream the capture was taken against, which pin
+table was used, the request and turn counts and the capture manifest hash. The
+resolved path of the CLI executable is retained privately and never published. A
 research profile must retain stdout, stderr, the complete final response
 (including provenance after the report), request/stream evidence, diagnostics,
 known exit status and hashes before extraction. The

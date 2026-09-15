@@ -361,15 +361,35 @@ const sections = toc([
       change predate the new check; they have not been retroactively cleared by it.
     </p>
     <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
-      New attempts must suppress host customizations and pass a separate test that public-web
-      access works and local files stay unreachable under the same execution profile. This is
-      a check of that execution, not a guarantee about a vendor. No provider yet has a
-      demonstrated profile meeting the full requirement, so new panels and source audits
-      are paused. The candidate Claude setup reports its tools, but does not expose the
-      instruction text needed to check for injected context. Restricting tools
-      can also prevent access to PDFs needed for budget, roads or infrastructure questions.
-      An essential source that cannot be read blocks the run; it does not become a finding
-      that the claim is not established.
+      That change required every new attempt to suppress host customizations and pass a
+      separate test that public-web access works and local files stay unreachable under the
+      same execution profile. It is a check of that execution, not a guarantee about a vendor.
+      On that date no provider had a demonstrated profile meeting the full requirement, so new
+      panels and source audits were paused: the candidate Claude setup reported its tools but
+      did not expose the instruction text needed to check for injected context. An essential
+      source that cannot be read blocks the run; it does not become a finding that the claim is
+      not established.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      September 15, 2026: the outgoing request is now kept. Each Claude reviewer launch runs
+      through a recording proxy on this machine, which writes down every request the tool sends
+      to the model and passes it on unchanged. A check then compares that request against a
+      written-down description of what a clean one contains: the maker's own standard
+      instructions and nothing added to them, only web search and web fetch as tools, and the
+      declared package word for word. The Claude seat may run when a test invocation and the
+      real one both pass. Two things the request does carry that the package does not: the
+      account email address of the person running it, and the folder the tool was started in.
+      Those come from the maker's own reminder text. They are written into the record with the
+      address removed, because a check that hid them would be describing something else.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      What this does not show. The proxy sees what the tool sends to the model and nothing else
+      on the machine. The maker's standard instructions are matched by fingerprint, not read or
+      republished. A pass is evidence about one run under one version of the tool, not a promise
+      from the company that makes it, and it clears nothing published before this date. The
+      Codex and Gemini seats have no equivalent evidence and remain paused, so the three-model
+      panel still cannot run and the commissioned Gemini source check is still blocked. The
+      tool limit set out above still applies, PDFs included.
     </p>
     <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
       Each launch attempt keeps its package and execution record privately, even when it
