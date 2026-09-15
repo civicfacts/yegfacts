@@ -150,6 +150,16 @@ read the same two figures from CSV downloads after five page failures. That
 is the retrieval limit v1.28 disclosed, observed live: public-web tools reach
 some pages and not others, and a run must say which.
 
+### Re-check under the released checker
+
+The check changed after attempt 4 passed: the final release also
+allowlists the request body's top-level keys and requires the metadata to
+carry exactly the three identifiers. The retained attempt 4 capture and its
+canary were re-run offline through the released checker with the built-in
+pins, no CLI and no network. Both pass, with the identifiers' presence now
+listed as a third disclosed entry per main turn. Re-check report SHA-256
+`28c93289034a4c9ced8f60fb4a64b15e7d815282d3cc971d59856bc7352d2260`.
+
 ## Limits of this demonstration
 
 One seat, one build, one model, one machine, four attempts on one day. The
@@ -165,7 +175,7 @@ finding, framing report or source audit follows from this record.
 Root verification on the final branch head, after four implementation
 rounds and the board conditions:
 
-- `npm test`: **441 passed, 1 skipped**, across 27 files. The skipped test
+- `npm test`: **449 passed, 1 skipped**, across 27 files. The skipped test
   is the opt-in live diagnostic; the live attempts above cover it.
 - `npm run validate`: OK, 7 stories, 17 claims, 1 commitment, 8 topics, 162
   evidence entries.

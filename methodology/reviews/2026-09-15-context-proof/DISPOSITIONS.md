@@ -112,7 +112,7 @@ this path; until it exists, each CLI upgrade costs a manual probe.
 
 **Corrections:** the memo could not confirm the suite green in its checkout
 because that checkout had no installed dependencies; the editor reproduced
-441 passing tests and one opt-in skip on the final branch head. The memo's hours
+449 passing tests and one opt-in skip on the final branch head. The memo's hours
 and dollar figures are estimates, not measurements.
 
 ### Product and audience: conditional approval
