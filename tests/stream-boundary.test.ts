@@ -1,14 +1,15 @@
 /**
  * The line between "we checked the configuration" and "we proved the context".
  *
- * The structural checks are worth having and they can pass. The context proof
- * cannot, because nothing in the installed CLIs emits the outgoing request. The
- * test that matters most here is the one asserting that a completely clean
- * stream is STILL refused for research: if someone later makes
- * `admitForResearch` pass by tightening the structural checks, that test fails,
- * which is the point of writing it down.
+ * The structural checks read the stream, which is the host reporting on itself.
+ * The context proof reads the captured request, which is what the host actually
+ * sent. They are different evidence and the lock here is that structural
+ * cleanliness alone never admits a run: a stream that passes every check with
+ * no capture behind it is still refused, and if someone later makes
+ * `admitForResearch` pass by tightening the structural checks, that test fails.
  */
 import { describe, expect, it } from 'vitest';
+import type { ProofResult } from '../scripts/panel/request-proof.ts';
 import {
   admitForResearch,
   checkCanary,
@@ -130,24 +131,88 @@ describe('canary', () => {
 });
 
 describe('research admission', () => {
-  it('reports the context proof as unavailable, with a reason', () => {
-    const proof = contextProof();
+  const proofResult = (over: Partial<ProofResult> = {}): ProofResult => ({
+    status: 'pass',
+    requests: [],
+    failures: [],
+    disclosed: [],
+    summary: {
+      upstream: 'https://api.anthropic.com',
+      production_upstream: true,
+      cli_version: PROBED,
+      vendor_prompt_sha256: 'a'.repeat(64),
+      tool_definitions_sha256: { WebFetch: 'b'.repeat(64), WebSearch: 'c'.repeat(64) },
+      request_count: 3,
+      main_turn_count: 1,
+      side_request_counts: {},
+    },
+    ...over,
+  });
+
+  it('reports the context proof as unavailable when no capture was taken', () => {
+    const proof = contextProof(null);
     expect(proof.status).toBe('unavailable');
-    expect(proof.reason).toMatch(/never a request body/);
+    expect(proof.reason).toMatch(/no request capture was taken/);
+  });
+
+  it('reports a failed proof with the reason the request check gave', () => {
+    const proof = contextProof(proofResult({ status: 'fail', failures: ['req-0003.json: a third tool'] }));
+    expect(proof.status).toBe('fail');
+    expect(proof.reason).toMatch(/a third tool/);
   });
 
   /**
-   * The lock. A stream that passes every structural check is still refused,
-   * because passing structural checks was never the contract. If this test ever
-   * needs changing, something actually emits the request and the change should
-   * come with that evidence attached.
+   * The lock. A stream that passes every structural check is still refused when
+   * nothing captured the request, because passing structural checks was never
+   * the contract. Every run before 2026-09-15 is in exactly this position.
    */
-  it('refuses a perfectly clean stream anyway', () => {
+  it('refuses a clean stream without a capture', () => {
     expect(checkStructure(readStream(cleanStream), expectation).ok).toBe(true);
 
-    const verdict = admitForResearch(readStream(cleanStream), expectation);
+    const verdict = admitForResearch(readStream(cleanStream), expectation, null);
     expect(verdict.ok).toBe(false);
     expect(verdict.failures).toHaveLength(1);
     expect(verdict.failures[0]).toMatch(/^context proof unavailable:/);
+  });
+
+  it('refuses a clean stream whose capture did not match the pins', () => {
+    const verdict = admitForResearch(readStream(cleanStream), expectation, proofResult({
+      status: 'fail',
+      failures: ['req-0003.json: messages[0][4] is not the declared package byte for byte'],
+    }));
+    expect(verdict.ok).toBe(false);
+    expect(verdict.failures[0]).toMatch(/^context proof fail:/);
+  });
+
+  it('admits a clean stream with a passing proof', () => {
+    const verdict = admitForResearch(readStream(cleanStream), expectation, proofResult());
+    expect(verdict).toEqual({ ok: true, failures: [] });
+  });
+
+  it('still refuses a passing proof when the stream itself is not clean', () => {
+    const facts = readStream(cleanStream.replace(PROBED, '3.0.0'));
+    const verdict = admitForResearch(facts, expectation, proofResult());
+    expect(verdict.ok).toBe(false);
+    expect(verdict.failures.join()).toMatch(/has no probed profile/);
+  });
+});
+
+describe('assistant turns', () => {
+  it('counts runs of consecutive assistant events, not the events', () => {
+    // The CLI emits one assistant event per content block, so a turn that
+    // thought and then called two tools is three events and one turn. The
+    // request capture has to agree with the turn count, not the block count.
+    const thinking = JSON.stringify({
+      type: 'assistant',
+      message: { role: 'assistant', content: [{ type: 'thinking', thinking: 'weighing it up' }] },
+    });
+    const answer = JSON.stringify({
+      type: 'assistant',
+      message: { role: 'assistant', content: [{ type: 'text', text: 'done' }] },
+    });
+    const twoTurns = [init(), thinking, fetchUse, fetchResult('The h1 is "Example Domain"'), answer, done()].join('\n');
+
+    expect(readStream(twoTurns).assistant_turns).toBe(2);
+    expect(readStream(cleanStream).assistant_turns).toBe(1);
   });
 });

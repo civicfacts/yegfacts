@@ -2,7 +2,7 @@
  * Read what a reviewer CLI actually did, from its own structured stream, and
  * say plainly which of two very different questions the answer settles.
  *
- * QUESTION ONE, which this can answer: what was the run configured to do and
+ * QUESTION ONE, which the stream answers: what was the run configured to do and
  * what did it do? `claude --output-format stream-json --verbose` opens with a
  * `system/init` event naming the tool inventory, MCP servers, skills, plugins,
  * slash commands, agents and CLI version, carries a `tool_use` for every tool
@@ -11,32 +11,29 @@
  * the subagent counters. That is the host reporting on itself, and it is
  * checkable.
  *
- * QUESTION TWO, which this CANNOT answer: what context was actually sent? This
- * file reads Claude Code streams, and no inspected path in Claude Code 2.1.267
- * emits the outgoing request. Its debug log never writes a request body — the
- * most detailed line, `[API REQUEST DETAIL]`, logs `{model, thinking,
- * output_config, temperature, betas}` and nothing else — so scanning it for
- * private marker strings finds none whatever the profile is, and a denylist
- * over a log that cannot contain the text is a check that passes by
- * construction. `--system-prompt-snapshot` records the prompt for reuse, not
- * for reading, and its own help says it has no effect where recording is
- * unavailable. Meanwhile that CLI's own help for
- * `--exclude-dynamic-system-prompt-sections` states that the default system
- * prompt carries memory paths.
+ * QUESTION TWO, which the stream does NOT answer: what context was actually
+ * sent? Nothing in the stream carries the outgoing request, and until
+ * 2026-09-15 nothing inspected in Claude Code did. What answers it is the
+ * request itself: Claude Code 2.1.272 honours `ANTHROPIC_BASE_URL`, so
+ * `record-proxy.mjs` retains every request the CLI addressed to the API and
+ * `request-proof.ts` checks it against a pinned description of a clean one.
  *
- * That is a finding about this CLI and not a claim about every vendor. Codex,
- * for instance, renders a prompt that can be read, and reading it is exactly
- * how its seat was disqualified.
+ * So `contextProof()` stopped being a constant. It takes that proof and returns
+ * `pass`, `fail`, or `unavailable` when no capture was taken, and
+ * `admitForResearch` admits a structurally clean stream only when the proof
+ * passed. The structural checks still all apply; they were never the contract
+ * on their own and they still are not.
  *
- * So an empty plugin list is not proof that no CLAUDE.md, memory or host
- * instruction reached the model. It is proof that plugins were not loaded.
- * `contextProof()` returns `unavailable` for the Claude candidate, deliberately
- * and permanently until something actually emits its request, and
- * `admitForResearch` refuses on that basis alone. Structural checks constrain
- * the blast radius. They are not the contract.
+ * WHAT A PASS DOES NOT COVER. The proxy sees what the CLI sends to its
+ * configured base URL and nothing else on the machine. The vendor prompt is
+ * pinned by hash, not read. The request carries the operator's account email
+ * and working directory in the vendor's own reminder blocks; those are recorded
+ * and published as host context, not treated as absent. Codex and Google have
+ * no capture-backed profile, so their seats stay blocked.
  */
 import { readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { type ProofResult, loadPins, proveRequests, readCapture } from './request-proof.ts';
 
 type Json = Record<string, unknown>;
 
@@ -87,6 +84,13 @@ export type StreamFacts = {
   plugins: string[] | null;
   agents: string[] | null;
   tool_calls: ToolCall[];
+  /**
+   * Maximal runs of consecutive assistant events. The CLI emits one assistant
+   * event per content block, so counting events counts blocks; a run between
+   * two user events is one API turn, and that is the number the request capture
+   * has to agree with.
+   */
+  assistant_turns: number;
   duplicate_tool_use_ids: string[];
   orphan_tool_result_ids: string[];
   permission_denials: string[] | null;
@@ -127,6 +131,7 @@ export function readStream(text: string): StreamFacts {
     plugins: null,
     agents: null,
     tool_calls: [],
+    assistant_turns: 0,
     duplicate_tool_use_ids: [],
     orphan_tool_result_ids: [],
     permission_denials: null,
@@ -137,6 +142,7 @@ export function readStream(text: string): StreamFacts {
   };
 
   const byId = new Map<string, ToolCall>();
+  let lastRole: 'assistant' | 'user' | null = null;
 
   for (const line of text.split('\n')) {
     if (!line.trim()) continue;
@@ -172,6 +178,11 @@ export function readStream(text: string): StreamFacts {
       facts.plugins = names(event.plugins);
       facts.agents = names(event.agents);
       continue;
+    }
+
+    if (type === 'assistant' || type === 'user') {
+      if (type === 'assistant' && lastRole !== 'assistant') facts.assistant_turns += 1;
+      lastRole = type;
     }
 
     // A `tool_use` arrives on an assistant event and its outcome comes back on
@@ -324,25 +335,44 @@ export function checkStructure(facts: StreamFacts, expected: StructureExpectatio
   return { ok: failures.length === 0, failures };
 }
 
-export type ContextProof = { status: 'unavailable'; reason: string };
+export type ContextProof = { status: 'pass' | 'fail' | 'unavailable'; reason: string };
 
 /**
  * Whether the actual context sent to the model was captured and inspected.
  *
- * It was not, for the Claude candidate this file reads, and there is no
- * argument to be had about it: no inspected native path in Claude Code 2.1.267
- * emits the request. This returns a constant so that the one place that could
- * ever change it is here, in the open, rather than in a launcher's flag list.
+ * Three answers, and the difference between them matters. `unavailable` means
+ * no capture was taken, which is where every run before 2026-09-15 sits and
+ * where a run without a proxy still sits: nothing was shown, so nothing is
+ * claimed. `fail` means a capture was taken and the request was not the one the
+ * profile pins. `pass` means every request the CLI sent to its base URL matched
+ * the pinned shapes, for that attempt, under that CLI version.
+ *
+ * A pass is not a vendor guarantee and not a statement about anything the CLI
+ * sent elsewhere. `request-proof.ts` says exactly what it covers.
  */
-export function contextProof(): ContextProof {
+export function contextProof(proof: ProofResult | null): ContextProof {
+  if (!proof) {
+    return {
+      status: 'unavailable',
+      reason:
+        'no request capture was taken for this attempt, so nothing establishes what the outgoing request ' +
+        'contained. The absence of plugins, skills and MCP servers from the init inventory is evidence ' +
+        'about loading, not about what was sent.',
+    };
+  }
+  if (proof.status === 'pass') {
+    return {
+      status: 'pass',
+      reason:
+        `every request the CLI sent to ${proof.summary.upstream} was captured and matched the pinned ` +
+        `profile for ${proof.summary.cli_version}: ${proof.summary.request_count} request(s), ` +
+        `${proof.summary.main_turn_count} main turn(s). The account email and working directory the ` +
+        'vendor reminder blocks carry are recorded in the proof report as disclosed host context.',
+    };
+  }
   return {
-    status: 'unavailable',
-    reason:
-      'no inspected path in Claude Code 2.1.267 emits its outgoing request: the debug log records only ' +
-      '{model, thinking, output_config, temperature, betas} and never a request body, and ' +
-      '--system-prompt-snapshot records the prompt for reuse rather than for reading. The absence of ' +
-      'plugins, skills and MCP servers from the init inventory is evidence about loading, not about what ' +
-      'the request contained. Other vendors expose different things; this says nothing about them.',
+    status: 'fail',
+    reason: `the captured request did not match the pinned profile: ${proof.failures.join('; ')}`,
   };
 }
 
@@ -415,16 +445,19 @@ export function checkCanary(facts: StreamFacts, expected: CanaryExpectation): Ve
 /**
  * The admission gate for real research. It is not a wrapper around
  * `checkStructure`: it adds the requirement that the context boundary was
- * actually demonstrated, which today nothing satisfies. Every provider is
- * refused, and the reason says why rather than pointing at a flag.
+ * actually demonstrated for this attempt. A clean stream with no capture is
+ * still refused, which is the case every run before 2026-09-15 was in.
  */
-export function admitForResearch(facts: StreamFacts, expected: StructureExpectation): Verdict {
+export function admitForResearch(
+  facts: StreamFacts,
+  expected: StructureExpectation,
+  proofResult: ProofResult | null,
+): Verdict {
   const structure = checkStructure(facts, expected);
-  const proof = contextProof();
-  return {
-    ok: false,
-    failures: [...structure.failures, `context proof ${proof.status}: ${proof.reason}`],
-  };
+  const proof = contextProof(proofResult);
+  const failures = [...structure.failures];
+  if (proof.status !== 'pass') failures.push(`context proof ${proof.status}: ${proof.reason}`);
+  return { ok: failures.length === 0, failures };
 }
 
 /**
@@ -435,6 +468,13 @@ export function admitForResearch(facts: StreamFacts, expected: StructureExpectat
  *                          [--check canary|research] [--tools A,B]
  *                          [--versions X,Y] [--token T]
  *                          [--expect-url U] [--expect-heading S]
+ *                          [--requests <dir> --package <file>
+ *                           --work-dir <dir> --model <id> [--pins <file>]]
+ *
+ * With `--requests`, the capture in that directory is proved against the pins
+ * for the CLI version the stream reported, and the proof goes into the report
+ * beside the stream facts. Without it the context proof is `unavailable` and
+ * `--check research` cannot pass.
  *
  * Exit 0 means the named check passed. Exit 1 prints the failures and writes the
  * report and the final message anyway, because a failed attempt is the one most
@@ -487,9 +527,33 @@ if (isEntryPoint()) {
     supportedVersions: list(flags.versions),
   };
 
+  // The proof runs before the verdict and is reported whatever the verdict is.
+  // A canary whose stream passed and whose request did not is the interesting
+  // case, and it has to be visible rather than folded into one word.
+  let proof: ProofResult | null = null;
+  if (flags.requests) {
+    const capture = readCapture(flags.requests);
+    proof = proveRequests({
+      requests: capture.requests,
+      upstream: capture.upstream,
+      requestsManifestSha256: capture.requestsManifestSha256,
+      packageText: flags.package ? readFileSync(flags.package, 'utf8') : '',
+      workDir: flags['work-dir'] ?? '',
+      model: flags.model ?? '',
+      cliVersion: facts.cli_version ?? 'unknown',
+      // Built-in unless a table is named. See loadPins for why that is possible
+      // at all and what the launcher makes it cost.
+      ...(flags.pins ? { pins: loadPins(flags.pins) } : {}),
+      stream: {
+        toolUseIds: facts.tool_calls.map((call) => call.id),
+        assistantTurns: facts.assistant_turns,
+      },
+    });
+  }
+
   let verdict: Verdict;
   switch (flags.check) {
-    case 'canary':
+    case 'canary': {
       verdict = checkCanary(facts, {
         ...expectation,
         token: flags.token ?? '',
@@ -497,9 +561,15 @@ if (isEntryPoint()) {
         expectedHeading: flags['expect-heading'] ?? '',
         rawText: raw,
       });
+      // The canary proves the profile, so its own request is proved too. Without
+      // this a failing canary capture would be written down and ignored.
+      if (proof && proof.status !== 'pass') {
+        verdict = { ok: false, failures: [...verdict.failures, ...proof.failures.map((f) => `request proof: ${f}`)] };
+      }
       break;
+    }
     case 'research':
-      verdict = admitForResearch(facts, expectation);
+      verdict = admitForResearch(facts, expectation, proof);
       break;
     default:
       console.error('--check must be canary or research');
@@ -512,7 +582,17 @@ if (isEntryPoint()) {
   if (flags.report) {
     writeFileSync(
       flags.report,
-      `${JSON.stringify({ check: flags.check, ...verdict, context_proof: contextProof(), facts }, null, 2)}\n`,
+      `${JSON.stringify(
+        {
+          check: flags.check,
+          ...verdict,
+          context_proof: contextProof(proof),
+          request_proof: proof,
+          facts,
+        },
+        null,
+        2,
+      )}\n`,
     );
   }
 
