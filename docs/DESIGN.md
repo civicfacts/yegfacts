@@ -360,7 +360,12 @@ the vendor prompt is pinned by hash and never published; the account email and
 working directory the vendor reminder blocks carry are recorded as disclosed
 host context rather than treated as absent. A pass covers one attempt under one
 CLI version and certifies no historical run. 2.1.266 and 2.1.267 have no pinned
-profile and now stop before anything is sent. Codex and Google have no
+profile and now stop before anything is sent. Because the pins describe one
+build, the launcher runs `~/.local/share/claude/versions/<pinned version>` when
+it is installed rather than the `claude` on PATH, checks `--version` on whatever
+it resolved, and refuses anything but the pinned build: 2.1.273 was already on
+PATH when v1.29 shipped, and a new version needs a fresh capture and a new pin
+row before it can run. Codex and Google have no
 capture-backed profile and stay blocked, so the three-seat panel still cannot
 run. Candidate diagnostics do not authorize a research run, and a source-audit
 helper does not authorize another framing check or reset a cap.
