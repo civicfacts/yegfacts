@@ -33,8 +33,9 @@
  * one is a visible diff.
  */
 import { createHash } from 'node:crypto';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, realpathSync } from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 export const PRODUCTION_UPSTREAM = 'https://api.anthropic.com';
 
@@ -43,6 +44,12 @@ const sha256 = (text: string): string => createHash('sha256').update(text, 'utf8
 /** Everything the check compares against, for one CLI version. */
 export type Pins = {
   cliVersion: string;
+  /**
+   * SHA-256 of the CLI executable itself. The request pins describe one build,
+   * so the launcher has to be able to say which bytes it ran, not just which
+   * version string they answered with.
+   */
+  binarySha256: string;
   /** `<n>` characters of vendor prompt, pinned by hash and never reproduced. */
   vendorPromptSha256: string;
   vendorPromptLength: number;
@@ -72,6 +79,9 @@ export type Pins = {
 export const PINS: Record<string, Pins> = {
   '2.1.272': {
     cliVersion: '2.1.272',
+    // ~/.local/share/claude/versions/2.1.272 as installed on 2026-09-15, the
+    // build the captures behind every other pin here came from.
+    binarySha256: '195e24e8e1f9bf46f1eaee72d434a33e18f9f5796f29a6348a00d16c5f8aee75',
     vendorPromptSha256: 'a3015596fabfe9063deb699fa369a88d1978106e7a9d3d06b40eb6199791872d',
     vendorPromptLength: 13487,
     agentLine: "You are a Claude agent, built on Anthropic's Claude Agent SDK.",
@@ -323,6 +333,45 @@ function checkFetchSummarizer(
 
 const REMINDER_ORDER = ['environment', 'model', 'account', 'date'] as const;
 
+/**
+ * The opening of a reminder block, matched without its closing bracket so that
+ * a variant tag (`<system-reminder foo="bar">`) is caught too.
+ */
+export const REMINDER_MARKER = '<system-reminder';
+
+/**
+ * What is wrong with one tool_result's payload, if anything.
+ *
+ * `content` is a bare string on some tools and an array of blocks on others.
+ * Both are read. Every block must be text, because a shape this cannot read is
+ * a shape it cannot scan, and every text is scanned for the reminder marker.
+ */
+function scanToolResult(content: unknown): string[] {
+  const complaints: string[] = [];
+  const texts: string[] = [];
+
+  if (typeof content === 'string') {
+    texts.push(content);
+  } else if (Array.isArray(content)) {
+    for (const raw of content) {
+      const block = asRecord(raw);
+      const type = typeof block?.type === 'string' ? block.type : '?';
+      if (type !== 'text') {
+        complaints.push(`carries a ${type} content block, which is not text`);
+        continue;
+      }
+      if (typeof block?.text === 'string') texts.push(block.text);
+    }
+  } else if (content !== undefined && content !== null) {
+    complaints.push(`content is a ${typeof content}, not a string or a list of blocks`);
+  }
+
+  if (texts.some((text) => text.includes(REMINDER_MARKER))) {
+    complaints.push(`content carries a ${REMINDER_MARKER}`);
+  }
+  return complaints;
+}
+
 function checkMainTurn(
   request: CapturedRequest,
   body: Record<string, unknown>,
@@ -394,8 +443,16 @@ function checkMainTurn(
 
   // Everything after the first message. A later user message carries tool
   // results and nothing else; a later assistant message carries the model's own
-  // blocks. A text block or a reminder appearing here would be context added
-  // between turns, which is exactly what the capture exists to catch.
+  // blocks. A text block appearing on a later user message would be context
+  // added between turns, which is exactly what the capture exists to catch.
+  //
+  // A tool_result is checked twice over, because its payload is the one place
+  // in a later turn where arbitrary text legitimately appears. Its blocks must
+  // all be text, so nothing arrives in a shape this cannot read; and the text
+  // is scanned for the reminder marker, because a tool_result carrying one
+  // would be host instruction text re-entering the conversation through the
+  // only door left open. An earlier version of this scanned a `text` field that
+  // a tool_result does not have, so it checked nothing at all.
   const toolUseIds = new Set(input.stream.toolUseIds);
   for (let index = 1; index < messages.length; index += 1) {
     const message = asRecord(messages[index]);
@@ -413,10 +470,14 @@ function checkMainTurn(
         if (typeof id !== 'string' || !toolUseIds.has(id)) {
           failures.push(`${where}: messages[${index}] carries a tool_result for "${String(id)}", which the stream never reported`);
         }
+        for (const complaint of scanToolResult(block?.content)) {
+          failures.push(`${where}: messages[${index}] tool_result ${complaint}`);
+        }
+        continue;
       }
       const text = typeof block?.text === 'string' ? block.text : '';
-      if (text.includes('<system-reminder>')) {
-        failures.push(`${where}: messages[${index}] carries a <system-reminder> after the first message`);
+      if (text.includes(REMINDER_MARKER)) {
+        failures.push(`${where}: messages[${index}] carries a ${REMINDER_MARKER} after the first message`);
       }
     }
   }
@@ -602,4 +663,47 @@ export function readCapture(dir: string): Capture {
   }
 
   return { requests, upstream, requestsManifestSha256: sha256(manifest.join('\n')) };
+}
+
+/**
+ * A one-line CLI, for the launcher and nothing else: print one pinned scalar.
+ *
+ *   tsx request-proof.ts --field binarySha256 --cli-version 2.1.272 [--pins <file>]
+ *
+ * The launcher is a shell script and the pins live here. It asks rather than
+ * keeping its own copy of a hash, because two copies of a pin is one copy too
+ * many: the one in the shell would be the one nobody noticed going stale.
+ * Exits 2 when the version has no row or the field is empty, so a missing pin
+ * stops the launcher instead of turning into an empty string.
+ */
+function isEntryPoint(): boolean {
+  const invoked = process.argv[1];
+  if (!invoked) return false;
+  try {
+    return realpathSync(invoked) === realpathSync(fileURLToPath(import.meta.url));
+  } catch {
+    return false;
+  }
+}
+
+if (isEntryPoint()) {
+  const flags: Record<string, string> = {};
+  const argv = process.argv.slice(2);
+  for (let index = 0; index < argv.length; index += 2) {
+    const flag = argv[index];
+    const value = argv[index + 1];
+    if (!flag?.startsWith('--') || value === undefined) {
+      console.error(`bad arguments near "${flag ?? ''}"`);
+      process.exit(2);
+    }
+    flags[flag.slice(2)] = value;
+  }
+  const table = flags.pins ? loadPins(flags.pins) : PINS;
+  const row = table[flags['cli-version'] ?? ''] as Record<string, unknown> | undefined;
+  const value = row?.[flags.field ?? ''];
+  if (typeof value !== 'string' || value === '') {
+    console.error(`no pinned ${flags.field} for CLI version ${flags['cli-version']}`);
+    process.exit(2);
+  }
+  process.stdout.write(value);
 }
