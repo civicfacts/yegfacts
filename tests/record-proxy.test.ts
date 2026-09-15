@@ -138,8 +138,8 @@ describe('recording and forwarding', { timeout: 30_000 }, () => {
     const sent = JSON.stringify({ model: 'claude-opus-5', messages: [{ role: 'user', content: 'hello' }] });
     const answer = await post(proxy.port, sent, {
       'content-type': 'application/json',
-      authorization: 'Bearer sk-secret-token',
-      'x-api-key': 'another-secret',
+      authorization: 'Bearer stub-oauth-token',
+      'x-api-key': 'k-2',
       cookie: 'session=private',
       'x-app': 'cli',
     });
@@ -153,7 +153,7 @@ describe('recording and forwarding', { timeout: 30_000 }, () => {
     expect(upstream.received).toHaveLength(1);
     expect(upstream.received[0]!.body).toBe(sent);
     expect(upstream.received[0]!.url).toBe('/v1/messages?beta=true');
-    expect(upstream.received[0]!.headers.authorization).toBe('Bearer sk-secret-token');
+    expect(upstream.received[0]!.headers.authorization).toBe('Bearer stub-oauth-token');
     expect(upstream.received[0]!.headers['x-app']).toBe('cli');
 
     proxy.child.kill('SIGTERM');
@@ -168,7 +168,7 @@ describe('recording and forwarding', { timeout: 30_000 }, () => {
     expect(capture.headers.cookie).toBe('<redacted>');
     expect(capture.headers['x-app']).toBe('cli');
     // Nothing that could be replayed is left in the retained bytes.
-    expect(readFileSync(path.join(proxy.out, 'req-0001.json'), 'utf8')).not.toContain('sk-secret-token');
+    expect(readFileSync(path.join(proxy.out, 'req-0001.json'), 'utf8')).not.toContain('stub-oauth-token');
 
     const response = readFileSync(path.join(proxy.out, 'res-0001.txt'), 'utf8');
     expect(response.startsWith('HTTP 200\n')).toBe(true);
