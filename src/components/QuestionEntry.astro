@@ -55,6 +55,17 @@ const rendered = await Promise.all(
 const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
 
 /**
+ * Whether this entry's reason says the review is paused.
+ *
+ * Read off the text, because the register has no paused lifecycle state and
+ * inventing one to carry a link would be the wrong way round. The reason itself
+ * is plain text, so the link goes beside it rather than inside the YAML string:
+ * a register field that had to be parsed as markup would be a worse thing to
+ * live with than this test.
+ */
+const paused = /\bReview is paused as of\b/.test(question.reason ?? '');
+
+/**
  * The three state fields, each under the question it answers.
  *
  * They are printed as three rows rather than folded into one word because that
@@ -131,6 +142,18 @@ const states = [
           data-record
         >
           {question.reason ?? question.note}
+        </p>
+      )
+    }
+
+    {
+      paused && (
+        <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed text-muted" data-record>
+          What has to be true before the models can run again is set out under{' '}
+          <a href="/methodology#reviewer-execution" class="link">
+            reviewer execution
+          </a>
+          .
         </p>
       )
     }
