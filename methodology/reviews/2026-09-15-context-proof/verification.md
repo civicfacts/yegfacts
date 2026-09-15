@@ -30,7 +30,9 @@ Probe 2, canary shape (fetch example.com, search, try to read a file one
 directory up, list tools), six requests: connectivity check, session title,
 main turn, search helper, fetch summary, second main turn. The fetch returned
 the heading, the search returned "Open Data | City of Edmonton", the file
-token came back null, and the tool list was WebFetch and WebSearch.
+token came back null, and the tool list was WebFetch and WebSearch. The
+connectivity check is omitted from the table below; the other five requests are
+listed.
 
 | File | SHA-256 |
 |---|---|
@@ -108,8 +110,9 @@ the model's own domain filter beside its use limit, and the check had pinned
 that tool's definition exactly. And a rate-limit event in the stream sat
 between two assistant events of one turn, so the turn count read eight
 against seven main-turn requests. The check was corrected to permit the
-search tool's documented filter fields and to end an assistant turn only at
-a user event. Capture manifest SHA-256
+search tool's documented filter fields and to count turns by the distinct
+message identifier the service puts on each exchange, with the event-order
+grouping kept only as a fallback for a stream that carries no identifiers. Capture manifest SHA-256
 `85cf04c4e1a250a6e63095b59cb84daa8e8ff01237a03f583acb3ccb773862b3`; stream
 `bda5d66b150af229246a370236c9730a1b63e635c82e75722c90ab0f2fe6f660`; final
 message `bc7d93f915628e9a3aa243f5d04d359a03e46340dfe29a45fa71f2f0624dec91`.

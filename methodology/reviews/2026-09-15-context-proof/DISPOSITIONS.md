@@ -28,7 +28,12 @@ different model from the same vendor. The synthesis is the editor's.
 
 Adopt, with the conditions below folded into the same release. The capture
 is the first artifact that answers the v1.28 question rather than talking
-around it, and it fails closed on anything it does not recognise. Its limits
+around it, and it fails closed on anything it does not recognise in the
+request body: the system blocks, the tool definitions, the model, the
+reasoning effort, the messages, the top-level keys and the keys inside the
+request metadata are each checked against the pinned list, so a field nobody
+described is a failure. The HTTP headers are recorded and not compared. Its
+limits
 are stated as limits: one attempt, one build, the client edge only, nothing
 on the vendor's side observed. Admission is narrower than the check, and the
 panel runner refuses to install anything not admitted.
