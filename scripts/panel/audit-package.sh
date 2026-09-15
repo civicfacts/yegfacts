@@ -16,12 +16,17 @@
 # reading it and drawing a conclusion is a person's job.
 #
 # Whether it runs at all is the launcher's decision, not this script's. From
-# methodology v1.29 the launcher captures the CLI's outgoing request and checks
-# it against a pinned profile, so an anthropic audit can complete; openai and
-# google have no capture-backed profile and are still refused, which is why the
-# consultation's commissioned Google audit remains blocked. The whole reason a
-# framing check once read the founder's private memory is that it had its own
-# invocation and its own idea of what was safe.
+# methodology v1.29 the launcher captures the pinned CLI build's outgoing
+# request and checks it against a pinned profile, so an anthropic audit can
+# complete; openai and google have no capture-backed profile and are still
+# refused, which is why the consultation's commissioned Google audit remains
+# blocked. The whole reason a framing check once read the founder's private
+# memory is that it had its own invocation and its own idea of what was safe.
+#
+# A zero exit is not admission. This script reads `admitted_for_research` from
+# the attempt metadata and writes no report unless it is exactly true. The
+# response is retained either way; what a run that was not admitted does not get
+# is a file under the name of an audit.
 #
 # --provider exists because an audit commissioned from one vendor must be
 # RECORDED against that vendor even when it is refused. The consultation's
@@ -94,6 +99,23 @@ ATTEMPT_DIR="$ARCHIVE_ROOT/audits/${SLUG:-audit}/$PROVIDER/$(date -u +%Y%m%dT%H%
 # No --model and no --effort: the launcher's pin for this vendor is the answer.
 "$INVOKE" --purpose research --provider "$PROVIDER" --package "$PACKAGE" \
   --attempt-dir "$ATTEMPT_DIR" --label "$LABEL"
+
+# A zero exit means every check passed. It does not mean the run was admitted:
+# a capture taken against a test upstream, or checked against a substitute pin
+# table, passes the request check and is still not a research run. Reading the
+# launcher's own decision is what stops such a response being filed as an audit.
+ADMITTED="$(node -e '
+  const fs = require("node:fs");
+  let metadata = {};
+  try { metadata = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); } catch {}
+  const ok = metadata.admitted_for_research === true;
+  if (!ok) process.stderr.write((metadata.admission_reason || "no admission decision was recorded") + "\n");
+  process.stdout.write(ok ? "true" : "false");
+' "$ATTEMPT_DIR/metadata.json")"
+if [ "$ADMITTED" != "true" ]; then
+  echo "[$LABEL] not admitted for research; no report was written. The response is retained in the attempt directory." >&2
+  exit 1
+fi
 
 # The complete final message, footer and all. No extraction, no schema: an audit
 # is prose to be read, not a document to be parsed. Installed exclusively, so a

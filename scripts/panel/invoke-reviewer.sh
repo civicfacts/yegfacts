@@ -430,6 +430,10 @@ case "$PROVIDER" in
     # so there is nothing to pin for them and no capture to pin it from. A
     # version with no row fails closed here, before a package is sent.
     PROBED_VERSIONS="2.1.272"
+    # The build the pins describe, and the build the launcher runs. The
+    # installer keeps every version as a standalone binary, so a newer CLI
+    # arriving on PATH does not take the seat with it.
+    PINNED_CLI_VERSION="2.1.272"
     ALLOWED_TOOLS="WebFetch,WebSearch"
     PINNED_MODELS="claude-opus-5"
     DEFAULT_MODEL="claude-opus-5"
@@ -437,7 +441,7 @@ case "$PROVIDER" in
   openai)
     CLI="codex"
     PROFILE_NAME="none"
-    PROBED_VERSIONS=""; ALLOWED_TOOLS=""
+    PROBED_VERSIONS=""; ALLOWED_TOOLS=""; PINNED_CLI_VERSION=""
     PINNED_MODELS="gpt-5.6-sol"
     DEFAULT_MODEL="gpt-5.6-sol"
     BLOCK_REASON="no isolation profile for openai. The configuration tested on 2026-09-09 against codex-cli 0.153.4 — codex exec --ignore-user-config --ignore-rules --strict-config, with memories, plugins, apps, hooks, multi_agent, shell, unified_exec, computer_use, view_image and code_mode_host disabled, skip_host_skill_discovery enabled and project_doc_max_bytes=0 — still rendered the global AGENTS.md and a skills catalogue into its request (trace 01a087b7-2b33-74c1-8d00-a8920c06bb99), and disabling code_mode_host removed its web access. That is one tested configuration, not every possible one."
@@ -445,7 +449,7 @@ case "$PROVIDER" in
   google)
     CLI="agy"
     PROFILE_NAME="none"
-    PROBED_VERSIONS=""; ALLOWED_TOOLS=""
+    PROBED_VERSIONS=""; ALLOWED_TOOLS=""; PINNED_CLI_VERSION=""
     PINNED_MODELS="gemini-3.8-flash-high"
     DEFAULT_MODEL="gemini-3.8-flash-high"
     BLOCK_REASON="no isolation profile for google: agy 1.1.28 exposes no customization-suppression or tool-allowlist flag, so no boundary has been demonstrated for it. It has not been probed live."
@@ -506,12 +510,31 @@ fi
 # same treatment. Exit 0 requires the CLI to have exited 0 and all four checks
 # to have passed.
 # ---------------------------------------------------------------------------
-command -v "$CLI" >/dev/null 2>&1 || refuse failed "$CLI is not on PATH"
+# WHICH BUILD RUNS, which is a different question from which one is on PATH.
+#
+# The pins in request-proof.ts describe one build. The `claude` on PATH is a
+# shim that follows the installer, and by the time this shipped the installer
+# had already moved to 2.1.273 while the capture behind the pins was 2.1.272. A
+# newer CLI is not a worse one. It is an unprobed one, and there is nothing to
+# compare its request against.
+#
+# The installer keeps every version as a standalone binary under
+# ~/.local/share/claude/versions/, so the pinned build can be run directly. If
+# it is not installed, the PATH command is used instead. Either way the check
+# below runs `--version` on whatever was actually resolved, so a shim answering
+# for a different build is still caught before anything is sent.
+CLI_NAME="$CLI"
+VERSIONED_CLI="${HOME}/.local/share/claude/versions/${PINNED_CLI_VERSION}"
+if [ -n "$PINNED_CLI_VERSION" ] && [ -f "$VERSIONED_CLI" ] && [ -x "$VERSIONED_CLI" ]; then
+  CLI="$VERSIONED_CLI"
+else
+  command -v "$CLI_NAME" >/dev/null 2>&1 || refuse failed "$CLI_NAME is not on PATH"
+  CLI="$(command -v "$CLI_NAME")"
+fi
 
-# The `claude` on PATH is usually a shim around a versioned install. Following
-# the links records which build actually ran. Private only: it names a path on
-# this machine and never crosses into the public manifest.
-CLI_EXECUTABLE="$(command -v "$CLI")"
+# Following the links records which build actually ran. Private only: it names a
+# path on this machine and never crosses into the public manifest.
+CLI_EXECUTABLE="$CLI"
 hops=0
 while [ -L "$CLI_EXECUTABLE" ] && [ "$hops" -lt 16 ]; do
   link="$(readlink "$CLI_EXECUTABLE")"
@@ -526,8 +549,11 @@ CLI_VERSION="$("$CLI" --version 2>/dev/null | head -1 | tr -d '\r' | awk '{print
 [ -n "$CLI_VERSION" ] || CLI_VERSION="unknown"
 case ",$PROBED_VERSIONS," in
   *",$CLI_VERSION,"*) ;;
-  *) refuse blocked "$CLI $CLI_VERSION has never been probed (probed: $PROBED_VERSIONS); refusing before sending anything" ;;
+  *) refuse blocked "$CLI_NAME $CLI_VERSION has never been probed (probed: $PROBED_VERSIONS); refusing before sending anything" ;;
 esac
+if [ -n "$PINNED_CLI_VERSION" ] && [ "$CLI_VERSION" != "$PINNED_CLI_VERSION" ]; then
+  refuse blocked "$CLI_NAME $CLI_VERSION is not the pinned build $PINNED_CLI_VERSION; a new version needs its own capture and its own pin row before it can run. Refusing before sending anything"
+fi
 PROFILE="$PROFILE_NAME-$CLI_VERSION"
 printf '%s\n' "$PROFILE" > "$ATTEMPT_DIR/profile.txt"
 

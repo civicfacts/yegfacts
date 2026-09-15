@@ -102,12 +102,14 @@ function fakeRepo(): string {
  * `--response-N` is the nth invocation's final message; `--exit-N` its exit
  * code. `--create-during-run` writes a file partway through, which is how a
  * concurrent session filling the destination is simulated without touching
- * production code.
+ * production code. `admitted` is what the launcher decided, and the runner now
+ * reads it: the retry tests need an admitted run, and one test needs a run that
+ * passed every check and was still not admitted.
  */
 function fixtureLauncher(
   repo: string,
   responses: { text: string; exit?: number }[],
-  options: { createDuringRun?: string } = {},
+  options: { createDuringRun?: string; admitted?: boolean } = {},
 ): string {
   const state = mkdtempSync(path.join(root, 'fixture-'));
   responses.forEach((response, index) => {
@@ -115,6 +117,7 @@ function fixtureLauncher(
     writeFileSync(path.join(state, `exit-${index + 1}`), String(response.exit ?? 0));
   });
   if (options.createDuringRun) writeFileSync(path.join(state, 'create-during-run'), options.createDuringRun);
+  const admitted = options.admitted === false ? 'false' : 'true';
 
   const script = `#!/usr/bin/env bash
 set -euo pipefail
@@ -164,7 +167,7 @@ STATUS=ok
 [ "$EXIT" = "0" ] || STATUS=failed
 printf '%s\n' "$EXIT" > "$ATTEMPT_DIR/exit-code"
 printf '%s\n' "$STATUS" > "$ATTEMPT_DIR/status.txt"
-printf '%s\n' unavailable > "$ATTEMPT_DIR/context-proof.txt"
+printf '%s\n' pass > "$ATTEMPT_DIR/context-proof.txt"
 cat > "$ATTEMPT_DIR/metadata.json" <<META
 {
   "attempt_id": "$(cat "$ATTEMPT_DIR/attempt-id.txt")",
@@ -179,8 +182,9 @@ cat > "$ATTEMPT_DIR/metadata.json" <<META
   "exit_code": $EXIT,
   "canary": "pass",
   "structure": "pass",
-  "context_proof": "unavailable",
-  "admitted_for_research": false,
+  "context_proof": "pass",
+  "admitted_for_research": ${admitted},
+  "admission_reason": "fixture launcher: admitted ${admitted}",
   "package_sha256": "$(sha "$ATTEMPT_DIR/package.md")",
   "stdout_sha256": "$(sha "$ATTEMPT_DIR/stdout.txt")",
   "final_message_sha256": "$(sha "$ATTEMPT_DIR/final-message.txt")"
@@ -325,12 +329,18 @@ type Stub = { dir: string; archive: string; env: NodeJS.ProcessEnv };
  * is the pair of things a real invocation produces and the pair the launcher
  * checks. `mutate` breaks one piece of the request on purpose, per run, so the
  * canary and the research run can be made to fail independently.
+ *
+ * HOME is always a directory inside the stub, so a test decides whether a
+ * versioned install exists rather than inheriting whatever this machine has
+ * under `~/.local/share/claude/versions`. `installedVersion` puts the same
+ * script there, and the script records which of the two copies was run.
  */
 function stubClaude(
   options: {
     canary?: string;
     canaryExit?: number;
     version?: string;
+    installedVersion?: string;
     research?: string;
     researchExit?: number;
     mutateCanary?: string;
@@ -340,7 +350,10 @@ function stubClaude(
   const dir = mkdtempSync(path.join(root, 'stub-'));
   const bin = path.join(dir, 'bin');
   mkdirSync(bin);
-  writeFileSync(path.join(dir, 'version'), `${options.version ?? PROBED_VERSION} (Claude Code)\n`);
+  const home = path.join(dir, 'home');
+  mkdirSync(home);
+  writeFileSync(path.join(dir, 'version-path'), `${options.version ?? PROBED_VERSION} (Claude Code)\n`);
+  writeFileSync(path.join(dir, 'version-installed'), `${options.installedVersion ?? PROBED_VERSION} (Claude Code)\n`);
   writeFileSync(path.join(dir, 'canary.jsonl'), options.canary ?? goodCanary);
   writeFileSync(path.join(dir, 'canary.exit'), String(options.canaryExit ?? 0));
   writeFileSync(path.join(dir, 'research.jsonl'), options.research ?? researchRun('the package was sent'));
@@ -348,7 +361,12 @@ function stubClaude(
 
   const script = `#!/usr/bin/env bash
 set -u
-if [ "\${1:-}" = "--version" ]; then cat "${dir}/version"; exit 0; fi
+case "$0" in
+  */versions/*) me=installed ;;
+  *) me=path ;;
+esac
+echo "$me" >> "${dir}/invoked-as"
+if [ "\${1:-}" = "--version" ]; then cat "${dir}/version-$me"; exit 0; fi
 
 model=""
 prev=""
@@ -390,12 +408,21 @@ exit "$(cat "${dir}/research.exit")"
   writeFileSync(claude, script);
   chmodSync(claude, 0o755);
 
+  if (options.installedVersion) {
+    const versions = path.join(home, '.local', 'share', 'claude', 'versions');
+    mkdirSync(versions, { recursive: true });
+    const installed = path.join(versions, options.installedVersion);
+    writeFileSync(installed, script);
+    chmodSync(installed, 0o755);
+  }
+
   const archive = mkdtempSync(path.join(root, 'archive-'));
   return {
     dir,
     archive,
     env: {
       ...process.env,
+      HOME: home,
       PATH: `${bin}:${process.env.PATH ?? ''}`,
       YEGFACTS_REVIEW_ARCHIVE: archive,
       YEGFACTS_REVIEW_UPSTREAM: upstreamUrl,
@@ -408,6 +435,12 @@ exit "$(cat "${dir}/research.exit")"
 
 /** True when the stub was ever handed a real package rather than the canary. */
 const packageWasSent = (stub: Stub) => existsSync(path.join(stub.dir, 'package-sent.txt'));
+
+/** Which copy of the stub ran, in order: "installed" or "path", one per exec. */
+const invokedAs = (stub: Stub): string[] => {
+  const file = path.join(stub.dir, 'invoked-as');
+  return existsSync(file) ? readFileSync(file, 'utf8').trim().split('\n') : [];
+};
 
 /** spawnSync, not execFileSync: the launcher says what it decided on stderr, and
  * that has to be readable when it succeeded as well as when it refused. The
@@ -864,6 +897,43 @@ describe('candidate diagnostic', { timeout: 60_000 }, () => {
     expect(readJson(path.join(attempt, 'metadata.json')).status).toBe('blocked');
   });
 
+  /**
+   * Which build runs, which is not the same question as which one is on PATH.
+   * The pins describe one build; the PATH shim follows the installer and had
+   * already moved on to 2.1.273 by the time this shipped.
+   */
+  it('runs the installed pinned build in preference to a newer one on PATH', () => {
+    const stub = stubClaude({ version: '2.1.273', installedVersion: PROBED_VERSION });
+    const { ok, attempt } = diagnose(stub, 'pinned-build');
+
+    expect(ok).toBe(true);
+    expect(invokedAs(stub)).toEqual(['installed', 'installed']);
+    expect(readJson(path.join(attempt, 'metadata.json')).cli_version).toBe(PROBED_VERSION);
+    // Recorded privately, and it is the versioned binary rather than the shim.
+    expect(String(readJson(path.join(attempt, 'metadata.json')).cli_executable)).toContain(
+      `/versions/${PROBED_VERSION}`,
+    );
+  });
+
+  it('falls back to the PATH command when the pinned build is not installed', () => {
+    const stub = stubClaude();
+    const { ok } = diagnose(stub, 'path-fallback');
+    expect(ok).toBe(true);
+    expect(invokedAs(stub)).toEqual(['path', 'path']);
+  });
+
+  it('refuses a newer CLI on PATH when the pinned build is not installed', () => {
+    const stub = stubClaude({ version: '2.1.273' });
+    const { ok, stderr, attempt } = diagnose(stub, 'newer-on-path');
+
+    expect(ok).toBe(false);
+    expect(stderr).toMatch(/2\.1\.273 has never been probed/);
+    // It was asked its version and nothing else.
+    expect(invokedAs(stub)).toEqual(['path']);
+    expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
+    expect(readJson(path.join(attempt, 'metadata.json')).status).toBe('blocked');
+  });
+
   it('keeps the output of a nonzero exit without ever admitting it', () => {
     const stub = stubClaude({ canaryExit: 3 });
     const { ok, stderr, attempt } = diagnose(stub, 'nonzero');
@@ -956,27 +1026,41 @@ describe('run-reviewer', { timeout: 120_000 }, () => {
   const runReviewer = (stub: Stub) =>
     run([path.join(repo, 'scripts', 'panel', 'run-reviewer.sh'), 'claude', STORY, RUN_DATE, '1'], stub.env);
 
-  it('assembles the package, runs it through the launcher, and records what happened', () => {
+  /**
+   * The case that matters most here: everything passed and nothing is
+   * published. The launcher captured the request, proved it, exited zero and
+   * still recorded `admitted_for_research: false`, because the capture went to
+   * a stub upstream and the pins were substitutes. A response from such a run
+   * is a real response to a real package; it is not a review, and the runner
+   * has to be the thing that refuses to file it as one.
+   */
+  it('installs nothing when the launcher passed every check without admitting the run', () => {
     const stub = stubClaude({ research: researchRun(validReview) });
     const result = runReviewer(stub);
 
-    expect(result.ok).toBe(true);
+    expect(result.ok).toBe(false);
+    expect(result.stderr).toMatch(/not admitted for research/);
+    expect(result.stderr).toMatch(/substitute pin table|rather than https:\/\/api\.anthropic\.com/);
+    // The package was sent and answered. The answer simply does not become a
+    // review, and it is retained where it was written.
     expect(packageWasSent(stub)).toBe(true);
-    expect(JSON.parse(readFileSync(reviewPath(), 'utf8')).story).toBe(STORY);
+    expect(existsSync(reviewPath())).toBe(false);
 
     const entry = manifest().runs[0]!;
-    expect(entry.status).toBe('ok');
+    expect(entry.status).toBe('failed');
+    // One attempt: not being admitted is not a reviewer answering badly, so the
+    // retry budget is not spent on it.
     expect(entry.attempts).toBe(1);
     const detail = entry.attempts_detail as Record<string, unknown>[];
     expect(detail).toHaveLength(1);
     expect(detail[0]!.context_proof).toBe('pass');
     expect(detail[0]!.canary_context_proof).toBe('pass');
-    expect(detail[0]!.schema).toBe('valid');
+    expect(detail[0]!.schema).toBe('not-reached');
     expect(detail[0]!.attempt_id).toMatch(/^[0-9a-f]{16}$/);
     // The row says the capture was proved AND that the run was not admitted,
-    // because the upstream was a stub and the pins were substitutes. A reader
-    // of the manifest can see both without reading any code.
+    // and why. A reader of the manifest sees both without reading any code.
     expect(detail[0]!.admitted_for_research).toBe(false);
+    expect(String(detail[0]!.admission_reason)).toMatch(/not admitted for research/);
     expect(detail[0]!.upstream).toBe(upstreamUrl);
     expect(detail[0]!.pins_source).toBe('override');
     // No filesystem path crosses into the public manifest.
@@ -1101,6 +1185,24 @@ describe('retry mechanics', { timeout: 120_000 }, () => {
     expect(readFileSync(reviewPath(), 'utf8')).not.toContain('Sources consulted');
   });
 
+  it('never installs a response from a launcher that did not admit the run', () => {
+    fixtureLauncher(repo, [{ text: validReview }], { admitted: false });
+    const env = archiveEnv();
+    const result = runReviewer(env);
+
+    expect(result.ok).toBe(false);
+    expect(result.stderr).toMatch(/not admitted for research/);
+    expect(existsSync(reviewPath())).toBe(false);
+    // The answer is retained, and it is the schema-valid one. Being valid was
+    // never what earned it a place under reviews/.
+    expect(readFileSync(path.join(attempts(env)[0]!, 'final-message.txt'), 'utf8')).toContain('"story"');
+    expect(manifest().runs[0]!.status).toBe('failed');
+    expect(manifest().runs[0]!.attempts).toBe(1);
+    const detail = manifest().runs[0]!.attempts_detail as Record<string, unknown>[];
+    expect(detail[0]!.schema).toBe('not-reached');
+    expect(detail[0]!.admitted_for_research).toBe(false);
+  });
+
   it('never accepts a nonzero exit, however good the JSON looks', () => {
     fixtureLauncher(repo, [{ text: validReview, exit: 3 }]);
     const env = archiveEnv();
@@ -1166,17 +1268,20 @@ describe('retry mechanics', { timeout: 120_000 }, () => {
 describe('audit-package', { timeout: 60_000 }, () => {
   const script = path.join(REAL_REPO, 'scripts', 'panel', 'audit-package.sh');
 
-  it('sends the package and writes the complete response as the report', () => {
+  it('writes no report when every check passed but the run was not admitted', () => {
     const stub = stubClaude({ research: researchRun('The audit found one framing problem.') });
-    const report = path.join(root, 'audit-written.md');
+    const report = path.join(root, 'audit-not-admitted.md');
     const result = run(
       [script, '--package', writePackage('audit.md'), '--report', report, '--label', 'framing-check'],
       stub.env,
     );
 
-    expect(result.ok).toBe(true);
-    expect(readFileSync(report, 'utf8')).toBe('The audit found one framing problem.');
+    expect(result.ok).toBe(false);
+    expect(result.stderr).toMatch(/not admitted for research/);
+    // The package was sent and answered. What the answer does not get is a file
+    // under the name of an audit.
     expect(packageWasSent(stub)).toBe(true);
+    expect(existsSync(report)).toBe(false);
   });
 
   it('writes no report when the launcher refuses', () => {
