@@ -73,7 +73,7 @@ verifies that description.
 
 Root verification on the final branch head:
 
-- `npm test`: **411 passed, 1 skipped**, across 27 files. The skipped test
+- `npm test`: **413 passed, 1 skipped**, across 27 files. The skipped test
   is the opt-in live diagnostic; the live attempts above cover it.
 - `npm run validate`: OK, 7 stories, 17 claims, 1 commitment, 8 topics, 162
   evidence entries.
@@ -83,8 +83,9 @@ Root verification on the final branch head:
 - Exposure audit: no fail-class findings; 40 warnings, dispositioned in
   `methodology/audits/exposure/2026-09-16.md` (the six placeholder addresses
   from the deleted v1.29 fixtures are gone; one remains in the test stub).
-- Duplication audit: no fail-class findings; 22 cross-page warnings, all
-  shared explanatory text. Sitemap audit: sitemap and built site agree.
+- Duplication audit: no fail-class findings; 24 cross-page warnings, all
+  shared explanatory text between the methodology page and the changelog,
+  two of them phrases this release put on both. Sitemap audit: sitemap and built site agree.
 
 Removed in this release: `scripts/panel/request-proof.ts`, its tests and the
 sanitized capture fixtures, the substitute pin table, the version gate and
