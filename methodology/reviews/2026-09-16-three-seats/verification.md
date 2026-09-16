@@ -124,7 +124,7 @@ on subscription CLIs; no historical run is certified.
 
 Root verification on the final branch head:
 
-- `npm test`: **465 passed, 1 skipped**, across 28 files. The skipped test is
+- `npm test`: **467 passed, 1 skipped**, across 28 files. The skipped test is
   the opt-in live diagnostic; the live attempts above cover it.
 - `npm run validate`: OK, 7 stories, 17 claims, 1 commitment, 8 topics, 162
   evidence entries.
