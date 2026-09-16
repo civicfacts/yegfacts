@@ -62,6 +62,13 @@ export type AttemptRecord = {
   canary_upstream?: string;
   request_count?: number;
   canary_request_count?: number;
+  /**
+   * How many of those requests the check walked: the ones with a JSON body. The
+   * difference from `request_count` is the requests nothing looked inside, and a
+   * reader should not have to assume the two numbers are equal.
+   */
+  requests_searched?: number;
+  canary_requests_searched?: number;
   /** How many captured requests carried the declared package byte for byte. */
   package_seen?: number;
   canary_package_seen?: number;
@@ -207,6 +214,8 @@ function attemptRecord(dir: string, attempt: number, schema?: string): AttemptRe
       'canary_upstream',
       'request_count',
       'canary_request_count',
+      'requests_searched',
+      'canary_requests_searched',
       'package_seen',
       'canary_package_seen',
       'capture_check_sources',

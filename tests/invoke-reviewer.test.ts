@@ -586,6 +586,8 @@ describe('research run', { timeout: 120_000 }, () => {
     expect(metadata.context_proof).toBe('pass');
     expect(metadata.canary_context_proof).toBe('pass');
     expect(metadata.request_count).toBe(4);
+    // Four captured, three walked: the HEAD connectivity check has no JSON body.
+    expect(metadata.requests_searched).toBe(3);
     // The package leaves twice per attempt: the session title and the main turn.
     expect(metadata.package_seen).toBe(2);
     expect(metadata.upstream).toBe(upstreamUrl);
@@ -637,6 +639,7 @@ describe('research run', { timeout: 120_000 }, () => {
     expect(row.admitted_for_research).toBe(false);
     expect(row.upstream).toBe(upstreamUrl);
     expect(row.request_count).toBe(4);
+    expect(row.requests_searched).toBe(3);
     expect(row.package_seen).toBe(2);
     expect(row.capture_check_sources).toEqual(sources);
     // Nothing that names this machine crosses into the public row.
@@ -792,6 +795,7 @@ describe('candidate diagnostic', { timeout: 60_000 }, () => {
     expect(metadata.context_proof).toBe('pass');
     expect(metadata.canary_context_proof).toBe('pass');
     expect(metadata.canary_request_count).toBe(4);
+    expect(metadata.canary_requests_searched).toBe(3);
     // The canary prompt is the package for a diagnostic, and it travels twice.
     expect(metadata.canary_package_seen).toBe(2);
     expect(metadata.canary_upstream).toBe(upstreamUrl);

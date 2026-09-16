@@ -64,11 +64,16 @@ export type CapturedRequest = {
  * this machine there are 92 of them; ninety-two near-identical rows in every
  * public manifest row is not a record anyone reads. Each file keeps its own
  * source, so a failure still names the file by its index and its line number.
+ *
+ * `origin` says where the source came from, and it exists for one guard: a run
+ * where not one `home` source was found is a run where `$HOME` was wrong or
+ * empty, not a run on a machine with no private instructions. See `checkCapture`.
  */
 export type PrivateSource = {
   name: string;
   present: boolean;
   lines: string[];
+  origin: 'home' | 'repo' | 'string';
   group?: string;
 };
 
@@ -91,6 +96,13 @@ export type CaptureCheckResult = {
   package_seen: number;
   /** Every captured request, including the ones with no JSON body. */
   requests: number;
+  /**
+   * How many of those requests were actually walked: the ones whose body the
+   * proxy parsed as JSON. The difference from `requests` is the requests nothing
+   * looked inside, which is the HEAD connectivity check in a normal run. A reader
+   * of a run record should not have to assume the two numbers are the same.
+   */
+  searched: number;
 };
 
 export type CaptureCheckInput = {
@@ -194,22 +206,22 @@ export function privateSources(options: { home: string; repoRoot: string; token:
   const { home, repoRoot, token } = options;
   const sources: PrivateSource[] = [];
 
-  const file = (name: string, absolute: string, group?: string) => {
+  const file = (name: string, absolute: string, origin: PrivateSource['origin'], group?: string) => {
     const text = readIfPresent(absolute);
     const tag = group ? { group } : {};
     sources.push(
       text === null
-        ? { name, present: false, lines: [], ...tag }
-        : { name, present: true, lines: needleLines(text), ...tag },
+        ? { name, present: false, lines: [], origin, ...tag }
+        : { name, present: true, lines: needleLines(text), origin, ...tag },
     );
   };
 
-  file('$HOME/.claude/CLAUDE.md', path.join(home, '.claude', 'CLAUDE.md'));
-  file('$HOME/CLAUDE.md', path.join(home, 'CLAUDE.md'));
-  file('$HOME/AGENTS.md', path.join(home, 'AGENTS.md'));
-  file('$HOME/.codex/AGENTS.md', path.join(home, '.codex', 'AGENTS.md'));
-  file('<repo>/CLAUDE.md', path.join(repoRoot, 'CLAUDE.md'));
-  file('<repo>/AGENTS.md', path.join(repoRoot, 'AGENTS.md'));
+  file('$HOME/.claude/CLAUDE.md', path.join(home, '.claude', 'CLAUDE.md'), 'home');
+  file('$HOME/CLAUDE.md', path.join(home, 'CLAUDE.md'), 'home');
+  file('$HOME/AGENTS.md', path.join(home, 'AGENTS.md'), 'home');
+  file('$HOME/.codex/AGENTS.md', path.join(home, '.codex', 'AGENTS.md'), 'home');
+  file('<repo>/CLAUDE.md', path.join(repoRoot, 'CLAUDE.md'), 'repo');
+  file('<repo>/AGENTS.md', path.join(repoRoot, 'AGENTS.md'), 'repo');
 
   // One source per memory file, so a failure can name the file that leaked, and
   // one group so the report carries one row instead of ninety-two. The empty
@@ -218,10 +230,10 @@ export function privateSources(options: { home: string; repoRoot: string; token:
   // worth recording rather than a gap.
   const memory = memoryFiles(home);
   memory.forEach((absolute, index) => {
-    file(`${MEMORY_GROUP} (${index + 1})`, absolute, MEMORY_GROUP);
+    file(`${MEMORY_GROUP} (${index + 1})`, absolute, 'home', MEMORY_GROUP);
   });
   if (memory.length === 0) {
-    sources.push({ name: MEMORY_GROUP, present: false, lines: [], group: MEMORY_GROUP });
+    sources.push({ name: MEMORY_GROUP, present: false, lines: [], origin: 'home', group: MEMORY_GROUP });
   }
 
   // The three bare strings. Each is private in its own way: the repository path
@@ -229,7 +241,11 @@ export function privateSources(options: { home: string; repoRoot: string; token:
   // token is the synthetic secret the attempt planted to see whether local files
   // are reachable. A research run has no token and the source is simply absent.
   const string = (name: string, value: string) =>
-    sources.push(value === '' ? { name, present: false, lines: [] } : { name, present: true, lines: [value] });
+    sources.push(
+      value === ''
+        ? { name, present: false, lines: [], origin: 'string' }
+        : { name, present: true, lines: [value], origin: 'string' },
+    );
 
   string('the repository path', repoRoot);
   string('the home directory', home);
@@ -293,10 +309,23 @@ export function reportSources(sources: PrivateSource[]): SourceReport[] {
  * The check itself: pure, so the launcher's behaviour can be argued about in a
  * unit test rather than only observed through a subprocess.
  *
+ * WHAT IS SEARCHED, exactly. Every string value inside every captured request
+ * body the proxy parsed as JSON, at any depth. NOT the HTTP headers, NOT the
+ * request URLs, NOT the responses. Those are captured and retained beside the
+ * request, and nothing here compares them, so a pass is a statement about
+ * request bodies and about nothing else.
+ *
  * Failures are ordered by request and then by source, and each one names a
  * source and a line number. Two different requests carrying the same leaked line
  * are two failures, because "which request leaked" is the first thing a person
  * reading the retained capture wants to know.
+ *
+ * TWO FAIL-CLOSED GUARDS, because the dangerous failure of a denylist is the
+ * empty one. A denylist built from nothing matches nothing and passes
+ * everything, and it passes loudly, with a green check and a run record. So a
+ * run where not one source under `$HOME` was found fails, because that is what a
+ * wrong or empty `$HOME` looks like rather than what a clean machine looks like;
+ * and a run with no needles at all fails, whatever the sources said.
  */
 export function checkCapture(input: CaptureCheckInput): CaptureCheckResult {
   const failures: string[] = [];
@@ -307,6 +336,18 @@ export function checkCapture(input: CaptureCheckInput): CaptureCheckResult {
 
   if (packageText === '') {
     failures.push('the check was given no package text, so nothing establishes that this capture is of this run');
+  }
+
+  if (!sources.some((source) => source.origin === 'home' && source.present)) {
+    failures.push(
+      'no private source under $HOME was found, so the denylist was built without the operator\'s own ' +
+        'instruction and memory files; an empty denylist passes everything',
+    );
+  }
+
+  const needles = sources.reduce((total, source) => total + source.lines.length, 0);
+  if (needles === 0) {
+    failures.push('the denylist holds no lines at all, so nothing was searched for and a pass would mean nothing');
   }
 
   for (const request of requests) {
@@ -345,6 +386,7 @@ export function checkCapture(input: CaptureCheckInput): CaptureCheckResult {
     sources: reportSources(sources),
     package_seen: packageSeen,
     requests: requests.length,
+    searched: jsonBodies,
   };
 }
 

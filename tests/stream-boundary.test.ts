@@ -148,6 +148,7 @@ describe('research admission', () => {
     ],
     package_seen: 2,
     requests: 4,
+    searched: 3,
     ...over,
   });
 
@@ -170,8 +171,12 @@ describe('research admission', () => {
     expect(proof.status).toBe('pass');
     // Counts from the sources that were actually present, and the limit said
     // plainly in the same breath as the pass.
+    expect(proof.reason).toMatch(/3 of 4 captured request\(s\) had a JSON body/);
     expect(proof.reason).toMatch(/12 line\(s\) of private text from 1 source\(s\)/);
-    expect(proof.reason).toMatch(/does not\s+say what it did contain/);
+    // The scope of the search, said in the same breath as the pass: request
+    // bodies only, so nobody reads "the request was checked" as "everything was".
+    expect(proof.reason).toMatch(/not the HTTP headers, the request URLs or the\s+responses/);
+    expect(proof.reason).toMatch(/does not say what they did\s+contain/);
     expect(proof.reason).toMatch(/cannot see text the vendor attaches that is not on this machine/);
   });
 

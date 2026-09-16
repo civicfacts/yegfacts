@@ -405,10 +405,12 @@ export function contextProof(check: CaptureCheckResult | null): ContextProof {
     return {
       status: 'pass',
       reason:
-        `${check.requests} captured request(s) were searched for ${lines} line(s) of private text from ` +
-        `${read.length} source(s) on this machine, and none of it appeared. ${check.package_seen} request(s) ` +
-        'carried the declared package byte for byte. This says what the request did not contain; it does not ' +
-        'say what it did contain, and it cannot see text the vendor attaches that is not on this machine.',
+        `${check.searched} of ${check.requests} captured request(s) had a JSON body and were searched for ` +
+        `${lines} line(s) of private text from ${read.length} source(s) on this machine, and none of it ` +
+        `appeared. ${check.package_seen} request(s) carried the declared package byte for byte. Only the ` +
+        'string values of those bodies were searched, not the HTTP headers, the request URLs or the ' +
+        'responses. This says what the request bodies did not contain; it does not say what they did ' +
+        'contain, and it cannot see text the vendor attaches that is not on this machine.',
     };
   }
   return {

@@ -293,6 +293,9 @@ write_metadata() {
     const spread = (prefix, value) => (value === null ? {} : {
       [prefix + "upstream"]: value.upstream ?? null,
       [prefix + "request_count"]: value.requests,
+      // How many of those the check actually walked. The difference is the
+      // requests with no JSON body, which nothing looked inside.
+      [prefix + "requests_searched"]: value.searched,
       [prefix + "package_seen"]: value.package_seen,
       // Which private sources were read and how many lines each contributed.
       // Names and counts only: the lines themselves never leave the check.

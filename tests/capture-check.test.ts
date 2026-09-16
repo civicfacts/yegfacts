@@ -112,6 +112,7 @@ describe('private sources', () => {
       name: '$HOME/.codex/AGENTS.md',
       present: false,
       lines: [],
+      origin: 'home',
     });
     expect(byName['<repo>/AGENTS.md']!.present).toBe(false);
     // A research run has no canary token, so that source is absent too.
@@ -129,7 +130,9 @@ describe('private sources', () => {
     // A group with no members would otherwise vanish from the report, and "this
     // machine keeps no project memory" is a fact rather than a gap.
     const group = privateSources({ ...machine, token: '' }).filter((source) => source.group === MEMORY_GROUP);
-    expect(group).toEqual([{ name: MEMORY_GROUP, present: false, lines: [], group: MEMORY_GROUP }]);
+    expect(group).toEqual([
+      { name: MEMORY_GROUP, present: false, lines: [], origin: 'home', group: MEMORY_GROUP },
+    ]);
   });
 
   it('names sources symbolically, so no report carries a path from this machine', () => {
@@ -154,6 +157,9 @@ describe('capture check', () => {
     // main turn. The package leaves twice per attempt and the check says so.
     expect(result.package_seen).toBe(2);
     expect(result.requests).toBe(3);
+    // Three captured, two walked: the HEAD connectivity check has no JSON body
+    // and nothing looked inside it. A reader of a run record is told both.
+    expect(result.searched).toBe(2);
     expect(result.sources.find((source) => source.name === '$HOME/.claude/CLAUDE.md')).toEqual({
       name: '$HOME/.claude/CLAUDE.md',
       present: true,
@@ -261,8 +267,47 @@ describe('capture check', () => {
     // request, and it is not walked, because there is nothing to walk.
     const result = check(machine, [connectivity(), sessionTitle(), mainTurn()]);
     expect(result.requests).toBe(3);
+    expect(result.searched).toBe(2);
     expect(result.package_seen).toBe(2);
     expect(result.status).toBe('pass');
+  });
+
+  /**
+   * The dangerous failure of a denylist is the empty one. It matches nothing,
+   * passes everything, and does it with a green check and a run record behind
+   * it. Both guards below exist so that the empty case looks like the failure it
+   * is rather than like the cleanest run the project ever had.
+   */
+  it('fails when no source under $HOME was found, however clean the capture looks', () => {
+    const machine = stubMachine('empty-home');
+    // A $HOME that points nowhere. Every home source is absent, so the denylist
+    // is built from the repository files and the two path strings alone.
+    const result = checkCapture({
+      requests: [sessionTitle(), mainTurn()],
+      packageText: PACKAGE,
+      token: '',
+      sources: privateSources({ ...machine, home: path.join(root, 'empty-home', 'nowhere'), token: '' }),
+    });
+
+    expect(result.status).toBe('fail');
+    expect(result.failures.join()).toMatch(/no private source under \$HOME was found/);
+    expect(result.failures.join()).toMatch(/an empty denylist passes everything/);
+  });
+
+  it('fails when the denylist holds no lines at all', () => {
+    const result = checkCapture({
+      requests: [sessionTitle(), mainTurn()],
+      packageText: PACKAGE,
+      token: '',
+      sources: [{ name: '$HOME/CLAUDE.md', present: true, lines: [], origin: 'home' }],
+    });
+
+    // Present but empty: the file is there and contributed nothing worth
+    // searching for, which is not the same as a clean request.
+    expect(result.status).toBe('fail');
+    expect(result.failures).toContain(
+      'the denylist holds no lines at all, so nothing was searched for and a pass would mean nothing',
+    );
   });
 
   it('reports one failure per request when two requests carry the same line', () => {
