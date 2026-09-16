@@ -458,9 +458,16 @@ const readJson = (file: string) => JSON.parse(readFileSync(file, 'utf8')) as Rec
 
 // ---------------------------------------------------------------------------
 describe('research admission', { timeout: 60_000 }, () => {
+  /**
+   * From methodology v1.31 the Codex and Gemini seats are no longer refused for
+   * having no profile. They are still refused here, and for the reason that
+   * matters most: this machine has no credential for them, and the launcher
+   * never creates one. A seat whose login is absent stops before anything is
+   * sent, exactly as an unknown vendor does.
+   */
   it.each([
-    ['openai', 'gpt-5.6-sol', /one tested configuration, not every possible one/],
-    ['google', 'gemini-3.8-flash-high', /agy 1\.1\.28 exposes no customization-suppression/],
+    ['openai', 'gpt-5.6-sol', /no codex credential at \$HOME\/\.codex\/auth\.json/],
+    ['google', 'gemini-3.8-flash-high', /no gemini credential at \$HOME\/\.gemini/],
     ['mystery-vendor', 'claude-opus-5', /unknown provider/],
   ])('refuses %s for research without invoking anything', (provider, model, expected) => {
     const stub = stubClaude();
@@ -491,8 +498,8 @@ describe('research admission', { timeout: 60_000 }, () => {
   });
 
   it.each([
-    ['openai', 'gpt-5.6-sol', /codex exec --ignore-user-config/],
-    ['google', 'gemini-3.8-flash-high', /agy 1\.1\.28 exposes no customization-suppression/],
+    ['openai', 'gpt-5.6-sol', /no codex credential at \$HOME\/\.codex\/auth\.json/],
+    ['google', 'gemini-3.8-flash-high', /no gemini credential at \$HOME\/\.gemini/],
   ])('records %s with its own seat and its own reason when no model is named', (provider, model, expected) => {
     const stub = stubClaude();
     const attempt = path.join(stub.archive, 'defaults', provider);
@@ -1404,8 +1411,10 @@ describe('audit-package', { timeout: 60_000 }, () => {
     );
 
     expect(result.ok).toBe(false);
-    // Google's own reason, not the Claude candidate's.
-    expect(result.stderr).toMatch(/agy 1\.1\.28 exposes no customization-suppression/);
+    // Google's own reason, not the Claude candidate's. The Gemini seat can run
+    // from v1.31; this machine has no Gemini credential, and the refusal is
+    // still filed against Google with Google's seat.
+    expect(result.stderr).toMatch(/no gemini credential at \$HOME\/\.gemini/);
     expect(existsSync(report)).toBe(false);
 
     // The retained attempt is filed under google, with google's seat.
