@@ -513,8 +513,8 @@ is that a run using a test hook or a loopback upstream is never admitted.
 
 **`result.status` is read against the steps.** agy reports `ERROR` when any step
 failed, and under this profile steps fail on purpose at the permission check. The
-first live canary answered correctly, refused three tools exactly as designed and
-came back `ERROR`. So `ERROR` is accepted only when every failed step failed at
+live canary that passed, attempt `ba2fe4d58dcf61c1`, answered correctly, had two
+file reads refused exactly as designed, and came back `ERROR`. So `ERROR` is accepted only when every failed step failed at
 the permission check, and any other failed step is named and fails.
 
 **Credentials.** Auth reaches a subprocess through a symlink and never a copy.

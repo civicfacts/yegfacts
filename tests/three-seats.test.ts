@@ -434,6 +434,68 @@ describe('the Gemini seat', { timeout: 120_000 }, () => {
     expect(workDir.startsWith(one.home)).toBe(false);
   });
 
+  /**
+   * The one case `clean_homes` will not tidy, and must not.
+   *
+   * Every credential reaches a subprocess as a symlink, and the launcher unlinks
+   * the link on the way out. If a vendor ever replaced that link with a regular
+   * file, the file would be a copy of a login sitting in the temporary tree.
+   * Deleting it is the wrong move: the same vendor may have rotated the token
+   * and written the new one there, and removing it could log the operator out.
+   * So it is left alone, named on stderr, and named in the private metadata.
+   */
+  it('leaves a credential copy in place, and says so loudly', () => {
+    const one = stub('google', { mutateCanary: 'replace-credential' });
+    const before = readFileSync(one.credential, 'utf8');
+    const { ok, stderr, attempt } = invoke('google', one, 'residue');
+    expect(ok).toBe(true);
+
+    const relative = 'canary-home/.gemini/antigravity-cli/antigravity-oauth-token';
+    expect(stderr).toContain('is a regular file where this launcher made a symlink');
+    expect(stderr).toContain('LEFT IN PLACE');
+    expect(stderr).toContain(relative);
+
+    const metadata = readJson(path.join(attempt, 'metadata.json'));
+    expect(metadata.credential_residue).toEqual([relative]);
+    // Left where it was, not deleted, and the real login is untouched.
+    const workDir = String(metadata.work_dir);
+    expect(readFileSync(path.join(workDir, relative), 'utf8')).toContain('a copy a vendor wrote');
+    expect(readFileSync(one.credential, 'utf8')).toBe(before);
+
+    // Nothing crosses into the public row.
+    const record = spawnSync(
+      'npx',
+      ['tsx', path.join(REAL_REPO, 'scripts', 'panel', 'attempt-record.ts'), attempt, '--attempt', '1'],
+      { env: one.env, encoding: 'utf8' },
+    );
+    const row = JSON.parse(record.stdout || '{}') as Record<string, unknown>;
+    expect(row.credential_residue).toBeUndefined();
+    expect(row.leftover_paths).toBeUndefined();
+  });
+
+  /**
+   * The temporary tree comes down after the homes that live inside it, so a run
+   * leaves no empty `attempt-<id>` directory behind. What a CLI wrote into its
+   * own home and never cleaned up cannot be removed by `rmdir`, and that is
+   * named rather than silently kept.
+   */
+  it('takes the temporary tree down, and names whatever a CLI left in it', () => {
+    const one = stub('google');
+    const { ok, attempt } = invoke('google', one, 'leftovers');
+    expect(ok).toBe(true);
+
+    const metadata = readJson(path.join(attempt, 'metadata.json'));
+    const workDir = String(metadata.work_dir);
+    const leftovers = metadata.leftover_paths as string[];
+    // This stub's CLI writes a brain directory into its home, as agy does, so
+    // both homes survive and both are named.
+    expect(leftovers).toEqual(['canary-home', 'research-home']);
+    expect(existsSync(workDir)).toBe(true);
+    for (const name of leftovers) expect(existsSync(path.join(workDir, name))).toBe(true);
+    // Nothing the launcher itself made is still there.
+    expect(readdirSync(workDir).sort()).toEqual(leftovers);
+  });
+
   it('refuses when there is no credential, and never writes one', () => {
     const one = stub('google', { credential: false });
     const { ok, stderr, attempt } = invoke('google', one, 'no-auth');

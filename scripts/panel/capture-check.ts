@@ -489,7 +489,7 @@ export function readCapture(dir: string): Capture {
  * Read a CLI's own local record as if it were a capture, so that the same
  * denylist runs over it.
  *
- * WHY THIS EXISTS, and what it is not. The Gemini CLI (agy 1.1.28) has no
+ * WHY THIS EXISTS, and what it is not. The Gemini CLI (agy, 1.2.4 at release) has no
  * capture route at all: it ignores every base-URL environment variable this
  * project could set, its log carries no request bodies, and its own transcript
  * omits the system prompt. Methodology v1.31 admits the seat anyway, under a

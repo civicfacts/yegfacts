@@ -306,6 +306,11 @@ ADMISSION_REASON="the launcher exited before reaching a decision"
 RECORD_KIND="request"
 BIN_HOOK=""
 BIN_OVERRIDE=""
+# What was still in the temporary tree when it was taken down, and whether a
+# credential link came back as a regular file. Both are private observations, and
+# both are empty on a run where nothing happened.
+LEFTOVER_PATHS=""
+CREDENTIAL_RESIDUE=""
 
 sha_of() { if [ -f "$1" ]; then shasum -a 256 "$1" | cut -d' ' -f1; else printf 'absent'; fi; }
 
@@ -369,6 +374,14 @@ write_metadata() {
       // which hook named the executable rather than leaving the reader to
       // infer it from an unadmitted run with no other explanation.
       cli_bin_override: values.cli_bin_override,
+      // Private. What a CLI left in the temporary tree that could not be
+      // removed, named relative to `work_dir`, and a credential path that came
+      // back as a regular file where this launcher made a symlink. The second
+      // one is close to an alarm: it means a copy of a login exists somewhere
+      // this launcher did not put one.
+      leftover_paths: values.leftover_paths === "" ? [] : String(values.leftover_paths).split(","),
+      credential_residue:
+        values.credential_residue === "" ? [] : String(values.credential_residue).split(","),
       work_dir: values.work_dir,
       exit_code: number(values.exit_code),
       canary: values.canary,
@@ -398,6 +411,8 @@ write_metadata() {
     cli_executable_sha256 "$CLI_EXECUTABLE_SHA" \
     record_kind "$RECORD_KIND" \
     cli_bin_override "$BIN_OVERRIDE" \
+    leftover_paths "$LEFTOVER_PATHS" \
+    credential_residue "$CREDENTIAL_RESIDUE" \
     work_dir "$WORK_ROOT" \
     context_proof "$CONTEXT_PROOF" \
     canary_context_proof "$CANARY_CONTEXT_PROOF" \
@@ -689,21 +704,31 @@ CANARY_HEADING="Example Domain"
 # ---------------------------------------------------------------------------
 # Per-attempt homes.
 #
-# Each run gets a home of its own under the attempt directory, 0700, holding a
-# SYMLINK to the credential the CLI already uses and the one configuration file
-# the profile needs. A symlink rather than a copy for two reasons: nothing here
-# ever reads a credential, and a token the vendor refreshes writes through the
-# link to the real file, which is the direction that keeps the operator's login
-# working.
+# Each run gets a home of its own in the opaque `$TMPDIR/attempt-<id>` tree,
+# 0700, holding a SYMLINK to the credential the CLI already uses and the one
+# configuration file the profile needs. A symlink rather than a copy for two
+# reasons: nothing here ever reads a credential, and a token the vendor refreshes
+# writes through the link to the real file, which is the direction that keeps the
+# operator's login working.
 #
 # Nothing here creates a credential. A machine that is not logged in is a
 # refusal, before anything is sent.
 #
 # Afterwards `clean_homes` takes away ONLY what was made here. The links are
-# unlinked with `rm -f`, which removes the link and never follows it; the
-# configuration files are removed; the directories are `rmdir`ed, which succeeds
-# only if they are empty, so whatever the CLI wrote into its own home stays where
-# it was written, in the private archive, as retained evidence.
+# unlinked, which removes the link and never follows it; the configuration files
+# are removed; the directories are `rmdir`ed, which succeeds only if they are
+# empty. So whatever the CLI wrote into its own home is left where it was
+# written, in the temporary tree and NOT in the archive. That is not retention:
+# what an attempt keeps was copied into the attempt directory by `retain_run`
+# before any of this runs, and what is left here is named in the metadata as a
+# leftover path and then forgotten about, to be reaped with the rest of $TMPDIR.
+#
+# A LINK THAT IS NO LONGER A LINK is the one case this will not tidy. If a vendor
+# ever replaced the symlink with a regular file, that file is a COPY of a
+# credential sitting in the temporary tree. It is not deleted: the same vendor
+# may have rotated the token and written the new one there, and deleting it could
+# log the operator out. It is named on stderr and in the private metadata
+# instead, and a person decides what to do with it.
 # ---------------------------------------------------------------------------
 HOME_LINKS=()
 HOME_FILES=()
@@ -712,7 +737,12 @@ HOME_DIRS=()
 clean_homes() {
   local target
   for target in ${HOME_LINKS[@]+"${HOME_LINKS[@]}"}; do
-    if [ -L "$target" ]; then rm -f "$target"; fi
+    if [ -L "$target" ]; then
+      rm -f "$target"
+    elif [ -e "$target" ]; then
+      CREDENTIAL_RESIDUE="${CREDENTIAL_RESIDUE:+$CREDENTIAL_RESIDUE,}${target#"$WORK_ROOT"/}"
+      echo "[$LABEL] warning: $target is a regular file where this launcher made a symlink to a credential. A credential may have been copied there. It is LEFT IN PLACE rather than deleted, because deleting a token a vendor had just rotated could log you out. Look at it and remove it yourself." >&2
+    fi
   done
   for target in ${HOME_FILES[@]+"${HOME_FILES[@]}"}; do
     if [ -f "$target" ] && [ ! -L "$target" ]; then rm -f "$target"; fi
@@ -985,11 +1015,24 @@ write_canary_prompt "$CANARY_DIR/work/canary.md" "$CANARY_FIXTURE"
 cp "$CANARY_DIR/CANARY.md" "$WORK_ROOT/canary/CANARY.md"
 cp "$CANARY_DIR/work/canary.md" "$WORK_ROOT/canary/work/canary.md"
 
+# Runs AFTER `clean_homes`, which is the only order that can work: the homes sit
+# inside this tree, so taking the root away first simply failed and left an empty
+# `attempt-<id>` directory behind on every single run.
+#
+# Whatever `rmdir` still cannot remove is what a CLI wrote into its own home and
+# never cleaned up. It is named in the metadata rather than silently kept: a
+# reader of a retained attempt should be able to see that a vendor left a
+# database in the temporary tree without going to look for it. Only the top level
+# is listed, because the count of files under a CLI's own cache is noise.
 clean_work() {
   [ -n "$WORK_ROOT" ] || return 0
   rm -f "$WORK_ROOT/canary/work/canary.md" "$WORK_ROOT/canary/CANARY.md" \
     "$WORK_ROOT/canary-cli.log" "$WORK_ROOT/research-cli.log"
-  rmdir "$WORK_ROOT/canary/work" "$WORK_ROOT/canary" "$WORK_ROOT/work" "$WORK_ROOT" 2>/dev/null || true
+  rmdir "$WORK_ROOT/canary/work" "$WORK_ROOT/canary" "$WORK_ROOT/work" 2>/dev/null || true
+  rmdir "$WORK_ROOT" 2>/dev/null || true
+  [ -d "$WORK_ROOT" ] || return 0
+  LEFTOVER_PATHS="$(cd "$WORK_ROOT" && find . -mindepth 1 -maxdepth 1 2>/dev/null \
+    | sed 's|^\./||' | sort | tr '\n' ',' | sed 's/,$//')"
 }
 
 # ---------------------------------------------------------------------------
@@ -1012,7 +1055,7 @@ clean_work() {
 # only by the attempt id.
 # ---------------------------------------------------------------------------
 
-trap 'stop_proxy; clean_work; clean_homes; write_metadata' EXIT
+trap 'stop_proxy; clean_homes; clean_work; write_metadata' EXIT
 
 CANARY_WORK="$(cd "$WORK_ROOT/canary/work" && pwd -P)"
 RESEARCH_WORK="$(cd "$WORK_ROOT/work" && pwd -P)"

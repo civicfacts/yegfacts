@@ -24,6 +24,7 @@ import {
   readdirSync,
   readlinkSync,
   statSync,
+  unlinkSync,
   writeFileSync,
 } from 'node:fs';
 import path from 'node:path';
@@ -71,6 +72,20 @@ if (!isCanary) writeFileSync(path.join(state, 'package-sent.txt'), prompt);
       token_target: link?.isSymbolicLink() ? readlinkSync(token) : '',
     }),
   );
+}
+
+// A vendor that replaced the launcher's symlink with a regular file, which would
+// mean a COPY of a login sitting in the temporary tree. Nothing observed does
+// this; the launcher has to survive it anyway, because the one thing it must not
+// do is delete a token that had just been rotated.
+if (mutate === 'replace-credential') {
+  const token = path.join(home, '.gemini', 'antigravity-cli', 'antigravity-oauth-token');
+  try {
+    unlinkSync(token);
+  } catch {
+    // Already gone is the same starting point.
+  }
+  writeFileSync(token, 'a copy a vendor wrote where a link used to be\n');
 }
 
 const leaked = leakedLine(mutate, realHome);
