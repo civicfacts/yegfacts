@@ -84,12 +84,37 @@ sentence reads.
 Do not soften. A REWRITE is normal, and an answer that is worse than the
 wording it replaces should be told so plainly.
 
+## The standfirst and the TL;DR
+
+When the drafts include a story's standfirst and its TL;DR, read them under
+"The layers" in `docs/DESIGN.md` §12. They are the ten-second layer, the
+resident's, and the four questions apply to each of them as they do to an
+answer. The shape rules:
+
+- The standfirst is one sentence a person would say to a friend who had just
+  asked the question. Stance first, at most one fact, at most one place and
+  one number, the answer's punctuation rule. There is no cap and you may not
+  impose one, but a standfirst that lists cities, years or denominators is
+  written for the wrong reader and is a REWRITE.
+- Each TL;DR bullet is one sentence, one fact the standfirst did not carry,
+  numbers as people say them. No source names, no survey years, no
+  denominators, no comparator lists, no method words. Those belong in the
+  explanation, and the accounting must show the explanation carries them.
+
+The clause accounting for a story covers the old standfirst and every old
+bullet against the new standfirst, the new bullets and the explanation.
+"Moved to the explanation" names the section. A figure that left a bullet
+and is nowhere in the explanation was dropped, and that is a REWRITE of the
+page, not of the bullet.
+
 ## Output, in Markdown
 
 - A header naming the drafting seat and its vendor, your own seat and
   vendor, the date, and the claims covered.
-- For each answer, in this order:
-  - `### <claim id>`
+- For each answer, and for a story's standfirst and each of its TL;DR
+  bullets where those are supplied, in this order:
+  - `### <claim id>`, or `### <story> — standfirst`, or
+    `### <story> — tldr <n>`
   - the four questions, one line each.
   - the clause accounting, as a list.
   - `**OK**`, or `**REWRITE**` followed by your replacement as a block

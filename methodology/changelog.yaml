@@ -14,6 +14,32 @@
 # The sentence above used to describe a check that did not exist: the rule sat
 # as a TODO in scripts/validate.ts, and a change under methodology/ shipped
 # clean. It runs now.
+- version: "1.32"
+  date: "2026-09-16"
+  scope: readable-layers
+  summary: >
+    A question page now has a ten-second layer. The standfirst is one sentence
+    a person would say to a friend, the TL;DR is a few plain sentences with
+    one fact each, and the exact figures, years, sources and denominators they
+    used to carry live in the explanation, beside the sentences they support.
+    The plain-speech read now reads those two layers as well as the answers.
+    No finding, figure, hedge or source changed on any page.
+  highlights:
+    - "The founder's complaint, for the second time, was that the published stories are hard for normal people to read. The 2026-09-03 pass had answered the first complaint by fixing the vocabulary of every layer, and it worked as far as it went. Measured on 2026-09-16, the seven live standfirsts ran 24 to 78 words with a median of 44, the TL;DR bullets 16 to 78 with a median of 34, and four of the seven explanations opened by describing what the frozen brief asked the reviewers. Every layer was plainer and every layer was still written at the journalist's depth. The charter's ten-second reader had no layer of their own."
+    - "docs/DESIGN.md section 12 now says what each layer is for. The standfirst is one sentence carrying the stance and at most one fact. The TL;DR is three to five sentences a person would say, one fact each, numbers rounded, with no source names, survey years, denominators, comparator lists or method words. The explanation is where the exact figure, the year and the source live, beside the sentence they support, and it opens with what happened rather than with how the question was put to the panel. Claim detail is where the brief, the split and what a seat tried belong. A length rule for the two top layers exists only as a validator warning, because a length that failed the build would be the thirty-word cap coming back."
+    - "Nothing moves up a layer by being deleted from the one below. A figure that leaves a bullet lands in the explanation, and the plain-speech read's clause accounting now covers the standfirst and every bullet as well as the answers, so a figure that left the top of the page and is nowhere below is a rewrite of the page. prompts/plain-speech-read.md carries the rule and the report shape."
+    - "The seven live pages were re-layered under the rule in one batch, each with a changelog entry. A model from another vendor read the standfirst and every bullet before merge and rewrote 34 of 42; 27 were taken in whole or part and 7 refused with reasons. A fresh session then read the rendered pages as a resident and found the three single-claim pages printing the claim's answer and the standfirst ten words apart, two bullets calling counter passes riders, and a bullet handing the reader a number beside one saying the number cannot be calculated; all fixed. The founder then ran two more outside comparisons of the old and new pages in fresh sessions; both found the same three things in the way: the provenance line and the board notices sitting between the answer and the TL;DR, seven claim rows before the page-level answer on the cycling page, and a launch banner that told a reader the site had not found its method. All three are changed. The page now runs title, answer, TL;DR, then the claim strip on a question with several claims, then who checked it and when, in the same words one block lower. They also caught three regressions against recorded corrections (a categorical \"not money the City has lost\" on a Not established finding, the freedom-of-movement line placed in the plans rather than the District Policy, and \"measured\" for \"published\"), all fixed. A third comparison quoted text that exists on no version of any page and was discarded. All four reports sit with the editor's dispositions under reviews/2026-09-16-readable-layers/, and docs/readable-layers-2026-09-16.md lists every string that changed beside its old wording."
+  links:
+    - label: The layers (docs/DESIGN.md section 12)
+      href: https://github.com/civicfacts/yegfacts/blob/main/docs/DESIGN.md
+    - label: Every string that changed
+      href: https://github.com/civicfacts/yegfacts/blob/main/docs/readable-layers-2026-09-16.md
+  note: >
+    This is the second pass at the same complaint, and the first one did not
+    fail. It fixed the words and left the depth, which is a different fault
+    with the same symptom. Length is the visible sign and not the rule. The
+    rule is that each layer is written for its own reader, and the only check
+    that can tell is a person reading it aloud.
 - version: "1.30"
   date: "2026-09-16"
   scope: capture-check-simplified

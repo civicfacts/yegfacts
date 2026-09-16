@@ -104,6 +104,10 @@ function cutAtSentence(text: string, max: number): string {
     const word = text.slice(0, match.index).split(/\s+/).at(-1) ?? '';
     if (/^[A-Za-z](?:\.[A-Za-z])*$/.test(word)) continue;
     const at = match.index + match[0].length;
+    // An answer opens with its stance and a full stop ("No. People in the
+    // Oulu region…"). The stance is not a sentence a search result can show
+    // on its own; the first sentence is the stance and what follows it.
+    if (text.slice(0, at).split(/\s+/).length <= 3) continue;
     if (at <= max) {
       end = at;
       continue;
@@ -216,10 +220,10 @@ const isPreview = import.meta.env.DEPLOY_BRANCH !== '' && import.meta.env.DEPLOY
       data-pagefind-ignore
     >
       <p class="mx-auto max-w-[66rem] text-[0.875rem] leading-snug text-pretty">
-        <strong>YEGFacts has not launched yet.</strong> This site is still a work in progress. We have not
-        yet found the right methodology.{' '}
+        <strong>YEGFacts has not launched yet.</strong> The method is still being worked out in the
+        open, pages can change, and every change is logged.{' '}
         <a href="/methodology" class="link">
-          See the current methodology.
+          See how a finding is made.
         </a>
       </p>
     </aside>

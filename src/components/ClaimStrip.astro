@@ -1,0 +1,66 @@
+---
+/**
+ * The verdict strip: every claim on a question page, its finding and its
+ * answer, each row linking down to the check that produced it. The question
+ * links; the finding word is its own control, because the word opens the
+ * definition of the word.
+ *
+ * The answer is here and nowhere else on the page. It is the one sentence
+ * most readers will read (docs/DESIGN.md §12), and printing it again beside
+ * the same claim further down would be the site saying one thing twice.
+ *
+ * Where the strip sits depends on how many claims there are (§12, "The
+ * layers"). A question with one claim has no standfirst of its own, so the
+ * strip is the answer and comes first. A question with several claims puts
+ * its standfirst and TL;DR first and the strip after them, because seven rows
+ * of question, verdict and answer before the page-level answer is a report,
+ * not a ten-second layer.
+ */
+import type { CollectionEntry } from 'astro:content';
+import Finding from './Finding.astro';
+import Gloss from './Gloss.astro';
+import { requireTerm as gloss } from '../lib/glossary';
+
+interface Props {
+  headline: CollectionEntry<'claims'>[];
+  primaryClaim?: string;
+  class?: string;
+}
+
+const { headline, primaryClaim, class: className = 'mt-6' } = Astro.props;
+const mainClaim = 'ml-2 align-middle text-[0.6875rem] tracking-[0.08em] text-forest uppercase';
+---
+
+{
+  headline.length > 0 && (
+    <ul class:list={[className, 'divide-y divide-rule border-y border-rule']}>
+      {headline.map((claim) => (
+        <li class="grid gap-x-8 gap-y-1.5 py-4 sm:grid-cols-[minmax(0,30rem)_1fr] sm:items-baseline">
+          <p
+            class="text-lg leading-snug font-bold text-pretty sm:col-start-1 sm:row-start-1"
+            data-crossref
+          >
+            <a href={`#${claim.data.id}`} class="link-title">
+              {claim.data.question}
+            </a>
+            {primaryClaim === claim.data.id && <span class={mainClaim}>Main claim</span>}
+          </p>
+          <div class="sm:col-start-2 sm:row-start-1">
+            <Gloss {...gloss(claim.data.finding)} variant="boxed">
+              <Finding finding={claim.data.finding} size="md" />
+            </Gloss>
+            {/* Said beside the badge too, so the strip is never read as a live board. */}
+            {claim.data.board_withdrawn && (
+              <span class="mt-1.5 block font-sans text-xs font-semibold tracking-[0.09em] text-muted uppercase">
+                Off the board
+              </span>
+            )}
+          </div>
+          <p class="text-[1.0625rem] leading-relaxed text-pretty sm:col-start-1 sm:row-start-2 sm:mt-1">
+            {claim.data.answer}
+          </p>
+        </li>
+      ))}
+    </ul>
+  )
+}

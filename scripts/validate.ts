@@ -569,7 +569,11 @@ function checkPublishedReviewRun(claimFile: string, reviewRun: string): void {
  * which the content schema reads from too.
  */
 function checkPlainSpeech(): void {
-  const sentences: Array<{ file: string; field: string; text: string }> = [];
+  // `longAt`: the word count past which the sentence is probably written for
+  // the reader one layer down (§12, "The layers"). Only the ten-second layer
+  // carries one. A warning, never a failure: a length that failed the build
+  // would be the thirty-word cap coming back.
+  const sentences: Array<{ file: string; field: string; text: string; longAt?: number }> = [];
   for (const { file, data } of claims) {
     if (typeof data.answer === 'string') {
       sentences.push({ file, field: 'answer', text: data.answer });
@@ -577,13 +581,20 @@ function checkPlainSpeech(): void {
   }
   for (const { file, data } of stories) {
     if (typeof data.one_line === 'string') {
-      sentences.push({ file, field: 'one_line', text: data.one_line });
+      sentences.push({ file, field: 'one_line', text: data.one_line, longAt: 25 });
     }
+    stringArray(data.tldr).forEach((text, i) => {
+      sentences.push({ file, field: `tldr[${i}]`, text, longAt: 30 });
+    });
   }
 
-  for (const { file, field, text } of sentences) {
+  for (const { file, field, text, longAt } of sentences) {
     for (const term of methodVocabularyIn(text)) {
       warn(file, `${field} uses method vocabulary "${term}". Say it in the words a reader uses.`);
+    }
+    const words = text.trim().split(/\s+/).length;
+    if (longAt !== undefined && words > longAt) {
+      warn(file, `${field} is ${words} words. Is it a sentence a person would say? The exact figures belong in the explanation.`);
     }
   }
 }
