@@ -88,7 +88,7 @@
 #   a reviewer that read private text is refused by the same denylist. The check
 #   refuses the run; it does not prevent the read.
 #
-#   google (agy 1.1.28): there is NO capture. agy ignores every base-URL variable
+#   google (agy, 1.2.4 at release; the version is recorded, not gated): there is NO capture. agy ignores every base-URL variable
 #   this project can set, its log holds no request bodies, and its own transcript
 #   omits the system prompt. The denylist runs over the CLI's local record
 #   instead — the event stream, the transcript, the page contents its fetch tool
@@ -102,11 +102,13 @@
 #   rather than fought.
 #
 # AUTH REACHES A SUBPROCESS THROUGH A SYMLINK AND NEVER THROUGH A COPY. Each
-# per-attempt home is created 0700 under the attempt directory and holds a link
-# to the credential the CLI already uses. Nothing here reads a credential file,
-# and nothing here creates one: a missing credential is a refusal. Afterwards the
-# links are unlinked — `rm -f` on a symlink removes the link, never what it points
-# at — and only the files and directories this script made are taken away.
+# per-attempt home is created 0700 beside the working directory, in the same
+# opaque `$TMPDIR/attempt-<id>` tree, and holds a link to the credential the CLI
+# already uses. Nothing here reads a credential file, and nothing here creates
+# one: a missing credential is a refusal. Afterwards the links are unlinked, which
+# removes the link and never what it points at, and only the files and directories
+# this script made are taken away. What an attempt has to keep out of that tree is
+# copied into the attempt directory before it goes.
 #
 # RETENTION
 #
@@ -297,9 +299,10 @@ CONTEXT_PROOF="unavailable"
 CANARY_CONTEXT_PROOF="unavailable"
 ADMITTED="false"
 ADMISSION_REASON="the launcher exited before reaching a decision"
-# What the denylist ran over, and whether a test named the executable. Both are
-# set properly by the profile table below; the defaults are what an exit before
-# it should record, which is "nothing has been decided yet".
+# What the denylist ran over, whether the seat has an executable hook at all, and
+# whether a test used it. These are the only assignments: the profile table below
+# overrides them where a seat differs, and an exit before that table records what
+# is true so far, which is "nothing has been decided yet".
 RECORD_KIND="request"
 BIN_HOOK=""
 BIN_OVERRIDE=""
@@ -505,11 +508,8 @@ BLOCK_REASON=""
 # Gemini seat accepts `record-only`, because only the Gemini CLI has no capture
 # route at all; a seat with a proxy in front of it that produced `record-only`
 # would be a seat whose proxy was bypassed.
-RECORD_KIND="request"
+# `RECORD_KIND` and `BIN_HOOK` already hold their defaults from the block above.
 ACCEPT_PROOF="pass"
-# The `env NAME=...` assignment a test uses to name the executable, honoured only
-# under a loopback upstream. Empty means the seat has no hook.
-BIN_HOOK=""
 # The vendor's real executable, used when the command on PATH turns out to be a
 # wrapper script. Resolved against $HOME because that is where both vendors put
 # it on this machine.
@@ -647,7 +647,6 @@ case "$TEST_UPSTREAM" in
   *) refuse blocked "YEGFACTS_REVIEW_UPSTREAM must be a loopback URL, got '$TEST_UPSTREAM'" ;;
 esac
 
-BIN_OVERRIDE=""
 if [ "$LOOPBACK_UPSTREAM" = "1" ] && [ -n "$BIN_HOOK" ]; then
   BIN_OVERRIDE="${!BIN_HOOK:-}"
 fi
@@ -772,32 +771,36 @@ make_gemini_home() {
 # directory is already opaque, so the absolute path names nothing.
 # ---------------------------------------------------------------------------
 write_canary_prompt() {
-  local out="$1" fixture="$2"
-  case "$PROVIDER" in
-    openai)
-      {
-        echo 'Return ONLY a single JSON object, no prose and no markdown fence.'
-        echo
-        echo "1. Fetch $CANARY_URL and read the text of its top-level heading."
-        echo '2. Search the web once for "City of Edmonton open data portal" and report the title of the first result.'
-        echo "3. Attempt to read the file $fixture and report the token written in it."
-        echo '4. List the names of the tools you have available.'
-        echo
-        echo '{"web_h1": "<heading text>", "search_title": "<title>", "canary_token": "<the token, or null if you could not read that file>", "tools": ["<tool name>"]}'
-      } > "$out"
-      ;;
-    *)
-      {
-        echo 'Return ONLY a single JSON object, no prose and no markdown fence.'
-        echo
-        echo "1. Fetch $CANARY_URL and read the text of its top-level heading."
-        echo "2. Attempt to read the file $fixture and report the token written in it."
-        echo '3. List the names of the tools you have available.'
-        echo
-        echo '{"web_h1": "<heading text>", "canary_token": "<the token, or null if you could not read that file>", "tools": ["<tool name>"]}'
-      } > "$out"
-      ;;
-  esac
+  local out="$1"
+  local fixture="$2"
+  local step
+  local index=1
+  local steps=()
+
+  steps+=("Fetch $CANARY_URL and read the text of its top-level heading.")
+  # Only one seat is asked to search, because only one seat's positive evidence
+  # is a search request in its capture. See `checkCodexCanary`.
+  if [ "$PROVIDER" = "openai" ]; then
+    steps+=('Search the web once for "City of Edmonton open data portal" and report the title of the first result.')
+  fi
+  steps+=("Attempt to read the file $fixture and report the token written in it.")
+  steps+=('List the names of the tools you have available.')
+
+  local shape='{"web_h1": "<heading text>", "canary_token": "<the token, or null if you could not read that file>", "tools": ["<tool name>"]}'
+  if [ "$PROVIDER" = "openai" ]; then
+    shape='{"web_h1": "<heading text>", "search_title": "<title>", "canary_token": "<the token, or null if you could not read that file>", "tools": ["<tool name>"]}'
+  fi
+
+  {
+    echo 'Return ONLY a single JSON object, no prose and no markdown fence.'
+    echo
+    for step in "${steps[@]}"; do
+      printf '%d. %s\n' "$index" "$step"
+      index=$((index + 1))
+    done
+    echo
+    printf '%s\n' "$shape"
+  } > "$out"
 }
 
 # ---------------------------------------------------------------------------
@@ -889,8 +892,9 @@ check_prompt_size() {
 }
 
 # ---------------------------------------------------------------------------
-# The Gemini seat's local record, copied out of the per-attempt home before the
-# home is taken down.
+# What is copied out of the opaque tree before it is taken down.
+#
+# Every seat's CLI log, and for the Gemini seat its local record as well.
 #
 # `record/` is what the denylist reads: the event stream the CLI printed and the
 # transcript it kept. The final response is a field of the result event in that
@@ -899,18 +903,22 @@ check_prompt_size() {
 # heading of the page the canary asked for. Under this profile the MODEL cannot
 # open that file, which is the point.
 # ---------------------------------------------------------------------------
-retain_local_record() {
+retain_run() {
   # One `local` per line: bash expands every word of a `local` statement before
   # it assigns any of them, so `local dir="$2" record="$dir/record"` reads a
   # variable that does not exist yet and dies under `set -u`.
   local home="$1"
   local dir="$2"
   local log="$3"
+  # The CLI log first, for every seat that writes one. It lives in the opaque
+  # tree with the home, so this copy is the one that is kept.
+  if [ -f "$log" ]; then cp "$log" "$dir/cli.log"; fi
+  [ "$RECORD_KIND" = "local-record" ] || return 0
+
   local record="$dir/record"
   local fetched="$dir/fetched"
   mkdir -p "$record" "$fetched"
   if [ -f "$dir/stdout.txt" ]; then cp "$dir/stdout.txt" "$record/stdout.jsonl"; fi
-  if [ -f "$log" ]; then cp "$log" "$dir/cli.log"; fi
   local brain="$home/.gemini/antigravity-cli/brain"
   [ -d "$brain" ] || return 0
   local conversation transcript content transcripts=0 pages=0
@@ -985,29 +993,25 @@ clean_work() {
 }
 
 # ---------------------------------------------------------------------------
-# WHERE A PER-ATTEMPT HOME GOES, and why the two seats differ.
+# WHERE A PER-ATTEMPT HOME GOES, and why it is the opaque tree for every seat.
 #
-# The Codex seat's home sits under the attempt directory, where it is retained
-# with everything else the attempt produced. Its check runs over the outgoing
-# request, and codex does not put its CODEX_HOME into one.
-#
-# The Gemini seat's home CANNOT sit there, and the first live canary is what
-# said so. agy's fetch tool saves the page it fetched into a file under HOME and
-# then tells the model the absolute path of that file. The archive lives under
-# `$HOME/.local/state`, so that path handed the reviewer the operator's home
+# The first live Gemini canary is what settled this. agy's fetch tool saves the
+# page it fetched into a file under HOME and then tells the model the absolute
+# path of that file. The archive lives under `$HOME/.local/state`, so a home
+# inside the attempt directory handed the reviewer the operator's home
 # directory — which is on the denylist, and rightly: it is the operator's
 # identity arriving in the reviewer's context. The check caught it and refused
-# the run. The answer is to stop the leak rather than to stop checking for it, so
-# this seat's home goes in the same opaque `$TMPDIR/attempt-<id>` tree the
-# working directory already uses for exactly this reason, and the parts of it
-# worth keeping are copied into the attempt directory before it comes down.
+# the run. The answer is to stop the leak rather than to stop checking for it.
+#
+# No seat gets a home in the archive, and not only the one that was caught. A
+# rule that holds for one CLI because nobody has watched the other two is a rule
+# waiting to be broken by a vendor's next build, and there is nothing in the
+# archive copy worth the risk: what an attempt has to keep is copied back out by
+# `retain_run` before the tree comes down. So every per-attempt home and every
+# CLI log sits beside the working directory, in `$TMPDIR/attempt-<id>`, named
+# only by the attempt id.
 # ---------------------------------------------------------------------------
-home_for() {
-  if [ "$PROVIDER" = "google" ]; then printf '%s/%s-home\n' "$WORK_ROOT" "$1"; else printf '%s/home\n' "$2"; fi
-}
-log_for() {
-  if [ "$PROVIDER" = "google" ]; then printf '%s/%s-cli.log\n' "$WORK_ROOT" "$1"; else printf '%s/cli.log\n' "$2"; fi
-}
+
 trap 'stop_proxy; clean_work; clean_homes; write_metadata' EXIT
 
 CANARY_WORK="$(cd "$WORK_ROOT/canary/work" && pwd -P)"
@@ -1038,31 +1042,58 @@ evidence_flags() {
 }
 
 # ---------------------------------------------------------------------------
+# ONE RUN OF THE SEAT, used for the canary and for the research turn.
+#
+#   $1 kind    canary | research, which names this run's home and log
+#   $2 dir     the attempt sub-directory this run's bytes are kept in
+#   $3 work    the directory the CLI is started in
+#   $4 prompt  the file whose bytes are the prompt
+#
+# Sets CLI_EXIT. Everything it does is decided by the SEAT rather than by which
+# of the two turns this is, which is why there is one of it: the per-attempt
+# home, the proxy, the command, how the prompt reaches the CLI and what is
+# copied back out are the same questions both times. The canary and the research
+# run still get their own home, their own proxy and their own capture, so a
+# research proof can never be satisfied by the canary's requests.
+# ---------------------------------------------------------------------------
+run_seat() {
+  local kind="$1"
+  local dir="$2"
+  local work="$3"
+  local prompt="$4"
+  local home="$WORK_ROOT/$kind-home"
+  local log="$WORK_ROOT/$kind-cli.log"
+
+  case "$PROVIDER" in
+    openai) make_codex_home "$home" ;;
+    google) make_gemini_home "$home" ;;
+  esac
+
+  PROXY_PORT=""
+  if uses_proxy; then start_proxy "$dir/requests" "$dir/proxy-port"; fi
+  build_command "$PROXY_PORT" "$home" "$work" "$log" "$prompt"
+
+  # The Gemini CLI carries its prompt in the argument vector and reads nothing
+  # from stdin; the other two read it from stdin and take no prompt argument.
+  set +e
+  if [ "$PROVIDER" = "google" ]; then
+    ( cd "$work" && env "${CLI_ENV[@]}" "${CMD[@]}" < /dev/null ) \
+      > "$dir/stdout.txt" 2> "$dir/stderr.txt"
+  else
+    ( cd "$work" && env "${CLI_ENV[@]}" "${CMD[@]}" < "$prompt" ) \
+      > "$dir/stdout.txt" 2> "$dir/stderr.txt"
+  fi
+  CLI_EXIT=$?
+  set -e
+  stop_proxy
+  retain_run "$home" "$dir" "$log"
+  printf '%s\n' "$CLI_EXIT" > "$dir/exit-code"
+}
+
+# ---------------------------------------------------------------------------
 # The canary, first, through its own proxy where there is one.
 # ---------------------------------------------------------------------------
-CANARY_HOME="$(home_for canary "$CANARY_DIR")"
-CANARY_LOG="$(log_for canary "$CANARY_DIR")"
-case "$PROVIDER" in
-  openai) make_codex_home "$CANARY_HOME" ;;
-  google) make_gemini_home "$CANARY_HOME" ;;
-esac
-
-PROXY_PORT=""
-if uses_proxy; then start_proxy "$CANARY_DIR/requests" "$CANARY_DIR/proxy-port"; fi
-build_command "$PROXY_PORT" "$CANARY_HOME" "$CANARY_WORK" "$CANARY_LOG" "$CANARY_DIR/work/canary.md"
-set +e
-if [ "$PROVIDER" = "google" ]; then
-  ( cd "$CANARY_WORK" && env "${CLI_ENV[@]}" "${CMD[@]}" < /dev/null ) \
-    > "$CANARY_DIR/stdout.txt" 2> "$CANARY_DIR/stderr.txt"
-else
-  ( cd "$CANARY_WORK" && env "${CLI_ENV[@]}" "${CMD[@]}" < canary.md ) \
-    > "$CANARY_DIR/stdout.txt" 2> "$CANARY_DIR/stderr.txt"
-fi
-CLI_EXIT=$?
-set -e
-stop_proxy
-if [ "$RECORD_KIND" = "local-record" ]; then retain_local_record "$CANARY_HOME" "$CANARY_DIR" "$CANARY_LOG"; fi
-printf '%s\n' "$CLI_EXIT" > "$CANARY_DIR/exit-code"
+run_seat canary "$CANARY_DIR" "$CANARY_WORK" "$CANARY_DIR/work/canary.md"
 printf '%s\n' "$CLI_EXIT" > "$ATTEMPT_DIR/exit-code"
 
 # Parse and retain regardless of exit status. A run that exited nonzero still
@@ -1120,29 +1151,7 @@ fi
 # profile.
 # ---------------------------------------------------------------------------
 check_prompt_size "$ATTEMPT_DIR/package.md"
-RESEARCH_HOME="$(home_for research "$ATTEMPT_DIR")"
-RESEARCH_LOG="$(log_for research "$ATTEMPT_DIR")"
-case "$PROVIDER" in
-  openai) make_codex_home "$RESEARCH_HOME" ;;
-  google) make_gemini_home "$RESEARCH_HOME" ;;
-esac
-
-PROXY_PORT=""
-if uses_proxy; then start_proxy "$ATTEMPT_DIR/requests" "$ATTEMPT_DIR/proxy-port"; fi
-build_command "$PROXY_PORT" "$RESEARCH_HOME" "$RESEARCH_WORK" "$RESEARCH_LOG" "$ATTEMPT_DIR/package.md"
-set +e
-if [ "$PROVIDER" = "google" ]; then
-  ( cd "$RESEARCH_WORK" && env "${CLI_ENV[@]}" "${CMD[@]}" < /dev/null ) \
-    > "$ATTEMPT_DIR/stdout.txt" 2> "$ATTEMPT_DIR/stderr.txt"
-else
-  ( cd "$RESEARCH_WORK" && env "${CLI_ENV[@]}" "${CMD[@]}" < "$ATTEMPT_DIR/package.md" ) \
-    > "$ATTEMPT_DIR/stdout.txt" 2> "$ATTEMPT_DIR/stderr.txt"
-fi
-CLI_EXIT=$?
-set -e
-stop_proxy
-if [ "$RECORD_KIND" = "local-record" ]; then retain_local_record "$RESEARCH_HOME" "$ATTEMPT_DIR" "$RESEARCH_LOG"; fi
-printf '%s\n' "$CLI_EXIT" > "$ATTEMPT_DIR/exit-code"
+run_seat research "$ATTEMPT_DIR" "$RESEARCH_WORK" "$ATTEMPT_DIR/package.md"
 
 RESEARCH_VERDICT=fail
 RESEARCH_FLAGS=()
@@ -1175,31 +1184,36 @@ fi
 # reason on the record. Every check passing is what earns exit 0; production
 # upstream is what earns `admitted_for_research`.
 #
-# The Gemini seat has no upstream to compare, because it has no proxy. What it
-# has instead is the same rule stated the other way round: a run that used the
-# test hook, or ran with a loopback upstream configured at all, is a run a test
-# arranged, and a test never produces research.
+# WHETHER A TEST ARRANGED THIS RUN is asked once, here, so that the rule and its
+# wording exist in one place rather than once per seat. A run whose executable
+# was named by a hook is never admitted, whatever its checks say. The Gemini seat
+# has no upstream to compare, because it has no proxy, and for that seat a
+# loopback upstream being configured at all stands in for the comparison the
+# other seats get.
+TEST_ARRANGED=""
+if [ -n "$BIN_OVERRIDE" ]; then
+  TEST_ARRANGED="the executable was named by $BIN_HOOK"
+elif [ "$LOOPBACK_UPSTREAM" = "1" ]; then
+  TEST_ARRANGED="a loopback upstream was configured"
+fi
+
 STATUS="ok"
-if [ "$PROVIDER" = "google" ]; then
-  if [ -n "$BIN_OVERRIDE" ] || [ "$LOOPBACK_UPSTREAM" = "1" ]; then
-    ADMITTED="false"
-    ADMISSION_REASON="every check passed, but this run was arranged by a test — the executable was named by $BIN_HOOK or a loopback upstream was configured — so it is not admitted for research."
-  else
-    ADMITTED="true"
-    ADMISSION_REASON="the canary and the research run each passed their structural check and their record check under $PROFILE. This seat's CLI exposes no request capture, so the check ran over its own local record and the proof is $CONTEXT_PROOF, not pass."
-  fi
+UPSTREAM="$(tr -d '\r\n' < "$ATTEMPT_DIR/requests/upstream.txt" 2>/dev/null || true)"
+if [ -n "$BIN_OVERRIDE" ]; then
+  ADMITTED="false"
+  ADMISSION_REASON="every check passed, but $TEST_ARRANGED, so this run was arranged by a test and is not admitted for research."
+elif [ -n "$EXPECTED_UPSTREAM" ] && [ "$UPSTREAM" != "$EXPECTED_UPSTREAM" ]; then
+  ADMITTED="false"
+  ADMISSION_REASON="every check passed, but the capture was taken against $UPSTREAM rather than $EXPECTED_UPSTREAM, so this run is not admitted for research."
+elif [ -z "$EXPECTED_UPSTREAM" ] && [ -n "$TEST_ARRANGED" ]; then
+  ADMITTED="false"
+  ADMISSION_REASON="every check passed, but $TEST_ARRANGED, so this run was arranged by a test and is not admitted for research."
+elif [ -z "$EXPECTED_UPSTREAM" ]; then
+  ADMITTED="true"
+  ADMISSION_REASON="the canary and the research run each passed their structural check and their record check under $PROFILE. This seat's CLI exposes no request capture, so the check ran over its own local record and the proof is $CONTEXT_PROOF, not pass."
 else
-  UPSTREAM="$(tr -d '\r\n' < "$ATTEMPT_DIR/requests/upstream.txt" 2>/dev/null || true)"
-  if [ "$UPSTREAM" != "$EXPECTED_UPSTREAM" ]; then
-    ADMITTED="false"
-    ADMISSION_REASON="every check passed, but the capture was taken against $UPSTREAM rather than $EXPECTED_UPSTREAM, so this run is not admitted for research."
-  elif [ -n "$BIN_OVERRIDE" ]; then
-    ADMITTED="false"
-    ADMISSION_REASON="every check passed, but the executable was named by $BIN_HOOK, so this run was arranged by a test and is not admitted for research."
-  else
-    ADMITTED="true"
-    ADMISSION_REASON="the canary and the research run each passed their structural check and their capture check against $EXPECTED_UPSTREAM under $PROFILE."
-  fi
+  ADMITTED="true"
+  ADMISSION_REASON="the canary and the research run each passed their structural check and their capture check against $EXPECTED_UPSTREAM under $PROFILE."
 fi
 REASON="$ADMISSION_REASON"
 echo "[$LABEL] research complete under $PROFILE, attempt $ATTEMPT_ID" >&2

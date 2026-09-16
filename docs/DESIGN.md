@@ -448,8 +448,8 @@ disclosure is not enough to admit a reviewer, stands beside this and is not
 answered by it.
 
 `openai` (codex-cli 0.154.0) is captured, because codex honours `openai_base_url`
-and `chatgpt_base_url`. The launcher builds a per-attempt `CODEX_HOME` under the
-attempt directory, 0700, holding `auth.json` as a SYMLINK to `$HOME/.codex/auth.json`
+and `chatgpt_base_url`. The launcher builds a per-attempt `CODEX_HOME` beside the
+working directory, 0700, holding `auth.json` as a SYMLINK to `$HOME/.codex/auth.json`
 and a two-line `config.toml` naming the model and `model_reasoning_effort`. It
 resolves the real vendor binary rather than the cmux shim, sets
 `CMUX_CODEX_HOOKS_DISABLED=1` either way, and runs
@@ -476,7 +476,7 @@ for that reason alone. What refuses a run that touched private text is the
 denylist over the capture: a tool's output returns in the next turn's request
 body. The check refuses the run; it cannot prevent the read.
 
-`google` (agy 1.1.28) has NO capture. `BAICODE_PREDICTION_ENDPOINT_URL` and
+`google` (agy, 1.2.4 at release; recorded, not gated) has NO capture. `BAICODE_PREDICTION_ENDPOINT_URL` and
 `GOOGLE_GEMINI_BASE_URL` are ignored under this login, the log holds no request
 bodies, and the CLI's own transcript omits the system prompt. The launcher builds
 a per-attempt `HOME` holding symlinks to
@@ -487,12 +487,21 @@ inventory and are refused at the permission check, so the structural rule is abo
 which tools reached `DONE`: only `read_url_content` and `search_web` may. The
 denylist runs over the CLI's own local record instead of a request, and the proof
 word is `record-only` rather than `pass`. Admission accepts `record-only` for this
-seat and no other. That home lives under `${TMPDIR}/attempt-<id>` rather than under
-the attempt directory, because agy's fetch tool saves the page it fetched under
+seat and no other.
+
+**Every per-attempt home is in the opaque tree, not in the archive.** The first
+live Gemini canary settled this. agy's fetch tool saves the page it fetched under
 HOME and then tells the model that file's absolute path; with the archive under
-`$HOME/.local/state` that path handed the reviewer the operator's home directory
-and the denylist correctly refused the run. The record, the fetched pages and the
-log are copied into the attempt directory before the home comes down.
+`$HOME/.local/state`, that path handed the reviewer the operator's home directory,
+which is on the denylist, and the check correctly refused the run. The answer was
+to stop the leak rather than to stop checking for it, and the rule is applied to
+every seat rather than only to the one that was caught: a rule that holds for one
+CLI because nobody has watched the other two is a rule waiting to be broken by a
+vendor's next build. So every seat's `CODEX_HOME`, `HOME` and CLI log sit under
+`${TMPDIR}/attempt-<id>`, beside the working directory and named only by the
+attempt id, and `retain_run` copies what an attempt must keep back into the
+attempt directory before that tree comes down: the CLI log for every seat, and
+the local record and fetched pages for the Gemini seat.
 
 **The Gemini limit.** There is no request capture, so the check sees what the
 model produced and what its tools returned and nothing of what was sent. Global
