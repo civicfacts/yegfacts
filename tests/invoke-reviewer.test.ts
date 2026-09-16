@@ -29,7 +29,7 @@
  * cleanly everything else passes, and the reason is recorded. That is the
  * behaviour under test, not a limitation of the test.
  */
-import { spawn, spawnSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import http from 'node:http';
 import {
   chmodSync,
@@ -49,6 +49,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import YAML from 'yaml';
+import { HOME_INSTRUCTION, MEMORY_NOTE, startStubUpstream, stubHome } from './stub-machine.ts';
 
 const REAL_REPO = fileURLToPath(new URL('..', import.meta.url));
 const INVOKE = path.join(REAL_REPO, 'scripts', 'panel', 'invoke-reviewer.sh');
@@ -57,13 +58,6 @@ const RUN_DATE = '2026-09-09';
 /** What the stub CLI answers to `--version`, recorded and no longer gated. */
 const STUB_VERSION = '2.1.272';
 const POSTER = path.join(REAL_REPO, 'tests', 'stub-request-poster.mjs');
-
-/**
- * The private text the stub machine holds. A leaking run copies one of these
- * lines into its request, and the capture check has to find it there.
- */
-const HOME_INSTRUCTION = 'Answer in the house voice and follow the rules in this file.';
-const MEMORY_NOTE = 'The founder runs parallel sessions; stage commits by explicit file names.';
 
 // realpath, because macOS hands out /var/folders paths that are symlinks into
 // /private, and the launcher resolves before it compares.
@@ -305,23 +299,13 @@ const validReview = (() => {
 // The stub upstream. The recording proxy forwards to it, so no test reaches the
 // network and every test still goes through the proxy for real.
 // ---------------------------------------------------------------------------
-const UPSTREAM_PORT_FILE = path.join(root, 'upstream-port');
-let upstream: ReturnType<typeof spawn>;
+let upstream: { url: string; stop: () => void };
 let upstreamUrl = '';
-
 beforeAll(async () => {
-  // Its own process, because the launcher is driven with spawnSync and that
-  // blocks this worker's event loop: an upstream listening here would never
-  // answer and every run would deadlock behind its own first request.
-  upstream = spawn(process.execPath, [path.join(REAL_REPO, 'tests', 'stub-upstream.mjs'), '--port-file', UPSTREAM_PORT_FILE], {
-    stdio: 'ignore',
-  });
-  for (let waited = 0; waited < 100 && !existsSync(UPSTREAM_PORT_FILE); waited += 1) {
-    await new Promise((resolve) => setTimeout(resolve, 50));
-  }
-  upstreamUrl = `http://127.0.0.1:${readFileSync(UPSTREAM_PORT_FILE, 'utf8').trim()}`;
+  upstream = await startStubUpstream(root);
+  upstreamUrl = upstream.url;
 });
-afterAll(() => upstream?.kill('SIGKILL'));
+afterAll(() => upstream?.stop());
 
 type Stub = { dir: string; archive: string; env: NodeJS.ProcessEnv };
 
@@ -357,16 +341,7 @@ function stubClaude(
   const dir = mkdtempSync(path.join(root, 'stub-'));
   const bin = path.join(dir, 'bin');
   mkdirSync(bin);
-  const home = path.join(dir, 'home');
-  mkdirSync(path.join(home, '.claude', 'projects', 'stub-project', 'memory'), { recursive: true });
-  writeFileSync(
-    path.join(home, '.claude', 'CLAUDE.md'),
-    `# Global instructions\n\n${HOME_INSTRUCTION}\n`,
-  );
-  writeFileSync(
-    path.join(home, '.claude', 'projects', 'stub-project', 'memory', 'notes.md'),
-    `# Memory\n\n${MEMORY_NOTE}\n`,
-  );
+  const home = stubHome(dir);
   writeFileSync(path.join(dir, 'version'), `${options.version ?? STUB_VERSION} (Claude Code)\n`);
   writeFileSync(path.join(dir, 'canary.jsonl'), options.canary ?? goodCanary);
   writeFileSync(path.join(dir, 'canary.exit'), String(options.canaryExit ?? 0));

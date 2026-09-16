@@ -26,7 +26,7 @@
  * are recorded with the reason. That is the behaviour under test, not a
  * limitation of the test.
  */
-import { spawn, spawnSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import {
   chmodSync,
   existsSync,
@@ -44,38 +44,21 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { HOME_INSTRUCTION, MEMORY_NOTE, startStubUpstream, stubHome } from './stub-machine.ts';
 
 const REAL_REPO = fileURLToPath(new URL('..', import.meta.url));
 const INVOKE = path.join(REAL_REPO, 'scripts', 'panel', 'invoke-reviewer.sh');
 
-/** The private text the stub machine holds, which a leaking run copies for real. */
-const HOME_INSTRUCTION = 'Answer in the house voice and follow the rules in this file.';
-const MEMORY_NOTE = 'The founder runs parallel sessions; stage commits by explicit file names.';
-
 const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'yegfacts-seats-')));
 afterAll(() => rmSync(root, { recursive: true, force: true }));
 
-// ---------------------------------------------------------------------------
-// The stub upstream, in its own process: the launcher is driven with spawnSync,
-// which blocks this worker's event loop, so an upstream listening here would
-// never answer and every run would deadlock behind its own first request.
-// ---------------------------------------------------------------------------
-const UPSTREAM_PORT_FILE = path.join(root, 'upstream-port');
-let upstream: ReturnType<typeof spawn>;
+let upstream: { url: string; stop: () => void };
 let upstreamUrl = '';
-
 beforeAll(async () => {
-  upstream = spawn(
-    process.execPath,
-    [path.join(REAL_REPO, 'tests', 'stub-upstream.mjs'), '--port-file', UPSTREAM_PORT_FILE],
-    { stdio: 'ignore' },
-  );
-  for (let waited = 0; waited < 100 && !existsSync(UPSTREAM_PORT_FILE); waited += 1) {
-    await new Promise((resolve) => setTimeout(resolve, 50));
-  }
-  upstreamUrl = `http://127.0.0.1:${readFileSync(UPSTREAM_PORT_FILE, 'utf8').trim()}`;
+  upstream = await startStubUpstream(root);
+  upstreamUrl = upstream.url;
 });
-afterAll(() => upstream?.kill('SIGKILL'));
+afterAll(() => upstream?.stop());
 
 type Seat = 'openai' | 'google';
 type Stub = {
@@ -111,13 +94,7 @@ function stub(
   const dir = mkdtempSync(path.join(root, `stub-${seat}-`));
   const bin = path.join(dir, 'bin');
   mkdirSync(bin);
-  const home = path.join(dir, 'home');
-  mkdirSync(path.join(home, '.claude', 'projects', 'stub-project', 'memory'), { recursive: true });
-  writeFileSync(path.join(home, '.claude', 'CLAUDE.md'), `# Global instructions\n\n${HOME_INSTRUCTION}\n`);
-  writeFileSync(
-    path.join(home, '.claude', 'projects', 'stub-project', 'memory', 'notes.md'),
-    `# Memory\n\n${MEMORY_NOTE}\n`,
-  );
+  const home = stubHome(dir);
 
   // The credential the launcher may link to and must never create.
   let credential = '';

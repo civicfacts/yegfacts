@@ -17,12 +17,11 @@
 import { existsSync, lstatSync, readFileSync, readdirSync, readlinkSync, statSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { buildRequests } from './stub-codex-poster.mjs';
-import http from 'node:http';
+import { CODEX_HEADERS, controlFile, send } from './stub-support.mjs';
 
 const argv = process.argv.slice(2);
 const state = process.env.YEGFACTS_STUB_DIR ?? '';
-const read = (name, fallback = '') =>
-  existsSync(path.join(state, name)) ? readFileSync(path.join(state, name), 'utf8') : fallback;
+const read = controlFile(state);
 
 if (argv[0] === '--version') {
   process.stdout.write(read('version', 'codex-cli 0.154.0\n'));
@@ -84,33 +83,6 @@ if (isCanary) {
   }
 }
 
-const send = (request) =>
-  new Promise((resolve, reject) => {
-    const url = new URL(base);
-    const payload = request.body === null ? null : Buffer.from(JSON.stringify(request.body), 'utf8');
-    const outgoing = http.request(
-      {
-        host: url.hostname,
-        port: url.port,
-        method: request.method,
-        path: request.url,
-        headers: {
-          'content-type': 'application/json',
-          authorization: 'Bearer stub-codex-token',
-          'chatgpt-account-id': 'stub-account-0000-1111-2222',
-          ...(payload ? { 'content-length': String(payload.length) } : {}),
-        },
-      },
-      (response) => {
-        response.resume();
-        response.on('end', () => resolve(response.statusCode));
-      },
-    );
-    outgoing.on('error', reject);
-    if (payload) outgoing.write(payload);
-    outgoing.end();
-  });
-
 if (base) {
   const requests = buildRequests({
     packageText: prompt,
@@ -122,7 +94,7 @@ if (base) {
     home: process.env.HOME ?? '',
     toolOutput,
   });
-  for (const request of requests) await send(request);
+  for (const request of requests) await send(base, request, CODEX_HEADERS);
 }
 
 const answer = isCanary

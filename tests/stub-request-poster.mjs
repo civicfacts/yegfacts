@@ -21,43 +21,8 @@
  * stub HOME's own CLAUDE.md or memory file off disk and copies a line of it into
  * the request, which is exactly the failure the check exists to catch.
  */
-import { readFileSync, readdirSync } from 'node:fs';
-import http from 'node:http';
-import path from 'node:path';
-
-/** The first line of a file long enough for the check to treat as a needle. */
-function firstNeedle(file) {
-  for (const raw of readFileSync(file, 'utf8').split('\n')) {
-    const line = raw.trim();
-    if (line.length >= 24 && !line.startsWith('```') && !/^#+$/.test(line) && !/^-{3,}$/.test(line)) {
-      return line;
-    }
-  }
-  throw new Error(`no line worth leaking in ${file}`);
-}
-
-/** The first Markdown file under any project's memory directory in this HOME. */
-function firstMemoryFile(home) {
-  const projects = path.join(home, '.claude', 'projects');
-  for (const project of readdirSync(projects).sort()) {
-    const memory = path.join(projects, project, 'memory');
-    for (const file of readdirSync(memory).sort()) {
-      if (file.endsWith('.md')) return path.join(memory, file);
-    }
-  }
-  throw new Error(`no memory file under ${projects}`);
-}
-
-/**
- * The private line this run will copy into its request, or '' for a clean run.
- * Read from the stub HOME the launcher was given, so a leaking scenario leaks
- * the same bytes the check will look for rather than a string a test invented.
- */
-function leakedLine(mutate, home) {
-  if (mutate === 'leak-home') return firstNeedle(path.join(home, '.claude', 'CLAUDE.md'));
-  if (mutate === 'leak-memory') return firstNeedle(firstMemoryFile(home));
-  return '';
-}
+import { readFileSync } from 'node:fs';
+import { leakedLine, send } from './stub-support.mjs';
 
 /**
  * The requests one attempt makes, in the order a real one makes them:
@@ -127,32 +92,6 @@ export function buildRequests({ packageText, workDir, model, mutate, home, date 
   ];
 }
 
-const send = (base, request) =>
-  new Promise((resolve, reject) => {
-    const url = new URL(base);
-    const payload = request.body === null ? null : Buffer.from(JSON.stringify(request.body), 'utf8');
-    const outgoing = http.request(
-      {
-        host: url.hostname,
-        port: url.port,
-        method: request.method,
-        path: request.url,
-        headers: {
-          'content-type': 'application/json',
-          authorization: 'Bearer stub-oauth-token',
-          ...(payload ? { 'content-length': String(payload.length) } : {}),
-        },
-      },
-      (response) => {
-        response.resume();
-        response.on('end', () => resolve(response.statusCode));
-      },
-    );
-    outgoing.on('error', reject);
-    if (payload) outgoing.write(payload);
-    outgoing.end();
-  });
-
 const flags = {};
 const argv = process.argv.slice(2);
 for (let index = 0; index < argv.length; index += 2) flags[argv[index].slice(2)] = argv[index + 1];
@@ -166,5 +105,5 @@ if (flags.base) {
     home: process.env.HOME ?? '',
     date: '2026-09-16',
   });
-  for (const request of requests) await send(flags.base, request);
+  for (const request of requests) await send(flags.base, request, { authorization: 'Bearer stub-oauth-token' });
 }

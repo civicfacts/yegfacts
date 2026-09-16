@@ -27,11 +27,11 @@ import {
   writeFileSync,
 } from 'node:fs';
 import path from 'node:path';
+import { controlFile, leakedLine } from './stub-support.mjs';
 
 const argv = process.argv.slice(2);
 const state = process.env.YEGFACTS_STUB_DIR ?? '';
-const read = (name, fallback = '') =>
-  existsSync(path.join(state, name)) ? readFileSync(path.join(state, name), 'utf8') : fallback;
+const read = controlFile(state);
 
 if (argv[0] === '--version') {
   process.stdout.write(read('version', '1.1.28\n'));
@@ -73,29 +73,7 @@ if (!isCanary) writeFileSync(path.join(state, 'package-sent.txt'), prompt);
   );
 }
 
-/** The first line of a file long enough for the check to treat as a needle. */
-function firstNeedle(file) {
-  for (const raw of readFileSync(file, 'utf8').split('\n')) {
-    const line = raw.trim();
-    if (line.length >= 24 && !line.startsWith('```') && !/^#+$/.test(line) && !/^-{3,}$/.test(line)) return line;
-  }
-  throw new Error(`no line worth leaking in ${file}`);
-}
-
-function firstMemoryFile(root) {
-  const projects = path.join(root, '.claude', 'projects');
-  for (const project of readdirSync(projects).sort()) {
-    const memory = path.join(projects, project, 'memory');
-    for (const file of readdirSync(memory).sort()) {
-      if (file.endsWith('.md')) return path.join(memory, file);
-    }
-  }
-  throw new Error(`no memory file under ${projects}`);
-}
-
-let leaked = '';
-if (mutate === 'leak-home') leaked = firstNeedle(path.join(realHome, '.claude', 'CLAUDE.md'));
-if (mutate === 'leak-memory') leaked = firstNeedle(firstMemoryFile(realHome));
+const leaked = leakedLine(mutate, realHome);
 
 // The fixture the canary was told to open. The deny rules refuse it at the
 // permission check, so this stub records the refusal rather than the contents —
