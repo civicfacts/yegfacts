@@ -11,12 +11,20 @@
  * bytes; nobody needs to learn where on the founder's machine they live, and a
  * hash of a package is not the package.
  *
- * `context_proof` and `admitted_for_research` are carried deliberately, and
- * from methodology v1.29 so are `upstream`, `pins_source` and the request
- * counts. A reader of a manifest row should be able to see, without reading any
- * code, whether the outgoing request was captured and checked, what it was
- * checked against, and whether the run was admitted. A proved request and an
- * admitted run are different facts and the row shows both.
+ * `context_proof` and `admitted_for_research` are carried deliberately, and so
+ * are `upstream`, the request counts and, from methodology v1.30, the names and
+ * line counts of the private sources the capture was searched for. A reader of a
+ * manifest row should be able to see, without reading any code, whether the
+ * outgoing request was captured and checked, what it was checked against, and
+ * whether the run was admitted. A checked request and an admitted run are
+ * different facts and the row shows both.
+ *
+ * What v1.30 stopped copying, because the check that produced them is gone:
+ * `path_cli_version`, `pins_source`, `vendor_prompt_sha256`,
+ * `tool_definitions_sha256`, `main_turn_count` and `side_request_counts`. A
+ * manifest written before this release still carries them and still reads
+ * correctly; nothing here rewrites an old row, and a field this no longer writes
+ * means "not recorded", exactly as a missing field always has.
  *
  * A directory from a refusal has almost nothing in it, and that is the correct
  * record: an id, a blocked status, a reason, the package hash, and no output
@@ -38,12 +46,6 @@ export type AttemptRecord = {
   model_id?: string;
   reasoning_effort?: string;
   cli_version?: string;
-  /**
-   * What `claude --version` on PATH reported, or "absent". From v1.29 the
-   * launcher runs the pinned build rather than the PATH command, so the two can
-   * differ and a reader should be able to see that they did.
-   */
-  path_cli_version?: string;
   canary?: string;
   structure?: string;
   context_proof?: string;
@@ -51,25 +53,27 @@ export type AttemptRecord = {
   admitted_for_research?: boolean;
   /** Why a run that passed every check was or was not admitted. */
   admission_reason?: string;
-  /** "built-in" or "override": which pin table the request proof compared against. */
-  pins_source?: string;
   /**
-   * The base URL the capture was taken against. Carried because a proof taken
+   * The base URL the capture was taken against. Carried because a check taken
    * against a loopback stub reads exactly like one taken against the API unless
    * the row says which it was. Absent on manifests written before v1.29.
    */
   upstream?: string;
   canary_upstream?: string;
-  vendor_prompt_sha256?: string;
-  canary_vendor_prompt_sha256?: string;
-  tool_definitions_sha256?: Record<string, string>;
-  canary_tool_definitions_sha256?: Record<string, string>;
   request_count?: number;
   canary_request_count?: number;
-  main_turn_count?: number;
-  canary_main_turn_count?: number;
-  side_request_counts?: Record<string, number>;
-  canary_side_request_counts?: Record<string, number>;
+  /** How many captured requests carried the declared package byte for byte. */
+  package_seen?: number;
+  canary_package_seen?: number;
+  /**
+   * The private sources the capture was searched for: each one's symbolic name,
+   * whether it existed on the machine, and how many lines of it were used as
+   * needles. Names and counts only. The lines themselves never leave the check,
+   * because a public row that quoted private text to prove it did not travel
+   * would be the leak it is defending against (methodology v1.30).
+   */
+  capture_check_sources?: { name: string; present: boolean; lines_checked: number }[];
+  canary_capture_check_sources?: { name: string; present: boolean; lines_checked: number }[];
   /** Hash over the sorted list of every capture file and its own hash. */
   requests_manifest_sha256?: string;
   canary_requests_manifest_sha256?: string;
@@ -158,7 +162,6 @@ function attemptRecord(dir: string, attempt: number, schema?: string): AttemptRe
     ...(text('model_id') ? { model_id: text('model_id') } : {}),
     ...(text('reasoning_effort') ? { reasoning_effort: text('reasoning_effort') } : {}),
     ...(text('cli_version') ? { cli_version: text('cli_version') } : {}),
-    ...(text('path_cli_version') ? { path_cli_version: text('path_cli_version') } : {}),
     ...(text('canary') ? { canary: text('canary') } : {}),
     ...(text('structure') ? { structure: text('structure') } : {}),
     // Defaulted, not optional: a row that omits these reads as if the question
@@ -167,7 +170,6 @@ function attemptRecord(dir: string, attempt: number, schema?: string): AttemptRe
     admitted_for_research: metadata.admitted_for_research === true,
     ...(text('canary_context_proof') ? { canary_context_proof: text('canary_context_proof') } : {}),
     ...(text('admission_reason') ? { admission_reason: text('admission_reason') } : {}),
-    ...(text('pins_source') ? { pins_source: text('pins_source') } : {}),
     ...(schema ? { schema } : {}),
     ...(text('reason') ? { reason: text('reason') } : {}),
     ...(realHash(metadata.package_sha256) ? { package_sha256: metadata.package_sha256 as string } : {}),
@@ -190,24 +192,21 @@ function attemptRecord(dir: string, attempt: number, schema?: string): AttemptRe
     ...(realHash(metadata.proof_report_sha256)
       ? { proof_report_sha256: metadata.proof_report_sha256 as string }
       : {}),
-    // The request-capture fields (methodology v1.29). Every one is optional and
-    // a missing one means the capture was not taken or not recorded, never that
-    // it passed. `cli_executable`, `cli_executable_sha256` and `work_dir` are
-    // deliberately not among them: they name paths on the founder's machine and
-    // stay in the private archive. Which build ran is public as `cli_version`.
+    // The request-capture fields. Every one is optional and a missing one means
+    // the capture was not taken or not recorded, never that it passed.
+    // `cli_executable`, `cli_executable_sha256` and `work_dir` are deliberately
+    // not among them: they name a path on the founder's machine and the hash of
+    // a file nobody else can fetch, and they stay in the private archive. Which
+    // build ran is public as `cli_version`.
     ...copy(metadata, [
       'upstream',
       'canary_upstream',
-      'vendor_prompt_sha256',
-      'canary_vendor_prompt_sha256',
-      'tool_definitions_sha256',
-      'canary_tool_definitions_sha256',
       'request_count',
       'canary_request_count',
-      'main_turn_count',
-      'canary_main_turn_count',
-      'side_request_counts',
-      'canary_side_request_counts',
+      'package_seen',
+      'canary_package_seen',
+      'capture_check_sources',
+      'canary_capture_check_sources',
       'requests_manifest_sha256',
       'canary_requests_manifest_sha256',
     ]),

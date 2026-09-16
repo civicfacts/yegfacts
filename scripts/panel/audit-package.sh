@@ -15,13 +15,13 @@
 # anything about framing. Whatever the seat returned is what lands in the report;
 # reading it and drawing a conclusion is a person's job.
 #
-# Whether it runs at all is the launcher's decision, not this script's. From
-# methodology v1.29 the launcher captures the pinned CLI build's outgoing
-# request and checks it against a pinned profile, so an anthropic audit can
-# complete; openai and google have no capture-backed profile and are still
-# refused, which is why the consultation's commissioned Google audit remains
-# blocked. The whole reason a framing check once read the founder's private
-# memory is that it had its own invocation and its own idea of what was safe.
+# Whether it runs at all is the launcher's decision, not this script's. The
+# launcher captures the CLI's outgoing request and, from methodology v1.30,
+# searches it for the private text on this machine, so an anthropic audit can
+# complete; openai and google have no capture at all and are still refused, which
+# is why the consultation's commissioned Google audit remains blocked. The whole
+# reason a framing check once read the founder's private memory is that it had
+# its own invocation and its own idea of what was safe.
 #
 # A zero exit is not admission. This script reads `admitted_for_research` from
 # the attempt metadata and writes no report unless it is exactly true. The
