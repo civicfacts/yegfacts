@@ -72,9 +72,11 @@ propositions — keep them apart.
 - `proposition` — plain words, one sentence, what would have to be true for
   the claim to hold. Self-contained: a reader who has not seen the thread must
   understand it. No hedging, no verdict.
-- `side` — which side of the bike-lane spending argument the claim serves:
-  `for` (supports the spending or the lanes), `against` (opposes them), or
-  `neither`.
+- `side` — which side of the argument in this source the claim serves:
+  `for`, `against`, or `neither`. The source note that follows these
+  instructions names the argument the people in the source are having and
+  says what `for` and `against` mean in it. Side is a property of the claim
+  in that argument, not of the commenter.
 - `forms` — every place the claim appears, each with:
   - `index` — the comment index, an integer.
   - `commenter` — the pseudonym exactly as printed.
@@ -97,6 +99,13 @@ that fails either is thrown out:
 
 Getting a claim right and its quote wrong is worse than not finding the
 claim: a wrong quote is a false attribution to a real person.
+
+## The source note
+
+After these instructions and before the thread comes a source note: one
+paragraph, written by the run and committed with it, naming the argument the
+source is having and what `for` and `against` mean in it. It describes the
+source. It names no claim and chooses none.
 
 ## Output
 

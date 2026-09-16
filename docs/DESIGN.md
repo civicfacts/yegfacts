@@ -178,7 +178,10 @@ published at `/considered`.
    thread as rendered by `scripts/intake-render-thread.ts`, under
    `prompts/intake-extract.md`, and list every materially factual claim with a
    verbatim quote and the comment index it came from. Seats do no research, do
-   not judge truth, and do not choose.
+   not judge truth, and do not choose. Each seat is also given the run's source
+   note, one committed paragraph naming the argument the source is having and
+   what `for` and `against` mean in it (methodology v1.33); the prompts
+   themselves name no source.
 2. **Quote check.** Before the merge sees them, forms are checked against the
    capture: the quote must be one unbroken run of the comment it cites, and the
    index must exist. Failures are discarded and the discards recorded. A wrong
