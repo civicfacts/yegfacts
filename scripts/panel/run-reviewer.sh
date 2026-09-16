@@ -377,10 +377,11 @@ for attempt in 1 2; do
   fi
 
   # A zero exit means every check passed. It does not mean the run was admitted.
-  # A capture taken against a test upstream, or checked against a substitute pin
-  # table, passes the request check and is still not a research run, and the
-  # launcher says so in `admitted_for_research`. Reading it here is what stops a
-  # response from such a run being published as a review.
+  # A capture taken against a test upstream passes the capture check and is still
+  # not a research run, because the check is about what the CLI sent and the CLI
+  # does not know where it went. The launcher says so in `admitted_for_research`.
+  # Reading it here is what stops a response from such a run being published as a
+  # review.
   #
   # No retry: this is not a reviewer that answered badly, so re-sending the same
   # package would only produce the same unadmitted run again.

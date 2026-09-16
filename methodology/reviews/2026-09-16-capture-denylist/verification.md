@@ -18,10 +18,12 @@ retained privately under the v1.28 terms.
 
 Attempt `e30febe012cd3b6d`. CLI exit 0. Structural canary pass; capture check
 pass. Five requests captured, three of which carried the canary prompt byte
-for byte. The check compared every string in every request against 101
-private sources: four user-level instruction files, the repository's two, 92
-memory files, the repository path, the home path and the canary token, 1,223
-lines in all. No match. The fetch of example.com returned its heading in the
+for byte. The check compared every string in the request bodies against 101
+private sources, all 101 of them present on this machine: four user-level
+instruction files, the repository's two, 92 memory files, the repository path,
+the home path and the canary token, 1,223 lines in all. No match. Only the
+request bodies were searched; the headers, the addresses the requests were sent
+to and the responses are retained and not compared. The fetch of example.com returned its heading in the
 tool's own result, the synthetic token came back null, the tools listed were
 WebFetch and WebSearch. Nothing was admitted, because a diagnostic sends no
 package. Canary capture manifest SHA-256
@@ -36,9 +38,16 @@ point, demonstration package SHA-256
 `56f5b2ce7bb99d201fc2a611b435d09551220182373faf01538c67aab2394e17`. Its own
 canary passed with a passing check (capture manifest
 `95f21a95be7993a283750fe5d3c2352c7fd2c82d970b82ebc8e95e2274cddc95`). The
-research run exited 0 with 20 captured requests, eight carrying the package;
-the same 101 sources and 1,222 lines were checked with no match. Structural
-check pass, capture check pass, admitted for research. The model returned
+research run exited 0 with 20 captured requests, eight carrying the package.
+The same 101 sources were resolved and 100 of them were present: a research run
+plants no canary token, so that one source is recorded as absent rather than
+searched for, which is why this run checked 1,222 lines against the
+diagnostic's 1,223. No match. Structural check pass, capture check pass,
+admitted for research. The public run row shows ten source rows rather than
+101, because the 92 memory files are reported as one row carrying a count of
+how many were found; a manifest row nobody can read is not a public record.
+Each file is still checked on its own, and a refusal would name the one that
+leaked. The model returned
 1,010,899 for the census subdivision and 1,418,118 for the metropolitan area,
 citing Statistics Canada pages, and listed the Statistics Canada pages that
 failed to load through the fetch tool. Those figures are the output of a

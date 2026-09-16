@@ -96,8 +96,10 @@ tests to the new proof input.
 
 - `methodology/changelog.yaml` v1.30, scope `capture-check-simplified`: what
   was removed and why (founder's call on cost and version rot), what remains,
-  the weaker limit stated plainly, and that the September 15 board objection
-  to a convention-only check stands on the record beside this decision.
+  the weaker limit stated plainly, and that the September 9 disposition's
+  objection to a convention-only check, made under v1.28, stands on the record
+  beside this decision. The September 15 technology memo asked for a looser
+  gate than v1.29, which v1.29 refused; v1.30 goes past what it asked for.
 - `src/pages/methodology/index.astro`, reviewer-execution section: keep the
   September 9 and September 15 paragraphs as history; add a dated September
   16 paragraph in plain words: what the check now does, what it no longer

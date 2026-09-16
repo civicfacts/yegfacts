@@ -362,8 +362,14 @@ week and every one of them needed a fresh live capture, a new pin row and a paid
 probe run before a reviewer could run at all; between 2026-09-15 and 2026-09-16
 that was already true of the single row the table held. On 2026-09-16 the founder
 decided that cost was not worth paying and chose a check that cannot rot. Stew
-advised keeping v1.29. The disagreement, and the September 15 review memos'
-objection to a convention-only check, stand on the record beside the decision.
+advised keeping v1.29, and the disagreement stands on the record beside the
+decision. So does the September 9 disposition, which ruled under v1.28 that a
+convention plus disclosure is not enough to admit a reviewer; nothing since has
+withdrawn it. The September 15 technology memo asked for a looser gate than
+v1.29, keeping the vendor prompt hash as a dated observation rather than a
+condition, and v1.29 refused it because a prompt that began carrying memory
+paths would pass a structure-only gate. v1.30 goes past what that memo asked
+for: there is no prompt hash left to observe.
 
 **What v1.30 checks.** `scripts/panel/capture-check.ts` resolves the private text
 that exists on this machine at check time: `$HOME/.claude/CLAUDE.md`,

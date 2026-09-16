@@ -101,9 +101,10 @@ ATTEMPT_DIR="$ARCHIVE_ROOT/audits/${SLUG:-audit}/$PROVIDER/$(date -u +%Y%m%dT%H%
   --attempt-dir "$ATTEMPT_DIR" --label "$LABEL"
 
 # A zero exit means every check passed. It does not mean the run was admitted:
-# a capture taken against a test upstream, or checked against a substitute pin
-# table, passes the request check and is still not a research run. Reading the
-# launcher's own decision is what stops such a response being filed as an audit.
+# a capture taken against a test upstream passes the capture check and is still
+# not a research run, because the check is about what the CLI sent and the CLI
+# does not know where it went. Reading the launcher's own decision is what stops
+# such a response being filed as an audit.
 ADMITTED="$(node -e '
   const fs = require("node:fs");
   let metadata = {};

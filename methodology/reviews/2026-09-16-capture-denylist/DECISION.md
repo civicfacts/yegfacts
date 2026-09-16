@@ -35,9 +35,14 @@ and a line number, never the text.
 Stew recommended keeping the v1.29 allowlist and cutting only the pin rot.
 A denylist over known text can say what the request does not contain; it
 cannot say what it contains, so a new vendor-side injection that carries no
-text from this machine passes. The September 15 board memos had already
-refused a convention-only check, and v1.30 goes further than that refusal
-allowed. The founder's grounds were cost and maintainability: a check that
+text from this machine passes. The September 9 disposition had already ruled,
+under v1.28, that a convention plus disclosure is not enough to admit a
+reviewer, and that ruling has not been withdrawn. The September 15 technology
+memo asked for something looser than v1.29, with the vendor prompt hash kept as
+a dated observation rather than a condition; that release refused it, on the
+ground that a prompt which began carrying memory paths would pass a
+structure-only gate. v1.30 goes past what that memo asked for, because it keeps
+no prompt hash at all. The founder's grounds were cost and maintainability: a check that
 rots on every CLI update and takes a day of model budget to re-derive
 protects nothing once nobody maintains it. Stew accepts that the capture and
 the retention were the part that mattered, and records the disagreement here
