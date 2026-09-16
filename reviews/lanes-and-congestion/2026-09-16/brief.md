@@ -1,16 +1,20 @@
 # Review brief: Do Edmonton's bike lanes ease traffic congestion or make it worse?
 
-Status: **REVISED after framing check 2, not frozen.** Check 1
-(`framing/check-1.md`) and check 2 (`framing/check-2.md`), both from the
-OpenAI seat through `scripts/panel/audit-package.sh`, returned REVISE.
-Each report's defect findings are corrected in the checker's exact
-wording and each report's framing findings are answered, with what
-changed, in `framing/response-1.md` and `framing/response-2.md`. One
-claim, `79-street-relieves-75-street`, left the brief after check 1; see
-"Dropped at the brief". The brief goes back for check 3, the last the cap
-allows. The freeze is the sha256 of this file, recorded in
-`run-record.md` with the one line that recomputes it, once a check
-returns FRAME OK.
+Status: **PARKED 2026-09-16 on framing check 3 REVISE, under the v1.12
+three-report cap. NOT frozen; no panel may run.** Checks 1, 2 and 3
+(`framing/check-1.md`, `check-2.md`, `check-3.md`), all from the OpenAI
+seat through `scripts/panel/audit-package.sh` under methodology v1.31,
+each returned REVISE. Checks 1 and 2 were answered in full
+(`framing/response-1.md`, `response-2.md`) and this text is the brief as
+revised after check 2; check 3's findings are not applied, because the
+cap ends the round, and `run-record.md` records what the editor would
+have adopted and why. Check 3's decisive finding is that no published
+Edmonton source plausibly supplies the decisive instrument for claims 1,
+2 or 4 at the causal level, and that claim 3 is checkable. Under the rule
+as written this brief reopens only on new intake evidence; OQ-27 on the
+board asks whether the rule should have a step for this case. One claim,
+`79-street-relieves-75-street`, left the brief after check 1; see
+"Dropped at the brief".
 Drafted 2026-09-16 and revised twice the same day by Stew.
 Methodology v1.32.
 Question id: `lanes-and-congestion`. Register entry: `intake/register.yaml`.
