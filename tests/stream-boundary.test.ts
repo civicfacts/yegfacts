@@ -1,15 +1,15 @@
 /**
- * The line between "we checked the configuration" and "we proved the context".
+ * The line between "we checked the configuration" and "we checked the context".
  *
  * The structural checks read the stream, which is the host reporting on itself.
- * The context proof reads the captured request, which is what the host actually
+ * The capture check reads the captured request, which is what the host actually
  * sent. They are different evidence and the lock here is that structural
  * cleanliness alone never admits a run: a stream that passes every check with
  * no capture behind it is still refused, and if someone later makes
  * `admitForResearch` pass by tightening the structural checks, that test fails.
  */
 import { describe, expect, it } from 'vitest';
-import type { ProofResult } from '../scripts/panel/request-proof.ts';
+import type { CaptureCheckResult } from '../scripts/panel/capture-check.ts';
 import {
   admitForResearch,
   checkCanary,
@@ -18,8 +18,8 @@ import {
   readStream,
 } from '../scripts/panel/stream-boundary.ts';
 
-const PROBED = '2.1.267';
-const expectation = { allowedTools: ['WebFetch', 'WebSearch'], supportedVersions: [PROBED] };
+const VERSION = '2.1.267';
+const expectation = { allowedTools: ['WebFetch', 'WebSearch'] };
 
 const init = (over: Record<string, unknown> = {}) =>
   JSON.stringify({
@@ -34,7 +34,7 @@ const init = (over: Record<string, unknown> = {}) =>
     agents: ['claude', 'Explore', 'general-purpose', 'Plan'],
     output_style: 'default',
     permissionMode: 'default',
-    claude_code_version: PROBED,
+    claude_code_version: VERSION,
     ...over,
   });
 
@@ -97,9 +97,17 @@ describe('structural checks', () => {
     expect(checkStructure(readStream(cleanStream), expectation)).toEqual({ ok: true, failures: [] });
   });
 
-  it('fails an unprobed CLI version', () => {
-    const facts = readStream(cleanStream.replace(PROBED, '3.0.0'));
-    expect(checkStructure(facts, expectation).failures.join()).toMatch(/has no probed profile/);
+  /**
+   * The version is recorded, not gated (methodology v1.30). A build nobody has
+   * probed is the normal case now: the vendor ships several a week, and the
+   * capture check does not depend on which one sent the request.
+   */
+  it('accepts a CLI version nobody has probed, and fails a stream that names none', () => {
+    const newer = readStream(cleanStream.replace(VERSION, '3.0.0'));
+    expect(checkStructure(newer, expectation)).toEqual({ ok: true, failures: [] });
+
+    const anonymous = readStream(`${init({ claude_code_version: undefined })}\n${done()}`);
+    expect(checkStructure(anonymous, expectation).failures).toContain('the run reported no CLI version');
   });
 });
 
@@ -131,24 +139,16 @@ describe('canary', () => {
 });
 
 describe('research admission', () => {
-  const proofResult = (over: Partial<ProofResult> = {}): ProofResult => ({
+  const captureResult = (over: Partial<CaptureCheckResult> = {}): CaptureCheckResult => ({
     status: 'pass',
-    requests: [],
     failures: [],
-    disclosed: [],
-    observations: [],
-    summary: {
-      upstream: 'https://api.anthropic.com',
-      production_upstream: true,
-      cli_version: PROBED,
-      model: 'claude-opus-5',
-      effort: 'high',
-      vendor_prompt_sha256: 'a'.repeat(64),
-      tool_definitions_sha256: { WebFetch: 'b'.repeat(64), WebSearch: 'c'.repeat(64) },
-      request_count: 3,
-      main_turn_count: 1,
-      side_request_counts: {},
-    },
+    sources: [
+      { name: '$HOME/.claude/CLAUDE.md', present: true, lines_checked: 12 },
+      { name: '$HOME/.codex/AGENTS.md', present: false, lines_checked: 0 },
+    ],
+    package_seen: 2,
+    requests: 4,
+    searched: 3,
     ...over,
   });
 
@@ -158,10 +158,26 @@ describe('research admission', () => {
     expect(proof.reason).toMatch(/no request capture was taken/);
   });
 
-  it('reports a failed proof with the reason the request check gave', () => {
-    const proof = contextProof(proofResult({ status: 'fail', failures: ['req-0003.json: a third tool'] }));
+  it('reports a failed check with the reason the capture check gave', () => {
+    const proof = contextProof(
+      captureResult({ status: 'fail', failures: ['req-0003.json: carries $HOME/CLAUDE.md line 4'] }),
+    );
     expect(proof.status).toBe('fail');
-    expect(proof.reason).toMatch(/a third tool/);
+    expect(proof.reason).toMatch(/carries \$HOME\/CLAUDE\.md line 4/);
+  });
+
+  it('states the limit in the reason a passing check gives', () => {
+    const proof = contextProof(captureResult());
+    expect(proof.status).toBe('pass');
+    // Counts from the sources that were actually present, and the limit said
+    // plainly in the same breath as the pass.
+    expect(proof.reason).toMatch(/3 of 4 captured request\(s\) had a JSON body/);
+    expect(proof.reason).toMatch(/12 line\(s\) of private text from 1 source\(s\)/);
+    // The scope of the search, said in the same breath as the pass: request
+    // bodies only, so nobody reads "the request was checked" as "everything was".
+    expect(proof.reason).toMatch(/not the HTTP headers, the request URLs or the\s+responses/);
+    expect(proof.reason).toMatch(/does not say what they did\s+contain/);
+    expect(proof.reason).toMatch(/cannot see text the vendor attaches that is not on this machine/);
   });
 
   /**
@@ -178,25 +194,25 @@ describe('research admission', () => {
     expect(verdict.failures[0]).toMatch(/^context proof unavailable:/);
   });
 
-  it('refuses a clean stream whose capture did not match the pins', () => {
-    const verdict = admitForResearch(readStream(cleanStream), expectation, proofResult({
+  it('refuses a clean stream whose capture carried private text', () => {
+    const verdict = admitForResearch(readStream(cleanStream), expectation, captureResult({
       status: 'fail',
-      failures: ['req-0003.json: messages[0][4] is not the declared package byte for byte'],
+      failures: ['req-0003.json: carries $HOME/.claude/CLAUDE.md line 7'],
     }));
     expect(verdict.ok).toBe(false);
     expect(verdict.failures[0]).toMatch(/^context proof fail:/);
   });
 
-  it('admits a clean stream with a passing proof', () => {
-    const verdict = admitForResearch(readStream(cleanStream), expectation, proofResult());
+  it('admits a clean stream with a passing capture check', () => {
+    const verdict = admitForResearch(readStream(cleanStream), expectation, captureResult());
     expect(verdict).toEqual({ ok: true, failures: [] });
   });
 
-  it('still refuses a passing proof when the stream itself is not clean', () => {
-    const facts = readStream(cleanStream.replace(PROBED, '3.0.0'));
-    const verdict = admitForResearch(facts, expectation, proofResult());
+  it('still refuses a passing capture check when the stream itself is not clean', () => {
+    const facts = readStream(cleanStream.replace('"skills":[]', '"skills":["ponytail"]'));
+    const verdict = admitForResearch(facts, expectation, captureResult());
     expect(verdict.ok).toBe(false);
-    expect(verdict.failures.join()).toMatch(/has no probed profile/);
+    expect(verdict.failures.join()).toMatch(/skills were loaded: ponytail/);
   });
 });
 

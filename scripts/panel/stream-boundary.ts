@@ -12,28 +12,34 @@
  * checkable.
  *
  * QUESTION TWO, which the stream does NOT answer: what context was actually
- * sent? Nothing in the stream carries the outgoing request, and until
- * 2026-09-15 nothing inspected in Claude Code did. What answers it is the
- * request itself: Claude Code 2.1.272 honours `ANTHROPIC_BASE_URL`, so
+ * sent? Nothing in the stream carries the outgoing request. What answers it is
+ * the request itself: Claude Code honours `ANTHROPIC_BASE_URL`, so
  * `record-proxy.mjs` retains every request the CLI addressed to the API and
- * `request-proof.ts` checks it against a pinned description of a clean one.
+ * `capture-check.ts` searches those bytes for the private text that exists on
+ * this machine.
  *
- * So `contextProof()` stopped being a constant. It takes that proof and returns
- * `pass`, `fail`, or `unavailable` when no capture was taken, and
- * `admitForResearch` admits a structurally clean stream only when the proof
+ * So `contextProof()` is not a constant. It takes the capture check's result and
+ * returns `pass`, `fail`, or `unavailable` when no capture was taken, and
+ * `admitForResearch` admits a structurally clean stream only when the check
  * passed. The structural checks still all apply; they were never the contract
  * on their own and they still are not.
  *
- * WHAT A PASS DOES NOT COVER. The proxy sees what the CLI sends to its
- * configured base URL and nothing else on the machine. The vendor prompt is
- * pinned by hash, not read. The request carries the operator's account email
- * and working directory in the vendor's own reminder blocks; those are recorded
- * and published as host context, not treated as absent. Codex and Google have
- * no capture-backed profile, so their seats stay blocked.
+ * WHAT A PASS DOES NOT COVER. From methodology v1.30 the capture check is a
+ * denylist, not a description. It catches known private text from this machine.
+ * It cannot catch text the vendor attaches that is not on this machine, and it
+ * does not say what the request contains, only what it does not contain. The
+ * proxy sees what the CLI sends to its configured base URL and nothing else on
+ * the machine. Codex and Google have no capture at all, so their seats stay
+ * blocked.
  */
 import { readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { type ProofResult, loadPins, proveRequests, readCapture } from './request-proof.ts';
+import {
+  type CaptureCheckResult,
+  checkCapture,
+  privateSources,
+  readCapture,
+} from './capture-check.ts';
 
 type Json = Record<string, unknown>;
 
@@ -268,8 +274,6 @@ export type Verdict = { ok: boolean; failures: string[] };
 export type StructureExpectation = {
   /** Exactly the tools the profile allows. Anything more or less fails. */
   allowedTools: string[];
-  /** Versions actually probed. An unknown version fails closed. */
-  supportedVersions: string[];
 };
 
 /**
@@ -301,12 +305,13 @@ export function checkStructure(facts: StreamFacts, expected: StructureExpectatio
     failures.push(`tool_result with no matching tool_use: ${facts.orphan_tool_result_ids.join(', ')}`);
   }
 
+  // The version is recorded, not gated. Methodology v1.30 removed the
+  // allowlist: the vendor ships builds several times a week, and a check that
+  // refuses every build nobody has probed yet refuses almost every day. What is
+  // still required is that the run said which build it was, because a run that
+  // will not name itself cannot be written down honestly.
   if (facts.cli_version === null) {
     failures.push('the run reported no CLI version');
-  } else if (!expected.supportedVersions.includes(facts.cli_version)) {
-    failures.push(
-      `CLI version ${facts.cli_version} has no probed profile (probed: ${expected.supportedVersions.join(', ')})`,
-    );
   }
 
   const wanted = [...expected.allowedTools].sort();
@@ -371,20 +376,21 @@ export function checkStructure(facts: StreamFacts, expected: StructureExpectatio
 export type ContextProof = { status: 'pass' | 'fail' | 'unavailable'; reason: string };
 
 /**
- * Whether the actual context sent to the model was captured and inspected.
+ * Whether the actual context sent to the model was captured and searched.
  *
  * Three answers, and the difference between them matters. `unavailable` means
- * no capture was taken, which is where every run before 2026-09-15 sits and
- * where a run without a proxy still sits: nothing was shown, so nothing is
- * claimed. `fail` means a capture was taken and the request was not the one the
- * profile pins. `pass` means every request the CLI sent to its base URL matched
- * the pinned shapes, for that attempt, under that CLI version.
+ * no capture was taken: nothing was shown, so nothing is claimed. `fail` means a
+ * capture was taken and it carried private text from this machine, or it did not
+ * carry the declared package at all. `pass` means none of the private text this
+ * machine holds appeared anywhere in any captured request, and the package did.
  *
- * A pass is not a vendor guarantee and not a statement about anything the CLI
- * sent elsewhere. `request-proof.ts` says exactly what it covers.
+ * A pass is a statement about what the request did NOT contain. It is not a
+ * description of what it did contain, it does not cover text the vendor attaches
+ * that is not on this machine, and it is not a vendor guarantee.
+ * `capture-check.ts` says exactly what it covers.
  */
-export function contextProof(proof: ProofResult | null): ContextProof {
-  if (!proof) {
+export function contextProof(check: CaptureCheckResult | null): ContextProof {
+  if (!check) {
     return {
       status: 'unavailable',
       reason:
@@ -393,19 +399,23 @@ export function contextProof(proof: ProofResult | null): ContextProof {
         'about loading, not about what was sent.',
     };
   }
-  if (proof.status === 'pass') {
+  if (check.status === 'pass') {
+    const read = check.sources.filter((source) => source.present);
+    const lines = read.reduce((total, source) => total + source.lines_checked, 0);
     return {
       status: 'pass',
       reason:
-        `every request the CLI sent to ${proof.summary.upstream} was captured and matched the pinned ` +
-        `profile for ${proof.summary.cli_version}: ${proof.summary.request_count} request(s), ` +
-        `${proof.summary.main_turn_count} main turn(s). The account email and working directory the ` +
-        'vendor reminder blocks carry are recorded in the proof report as disclosed host context.',
+        `${check.searched} of ${check.requests} captured request(s) had a JSON body and were searched for ` +
+        `${lines} line(s) of private text from ${read.length} source(s) on this machine, and none of it ` +
+        `appeared. ${check.package_seen} request(s) carried the declared package byte for byte. Only the ` +
+        'string values of those bodies were searched, not the HTTP headers, the request URLs or the ' +
+        'responses. This says what the request bodies did not contain; it does not say what they did ' +
+        'contain, and it cannot see text the vendor attaches that is not on this machine.',
     };
   }
   return {
     status: 'fail',
-    reason: `the captured request did not match the pinned profile: ${proof.failures.join('; ')}`,
+    reason: `the captured request did not pass the private-text check: ${check.failures.join('; ')}`,
   };
 }
 
@@ -484,10 +494,10 @@ export function checkCanary(facts: StreamFacts, expected: CanaryExpectation): Ve
 export function admitForResearch(
   facts: StreamFacts,
   expected: StructureExpectation,
-  proofResult: ProofResult | null,
+  check: CaptureCheckResult | null,
 ): Verdict {
   const structure = checkStructure(facts, expected);
-  const proof = contextProof(proofResult);
+  const proof = contextProof(check);
   const failures = [...structure.failures];
   if (proof.status !== 'pass') failures.push(`context proof ${proof.status}: ${proof.reason}`);
   return { ok: failures.length === 0, failures };
@@ -498,16 +508,15 @@ export function admitForResearch(
  * complete final message out as its own bytes.
  *
  *   tsx stream-boundary.ts <stream.jsonl> --report <out.json> [--final <out.txt>]
- *                          [--check canary|research] [--tools A,B]
- *                          [--versions X,Y] [--token T]
+ *                          [--check canary|research] [--tools A,B] [--token T]
  *                          [--expect-url U] [--expect-heading S]
- *                          [--requests <dir> --package <file>
- *                           --work-dir <dir> --model <id> [--pins <file>]]
+ *                          [--requests <dir> --package <file>]
  *
- * With `--requests`, the capture in that directory is proved against the pins
- * for the CLI version the stream reported, and the proof goes into the report
- * beside the stream facts. Without it the context proof is `unavailable` and
- * `--check research` cannot pass.
+ * With `--requests`, the capture in that directory is searched for the private
+ * text on this machine, and the result goes into the report beside the stream
+ * facts. Without it the context proof is `unavailable` and `--check research`
+ * cannot pass. `--token` is both the canary token the stream must not echo and
+ * one of the strings the capture must not carry; a research run has neither.
  *
  * Exit 0 means the named check passed. Exit 1 prints the failures and writes the
  * report and the final message anyway, because a failed attempt is the one most
@@ -555,33 +564,33 @@ if (isEntryPoint()) {
   const facts = readStream(raw);
   const list = (value: string | undefined) =>
     (value ?? '').split(',').map((item) => item.trim()).filter(Boolean);
-  const expectation: StructureExpectation = {
-    allowedTools: list(flags.tools),
-    supportedVersions: list(flags.versions),
-  };
+  const expectation: StructureExpectation = { allowedTools: list(flags.tools) };
 
-  // The proof runs before the verdict and is reported whatever the verdict is.
-  // A canary whose stream passed and whose request did not is the interesting
-  // case, and it has to be visible rather than folded into one word.
-  let proof: ProofResult | null = null;
+  // The capture check runs before the verdict and is reported whatever the
+  // verdict is. A canary whose stream passed and whose request did not is the
+  // interesting case, and it has to be visible rather than folded into one word.
+  //
+  // The private sources are resolved HERE, against this machine, at this moment.
+  // $HOME is the operator's real home unless a test points it somewhere else,
+  // and the repository root is this script's own, two directories up.
+  let check: CaptureCheckResult | null = null;
+  let captureFacts: { upstream: string; requests_manifest_sha256: string } | null = null;
   if (flags.requests) {
     const capture = readCapture(flags.requests);
-    proof = proveRequests({
+    check = checkCapture({
       requests: capture.requests,
-      upstream: capture.upstream,
-      requestsManifestSha256: capture.requestsManifestSha256,
       packageText: flags.package ? readFileSync(flags.package, 'utf8') : '',
-      workDir: flags['work-dir'] ?? '',
-      model: flags.model ?? '',
-      cliVersion: facts.cli_version ?? 'unknown',
-      // Built-in unless a table is named. See loadPins for why that is possible
-      // at all and what the launcher makes it cost.
-      ...(flags.pins ? { pins: loadPins(flags.pins) } : {}),
-      stream: {
-        toolUseIds: facts.tool_calls.map((call) => call.id),
-        assistantTurns: facts.assistant_turns,
-      },
+      token: flags.token ?? '',
+      sources: privateSources({
+        home: process.env.HOME ?? '',
+        repoRoot: fileURLToPath(new URL('../..', import.meta.url)).replace(/\/$/, ''),
+        token: flags.token ?? '',
+      }),
     });
+    captureFacts = {
+      upstream: capture.upstream,
+      requests_manifest_sha256: capture.requestsManifestSha256,
+    };
   }
 
   let verdict: Verdict;
@@ -594,15 +603,18 @@ if (isEntryPoint()) {
         expectedHeading: flags['expect-heading'] ?? '',
         rawText: raw,
       });
-      // The canary proves the profile, so its own request is proved too. Without
-      // this a failing canary capture would be written down and ignored.
-      if (proof && proof.status !== 'pass') {
-        verdict = { ok: false, failures: [...verdict.failures, ...proof.failures.map((f) => `request proof: ${f}`)] };
+      // The canary proves the profile, so its own request is checked too.
+      // Without this a failing canary capture would be written down and ignored.
+      if (check && check.status !== 'pass') {
+        verdict = {
+          ok: false,
+          failures: [...verdict.failures, ...check.failures.map((f) => `capture check: ${f}`)],
+        };
       }
       break;
     }
     case 'research':
-      verdict = admitForResearch(facts, expectation, proof);
+      verdict = admitForResearch(facts, expectation, check);
       break;
     default:
       console.error('--check must be canary or research');
@@ -619,8 +631,11 @@ if (isEntryPoint()) {
         {
           check: flags.check,
           ...verdict,
-          context_proof: contextProof(proof),
-          request_proof: proof,
+          context_proof: contextProof(check),
+          // The upstream and the manifest hash are facts about the capture
+          // directory rather than about the denylist, so they are added here
+          // rather than smuggled into a pure function's result.
+          capture_check: check ? { ...check, ...captureFacts } : null,
           facts,
         },
         null,

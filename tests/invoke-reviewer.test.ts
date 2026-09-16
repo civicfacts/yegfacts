@@ -10,25 +10,26 @@
  *
  * It also makes real HTTP requests. `$ANTHROPIC_BASE_URL` points at the real
  * recording proxy, the proxy forwards to a stub upstream this file started, and
- * what the stub posts is the sanitized 2026-09-15 capture fixture. So the
- * capture the proof reads was produced by an actual request through the actual
- * proxy, rather than by a file a test wrote where the capture should be.
+ * the stub posts a real set of request bodies. So the capture the check reads
+ * was produced by an actual request through the actual proxy, rather than by a
+ * file a test wrote where the capture should be.
+ *
+ * Each stub also gets its own HOME, carrying a CLAUDE.md and a project memory
+ * file written for the test. That is the machine the capture check reads: a
+ * leaking scenario copies a line of those files into its request for real, and
+ * the check has to catch it by finding that line rather than by being told.
  *
  * The stream fixtures copy the shapes of a real stream, including the
  * `system/thinking_tokens` events that show up between the interesting ones and
  * the `tool_result` blocks that arrive on `user` events. None of it is invented;
  * a parser tested only against fixtures a CLI cannot emit tests nothing.
  *
- * TWO THINGS EVERY RUN HERE FALLS SHORT OF, on purpose. The upstream is a stub,
- * not api.anthropic.com. And the pin table is a substitute, because the built-in
- * one pins the vendor prompt and the tool definitions by hash and this
- * repository does not carry their text. Either one alone means
- * `admitted_for_research` is false however cleanly everything else passes, and
- * the reason is recorded. That is the behaviour under test, not a limitation of
- * the test.
+ * WHAT EVERY RUN HERE FALLS SHORT OF, on purpose: the upstream is a stub, not
+ * api.anthropic.com. That alone means `admitted_for_research` is false however
+ * cleanly everything else passes, and the reason is recorded. That is the
+ * behaviour under test, not a limitation of the test.
  */
 import { spawn, spawnSync } from 'node:child_process';
-import { createHash } from 'node:crypto';
 import http from 'node:http';
 import {
   chmodSync,
@@ -40,9 +41,7 @@ import {
   readdirSync,
   realpathSync,
   rmSync,
-  statSync,
   symlinkSync,
-  unlinkSync,
   writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -50,18 +49,21 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import YAML from 'yaml';
-import { PINS } from '../scripts/panel/request-proof.ts';
-import { fixturePins } from './stub-request-poster.mjs';
 
 const REAL_REPO = fileURLToPath(new URL('..', import.meta.url));
 const INVOKE = path.join(REAL_REPO, 'scripts', 'panel', 'invoke-reviewer.sh');
 const STORY = 'stub-story';
 const RUN_DATE = '2026-09-09';
-const PROBED_VERSION = '2.1.272';
-/** The pins are keyed by build and model, because the request shape needs both. */
-const PINNED_MODEL = 'claude-opus-5';
-const FIXTURE_CAPTURE = path.join(REAL_REPO, 'tests', 'fixtures', 'request-capture');
+/** What the stub CLI answers to `--version`, recorded and no longer gated. */
+const STUB_VERSION = '2.1.272';
 const POSTER = path.join(REAL_REPO, 'tests', 'stub-request-poster.mjs');
+
+/**
+ * The private text the stub machine holds. A leaking run copies one of these
+ * lines into its request, and the capture check has to find it there.
+ */
+const HOME_INSTRUCTION = 'Answer in the house voice and follow the rules in this file.';
+const MEMORY_NOTE = 'The founder runs parallel sessions; stage commits by explicit file names.';
 
 // realpath, because macOS hands out /var/folders paths that are symlinks into
 // /private, and the launcher resolves before it compares.
@@ -217,7 +219,7 @@ const initEvent = (over: Record<string, unknown> = {}) =>
     model: 'claude-opus-5',
     permissionMode: 'default',
     slash_commands: [],
-    claude_code_version: PROBED_VERSION,
+    claude_code_version: STUB_VERSION,
     output_style: 'default',
     agents: ['claude', 'Explore', 'general-purpose', 'Plan'],
     skills: [],
@@ -304,15 +306,6 @@ const validReview = (() => {
 // network and every test still goes through the proxy for real.
 // ---------------------------------------------------------------------------
 const UPSTREAM_PORT_FILE = path.join(root, 'upstream-port');
-/**
- * The substitute pin row every stub run is checked against. Each stub writes
- * its own copy with its own `binarySha256`, because the stub script embeds its
- * own paths and so has a different hash in every test.
- */
-const FIXTURE_PIN_ROW = fixturePins(FIXTURE_CAPTURE, PINS[PROBED_VERSION]![PINNED_MODEL]!) as Record<
-  string,
-  unknown
->;
 let upstream: ReturnType<typeof spawn>;
 let upstreamUrl = '';
 
@@ -333,32 +326,28 @@ afterAll(() => upstream?.kill('SIGKILL'));
 type Stub = { dir: string; archive: string; env: NodeJS.ProcessEnv };
 
 /**
- * The stub `claude`. It posts the capture fixture to whatever
+ * The stub `claude`. It posts a real set of request bodies to whatever
  * `$ANTHROPIC_BASE_URL` names and writes a stream-json fixture to stdout, which
  * is the pair of things a real invocation produces and the pair the launcher
  * checks. `mutate` breaks one piece of the request on purpose, per run, so the
  * canary and the research run can be made to fail independently.
  *
- * HOME is always a directory inside the stub, so a test decides whether a
- * versioned install exists rather than inheriting whatever this machine has
- * under `~/.local/share/claude/versions`. By default the install is there, at
- * the pinned version, because from v1.29 there is no PATH fallback: the PATH
- * copy exists only to be asked its version. `installVersion: null` takes the
- * install away, `version` is what the install (and the archived copy of it)
- * reports, `pathVersion` is what the PATH copy reports, and `binaryHash`
- * substitutes a wrong hash into the stub's own pin row.
+ * HOME is always a directory inside the stub, and it holds a `.claude/CLAUDE.md`
+ * and a project memory file. That is the private text the capture check reads:
+ * a `leak-home` or `leak-memory` run copies a line of one of them into its
+ * request for real, and `no-package` sends a request that does not carry the
+ * declared package at all.
  *
- * The script records which copy ran — "archived", "installed" or "path" — so a
- * test can see that the pin was held rather than inferring it.
+ * From methodology v1.30 there is no pinned build and no version gate, so there
+ * is one stub executable and it sits on PATH, which is where the launcher now
+ * looks. `version` is what it answers to `--version`, which is recorded and
+ * nothing more.
  */
 function stubClaude(
   options: {
     canary?: string;
     canaryExit?: number;
     version?: string;
-    pathVersion?: string;
-    installVersion?: string | null;
-    binaryHash?: string;
     research?: string;
     researchExit?: number;
     mutateCanary?: string;
@@ -369,13 +358,16 @@ function stubClaude(
   const bin = path.join(dir, 'bin');
   mkdirSync(bin);
   const home = path.join(dir, 'home');
-  mkdirSync(home);
-  const reports = `${options.version ?? PROBED_VERSION} (Claude Code)\n`;
-  writeFileSync(path.join(dir, 'version-path'), `${options.pathVersion ?? PROBED_VERSION} (Claude Code)\n`);
-  writeFileSync(path.join(dir, 'version-installed'), reports);
-  // The archived copy is a byte copy of the installed file, so it answers the
-  // same way and hashes the same way.
-  writeFileSync(path.join(dir, 'version-archived'), reports);
+  mkdirSync(path.join(home, '.claude', 'projects', 'stub-project', 'memory'), { recursive: true });
+  writeFileSync(
+    path.join(home, '.claude', 'CLAUDE.md'),
+    `# Global instructions\n\n${HOME_INSTRUCTION}\n`,
+  );
+  writeFileSync(
+    path.join(home, '.claude', 'projects', 'stub-project', 'memory', 'notes.md'),
+    `# Memory\n\n${MEMORY_NOTE}\n`,
+  );
+  writeFileSync(path.join(dir, 'version'), `${options.version ?? STUB_VERSION} (Claude Code)\n`);
   writeFileSync(path.join(dir, 'canary.jsonl'), options.canary ?? goodCanary);
   writeFileSync(path.join(dir, 'canary.exit'), String(options.canaryExit ?? 0));
   writeFileSync(path.join(dir, 'research.jsonl'), options.research ?? researchRun('the package was sent'));
@@ -383,13 +375,7 @@ function stubClaude(
 
   const script = `#!/usr/bin/env bash
 set -u
-case "$0" in
-  */cli/claude-*) me=archived ;;
-  */versions/*) me=installed ;;
-  *) me=path ;;
-esac
-echo "$me" >> "${dir}/invoked-as"
-if [ "\${1:-}" = "--version" ]; then cat "${dir}/version-$me"; exit 0; fi
+if [ "\${1:-}" = "--version" ]; then cat "${dir}/version"; exit 0; fi
 
 model=""
 prev=""
@@ -412,7 +398,7 @@ if [ "$kind" = canary ]; then mutate="\${STUB_MUTATE_CANARY:-}"; else mutate="\$
 # The part that makes the capture real: an actual request, through the actual
 # proxy, from the directory the launcher chose.
 if [ -n "\${ANTHROPIC_BASE_URL:-}" ]; then
-  "${process.execPath}" "${POSTER}" --base "$ANTHROPIC_BASE_URL" --fixture "${FIXTURE_CAPTURE}" \
+  "${process.execPath}" "${POSTER}" --base "$ANTHROPIC_BASE_URL" \
     --package "$stdin" --work-dir "$(pwd -P)" --model "$model" --mutate "$mutate"
 fi
 
@@ -431,34 +417,6 @@ exit "$(cat "${dir}/research.exit")"
   writeFileSync(claude, script);
   chmodSync(claude, 0o755);
 
-  const installVersion = options.installVersion === undefined ? PROBED_VERSION : options.installVersion;
-  if (installVersion) {
-    const versions = path.join(home, '.local', 'share', 'claude', 'versions');
-    mkdirSync(versions, { recursive: true });
-    const installed = path.join(versions, installVersion);
-    writeFileSync(installed, script);
-    chmodSync(installed, 0o755);
-  }
-
-  // The stub's own pin row, because the stub script embeds its own paths and so
-  // hashes differently in every test.
-  const pinsFile = path.join(dir, 'pins.json');
-  writeFileSync(
-    pinsFile,
-    `${JSON.stringify(
-      {
-        [PROBED_VERSION]: {
-          [PINNED_MODEL]: {
-            ...FIXTURE_PIN_ROW,
-            binarySha256: options.binaryHash ?? createHash('sha256').update(script, 'utf8').digest('hex'),
-          },
-        },
-      },
-      null,
-      2,
-    )}\n`,
-  );
-
   const archive = mkdtempSync(path.join(root, 'archive-'));
   return {
     dir,
@@ -469,7 +427,6 @@ exit "$(cat "${dir}/research.exit")"
       PATH: `${bin}:${process.env.PATH ?? ''}`,
       YEGFACTS_REVIEW_ARCHIVE: archive,
       YEGFACTS_REVIEW_UPSTREAM: upstreamUrl,
-      YEGFACTS_REVIEW_PINS: pinsFile,
       ...(options.mutateCanary ? { STUB_MUTATE_CANARY: options.mutateCanary } : {}),
       ...(options.mutateResearch ? { STUB_MUTATE_RESEARCH: options.mutateResearch } : {}),
     },
@@ -478,12 +435,6 @@ exit "$(cat "${dir}/research.exit")"
 
 /** True when the stub was ever handed a real package rather than the canary. */
 const packageWasSent = (stub: Stub) => existsSync(path.join(stub.dir, 'package-sent.txt'));
-
-/** Which copy of the stub ran, in order: "installed" or "path", one per exec. */
-const invokedAs = (stub: Stub): string[] => {
-  const file = path.join(stub.dir, 'invoked-as');
-  return existsSync(file) ? readFileSync(file, 'utf8').trim().split('\n') : [];
-};
 
 /** spawnSync, not execFileSync: the launcher says what it decided on stderr, and
  * that has to be readable when it succeeded as well as when it refused. The
@@ -587,11 +538,10 @@ describe('research admission', { timeout: 60_000 }, () => {
 /**
  * The research path, end to end, through the real proxy.
  *
- * "End to end" stops short of admission on purpose, twice over: the upstream is
- * a stub and the pin table is a substitute. Both are recorded and either one
- * makes `admitted_for_research` false, which is the property these tests are
- * really about — a run can pass every check it is capable of passing and still
- * not be admitted, and the row has to say why.
+ * "End to end" stops short of admission on purpose: the upstream is a stub, that
+ * is recorded, and it makes `admitted_for_research` false. That is the property
+ * these tests are really about — a run can pass every check it is capable of
+ * passing and still not be admitted, and the row has to say why.
  */
 describe('research run', { timeout: 120_000 }, () => {
   const research = (stub: Stub, name: string, extra: string[] = []) => {
@@ -605,7 +555,7 @@ describe('research run', { timeout: 120_000 }, () => {
     return { ...result, attempt, pkg };
   };
 
-  it('captures and proves both runs, sends the package, and leaves the contract files', () => {
+  it('captures and checks both runs, sends the package, and leaves the contract files', () => {
     const stub = stubClaude({ research: researchRun('a report a reader could use') });
     const { ok, stderr, attempt, pkg } = research(stub, 'happy');
 
@@ -635,19 +585,49 @@ describe('research run', { timeout: 120_000 }, () => {
     expect(metadata.structure).toBe('pass');
     expect(metadata.context_proof).toBe('pass');
     expect(metadata.canary_context_proof).toBe('pass');
-    expect(metadata.main_turn_count).toBe(1);
     expect(metadata.request_count).toBe(4);
+    // Four captured, three walked: the HEAD connectivity check has no JSON body.
+    expect(metadata.requests_searched).toBe(3);
+    // The package leaves twice per attempt: the session title and the main turn.
+    expect(metadata.package_seen).toBe(2);
     expect(metadata.upstream).toBe(upstreamUrl);
     expect(metadata.requests_manifest_sha256).toMatch(/^[0-9a-f]{64}$/);
     expect(metadata.proof_report_sha256).toMatch(/^[0-9a-f]{64}$/);
     // Recorded privately and never anywhere else.
     expect(metadata.cli_executable).toContain('claude');
 
-    // Every check passed and the run is still not admitted, for the two stated
-    // reasons. This is the assertion the whole release turns on.
+    // Which private sources were read, by symbolic name and line count. The
+    // stub HOME's two files are there, present, with the lines this test wrote.
+    const sources = metadata.capture_check_sources as {
+      name: string;
+      present: boolean;
+      lines_checked: number;
+      files?: number;
+    }[];
+    expect(sources.find((one) => one.name === '$HOME/.claude/CLAUDE.md')).toEqual({
+      name: '$HOME/.claude/CLAUDE.md',
+      present: true,
+      lines_checked: 1,
+    });
+    // The memory files are ONE row with a count, not one row each. On the
+    // founder's machine there are 92 of them, and 92 rows is not a record
+    // anyone reads.
+    expect(sources.find((one) => one.name === '$HOME/.claude/projects/*/memory/*.md')).toEqual({
+      name: '$HOME/.claude/projects/*/memory/*.md',
+      present: true,
+      files: 1,
+      lines_checked: 1,
+    });
+    expect(sources.filter((one) => one.name.includes('memory'))).toHaveLength(1);
+    expect(JSON.stringify(sources)).not.toContain('memory/*.md (');
+    // Names and counts only: no line of any private file is in the record.
+    expect(JSON.stringify(sources)).not.toContain(HOME_INSTRUCTION);
+    expect(JSON.stringify(sources)).not.toContain(MEMORY_NOTE);
+
+    // Every check passed and the run is still not admitted, for the stated
+    // reason. This is the assertion the whole release turns on.
     expect(metadata.admitted_for_research).toBe(false);
-    expect(metadata.pins_source).toBe('override');
-    expect(String(metadata.admission_reason)).toMatch(/substitute pin table|rather than https:\/\/api\.anthropic\.com/);
+    expect(String(metadata.admission_reason)).toMatch(/rather than https:\/\/api\.anthropic\.com/);
 
     const row = JSON.parse(
       run([
@@ -658,11 +638,13 @@ describe('research run', { timeout: 120_000 }, () => {
     expect(row.context_proof).toBe('pass');
     expect(row.admitted_for_research).toBe(false);
     expect(row.upstream).toBe(upstreamUrl);
-    expect(row.pins_source).toBe('override');
-    expect(row.main_turn_count).toBe(1);
-    expect(row.tool_definitions_sha256).toEqual(metadata.tool_definitions_sha256);
+    expect(row.request_count).toBe(4);
+    expect(row.requests_searched).toBe(3);
+    expect(row.package_seen).toBe(2);
+    expect(row.capture_check_sources).toEqual(sources);
     // Nothing that names this machine crosses into the public row.
     expect(row.cli_executable).toBeUndefined();
+    expect(row.cli_executable_sha256).toBeUndefined();
     expect(JSON.stringify(row)).not.toContain(stub.archive);
     expect(JSON.stringify(row)).not.toContain('/Users/');
   });
@@ -694,9 +676,9 @@ describe('research run', { timeout: 120_000 }, () => {
     expect(readFileSync(path.join(attempt, 'canary', 'work', 'canary.md'), 'utf8')).toContain('../CANARY.md');
     expect(readFileSync(path.join(attempt, 'canary', 'CANARY.md'), 'utf8')).toMatch(/^token: YEGFACTS_CANARY_/);
 
-    // And the request the reviewer got names the temporary directory, which is
-    // what the proof compared against. Under this seat the working directory
-    // travels in a system-role message rather than in a user reminder block.
+    // And the request the reviewer got names the temporary directory. Under this
+    // seat the working directory travels in a system-role message rather than in
+    // a user reminder block.
     const main = readJson(path.join(attempt, 'requests', 'req-0003.json'));
     const environment = (main.body as { messages: { role: string; content: { text: string }[] }[] })
       .messages[1]!;
@@ -725,12 +707,14 @@ describe('research run', { timeout: 120_000 }, () => {
     }
   });
 
-  it('refuses when the canary request proof fails, and never sends the package', () => {
-    const stub = stubClaude({ mutateCanary: 'extra-system' });
-    const { ok, stderr, attempt } = research(stub, 'canary-proof');
+  it('refuses when the canary capture carries the global CLAUDE.md, and never sends the package', () => {
+    const stub = stubClaude({ mutateCanary: 'leak-home' });
+    const { ok, stderr, attempt } = research(stub, 'canary-leak');
 
     expect(ok).toBe(false);
-    expect(stderr).toMatch(/matches no pinned shape/);
+    // The source and the line number, never the line.
+    expect(stderr).toMatch(/carries \$HOME\/\.claude\/CLAUDE\.md line 1/);
+    expect(stderr).not.toContain(HOME_INSTRUCTION);
     expect(stderr).toMatch(/failed its canary/);
     expect(packageWasSent(stub)).toBe(false);
     expect(existsSync(path.join(attempt, 'final-message.txt'))).toBe(false);
@@ -739,23 +723,13 @@ describe('research run', { timeout: 120_000 }, () => {
     expect(metadata.admitted_for_research).toBe(false);
   });
 
-  it('refuses when the request did not carry the pinned reasoning effort', () => {
-    // The effort used to be a launcher flag with nothing to check it against.
-    // It is in the request, so a run that asked for something else is refused.
-    const stub = stubClaude({ mutateResearch: 'wrong-effort' });
-    const { ok, stderr, attempt } = research(stub, 'wrong-effort');
+  it('refuses when the research capture carries a project memory line, after a clean canary', () => {
+    const stub = stubClaude({ mutateResearch: 'leak-memory' });
+    const { ok, stderr, attempt } = research(stub, 'research-leak');
 
     expect(ok).toBe(false);
-    expect(stderr).toMatch(/output_config\.effort is "low", not the pinned "high"/);
-    expect(readJson(path.join(attempt, 'metadata.json')).context_proof).toBe('fail');
-  });
-
-  it('refuses when the research capture fails after a clean canary', () => {
-    const stub = stubClaude({ mutateResearch: 'package-drift' });
-    const { ok, stderr, attempt } = research(stub, 'research-proof');
-
-    expect(ok).toBe(false);
-    expect(stderr).toMatch(/is not the declared package byte for byte/);
+    expect(stderr).toMatch(/carries \$HOME\/\.claude\/projects\/\*\/memory\/\*\.md \(1\) line 1/);
+    expect(stderr).not.toContain(MEMORY_NOTE);
     // The canary passed; the run that mattered did not.
     const metadata = readJson(path.join(attempt, 'metadata.json'));
     expect(metadata.canary_context_proof).toBe('pass');
@@ -766,17 +740,18 @@ describe('research run', { timeout: 120_000 }, () => {
     expect(readdirSync(path.join(attempt, 'requests')).length).toBeGreaterThan(0);
   });
 
-  it('refuses a substitute pin table without a loopback upstream', () => {
-    const stub = stubClaude();
-    const attempt = path.join(stub.archive, 'research', 'pins-without-stub');
-    const result = run(
-      [INVOKE, '--purpose', 'research', '--provider', 'anthropic', '--package', writePackage('pins.md'),
-        '--attempt-dir', attempt, '--model', 'claude-opus-5', '--effort', 'high'],
-      { ...stub.env, YEGFACTS_REVIEW_UPSTREAM: '' },
-    );
-    expect(result.ok).toBe(false);
-    expect(result.stderr).toMatch(/must never be used against the API/);
-    expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
+  it('refuses a capture that never carried the declared package', () => {
+    // Not a leak, and still not a capture of this run. A capture that cannot be
+    // tied to the package it was supposed to carry proves nothing about it.
+    const stub = stubClaude({ mutateResearch: 'no-package' });
+    const { ok, stderr, attempt } = research(stub, 'no-package');
+
+    expect(ok).toBe(false);
+    expect(stderr).toMatch(/no captured request carries the declared package byte for byte/);
+    const metadata = readJson(path.join(attempt, 'metadata.json'));
+    expect(metadata.context_proof).toBe('fail');
+    expect(metadata.package_seen).toBe(0);
+    expect(metadata.admitted_for_research).toBe(false);
   });
 
   it('keeps the output of a nonzero research exit without admitting it', () => {
@@ -802,7 +777,7 @@ describe('candidate diagnostic', { timeout: 60_000 }, () => {
     return { ...result, attempt, pkg };
   };
 
-  it('runs the canary, proves its request, and still admits nothing', () => {
+  it('runs the canary, checks its request, and still admits nothing', () => {
     const stub = stubClaude();
     const { ok, stderr, attempt, pkg } = diagnose(stub, 'happy');
 
@@ -814,12 +789,15 @@ describe('candidate diagnostic', { timeout: 60_000 }, () => {
     expect(metadata.status).toBe('diagnostic');
     expect(metadata.canary).toBe('pass');
     expect(metadata.structure).toBe('pass');
-    // The canary's own request was captured and proved. It still admits
+    // The canary's own request was captured and checked. It still admits
     // nothing: a diagnostic sends no package, so there is nothing to admit.
     expect(metadata.admitted_for_research).toBe(false);
     expect(metadata.context_proof).toBe('pass');
     expect(metadata.canary_context_proof).toBe('pass');
-    expect(metadata.canary_main_turn_count).toBe(1);
+    expect(metadata.canary_request_count).toBe(4);
+    expect(metadata.canary_requests_searched).toBe(3);
+    // The canary prompt is the package for a diagnostic, and it travels twice.
+    expect(metadata.canary_package_seen).toBe(2);
     expect(metadata.canary_upstream).toBe(upstreamUrl);
     expect(String(metadata.admission_reason)).toMatch(/a diagnostic never admits a seat/);
     expect(metadata.exit_code).toBe(0);
@@ -979,94 +957,62 @@ describe('candidate diagnostic', { timeout: 60_000 }, () => {
     expect(stderr).toMatch(expected);
   });
 
-  it('refuses a CLI version that has never been probed, before sending anything', () => {
-    const stub = stubClaude({ version: '9.9.9' });
-    const { ok, stderr, attempt } = diagnose(stub, 'unprobed');
-    expect(ok).toBe(false);
-    expect(stderr).toMatch(/has never been probed/);
-    expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
-    expect(readJson(path.join(attempt, 'metadata.json')).status).toBe('blocked');
-  });
-
   /**
-   * Which bytes run, which is not the same question as which version is on
-   * PATH. The pins describe one build; the PATH shim follows the installer and
-   * had already moved on to 2.1.273 by the time this shipped.
+   * The version is an observation now, not a gate. v1.29 refused any build with
+   * no pin row, which meant refusing almost every day: the vendor ships builds
+   * several times a week and each one needed a live capture and a fresh pin
+   * before a reviewer could run. The denylist does not care which build sent the
+   * request, so the build a machine actually has is the build that runs, and the
+   * record says which one it was.
    */
-  it('copies the pinned build into the archive and runs the copy, not PATH', () => {
-    const stub = stubClaude({ pathVersion: '2.1.273' });
-    const { ok, attempt } = diagnose(stub, 'pinned-build');
+  it('runs whatever build is on PATH and writes its version down', () => {
+    const stub = stubClaude({ version: '2.1.999' });
+    const { ok, attempt } = diagnose(stub, 'any-version');
 
     expect(ok).toBe(true);
-    // PATH was asked its version and never run; everything else was the copy.
-    expect(new Set(invokedAs(stub))).toEqual(new Set(['path', 'archived']));
-    expect(invokedAs(stub).filter((one) => one === 'path')).toHaveLength(1);
-    expect(invokedAs(stub)).not.toContain('installed');
-
     const metadata = readJson(path.join(attempt, 'metadata.json'));
-    expect(metadata.cli_version).toBe(PROBED_VERSION);
-    // Both versions on the record, which is how a reader sees the pin was held.
-    expect(metadata.path_cli_version).toBe('2.1.273');
-    // Private: the path and the hash of the bytes that ran.
-    expect(String(metadata.cli_executable)).toContain(`/cli/claude-${PROBED_VERSION}`);
+    expect(metadata.cli_version).toBe('2.1.999');
+    // Private: the path of the executable and the hash of its bytes, so a later
+    // reader of a retained capture can still ask which file produced it.
+    expect(String(metadata.cli_executable)).toBe(path.join(stub.dir, 'bin', 'claude'));
     expect(metadata.cli_executable_sha256).toMatch(/^[0-9a-f]{64}$/);
 
-    // The archived copy is what a later attempt will reuse, and it is read-only.
-    const archived = path.join(stub.archive, 'cli', `claude-${PROBED_VERSION}`);
-    expect(existsSync(archived)).toBe(true);
-    expect(statSync(archived).mode & 0o777).toBe(0o500);
-    expect(statSync(path.join(stub.archive, 'cli')).mode & 0o777).toBe(0o700);
+    // Neither crosses into the public row, because one names a place on this
+    // machine and the other is a hash of a file nobody else can fetch.
+    const row = JSON.parse(
+      run([
+        'npx', 'tsx', path.join(REAL_REPO, 'scripts', 'panel', 'attempt-record.ts'),
+        attempt, '--attempt', '1',
+      ], stub.env).stdout || '{}',
+    ) as Record<string, unknown>;
+    expect(row.cli_version).toBe('2.1.999');
+    expect(row.cli_executable).toBeUndefined();
+    expect(row.cli_executable_sha256).toBeUndefined();
+    // The v1.29 pin fields are gone from the row entirely.
+    expect(row.path_cli_version).toBeUndefined();
+    expect(row.pins_source).toBeUndefined();
+    expect(row.vendor_prompt_sha256).toBeUndefined();
+    expect(row.tool_definitions_sha256).toBeUndefined();
   });
 
-  it('prefers the archived copy once it exists, even with the installer gone', () => {
+  it('refuses when there is no CLI on PATH at all, before sending anything', () => {
     const stub = stubClaude();
-    expect(diagnose(stub, 'archive-first').ok).toBe(true);
+    const attempt = path.join(stub.archive, 'diag', 'no-cli');
+    // A PATH with the system tools the launcher needs and no `claude` anywhere
+    // on it. Emptying PATH entirely would test nothing: the launcher would fail
+    // on `git` long before it asked whether a reviewer CLI exists.
+    const tools = mkdtempSync(path.join(root, 'tools-'));
+    symlinkSync(process.execPath, path.join(tools, 'node'));
+    const result = run(
+      [INVOKE, '--purpose', 'diagnostic', '--provider', 'anthropic', '--package', writePackage('no-cli.md'),
+        '--attempt-dir', attempt, '--model', 'claude-opus-5', '--effort', 'high'],
+      { ...stub.env, PATH: `${tools}:/usr/bin:/bin` },
+    );
 
-    // The installer removes and replaces builds on its own schedule. The
-    // archived copy is the point: the same bytes stay runnable afterwards.
-    unlinkSync(path.join(stub.dir, 'home', '.local', 'share', 'claude', 'versions', PROBED_VERSION));
-    const second = diagnose(stub, 'archive-second');
-
-    expect(second.ok).toBe(true);
-    expect(invokedAs(stub)).not.toContain('installed');
-    expect(String(readJson(path.join(second.attempt, 'metadata.json')).cli_executable)).toContain('/cli/claude-');
-  });
-
-  it('refuses when the pinned build is neither installed nor archived', () => {
-    const stub = stubClaude({ installVersion: null, pathVersion: '2.1.273' });
-    const { ok, stderr, attempt } = diagnose(stub, 'not-installed');
-
-    expect(ok).toBe(false);
-    expect(stderr).toMatch(new RegExp(`pinned build ${PROBED_VERSION} is not installed and no archived copy exists`));
-    // A distinct refusal from the unprobed-version one, and nothing was run.
-    expect(stderr).not.toMatch(/has never been probed/);
-    expect(invokedAs(stub)).toEqual(['path']);
+    expect(result.ok).toBe(false);
+    expect(result.stderr).toMatch(/claude is not on PATH/);
     expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
     expect(readJson(path.join(attempt, 'metadata.json')).status).toBe('blocked');
-  });
-
-  it('refuses a build whose bytes do not hash to the pin', () => {
-    const stub = stubClaude({ binaryHash: 'a'.repeat(64) });
-    const { ok, stderr, attempt } = diagnose(stub, 'wrong-bytes');
-
-    expect(ok).toBe(false);
-    expect(stderr).toMatch(/hashes to [0-9a-f]{64}, not the pinned a{64}/);
-    expect(invokedAs(stub)).toEqual(['path']);
-    expect(existsSync(path.join(stub.archive, 'cli'))).toBe(false);
-    expect(readJson(path.join(attempt, 'metadata.json')).status).toBe('blocked');
-  });
-
-  it('refuses an archived copy whose bytes changed under it', () => {
-    const stub = stubClaude();
-    expect(diagnose(stub, 'archive-ok').ok).toBe(true);
-
-    const archived = path.join(stub.archive, 'cli', `claude-${PROBED_VERSION}`);
-    chmodSync(archived, 0o700);
-    writeFileSync(archived, '#!/usr/bin/env bash\nexit 0\n');
-    const second = diagnose(stub, 'archive-tampered');
-
-    expect(second.ok).toBe(false);
-    expect(second.stderr).toMatch(/the archived copy of build .* hashes to/);
   });
 
   it('keeps the output of a nonzero exit without ever admitting it', () => {
@@ -1163,9 +1109,9 @@ describe('run-reviewer', { timeout: 120_000 }, () => {
 
   /**
    * The case that matters most here: everything passed and nothing is
-   * published. The launcher captured the request, proved it, exited zero and
+   * published. The launcher captured the request, checked it, exited zero and
    * still recorded `admitted_for_research: false`, because the capture went to
-   * a stub upstream and the pins were substitutes. A response from such a run
+   * a stub upstream. A response from such a run
    * is a real response to a real package; it is not a review, and the runner
    * has to be the thing that refuses to file it as one.
    */
@@ -1175,7 +1121,7 @@ describe('run-reviewer', { timeout: 120_000 }, () => {
 
     expect(result.ok).toBe(false);
     expect(result.stderr).toMatch(/not admitted for research/);
-    expect(result.stderr).toMatch(/substitute pin table|rather than https:\/\/api\.anthropic\.com/);
+    expect(result.stderr).toMatch(/rather than https:\/\/api\.anthropic\.com/);
     // The package was sent and answered. The answer simply does not become a
     // review, and it is retained where it was written.
     expect(packageWasSent(stub)).toBe(true);
@@ -1192,19 +1138,22 @@ describe('run-reviewer', { timeout: 120_000 }, () => {
     expect(detail[0]!.canary_context_proof).toBe('pass');
     expect(detail[0]!.schema).toBe('not-reached');
     expect(detail[0]!.attempt_id).toMatch(/^[0-9a-f]{16}$/);
-    // The row says the capture was proved AND that the run was not admitted,
+    // The row says the capture was checked AND that the run was not admitted,
     // and why. A reader of the manifest sees both without reading any code.
     expect(detail[0]!.admitted_for_research).toBe(false);
     expect(String(detail[0]!.admission_reason)).toMatch(/not admitted for research/);
     expect(detail[0]!.upstream).toBe(upstreamUrl);
-    expect(detail[0]!.pins_source).toBe('override');
+    expect(detail[0]!.package_seen).toBe(2);
+    // Source names and line counts, never a line of a private file.
+    expect(JSON.stringify(detail)).not.toContain(HOME_INSTRUCTION);
+    expect(JSON.stringify(detail)).not.toContain(MEMORY_NOTE);
     // No filesystem path crosses into the public manifest.
     expect(JSON.stringify(detail)).not.toContain(stub.archive);
     expect(JSON.stringify(detail)).not.toContain('/Users/');
   });
 
   it('writes no review when the launcher refuses', () => {
-    const stub = stubClaude({ mutateCanary: 'extra-system' });
+    const stub = stubClaude({ mutateCanary: 'leak-home' });
     const result = runReviewer(stub);
 
     expect(result.ok).toBe(false);
@@ -1420,7 +1369,7 @@ describe('audit-package', { timeout: 60_000 }, () => {
   });
 
   it('writes no report when the launcher refuses', () => {
-    const stub = stubClaude({ mutateCanary: 'extra-system' });
+    const stub = stubClaude({ mutateCanary: 'leak-home' });
     const report = path.join(root, 'audit-refused.md');
     const result = run(
       [script, '--package', writePackage('audit-refused-package.md'), '--report', report, '--label', 'framing-check'],
@@ -1495,17 +1444,20 @@ describe('audit-package', { timeout: 60_000 }, () => {
  * The one live test, opt-in because it spends real money on a real subscription.
  * Run it deliberately with YEGFACTS_LIVE_CANARY=1. It runs the candidate
  * profile's diagnostic against the installed CLI and the real API, with no stub
- * upstream and no substitute pins, and asserts what a real capture shows.
+ * upstream, and asserts what a real capture shows.
+ *
+ * It also runs against the FOUNDER'S OWN $HOME, which is the point: the denylist
+ * is built from the CLAUDE.md, AGENTS.md and memory files that actually exist on
+ * this machine, so a real leak of any of them fails here and nowhere else.
  */
 describe.runIf(process.env.YEGFACTS_LIVE_CANARY === '1')('live candidate diagnostic', { timeout: 240_000 }, () => {
-  it('passes the structural canary and proves its own request', () => {
+  it('passes the structural canary and its own capture check', () => {
     const archive = mkdtempSync(path.join(root, 'live-archive-'));
     const attempt = path.join(archive, 'live', 'attempt-1');
-    // Deliberately no YEGFACTS_REVIEW_UPSTREAM and no YEGFACTS_REVIEW_PINS: the
-    // point of this test is the production upstream and the built-in pins.
+    // Deliberately no YEGFACTS_REVIEW_UPSTREAM: the point of this test is the
+    // production upstream.
     const env: NodeJS.ProcessEnv = { ...process.env, YEGFACTS_REVIEW_ARCHIVE: archive };
     delete env.YEGFACTS_REVIEW_UPSTREAM;
-    delete env.YEGFACTS_REVIEW_PINS;
 
     const diagnostic = run(
       [INVOKE, '--purpose', 'diagnostic', '--provider', 'anthropic', '--package', writePackage('live.md'),
@@ -1527,16 +1479,21 @@ describe.runIf(process.env.YEGFACTS_LIVE_CANARY === '1')('live candidate diagnos
     expect(metadata.canary).toBe('pass');
     expect(metadata.reasoning_effort).toBe('high');
     expect(metadata.canary_upstream).toBe('https://api.anthropic.com');
-    expect(metadata.pins_source).toBe('built-in');
-    // A diagnostic never admits, whatever its proof says: no package was sent.
+    // A diagnostic never admits, whatever its check says: no package was sent.
     expect(metadata.admitted_for_research).toBe(false);
     expect(metadata.stdout_sha256).toBe('absent');
     expect(metadata.canary_stdout_sha256).toMatch(/^[0-9a-f]{64}$/);
 
-    // The disclosed host context, with the address removed, is on the record.
-    const proof = report.request_proof as { disclosed: { blocks: { text: string }[] }[] };
-    const disclosed = JSON.stringify(proof.disclosed);
-    expect(disclosed).toContain('<account-email>');
-    expect(disclosed).not.toMatch(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/);
+    // The real machine's real files were read, and none of their text is in the
+    // report that a public row will carry the hash of.
+    const capture = report.capture_check as {
+      sources: { name: string; present: boolean; lines_checked: number }[];
+    };
+    const read = capture.sources.filter((source) => source.present);
+    expect(read.length).toBeGreaterThan(0);
+    expect(read.reduce((total, source) => total + source.lines_checked, 0)).toBeGreaterThan(0);
+    for (const source of capture.sources) {
+      expect(source.name).toMatch(/^(\$HOME|<repo>|the )/);
+    }
   });
 });

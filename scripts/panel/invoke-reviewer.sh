@@ -20,18 +20,26 @@
 # loaded, not that no CLAUDE.md, memory or host instruction reached the model.
 #
 # What settles it is the outgoing request, and from 2026-09-15 this launcher
-# keeps it. Claude Code 2.1.272 honours ANTHROPIC_BASE_URL, so every invocation
-# runs through scripts/panel/record-proxy.mjs, which writes each request and
-# response to the attempt directory and forwards them unchanged to
-# https://api.anthropic.com. scripts/panel/request-proof.ts then checks the
-# capture against a pinned description of a clean request: the vendor default
-# prompt by hash, exactly two client tool definitions by hash, the reasoning
-# effort the seat is pinned to, a first user message of the account reminder and
-# then the declared package byte for byte, and one system-role message of host
-# environment text matching a fixed template. The body's top-level keys and its
-# metadata keys are allowlisted, so a field nobody described is a failure rather
-# than something read past. The HTTP headers are captured and retained but not
-# compared.
+# keeps it. Claude Code honours ANTHROPIC_BASE_URL, so every invocation runs
+# through scripts/panel/record-proxy.mjs, which writes each request and response
+# to the attempt directory and forwards them unchanged to
+# https://api.anthropic.com.
+#
+# WHAT THE CAPTURE IS CHECKED AGAINST CHANGED ON 2026-09-16 (methodology v1.30).
+# v1.29 checked it against a pinned description of a clean request: the vendor
+# prompt by hash, the tool definitions by hash, one pin row per (CLI build,
+# model), an archived copy of the pinned build. That description was exact and it
+# rotted. A new CLI build lands several times a week and each one needed a live
+# capture and a fresh pin before a reviewer could run at all. The founder decided
+# the cost was not worth paying and asked for a check that cannot rot. Stew
+# advised keeping v1.29 and the disagreement stands on the record.
+#
+# So scripts/panel/capture-check.ts now reads the private text that actually
+# exists on this machine — the user and repository CLAUDE.md and AGENTS.md files,
+# every project memory file, the home directory, the repository path and this
+# attempt's canary token — and searches every captured request for it. A hit is a
+# leak. A capture that does not carry the declared package at all is not a
+# capture of this run and fails too.
 #
 # The package leaves twice per research attempt, and no message here pretends
 # otherwise. Before the main turn the CLI sends a session-naming request that
@@ -40,14 +48,16 @@
 # is a refusal to publish, not a claim that nothing left the machine.
 #
 # What is NOT covered, stated plainly because a capture invites the opposite
-# reading. The proxy sees what the CLI addresses to its configured base URL.
-# Nothing else on the machine is watched. The vendor prompt is pinned by hash
-# and never read. The request tells the model the operator's account email and
-# working directory through the vendor's own reminder blocks: those are
-# recorded and published as disclosed host context, not suppressed and not
-# counted as isolation. A passing proof is evidence about one attempt under one
-# CLI version. It is not a vendor guarantee, and no historical run is
-# retroactively certified.
+# reading. The check catches KNOWN private text FROM THIS MACHINE. It cannot
+# catch text the vendor attaches that is not on this machine, and it does not
+# describe what the request contains: it says only what the request does not
+# contain. The proxy sees what the CLI addresses to its configured base URL, and
+# nothing else on the machine is watched. The request also tells the model the
+# operator's account email, the platform and the date through the vendor's own
+# reminder blocks; that is host context, not isolation. A passing check is
+# evidence about one attempt. It is not a vendor guarantee, and no historical run
+# is retroactively certified. The capture is retained so a later reader can ask a
+# stronger question of the same bytes.
 #
 #   openai (codex 0.153.4): tested on 2026-09-09 and failed. See BLOCK_REASON in
 #   the profile table for the exact flag set; it still rendered the global
@@ -58,10 +68,10 @@
 #   flag, so no boundary has been demonstrated for it. It has not been probed
 #   live, and "not demonstrated" is not "impossible".
 #
-#   anthropic (claude 2.1.272): the candidate profile, admitted for research
-#   only when the canary and the research run each pass their structural check
-#   AND their request proof, and only when the upstream was production.
-#   `--purpose diagnostic` runs the canary alone, captures and proves its
+#   anthropic (claude): the candidate profile, admitted for research only when
+#   the canary and the research run each pass their structural check AND their
+#   capture check, and only when the upstream was production.
+#   `--purpose diagnostic` runs the canary alone, captures and checks its
 #   request, and never sends the package.
 #
 # RETENTION
@@ -243,7 +253,6 @@ CLI_EXIT=""
 CLI_VERSION=""
 CLI_EXECUTABLE=""
 CLI_EXECUTABLE_SHA=""
-PATH_CLI_VERSION="absent"
 WORK_ROOT=""
 PROFILE="unresolved"
 CANARY_VERDICT="not-run"
@@ -252,7 +261,6 @@ STRUCTURE_VERDICT="not-run"
 # before that records the honest answer rather than an optimistic default.
 CONTEXT_PROOF="unavailable"
 CANARY_CONTEXT_PROOF="unavailable"
-PINS_SOURCE="built-in"
 ADMITTED="false"
 ADMISSION_REASON="the launcher exited before reaching a decision"
 
@@ -270,25 +278,28 @@ write_metadata() {
     const values = {};
     for (let i = 0; i < rest.length; i += 2) values[rest[i]] = rest[i + 1];
     const number = (value) => (value === "" ? null : Number(value));
-    // The proof summary is read back out of the report the check wrote rather
+    // The capture facts are read back out of the report the check wrote rather
     // than shuttled through a dozen shell variables. A report that is missing,
     // truncated or from a run that never reached the check leaves every field
     // absent, which reads as "not recorded" everywhere downstream.
     const summary = (file) => {
       try {
         const report = JSON.parse(fs.readFileSync(file, "utf8"));
-        return report.request_proof && report.request_proof.summary ? report.request_proof.summary : null;
+        return report.capture_check ?? null;
       } catch { return null; }
     };
     const research = summary(values.report);
     const canary = summary(values.canary_report);
     const spread = (prefix, value) => (value === null ? {} : {
-      [prefix + "upstream"]: value.upstream,
-      [prefix + "vendor_prompt_sha256"]: value.vendor_prompt_sha256,
-      [prefix + "tool_definitions_sha256"]: value.tool_definitions_sha256,
-      [prefix + "request_count"]: value.request_count,
-      [prefix + "main_turn_count"]: value.main_turn_count,
-      [prefix + "side_request_counts"]: value.side_request_counts,
+      [prefix + "upstream"]: value.upstream ?? null,
+      [prefix + "request_count"]: value.requests,
+      // How many of those the check actually walked. The difference is the
+      // requests with no JSON body, which nothing looked inside.
+      [prefix + "requests_searched"]: value.searched,
+      [prefix + "package_seen"]: value.package_seen,
+      // Which private sources were read and how many lines each contributed.
+      // Names and counts only: the lines themselves never leave the check.
+      [prefix + "capture_check_sources"]: value.sources,
       [prefix + "requests_manifest_sha256"]: value.requests_manifest_sha256 ?? null,
     });
     fs.writeFileSync(out, JSON.stringify({
@@ -300,24 +311,21 @@ write_metadata() {
       profile: values.profile,
       model_id: values.model_id,
       reasoning_effort: values.reasoning_effort,
+      // Observations, not gates (methodology v1.30). Which build ran is worth
+      // writing down; refusing every build nobody has probed yet is what rotted.
       cli_version: values.cli_version,
       // Private only. attempt-record.ts never copies these: where a CLI build
-      // sits on this machine, and where the attempt worked, are not part of the
-      // public record. The hash of the build IS public, under cli_version.
+      // sits on this machine, what its bytes hash to, and where the attempt
+      // worked are not part of the public record.
       cli_executable: values.cli_executable,
       cli_executable_sha256: values.cli_executable_sha256,
       work_dir: values.work_dir,
-      // What `claude --version` on PATH says, which from methodology v1.29 is
-      // not necessarily what ran. Public: a reader comparing the two sees that
-      // the launcher held the pin rather than following the installer.
-      path_cli_version: values.path_cli_version,
       exit_code: number(values.exit_code),
       canary: values.canary,
       structure: values.structure,
       context_proof: values.context_proof,
       admitted_for_research: values.admitted === "true",
       admission_reason: values.admission_reason,
-      pins_source: values.pins_source,
       started_at: values.started_at,
       finished_at: values.finished_at,
       package_sha256: values.package_sha256,
@@ -338,13 +346,11 @@ write_metadata() {
     canary_report "$ATTEMPT_DIR/canary/report.json" \
     cli_executable "$CLI_EXECUTABLE" \
     cli_executable_sha256 "$CLI_EXECUTABLE_SHA" \
-    path_cli_version "$PATH_CLI_VERSION" \
     work_dir "$WORK_ROOT" \
     context_proof "$CONTEXT_PROOF" \
     canary_context_proof "$CANARY_CONTEXT_PROOF" \
     admitted "$ADMITTED" \
     admission_reason "$ADMISSION_REASON" \
-    pins_source "$PINS_SOURCE" \
     proof_report_sha256 "$(sha_of "$ATTEMPT_DIR/report.json")" \
     attempt_id "$ATTEMPT_ID" \
     purpose "$PURPOSE" \
@@ -448,15 +454,6 @@ case "$PROVIDER" in
   anthropic)
     CLI="claude"
     PROFILE_NAME="claude-safe-web-candidate"
-    # Only versions with a pinned request profile in request-proof.ts. 2.1.266
-    # and 2.1.267 are gone: they were probed before anything emitted a request,
-    # so there is nothing to pin for them and no capture to pin it from. A
-    # version with no row fails closed here, before a package is sent.
-    PROBED_VERSIONS="2.1.272"
-    # The build the pins describe, and the build the launcher runs. The
-    # installer keeps every version as a standalone binary, so a newer CLI
-    # arriving on PATH does not take the seat with it.
-    PINNED_CLI_VERSION="2.1.272"
     ALLOWED_TOOLS="WebFetch,WebSearch"
     PINNED_MODELS="claude-opus-5"
     DEFAULT_MODEL="claude-opus-5"
@@ -464,7 +461,7 @@ case "$PROVIDER" in
   openai)
     CLI="codex"
     PROFILE_NAME="none"
-    PROBED_VERSIONS=""; ALLOWED_TOOLS=""; PINNED_CLI_VERSION=""
+    ALLOWED_TOOLS=""
     PINNED_MODELS="gpt-5.6-sol"
     DEFAULT_MODEL="gpt-5.6-sol"
     BLOCK_REASON="no isolation profile for openai. The configuration tested on 2026-09-09 against codex-cli 0.153.4 — codex exec --ignore-user-config --ignore-rules --strict-config, with memories, plugins, apps, hooks, multi_agent, shell, unified_exec, computer_use, view_image and code_mode_host disabled, skip_host_skill_discovery enabled and project_doc_max_bytes=0 — still rendered the global AGENTS.md and a skills catalogue into its request (trace 01a087b7-2b33-74c1-8d00-a8920c06bb99), and disabling code_mode_host removed its web access. That is one tested configuration, not every possible one."
@@ -472,7 +469,7 @@ case "$PROVIDER" in
   google)
     CLI="agy"
     PROFILE_NAME="none"
-    PROBED_VERSIONS=""; ALLOWED_TOOLS=""; PINNED_CLI_VERSION=""
+    ALLOWED_TOOLS=""
     PINNED_MODELS="gemini-3.8-flash-high"
     DEFAULT_MODEL="gemini-3.8-flash-high"
     BLOCK_REASON="no isolation profile for google: agy 1.1.28 exposes no customization-suppression or tool-allowlist flag, so no boundary has been demonstrated for it. It has not been probed live."
@@ -518,7 +515,7 @@ fi
 #   final-message.txt  the complete final response, footer and all
 #   stdout.txt         the raw stream
 #   requests/          the captured outgoing requests and responses
-#   report.json        the structural verdict and the request proof
+#   report.json        the structural verdict and the capture check
 #   exit-code, status.txt, metadata.json             (written by the trap)
 #
 # `run-reviewer.sh` extracts the review from `final-message.txt` and nothing
@@ -526,117 +523,40 @@ fi
 # about the CLI, never a reviewer's answer, and putting them where the runner
 # looks is how a self-test would get published as a review.
 #
-# THE ORDER, which is the whole gate. Version check first, so an unpinned CLI
-# stops before anything is spent. Then the canary through its own proxy, with
-# both its structural check and its request proof. Only if both pass does the
-# package go anywhere, and then through a fresh proxy whose capture gets the
+# THE ORDER, which is the whole gate. The canary first, through its own proxy,
+# with both its structural check and its capture check. Only if both pass does
+# the package go anywhere, and then through a fresh proxy whose capture gets the
 # same treatment. Exit 0 requires the CLI to have exited 0 and all four checks
 # to have passed.
 # ---------------------------------------------------------------------------
-# The pin table. Built-in unless YEGFACTS_REVIEW_PINS names another, which only
-# exists so a test can prove a capture whose hash-pinned blocks are stand-ins:
-# the repository pins the vendor prompt and the two tool definitions by hash and
-# does not carry their text, so a fixture cannot reproduce them. It is gated on
-# the loopback upstream, so it cannot be used against the API, and a run that
-# used it is never admitted. Both facts are recorded.
+# WHICH BYTES RUN, recorded rather than gated (methodology v1.30).
 #
-# What counts as loopback is asked of record-proxy.mjs rather than matched here.
-# A shell glob of `http://127.0.0.1*` is a looser rule than the proxy's: it
-# matches http://127.0.0.1.example.com, which is somebody else's host. Two rules
-# for one question is how the looser one ends up being the one that decides.
-PINS_SOURCE="built-in"
-PINS_ARGS=()
-if [ -n "${YEGFACTS_REVIEW_PINS:-}" ]; then
-  UPSTREAM_KIND="$(node "$PROXY_SCRIPT" --classify-upstream "${YEGFACTS_REVIEW_UPSTREAM:-}" 2>/dev/null || true)"
-  if [ "$UPSTREAM_KIND" = "loopback" ]; then
-    PINS_SOURCE="override"
-    PINS_ARGS=(--pins "$YEGFACTS_REVIEW_PINS")
-  else
-    refuse blocked "YEGFACTS_REVIEW_PINS was set without a loopback YEGFACTS_REVIEW_UPSTREAM: a substitute pin table is a test fixture and must never be used against the API"
-  fi
-fi
-
-# WHICH BYTES RUN, which is a different question from which version is on PATH.
+# v1.29 pinned the build by the SHA-256 of the executable, kept its own archived
+# copy of it and refused anything else, because the request pins described one
+# build of one CLI running one model. There are no request pins now, so there is
+# nothing left for a build pin to protect: the capture check reads this machine's
+# private text and searches the request for it, and that works the same whatever
+# build sent the request. What remains is the honest thing to do with a version
+# number, which is to write it down. The resolved path and the hash of the bytes
+# that ran are recorded privately, so a later reader of a retained capture can
+# still ask which executable produced it.
 #
-# The pins in request-proof.ts describe one build of one CLI. The `claude` on
-# PATH is a shim that follows the installer, and by the time this shipped the
-# installer had already moved to 2.1.273 while the captures behind the pins came
-# from 2.1.272. A newer CLI is not a worse one. It is an unprobed one, and there
-# is nothing to compare its request against.
-#
-# A version string is not enough either: it is whatever the executable says when
-# asked. So the build is pinned by the SHA-256 of the file, and the launcher
-# keeps its own copy of it in the archive. Three outcomes and no fallback:
-#
-#   (a) the archived copy exists and hashes to the pin, and is run;
-#   (b) no archived copy, but the installer's file exists and hashes to the pin,
-#       so it is copied into the archive (0700 directory, 0500 file) and the
-#       copy is run;
-#   (c) neither, and this refuses.
-#
-# A hash that does not match is its own refusal in either case. The point of
-# (b) is that the installer overwrites and removes builds on its own schedule;
-# a published proof that named a build nobody can produce any more would be
-# worth very little. The copy is read-only so a later run cannot quietly get
-# different bytes under the same name.
-#
-# There is no PATH fallback. What PATH reports is recorded and nothing else.
+# So this runs the `claude` on PATH, which is the build the machine would use
+# anyway, and refuses only when there is no such command at all.
 CLI_NAME="$CLI"
 
-PATH_CLI_VERSION="absent"
-if command -v "$CLI_NAME" >/dev/null 2>&1; then
-  PATH_CLI_VERSION="$("$CLI_NAME" --version 2>/dev/null | head -1 | tr -d '\r' | awk '{print $1}')"
-  [ -n "$PATH_CLI_VERSION" ] || PATH_CLI_VERSION="unknown"
-fi
+command -v "$CLI_NAME" >/dev/null 2>&1 \
+  || refuse blocked "$CLI_NAME is not on PATH; refusing before sending anything"
+CLI="$(command -v "$CLI_NAME")"
 
-# Keyed by build AND model: the request shape depends on both, which a live
-# demonstration proved by refusing a request the Haiku-derived pins had never
-# described.
-PINNED_BINARY_SHA="$(npx tsx "$REPO_ROOT/scripts/panel/request-proof.ts" \
-  --field binarySha256 --cli-version "$PINNED_CLI_VERSION" --model "$MODEL" \
-  "${PINS_ARGS[@]+"${PINS_ARGS[@]}"}")" \
-  || refuse blocked "no pinned profile for $CLI_NAME $PINNED_CLI_VERSION running $MODEL; refusing before sending anything"
-
-sha_of_file() { shasum -a 256 "$1" | cut -d' ' -f1; }
-
-ARCHIVED_CLI="$ROOT/cli/$CLI_NAME-$PINNED_CLI_VERSION"
-INSTALLED_CLI="${HOME}/.local/share/claude/versions/${PINNED_CLI_VERSION}"
-
-if [ -f "$ARCHIVED_CLI" ]; then
-  CLI_EXECUTABLE_SHA="$(sha_of_file "$ARCHIVED_CLI")"
-  [ "$CLI_EXECUTABLE_SHA" = "$PINNED_BINARY_SHA" ] || refuse blocked \
-    "the archived copy of build $PINNED_CLI_VERSION hashes to $CLI_EXECUTABLE_SHA, not the pinned $PINNED_BINARY_SHA; refusing before sending anything"
-  CLI="$ARCHIVED_CLI"
-elif [ -f "$INSTALLED_CLI" ]; then
-  CLI_EXECUTABLE_SHA="$(sha_of_file "$INSTALLED_CLI")"
-  [ "$CLI_EXECUTABLE_SHA" = "$PINNED_BINARY_SHA" ] || refuse blocked \
-    "the installed build $PINNED_CLI_VERSION hashes to $CLI_EXECUTABLE_SHA, not the pinned $PINNED_BINARY_SHA; refusing before sending anything"
-  mkdir -p "$ROOT/cli"
-  chmod 700 "$ROOT/cli"
-  # Copied under a unique name and renamed into place, so two sessions racing
-  # here cannot run a half-written binary.
-  staging="$ARCHIVED_CLI.partial.$$"
-  cp "$INSTALLED_CLI" "$staging"
-  chmod 500 "$staging"
-  mv "$staging" "$ARCHIVED_CLI"
-  CLI="$ARCHIVED_CLI"
-else
-  refuse blocked "pinned build $PINNED_CLI_VERSION is not installed and no archived copy exists"
-fi
-
-# Private only: it names a path on this machine and never crosses into the
-# public manifest. The hash is what a reader of the public row would be given.
+# Private only: the path names a place on this machine, and the hash is a fact
+# about a file nobody else can fetch. Neither crosses into the public manifest.
 CLI_EXECUTABLE="$CLI"
+CLI_EXECUTABLE_SHA="$(shasum -a 256 "$CLI" 2>/dev/null | cut -d' ' -f1)"
+[ -n "$CLI_EXECUTABLE_SHA" ] || CLI_EXECUTABLE_SHA="unreadable"
 
 CLI_VERSION="$("$CLI" --version 2>/dev/null | head -1 | tr -d '\r' | awk '{print $1}')"
 [ -n "$CLI_VERSION" ] || CLI_VERSION="unknown"
-case ",$PROBED_VERSIONS," in
-  *",$CLI_VERSION,"*) ;;
-  *) refuse blocked "$CLI_NAME $CLI_VERSION has never been probed (probed: $PROBED_VERSIONS); refusing before sending anything" ;;
-esac
-if [ -n "$PINNED_CLI_VERSION" ] && [ "$CLI_VERSION" != "$PINNED_CLI_VERSION" ]; then
-  refuse blocked "$CLI_NAME $CLI_VERSION is not the pinned build $PINNED_CLI_VERSION; a new version needs its own capture and its own pin row before it can run. Refusing before sending anything"
-fi
 PROFILE="$PROFILE_NAME-$CLI_VERSION"
 printf '%s\n' "$PROFILE" > "$ATTEMPT_DIR/profile.txt"
 
@@ -747,10 +667,9 @@ printf '%s\n' "$CLI_EXIT" > "$ATTEMPT_DIR/exit-code"
 CANARY_VERDICT=fail
 npx tsx "$BOUNDARY_TS" "$CANARY_DIR/stdout.txt" \
   --report "$CANARY_DIR/report.json" --final "$CANARY_DIR/final-message.txt" \
-  --check canary --tools "$ALLOWED_TOOLS" --versions "$PROBED_VERSIONS" \
+  --check canary --tools "$ALLOWED_TOOLS" \
   --token "$CANARY_TOKEN" --expect-url "$CANARY_URL" --expect-heading "$CANARY_HEADING" \
   --requests "$CANARY_DIR/requests" --package "$CANARY_DIR/work/canary.md" \
-  --work-dir "$CANARY_WORK" --model "$MODEL" "${PINS_ARGS[@]+"${PINS_ARGS[@]}"}" \
   2> "$CANARY_DIR/failures.txt" && CANARY_VERDICT=pass
 printf '%s\n' "$CANARY_VERDICT" > "$ATTEMPT_DIR/canary.txt"
 STRUCTURE_VERDICT="$CANARY_VERDICT"
@@ -762,7 +681,7 @@ if [ "$CLI_EXIT" -ne 0 ]; then
 fi
 if [ "$CANARY_VERDICT" != "pass" ]; then
   sed 's/^/  /' "$CANARY_DIR/failures.txt" >&2
-  refuse failed "the candidate profile failed its canary: the structural check or the request proof did not pass. The package was never sent."
+  refuse failed "the candidate profile failed its canary: the structural check or the capture check did not pass. The package was never sent."
 fi
 
 if [ "$PURPOSE" != "research" ]; then
@@ -796,9 +715,8 @@ printf '%s\n' "$CLI_EXIT" > "$ATTEMPT_DIR/exit-code"
 RESEARCH_VERDICT=fail
 npx tsx "$BOUNDARY_TS" "$ATTEMPT_DIR/stdout.txt" \
   --report "$ATTEMPT_DIR/report.json" --final "$ATTEMPT_DIR/final-message.txt" \
-  --check research --tools "$ALLOWED_TOOLS" --versions "$PROBED_VERSIONS" \
+  --check research --tools "$ALLOWED_TOOLS" \
   --requests "$ATTEMPT_DIR/requests" --package "$ATTEMPT_DIR/package.md" \
-  --work-dir "$RESEARCH_WORK" --model "$MODEL" "${PINS_ARGS[@]+"${PINS_ARGS[@]}"}" \
   2> "$ATTEMPT_DIR/failures.txt" && RESEARCH_VERDICT=pass
 STRUCTURE_VERDICT="$RESEARCH_VERDICT"
 CONTEXT_PROOF="$(proof_status "$ATTEMPT_DIR/report.json")"
@@ -814,27 +732,24 @@ if [ "$CLI_EXIT" -ne 0 ]; then
 fi
 if [ "$RESEARCH_VERDICT" != "pass" ]; then
   sed 's/^/  /' "$ATTEMPT_DIR/failures.txt" >&2
-  ADMISSION_REASON="the research run did not pass its structural check and request proof; the package had already been sent"
+  ADMISSION_REASON="the research run did not pass its structural check and capture check; the package had already been sent"
   refuse failed "the research run failed its admission check; the package had already been sent and its output and capture are retained"
 fi
 
 # The upstream the capture was actually taken against. A capture taken against
-# a loopback stub can pass the request proof, because the proof is about the
-# shape of what the CLI sent and the CLI does not know where it went. So the
-# proof is reported honestly AND the run is not admitted, with the reason on the
-# record. Every check passing is what earns exit 0; production upstream is what
-# earns `admitted_for_research`, and they are different questions.
+# a loopback stub can pass the capture check, because the check is about what
+# the CLI sent and the CLI does not know where it went. So the check is reported
+# honestly AND the run is not admitted, with the reason on the record. Every
+# check passing is what earns exit 0; production upstream is what earns
+# `admitted_for_research`, and they are different questions.
 UPSTREAM="$(tr -d '\r\n' < "$ATTEMPT_DIR/requests/upstream.txt" 2>/dev/null || true)"
 STATUS="ok"
 if [ "$UPSTREAM" != "https://api.anthropic.com" ]; then
   ADMITTED="false"
   ADMISSION_REASON="every check passed, but the capture was taken against $UPSTREAM rather than https://api.anthropic.com, so this run is not admitted for research."
-elif [ "$PINS_SOURCE" != "built-in" ]; then
-  ADMITTED="false"
-  ADMISSION_REASON="every check passed, but it was run against a substitute pin table rather than the built-in one, so this run is not admitted for research."
 else
   ADMITTED="true"
-  ADMISSION_REASON="the canary and the research run each passed their structural check and their request proof against https://api.anthropic.com under $PROFILE."
+  ADMISSION_REASON="the canary and the research run each passed their structural check and their capture check against https://api.anthropic.com under $PROFILE."
 fi
 REASON="$ADMISSION_REASON"
 echo "[$LABEL] research complete under $PROFILE, attempt $ATTEMPT_ID" >&2

@@ -250,13 +250,14 @@ stopped.
    candidate Claude profile suppresses host customizations and exposes only
    public-web search and fetch. A scratch directory alone never established
    isolation; the earlier text claiming it did was wrong. From v1.29 the
-   launcher also runs the CLI through a local recording proxy and checks the
-   captured outgoing request against a pinned profile, on the canary and on the
-   research run. Both must pass before a result is admitted. Public-web research
-   is allowed and expected, but retrieval can be more limited without shell
-   tools. Missing essential sources stop a run, not produce a finding. Output
-   is validated against the schema with at most one schema retry. Providers with
-   no capture-backed profile block the three-seat panel; they are not replaced.
+   launcher also runs the CLI through a local recording proxy and retains the
+   outgoing request; from v1.30 it searches that capture for the private text on
+   this machine, on the canary and on the research run. Both must pass before a
+   result is admitted. Public-web research is allowed and expected, but retrieval
+   can be more limited without shell tools. Missing essential sources stop a run,
+   not produce a finding. Output is validated against the schema with at most one
+   schema retry. Providers with no capture at all block the three-seat panel;
+   they are not replaced.
 3. **Evidence staging, then deterministic merge.** Split in two because network
    work is not deterministic. Staging fetches the cited URLs, hashes them and
    snapshots them; a failed fetch is recorded, not fatal. The merge
@@ -338,86 +339,96 @@ record earlier execution, **not commands approved for new runs**:
 
 From v1.28, `scripts/panel/invoke-reviewer.sh` is the common execution path for
 panel reviews and package-in/report-out framing or source audits. There is no
-unrestricted fallback. The Claude Code 2.1.272 profile uses safe mode, empty
+unrestricted fallback. The candidate Claude Code profile uses safe mode, empty
 settings sources, strict MCP configuration, no slash commands or session
-persistence, and an explicit WebSearch/WebFetch allowlist. This is not a
-filesystem jail or a vendor-wide guarantee.
+persistence, and an explicit WebSearch/WebFetch allowlist. From v1.30 it is not
+tied to one build: the flag set is what the profile is. This is not a filesystem
+jail or a vendor-wide guarantee.
 
 v1.28 refused every seat because an empty startup inventory shows what was not
 loaded and cannot show what was sent, and no inspected path emitted the request.
-v1.29 changes that for Claude and only for Claude. The CLI runs with
-`ANTHROPIC_BASE_URL` set on its subprocess alone, pointed at
-`scripts/panel/record-proxy.mjs`, which retains every outgoing request and
-response and forwards them unchanged to `https://api.anthropic.com`.
-`scripts/panel/request-proof.ts` then classifies every captured request into one
-of five pinned shapes and checks the main turn against the pinned vendor prompt
-hash, the two pinned tool-definition hashes, `output_config.effort`, the two
-blocks of the first user message, the system-role environment message and the
-declared package bytes. In later messages a user message may carry no block
-other than tool results, and each tool result's own content must be text and is
-scanned for the host's reminder markup: a block-type and marker-string check,
-not a general test for instruction text. A seat is admitted only when the canary
-and the research run each pass their structural check and their request check,
-the CLI exited zero, the capture was taken against the production API, and the
-built-in pin table was used. Note that the package leaves twice per attempt: the
+v1.29 changed that for Claude and only for Claude, and v1.30 changed what the
+captured request is checked against. The CLI runs with `ANTHROPIC_BASE_URL` set
+on its subprocess alone, pointed at `scripts/panel/record-proxy.mjs`, which
+retains every outgoing request and response and forwards them unchanged to
+`https://api.anthropic.com`. That part is unchanged.
+
+**What v1.30 removed, and why.** v1.29's `request-proof.ts` pinned the whole
+shape of a clean request: the vendor prompt and the two client tool definitions
+by SHA-256, one pin row per (CLI build, model), an allowlist for every top-level
+body key, an archived copy of the pinned build, and a refusal for any build with
+no row. It was exact, and it rotted. The vendor ships a build several times a
+week and every one of them needed a fresh live capture, a new pin row and a paid
+probe run before a reviewer could run at all; between 2026-09-15 and 2026-09-16
+that was already true of the single row the table held. On 2026-09-16 the founder
+decided that cost was not worth paying and chose a check that cannot rot. Stew
+advised keeping v1.29, and the disagreement stands on the record beside the
+decision. So does the September 9 disposition, which ruled under v1.28 that a
+convention plus disclosure is not enough to admit a reviewer; nothing since has
+withdrawn it. The September 15 technology memo asked for a looser gate than
+v1.29, keeping the vendor prompt hash as a dated observation rather than a
+condition, and v1.29 refused it because a prompt that began carrying memory
+paths would pass a structure-only gate. v1.30 goes past what that memo asked
+for: there is no prompt hash left to observe.
+
+**What v1.30 checks.** `scripts/panel/capture-check.ts` resolves the private text
+that exists on this machine at check time: `$HOME/.claude/CLAUDE.md`,
+`$HOME/CLAUDE.md`, `$HOME/AGENTS.md` (symlinks followed), `$HOME/.codex/AGENTS.md`,
+the repository's own `CLAUDE.md` and `AGENTS.md`, every Markdown file in the
+`memory` directory of every project under `$HOME/.claude/projects`, and three bare
+strings: the repository path, `$HOME`, and the attempt's canary token. A source
+that is not on the machine is recorded as absent, not as an error. From each file
+it takes every line that, trimmed, is at least 24 characters and is not a markdown
+fence, a bare heading marker or a frontmatter delimiter. It then walks every string
+value of every captured request body and fails on any string that contains any of
+those lines. It also requires at least one request whose strings carry the package
+byte for byte; zero means the capture is not of this run. A request with a non-JSON
+body, which is the HEAD connectivity check, is counted and skipped.
+
+`checkCapture` is a pure exported function over (captured requests, package bytes,
+token, sources), so the admission rule is argued about in unit tests rather than
+only observed through a subprocess. The stream-boundary CLI drives it and writes
+the result into `report.json`.
+
+**The report never carries private text.** A match is reported as a source name
+and a line number. Source names are symbolic (`$HOME/...`, `<repo>/...`,
+`the repository path`), because the home directory and the repository path are
+themselves two of the denylisted strings, and a project directory under
+`~/.claude/projects` is named after the absolute path of its project. The public
+run row carries the source names, whether each was present, and how many lines of
+each were searched for. It carries no line of any of them. The project memory
+files are one row with a `files` count rather than one row each: there are 92 of
+them on this machine, and ninety-two near-identical rows would make every
+manifest row unreadable. They are still checked one file at a time, so a failure
+still names the file by its index.
+
+**The limit, stated wherever the check is described.** This catches known private
+text from this machine. It does not catch text the vendor attaches that is not on
+this machine, and it does not describe what the request contains; it says only
+what the request does not contain. That is strictly weaker than v1.29, which could
+say what every field of a request was. The capture is retained in full so a later
+reader can ask a stronger question of the same bytes. On the vendor's side nothing
+is observed: the capture shows what the CLI attached here and cannot show anything
+attached to this account after the request leaves. A pass covers one attempt and
+certifies no historical run.
+
+A seat is admitted only when the canary and the research run each pass their
+structural check and their capture check, the CLI exited zero, and the capture was
+taken against the production API. The package leaves twice per attempt: the
 session-naming request carries the whole package, with no tools, before the main
-turn does.
+turn does, and both are captured and both are checked. The working directory is an
+opaque `${TMPDIR}/attempt-<id>` path created for the run and removed afterwards, so
+the path the vendor's environment block hands the reviewer no longer names the
+story, the round or the seat.
 
-**The pins are keyed by (CLI version, model), and that cost a live run to
-learn.** The feasibility probes used Haiku; the first real diagnostic under
-`claude-opus-5` was refused with `the request matches no pinned shape` on both
-main turns. The same build sends a 6,755-character vendor prompt under Opus
-against 13,487 under Haiku, different `WebFetch`/`WebSearch` definitions, and
-the host environment in a system-role message rather than as reminder blocks in
-the user turn. The gate was right; the table was wrong. The only row is 2.1.272
-+ claude-opus-5 and the Haiku-derived main-turn pins are gone rather than kept
-alongside. The three side requests are classified structurally, on system texts,
-tool list and user-text prefix. Their model, `thinking`, `output_config` and
-`max_tokens` are recorded as observations and never required, because they are
-vendor defaults. The search helper's server tool is pinned by `type` and `name`
-only: `max_uses`, `allowed_domains` and `blocked_domains` carry the model's own
-search input and are recorded rather than pinned, which a live research run
-established by being refused for scoping a search to two hosts.
-
-**What is checked and what is only recorded.** Checked: the system blocks, the
-tool definitions, the model, `output_config.effort`, the messages, the top-level
-body keys and the keys inside `metadata`. Every field in the body is therefore
-either compared against a pin or named in a per-shape allowlist, so a key nobody
-described fails rather than being read past. `metadata` must be exactly
-`{user_id}` whose JSON carries exactly a device id, an account uuid and a
-session id; the proof records that those three were sent and never their values.
-NOT checked: the HTTP headers. `record-proxy.mjs` captures them with the
-credential headers redacted and they are retained with the attempt, but nothing
-compares them, so "this request matched the pinned profile" is a statement about
-the body.
-
-The host context the request carries beyond the package, in full: the working
-directory, whether it is a Git repository, the platform, the shell and the OS
-version; the model name and knowledge cutoff; the date; the account email
-address; and, in `metadata.user_id`, a device id, an account uuid and a session
-id. Under the pinned seat the email reminder is the first block of the first
-user message and the rest is one system-role message, which arrives as a
-one-element block array on the first turn and as a bare string on later ones.
-It is recorded as disclosed host context rather than treated as absent, with the
-email address replaced in the report. The working directory is an opaque
-`${TMPDIR}/attempt-<id>` path created for the run and removed afterwards, so it
-no longer names the story, the round or the seat.
-
-The limits run two ways. On this machine the proxy sees only what the CLI
-addresses to its base URL, nothing else is monitored, and the vendor prompt is
-pinned by hash and never published. On the vendor's side the capture shows what
-the CLI attached here and cannot show anything attached to this account after
-the request leaves. A pass covers one attempt under one CLI build and certifies
-no historical run. 2.1.266 and 2.1.267 have no pinned profile and now stop
-before anything is sent. Because the pins describe one build, the build is
-pinned by the SHA-256 of the executable: the launcher runs
-`$ARCHIVE_ROOT/cli/claude-<version>` when its hash matches, otherwise copies
-`~/.local/share/claude/versions/<version>` there once (0700 directory, 0500
-file) and runs the copy, and otherwise refuses. There is no PATH fallback;
-2.1.273 was on PATH when v1.29 shipped, the run record carries both
-`cli_version` and `path_cli_version`, and a new version needs a fresh capture
-and a new pin row before it can run. Codex and Google have no capture-backed
-profile and stay blocked, so the three-seat panel still cannot run. Candidate
+**The CLI build is recorded, not pinned.** v1.30 removed the version gate, the pin
+table and the archived build with the request pins they protected. The launcher
+runs the `claude` on PATH and refuses only when there is none. `cli_version` is
+public; the executable's resolved path and the SHA-256 of its bytes are retained
+privately as observations, so a reader of a retained capture can still ask which
+file produced it. `path_cli_version` is gone, because the launcher no longer
+overrides the machine's own choice of build. Codex and Google have no capture at
+all and stay blocked, so the three-seat panel still cannot run. Candidate
 diagnostics do not authorize a research run, and a source-audit helper does not
 authorize another framing check or reset a cap.
 
@@ -427,12 +438,13 @@ Essential-source access must be resolved before the run continues. The model
 pins above and the three-vendor synthesis rule remain unchanged.
 
 Every launch attempt retains its package and execution metadata in a private
-archive outside Git worktrees; any diagnostic output remains there too. From
-v1.29 the retained record also holds the captured requests and responses and the
-proof report, and the public row gains the context-proof status, whether the run
-was admitted and why, the upstream the capture was taken against, which pin
-table was used, the request and turn counts and the capture manifest hash. The
-resolved path of the CLI executable is retained privately and never published. A
+archive outside Git worktrees; any diagnostic output remains there too. The
+retained record also holds the captured requests and responses and the check
+report, and the public row carries the context-proof status, whether the run was
+admitted and why, the upstream the capture was taken against, the request count,
+how many requests carried the package, the private sources searched for by name
+and line count, and the capture manifest hash. The resolved path of the CLI
+executable and the hash of its bytes are retained privately and never published. A
 research profile must retain stdout, stderr, the complete final response
 (including provenance after the report), request/stream evidence, diagnostics,
 known exit status and hashes before extraction. The
