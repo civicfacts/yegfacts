@@ -950,15 +950,64 @@ The article under the question.
   when. "We did not find it" never becomes "it does not exist".
 - Quote only where the exact words matter. Otherwise say it plainly and link.
 
+### The layers
+
+The charter promises three depths on one page: ten seconds for a resident, ten
+minutes for a journalist, an hour for a researcher. A page serves all three only
+if each layer is written for its own reader, not for the reader one layer down.
+
+The founder read the published stories again on 2026-09-16: "the stories we
+have published are really hard to read for normal people." Measured, he was
+right, and the cause was not vocabulary this time. The seven live standfirsts
+ran 24 to 78 words, median 44. TL;DR bullets ran 16 to 78 words, median 34,
+carrying survey years, sample sizes, denominators and lists of comparator
+cities. Four of the seven explanations opened with what the frozen brief asked
+the reviewers, and carried between 15 and 27 method words in reader text. The
+2026-09-03 pass had made every layer plainer and left every layer at the
+journalist's depth. The ten-second layer did not exist.
+
+What each layer is for:
+
+- **The standfirst** is the ten-second layer. It is one sentence a person would
+  say to a friend who had just asked the question. It carries the stance and at
+  most one fact, and names at most one place and one number. It obeys the
+  answer's punctuation rule. Somewhere under twenty words is where such a
+  sentence usually lands, and that is a description, not a cap; the check is
+  whether a person would say it. Where a question has one claim, the claim's
+  answer can serve as the standfirst.
+- **The TL;DR** is the same ten-second reader, reading on. Three to five
+  sentences, each a thing a person would say, each carrying one fact the
+  standfirst did not. Numbers rounded as people say them. No source names, no
+  survey years, no denominators, no comparator lists, no method words. The
+  exact figure, the year and the source belong one layer down, and the
+  explanation must carry them, so that the bullet is a plain statement of a
+  fact the page proves rather than the proof itself.
+- **The explanation** is the ten-minute layer. Exact figures, sources, years,
+  denominators and qualifications live here, each beside the sentence it
+  supports. It opens with what happened, not with how the question was put to
+  the panel.
+- **Claim detail** is the hour. The brief, the panel and how it split, the rule,
+  the key facts and their sources, what a seat tried and what it could not
+  find. Method narration belongs here, or under its own subhead after the
+  reader has the answer, and never in the first paragraphs of the explanation.
+
+Nothing moves up a layer by being deleted from the one below. A fact leaving a
+bullet lands in the explanation, and the plain-speech read's clause accounting
+covers the whole move, bullet by bullet. Where a plainer bullet would change
+the strength or the scope of a finding, the bullet stays and the read says why.
+
 ### What a script checks, and what a reader checks
 
 A script can only see shape, so it checks shape: the answer's punctuation, the
 question's opening word and its lack of a colon, the presence of a stance
-opener, and a jargon list that warns rather than fails.
+opener, a jargon list that warns rather than fails, and the length of a
+standfirst or a TL;DR bullet, which also only warns, because a length that
+failed the build would be the cap this section removed coming back.
 
 Everything else goes to a plain-speech read before publication, by a model from
 a different vendor than the one that drafted, in the same shape as the
-faithfulness check. It answers three questions. Would a person say this out
+faithfulness check. It reads the standfirst and the TL;DR under the layers rule
+above as well as the answers. It answers three questions. Would a person say this out
 loud. Does the answer make sense to someone who has not seen the question. Has
 anything true been deleted rather than moved. The last one is the important
 one: the reader has to account for every substantive clause in the draft as

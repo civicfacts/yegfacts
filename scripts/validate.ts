@@ -579,11 +579,23 @@ function checkPlainSpeech(): void {
     if (typeof data.one_line === 'string') {
       sentences.push({ file, field: 'one_line', text: data.one_line });
     }
+    stringArray(data.tldr).forEach((text, i) => {
+      sentences.push({ file, field: `tldr[${i}]`, text });
+    });
   }
 
   for (const { file, field, text } of sentences) {
     for (const term of methodVocabularyIn(text)) {
       warn(file, `${field} uses method vocabulary "${term}". Say it in the words a reader uses.`);
+    }
+    // The layers rule (§12): the standfirst and each bullet are the ten-second
+    // reader's, and a sentence that long is usually written for the reader one
+    // layer down. A warning, never a failure: a length that failed the build
+    // would be the thirty-word cap coming back.
+    const words = text.trim().split(/\s+/).length;
+    const limit = field === 'answer' ? Infinity : field === 'one_line' ? 25 : 30;
+    if (words > limit) {
+      warn(file, `${field} is ${words} words. Is it a sentence a person would say? The exact figures belong in the explanation.`);
     }
   }
 }
