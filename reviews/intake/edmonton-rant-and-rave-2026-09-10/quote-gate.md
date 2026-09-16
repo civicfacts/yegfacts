@@ -9,15 +9,21 @@ Every quote is the words of the comment it cites. Nothing thrown out.
 
 ## luna
 
-1 form(s) thrown out; 1 claim(s) lost every form and went with them.
+2 form(s) thrown out; 1 claim(s) lost every form and went with them.
 
-- `e-061` not in comment 117, and nowhere in the capture. Quote: “we have 10x more blue bags and compost than actual trash”
+- `e-033` not in comment 71, and nowhere in the capture. Quote: “you keep dumping your furniture and garbage in our bins so I HAVE BEEN CHARGED TWICE for e”
+- `e-037` not in comment 105, and nowhere in the capture. Quote: “there's not much in there and often we don't even put it out for garbage day if the weathe”
 
-Claims lost entirely: `e-061`
+Claims lost entirely: `e-033`
+
+## sonnet
+
+Every quote is the words of the comment it cites. Nothing thrown out.
 
 ## Totals
 
 | seat | claims kept | forms kept | forms thrown out | claims lost |
 | --- | ---: | ---: | ---: | ---: |
-| haiku | 25 | 31 | 0 | 0 |
-| luna | 69 | 83 | 1 | 1 |
+| haiku | 35 | 51 | 0 | 0 |
+| luna | 54 | 87 | 2 | 1 |
+| sonnet | 55 | 78 | 0 | 0 |

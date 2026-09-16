@@ -59,9 +59,10 @@ thing that would have to be true. Prefer the clearest of the seats' wordings;
 sharpen it if all three are vague. State it in the direction the commenter
 asserted it, not as a question.
 
-`side` is which side of the bike-lane spending argument the claim serves:
-`for`, `against`, or `neither`. Where seats disagree, decide it yourself from
-the forms.
+`side` is which side of the argument in this source the claim serves:
+`for`, `against`, or `neither`, as the run's source note defines them. The
+note follows these instructions and is the same paragraph the extractor
+seats were given. Where seats disagree, decide it yourself from the forms.
 
 ## Forms
 

@@ -14,6 +14,30 @@
 # The sentence above used to describe a check that did not exist: the rule sat
 # as a TODO in scripts/validate.ts, and a change under methodology/ shipped
 # clean. It runs now.
+- version: "1.33"
+  date: "2026-09-16"
+  scope: intake-source-note
+  summary: >
+    The intake prompts no longer name one source's argument. Each whole-source
+    run now commits a source note, one paragraph saying what the people in
+    that source are arguing about and what "for" and "against" mean in it,
+    and every seat reads the note after the prompt. The second source read
+    under this method, a public-group thread on garbage collection, snow
+    clearing and taxes, ran on two vendors rather than three, and the run
+    record says so and why.
+  highlights:
+    - "The extraction and merge prompts defined a claim's side as a position in \"the bike-lane spending argument\". That was the first source's argument written into the method as if it were part of it, and the second source, which is not about bike lanes, exposed it before a seat ran. The definition now points at a source note the run writes and commits beside its artifacts. The note describes the source and its two positions; it names no claim and chooses none, which is the property the rest of the stage rests on. The examples inside the prompts still come from the first thread, because an example has to come from somewhere."
+    - "The Google seat could not run on the second source: the only working Gemini command-line tool on the machine reported its account quota exhausted for about a week, and the vendor's other tool refuses to authenticate at all. The founder chose to run the source on two vendors rather than wait, and the record carries that as a stated limit rather than a footnote: extraction on three seats from two vendors, and triage on two readers from one vendor, which is the vendor the merge did not run on. The first run's argument for three seats, that the weakest seat found a fifth of what the strongest did, applies here with one seat fewer, and a claim only the missing seat would have found is a claim this run did not see."
+  links:
+    - label: Stage 0 (docs/DESIGN.md section 4)
+      href: https://github.com/civicfacts/yegfacts/blob/main/docs/DESIGN.md
+    - label: The second source's run record
+      href: https://github.com/civicfacts/yegfacts/blob/main/reviews/intake/edmonton-rant-and-rave-2026-09-10/README.md
+  note: >
+    A method that names its first source in its rules will read every later
+    source as if it were the first. The fix is not to generalise the wording
+    but to move the source's description out of the method and into the run,
+    where it is written fresh each time and published with the result.
 - version: "1.32"
   date: "2026-09-16"
   scope: readable-layers
