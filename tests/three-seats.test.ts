@@ -125,7 +125,10 @@ function stub(
     if (seat === 'openai') {
       mkdirSync(path.join(home, '.codex'), { recursive: true });
       credential = path.join(home, '.codex', 'auth.json');
-      writeFileSync(credential, '{"tokens":{"access_token":"stub-oauth-token"}}\n');
+      // Deliberately not shaped like a real credential file. The launcher never
+      // reads one, so nothing here needs the real keys, and a stand-in that
+      // looked like a token would trip the repository's own secret scan.
+      writeFileSync(credential, '{"stub-login": "this file stands in for a login and holds nothing"}\n');
     } else {
       mkdirSync(path.join(home, '.gemini', 'antigravity-cli'), { recursive: true });
       credential = path.join(home, '.gemini', 'antigravity-cli', 'antigravity-oauth-token');
@@ -304,7 +307,7 @@ describe('the Codex seat', { timeout: 120_000 }, () => {
     const after = statSync(one.credential);
     expect(after.size).toBe(before.size);
     expect(after.mode).toBe(before.mode);
-    expect(readFileSync(one.credential, 'utf8')).toContain('stub-oauth-token');
+    expect(readFileSync(one.credential, 'utf8')).toContain('stands in for a login');
   });
 
   it('refuses when there is no credential, and never writes one', () => {
