@@ -11,10 +11,17 @@ one place. Reviewers do not receive it.
 ## Provenance
 
 - **Source:** `yegscoop-2026-08-26`, a Facebook post by Yegscoop about the
-  Infrastructure Committee's bike-lane decision of 2026-08-26, with all 621
-  captured comment records, captured by the founder on 2026-09-02 and
-  committed at `intake/captures/yegscoop-2026-08-26/comments.jsonl`. The
-  source URL and the capture's own terms are in that directory's README.
+  Infrastructure Committee's bike-lane decision of 2026-08-26, captured by
+  the founder on 2026-09-02 and committed at
+  `intake/captures/yegscoop-2026-08-26/comments.jsonl`. The source URL and
+  the capture's own terms are in that directory's README.
+- **Capture limitation:** the platform displayed 669 comments; the capture
+  holds 621 accessible records after two stable end passes exposed no
+  further comments or replies. The 48-count gap is unresolved and does not
+  identify 48 missing unique comments. Every count in this record and in
+  the brief describes the accessible capture, not the complete displayed
+  thread, and the capture is not described as complete anywhere in this
+  run.
 - **How the claims were found:** three extractor seats read the whole
   thread and listed every materially factual claim in it; a merge seat
   folded the three lists into propositions; `scripts/intake-coverage.ts`
