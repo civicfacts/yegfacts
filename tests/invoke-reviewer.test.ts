@@ -392,6 +392,33 @@ exit "$(cat "${dir}/research.exit")"
   writeFileSync(claude, script);
   chmodSync(claude, 0o755);
 
+  // A stub `codex` and `agy` beside the stub `claude`, so that the two refusals
+  // the tests below are about are the ones they say they are. Without these the
+  // launcher stops at "codex is not on PATH" on any machine that does not happen
+  // to have the real CLI installed — which is every CI runner — and the
+  // credential check under test is never reached. A test that passes only on the
+  // machine it was written on is a test about that machine.
+  //
+  // Neither is ever asked to do work here, because the credential refusal comes
+  // first. They answer `--version`, which the launcher reads before it builds a
+  // home, and anything past that records a call in the same `calls` file the
+  // stub `claude` uses. So `calls` staying absent now means no reviewer CLI ran
+  // at all, rather than only that `claude` did not.
+  for (const [name, version] of [['codex', 'codex-cli 0.154.0'], ['agy', '1.2.4']] as const) {
+    const other = path.join(bin, name);
+    writeFileSync(
+      other,
+      `#!/usr/bin/env bash
+set -u
+if [ "\${1:-}" = "--version" ]; then echo "${version}"; exit 0; fi
+count=$(( $(cat "${dir}/calls" 2>/dev/null || echo 0) + 1 ))
+echo "$count" > "${dir}/calls"
+exit 0
+`,
+    );
+    chmodSync(other, 0o755);
+  }
+
   const archive = mkdtempSync(path.join(root, 'archive-'));
   return {
     dir,
