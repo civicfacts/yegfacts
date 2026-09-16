@@ -48,6 +48,12 @@ export type CapturedRequest = {
   url: string;
   headers: Record<string, unknown>;
   body: unknown;
+  /**
+   * The HTTP status the upstream answered with, read off the matching
+   * `res-NNNN.txt`. Absent when no response was captured, and absent on a local
+   * record, which is not an HTTP exchange at all.
+   */
+  status?: number;
 };
 
 /**
@@ -407,11 +413,26 @@ export function readCapture(dir: string): Capture {
   const requests: CapturedRequest[] = [];
   const manifest: string[] = [];
 
+  /** `res-0007.txt` opens `HTTP 200 ...`, and 0007 is the request it answers. */
+  const statusById = new Map<string, number>();
   for (const name of entries) {
-    if (!/^(req|res)-\d+\.(json|txt)$/.test(name)) continue;
+    const match = /^res-(\d+)\.txt$/.exec(name);
+    if (!match) continue;
+    try {
+      const first = readFileSync(path.join(dir, name), 'utf8').split('\n', 1)[0] ?? '';
+      const status = /^HTTP (\d{3})/.exec(first);
+      if (status) statusById.set(match[1]!, Number(status[1]));
+    } catch {
+      // An unreadable response leaves the status absent, which is never read as
+      // a success anywhere downstream.
+    }
+  }
+
+  for (const name of entries) {
+    if (!/^(req|res)-\d+\.(json|txt|bin)$/.test(name)) continue;
     const raw = readFileSync(path.join(dir, name));
     manifest.push(`${name} ${createHash('sha256').update(raw).digest('hex')}`);
-    if (!name.startsWith('req-')) continue;
+    if (!name.startsWith('req-') || !name.endsWith('.json')) continue;
     let parsed: Record<string, unknown> = {};
     try {
       parsed = JSON.parse(raw.toString('utf8')) as Record<string, unknown>;
@@ -420,6 +441,7 @@ export function readCapture(dir: string): Capture {
       // and pushed through with no body rather than skipped.
     }
     const headers = parsed.headers;
+    const status = statusById.get(/^req-(\d+)\.json$/.exec(name)?.[1] ?? '');
     requests.push({
       file: name,
       method: typeof parsed.method === 'string' ? parsed.method : '?',
@@ -429,6 +451,7 @@ export function readCapture(dir: string): Capture {
           ? (headers as Record<string, unknown>)
           : {},
       body: parsed.body,
+      ...(status === undefined ? {} : { status }),
     });
   }
 
@@ -441,4 +464,63 @@ export function readCapture(dir: string): Capture {
   }
 
   return { requests, upstream, requestsManifestSha256: sha256(manifest.join('\n')) };
+}
+
+/**
+ * Read a CLI's own local record as if it were a capture, so that the same
+ * denylist runs over it.
+ *
+ * WHY THIS EXISTS, and what it is not. The Gemini CLI (agy 1.1.28) has no
+ * capture route at all: it ignores every base-URL environment variable this
+ * project could set, its log carries no request bodies, and its own transcript
+ * omits the system prompt. Methodology v1.31 admits the seat anyway, under a
+ * check that runs over what the CLI does write down — the event stream it
+ * printed, the transcript it kept, the fetched page contents its own tool saved,
+ * and the final response. That is a check of the CLI's local record, never of a
+ * request, and every caller of this function labels it `record-only` for exactly
+ * that reason.
+ *
+ * A `.jsonl` file becomes one entry per line, so a failure names the line that
+ * carried the private text. A line that is not JSON is still searched, wrapped
+ * as `{ text }`, because an unparsed line is text the model saw. Any other file
+ * becomes one entry holding its whole contents the same way. A file that is not
+ * there contributes nothing and is not an error here: the package-presence rule
+ * in `checkCapture` is what fails a record that is missing the piece that
+ * matters.
+ */
+export function readLocalRecord(files: { name: string; file: string }[]): Capture {
+  const requests: CapturedRequest[] = [];
+  const manifest: string[] = [];
+
+  for (const { name, file } of files) {
+    let raw: Buffer;
+    try {
+      raw = readFileSync(file);
+    } catch {
+      continue;
+    }
+    manifest.push(`${name} ${createHash('sha256').update(raw).digest('hex')}`);
+    const text = raw.toString('utf8');
+    const entry = (label: string, body: unknown) =>
+      requests.push({ file: label, method: 'record', url: name, headers: {}, body });
+
+    if (file.endsWith('.jsonl')) {
+      text.split('\n').forEach((line, index) => {
+        if (line.trim() === '') return;
+        let parsed: unknown;
+        try {
+          parsed = JSON.parse(line);
+        } catch {
+          parsed = { text: line };
+        }
+        // A bare string or number on a line would not be walked by the check,
+        // which only looks inside objects, so everything is wrapped.
+        entry(`${name} line ${index + 1}`, parsed !== null && typeof parsed === 'object' ? parsed : { text: line });
+      });
+      continue;
+    }
+    entry(name, { text });
+  }
+
+  return { requests, upstream: '', requestsManifestSha256: sha256(manifest.join('\n')) };
 }

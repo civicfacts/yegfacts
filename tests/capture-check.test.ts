@@ -23,6 +23,7 @@ import {
   needleLines,
   privateSources,
   readCapture,
+  readLocalRecord,
 } from '../scripts/panel/capture-check.ts';
 
 const root = mkdtempSync(path.join(tmpdir(), 'yegfacts-capture-check-'));
@@ -354,5 +355,91 @@ describe('reading a capture directory', () => {
     const before = capture.requestsManifestSha256;
     writeFileSync(path.join(dir, 'res-0002.txt'), 'HTTP 200\nand one more line\n');
     expect(readCapture(dir).requestsManifestSha256).not.toBe(before);
+  });
+});
+
+describe('reading a CLI local record', () => {
+  /**
+   * The Gemini seat has no capture at all, so the same denylist runs over what
+   * its CLI wrote down. What matters here is that a JSONL file becomes one entry
+   * PER LINE, so a failure names the line that carried the private text, and
+   * that a line which is not JSON is still searched rather than skipped.
+   */
+  const machine = stubMachine('local-record');
+
+  const write = (name: string, body: string) => {
+    const dir = path.join(root, 'record');
+    mkdirSync(dir, { recursive: true });
+    const file = path.join(dir, name);
+    writeFileSync(file, body);
+    return { name, file };
+  };
+
+  it('splits a JSONL record into one searchable entry per line', () => {
+    const transcript = write(
+      'transcript-1.jsonl',
+      `${JSON.stringify({ step: 0, content: PACKAGE })}\n${JSON.stringify({ step: 1, content: 'a reply' })}\n`,
+    );
+    const record = readLocalRecord([transcript]);
+    expect(record.requests.map((one) => one.file)).toEqual([
+      'transcript-1.jsonl line 1',
+      'transcript-1.jsonl line 2',
+    ]);
+    expect(record.requestsManifestSha256).toMatch(/^[0-9a-f]{64}$/);
+    // There is no upstream, because there was no request.
+    expect(record.upstream).toBe('');
+
+    const result = checkCapture({
+      requests: record.requests,
+      packageText: PACKAGE,
+      token: '',
+      sources: privateSources({ ...machine, token: '' }),
+    });
+    expect(result.status).toBe('pass');
+    expect(result.package_seen).toBe(1);
+    expect(result.searched).toBe(2);
+  });
+
+  it('names the line that leaked, and never the line itself', () => {
+    const transcript = write(
+      'transcript-2.jsonl',
+      `${JSON.stringify({ step: 0, content: PACKAGE })}\n${JSON.stringify({ step: 1, host: HOME_LINE })}\n`,
+    );
+    const result = checkCapture({
+      requests: readLocalRecord([transcript]).requests,
+      packageText: PACKAGE,
+      token: '',
+      sources: privateSources({ ...machine, token: '' }),
+    });
+    expect(result.status).toBe('fail');
+    expect(result.failures.join()).toContain('transcript-2.jsonl line 2: carries $HOME/.claude/CLAUDE.md line 1');
+    expect(result.failures.join()).not.toContain(HOME_LINE);
+  });
+
+  it('searches a line that is not JSON rather than stepping over it', () => {
+    const transcript = write('transcript-3.jsonl', `not json at all: ${HOME_LINE}\n`);
+    const result = checkCapture({
+      requests: readLocalRecord([transcript]).requests,
+      packageText: PACKAGE,
+      token: '',
+      sources: privateSources({ ...machine, token: '' }),
+    });
+    expect(result.failures.join()).toContain('transcript-3.jsonl line 1: carries');
+  });
+
+  it('reads a plain file whole, and treats a missing one as contributing nothing', () => {
+    const final = write('final-response.txt', `the answer, quoting ${HOME_LINE}\n`);
+    const record = readLocalRecord([final, { name: 'gone.jsonl', file: path.join(root, 'record', 'gone.jsonl') }]);
+    expect(record.requests.map((one) => one.file)).toEqual(['final-response.txt']);
+    const result = checkCapture({
+      requests: record.requests,
+      packageText: PACKAGE,
+      token: '',
+      sources: privateSources({ ...machine, token: '' }),
+    });
+    // A record with no package in it is not a record of this run, and a leak in
+    // it is still a leak.
+    expect(result.failures.join()).toContain('final-response.txt: carries');
+    expect(result.failures.join()).toContain('no captured request carries the declared package');
   });
 });

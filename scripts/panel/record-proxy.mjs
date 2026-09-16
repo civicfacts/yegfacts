@@ -3,12 +3,14 @@
  * forward it unchanged.
  *
  *   node scripts/panel/record-proxy.mjs --out <dir> --port-file <file>
+ *                                      [--provider anthropic|openai]
  *
  * This is the piece that was missing when v1.28 said the context boundary was
- * undemonstrated. Claude Code honours `ANTHROPIC_BASE_URL`, so pointing it at a
- * loopback listener puts the complete outgoing request on disk before it leaves
- * the machine. What the CLI addresses elsewhere is not seen here, and nothing
- * else on the machine is watched.
+ * undemonstrated. Claude Code honours `ANTHROPIC_BASE_URL` and codex honours
+ * `openai_base_url`/`chatgpt_base_url`, so pointing either at a loopback
+ * listener puts the complete outgoing request on disk before it leaves the
+ * machine. What the CLI addresses elsewhere is not seen here, and nothing else
+ * on the machine is watched.
  *
  * TWO RULES, and everything else follows from them.
  *
@@ -17,25 +19,39 @@
  * edited a request would make the capture a description of the proxy rather
  * than of the CLI, which is the opposite of the point.
  *
- * It redacts in the CAPTURE ONLY. `authorization`, `x-api-key` and `cookie`
- * become `<redacted>` in `req-NNNN.json`; the real headers are forwarded. The
- * retained capture is evidence a person may have to read, and a subscription
- * token in it would make the whole archive unshowable.
+ * It redacts in the CAPTURE ONLY. `authorization`, `x-api-key`, `cookie` and
+ * `chatgpt-account-id` become `<redacted>` in `req-NNNN.json`; the real headers
+ * are forwarded. The retained capture is evidence a person may have to read,
+ * and a subscription token or an account identifier in it would make the whole
+ * archive unshowable.
  *
- * Upstream is `https://api.anthropic.com`. `YEGFACTS_REVIEW_UPSTREAM` may point
- * at a loopback URL instead, which is how the tests run without reaching the
- * network; anything else is refused before the listener opens. The upstream
- * actually used is written to `<out>/upstream.txt` and travels from there into
- * the attempt metadata and the public manifest row, so a capture taken against
- * a stub can never be presented as a production one.
+ * UPSTREAM IS A FIXED TABLE, one row per provider: `https://api.anthropic.com`
+ * for anthropic, `https://chatgpt.com` for openai. It is chosen by the
+ * `--provider` flag and nothing else; there is no way to name an arbitrary host
+ * on the command line, because a proxy that forwarded wherever it was told
+ * would be a way to send a package somewhere nobody chose.
+ * `YEGFACTS_REVIEW_UPSTREAM` may point at a loopback URL instead, which is how
+ * the tests run without reaching the network; anything else is refused before
+ * the listener opens. The upstream actually used is written to
+ * `<out>/upstream.txt` and travels from there into the attempt metadata and the
+ * public manifest row, so a capture taken against a stub can never be presented
+ * as a production one.
  *
  * Files written, per request, numbered in arrival order:
  *   req-NNNN.json  method, url, headers (redacted), body parsed as JSON when it
  *                  is JSON and kept as text when it is not
+ *   req-NNNN.bin   the raw request bytes, kept whenever the body did not parse
+ *                  as JSON, so an encoding this node could not decode is still
+ *                  on disk for a person to look at rather than lost
  *   res-NNNN.txt   the status line and the complete response body, including a
  *                  streamed (SSE) one, read to its end. Content encodings are
  *                  decoded for the capture; an encoding this node cannot decode
  *                  is written as base64 under a header line that says so.
+ *
+ * REQUEST bodies are decoded before they are parsed, for the same reason the
+ * response bodies are: a compressed body the capture could not read would be a
+ * body the denylist check could not search, and an unsearchable request that
+ * passed would be worse than one that failed.
  *
  * An upstream error is written to `res-NNNN.txt` and returned to the CLI as a
  * 502. It is never swallowed: a run that failed to reach the API has to look
@@ -48,8 +64,16 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import zlib from 'node:zlib';
 
-const PRODUCTION_UPSTREAM = 'https://api.anthropic.com';
-const REDACTED_HEADERS = new Set(['authorization', 'x-api-key', 'cookie']);
+/**
+ * The upstream for each provider, and the whole of it. A provider with no row
+ * has no upstream and the proxy refuses to start rather than guessing one.
+ */
+export const PROVIDER_UPSTREAMS = Object.freeze({
+  anthropic: 'https://api.anthropic.com',
+  openai: 'https://chatgpt.com',
+});
+
+const REDACTED_HEADERS = new Set(['authorization', 'x-api-key', 'cookie', 'chatgpt-account-id']);
 
 /**
  * The only non-production upstream that is allowed, and it has to be on this
@@ -58,8 +82,14 @@ const REDACTED_HEADERS = new Set(['authorization', 'x-api-key', 'cookie']);
  */
 const LOOPBACK = /^http:\/\/(?:127\.0\.0\.1|localhost)(?::\d{1,5})?(?:\/.*)?$/;
 
-export function resolveUpstream(value) {
-  if (value === undefined || value === '') return PRODUCTION_UPSTREAM;
+export function resolveUpstream(value, provider = 'anthropic') {
+  const production = PROVIDER_UPSTREAMS[provider];
+  if (production === undefined) {
+    throw new Error(
+      `no upstream is recorded for provider "${provider}" (known: ${Object.keys(PROVIDER_UPSTREAMS).join(', ')})`,
+    );
+  }
+  if (value === undefined || value === '') return production;
   if (!LOOPBACK.test(value)) {
     throw new Error(
       `YEGFACTS_REVIEW_UPSTREAM must be a loopback URL (http://127.0.0.1:... or http://localhost:...), got "${value}"`,
@@ -68,7 +98,7 @@ export function resolveUpstream(value) {
   return value.replace(/\/$/, '');
 }
 
-/** The capture of one response body, decoded when this node can decode it. */
+/** The capture of one body, decoded when this node can decode it. */
 function decodeBody(buffer, encoding) {
   const name = (encoding ?? '').toLowerCase().trim();
   try {
@@ -76,6 +106,13 @@ function decodeBody(buffer, encoding) {
     if (name === 'gzip') return { text: zlib.gunzipSync(buffer).toString('utf8'), note: '' };
     if (name === 'deflate') return { text: zlib.inflateSync(buffer).toString('utf8'), note: '' };
     if (name === 'br') return { text: zlib.brotliDecompressSync(buffer).toString('utf8'), note: '' };
+    // Codex 0.154.0 compresses its request bodies with zstd unless
+    // `enable_request_compression` is disabled. The launcher disables it; this
+    // is here so that a build which ignores the flag still produces a capture
+    // the denylist can read rather than one it silently skips.
+    if (name === 'zstd' && typeof zlib.zstdDecompressSync === 'function') {
+      return { text: zlib.zstdDecompressSync(buffer).toString('utf8'), note: '' };
+    }
   } catch (error) {
     return { text: buffer.toString('base64'), note: ` (undecoded ${name}: ${error.message}; body is base64)` };
   }
@@ -101,12 +138,18 @@ export function startRecordingProxy({ out, upstream }) {
       for (const [key, value] of Object.entries(req.headers)) {
         headers[key] = REDACTED_HEADERS.has(key.toLowerCase()) ? '<redacted>' : value;
       }
+      const decoded = body.length > 0 ? decodeBody(body, req.headers['content-encoding']) : { text: '', note: '' };
       let parsed = null;
       try {
-        parsed = body.length > 0 ? JSON.parse(body.toString('utf8')) : null;
+        parsed = body.length > 0 ? JSON.parse(decoded.text) : null;
       } catch {
         parsed = null;
       }
+      // The raw bytes of anything that did not parse. A body the capture could
+      // not read is a body the denylist could not search, and the retained
+      // bytes are what lets a person answer later what this could not answer
+      // now.
+      if (body.length > 0 && parsed === null) fs.writeFileSync(path.join(out, `req-${id}.bin`), body);
       // Written before anything is forwarded. A capture that only appears once
       // the upstream answered would lose exactly the requests worth keeping.
       fs.writeFileSync(
@@ -116,7 +159,7 @@ export function startRecordingProxy({ out, upstream }) {
             method: req.method,
             url: req.url,
             headers,
-            body: parsed ?? body.toString('utf8'),
+            body: parsed ?? decoded.text,
           },
           null,
           2,
@@ -128,13 +171,18 @@ export function startRecordingProxy({ out, upstream }) {
       const forwarded = { ...req.headers, host: target.host };
       if (body.length > 0) forwarded['content-length'] = String(body.length);
 
+      // An upstream may carry a path of its own. Neither production row does,
+      // so this is empty in every real run; it exists so a loopback stub
+      // mounted under a prefix still receives what the CLI addressed.
+      const basePath = target.pathname.replace(/\/$/, '');
+
       const upstreamRequest = transport.request(
         {
           protocol: target.protocol,
           host: target.hostname,
           port: target.port || (target.protocol === 'https:' ? 443 : 80),
           method: req.method,
-          path: req.url,
+          path: `${basePath}${req.url}`,
           headers: forwarded,
         },
         (upstreamResponse) => {
@@ -192,13 +240,15 @@ if (invoked === self) {
     flags[flag.slice(2)] = value;
   }
   if (!flags.out || !flags['port-file']) {
-    console.error('usage: node scripts/panel/record-proxy.mjs --out <dir> --port-file <file>');
+    console.error(
+      'usage: node scripts/panel/record-proxy.mjs --out <dir> --port-file <file> [--provider anthropic|openai]',
+    );
     process.exit(2);
   }
 
   let upstream;
   try {
-    upstream = resolveUpstream(process.env.YEGFACTS_REVIEW_UPSTREAM);
+    upstream = resolveUpstream(process.env.YEGFACTS_REVIEW_UPSTREAM, flags.provider ?? 'anthropic');
   } catch (error) {
     console.error(`record-proxy: ${error.message}`);
     process.exit(2);
