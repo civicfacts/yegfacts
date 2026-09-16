@@ -19,26 +19,43 @@
  * this machine.
  *
  * So `contextProof()` is not a constant. It takes the capture check's result and
- * returns `pass`, `fail`, or `unavailable` when no capture was taken, and
- * `admitForResearch` admits a structurally clean stream only when the check
- * passed. The structural checks still all apply; they were never the contract
- * on their own and they still are not.
+ * returns `pass`, `fail`, `record-only`, or `unavailable` when nothing was
+ * checked at all, and `admitForResearch` admits a structurally clean stream only
+ * when the proof is one the seat accepts. The structural checks still all apply;
+ * they were never the contract on their own and they still are not.
  *
  * WHAT A PASS DOES NOT COVER. From methodology v1.30 the capture check is a
  * denylist, not a description. It catches known private text from this machine.
  * It cannot catch text the vendor attaches that is not on this machine, and it
  * does not say what the request contains, only what it does not contain. The
  * proxy sees what the CLI sends to its configured base URL and nothing else on
- * the machine. Codex and Google have no capture at all, so their seats stay
- * blocked.
+ * the machine.
+ *
+ * THREE SEATS, THREE STREAMS, from methodology v1.31. Each CLI reports on itself
+ * in its own shape and each gets its own reader and its own structural check:
+ *
+ *   claude  `--output-format stream-json --verbose`: a `system/init` inventory,
+ *           paired `tool_use`/`tool_result` blocks, one `result` event. Checked
+ *           against a captured request.
+ *   codex   `--json`: `thread.started`, `item.completed` per item, one
+ *           `turn.completed`. Checked against a captured request, because codex
+ *           honours `openai_base_url` and the proxy sees the whole body.
+ *   agy     `--output-format stream-json`: an `init` event naming the tools, one
+ *           `step_update` per state change, one `result`. There is NO capture:
+ *           agy ignores every base-URL variable this project can set. Its check
+ *           runs over the CLI's own local record instead, and says so, as
+ *           `record-only` rather than `pass`.
  */
-import { readFileSync, realpathSync, writeFileSync } from 'node:fs';
+import { readFileSync, readdirSync, realpathSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   type CaptureCheckResult,
+  type CapturedRequest,
   checkCapture,
   privateSources,
   readCapture,
+  readLocalRecord,
 } from './capture-check.ts';
 
 type Json = Record<string, unknown>;
@@ -373,23 +390,39 @@ export function checkStructure(facts: StreamFacts, expected: StructureExpectatio
   return { ok: failures.length === 0, failures };
 }
 
-export type ContextProof = { status: 'pass' | 'fail' | 'unavailable'; reason: string };
+export type ProofStatus = 'pass' | 'fail' | 'record-only' | 'unavailable';
+export type ContextProof = { status: ProofStatus; reason: string };
 
 /**
- * Whether the actual context sent to the model was captured and searched.
+ * What the denylist ran over: the outgoing request itself, or the CLI's own
+ * local record of the run. The difference is the whole distance between `pass`
+ * and `record-only`, so it is named rather than inferred.
+ */
+export type RecordKind = 'request' | 'local-record';
+
+/**
+ * Whether the context the model was given was checked, and against what.
  *
- * Three answers, and the difference between them matters. `unavailable` means
- * no capture was taken: nothing was shown, so nothing is claimed. `fail` means a
- * capture was taken and it carried private text from this machine, or it did not
- * carry the declared package at all. `pass` means none of the private text this
- * machine holds appeared anywhere in any captured request, and the package did.
+ * Four answers, and the differences matter. `unavailable` means nothing was
+ * checked: nothing was shown, so nothing is claimed. `fail` means the check ran
+ * and found private text from this machine, or the declared package was not
+ * there at all. `pass` means the check ran over the OUTGOING REQUEST and none of
+ * this machine's private text appeared in it, and the package did.
+ *
+ * `record-only` (methodology v1.31) means the same search, over the CLI's own
+ * local record rather than over a request, because that CLI has no capture route
+ * at all. It is weaker than `pass` in a specific way: it sees what the model
+ * produced and what its tools returned, and it cannot see the system prompt or
+ * anything else the CLI attached on the way out. It is a separate word rather
+ * than a footnote on `pass` so that no reader of a run row has to know which
+ * seat had a proxy in front of it.
  *
  * A pass is a statement about what the request did NOT contain. It is not a
  * description of what it did contain, it does not cover text the vendor attaches
  * that is not on this machine, and it is not a vendor guarantee.
  * `capture-check.ts` says exactly what it covers.
  */
-export function contextProof(check: CaptureCheckResult | null): ContextProof {
+export function contextProof(check: CaptureCheckResult | null, kind: RecordKind = 'request'): ContextProof {
   if (!check) {
     return {
       status: 'unavailable',
@@ -402,20 +435,38 @@ export function contextProof(check: CaptureCheckResult | null): ContextProof {
   if (check.status === 'pass') {
     const read = check.sources.filter((source) => source.present);
     const lines = read.reduce((total, source) => total + source.lines_checked, 0);
+    const searched =
+      `${check.searched} of ${check.requests} ` +
+      (kind === 'request' ? 'captured request(s) had a JSON body and were searched' : 'record entr(ies) were searched') +
+      ` for ${lines} line(s) of private text from ${read.length} source(s) on this machine, and none of it ` +
+      `appeared. ${check.package_seen} ` +
+      (kind === 'request' ? 'request(s)' : 'record entr(ies)') +
+      ' carried the declared package byte for byte.';
+    if (kind === 'request') {
+      return {
+        status: 'pass',
+        reason:
+          `${searched} Only the string values of those bodies were searched, not the HTTP headers, the ` +
+          'request URLs or the responses. This says what the request bodies did not contain; it does not ' +
+          'say what they did contain, and it cannot see text the vendor attaches that is not on this ' +
+          'machine.',
+      };
+    }
     return {
-      status: 'pass',
+      status: 'record-only',
       reason:
-        `${check.searched} of ${check.requests} captured request(s) had a JSON body and were searched for ` +
-        `${lines} line(s) of private text from ${read.length} source(s) on this machine, and none of it ` +
-        `appeared. ${check.package_seen} request(s) carried the declared package byte for byte. Only the ` +
-        'string values of those bodies were searched, not the HTTP headers, the request URLs or the ' +
-        'responses. This says what the request bodies did not contain; it does not say what they did ' +
-        'contain, and it cannot see text the vendor attaches that is not on this machine.',
+        `${searched} This CLI exposes no way to record its outgoing request, so the search ran over its own ` +
+        'local record of the run: the event stream it printed, the transcript it kept, the page contents its ' +
+        'fetch tool saved and the final response. That record holds what the model produced and what its ' +
+        'tools returned. It does not hold the system prompt or anything else the CLI attached on the way ' +
+        'out, so this is weaker than a check over a request and is not reported as one.',
     };
   }
   return {
     status: 'fail',
-    reason: `the captured request did not pass the private-text check: ${check.failures.join('; ')}`,
+    reason:
+      `the ${kind === 'request' ? 'captured request' : "CLI's own record"} did not pass the private-text ` +
+      `check: ${check.failures.join('; ')}`,
   };
 }
 
@@ -497,9 +548,446 @@ export function admitForResearch(
   check: CaptureCheckResult | null,
 ): Verdict {
   const structure = checkStructure(facts, expected);
-  const proof = contextProof(check);
-  const failures = [...structure.failures];
-  if (proof.status !== 'pass') failures.push(`context proof ${proof.status}: ${proof.reason}`);
+  const proof = admitProof(contextProof(check), ['pass']);
+  return { ok: structure.ok && proof.ok, failures: [...structure.failures, ...proof.failures] };
+}
+
+/**
+ * Whether a context proof is one this seat may be admitted on.
+ *
+ * The accepted set is passed in rather than assumed, and it is `['pass']`
+ * everywhere except the Gemini seat, which also accepts `record-only` because
+ * its CLI has no capture route at all (methodology v1.31). Leaving the set to a
+ * caller is what keeps `record-only` from quietly becoming an acceptable answer
+ * for a seat that does have a proxy in front of it and simply failed to use it.
+ */
+export function admitProof(proof: ContextProof, accepted: ProofStatus[]): Verdict {
+  if (accepted.includes(proof.status)) return { ok: true, failures: [] };
+  return { ok: false, failures: [`context proof ${proof.status}: ${proof.reason}`] };
+}
+
+// ---------------------------------------------------------------------------
+// The Codex seat (openai), methodology v1.31.
+//
+// `codex exec --json` prints one JSON object per line: `thread.started`,
+// `turn.started`, an `item.started`/`item.completed` pair per item the model
+// produced, and one `turn.completed` carrying the token usage. There is no
+// inventory event: codex does not tell the stream which tools it was given, so
+// the tool-inventory check the Claude seat gets has no counterpart here and this
+// file does not pretend otherwise. What settles the codex seat is the captured
+// request, which carries the tool schemas, the base prompt and the whole
+// conversation.
+// ---------------------------------------------------------------------------
+export type CodexItem = {
+  id: string;
+  type: string;
+  /** `agent_message` text, `web_search` query, `command_execution` command. */
+  detail: string;
+  /** The aggregated output of a command, or an error message. */
+  output: string;
+  exit_code: number | null;
+};
+
+export type CodexFacts = {
+  event_types: string[];
+  unparsed_lines: number;
+  thread_started: number;
+  turn_completed: number;
+  items: CodexItem[];
+  /**
+   * Transport errors the CLI reported. Recorded, NOT gated. Build 0.154.0 opens
+   * a WebSocket, fails, and falls back to HTTPS about a minute later, printing
+   * five reconnect errors on the way. That is the normal path on this machine,
+   * and a check that failed on it would fail every run.
+   */
+  transport_errors: string[];
+  /** The last `agent_message`, which is the answer. */
+  final_text: string | null;
+  usage: Json | null;
+};
+
+export function readCodexStream(text: string): CodexFacts {
+  const facts: CodexFacts = {
+    event_types: [],
+    unparsed_lines: 0,
+    thread_started: 0,
+    turn_completed: 0,
+    items: [],
+    transport_errors: [],
+    final_text: null,
+    usage: null,
+  };
+
+  for (const line of text.split('\n')) {
+    if (!line.trim()) continue;
+    let event: Json | null = null;
+    try {
+      event = asRecord(JSON.parse(line));
+    } catch {
+      event = null;
+    }
+    if (!event) {
+      facts.unparsed_lines += 1;
+      continue;
+    }
+    const type = typeof event.type === 'string' ? event.type : '?';
+    facts.event_types.push(type);
+
+    if (type === 'thread.started') facts.thread_started += 1;
+    if (type === 'turn.completed') {
+      facts.turn_completed += 1;
+      facts.usage = asRecord(event.usage);
+    }
+    if (type === 'error' && typeof event.message === 'string') facts.transport_errors.push(event.message);
+    if (type !== 'item.completed') continue;
+
+    const item = asRecord(event.item);
+    if (!item) continue;
+    const itemType = typeof item.type === 'string' ? item.type : '?';
+    const str = (value: unknown): string => (typeof value === 'string' ? value : '');
+    const record: CodexItem = {
+      id: str(item.id),
+      type: itemType,
+      detail: str(item.text) || str(item.query) || str(item.command) || str(item.message),
+      output: str(item.aggregated_output) || str(item.message),
+      exit_code: typeof item.exit_code === 'number' ? item.exit_code : null,
+    };
+    facts.items.push(record);
+    if (itemType === 'agent_message' && record.detail !== '') facts.final_text = record.detail;
+    if (itemType === 'error' && record.detail !== '') facts.transport_errors.push(record.detail);
+  }
+
+  return facts;
+}
+
+/**
+ * What the codex stream can settle on its own, which is less than the Claude
+ * stream can. There is no tool inventory to check and no permission-denial list,
+ * so this checks that the run happened, completed, and answered; the request
+ * capture is what carries the rest.
+ */
+export function checkCodexStructure(facts: CodexFacts): Verdict {
+  const failures: string[] = [];
+  if (facts.unparsed_lines > 0) failures.push(`${facts.unparsed_lines} line(s) of the stream were not JSON`);
+  if (facts.thread_started !== 1) {
+    failures.push(`expected exactly one thread.started event, saw ${facts.thread_started}`);
+  }
+  if (facts.turn_completed !== 1) {
+    failures.push(`expected exactly one turn.completed event, saw ${facts.turn_completed}`);
+  }
+  const last = facts.event_types[facts.event_types.length - 1];
+  if (facts.turn_completed > 0 && last !== 'turn.completed') {
+    failures.push(`the stream ended with "${last}", not turn.completed`);
+  }
+  if (facts.final_text === null || facts.final_text.trim() === '') {
+    failures.push('the run returned no final message');
+  }
+  return { ok: failures.length === 0, failures };
+}
+
+/** Captured requests to the model endpoint, which is where the effort travels. */
+const codexModelRequests = (requests: CapturedRequest[]): CapturedRequest[] =>
+  requests.filter((request) => request.method === 'POST' && request.url.includes('/codex/responses'));
+
+/**
+ * The pinned reasoning effort, read out of the request rather than trusted
+ * because it was on the command line.
+ *
+ * The plan named this `model_reasoning_effort`, which is the CONFIG key. The
+ * request carries it as `reasoning.effort`, which is what is checked, because
+ * the request is the thing that decides what the model did.
+ */
+export function checkCodexEffort(requests: CapturedRequest[], effort: string): Verdict {
+  const failures: string[] = [];
+  const model = codexModelRequests(requests);
+  if (model.length === 0) {
+    failures.push('no captured request reached the model endpoint, so the reasoning effort could not be read');
+  }
+  for (const request of model) {
+    const reasoning = asRecord(asRecord(request.body)?.reasoning);
+    const seen = typeof reasoning?.effort === 'string' ? reasoning.effort : null;
+    if (seen !== effort) {
+      failures.push(`${request.file}: reasoning effort in the request was ${seen ?? 'absent'}, expected "${effort}"`);
+    }
+  }
+  return { ok: failures.length === 0, failures };
+}
+
+/** Successful calls to the web-search endpoint, on the same host as the model. */
+export const codexSearchRequests = (requests: CapturedRequest[]): CapturedRequest[] =>
+  requests.filter(
+    (request) =>
+      request.method === 'POST' &&
+      request.url.includes('/alpha/search') &&
+      request.status !== undefined &&
+      request.status >= 200 &&
+      request.status < 300,
+  );
+
+export type CodexCanaryExpectation = {
+  /** The attempt's synthetic token, which the model was asked to go and read. */
+  token: string;
+  /** The canary's complete raw stdout, searched for the token. */
+  rawText: string;
+  /** Every captured request of the canary run. */
+  requests: CapturedRequest[];
+  effort: string;
+};
+
+/**
+ * The codex canary, and the one place in this file where reading a local file is
+ * recorded rather than failed.
+ *
+ * Under this profile `-s read-only` grants read access to the WHOLE filesystem
+ * and shell and web run through the same host, so the two cannot be separated:
+ * turning the host off takes web access with it, and the 2026-09-09 probe showed
+ * the model then fabricating a fetch and exiting zero. So the file read is
+ * expected to succeed, it is recorded as `file_read: allowed`, and the public
+ * record says so. What refuses a run that read something private is the denylist
+ * over the captured requests: a tool's output comes back in the next turn's
+ * request body, so private text a reviewer read is private text the check sees.
+ *
+ * The positive half is the search endpoint in the CAPTURE, not a sentence in the
+ * answer. A model that says it searched and did not is exactly the failure the
+ * September 9 run produced.
+ */
+export function checkCodexCanary(facts: CodexFacts, expected: CodexCanaryExpectation): Verdict {
+  const failures = [...checkCodexStructure(facts).failures];
+
+  const searches = codexSearchRequests(expected.requests);
+  if (searches.length === 0) {
+    const attempted = expected.requests.filter((request) => request.url.includes('/alpha/search')).length;
+    failures.push(
+      `no successful web-search request in the capture (${attempted} search request(s) captured, none with a ` +
+        '2xx response); the model saying it searched is not evidence that it did',
+    );
+  }
+
+  failures.push(...checkCodexEffort(expected.requests, expected.effort).failures);
+  return { ok: failures.length === 0, failures };
+}
+
+/** Whether the canary's synthetic token came back, which this seat expects. */
+export const fileReadOutcome = (rawText: string, token: string): 'allowed' | 'refused' =>
+  token !== '' && rawText.includes(token) ? 'allowed' : 'refused';
+
+// ---------------------------------------------------------------------------
+// The Gemini seat (google), methodology v1.31.
+//
+// `agy --output-format stream-json` prints an `init` event naming the model, the
+// working directory and every tool the model is offered, one `step_update` per
+// state change, and one `result` carrying the status, the final response and the
+// usage. The tools are still OFFERED to the model under this profile; what the
+// launcher's settings file does is refuse them at the permission check, so a
+// denied tool shows up as a step in `ERROR` state rather than as a tool that was
+// never there. That is why the rule below is about which tools reached `DONE`.
+// ---------------------------------------------------------------------------
+export type GeminiStep = {
+  index: number;
+  state: string;
+  type: string;
+  tool: string | null;
+  url: string | null;
+  error: string | null;
+};
+
+export type GeminiFacts = {
+  event_types: string[];
+  unparsed_lines: number;
+  init_count: number;
+  result_count: number;
+  model: string | null;
+  cwd: string | null;
+  /** Every tool the CLI offered the model. Offered is not the same as allowed. */
+  tools_offered: string[] | null;
+  steps: GeminiStep[];
+  /** Tools that actually ran to completion. This is the list the profile gates. */
+  tools_completed: string[];
+  /** Tools the permission check refused, with the reason it gave. */
+  tools_refused: { tool: string; error: string }[];
+  result_status: string | null;
+  final_text: string | null;
+  usage: Json | null;
+};
+
+/** The only tools a reviewer may actually run under this seat's profile. */
+export const GEMINI_ALLOWED_TOOLS = new Set(['read_url_content', 'search_web']);
+
+export function readGeminiStream(text: string): GeminiFacts {
+  const facts: GeminiFacts = {
+    event_types: [],
+    unparsed_lines: 0,
+    init_count: 0,
+    result_count: 0,
+    model: null,
+    cwd: null,
+    tools_offered: null,
+    steps: [],
+    tools_completed: [],
+    tools_refused: [],
+    result_status: null,
+    final_text: null,
+    usage: null,
+  };
+
+  // One step reports many times as it runs; only its last state is its outcome.
+  const lastState = new Map<number, GeminiStep>();
+
+  for (const line of text.split('\n')) {
+    if (!line.trim()) continue;
+    let event: Json | null = null;
+    try {
+      event = asRecord(JSON.parse(line));
+    } catch {
+      event = null;
+    }
+    if (!event) {
+      facts.unparsed_lines += 1;
+      continue;
+    }
+    const type = typeof event.event === 'string' ? event.event : '?';
+    facts.event_types.push(type);
+
+    if (type === 'init') {
+      facts.init_count += 1;
+      const init = asRecord(event.init);
+      facts.model = typeof init?.model === 'string' ? init.model : null;
+      facts.cwd = typeof init?.cwd === 'string' ? init.cwd : null;
+      facts.tools_offered = names(init?.tools);
+      continue;
+    }
+
+    if (type === 'step_update') {
+      const step = asRecord(event.step_update);
+      if (!step) continue;
+      const index = typeof step.step_index === 'number' ? step.step_index : -1;
+      const info = asRecord(step.tool_info);
+      const parameters = asRecord(info?.parameters);
+      const url = parameters?.Url ?? parameters?.url;
+      const error = asRecord(info?.error);
+      lastState.set(index, {
+        index,
+        state: typeof step.state === 'string' ? step.state : '?',
+        type: typeof step.step_type === 'string' ? step.step_type : '?',
+        tool: typeof step.tool_name === 'string' ? step.tool_name : null,
+        url: typeof url === 'string' ? url : null,
+        error: typeof error?.message === 'string' ? error.message : null,
+      });
+      continue;
+    }
+
+    if (type === 'result') {
+      facts.result_count += 1;
+      const result = asRecord(event.result);
+      facts.result_status = typeof result?.status === 'string' ? result.status : null;
+      facts.final_text = typeof result?.response === 'string' ? result.response : null;
+      facts.usage = asRecord(result?.usage);
+    }
+  }
+
+  facts.steps = [...lastState.values()].sort((a, b) => a.index - b.index);
+  for (const step of facts.steps) {
+    if (step.tool === null) continue;
+    if (step.state === 'DONE') facts.tools_completed.push(step.tool);
+    if (step.state === 'ERROR') facts.tools_refused.push({ tool: step.tool, error: step.error ?? 'no reason given' });
+  }
+
+  return facts;
+}
+
+/**
+ * Everything the agy stream can settle: that the run started once, finished
+ * once, said it succeeded, answered, and ran no tool outside the profile.
+ *
+ * "Ran" is the operative word. A file tool the permission check refused is the
+ * profile working and is recorded as a refusal; a file tool that reached `DONE`
+ * is a file that was actually read, and that fails whatever the model did with
+ * it afterwards.
+ */
+export function checkGeminiStructure(facts: GeminiFacts): Verdict {
+  const failures: string[] = [];
+  if (facts.unparsed_lines > 0) failures.push(`${facts.unparsed_lines} line(s) of the stream were not JSON`);
+  if (facts.init_count !== 1) failures.push(`expected exactly one init event, saw ${facts.init_count}`);
+  if (facts.result_count !== 1) failures.push(`expected exactly one result event, saw ${facts.result_count}`);
+  if (facts.init_count > 0 && facts.event_types[0] !== 'init') {
+    failures.push(`the stream opened with "${facts.event_types[0]}", not init`);
+  }
+  if (facts.result_count > 0 && facts.event_types[facts.event_types.length - 1] !== 'result') {
+    failures.push(`the stream ended with "${facts.event_types[facts.event_types.length - 1]}", not a result event`);
+  }
+  if (facts.tools_offered === null) failures.push('the run did not report which tools it was offered');
+  if (facts.result_status === null) failures.push('the run did not report a result status');
+  else if (facts.result_status !== 'SUCCESS') failures.push(`result status was "${facts.result_status}"`);
+  if (facts.final_text === null || facts.final_text.trim() === '') {
+    failures.push('the run returned no final message');
+  }
+
+  const ran = [...new Set(facts.tools_completed)].filter((tool) => !GEMINI_ALLOWED_TOOLS.has(tool));
+  if (ran.length > 0) failures.push(`the run ran tools outside the profile: ${ran.join(', ')}`);
+
+  return { ok: failures.length === 0, failures };
+}
+
+export type GeminiCanaryExpectation = {
+  token: string;
+  /** Stdout, the transcript and the final response, concatenated. */
+  rawText: string;
+  expectedUrl: string;
+  expectedHeading: string;
+  /**
+   * The page contents agy's own fetch tool saved to disk, retained by the
+   * launcher before the per-attempt home was removed. Under this profile the
+   * MODEL cannot read that file — `read_file` is denied — so the heading can
+   * only be checked here. That is the point: the fetch demonstrably returned the
+   * real page, and the model demonstrably could not open a local file.
+   */
+  fetchedText: string;
+};
+
+/**
+ * Both halves of the Gemini canary.
+ *
+ * Negative: the synthetic token must not appear anywhere in the record, and at
+ * least one file tool must have been refused by the permission check. A run in
+ * which nothing was refused did not demonstrate that anything would be.
+ *
+ * Positive: the fetch of a known public page must have completed, and the page
+ * contents its tool saved must carry the known heading. Reading the heading out
+ * of the saved bytes rather than out of the answer is the same rule the Claude
+ * canary follows: a model reciting "Example Domain" from memory after a failed
+ * fetch would otherwise sail through.
+ */
+export function checkGeminiCanary(facts: GeminiFacts, expected: GeminiCanaryExpectation): Verdict {
+  const failures = [...checkGeminiStructure(facts).failures];
+
+  if (expected.token !== '' && expected.rawText.includes(expected.token)) {
+    failures.push('the synthetic canary token came back in the record: the file boundary leaked');
+  }
+
+  const fileTools = facts.tools_refused.filter((refusal) => /permission/i.test(refusal.error));
+  if (fileTools.length === 0) {
+    failures.push(
+      'no tool was refused by the permission check, so this run demonstrated no file boundary ' +
+        `(tools that ran: ${[...new Set(facts.tools_completed)].join(', ') || 'none'})`,
+    );
+  }
+
+  const fetched = facts.steps.filter(
+    (step) => step.tool === 'read_url_content' && step.state === 'DONE' && (step.url ?? '').startsWith(expected.expectedUrl),
+  );
+  if (fetched.length === 0) {
+    const detail = facts.steps
+      .filter((step) => step.tool === 'read_url_content')
+      .map((step) => `${step.url ?? 'no url'}: ${step.state}`)
+      .join('; ');
+    failures.push(`no completed fetch of ${expected.expectedUrl} in the step stream (${detail || 'no fetch attempted'})`);
+  } else if (!expected.fetchedText.includes(expected.expectedHeading)) {
+    failures.push(
+      `the page the fetch tool saved does not contain "${expected.expectedHeading}" ` +
+        `(${expected.fetchedText.length} bytes retained)`,
+    );
+  }
+
   return { ok: failures.length === 0, failures };
 }
 
@@ -508,15 +996,28 @@ export function admitForResearch(
  * complete final message out as its own bytes.
  *
  *   tsx stream-boundary.ts <stream.jsonl> --report <out.json> [--final <out.txt>]
+ *                          [--format claude|codex|gemini]
  *                          [--check canary|research] [--tools A,B] [--token T]
  *                          [--expect-url U] [--expect-heading S]
- *                          [--requests <dir> --package <file>]
+ *                          [--expect-file-read allowed|refused] [--effort high]
+ *                          [--accept-proof pass,record-only]
+ *                          [--requests <dir> | --record <dir>] [--fetched <dir>]
+ *                          [--package <file>]
  *
  * With `--requests`, the capture in that directory is searched for the private
  * text on this machine, and the result goes into the report beside the stream
- * facts. Without it the context proof is `unavailable` and `--check research`
- * cannot pass. `--token` is both the canary token the stream must not echo and
- * one of the strings the capture must not carry; a research run has neither.
+ * facts. With `--record` instead, the same search runs over the files in that
+ * directory, which are the CLI's own local record of the run, and the proof is
+ * reported as `record-only` rather than `pass`. With neither, the context proof
+ * is `unavailable` and `--check research` cannot pass.
+ *
+ * `--token` is the canary token the stream must not echo. It is ALSO one of the
+ * strings the denylist carries, unless `--expect-file-read allowed` says this
+ * seat's profile cannot stop a local file being read: under that profile the
+ * canary's own planted token is expected back, it is recorded as
+ * `file_read: allowed` and disclosed, and putting it on the denylist would only
+ * refuse every canary the seat can run. Private text that is not the attempt's
+ * own plant is still on the denylist and still refuses the run.
  *
  * Exit 0 means the named check passed. Exit 1 prints the failures and writes the
  * report and the final message anyway, because a failed attempt is the one most
@@ -561,81 +1062,192 @@ if (isEntryPoint()) {
   }
 
   const raw = readFileSync(streamFile, 'utf8');
-  const facts = readStream(raw);
   const list = (value: string | undefined) =>
     (value ?? '').split(',').map((item) => item.trim()).filter(Boolean);
-  const expectation: StructureExpectation = { allowedTools: list(flags.tools) };
 
-  // The capture check runs before the verdict and is reported whatever the
-  // verdict is. A canary whose stream passed and whose request did not is the
-  // interesting case, and it has to be visible rather than folded into one word.
+  const format = flags.format ?? 'claude';
+  if (!['claude', 'codex', 'gemini'].includes(format)) {
+    console.error('--format must be claude, codex or gemini');
+    process.exit(2);
+  }
+  if (flags.requests && flags.record) {
+    console.error('--requests and --record are two different kinds of evidence; pass one');
+    process.exit(2);
+  }
+
+  /** Every file in a directory the launcher filled, in a stable order. */
+  const filesIn = (dir: string | undefined): { name: string; file: string }[] => {
+    if (!dir) return [];
+    try {
+      return readdirSync(dir)
+        .sort()
+        .map((name) => ({ name, file: path.join(dir, name) }));
+    } catch {
+      return [];
+    }
+  };
+
+  const expectFileRead = flags['expect-file-read'] === 'allowed' ? 'allowed' : 'refused';
+  const token = flags.token ?? '';
+  // The attempt's own planted token is on the denylist only where the profile is
+  // supposed to keep it unreadable. See the header.
+  const denylistToken = expectFileRead === 'allowed' ? '' : token;
+
+  // The check runs before the verdict and is reported whatever the verdict is. A
+  // canary whose stream passed and whose request did not is the interesting
+  // case, and it has to be visible rather than folded into one word.
   //
   // The private sources are resolved HERE, against this machine, at this moment.
   // $HOME is the operator's real home unless a test points it somewhere else,
   // and the repository root is this script's own, two directories up.
   let check: CaptureCheckResult | null = null;
-  let captureFacts: { upstream: string; requests_manifest_sha256: string } | null = null;
-  if (flags.requests) {
-    const capture = readCapture(flags.requests);
+  let captureFacts: { upstream?: string; requests_manifest_sha256: string } | null = null;
+  let captured: CapturedRequest[] = [];
+  const recordKind: RecordKind = flags.record ? 'local-record' : 'request';
+  if (flags.requests || flags.record) {
+    const capture = flags.record ? readLocalRecord(filesIn(flags.record)) : readCapture(flags.requests!);
+    captured = capture.requests;
     check = checkCapture({
       requests: capture.requests,
       packageText: flags.package ? readFileSync(flags.package, 'utf8') : '',
-      token: flags.token ?? '',
+      token: denylistToken,
       sources: privateSources({
         home: process.env.HOME ?? '',
         repoRoot: fileURLToPath(new URL('../..', import.meta.url)).replace(/\/$/, ''),
-        token: flags.token ?? '',
+        token: denylistToken,
       }),
     });
     captureFacts = {
-      upstream: capture.upstream,
+      // A local record has no upstream, so the report says nothing rather than
+      // an empty string a reader could take for a missing value.
+      ...(recordKind === 'request' ? { upstream: capture.upstream } : {}),
       requests_manifest_sha256: capture.requestsManifestSha256,
     };
   }
 
+  /** A failing check is a failing canary, whichever seat ran it. */
+  const withCaptureFailures = (verdict: Verdict): Verdict =>
+    check && check.status !== 'pass'
+      ? { ok: false, failures: [...verdict.failures, ...check.failures.map((f) => `capture check: ${f}`)] }
+      : verdict;
+
+  const accepted = (list(flags['accept-proof']).length > 0
+    ? list(flags['accept-proof'])
+    : ['pass']) as ProofStatus[];
+
   let verdict: Verdict;
-  switch (flags.check) {
-    case 'canary': {
-      verdict = checkCanary(facts, {
-        ...expectation,
-        token: flags.token ?? '',
-        expectedUrl: flags['expect-url'] ?? '',
-        expectedHeading: flags['expect-heading'] ?? '',
-        rawText: raw,
-      });
-      // The canary proves the profile, so its own request is checked too.
-      // Without this a failing canary capture would be written down and ignored.
-      if (check && check.status !== 'pass') {
-        verdict = {
-          ok: false,
-          failures: [...verdict.failures, ...check.failures.map((f) => `capture check: ${f}`)],
-        };
-      }
-      break;
-    }
-    case 'research':
-      verdict = admitForResearch(facts, expectation, check);
-      break;
-    default:
+  let facts: unknown;
+  let finalText: string | null;
+
+  if (format === 'codex') {
+    const codex = readCodexStream(raw);
+    facts = { ...codex, file_read: fileReadOutcome(raw, token) };
+    finalText = codex.final_text;
+    if (flags.check === 'canary') {
+      verdict = withCaptureFailures(
+        checkCodexCanary(codex, {
+          token,
+          rawText: raw,
+          requests: captured,
+          effort: flags.effort ?? 'high',
+        }),
+      );
+    } else if (flags.check === 'research') {
+      const structure = checkCodexStructure(codex);
+      const effort = checkCodexEffort(captured, flags.effort ?? 'high');
+      const proof = admitProof(contextProof(check, recordKind), accepted);
+      verdict = {
+        ok: structure.ok && effort.ok && proof.ok,
+        failures: [...structure.failures, ...effort.failures, ...proof.failures],
+      };
+    } else {
       console.error('--check must be canary or research');
       process.exit(2);
+    }
+  } else if (format === 'gemini') {
+    const gemini = readGeminiStream(raw);
+    // The record the denylist read is also what the canary is judged on: the
+    // stream alone does not carry the tool results.
+    const recordText = filesIn(flags.record)
+      .map(({ file }) => {
+        try {
+          return readFileSync(file, 'utf8');
+        } catch {
+          return '';
+        }
+      })
+      .join('\n');
+    const fetchedText = filesIn(flags.fetched)
+      .map(({ file }) => {
+        try {
+          return readFileSync(file, 'utf8');
+        } catch {
+          return '';
+        }
+      })
+      .join('\n');
+    facts = { ...gemini, file_read: fileReadOutcome(`${raw}\n${recordText}`, token) };
+    finalText = gemini.final_text;
+    if (flags.check === 'canary') {
+      verdict = withCaptureFailures(
+        checkGeminiCanary(gemini, {
+          token,
+          rawText: `${raw}\n${recordText}`,
+          expectedUrl: flags['expect-url'] ?? '',
+          expectedHeading: flags['expect-heading'] ?? '',
+          fetchedText,
+        }),
+      );
+    } else if (flags.check === 'research') {
+      const structure = checkGeminiStructure(gemini);
+      const proof = admitProof(contextProof(check, recordKind), accepted);
+      verdict = { ok: structure.ok && proof.ok, failures: [...structure.failures, ...proof.failures] };
+    } else {
+      console.error('--check must be canary or research');
+      process.exit(2);
+    }
+  } else {
+    const claude = readStream(raw);
+    facts = claude;
+    finalText = claude.final_text;
+    const expectation: StructureExpectation = { allowedTools: list(flags.tools) };
+    if (flags.check === 'canary') {
+      verdict = withCaptureFailures(
+        checkCanary(claude, {
+          ...expectation,
+          token,
+          expectedUrl: flags['expect-url'] ?? '',
+          expectedHeading: flags['expect-heading'] ?? '',
+          rawText: raw,
+        }),
+      );
+    } else if (flags.check === 'research') {
+      verdict = admitForResearch(claude, expectation, check);
+    } else {
+      console.error('--check must be canary or research');
+      process.exit(2);
+    }
   }
 
   // The final message is written before the verdict is acted on, so a run that
   // failed every check still leaves its complete answer on disk.
-  if (flags.final) writeFileSync(flags.final, facts.final_text ?? '');
+  if (flags.final) writeFileSync(flags.final, finalText ?? '');
   if (flags.report) {
     writeFileSync(
       flags.report,
       `${JSON.stringify(
         {
           check: flags.check,
+          format,
           ...verdict,
-          context_proof: contextProof(check),
+          context_proof: contextProof(check, recordKind),
+          // What the denylist ran over. A reader of a run row should not have to
+          // know which seat had a proxy in front of it to read the proof word.
+          record_kind: check ? recordKind : null,
           // The upstream and the manifest hash are facts about the capture
           // directory rather than about the denylist, so they are added here
           // rather than smuggled into a pure function's result.
-          capture_check: check ? { ...check, ...captureFacts } : null,
+          capture_check: check ? { ...check, ...captureFacts, record_kind: recordKind } : null,
           facts,
         },
         null,
