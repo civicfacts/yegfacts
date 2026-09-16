@@ -121,7 +121,7 @@ const stages = [
   },
   {
     name: 'Drafting, faithfulness check and plain-speech read',
-    body: 'Claude drafts the question page and the claim records from the merged evidence, a fixed choice disclosed here. The other two models then check the draft against the evidence sentence by sentence, looking for anything asserted that the evidence does not carry. Flags are fixed before a human sees it. Then a model from a different vendor than the drafter reads the answers as a person would: would anyone say this out loud, does it make sense to somebody who has not seen the question, and has anything true been dropped rather than moved down. Its report is committed with the run, and a claim that cannot name its read does not publish.',
+    body: 'Claude drafts the question page and the claim records from the merged evidence, a fixed choice disclosed here. The other two models then check the draft against the evidence sentence by sentence, looking for anything asserted that the evidence does not carry. Flags are fixed before a human sees it. Then a model from a different vendor than the drafter reads the answers, the sentence under the title and the TL;DR as a person would: would anyone say this out loud, does it make sense to somebody who has not seen the question, and has anything true been dropped rather than moved down. Since v1.32 a page is written in layers, ten seconds for a resident at the top and the exact figures with their sources below, and the read checks that every figure that left the top is still on the page. Its report is committed with the run, and a claim that cannot name its read does not publish.',
   },
   {
     name: 'Publication gate',
