@@ -162,6 +162,13 @@ describe('research admission', () => {
     ...over,
   });
 
+  /**
+   * The Claude seat's shape of the shared gate: a structural verdict, the proof
+   * word, and the words this seat accepts, which is `pass` and nothing else.
+   */
+  const admitClaude = (stream: string, check: CaptureCheckResult | null) =>
+    admitForResearch(checkStructure(readStream(stream), expectation), contextProof(check));
+
   it('reports the context proof as unavailable when no capture was taken', () => {
     const proof = contextProof(null);
     expect(proof.status).toBe('unavailable');
@@ -198,29 +205,28 @@ describe('research admission', () => {
   it('refuses a clean stream without a capture', () => {
     expect(checkStructure(readStream(cleanStream), expectation).ok).toBe(true);
 
-    const verdict = admitForResearch(readStream(cleanStream), expectation, null);
+    const verdict = admitClaude(cleanStream, null);
     expect(verdict.ok).toBe(false);
     expect(verdict.failures).toHaveLength(1);
     expect(verdict.failures[0]).toMatch(/^context proof unavailable:/);
   });
 
   it('refuses a clean stream whose capture carried private text', () => {
-    const verdict = admitForResearch(readStream(cleanStream), expectation, captureResult({
-      status: 'fail',
-      failures: ['req-0003.json: carries $HOME/.claude/CLAUDE.md line 7'],
-    }));
+    const verdict = admitClaude(
+      cleanStream,
+      captureResult({ status: 'fail', failures: ['req-0003.json: carries $HOME/.claude/CLAUDE.md line 7'] }),
+    );
     expect(verdict.ok).toBe(false);
     expect(verdict.failures[0]).toMatch(/^context proof fail:/);
   });
 
   it('admits a clean stream with a passing capture check', () => {
-    const verdict = admitForResearch(readStream(cleanStream), expectation, captureResult());
+    const verdict = admitClaude(cleanStream, captureResult());
     expect(verdict).toEqual({ ok: true, failures: [] });
   });
 
   it('still refuses a passing capture check when the stream itself is not clean', () => {
-    const facts = readStream(cleanStream.replace('"skills":[]', '"skills":["ponytail"]'));
-    const verdict = admitForResearch(facts, expectation, captureResult());
+    const verdict = admitClaude(cleanStream.replace('"skills":[]', '"skills":["ponytail"]'), captureResult());
     expect(verdict.ok).toBe(false);
     expect(verdict.failures.join()).toMatch(/skills were loaded: ponytail/);
   });

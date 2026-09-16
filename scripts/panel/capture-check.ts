@@ -403,36 +403,47 @@ export type Capture = {
 };
 
 /**
+ * A capture read out of a CLI's own local record, which also hands back the text
+ * it read. The Gemini canary is judged on that same text, and reading the
+ * directory twice would be two different answers to one question.
+ */
+export type LocalRecord = Capture & { text: string };
+
+/**
  * Read a capture directory. The manifest hash covers the sorted list of
  * `<file> <hash>` lines over every `req-*`/`res-*` file, so a published row can
  * be checked against the retained bytes without republishing them, and a file
  * removed after the fact changes the hash.
  */
+/**
+ * The number that pairs a request with its response: `req-0007.json` and
+ * `res-0007.txt` are two halves of exchange 0007.
+ */
+const idOf = (name: string): string => /^(?:req|res)-(\d+)\./.exec(name)?.[1] ?? '';
+
 export function readCapture(dir: string): Capture {
-  const entries = readdirSync(dir).sort();
   const requests: CapturedRequest[] = [];
   const manifest: string[] = [];
-
-  /** `res-0007.txt` opens `HTTP 200 ...`, and 0007 is the request it answers. */
+  /** `res-0007.txt` opens `HTTP 200 ...`, and nothing below that line is read. */
   const statusById = new Map<string, number>();
-  for (const name of entries) {
-    const match = /^res-(\d+)\.txt$/.exec(name);
-    if (!match) continue;
-    try {
-      const first = readFileSync(path.join(dir, name), 'utf8').split('\n', 1)[0] ?? '';
-      const status = /^HTTP (\d{3})/.exec(first);
-      if (status) statusById.set(match[1]!, Number(status[1]));
-    } catch {
-      // An unreadable response leaves the status absent, which is never read as
-      // a success anywhere downstream.
-    }
-  }
+  const requestById = new Map<string, CapturedRequest>();
 
-  for (const name of entries) {
+  // One read per file. Every matching file is hashed into the manifest, and what
+  // else happens to it depends on which half of an exchange it is.
+  for (const name of readdirSync(dir).sort()) {
     if (!/^(req|res)-\d+\.(json|txt|bin)$/.test(name)) continue;
     const raw = readFileSync(path.join(dir, name));
     manifest.push(`${name} ${createHash('sha256').update(raw).digest('hex')}`);
-    if (!name.startsWith('req-') || !name.endsWith('.json')) continue;
+
+    if (name.startsWith('res-')) {
+      const newline = raw.indexOf(0x0a);
+      const first = raw.subarray(0, newline === -1 ? raw.length : newline).toString('utf8');
+      const status = /^HTTP (\d{3})/.exec(first);
+      if (status) statusById.set(idOf(name), Number(status[1]));
+      continue;
+    }
+    if (!name.endsWith('.json')) continue;
+
     let parsed: Record<string, unknown> = {};
     try {
       parsed = JSON.parse(raw.toString('utf8')) as Record<string, unknown>;
@@ -441,8 +452,7 @@ export function readCapture(dir: string): Capture {
       // and pushed through with no body rather than skipped.
     }
     const headers = parsed.headers;
-    const status = statusById.get(/^req-(\d+)\.json$/.exec(name)?.[1] ?? '');
-    requests.push({
+    const request: CapturedRequest = {
       file: name,
       method: typeof parsed.method === 'string' ? parsed.method : '?',
       url: typeof parsed.url === 'string' ? parsed.url : '?',
@@ -451,8 +461,17 @@ export function readCapture(dir: string): Capture {
           ? (headers as Record<string, unknown>)
           : {},
       body: parsed.body,
-      ...(status === undefined ? {} : { status }),
-    });
+    };
+    requests.push(request);
+    requestById.set(idOf(name), request);
+  }
+
+  // Attached afterwards rather than during the walk: `res-0007.txt` sorts after
+  // the request it answers, so its status is not known yet when that request is
+  // built. A status with no request is simply dropped.
+  for (const [id, status] of statusById) {
+    const request = requestById.get(id);
+    if (request) request.status = status;
   }
 
   const upstreamFile = path.join(dir, 'upstream.txt');
@@ -488,9 +507,10 @@ export function readCapture(dir: string): Capture {
  * in `checkCapture` is what fails a record that is missing the piece that
  * matters.
  */
-export function readLocalRecord(files: { name: string; file: string }[]): Capture {
+export function readLocalRecord(files: { name: string; file: string }[]): LocalRecord {
   const requests: CapturedRequest[] = [];
   const manifest: string[] = [];
+  const texts: string[] = [];
 
   for (const { name, file } of files) {
     let raw: Buffer;
@@ -501,6 +521,7 @@ export function readLocalRecord(files: { name: string; file: string }[]): Captur
     }
     manifest.push(`${name} ${createHash('sha256').update(raw).digest('hex')}`);
     const text = raw.toString('utf8');
+    texts.push(text);
     const entry = (label: string, body: unknown) =>
       requests.push({ file: label, method: 'record', url: name, headers: {}, body });
 
@@ -522,5 +543,10 @@ export function readLocalRecord(files: { name: string; file: string }[]): Captur
     entry(name, { text });
   }
 
-  return { requests, upstream: '', requestsManifestSha256: sha256(manifest.join('\n')) };
+  return {
+    requests,
+    upstream: '',
+    requestsManifestSha256: sha256(manifest.join('\n')),
+    text: texts.join('\n'),
+  };
 }

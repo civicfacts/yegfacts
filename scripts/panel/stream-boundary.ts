@@ -50,6 +50,7 @@ import { readFileSync, readdirSync, realpathSync, writeFileSync } from 'node:fs'
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
+  type Capture,
   type CaptureCheckResult,
   type CapturedRequest,
   checkCapture,
@@ -62,6 +63,34 @@ type Json = Record<string, unknown>;
 
 const asRecord = (value: unknown): Json | null =>
   value !== null && typeof value === 'object' && !Array.isArray(value) ? (value as Json) : null;
+
+/**
+ * Every JSON object on its own line, and a count of the lines that were not one.
+ *
+ * All three CLIs print one JSON object per line, and all three can print
+ * something else by accident: a banner, a crash message, a line cut off when a
+ * process died. Splitting, skipping blanks, parsing, and COUNTING what did not
+ * parse is the same job in all three readers, so it lives here once. A stream
+ * this could not fully read is not one we can vouch for, which is why the count
+ * is kept and checked rather than shrugged off. What differs per CLI is only
+ * which fields are pulled out of each event, and that stays in the readers.
+ */
+function readEvents(text: string): { events: Json[]; unparsed: number } {
+  const events: Json[] = [];
+  let unparsed = 0;
+  for (const line of text.split('\n')) {
+    if (!line.trim()) continue;
+    let event: Json | null = null;
+    try {
+      event = asRecord(JSON.parse(line));
+    } catch {
+      event = null;
+    }
+    if (event) events.push(event);
+    else unparsed += 1;
+  }
+  return { events, unparsed };
+}
 
 /**
  * Names out of a list the CLI may render as bare strings or as objects.
@@ -185,22 +214,10 @@ export function readStream(text: string): StreamFacts {
   let assistantRuns = 0;
   let lastRole: 'assistant' | 'user' | null = null;
 
-  for (const line of text.split('\n')) {
-    if (!line.trim()) continue;
-    let event: Json | null = null;
-    try {
-      event = asRecord(JSON.parse(line));
-    } catch {
-      event = null;
-    }
-    if (!event) {
-      // A banner, a crash message or a truncated line. Counted, never skipped
-      // over quietly: a stream we could not fully read is not one we can vouch
-      // for, and the raw bytes are retained for a person to look at.
-      facts.unparsed_lines += 1;
-      continue;
-    }
+  const { events, unparsed } = readEvents(text);
+  facts.unparsed_lines = unparsed;
 
+  for (const event of events) {
     const type = typeof event.type === 'string' ? event.type : '?';
     const subtype = typeof event.subtype === 'string' ? event.subtype : '';
     facts.event_types.push(subtype ? `${type}/${subtype}` : type);
@@ -537,19 +554,26 @@ export function checkCanary(facts: StreamFacts, expected: CanaryExpectation): Ve
 }
 
 /**
- * The admission gate for real research. It is not a wrapper around
- * `checkStructure`: it adds the requirement that the context boundary was
- * actually demonstrated for this attempt. A clean stream with no capture is
- * still refused, which is the case every run before 2026-09-15 was in.
+ * The admission gate for real research, and the one all three seats go through.
+ *
+ * It is not a wrapper around a structural check: it adds the requirement that
+ * the context boundary was actually demonstrated for this attempt. A clean
+ * stream with no capture is still refused, which is the case every run before
+ * 2026-09-15 was in.
+ *
+ * The structural verdict arrives already computed, because the three CLIs report
+ * on themselves in three different shapes and only the caller knows which reader
+ * produced this one. What is the same for all three, and therefore lives here,
+ * is that structure alone never admits anything and that the accepted proof
+ * words are named by the caller rather than assumed.
  */
 export function admitForResearch(
-  facts: StreamFacts,
-  expected: StructureExpectation,
-  check: CaptureCheckResult | null,
+  structure: Verdict,
+  proof: ContextProof,
+  accepted: ProofStatus[] = ['pass'],
 ): Verdict {
-  const structure = checkStructure(facts, expected);
-  const proof = admitProof(contextProof(check), ['pass']);
-  return { ok: structure.ok && proof.ok, failures: [...structure.failures, ...proof.failures] };
+  const admitted = admitProof(proof, accepted);
+  return { ok: structure.ok && admitted.ok, failures: [...structure.failures, ...admitted.failures] };
 }
 
 /**
@@ -618,18 +642,10 @@ export function readCodexStream(text: string): CodexFacts {
     usage: null,
   };
 
-  for (const line of text.split('\n')) {
-    if (!line.trim()) continue;
-    let event: Json | null = null;
-    try {
-      event = asRecord(JSON.parse(line));
-    } catch {
-      event = null;
-    }
-    if (!event) {
-      facts.unparsed_lines += 1;
-      continue;
-    }
+  const { events, unparsed } = readEvents(text);
+  facts.unparsed_lines = unparsed;
+
+  for (const event of events) {
     const type = typeof event.type === 'string' ? event.type : '?';
     facts.event_types.push(type);
 
@@ -833,18 +849,10 @@ export function readGeminiStream(text: string): GeminiFacts {
   // One step reports many times as it runs; only its last state is its outcome.
   const lastState = new Map<number, GeminiStep>();
 
-  for (const line of text.split('\n')) {
-    if (!line.trim()) continue;
-    let event: Json | null = null;
-    try {
-      event = asRecord(JSON.parse(line));
-    } catch {
-      event = null;
-    }
-    if (!event) {
-      facts.unparsed_lines += 1;
-      continue;
-    }
+  const { events, unparsed } = readEvents(text);
+  facts.unparsed_lines = unparsed;
+
+  for (const event of events) {
     const type = typeof event.event === 'string' ? event.event : '?';
     facts.event_types.push(type);
 
@@ -1130,9 +1138,20 @@ if (isEntryPoint()) {
   let check: CaptureCheckResult | null = null;
   let captureFacts: { upstream?: string; requests_manifest_sha256: string } | null = null;
   let captured: CapturedRequest[] = [];
+  // The text of a local record, handed back by the reader that already read it.
+  // The Gemini canary is judged on these same bytes, and reading the directory a
+  // second time would be two different answers to one question.
+  let recordText = '';
   const recordKind: RecordKind = flags.record ? 'local-record' : 'request';
   if (flags.requests || flags.record) {
-    const capture = flags.record ? readLocalRecord(filesIn(flags.record)) : readCapture(flags.requests!);
+    let capture: Capture;
+    if (flags.record) {
+      const record = readLocalRecord(filesIn(flags.record));
+      recordText = record.text;
+      capture = record;
+    } else {
+      capture = readCapture(flags.requests!);
+    }
     captured = capture.requests;
     check = checkCapture({
       requests: capture.requests,
@@ -1162,6 +1181,12 @@ if (isEntryPoint()) {
     ? list(flags['accept-proof'])
     : ['pass']) as ProofStatus[];
 
+  // Computed once and used twice, for the gate and for the report. Two calls
+  // could not disagree today, and a proof word that was judged on one reading
+  // and published from another is the kind of thing nobody notices until it
+  // does.
+  const proof = contextProof(check, recordKind);
+
   let verdict: Verdict;
   let facts: unknown;
   let finalText: string | null;
@@ -1180,13 +1205,16 @@ if (isEntryPoint()) {
         }),
       );
     } else if (flags.check === 'research') {
+      // The effort is part of this seat's structural evidence: it is read out of
+      // the captured request rather than trusted because it was on the command
+      // line, so it joins the structural verdict before the gate sees it.
       const structure = checkCodexStructure(codex);
       const effort = checkCodexEffort(captured, flags.effort ?? 'high');
-      const proof = admitProof(contextProof(check, recordKind), accepted);
-      verdict = {
-        ok: structure.ok && effort.ok && proof.ok,
-        failures: [...structure.failures, ...effort.failures, ...proof.failures],
-      };
+      verdict = admitForResearch(
+        { ok: structure.ok && effort.ok, failures: [...structure.failures, ...effort.failures] },
+        proof,
+        accepted,
+      );
     } else {
       console.error('--check must be canary or research');
       process.exit(2);
@@ -1194,16 +1222,8 @@ if (isEntryPoint()) {
   } else if (format === 'gemini') {
     const gemini = readGeminiStream(raw);
     // The record the denylist read is also what the canary is judged on: the
-    // stream alone does not carry the tool results.
-    const recordText = filesIn(flags.record)
-      .map(({ file }) => {
-        try {
-          return readFileSync(file, 'utf8');
-        } catch {
-          return '';
-        }
-      })
-      .join('\n');
+    // stream alone does not carry the tool results. `recordText` is what the
+    // reader above already read.
     const fetchedText = filesIn(flags.fetched)
       .map(({ file }) => {
         try {
@@ -1226,9 +1246,7 @@ if (isEntryPoint()) {
         }),
       );
     } else if (flags.check === 'research') {
-      const structure = checkGeminiStructure(gemini);
-      const proof = admitProof(contextProof(check, recordKind), accepted);
-      verdict = { ok: structure.ok && proof.ok, failures: [...structure.failures, ...proof.failures] };
+      verdict = admitForResearch(checkGeminiStructure(gemini), proof, accepted);
     } else {
       console.error('--check must be canary or research');
       process.exit(2);
@@ -1249,7 +1267,7 @@ if (isEntryPoint()) {
         }),
       );
     } else if (flags.check === 'research') {
-      verdict = admitForResearch(claude, expectation, check);
+      verdict = admitForResearch(checkStructure(claude, expectation), proof, accepted);
     } else {
       console.error('--check must be canary or research');
       process.exit(2);
@@ -1267,7 +1285,7 @@ if (isEntryPoint()) {
           check: flags.check,
           format,
           ...verdict,
-          context_proof: contextProof(check, recordKind),
+          context_proof: proof,
           // What the denylist ran over. A reader of a run row should not have to
           // know which seat had a proxy in front of it to read the proof word.
           record_kind: check ? recordKind : null,
