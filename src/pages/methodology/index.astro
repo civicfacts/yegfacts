@@ -44,7 +44,7 @@ const short: ReadonlyArray<{ name: string; body: string; exits: readonly Exit[] 
       { kind: 'Stops here', text: 'A reviewer that returns nothing after its retry halts the run before any finding.' },
       {
         kind: 'Stops here',
-        text: 'As of September 15, 2026 no panel has run since September 4. One of the three seats has passed the check on how a model is run; the other two have not, and a finding needs all three.',
+        text: 'As of September 16, 2026 all three seats can run again, each under a check whose limits are set out below. No panel has run since September 4, and no finding has been published under these checks.',
         link: { href: '#reviewer-execution', text: 'What the check is, and what it does not show' },
       },
       { kind: 'Loops back', text: "Afterwards the three read each other's work. A fabricated citation caught there sends that claim back for a fresh blind round." },
@@ -105,7 +105,7 @@ const stages = [
   },
   {
     name: 'Blind research round',
-    body: 'Three models, Claude, GPT and Gemini, receive the identical package: the brief, the public reviewer prompt, and a required JSON output schema. New runs must pass an execution check intended to keep host instructions and private files out of the review. A separate working directory alone did not provide that protection; the limitation and current pause are recorded below. Each returns a per-claim verdict, its confidence, the evidence supporting and challenging it, its limitations, what it could not find, and comparison cities with a judgement about whether those cases transfer to Edmonton.',
+    body: 'Three models, Claude, GPT and Gemini, receive the identical package: the brief, the public reviewer prompt, and a required JSON output schema. New runs must pass an execution check intended to keep host instructions and private files out of the review. A separate working directory alone did not provide that protection. Since September 16, 2026 every seat has a demonstrated profile again, and what each of those profiles does and does not establish is set out below. Each returns a per-claim verdict, its confidence, the evidence supporting and challenging it, its limitations, what it could not find, and comparison cities with a judgement about whether those cases transfer to Edmonton.',
   },
   {
     name: 'Evidence staging and deterministic merge',
@@ -470,6 +470,60 @@ const sections = toc([
       stands in the record beside this decision. The reviewers who read the September 15 work
       asked for a looser check than the one that shipped that day, and were refused; this goes
       further in the same direction than they asked. The founder decided.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      September 16, 2026, later the same day: the other two seats can run again, and the reason
+      is worth stating before the detail. Complete isolation is not available on a subscription
+      tool. A fully controlled context needs direct calls to a company's programming interface,
+      and this project does not pay for those. So the choice was between three seats with their
+      limits written down and no panel at all, and the founder chose the three seats. The September 9
+      ruling stands beside this decision, and nothing here answers it: describing how we run a
+      tool does not on its own earn that tool a seat.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      The GPT seat. What the check covers: every request the tool sends to the model is written
+      down before it leaves this computer and searched for the private files this computer holds,
+      the same way the Claude seat's is. Each attempt runs from a fresh settings folder holding
+      nothing but a link to the login and two lines naming the model and the effort level, with
+      the computer's skills catalogue, plugins, apps, hooks, memories and multi-model features
+      switched off. What the check cannot cover: this tool runs its web access and its command
+      line through one internal component and they cannot be separated. Switching that component
+      off takes web search with it, and when we tried that on September 9 the model reported a
+      page it had never fetched and finished without error. So the seat runs with web access, and
+      that means a command line it can also reach. Its read-only setting can read the whole
+      computer, and the test file we plant for our own check is read every time. We record that
+      rather than hide it. What stops a run that touched something private is the search over the
+      request: what a tool returns comes back to the model in the next request, so private text a
+      reviewer read is private text the search finds. The search refuses the run. It cannot
+      prevent the read.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      The Gemini seat. What the check covers: this tool ignores every setting we can use to point
+      it at a local recorder, so there is no request to record and we do not claim one. What it keeps
+      instead is a stream of what happened, a transcript, and the page contents its fetch tool
+      saved, and those are what get searched. Each attempt runs from an empty home
+      folder holding links to the login and a settings file that refuses every file, write and
+      command tool. The live check on September 16 watched three such refusals in one run while a
+      live page fetch went through. What the check cannot cover: it sees what the model produced
+      and what its tools returned, and not the standing instructions the tool attached on the way
+      out, because those are in no record on this computer. Keeping the operator's own
+      instructions and add-ons out rests on running from an empty home folder, which our test
+      supports and cannot prove. The tool also writes its logs, caches and built-in skills into
+      the operator's real folder whatever home it is given. And with no request recorded, nothing
+      here shows where the request went.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      Because those two are not the same evidence, the run record does not use the same word for
+      them. A context check now reads pass, fail, unavailable, or record-only, and record-only
+      means the search ran over a tool's own record of the run rather than over a request. It is
+      the weaker answer, it is a separate word so that nobody has to know which seat had a
+      recorder in front of it, and only the Gemini seat may run on it. Every row also says which
+      kind of evidence was searched. A login reaches a reviewer through a link and never a copy:
+      each attempt builds its own folder holding a link to the login the tool already uses,
+      nothing here reads a login file or creates one, a computer that is not signed in is a
+      refusal before anything is sent, and afterwards the links are removed as links rather than
+      followed. No panel has run under these checks yet and nothing published before today is
+      cleared by them.
     </p>
     <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
       Each launch attempt keeps its package and execution record privately, even when it
