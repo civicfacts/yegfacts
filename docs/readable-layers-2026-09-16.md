@@ -31,9 +31,9 @@ Old (60 words):
 
 > Winter cuts cycling back where anyone has measured it against the rest of the year, in Finland's Oulu region and in four Québec cities, but people in Oulu ride through it anyway, so cold on its own does not settle the question. Edmonton has no published measure of what share of its own trips are made by bike in winter.
 
-New (20 words):
+New (21 words):
 
-> No. Cold cuts cycling back, but people in Oulu, Finland still make one trip in ten by bike in winter.
+> No. Cold makes people cycle less, but people in Oulu, Finland still make one trip in ten by bike in winter.
 
 ### TL;DR
 
@@ -77,11 +77,11 @@ Old:
 
 New:
 
-1. Council promised to cut emissions 35 per cent by 2025 and half by 2030.
-2. Emissions went up 3 per cent in the latest year the City has counted, not down.
-3. The City itself now says the 2025 target will not be met.
+1. Edmonton City Council promised to cut emissions 35 per cent by 2025 and half by 2030.
+2. Edmonton's emissions went up 3 per cent in the latest year the City counted, instead of going down.
+3. The City of Edmonton itself now says it will miss the 2025 target.
 4. Edmonton emits far less per person than in 2005, but the city as a whole is only about a tenth lower.
-5. Council has not changed the targets, and the City is rewriting its plan instead.
+5. Edmonton City Council has not changed its emissions targets.
 
 ## cycling-volumes
 
@@ -107,11 +107,11 @@ Old:
 
 New:
 
-1. The quietest counted bike lane sees about 50 riders a day and the busiest close to a thousand.
-2. The lanes people call empty are the quiet ones. 132 Avenue sees about 75 riders a day.
-3. The City's counters logged about 1.3 million bike passes in the first seven months of this year, a figure this site could only partly confirm.
+1. Edmonton's quietest counted bike lane sees about 50 riders a day and its busiest nearly a thousand.
+2. Edmonton's 132 Avenue, one of the bike routes people call empty, sees about 75 riders a day.
+3. Edmonton's counters show about 1.3 million bike passes over seven months, though the published record may not cover all seven.
 4. Fewer than one Edmonton commuter in a hundred bikes to work, and about 85 in a hundred drive.
-5. Nobody knows how many Edmontonians ride a bike at all, because no proper survey has asked.
+5. Nobody can tell from published surveys how many Edmontonians ride a bike at all.
 
 ## electric-buses
 
@@ -121,9 +121,9 @@ Old (50 words):
 
 > Edmonton's own court filings say the buses fell short of the contract. The $82 million is what the City asked for in the supplier's bankruptcy rather than money it has shown it lost, and one supplier's buses falling short here does not show that electric buses fail in cold cities.
 
-New (25 words):
+New (23 words):
 
-> The buses fell well short of the contract, and the $82 million is what the City is claiming in court, not money it has lost.
+> Edmonton's electric buses fell well short of the contract, and the $82 million is a court claim, not money the City has lost.
 
 ### TL;DR
 
@@ -137,10 +137,10 @@ Old:
 
 New:
 
-1. The buses managed about 165 km in winter against the 268 km the contract promised.
-2. At times more than half of the 60 buses were off the road.
-3. The maker, Proterra, went bankrupt, which left Edmonton without a warranty it could count on or a reliable source of parts.
-4. The City paid about US$59 million for the buses.
+1. Edmonton's electric buses managed about 165 km in winter against the 268 km their contract promised.
+2. At times, more than half of Edmonton's 60 electric buses were off the road.
+3. Proterra went bankrupt, leaving Edmonton without reliable parts or a warranty it could count on.
+4. Edmonton paid about US$59 million for the buses.
 5. Toronto ran electric buses from three makers through its winters and kept some of them on the road 95 per cent of the time.
 
 ## fifteen-minute-districts
@@ -153,7 +153,7 @@ Old (34 words):
 
 New (21 words):
 
-> No. The district plans guide what gets built where, and Council added a line saying they cannot restrict where people go.
+> No. Edmonton's district plans guide what gets built where, and Council added a line saying they cannot restrict where people go.
 
 ### TL;DR
 
@@ -167,11 +167,11 @@ Old:
 
 New:
 
-1. The District Policy is a planning document that guides rezoning and building permits.
-2. Council voted 12 to 0 to add the line that the plans 'shall not restrict freedom of movement, association and commerce'.
-3. There are no travel permits, no fines for crossing a district line and no tracking anywhere in the text.
-4. The closest thing to a restriction in the whole document is ordinary parking management.
-5. Any real restriction on travel would need new laws and another council vote.
+1. Edmonton's District Policy guides rezoning and building-permit decisions.
+2. Council voted 12 to 0 to say Edmonton's district plans cannot restrict freedom of movement, association or commerce.
+3. Edmonton's District Policy contains no travel permits, no fines for crossing a district line and no tracking.
+4. The closest thing to a travel restriction in Edmonton's District Policy is ordinary parking management.
+5. Restricting travel through Edmonton's district plans would require separate legal authority and another Council vote.
 
 ## active-transportation
 
@@ -183,7 +183,7 @@ Old (78 words):
 
 New (21 words):
 
-> The $100 million for bike lanes is spread over four years, and roads got many times more in the same budget.
+> Edmonton's $100 million for bike lanes is spread over four years, and roads got many times more in the same budget.
 
 ### TL;DR
 
@@ -197,11 +197,11 @@ Old:
 
 New:
 
-1. No single year gets $100 million, because Council spread it across four years of budgets.
-2. Four years of bike money add up to more than one year of snow clearing, but nowhere near double it.
-3. Council approved roughly nineteen times as much for roads and bridges over the same four years.
-4. The claim that roads get 180 times as much is off by ten. $1.8 billion is 18 times $100 million.
-5. By the end of 2025 the City had spent about $40 million of it and built about 35 km of routes.
+1. Edmonton City Council spread the $100 million bike-lane program over four years rather than putting it into one year.
+2. Edmonton's four years of bike-lane money add up to more than one year of snow clearing, but nowhere near twice as much.
+3. Edmonton City Council approved roughly nineteen times as much for roads and bridges as it did for the bike-lane program.
+4. The claim that Edmonton spends 180 times as much on roads is off by ten, because $1.8 billion is 18 times $100 million.
+5. Edmonton had spent about $40 million of the bike-lane program by the end of 2025 and built about 35 km of routes.
 
 ## infill-prices
 
@@ -227,11 +227,11 @@ Old:
 
 New:
 
-1. Before anyone looked, the test was set as whether the new housing costs about three times the old house.
-2. No record follows a demolished house to the homes built on its lot, so the number could not be worked out.
+1. People say the new housing costs about three times as much as the house it replaced.
+2. No public record anyone found follows a demolished Edmonton house to the homes built on its lot, so the price difference cannot be calculated.
 3. Edmonton's older neighbourhoods lost about 300 detached houses on net in one year and gained about 3,500 homes.
-4. A trial on eight lots found new homes valued at one and a half to four times the old house, which settles nothing about a decade.
-5. Whether a household on Edmonton's median income could afford the new housing is stuck in the same place.
+4. The few Edmonton examples available range from about one and a half to four times the old house's value, which is too little to settle the question.
+5. Nobody can tell whether an Edmonton household on a typical income could afford the replacement housing.
 
 ## Explanation openings rewritten
 
@@ -253,4 +253,24 @@ These were only ever in a TL;DR bullet and are now in the paragraph that uses th
 
 ## What the read did
 
-(Filled in after the read runs.)
+The OpenAI seat, via Codex, read the standfirst and every bullet of the seven
+pages on 2026-09-16 against this file and the full story files. It passed 8
+of 42 and rewrote 34. The report, with the editor's disposition under each
+verdict, is `reviews/2026-09-16-readable-layers/plain-speech/gpt-1.md`.
+The strings above are the ones that came out of it.
+
+Taken, in whole or in part: 27. The reader's strongest finding was that the
+bullets leaned on "the City", "Council", "the buses" and "the text" as if the
+reader had the page in front of them, and the TL;DR has a Copy button, so it
+travels alone; Edmonton is now named where a bullet would otherwise float.
+Three overstatements were caught and fixed: "no proper survey has asked"
+(a 2014 self-selected panel did ask), "new laws" (the page says separate
+instruments and council action), and the method narration in the infill
+bullets. Refused, with reasons in the report: a "Partly." opener on the three
+standfirsts that answer how-questions rather than claims; three replacements
+that dropped half a finding (the metered lanes not being empty, the $82
+million being a claim not a loss, the roads half of the funding comparison);
+"warmer cities" where the source names two cities; "border-crossing fines"
+because districts have no borders and border is the claim's own word; and two
+bullets whose two figures are one contrast (per-person against total
+emissions; bike commuters against drivers).
