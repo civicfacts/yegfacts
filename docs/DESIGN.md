@@ -998,6 +998,18 @@ bullet lands in the explanation, and the plain-speech read's clause accounting
 covers the whole move, bullet by bullet. Where a plainer bullet would change
 the strength or the scope of a finding, the bullet stays and the read says why.
 
+The order of the page follows the layers. Title, then the answer, then the
+TL;DR, with nothing between them. On a question with one claim the answer is
+the claim's row in the verdict strip; on a question with several, the answer
+is the standfirst and the strip follows the TL;DR, because seven rows of
+question, verdict and answer before the page-level answer is a report. Who
+checked it and when, and any notice that a finding has left the board, come
+after the TL;DR in the same words. Three outside readings of the rendered
+pages on 2026-09-16 each found the provenance line and the notices sitting
+between the answer and the TL;DR, so a resident read the machinery before the
+evidence; the founder's rule on hearing that the order was a recorded decision
+was that the site optimizes for readers, not for past decisions.
+
 ### What a script checks, and what a reader checks
 
 A script can only see shape, so it checks shape: the answer's punctuation, the

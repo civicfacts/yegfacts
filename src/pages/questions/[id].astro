@@ -3,6 +3,7 @@ import { getEntry, render, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import AiReview from '../../components/AiReview.astro';
 import AlsoSaidAs from '../../components/AlsoSaidAs.astro';
+import ClaimStrip from '../../components/ClaimStrip.astro';
 import CopyButton from '../../components/CopyButton.astro';
 import Finding from '../../components/Finding.astro';
 import Gloss from '../../components/Gloss.astro';
@@ -153,6 +154,12 @@ const withdrawn = story?.data.withdrawn;
  * ran on whatever the page does with it.
  */
 const headline = answered.filter((claim) => claim.data.context_for === undefined);
+/**
+ * A question with one claim has no standfirst; its claim's answer is the
+ * standfirst and the strip comes first. With several claims, the standfirst
+ * and the TL;DR come first and the strip follows them (docs/DESIGN.md §12).
+ */
+const stripFirst = story?.data.one_line === undefined;
 const backgroundFor = (id: string) =>
   answered.filter((claim) => claim.data.context_for === id);
 
@@ -237,45 +244,6 @@ const Content = rendered?.Content;
     story && Content ? (
       <>
         {story.data.status === 'pending-review' && <PendingBanner />}
-        {withdrawn && (
-          <aside
-            class="mb-8 border-t-2 border-b border-t-gold border-b-rule bg-wash px-4 py-3.5"
-            role="note"
-          >
-            <p class="text-sm font-semibold text-forest">
-              No longer a finding · <time datetime={withdrawn.date}>{withdrawn.date}</time>
-            </p>
-            <p class="mt-1 text-sm leading-relaxed text-muted">
-              This is no longer a finding. {withdrawn.reason} The page stays for the record: the
-              question, the claims under it and the whole evidence trail are below.
-            </p>
-          </aside>
-        )}
-
-        {/*
-          A claim can come off the board on its own since v1.19, and a reader who
-          sees that happen will assume the finding was wrong. It was not, so the
-          note says so first, and says what actually changed instead. The reason
-          for each claim sits with that claim under "Claims checked".
-        */}
-        {offTheBoard && (
-          <aside
-            class="mb-8 border-t-2 border-b border-t-gold border-b-rule bg-wash px-4 py-3.5"
-            role="note"
-          >
-            <p class="text-sm font-semibold text-forest">
-              Off the findings board · <time datetime={offTheBoard}>{offTheBoard}</time>
-            </p>
-            <p class="mt-1 text-sm leading-relaxed text-muted">
-              Every answer on this page still stands. We have corrected nothing and no finding has
-              changed. What changed is our own judgement about whether the question was worth
-              checking, and the reason sits beside each answer it applies to below. The site spent
-              a panel run on a question nobody was arguing about. What comes off is the board, not
-              the record: the page keeps its evidence, its panel and its history.
-            </p>
-          </aside>
-        )}
-
         <article>
           <header class="border-b border-rule pb-7">
             {/*
@@ -296,51 +264,9 @@ const Content = rendered?.Content;
               {question.question}
             </p>
 
-            {/*
-              The verdict strip. The findings used to arrive at section four,
-              two or three screens down on a phone. Every claim, its answer and
-              its finding now sit directly under the title, each row linking
-              down to the check that produced it. The question links; the
-              finding word is its own control, because the word opens the
-              definition of the word.
-
-              The answer is here and nowhere else on this page. It is the one
-              sentence most readers will read (docs/DESIGN.md §12), so it goes
-              where they meet the claim first, and printing it again beside the
-              same claim further down would be the site saying one thing twice.
-            */}
-            {headline.length > 0 && (
-              <ul class="mt-6 divide-y divide-rule border-y border-rule">
-                {headline.map((claim) => (
-                  <li class="grid gap-x-8 gap-y-1.5 py-4 sm:grid-cols-[minmax(0,30rem)_1fr] sm:items-baseline">
-                    <p
-                      class="text-lg leading-snug font-bold text-pretty sm:col-start-1 sm:row-start-1"
-                      data-crossref
-                    >
-                      <a href={`#${claim.data.id}`} class="link-title">
-                        {claim.data.question}
-                      </a>
-                      {story.data.primary_claim === claim.data.id && (
-                        <span class={mainClaim}>Main claim</span>
-                      )}
-                    </p>
-                    <div class="sm:col-start-2 sm:row-start-1">
-                      <Gloss {...gloss(claim.data.finding)} variant="boxed">
-                        <Finding finding={claim.data.finding} size="md" />
-                      </Gloss>
-                      {/* Said beside the badge too, so the strip is never read as a live board. */}
-                      {claim.data.board_withdrawn && (
-                        <span class="mt-1.5 block font-sans text-xs font-semibold tracking-[0.09em] text-muted uppercase">
-                          Off the board
-                        </span>
-                      )}
-                    </div>
-                    <p class="text-[1.0625rem] leading-relaxed text-pretty sm:col-start-1 sm:row-start-2 sm:mt-1">
-                      {claim.data.answer}
-                    </p>
-                  </li>
-                ))}
-              </ul>
+            {/* One claim: the strip is the answer and comes first. */}
+            {stripFirst && (
+              <ClaimStrip headline={headline} primaryClaim={story.data.primary_claim} />
             )}
 
             {/*
@@ -360,29 +286,6 @@ const Content = rendered?.Content;
               </div>
             )}
 
-            {/*
-              Provenance, then dates. Naming the panel and the rule here — both
-              glossed, both linking into the methodology — puts "who decided
-              this?" where the finding is.
-            */}
-            <p class="mt-5 text-[0.8125rem] text-muted">
-              Verdicts by a <Gloss {...gloss('three-model AI panel')}>three-model AI panel</Gloss>{' '}
-              under a <Gloss {...gloss('published rule')}>published rule</Gloss> ·{' '}
-              <Gloss {...gloss('as of')}>as of</Gloss>{' '}
-              <time datetime={story.data.as_of}>{story.data.as_of}</time> ·{' '}
-              <Gloss {...gloss('last verified')}>last verified</Gloss>{' '}
-              <time datetime={story.data.last_verified}>{story.data.last_verified}</time> ·{' '}
-              <Gloss {...gloss('next review by')}>next review by</Gloss>{' '}
-              <time datetime={story.data.review_by}>{story.data.review_by}</time>
-              {methodologyVersions.length > 0 && (
-                <>
-                  {' '}·{' '}
-                  <Gloss {...gloss('methodology version')} hrefLabel="See what changed">
-                    methodology v{methodologyVersions.join(', v')}
-                  </Gloss>
-                </>
-              )}
-            </p>
           </header>
 
           {/*
@@ -412,6 +315,81 @@ const Content = rendered?.Content;
                 ))}
               </ul>
             </section>
+          )}
+
+          {/* Several claims: the strip follows the page-level answer and the TL;DR. */}
+          {!stripFirst && (
+            <ClaimStrip headline={headline} primaryClaim={story.data.primary_claim} class="mt-10" />
+          )}
+
+          {/*
+            Who decided this, and when, after the answer and the TL;DR rather
+            than between them. Three outside readings of the rendered pages on
+            2026-09-16 each found the provenance line and the board notices
+            sitting between the answer and the TL;DR, so a resident read the
+            machinery before the evidence. They are still on every page, in
+            the same words, one block lower.
+          */}
+            {/*
+              Provenance, then dates. Naming the panel and the rule here — both
+              glossed, both linking into the methodology — puts "who decided
+              this?" where the finding is.
+            */}
+            <p class="mt-8 border-t border-rule pt-4 text-[0.8125rem] text-muted">
+              Verdicts by a <Gloss {...gloss('three-model AI panel')}>three-model AI panel</Gloss>{' '}
+              under a <Gloss {...gloss('published rule')}>published rule</Gloss> ·{' '}
+              <Gloss {...gloss('as of')}>as of</Gloss>{' '}
+              <time datetime={story.data.as_of}>{story.data.as_of}</time> ·{' '}
+              <Gloss {...gloss('last verified')}>last verified</Gloss>{' '}
+              <time datetime={story.data.last_verified}>{story.data.last_verified}</time> ·{' '}
+              <Gloss {...gloss('next review by')}>next review by</Gloss>{' '}
+              <time datetime={story.data.review_by}>{story.data.review_by}</time>
+              {methodologyVersions.length > 0 && (
+                <>
+                  {' '}·{' '}
+                  <Gloss {...gloss('methodology version')} hrefLabel="See what changed">
+                    methodology v{methodologyVersions.join(', v')}
+                  </Gloss>
+                </>
+              )}
+            </p>
+          {withdrawn && (
+            <aside
+              class="mt-6 border-l-2 border-gold bg-wash px-4 py-3"
+              role="note"
+            >
+              <p class="text-sm font-semibold text-forest">
+                No longer a finding · <time datetime={withdrawn.date}>{withdrawn.date}</time>
+              </p>
+              <p class="mt-1 text-sm leading-relaxed text-muted">
+                This is no longer a finding. {withdrawn.reason} The page stays for the record: the
+                question, the claims under it and the whole evidence trail are below.
+              </p>
+            </aside>
+          )}
+
+          {/*
+            A claim can come off the board on its own since v1.19, and a reader who
+            sees that happen will assume the finding was wrong. It was not, so the
+            note says so first, and says what actually changed instead. The reason
+            for each claim sits with that claim under "Claims checked".
+          */}
+          {offTheBoard && (
+            <aside
+              class="mt-6 border-l-2 border-gold bg-wash px-4 py-3"
+              role="note"
+            >
+              <p class="text-sm font-semibold text-forest">
+                Off the findings board · <time datetime={offTheBoard}>{offTheBoard}</time>
+              </p>
+              <p class="mt-1 text-sm leading-relaxed text-muted">
+                Every answer on this page still stands. We have corrected nothing and no finding has
+                changed. What changed is our own judgement about whether the question was worth
+                checking, and the reason sits beside each answer it applies to below. The site spent
+                a panel run on a question nobody was arguing about. What comes off is the board, not
+                the record: the page keeps its evidence, its panel and its history.
+              </p>
+            </aside>
           )}
 
           {/* Common forms of the claim — what people say, before what is true. */}
