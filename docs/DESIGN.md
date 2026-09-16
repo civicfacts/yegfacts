@@ -974,7 +974,9 @@ What each layer is for:
   answer's punctuation rule. Somewhere under twenty words is where such a
   sentence usually lands, and that is a description, not a cap; the check is
   whether a person would say it. Where a question has one claim, the claim's
-  answer can serve as the standfirst.
+  answer is the standfirst and the story carries none of its own; the page
+  used to print both, ten words apart, and the critique of 2026-09-16 caught
+  it.
 - **The TL;DR** is the same ten-second reader, reading on. Three to five
   sentences, each a thing a person would say, each carrying one fact the
   standfirst did not. Numbers rounded as people say them. No source names, no

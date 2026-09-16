@@ -31,9 +31,9 @@ Old (60 words):
 
 > Winter cuts cycling back where anyone has measured it against the rest of the year, in Finland's Oulu region and in four Québec cities, but people in Oulu ride through it anyway, so cold on its own does not settle the question. Edmonton has no published measure of what share of its own trips are made by bike in winter.
 
-New (21 words):
+New (14 words):
 
-> No. Cold makes people cycle less, but people in Oulu, Finland still make one trip in ten by bike in winter.
+> (no standfirst: the question has one claim, and that claim's answer is the standfirst)
 
 ### TL;DR
 
@@ -61,9 +61,9 @@ Old (32 words):
 
 > Edmonton is not on track for the community-wide emissions targets Council adopted, and the City's own count of 2024 emissions came in 3.0 million tonnes above what its own plan called for.
 
-New (21 words):
+New (14 words):
 
-> No. Edmonton is not on track, and the City's own count puts 2024 emissions about 3 million tonnes over its plan.
+> (no standfirst: the question has one claim, and that claim's answer is the standfirst)
 
 ### TL;DR
 
@@ -107,8 +107,8 @@ Old:
 
 New:
 
-1. Edmonton's quietest counted bike lane sees about 50 riders a day and its busiest nearly a thousand.
-2. Edmonton's 132 Avenue, one of the bike routes people call empty, sees about 75 riders a day.
+1. Edmonton's quietest counted bike lane logs about 50 bike passes a day and its busiest nearly a thousand.
+2. Edmonton's 132 Avenue, one of the bike routes people call empty, logs about 75 bike passes a day.
 3. Edmonton's counters show about 1.3 million bike passes over seven months, though the published record may not cover all seven.
 4. Fewer than one Edmonton commuter in a hundred bikes to work, and about 85 in a hundred drive.
 5. Nobody can tell from published surveys how many Edmontonians ride a bike at all.
@@ -151,9 +151,9 @@ Old (34 words):
 
 > Edmonton's district plans guide how land gets used, and Council voted 12 to 0 to write into the District Policy that it and the plans 'shall not restrict freedom of movement, association and commerce'.
 
-New (21 words):
+New (14 words):
 
-> No. Edmonton's district plans guide what gets built where, and Council added a line saying they cannot restrict where people go.
+> (no standfirst: the question has one claim, and that claim's answer is the standfirst)
 
 ### TL;DR
 
@@ -167,7 +167,7 @@ Old:
 
 New:
 
-1. Edmonton's District Policy guides rezoning and building-permit decisions.
+1. Edmonton's own City Plan says "the choice will remain to make those trips by auto".
 2. Council voted 12 to 0 to say Edmonton's district plans cannot restrict freedom of movement, association or commerce.
 3. Edmonton's District Policy contains no travel permits, no fines for crossing a district line and no tracking.
 4. The closest thing to a travel restriction in Edmonton's District Policy is ordinary parking management.
@@ -200,7 +200,7 @@ New:
 1. Edmonton City Council spread the $100 million bike-lane program over four years rather than putting it into one year.
 2. Edmonton's four years of bike-lane money add up to more than one year of snow clearing, but nowhere near twice as much.
 3. Edmonton City Council approved roughly nineteen times as much for roads and bridges as it did for the bike-lane program.
-4. The claim that Edmonton spends 180 times as much on roads is off by ten, because $1.8 billion is 18 times $100 million.
+4. The claim that Edmonton spends 180 times as much on roads is ten times too big, because the $1.8 billion it rests on is 18 times $100 million.
 5. Edmonton had spent about $40 million of the bike-lane program by the end of 2025 and built about 35 km of routes.
 
 ## infill-prices
@@ -230,7 +230,7 @@ New:
 1. People say the new housing costs about three times as much as the house it replaced.
 2. No public record anyone found follows a demolished Edmonton house to the homes built on its lot, so the price difference cannot be calculated.
 3. Edmonton's older neighbourhoods lost about 300 detached houses on net in one year and gained about 3,500 homes.
-4. The few Edmonton examples available range from about one and a half to four times the old house's value, which is too little to settle the question.
+4. The permits and assessment rolls needed to work it out exist, but nobody has joined them up.
 5. Nobody can tell whether an Edmonton household on a typical income could afford the replacement housing.
 
 ## Explanation openings rewritten
@@ -274,3 +274,28 @@ million being a claim not a loss, the roads half of the funding comparison);
 because districts have no borders and border is the claim's own word; and two
 bullets whose two figures are one contrast (per-person against total
 emissions; bike commuters against drivers).
+
+## What the critique did
+
+A fresh, read-only Claude Opus 5 session then read the seven rendered preview
+pages as a resident would and was told not to soften. Its report, with the
+editor's disposition under each finding, is
+`reviews/2026-09-16-readable-layers/critique-1.md`. Its verdict was no: the
+sentences of a ten-second layer existed, but sat under a claim list, a
+duplicate answer and a provenance block.
+
+Taken here: the three single-claim pages (winter-cycling, climate-targets,
+fifteen-minute-districts) no longer carry a standfirst of their own, because
+section 12 already says the claim's answer serves as one and the page had
+been printing both; the template no longer prints a lede a story does not
+have, and the TL;DR Copy control now carries the standfirst with the bullets.
+Two cycling-volumes bullets said riders where the page's own rule is bike
+passes. The infill-prices eight-lot range left the TL;DR because it sat
+beside a bullet saying the number cannot be calculated. "Off by ten" became
+"ten times too big" and names its base. The City Plan's own line about the
+choice to drive is back at the top of the districts page. Three explanation
+openings were fixed (two started with two headings back to back, one with
+"a capture of 621 comment records").
+
+Not taken here: the order of the page above the TL;DR, which is D-0020 and
+the founder's call, referred to the board with the critique as evidence.

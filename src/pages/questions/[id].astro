@@ -344,16 +344,21 @@ const Content = rendered?.Content;
             )}
 
             {/*
-              The standfirst: the whole question in a sentence or two, under the
-              same punctuation rule as an answer. On a phone the Copy control
-              drops under the sentence.
+              The standfirst: the whole question in a sentence, under the same
+              punctuation rule as an answer. A question with one claim has no
+              standfirst of its own; the claim's answer in the strip above is
+              the standfirst (docs/DESIGN.md §12), and printing it here again
+              was the site saying one thing twice, ten words apart. On a phone
+              the Copy control drops under the sentence.
             */}
-            <div class="mt-6 flex flex-col items-start gap-2.5 sm:flex-row sm:gap-3">
-              <p class="grow border-l-2 border-gold pl-3.5 text-lg leading-relaxed text-forest text-pretty">
-                {lede}
-              </p>
-              <CopyButton text={lede} url={pageUrl} label="Copy" />
-            </div>
+            {story.data.one_line && (
+              <div class="mt-6 flex flex-col items-start gap-2.5 sm:flex-row sm:gap-3">
+                <p class="grow border-l-2 border-gold pl-3.5 text-lg leading-relaxed text-forest text-pretty">
+                  {lede}
+                </p>
+                <CopyButton text={lede} url={pageUrl} label="Copy" />
+              </div>
+            )}
 
             {/*
               Provenance, then dates. Naming the panel and the rule here — both
@@ -388,8 +393,13 @@ const Content = rendered?.Content;
             <section id="tldr" class="mt-14">
               <div class="flex items-baseline justify-between gap-3">
                 <h2 class="section-heading">TL;DR</h2>
+                {/*
+                  The copy carries the answer with the bullets. The bullets are
+                  written to add to the standfirst, not repeat it, so on their
+                  own they can lose the fact the whole page turns on.
+                */}
                 <CopyButton
-                  text={story.data.tldr.map((line) => `• ${line}`).join('\n')}
+                  text={[lede, ...story.data.tldr.map((line) => `• ${line}`)].join('\n')}
                   url={`${pageUrl}#tldr`}
                   label="Copy"
                 />
