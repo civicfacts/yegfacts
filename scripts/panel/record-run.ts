@@ -46,7 +46,11 @@ type RunEntry = {
    * research and why, the upstream the capture was taken against, the request
    * count and the capture manifest hash. From v1.30 it carries how many captured
    * requests held the declared package, and the names and line counts of the
-   * private sources the capture was searched for; the v1.29 pin fields
+   * private sources the capture was searched for. From v1.31 a row also carries
+   * `record_kind`, which says whether the denylist ran over the outgoing request
+   * or over the CLI's own local record, and `context_proof` may read
+   * `record-only` for the Gemini seat, whose CLI exposes no capture route at
+   * all. The v1.29 pin fields
    * (`pins_source`, the vendor-prompt and tool-definition hashes, the main-turn
    * and side-request counts) are no longer written, because the check that
    * produced them is gone. Each field is absent on every manifest written before
