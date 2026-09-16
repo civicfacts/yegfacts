@@ -1,16 +1,17 @@
 # Review brief: Do Edmonton's bike lanes ease traffic congestion or make it worse?
 
-Status: **REVISED after framing check 1, not frozen.** Check 1
-(`framing/check-1.md`, OpenAI seat through `scripts/panel/audit-package.sh`)
-returned REVISE with two defect findings and nine framing findings. The
-defects are corrected in the checker's exact wording; the framing findings
-and what changed for each are in `framing/response-1.md`. One claim,
-`79-street-relieves-75-street`, left the brief on the checker's finding
-that it belongs with the registered 79 Street question; see "Dropped at
-the brief". The brief goes back for check 2. The freeze is the sha256 of
-this file, recorded in `run-record.md` with the one line that recomputes
-it, once a check returns FRAME OK.
-Drafted 2026-09-16 and revised the same day by Stew.
+Status: **REVISED after framing check 2, not frozen.** Check 1
+(`framing/check-1.md`) and check 2 (`framing/check-2.md`), both from the
+OpenAI seat through `scripts/panel/audit-package.sh`, returned REVISE.
+Each report's defect findings are corrected in the checker's exact
+wording and each report's framing findings are answered, with what
+changed, in `framing/response-1.md` and `framing/response-2.md`. One
+claim, `79-street-relieves-75-street`, left the brief after check 1; see
+"Dropped at the brief". The brief goes back for check 3, the last the cap
+allows. The freeze is the sha256 of this file, recorded in
+`run-record.md` with the one line that recomputes it, once a check
+returns FRAME OK.
+Drafted 2026-09-16 and revised twice the same day by Stew.
 Methodology v1.32.
 Question id: `lanes-and-congestion`. Register entry: `intake/register.yaml`.
 
@@ -28,17 +29,18 @@ question it belongs to; see "Dropped at the brief".
 Claims in this question, reviewed and reported separately:
 
 - `lane-removal-increases-congestion`: whether converting a motor-vehicle
-  lane to a bike lane has increased motor-vehicle congestion on the
-  Edmonton corridors where it was done.
+  through lane to a bike lane caused motor-vehicle congestion to rise on
+  the Edmonton corridors where it was done.
 - `bike-infra-reduces-congestion`: whether Edmonton's cycling
-  infrastructure has been shown to reduce motor-vehicle congestion by
-  moving trips out of cars.
+  infrastructure has been shown to reduce motor-vehicle congestion across
+  the city by moving trips out of cars.
 - `city-removed-traffic-lanes`: whether the City has removed
   motor-vehicle through lanes for bike lanes across a geographically
   broad share of the city.
 - `lanes-removed-for-traffic-calming`: whether, where the City removed a
   through lane and added a bike lane, its own record says the lane would
-  have gone for traffic calming anyway.
+  have gone for traffic calming anyway and the bike lane was added to
+  work already proceeding to combine projects or save money.
 
 Each claim carries its own verdict, panel agreement and evidence-basis
 label. Reviewer confidence appears only beside the reviewer who gave it.
@@ -119,10 +121,16 @@ pseudonyms.
 A driver stuck on a street that lost a lane asks: did the bike lane do
 this? A person who rides asks: is it true that we're making traffic
 worse, or better? A reporter asks: has the City measured what its lane
-conversions did to traffic, and what did it find? The propositions below
-answer those questions at the level the record answers them, which is
-corridor by corridor where the City measured, and they say so where the
-record does not reach the level people ask at, the whole city.
+conversions did to traffic, and what did it find? A resident also asks:
+did Edmonton really remove through lanes for bike lanes across much of
+the city? Another asks: were those lanes going to be removed for traffic
+calming anyway, with bike lanes added to work already proceeding to
+combine projects or save money? Claims 3 and 4 answer those two questions
+separately; they do not answer whether congestion changed. The
+propositions below answer these questions at the level the record answers
+them, which is corridor by corridor where the City measured, and they say
+so where the record does not reach the level people ask at, the whole
+city.
 
 ## What is measured, and by whom
 
@@ -140,7 +148,8 @@ thing by the same name.
    Infrastructure Committee package already in this site's evidence
    registry. These are the primary instrument for the two congestion
    claims. Reviewers establish which corridors have such a measurement
-   published by the as-of date.
+   published by the as-of date, and for each, whether the evaluation's
+   design can support attributing a change to the conversion.
 2. **Average Annual Weekday Traffic (AAWDT).** Use the Open Data AAWDT
    dataset ("Average Annual Weekday Traffic Volumes", covering 2011 to
    2022 in the dataset as titled on the as-of date) and the AAWDT map and
@@ -154,18 +163,30 @@ thing by the same name.
    primary.
 3. **The City's record of what it built.** Bike route project pages,
    design drawings, council and committee reports, and the Bike Plan and
-   its implementation guide establish which corridors had a motor-vehicle
-   lane removed and a bike lane added, and what reason the City gave.
-   These are the instrument for claims 3 and 4.
+   its 2021 to 2026 Implementation Guide establish which corridors had a
+   motor-vehicle lane removed and a bike lane added, and what reason the
+   City gave. These are the instrument for claims 3 and 4.
 4. **Cycling counts and mode share.** The City's automated bicycle
-   counters and the Edmonton and Region Household Travel Survey, both
-   already tested under the question `cycling-volumes`, are context for
-   claim 2 and never carry a verdict here. The travel survey measures
-   regional travel patterns and modes; it is not a route-user
-   counterfactual instrument and does not count toward claim 2's S.
+   counters and the current Navigating Tomorrow Household Travel Survey,
+   and the historical 2015 Edmonton and Region Household Travel Survey
+   where that is the release used, both already tested under the question
+   `cycling-volumes`, are context for claim 2 and never carry a verdict
+   here. The travel survey measures regional travel patterns and modes;
+   it is not a route-user counterfactual instrument and does not count
+   toward claim 2's S.
 
-"Congestion" is fixed for this brief as **motor-vehicle delay on a
-corridor**. Primary definition: change in peak-period average travel time
+**The counting unit.** Use the City's Bike Routes - On Street GIS layer
+as the inventory, snapshotted on the as-of date. A corridor is one route
+identified as a single project with stated endpoints in the City's
+project record. Where no project route exists, group contiguous inventory
+features with the same street name and facility type between documented
+endpoints; split at a physical gap or change of street. Report the result
+again using individual inventory features as the reasonable alternative
+unit and state whether it changes any classification. Claims 1, 3 and 4
+count in this unit.
+
+**Congestion** is fixed for this brief as motor-vehicle delay on a
+corridor. Primary definition: change in peak-period average travel time
 or delay. Alternative definition, reported where the City publishes the
 inputs: change in peak-period queue or level of service, or in
 travel-time reliability; reviewers state whether the alternative changes
@@ -174,17 +195,26 @@ measures instead of travel time, reviewers report the document's own
 measure and say how it maps. Vehicle volume remains contextual and is not
 itself congestion.
 
+**Peak period and windows.** Primary: use the peak period and before and
+after windows expressly defined by the City evaluation, because those are
+pre-existing published windows rather than periods selected after seeing
+the result. Alternative: where the same publication supplies the inputs,
+report the result for matched calendar periods and for all-day or other
+published periods. State whether either alternative changes the
+classification; where the inputs are not published, identify the
+unavailable alternative without imputing a result.
+
 ## Dates fixed in this brief
 
 **As-of date (freeze date):** 2026-09-16. Anything decided or published
 after this date is out of scope.
 
 **Reference periods.** Each before-and-after comparison takes the windows
-the City's own evaluation defines, and reviewers state them. AAWDT takes
-the most recent year published for the corridor and the year before the
-conversion, both named. The set of converted corridors is as it stood on
-the as-of date; routes under re-evaluation after the 2026-08-26 committee
-meeting are in the set if built, out if not, and named either way.
+fixed above. AAWDT takes the most recent year published for the corridor
+and the year before the conversion, both named. The set of converted
+corridors is as it stood on the as-of date; routes under re-evaluation
+after the 2026-08-26 committee meeting are in the set if built, out if
+not, and named either way.
 
 **Currency of the record.** For every figure, reviewers state the
 publication date and the last-updated date of the document or dataset
@@ -194,51 +224,58 @@ used, and whether a newer release existed on the as-of date.
 
 The City of Edmonton, the municipal boundary, is the geography for every
 claim. Claims 1, 3 and 4 are about a set of corridors inside it; claim 2
-is about the city, and the brief says below what the record can answer at
-that level. Where a claim counts areas, an area is one of the 15
-district-plan areas shown in the City's plans in effect and adopted
-through the applicable district-plan bylaw; Charter Bylaw 24000 supplies
-the District Policy, not the individual area boundaries.
+is about the city, and its ladder says what the record must show at that
+level. Where a claim counts areas, an area is one of the 15 district-plan
+areas shown in the City's plans in effect and adopted through the
+applicable district-plan bylaw; Charter Bylaw 24000 supplies the District
+Policy, not the individual area boundaries.
 
 ## Claims under review
 
 ### Claim 1, id: `lane-removal-increases-congestion`
 
-**Normalized proposition:** Where the City of Edmonton removed a
-motor-vehicle through lane to install a bike lane, motor-vehicle
-congestion on that corridor increased.
+**Normalized proposition:** Removing a motor-vehicle through lane to
+install a bike lane caused peak-period average motor-vehicle travel time
+or delay on the converted corridor to rise by at least 10 per cent, with
+the result at 5 per cent reported as the alternative.
 
 **Why this reading.** Thirteen people said it, and the mechanism nearly
 all of them name is a through lane removed: "two lanes to one", "force
-traffic into one lane not two". The claim is about the corridors where
-that was done, and it is asserted as a general result of doing it, not as
-a report on one street. It is tested as a generalisation over the
-converted corridors, with a coverage rule so that a few measured
-corridors cannot carry a verdict about the program. Idling and emissions
-are reported as a separate consequence and do not carry this verdict.
+traffic into one lane not two". They say the removal causes the
+congestion, so the claim is causal and is tested as one: an uncontrolled
+before-and-after difference is not attribution. The claim is about the
+corridors where the removal was done and is asserted as a general result
+of doing it, so it is tested as a generalisation over the converted
+corridors, with a coverage rule so that a few measured corridors cannot
+carry a verdict about the program. Idling and emissions are reported as a
+separate consequence and do not carry this verdict.
 
-**What is counted, fixed here.** The set of corridors is every Edmonton
-street segment on which the City removed a motor-vehicle through lane and
-installed a bike lane, as established under claim 3 from the City's own
-project record; its size is T. The measure is the City's published
-before-and-after motor-vehicle travel time or delay for the peak period on
-that corridor. A corridor with no such measurement published is in the
-set but cannot carry evidence either way, and the story reports how many
-of the converted corridors the City measured at all.
+**What is counted, fixed here.** Let Q be the number of qualifying
+converted corridors; Q equals C as established under claim 3, in the
+counting unit fixed above. Let M be the number of those Q corridors with
+a qualifying published measurement: the City's published before-and-after
+peak-period motor-vehicle travel time or delay on that corridor. A
+corridor counts toward U only where the City evaluation expressly
+attributes the change to the conversion or uses a comparison,
+counterfactual or other design capable of supporting that attribution;
+an unadjusted before-and-after difference is reported as a qualification
+and does not by itself carry the causal verdict. A corridor with no
+qualifying measurement is in Q but cannot carry evidence either way, and
+the story reports how many of the converted corridors the City measured
+at all.
 
-**Thresholds.** Let T be the total number of qualifying converted
-corridors established under claim 3. Let M be the number of those with a
-published before-and-after travel-time or delay measurement, and of those
-let U be the number where peak-period travel time or delay rose by at
-least 10 per cent after the conversion, on the City's own figures.
+**Thresholds.** Let U be the number of the M corridors where, on an
+attribution-capable evaluation, peak-period travel time or delay rose by
+at least 10 per cent after the conversion, on the City's own figures.
 
-Coverage rule, read first: Supported requires measurements for at least
-half of T. The result is reported again using one-third of T as the
-alternative coverage threshold. If neither coverage threshold is met, the
-general proposition is Not established, and the measured-corridor results
-remain qualifications.
+Coverage, applied first and independently for each threshold. For the
+primary verdict, if M is less than one-half of Q, the result is **Not
+established**; otherwise apply the ladder below. Separately, for the
+one-third alternative, if M is less than one-third of Q, the alternative
+result is **Not established**; otherwise apply the same ladder. Report
+the one-third result only in `interpretation_notes` or `limitations`.
 
-Where the coverage rule is met:
+The ladder:
 
 - **Supported** if M is at least 3 and U is more than half of M.
 - **Partially supported** if M is at least 3 and U is at least one but
@@ -249,26 +286,31 @@ Where the coverage rule is met:
   verdict against a claim made about a program.
 
 Alternative cutoff, results required under both: a rise of at least 5
-per cent in place of 10. Neither figure comes from an identified
-pre-existing standard; ten per cent is the smallest change in a trip time
-a person would notice as "slower", and five is the alternative a holder
-would ask for. No cutoff may be changed after the figures are seen.
+per cent in place of 10. Neither cutoff comes from an identified
+pre-existing standard. Ten and five per cent are predeclared judgment
+cutoffs, and results are required under both. The minimum of three
+measured corridors is a judgment cutoff; report the ladder again with a
+minimum of five as the reasonable alternative and state whether the
+result changes; the primary verdict remains the three-corridor result. No
+cutoff may be changed after the figures are seen.
 
 **Qualifications reported, never carrying the verdict:**
 
-1. Vehicle volume (AAWDT) before and after on each measured corridor, and
+1. Every unadjusted before-and-after difference on a measured corridor,
+   reported as a difference and not as an effect.
+2. Vehicle volume (AAWDT) before and after on each measured corridor, and
    where the City reports it, on the parallel streets it names as
    diversion routes. A corridor whose travel time held because its
    traffic went elsewhere is reported as exactly that.
-2. The alternative congestion measures, queue or level of service and
-   reliability, where the City publishes them, and whether they change
-   the classification.
-3. Whether any City evaluation measured the whole network's travel times
+3. The alternative congestion measures, queue or level of service and
+   reliability, and the alternative periods, where the City publishes
+   them, and whether they change the classification.
+4. Whether any City evaluation measured the whole network's travel times
    rather than one corridor's, and what it found.
-4. Idling and emissions: reviewers determine whether an Edmonton-specific
+5. Idling and emissions: reviewers determine whether an Edmonton-specific
    published measurement exists and bound any reported absence by source,
    corridor, period and search date.
-5. Whether the measured corridors are the ones commenters named (102
+6. Whether the measured corridors are the ones commenters named (102
    Avenue, 132 Avenue, Hermitage Road) or others.
 
 **What this claim does not test.** Whether the lanes should have been
@@ -278,45 +320,50 @@ commenter saw from a car.
 ### Claim 2, id: `bike-infra-reduces-congestion`
 
 **Normalized proposition:** Edmonton's cycling infrastructure has been
-shown to reduce motor-vehicle congestion in the city by moving trips out
-of cars.
+shown to reduce motor-vehicle congestion across the city by moving trips
+out of cars.
 
 **Why this reading.** Six people said it, and the mechanism every one
 names is substitution: a person on a bike is a person not driving. The
 strongest fair reading keeps the consequence they assert, less
-congestion, and the cause they assert, the infrastructure. A proposition
-that only said "a bicycle trip is not a car trip" would be a truism, and a
-verdict on it would tell no one anything. So the claim is tested as a
-claim about a demonstrated causal chain in Edmonton, which is how the
-holders argue it: "the better Edmonton's traffic situation gets".
+congestion, the cause they assert, the infrastructure, and the scale
+they assert, the city: "the better Edmonton's traffic situation gets". A
+proposition that only said "a bicycle trip is not a car trip" would be a
+truism, and a verdict on it would tell no one anything. So the claim is
+tested as a claim about a demonstrated causal chain at Edmonton citywide
+scale, and local evidence is reported as local.
 
 **What is counted, fixed here.** Two links, both from published Edmonton
 evidence. S counts only studies that directly estimate infrastructure-
 attributable substitution from driving to cycling through a stated
 counterfactual method: a route-user survey asking what the trip would
 otherwise have been, a before-and-after design with a comparison
-corridor, or an equivalent method the study states. D counts only
-reductions in peak-period motor-vehicle travel time or delay that the
-same study, or a network analysis linked to it, attributes to that
-substitution. Unlinked bicycle and vehicle counts, on the same corridor
-or elsewhere, are qualifications and count toward neither.
+corridor, or an equivalent method the study states. D10 counts linked
+studies or network analyses attributing a peak-period travel-time or
+delay reduction of at least 10 per cent to that substitution; D5 counts
+the same at 5 per cent. The primary verdict uses D10; the D5 result is
+required in `interpretation_notes` or `limitations`. For each entry in S
+or D, reviewers state the population or network it evaluates and whether
+its stated inference covers Edmonton citywide or a corridor or local
+population. Unlinked bicycle and vehicle counts, on the same corridor or
+elsewhere, are qualifications and count toward neither.
 
 **Thresholds.**
 
-- **Supported** if S is at least 1 and D is at least 1 and the evidence
-  connects both links in the same evaluated population or network.
-- **Partially supported** if evidence establishes only one link, that is,
-  exactly one of S and D is at least 1, or both are but in unconnected
-  populations.
-- **Contradicted** if S and D are both zero and comparable causal or
-  network evidence in Edmonton points against the claimed reduction: a
-  study of the same kind finding no substitution, or a network analysis
-  attributing higher delay to the infrastructure.
-- **Not established** if S and D are both zero and no such contrary
-  evidence exists.
+- **Supported** only if published evidence connects infrastructure-
+  attributable substitution (S) and reduced delay (D10) in an evaluated
+  population or network whose stated inference covers Edmonton citywide.
+- **Partially supported** if both links are connected only for a
+  corridor or local population, or if citywide evidence establishes one
+  or both links without connecting them in one evaluated population or
+  network.
+- **Contradicted** only if comparable citywide causal or network evidence
+  points against the claimed reduction.
+- **Not established** if neither citywide link is established and no
+  comparable citywide contrary evidence exists.
 
-Alternative cutoff, results required under both: for D, a reduction of
-at least 5 per cent in place of 10 where the study reports a magnitude.
+Local evidence is reported as local; it cannot carry either citywide
+endpoint verdict.
 
 **Qualifications reported, never carrying the verdict:**
 
@@ -328,6 +375,8 @@ at least 5 per cent in place of 10 where the study reports a magnitude.
    plans, and whether reducing congestion is among the purposes it names.
 3. Coincident before-and-after counts on converted corridors, bicycle and
    motor-vehicle, reported as counts and not as substitution.
+4. Every local or corridor-scale entry in S or D, reported under its own
+   scale.
 
 **What this claim does not test.** Whether cycling infrastructure
 reduces congestion in other cities; whether it should; the health and
@@ -348,18 +397,19 @@ one or two areas, but a broad share of the city's districts. Individual
 examples and a smaller spread support only the examples or a partial
 finding, not "all throughout".
 
-**What is counted, fixed here.** A corridor counts if the City's own
-project record, design drawings, council or committee reports show that a
-lane used by through motor-vehicle traffic was removed and a bike lane
-installed in the space, or in space that included it, on that segment. A
-parking lane converted to a bike lane does not count; a lane converted
-because the City rebuilt a street for other stated reasons counts here
-and its reason is claim 4's business. Reviewers list every corridor they
-find with the segment, the year, the document and what the lane was
-before. The two named examples are checked as stated: whether 102 Avenue
-between 121 Street and 111 Street was two-way and is now one-way with a
-bike lane, whether 102 Avenue east of 109 Street lost through lanes to
-bike lanes, and what was done on 132 Avenue.
+**What is counted, fixed here.** In the counting unit fixed above, a
+corridor counts if the City's own project record, design drawings,
+council or committee reports show that a lane used by through
+motor-vehicle traffic was removed and a bike lane installed in the space,
+or in space that included it, on that segment. A parking lane converted
+to a bike lane does not count; a lane converted because the City rebuilt
+a street for other stated reasons counts here and its reason is claim 4's
+business. Reviewers list every corridor they find with the segment, the
+year, the document and what the lane was before. The two named examples
+are checked as stated: whether 102 Avenue between 121 Street and 111
+Street was two-way and is now one-way with a bike lane, whether 102
+Avenue east of 109 Street lost through lanes to bike lanes, and what was
+done on 132 Avenue.
 
 **Thresholds.** Let T be the number of on-street bike-lane corridors in
 the City's inventory that were built by the as-of date, and let R be the
@@ -376,15 +426,15 @@ in which at least one qualifying corridor lies.
 
 Alternative threshold, results required under both: Supported at A of at
 least 5. These are judgement thresholds rather than pre-existing
-standards, which is why both are reported.
+standards, which is why both are reported. The result is also reported
+again in the alternative counting unit, individual inventory features,
+with a statement of whether it changes the classification.
 
 **Qualifications reported, never carrying the verdict:**
 
-1. For each named example, whether the change the commenter described
-   happened as described, and if the street was changed for a different
-   reason (the record on 102 Avenue between 99 Street and 102 Street, for
-   instance, attributes its one-way conversion to LRT construction), that
-   reason.
+1. For each named example, state whether the described change occurred
+   and report the contemporaneous reason the City's record gives,
+   including any reason other than installation of the bike lane.
 2. The total length of bike lanes in the City's inventory that sit in
    former through lanes, as a share of the network, where the City
    publishes it.
@@ -407,52 +457,60 @@ the lanes went for traffic calming, and bike lanes were added where that
 work was already happening, "to save money combining the two". Hermitage
 Road is the example. The claim is about the City's stated reasons, which
 its own documents answer, and it is tested over the same corridors as
-claim 3. Traffic calming is the primary reading, because that is the
+claim 3. Both halves of what the holder said are conditions of the
+verdict: that the lane would have gone for calming anyway, and that the
+bike lane was added to work already proceeding to combine projects or
+save money. Traffic calming is the primary reading, because that is the
 reason the holder gave. Street renewal, transit priority, LRT
 construction, generic safety and other reasons are reported separately as
 qualifications and do not count as traffic calming unless the City
 document expressly links them to a traffic-calming lane removal.
 
 **What is counted, fixed here.** For each corridor that counts under
-claim 3, the reason the City's own contemporaneous document gives for the
-lane removal: the project page, the design rationale, the council or
-committee report that approved it. A corridor counts for the claim (O)
-where the document gives traffic calming, in those words or in the City's
-equivalent terms for it, as a purpose of the lane removal in its own
-right, not as a consequence of fitting the bike lane. A corridor counts
-against (B) where the document gives the bike lane as the reason for the
-lane removal. A document that gives both counts in both and is reported
-as such. Whether the document also says the bike lane was combined with
-the work or saved money is reported per corridor as a qualification, not
-as a condition. No stated reason is no evidence.
+claim 3, the reason the City's own contemporaneous record gives for the
+lane removal. "Contemporaneous" means a document published before or at
+the approval of the lane-removal design, not a later retrospective
+explanation: the project page as it stood, the design rationale, the
+council or committee report that approved it. Traffic calming counts
+where the document uses that term or expressly says the lane removal was
+intended to reduce motor-vehicle speed or through volume. Generic safety,
+renewal, streetscaping, multimodal accommodation or operational
+improvement does not count without that express link. A document merely
+naming traffic calming as one purpose does not establish that the lane
+would have been removed without the bike lane. No stated reason is no
+evidence.
 
-**Thresholds.** Let C be the corridors that count under claim 3 with a
-stated reason on the record, let O be those whose stated reason is
-traffic calming as defined above, and let B be those whose stated reason
-is the bike lane, with "both" corridors counted in both O and B.
+**Thresholds.** Let C be the qualifying corridors with a contemporaneous
+reason record; O those where the record expressly says the through-lane
+removal would have proceeded for traffic calming without the bike lane; K
+those where the record says the bike lane was added to work already
+proceeding to combine projects or save money; and J those satisfying both
+O and K on the same corridor.
 
-- **Supported** if C is at least 3 and O is more than half of C and B is
-  less than half of C.
-- **Partially supported** if C is at least 3 and O is at least one but
-  the condition for Supported fails; or if C is 1 or 2 and O is at least
-  1.
-- **Contradicted** if C is at least 3 and O is zero.
-- **Not established** if C is zero, or if C is 1 or 2 and O is zero.
+- **Supported** if C is at least 3 and J is more than half of C.
+- **Partially supported** if at least one of O or K is non-zero and
+  Supported does not apply.
+- **Contradicted** if C is at least 3, O and K are both zero, and the
+  records affirmatively give incompatible accounts.
+- **Not established** otherwise.
 
-No alternative cutoff: the verdict turns on a majority of documented
-reasons, and there is no second way to count a majority. Where claim 3
-finds no corridor at all, this claim is Not established, and the two
-findings are reported together.
+No alternative cutoff on the share: the verdict turns on a majority of
+documented corridors, and there is no second way to count a majority. The
+minimum of three documented corridors is a judgment cutoff; report the
+ladder again with a minimum of five as the reasonable alternative and
+state whether the result changes; the primary verdict remains the
+three-corridor result. Where claim 3 finds no corridor at all, this claim
+is Not established, and the two findings are reported together.
 
 **Qualifications reported, never carrying the verdict:**
 
-1. Hermitage Road specifically: what the City's project record says was
-   done and why.
-2. For each corridor, whether the record says the bike lane was combined
-   with the work or saved money.
+1. Hermitage Road specifically: what the City's contemporaneous record
+   says was done and why.
+2. For each corridor, the record's stated reason in its own words, and
+   which of O and K it satisfies.
 3. Corridors whose stated reason is renewal, transit priority, LRT
-   construction or safety without an express traffic-calming link, listed
-   under those reasons.
+   construction, safety or another purpose without an express
+   traffic-calming link, listed under those reasons.
 4. Whether the City's active transportation program documents state a
    policy of pairing bike routes with renewal or calming work, and what
    they say.
@@ -488,25 +546,27 @@ What each verdict would change, for the person making the claim and for
 the person arguing against it. Stated without any view of which way any
 of them comes out.
 
-**Claim 1, lanes taken, congestion made.** Supported means holders may
-say an adequately covered set of City measurements shows the claimed
-general increase; opponents must concede that measured result.
-Contradicted means holders must abandon that general measured claim at
-the fixed cutoff; opponents may say the adequately covered record points
-against it. Partially supported means both sides must accept
-heterogeneous corridor results. Not established means neither side gains
-an effect conclusion; only the measurement gap is established, and the
-story reports it as a fact about the record.
+**Claim 1, lanes taken, congestion made.** Supported means holders gain
+adequately covered Edmonton evidence attributing the threshold increase
+in congestion to the lane conversions; opponents must concede that
+attributable result. Contradicted means comparable adequately covered
+evidence points against an attributable increase at the fixed cutoff;
+holders must abandon the general causal claim and opponents may cite the
+record. Partially supported means both sides must accept heterogeneous
+corridor results. Not established means neither side gains an effect
+conclusion; only the measurement gap is established, and the story
+reports it as a fact about the record. A mere temporal increase or
+decrease changes neither side's causal position.
 
-**Claim 2, one less car.** Supported means holders gain Edmonton evidence
-connecting infrastructure, car-trip substitution and lower motor-vehicle
-delay; opponents must concede that causal chain. Contradicted means
-holders must abandon that Edmonton causal claim and opponents gain
-comparable evidence pointing against it. Partially supported means only
-one link or a local effect is established. Not established means neither
-the arithmetic argument nor its rejection has been demonstrated in
-Edmonton; the holders keep their arithmetic and lose the claim that it has
-been shown to work here.
+**Claim 2, one less car.** Supported requires the connected causal chain
+at Edmonton citywide scale, and means holders gain that evidence and
+opponents must concede the chain. Contradicted means comparable citywide
+evidence points against it; holders must abandon the Edmonton causal
+claim. A connected local effect is Partially supported and cannot require
+either side to concede the citywide generalisation. Not established means
+neither the arithmetic argument nor its rejection has been demonstrated
+in Edmonton at that scale; the holders keep their arithmetic and lose the
+claim that it has been shown to work here.
 
 **Claim 3, they took the lanes.** Supported means holders establish broad
 geographic occurrence and opponents must withdraw a blanket denial.
@@ -517,12 +577,13 @@ established means the prior-use record is too incomplete for either
 side's generalisation.
 
 **Claim 4, not for the bikes.** Supported means the holder establishes
-that the documented reason was traffic calming on the required share of
-corridors; opponents must answer those records. Contradicted means the
-holder must withdraw that general account and opponents may say the
-documented reasons point against it. Partially supported means the
-reasons vary by corridor. Not established means neither side may infer a
-reason from undocumented projects.
+both that traffic calming would independently have removed the lanes on
+the required share and that the bike lanes were added to proceeding work
+to combine projects or save money; opponents must answer those records.
+Partially supported means only one component or a smaller share is
+established. Contradicted means comparable records affirmatively point
+against both components. Not established means the records cannot decide
+the asserted counterfactual and combination account.
 
 ## Scope
 
@@ -555,28 +616,31 @@ Shared across claims:
   instrument, the document and its publication date, stated together. A
   travel time without its corridor and period is not a finding.
 - The corridor list built under claim 3 is the same list used in claims
-  1 and 4. It is built once, from the City's record, and each claim
-  reads it; the list is reported in full with the document behind each
-  entry.
+  1 and 4. It is built once, from the City's record in the counting unit
+  fixed above, and each claim reads it; the list is reported in full with
+  the document behind each entry, and once more in the alternative unit.
+- Every ladder with a minimum of three corridors is reported again at a
+  minimum of five, with a statement of whether the result changes.
 
-Claim 1: T; for each converted corridor, whether a before-and-after
-travel-time or delay measurement is published; for each that is, the
-before figure, the after figure, the periods, and the percentage change;
-M and U under both cutoffs; the coverage ratio M over T against both
-coverage thresholds.
+Claim 1: Q; for each of the Q corridors, whether a before-and-after
+travel-time or delay measurement is published and whether its design is
+attribution-capable; for each measured corridor, the before figure, the
+after figure, the periods, and the percentage change; M and U under both
+cutoffs; M over Q against both coverage thresholds, each applied
+independently.
 
-Claim 2: S and D as defined, each entry with its document, its method and
-the population or network it covers; any contrary study of the same kind;
-the cycling mode share figure and survey named as context.
+Claim 2: S, D10 and D5 as defined, each entry with its document, its
+method, the population or network it covers and whether its stated
+inference is citywide; any contrary citywide study of the same kind; the
+cycling mode share figure and survey named as context.
 
 Claim 3: T and R; the corridor list with segment, year, prior lane use,
-document and district-plan area; C and A under both thresholds; the three
-named examples checked as stated.
+document and district-plan area; C and A under both thresholds and in
+both counting units; the three named examples checked as stated.
 
-Claim 4: for each corridor on the list, the stated reason in the
-document's words, whether it is traffic calming under this brief's
-definition, and whether the document says the bike lane was combined or
-saved money; C, O and B.
+Claim 4: for each corridor on the list, the contemporaneous document,
+its stated reason in the document's words, and which of O and K it
+satisfies; C, O, K and J.
 
 All figures reported to the precision the source publishes, never
 further. Where a reviewer computes a change the source does not publish,
@@ -589,9 +653,15 @@ the arithmetic is shown and it is labelled as the reviewer's calculation.
   faster is a separate figure, and a corridor that got faster because its
   cars went to the next street is reported with the next street's figure
   beside it.
+- **A difference is not an effect.** A before-and-after difference
+  without an attribution-capable design does not establish claim 1's
+  causal assertion. A stated co-purpose without an express counterfactual
+  does not establish that traffic calming would have removed the lane
+  anyway under claim 4. If the required record is absent, return Not
+  established rather than substitute the proxy.
 - **Build the corridor list once and share it.** Claims 1, 3 and 4 read
-  one list. Report it in full under claim 3 and refer to it from the
-  others.
+  one list, in one counting unit. Report it in full under claim 3 and
+  refer to it from the others.
 - **Do not let one claim answer another.** A Supported on claim 1 is not
   a Contradicted on claim 2, and the reverse; each has its own
   instrument and thresholds. Claims 3 and 4 are antecedent facts about
