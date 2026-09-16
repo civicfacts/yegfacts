@@ -221,7 +221,7 @@ const stream = [
     event: 'result',
     result: {
       conversation_id: conversation,
-      status: mutate === 'failed-result' ? 'ERROR' : 'SUCCESS',
+      status: mutate === 'failed-result' ? 'CANCELLED' : 'SUCCESS',
       response: isCanary ? answer : 'a report a reader could use',
       duration_seconds: 82.1,
       num_turns: 1,

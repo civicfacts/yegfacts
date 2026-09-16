@@ -255,6 +255,20 @@ describe('the Codex seat', { timeout: 120_000 }, () => {
     expect(String(metadata.admission_reason)).toMatch(/rather than https:\/\/chatgpt\.com/);
   });
 
+  /**
+   * The three CLIs put their version in different places: `2.1.272 (Claude
+   * Code)`, `codex-cli 0.154.0`, `1.2.4`. Taking the first field turned this
+   * seat's profile into `codex-captured-read-only-codex-cli` on its first live
+   * run, which is a profile name that names no build at all.
+   */
+  it('records the version and not the product name in front of it', () => {
+    const one = stub('openai', { version: 'codex-cli 0.154.0\n' });
+    const { attempt } = invoke('openai', one, 'version');
+    const metadata = readJson(path.join(attempt, 'metadata.json'));
+    expect(metadata.cli_version).toBe('0.154.0');
+    expect(metadata.profile).toBe('codex-captured-read-only-0.154.0');
+  });
+
   it('redacts the account identifier in the capture and nowhere else', () => {
     const one = stub('openai');
     const { attempt } = invoke('openai', one, 'redaction');
@@ -404,12 +418,40 @@ describe('the Gemini seat', { timeout: 120_000 }, () => {
     );
     expect(readFileSync(one.credential, 'utf8')).toBe(before);
 
-    // Afterwards the links and the settings file are gone, and nothing that
-    // looks like a credential is left in the archive.
-    const left = readdirSync(path.join(attempt, 'home', '.gemini', 'antigravity-cli'));
+    // Afterwards nothing that looks like a credential is anywhere under the
+    // attempt directory, and the home itself was never there.
+    const walk = (dir: string): string[] =>
+      readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
+        entry.isDirectory() ? walk(path.join(dir, entry.name)) : [entry.name],
+      );
+    const left = walk(attempt);
     expect(left).not.toContain('antigravity-oauth-token');
     expect(left).not.toContain('installation_id');
     expect(left).not.toContain('settings.json');
+  });
+
+  /**
+   * The leak the first live canary found. agy's fetch tool saves the page it
+   * fetched under HOME and then tells the model the absolute path of that file.
+   * With the home under the archive, and the archive under `$HOME/.local/state`,
+   * that handed the reviewer the operator's home directory, and the denylist
+   * refused the run. The home moved into the opaque temporary tree instead.
+   */
+  it('keeps the operator\'s home directory out of the record the reviewer sees', () => {
+    const one = stub('google');
+    const { ok, attempt } = invoke('google', one, 'no-home-in-record');
+    expect(ok).toBe(true);
+
+    const record = readdirSync(path.join(attempt, 'record'))
+      .map((name) => readFileSync(path.join(attempt, 'record', name), 'utf8'))
+      .join('\n');
+    expect(record).not.toContain(one.home);
+    expect(record).not.toContain(one.archive);
+    // The home the CLI ran under is in the same opaque tree the working
+    // directory uses, named only by the attempt id.
+    const workDir = String(readJson(path.join(attempt, 'metadata.json')).work_dir);
+    expect(path.basename(workDir)).toMatch(/^attempt-[0-9a-f]{16}$/);
+    expect(workDir.startsWith(one.home)).toBe(false);
   });
 
   it('refuses when there is no credential, and never writes one', () => {
@@ -474,11 +516,15 @@ describe('the Gemini seat', { timeout: 120_000 }, () => {
     expect(stderr).toMatch(/no captured request carries the declared package byte for byte/);
   });
 
-  it('fails when the CLI reported the turn as anything but a success', () => {
+  it('fails when the CLI reported a status it has no rule for', () => {
+    // `ERROR` is not one of those: under this profile steps fail on purpose, at
+    // the permission check, and the first live canary came back ERROR having
+    // done exactly what it was supposed to. What fails is a status nobody has a
+    // reading for, and a step that failed for some other reason.
     const one = stub('google', { mutateCanary: 'failed-result' });
     const { ok, stderr } = invoke('google', one, 'failed-result');
     expect(ok).toBe(false);
-    expect(stderr).toMatch(/result status was "ERROR"/);
+    expect(stderr).toMatch(/result status was "CANCELLED"/);
   });
 });
 

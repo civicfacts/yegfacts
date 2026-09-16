@@ -498,10 +498,41 @@ describe('the gemini stream', () => {
     expect(checkGeminiStructure(facts).failures.join()).toMatch(/ran tools outside the profile: view_file/);
   });
 
-  it('fails a turn the CLI did not call a success', () => {
-    expect(checkGeminiStructure(readGeminiStream(geminiStream({ status: 'ERROR' }))).failures.join()).toMatch(
-      /result status was "ERROR"/,
+  /**
+   * `status` reports whether any step failed, not whether the turn answered.
+   * Under this profile steps fail on purpose: the deny rules refuse every file,
+   * write and command tool at the permission check, and the first live canary
+   * answered correctly, refused three tools and came back ERROR. So ERROR is
+   * read against the steps rather than taken at face value.
+   */
+  it('accepts an ERROR whose only failed steps were refused at the permission check', () => {
+    expect(checkGeminiStructure(readGeminiStream(geminiStream({ status: 'ERROR' }))).ok).toBe(true);
+  });
+
+  it('fails a status it has no reading for', () => {
+    expect(checkGeminiStructure(readGeminiStream(geminiStream({ status: 'CANCELLED' }))).failures.join()).toMatch(
+      /result status was "CANCELLED"/,
     );
+  });
+
+  it('fails a step that failed for any other reason', () => {
+    // The message must not mention a permission check, because that is the one
+    // failure this profile is supposed to produce.
+    const broken = geminiStream({ status: 'ERROR' }).replace(
+      'permission check failed for read_file',
+      'the tool crashed while reading',
+    );
+    expect(checkGeminiStructure(readGeminiStream(broken)).failures.join()).toMatch(
+      /step 2 \(view_file\) failed for a reason other than the permission check: the tool crashed/,
+    );
+  });
+
+  it('fails an ERROR that no step accounts for', () => {
+    const clean = [
+      JSON.stringify({ event: 'init', conversation_id: 'c', init: { model: 'm', cwd: '/stub', tools: [] } }),
+      JSON.stringify({ event: 'result', result: { conversation_id: 'c', status: 'ERROR', response: 'an answer' } }),
+    ].join('\n');
+    expect(checkGeminiStructure(readGeminiStream(clean)).failures.join()).toMatch(/no step says why/);
   });
 
   it('passes a canary whose fetch tool saved the real page', () => {

@@ -673,7 +673,12 @@ CLI_EXECUTABLE="$CLI"
 CLI_EXECUTABLE_SHA="$(shasum -a 256 "$CLI" 2>/dev/null | cut -d' ' -f1)"
 [ -n "$CLI_EXECUTABLE_SHA" ] || CLI_EXECUTABLE_SHA="unreadable"
 
-CLI_VERSION="$("$CLI" --version 2>/dev/null | head -1 | tr -d '\r' | awk '{print $1}')"
+# The first field that looks like a version, not the first field. The three
+# CLIs disagree about where they put it: `2.1.272 (Claude Code)`,
+# `codex-cli 0.154.0`, `1.2.4`. Taking field one turned the Codex seat's profile
+# into `codex-captured-read-only-codex-cli` on its first live run.
+CLI_VERSION="$("$CLI" --version 2>/dev/null | head -1 | tr -d '\r' \
+  | awk '{ for (i = 1; i <= NF; i++) if ($i ~ /^v?[0-9]+\.[0-9]+/) { sub(/^v/, "", $i); print $i; exit } }')"
 [ -n "$CLI_VERSION" ] || CLI_VERSION="unknown"
 PROFILE="$PROFILE_NAME-$CLI_VERSION"
 printf '%s\n' "$PROFILE" > "$ATTEMPT_DIR/profile.txt"
@@ -900,10 +905,12 @@ retain_local_record() {
   # variable that does not exist yet and dies under `set -u`.
   local home="$1"
   local dir="$2"
+  local log="$3"
   local record="$dir/record"
   local fetched="$dir/fetched"
   mkdir -p "$record" "$fetched"
   if [ -f "$dir/stdout.txt" ]; then cp "$dir/stdout.txt" "$record/stdout.jsonl"; fi
+  if [ -f "$log" ]; then cp "$log" "$dir/cli.log"; fi
   local brain="$home/.gemini/antigravity-cli/brain"
   [ -d "$brain" ] || return 0
   local conversation transcript content transcripts=0 pages=0
@@ -972,8 +979,34 @@ cp "$CANARY_DIR/work/canary.md" "$WORK_ROOT/canary/work/canary.md"
 
 clean_work() {
   [ -n "$WORK_ROOT" ] || return 0
-  rm -f "$WORK_ROOT/canary/work/canary.md" "$WORK_ROOT/canary/CANARY.md"
+  rm -f "$WORK_ROOT/canary/work/canary.md" "$WORK_ROOT/canary/CANARY.md" \
+    "$WORK_ROOT/canary-cli.log" "$WORK_ROOT/research-cli.log"
   rmdir "$WORK_ROOT/canary/work" "$WORK_ROOT/canary" "$WORK_ROOT/work" "$WORK_ROOT" 2>/dev/null || true
+}
+
+# ---------------------------------------------------------------------------
+# WHERE A PER-ATTEMPT HOME GOES, and why the two seats differ.
+#
+# The Codex seat's home sits under the attempt directory, where it is retained
+# with everything else the attempt produced. Its check runs over the outgoing
+# request, and codex does not put its CODEX_HOME into one.
+#
+# The Gemini seat's home CANNOT sit there, and the first live canary is what
+# said so. agy's fetch tool saves the page it fetched into a file under HOME and
+# then tells the model the absolute path of that file. The archive lives under
+# `$HOME/.local/state`, so that path handed the reviewer the operator's home
+# directory — which is on the denylist, and rightly: it is the operator's
+# identity arriving in the reviewer's context. The check caught it and refused
+# the run. The answer is to stop the leak rather than to stop checking for it, so
+# this seat's home goes in the same opaque `$TMPDIR/attempt-<id>` tree the
+# working directory already uses for exactly this reason, and the parts of it
+# worth keeping are copied into the attempt directory before it comes down.
+# ---------------------------------------------------------------------------
+home_for() {
+  if [ "$PROVIDER" = "google" ]; then printf '%s/%s-home\n' "$WORK_ROOT" "$1"; else printf '%s/home\n' "$2"; fi
+}
+log_for() {
+  if [ "$PROVIDER" = "google" ]; then printf '%s/%s-cli.log\n' "$WORK_ROOT" "$1"; else printf '%s/cli.log\n' "$2"; fi
 }
 trap 'stop_proxy; clean_work; clean_homes; write_metadata' EXIT
 
@@ -1007,7 +1040,8 @@ evidence_flags() {
 # ---------------------------------------------------------------------------
 # The canary, first, through its own proxy where there is one.
 # ---------------------------------------------------------------------------
-CANARY_HOME="$CANARY_DIR/home"
+CANARY_HOME="$(home_for canary "$CANARY_DIR")"
+CANARY_LOG="$(log_for canary "$CANARY_DIR")"
 case "$PROVIDER" in
   openai) make_codex_home "$CANARY_HOME" ;;
   google) make_gemini_home "$CANARY_HOME" ;;
@@ -1015,7 +1049,7 @@ esac
 
 PROXY_PORT=""
 if uses_proxy; then start_proxy "$CANARY_DIR/requests" "$CANARY_DIR/proxy-port"; fi
-build_command "$PROXY_PORT" "$CANARY_HOME" "$CANARY_WORK" "$CANARY_DIR/cli.log" "$CANARY_DIR/work/canary.md"
+build_command "$PROXY_PORT" "$CANARY_HOME" "$CANARY_WORK" "$CANARY_LOG" "$CANARY_DIR/work/canary.md"
 set +e
 if [ "$PROVIDER" = "google" ]; then
   ( cd "$CANARY_WORK" && env "${CLI_ENV[@]}" "${CMD[@]}" < /dev/null ) \
@@ -1027,7 +1061,7 @@ fi
 CLI_EXIT=$?
 set -e
 stop_proxy
-if [ "$RECORD_KIND" = "local-record" ]; then retain_local_record "$CANARY_HOME" "$CANARY_DIR"; fi
+if [ "$RECORD_KIND" = "local-record" ]; then retain_local_record "$CANARY_HOME" "$CANARY_DIR" "$CANARY_LOG"; fi
 printf '%s\n' "$CLI_EXIT" > "$CANARY_DIR/exit-code"
 printf '%s\n' "$CLI_EXIT" > "$ATTEMPT_DIR/exit-code"
 
@@ -1086,7 +1120,8 @@ fi
 # profile.
 # ---------------------------------------------------------------------------
 check_prompt_size "$ATTEMPT_DIR/package.md"
-RESEARCH_HOME="$ATTEMPT_DIR/home"
+RESEARCH_HOME="$(home_for research "$ATTEMPT_DIR")"
+RESEARCH_LOG="$(log_for research "$ATTEMPT_DIR")"
 case "$PROVIDER" in
   openai) make_codex_home "$RESEARCH_HOME" ;;
   google) make_gemini_home "$RESEARCH_HOME" ;;
@@ -1094,7 +1129,7 @@ esac
 
 PROXY_PORT=""
 if uses_proxy; then start_proxy "$ATTEMPT_DIR/requests" "$ATTEMPT_DIR/proxy-port"; fi
-build_command "$PROXY_PORT" "$RESEARCH_HOME" "$RESEARCH_WORK" "$ATTEMPT_DIR/cli.log" "$ATTEMPT_DIR/package.md"
+build_command "$PROXY_PORT" "$RESEARCH_HOME" "$RESEARCH_WORK" "$RESEARCH_LOG" "$ATTEMPT_DIR/package.md"
 set +e
 if [ "$PROVIDER" = "google" ]; then
   ( cd "$RESEARCH_WORK" && env "${CLI_ENV[@]}" "${CMD[@]}" < /dev/null ) \
@@ -1106,7 +1141,7 @@ fi
 CLI_EXIT=$?
 set -e
 stop_proxy
-if [ "$RECORD_KIND" = "local-record" ]; then retain_local_record "$RESEARCH_HOME" "$ATTEMPT_DIR"; fi
+if [ "$RECORD_KIND" = "local-record" ]; then retain_local_record "$RESEARCH_HOME" "$ATTEMPT_DIR" "$RESEARCH_LOG"; fi
 printf '%s\n' "$CLI_EXIT" > "$ATTEMPT_DIR/exit-code"
 
 RESEARCH_VERDICT=fail

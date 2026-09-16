@@ -897,7 +897,8 @@ export function readGeminiStream(text: string): GeminiFacts {
 
 /**
  * Everything the agy stream can settle: that the run started once, finished
- * once, said it succeeded, answered, and ran no tool outside the profile.
+ * once, answered, failed only where the profile meant it to, and ran no tool
+ * outside the profile.
  *
  * "Ran" is the operative word. A file tool the permission check refused is the
  * profile working and is recorded as a refusal; a file tool that reached `DONE`
@@ -916,10 +917,36 @@ export function checkGeminiStructure(facts: GeminiFacts): Verdict {
     failures.push(`the stream ended with "${facts.event_types[facts.event_types.length - 1]}", not a result event`);
   }
   if (facts.tools_offered === null) failures.push('the run did not report which tools it was offered');
-  if (facts.result_status === null) failures.push('the run did not report a result status');
-  else if (facts.result_status !== 'SUCCESS') failures.push(`result status was "${facts.result_status}"`);
   if (facts.final_text === null || facts.final_text.trim() === '') {
     failures.push('the run returned no final message');
+  }
+
+  // WHAT `status` ACTUALLY REPORTS, learned from the first live canary. It is
+  // not "did this turn answer": it is "did any step fail", and under this
+  // profile steps fail all the time on purpose, because the deny rules refuse
+  // every file, write and command tool at the permission check. That canary
+  // answered correctly, refused three tools exactly as designed, and came back
+  // `ERROR`. A check that required `SUCCESS` would refuse every run in which
+  // the profile did its job.
+  //
+  // So `ERROR` is accepted only when every failed step failed at the permission
+  // check. A step that failed for any other reason — a tool that broke, a model
+  // error — is named and fails, which is what `SUCCESS` was standing in for.
+  const refusal = /permission/i;
+  const other = facts.steps.filter((step) => step.state === 'ERROR' && !refusal.test(step.error ?? ''));
+  if (facts.result_status === null) failures.push('the run did not report a result status');
+  else if (facts.result_status !== 'SUCCESS' && facts.result_status !== 'ERROR') {
+    failures.push(`result status was "${facts.result_status}"`);
+  } else if (facts.result_status === 'ERROR' && other.length === 0 && facts.tools_refused.length === 0) {
+    // ERROR with nothing to attribute it to. Something went wrong that this
+    // stream does not explain, and an unexplained error is not a pass.
+    failures.push('result status was "ERROR" and no step says why');
+  }
+  for (const step of other) {
+    failures.push(
+      `step ${step.index} (${step.tool ?? step.type}) failed for a reason other than the permission check: ` +
+        `${step.error ?? 'no reason given'}`,
+    );
   }
 
   const ran = [...new Set(facts.tools_completed)].filter((tool) => !GEMINI_ALLOWED_TOOLS.has(tool));
