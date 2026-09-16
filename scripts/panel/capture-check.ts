@@ -58,17 +58,29 @@ export type CapturedRequest = {
  * token) contributes itself as a single line. `present: false` means the file
  * was not on this machine, which is recorded rather than treated as an error —
  * a machine without a `~/.codex/AGENTS.md` cannot leak one.
+ *
+ * `group` names a family of sources that is REPORTED as one row and CHECKED one
+ * file at a time. The project memory files are the only family there is, and on
+ * this machine there are 92 of them; ninety-two near-identical rows in every
+ * public manifest row is not a record anyone reads. Each file keeps its own
+ * source, so a failure still names the file by its index and its line number.
  */
 export type PrivateSource = {
   name: string;
   present: boolean;
   lines: string[];
+  group?: string;
 };
 
 export type SourceReport = {
   name: string;
   present: boolean;
   lines_checked: number;
+  /**
+   * How many files a collapsed group actually found. Absent on a row that is one
+   * file or one string, where the count would always be the same number.
+   */
+  files?: number;
 };
 
 export type CaptureCheckResult = {
@@ -100,6 +112,11 @@ export type CaptureCheckInput = {
  * same way, which is rare enough to be worth looking at when it happens.
  */
 const MIN_LINE = 24;
+
+/**
+ * The one family of sources reported as a single row. See `PrivateSource.group`.
+ */
+export const MEMORY_GROUP = '$HOME/.claude/projects/*/memory/*.md';
 
 /** A line that is markdown punctuation rather than content. */
 const isStructural = (line: string): boolean =>
@@ -177,10 +194,13 @@ export function privateSources(options: { home: string; repoRoot: string; token:
   const { home, repoRoot, token } = options;
   const sources: PrivateSource[] = [];
 
-  const file = (name: string, absolute: string) => {
+  const file = (name: string, absolute: string, group?: string) => {
     const text = readIfPresent(absolute);
+    const tag = group ? { group } : {};
     sources.push(
-      text === null ? { name, present: false, lines: [] } : { name, present: true, lines: needleLines(text) },
+      text === null
+        ? { name, present: false, lines: [], ...tag }
+        : { name, present: true, lines: needleLines(text), ...tag },
     );
   };
 
@@ -191,9 +211,18 @@ export function privateSources(options: { home: string; repoRoot: string; token:
   file('<repo>/CLAUDE.md', path.join(repoRoot, 'CLAUDE.md'));
   file('<repo>/AGENTS.md', path.join(repoRoot, 'AGENTS.md'));
 
-  memoryFiles(home).forEach((absolute, index) => {
-    file(`$HOME/.claude/projects/*/memory/*.md (${index + 1})`, absolute);
+  // One source per memory file, so a failure can name the file that leaked, and
+  // one group so the report carries one row instead of ninety-two. The empty
+  // placeholder exists because a group with no members would otherwise vanish
+  // from the report entirely, and "no memory files on this machine" is a fact
+  // worth recording rather than a gap.
+  const memory = memoryFiles(home);
+  memory.forEach((absolute, index) => {
+    file(`${MEMORY_GROUP} (${index + 1})`, absolute, MEMORY_GROUP);
   });
+  if (memory.length === 0) {
+    sources.push({ name: MEMORY_GROUP, present: false, lines: [], group: MEMORY_GROUP });
+  }
 
   // The three bare strings. Each is private in its own way: the repository path
   // names the project, the home directory names the operator, and the canary
@@ -226,6 +255,39 @@ function* strings(value: unknown): Generator<string> {
 
 /** True when the proxy captured a parsed JSON body rather than raw text. */
 const isJsonBody = (body: unknown): boolean => body !== null && typeof body === 'object';
+
+/**
+ * The sources as a reader sees them: one row per source, except that a group
+ * collapses to one row carrying how many of its files were found and how many
+ * lines they contributed between them.
+ *
+ * The individual file names inside a group are deliberately left out. They are
+ * indices rather than paths, and a manifest row is read by people.
+ */
+export function reportSources(sources: PrivateSource[]): SourceReport[] {
+  const rows: SourceReport[] = [];
+  const groupRow = new Map<string, SourceReport>();
+
+  for (const source of sources) {
+    if (source.group === undefined) {
+      rows.push({ name: source.name, present: source.present, lines_checked: source.lines.length });
+      continue;
+    }
+    let row = groupRow.get(source.group);
+    if (!row) {
+      row = { name: source.group, present: false, lines_checked: 0, files: 0 };
+      groupRow.set(source.group, row);
+      rows.push(row);
+    }
+    if (source.present) {
+      row.present = true;
+      row.files = (row.files ?? 0) + 1;
+    }
+    row.lines_checked += source.lines.length;
+  }
+
+  return rows;
+}
 
 /**
  * The check itself: pure, so the launcher's behaviour can be argued about in a
@@ -280,7 +342,7 @@ export function checkCapture(input: CaptureCheckInput): CaptureCheckResult {
   return {
     status: failures.length === 0 ? 'pass' : 'fail',
     failures,
-    sources: sources.map(({ name, present, lines }) => ({ name, present, lines_checked: lines.length })),
+    sources: reportSources(sources),
     package_seen: packageSeen,
     requests: requests.length,
   };

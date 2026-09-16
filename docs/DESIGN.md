@@ -390,7 +390,11 @@ and a line number. Source names are symbolic (`$HOME/...`, `<repo>/...`,
 themselves two of the denylisted strings, and a project directory under
 `~/.claude/projects` is named after the absolute path of its project. The public
 run row carries the source names, whether each was present, and how many lines of
-each were searched for. It carries no line of any of them.
+each were searched for. It carries no line of any of them. The project memory
+files are one row with a `files` count rather than one row each: there are 92 of
+them on this machine, and ninety-two near-identical rows would make every
+manifest row unreadable. They are still checked one file at a time, so a failure
+still names the file by its index.
 
 **The limit, stated wherever the check is described.** This catches known private
 text from this machine. It does not catch text the vendor attaches that is not on

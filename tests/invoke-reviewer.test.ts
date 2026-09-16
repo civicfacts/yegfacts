@@ -596,13 +596,28 @@ describe('research run', { timeout: 120_000 }, () => {
 
     // Which private sources were read, by symbolic name and line count. The
     // stub HOME's two files are there, present, with the lines this test wrote.
-    const sources = metadata.capture_check_sources as { name: string; present: boolean; lines_checked: number }[];
+    const sources = metadata.capture_check_sources as {
+      name: string;
+      present: boolean;
+      lines_checked: number;
+      files?: number;
+    }[];
     expect(sources.find((one) => one.name === '$HOME/.claude/CLAUDE.md')).toEqual({
       name: '$HOME/.claude/CLAUDE.md',
       present: true,
       lines_checked: 1,
     });
-    expect(sources.find((one) => one.name === '$HOME/.claude/projects/*/memory/*.md (1)')?.present).toBe(true);
+    // The memory files are ONE row with a count, not one row each. On the
+    // founder's machine there are 92 of them, and 92 rows is not a record
+    // anyone reads.
+    expect(sources.find((one) => one.name === '$HOME/.claude/projects/*/memory/*.md')).toEqual({
+      name: '$HOME/.claude/projects/*/memory/*.md',
+      present: true,
+      files: 1,
+      lines_checked: 1,
+    });
+    expect(sources.filter((one) => one.name.includes('memory'))).toHaveLength(1);
+    expect(JSON.stringify(sources)).not.toContain('memory/*.md (');
     // Names and counts only: no line of any private file is in the record.
     expect(JSON.stringify(sources)).not.toContain(HOME_INSTRUCTION);
     expect(JSON.stringify(sources)).not.toContain(MEMORY_NOTE);

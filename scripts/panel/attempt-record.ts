@@ -71,9 +71,13 @@ export type AttemptRecord = {
    * needles. Names and counts only. The lines themselves never leave the check,
    * because a public row that quoted private text to prove it did not travel
    * would be the leak it is defending against (methodology v1.30).
+   *
+   * The project memory files are one row with a `files` count rather than one row
+   * each. There are 92 of them on the machine this runs on, and a manifest row
+   * nobody can read is not a public record.
    */
-  capture_check_sources?: { name: string; present: boolean; lines_checked: number }[];
-  canary_capture_check_sources?: { name: string; present: boolean; lines_checked: number }[];
+  capture_check_sources?: { name: string; present: boolean; lines_checked: number; files?: number }[];
+  canary_capture_check_sources?: { name: string; present: boolean; lines_checked: number; files?: number }[];
   /** Hash over the sorted list of every capture file and its own hash. */
   requests_manifest_sha256?: string;
   canary_requests_manifest_sha256?: string;

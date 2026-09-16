@@ -18,6 +18,7 @@ import path from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
 import {
   type CapturedRequest,
+  MEMORY_GROUP,
   checkCapture,
   needleLines,
   privateSources,
@@ -115,8 +116,20 @@ describe('private sources', () => {
     expect(byName['<repo>/AGENTS.md']!.present).toBe(false);
     // A research run has no canary token, so that source is absent too.
     expect(byName['the canary token']!.present).toBe(false);
-    // The memory file is found by walking every project directory.
-    expect(byName['$HOME/.claude/projects/*/memory/*.md (1)']!.lines).toEqual([MEMORY_LINE]);
+    // The memory file is found by walking every project directory, and it keeps
+    // its own source so a failure can name the file that leaked.
+    expect(byName[`${MEMORY_GROUP} (1)`]!.lines).toEqual([MEMORY_LINE]);
+    expect(byName[`${MEMORY_GROUP} (1)`]!.group).toBe(MEMORY_GROUP);
+  });
+
+  it('marks the memory group absent when the machine keeps no memory files', () => {
+    const machine = stubMachine('no-memory');
+    rmSync(path.join(machine.home, '.claude', 'projects'), { recursive: true, force: true });
+
+    // A group with no members would otherwise vanish from the report, and "this
+    // machine keeps no project memory" is a fact rather than a gap.
+    const group = privateSources({ ...machine, token: '' }).filter((source) => source.group === MEMORY_GROUP);
+    expect(group).toEqual([{ name: MEMORY_GROUP, present: false, lines: [], group: MEMORY_GROUP }]);
   });
 
   it('names sources symbolically, so no report carries a path from this machine', () => {
@@ -148,6 +161,40 @@ describe('capture check', () => {
     });
   });
 
+  it('reports the memory files as one row with a file count, not one row each', () => {
+    const machine = stubMachine('many-memory');
+    const memory = path.join(machine.home, '.claude', 'projects', 'stub-project', 'memory');
+    writeFileSync(path.join(memory, 'second.md'), `# More\n\n${MEMORY_LINE} And a second line worth keeping.\n`);
+    mkdirSync(path.join(machine.home, '.claude', 'projects', 'other-project', 'memory'), { recursive: true });
+    writeFileSync(
+      path.join(machine.home, '.claude', 'projects', 'other-project', 'memory', 'third.md'),
+      '# Third\n\nA third note long enough to count as a distinctive line.\n',
+    );
+
+    const sources = privateSources({ ...machine, token: '' });
+    // Three files, three sources: the check still looks at each one on its own.
+    expect(sources.filter((source) => source.group === MEMORY_GROUP)).toHaveLength(3);
+
+    const result = check(machine, [sessionTitle(), mainTurn()]);
+    const rows = result.sources.filter((row) => row.name.startsWith('$HOME/.claude/projects'));
+    // One row in the report, with the count and the total.
+    expect(rows).toEqual([{ name: MEMORY_GROUP, present: true, files: 3, lines_checked: 3 }]);
+    // And no row naming an individual memory file.
+    expect(JSON.stringify(result.sources)).not.toContain(`${MEMORY_GROUP} (`);
+  });
+
+  it('reports an absent memory group with a file count of zero', () => {
+    const machine = stubMachine('empty-memory');
+    rmSync(path.join(machine.home, '.claude', 'projects'), { recursive: true, force: true });
+    const result = check(machine, [sessionTitle(), mainTurn()]);
+    expect(result.sources.find((row) => row.name === MEMORY_GROUP)).toEqual({
+      name: MEMORY_GROUP,
+      present: false,
+      files: 0,
+      lines_checked: 0,
+    });
+  });
+
   it('fails a body carrying one line of the global CLAUDE.md, and never quotes it', () => {
     const machine = stubMachine('home-leak');
     const result = check(machine, [connectivity(), sessionTitle(), mainTurn([`Remember: ${HOME_LINE}`])]);
@@ -163,7 +210,9 @@ describe('capture check', () => {
     const machine = stubMachine('memory-leak');
     const result = check(machine, [sessionTitle(), mainTurn([MEMORY_LINE])]);
 
-    expect(result.failures).toEqual(['req-0003.json: carries $HOME/.claude/projects/*/memory/*.md (1) line 1']);
+    // Collapsed in the report, named individually in a failure: the row is for
+    // reading and the failure is for finding the file that leaked.
+    expect(result.failures).toEqual([`req-0003.json: carries ${MEMORY_GROUP} (1) line 1`]);
     expect(JSON.stringify(result)).not.toContain(MEMORY_LINE);
   });
 
