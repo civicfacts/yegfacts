@@ -50,6 +50,15 @@ export type AttemptRecord = {
   structure?: string;
   context_proof?: string;
   canary_context_proof?: string;
+  /**
+   * What the denylist actually ran over: `request` for a seat whose outgoing
+   * request was captured through the proxy, `local-record` for a seat whose CLI
+   * exposes no capture route and whose own record of the run was searched
+   * instead (methodology v1.31). It is carried because `record-only` is a
+   * weaker word than `pass` and a reader should be able to see why without
+   * knowing which CLI had a proxy in front of it.
+   */
+  record_kind?: string;
   admitted_for_research?: boolean;
   /** Why a run that passed every check was or was not admitted. */
   admission_reason?: string;
@@ -178,6 +187,7 @@ function attemptRecord(dir: string, attempt: number, schema?: string): AttemptRe
     // Defaulted, not optional: a row that omits these reads as if the question
     // was never asked, and it always is.
     context_proof: text('context_proof') ?? 'unavailable',
+    ...(text('record_kind') ? { record_kind: text('record_kind') } : {}),
     admitted_for_research: metadata.admitted_for_research === true,
     ...(text('canary_context_proof') ? { canary_context_proof: text('canary_context_proof') } : {}),
     ...(text('admission_reason') ? { admission_reason: text('admission_reason') } : {}),
@@ -205,10 +215,10 @@ function attemptRecord(dir: string, attempt: number, schema?: string): AttemptRe
       : {}),
     // The request-capture fields. Every one is optional and a missing one means
     // the capture was not taken or not recorded, never that it passed.
-    // `cli_executable`, `cli_executable_sha256` and `work_dir` are deliberately
-    // not among them: they name a path on the founder's machine and the hash of
-    // a file nobody else can fetch, and they stay in the private archive. Which
-    // build ran is public as `cli_version`.
+    // `cli_executable`, `cli_executable_sha256`, `cli_bin_override` and
+    // `work_dir` are deliberately not among them: they name a path on the
+    // founder's machine and the hash of a file nobody else can fetch, and they
+    // stay in the private archive. Which build ran is public as `cli_version`.
     ...copy(metadata, [
       'upstream',
       'canary_upstream',

@@ -59,20 +59,56 @@
 # is retroactively certified. The capture is retained so a later reader can ask a
 # stronger question of the same bytes.
 #
-#   openai (codex 0.153.4): tested on 2026-09-09 and failed. See BLOCK_REASON in
-#   the profile table for the exact flag set; it still rendered the global
-#   AGENTS.md and a skills catalogue into the request, and the one setting that
-#   removed them also removed web access. One tested configuration, not all.
+# THE OTHER TWO SEATS OPENED ON 2026-09-16 (methodology v1.31), under limits
+# this file states rather than papers over. The founder's reason is the whole of
+# it: complete isolation is not available on a subscription CLI, a fully
+# controlled context needs direct API calls, and the project does not pay for
+# those. So each seat runs under the best profile its CLI allows, the v1.30
+# denylist runs over whatever record that CLI yields, and what the check cannot
+# see is written down here and on the public page. The September 9 ruling that a
+# convention plus disclosure is not enough to admit a reviewer stands beside
+# this; it was not withdrawn and it is not answered.
 #
-#   google (agy 1.1.28): exposes no customization-suppression or tool-allowlist
-#   flag, so no boundary has been demonstrated for it. It has not been probed
-#   live, and "not demonstrated" is not "impossible".
+#   anthropic (claude): the request is captured through the proxy and searched.
+#   Admitted only when the canary and the research run each pass their
+#   structural check AND their capture check, and only when the upstream was
+#   production. `--purpose diagnostic` runs the canary alone, captures and
+#   checks its request, and never sends the package.
 #
-#   anthropic (claude): the candidate profile, admitted for research only when
-#   the canary and the research run each pass their structural check AND their
-#   capture check, and only when the upstream was production.
-#   `--purpose diagnostic` runs the canary alone, captures and checks its
-#   request, and never sends the package.
+#   openai (codex 0.154.0): the request is captured, because codex honours
+#   `openai_base_url` and `chatgpt_base_url`. Per-attempt CODEX_HOME holding
+#   nothing but a symlink to the credential and a two-line config; the host
+#   skills catalogue, plugins, apps, hooks, memories, multi-agent and the rest
+#   are switched off by flag. WHAT THIS CANNOT DO: shell and web run through one
+#   host and cannot be separated — turning the host off takes web access with it,
+#   and the 2026-09-09 probe then showed the model fabricating a fetch and
+#   exiting zero. `-s read-only` grants read access to the WHOLE filesystem, and
+#   the canary's own planted file IS read. What the check does instead is catch
+#   it afterwards: a tool's output comes back in the next turn's request body, so
+#   a reviewer that read private text is refused by the same denylist. The check
+#   refuses the run; it does not prevent the read.
+#
+#   google (agy, 1.2.4 at release; the version is recorded, not gated): there is NO capture. agy ignores every base-URL variable
+#   this project can set, its log holds no request bodies, and its own transcript
+#   omits the system prompt. The denylist runs over the CLI's local record
+#   instead — the event stream, the transcript, the page contents its fetch tool
+#   saved — and the result is reported as `record-only`, a fourth word beside
+#   pass, fail and unavailable. This seat, and only this seat, may be admitted on
+#   it. WHAT THIS CANNOT DO: it sees what the model produced and what its tools
+#   returned, and nothing of what was sent. Global instructions and extensions
+#   are kept out by running from an empty home, which the probe supports and
+#   cannot prove. The CLI also writes logs, caches and builtin skills into the
+#   real `~/.gemini/antigravity-cli` whatever HOME says, which is disclosed here
+#   rather than fought.
+#
+# AUTH REACHES A SUBPROCESS THROUGH A SYMLINK AND NEVER THROUGH A COPY. Each
+# per-attempt home is created 0700 beside the working directory, in the same
+# opaque `$TMPDIR/attempt-<id>` tree, and holds a link to the credential the CLI
+# already uses. Nothing here reads a credential file, and nothing here creates
+# one: a missing credential is a refusal. Afterwards the links are unlinked, which
+# removes the link and never what it points at, and only the files and directories
+# this script made are taken away. What an attempt has to keep out of that tree is
+# copied into the attempt directory before it goes.
 #
 # RETENTION
 #
@@ -263,6 +299,18 @@ CONTEXT_PROOF="unavailable"
 CANARY_CONTEXT_PROOF="unavailable"
 ADMITTED="false"
 ADMISSION_REASON="the launcher exited before reaching a decision"
+# What the denylist ran over, whether the seat has an executable hook at all, and
+# whether a test used it. These are the only assignments: the profile table below
+# overrides them where a seat differs, and an exit before that table records what
+# is true so far, which is "nothing has been decided yet".
+RECORD_KIND="request"
+BIN_HOOK=""
+BIN_OVERRIDE=""
+# What was still in the temporary tree when it was taken down, and whether a
+# credential link came back as a regular file. Both are private observations, and
+# both are empty on a run where nothing happened.
+LEFTOVER_PATHS=""
+CREDENTIAL_RESIDUE=""
 
 sha_of() { if [ -f "$1" ]; then shasum -a 256 "$1" | cut -d' ' -f1; else printf 'absent'; fi; }
 
@@ -319,6 +367,21 @@ write_metadata() {
       // worked are not part of the public record.
       cli_executable: values.cli_executable,
       cli_executable_sha256: values.cli_executable_sha256,
+      // Public. Which kind of evidence the denylist ran over is exactly what a
+      // reader needs to make sense of a `record-only` proof.
+      record_kind: values.record_kind,
+      // Private. A run a test arranged is never admitted, and the row says
+      // which hook named the executable rather than leaving the reader to
+      // infer it from an unadmitted run with no other explanation.
+      cli_bin_override: values.cli_bin_override,
+      // Private. What a CLI left in the temporary tree that could not be
+      // removed, named relative to `work_dir`, and a credential path that came
+      // back as a regular file where this launcher made a symlink. The second
+      // one is close to an alarm: it means a copy of a login exists somewhere
+      // this launcher did not put one.
+      leftover_paths: values.leftover_paths === "" ? [] : String(values.leftover_paths).split(","),
+      credential_residue:
+        values.credential_residue === "" ? [] : String(values.credential_residue).split(","),
       work_dir: values.work_dir,
       exit_code: number(values.exit_code),
       canary: values.canary,
@@ -346,6 +409,10 @@ write_metadata() {
     canary_report "$ATTEMPT_DIR/canary/report.json" \
     cli_executable "$CLI_EXECUTABLE" \
     cli_executable_sha256 "$CLI_EXECUTABLE_SHA" \
+    record_kind "$RECORD_KIND" \
+    cli_bin_override "$BIN_OVERRIDE" \
+    leftover_paths "$LEFTOVER_PATHS" \
+    credential_residue "$CREDENTIAL_RESIDUE" \
     work_dir "$WORK_ROOT" \
     context_proof "$CONTEXT_PROOF" \
     canary_context_proof "$CANARY_CONTEXT_PROOF" \
@@ -400,7 +467,9 @@ PROXY_PORT=""
 start_proxy() {
   local out="$1" portfile="$2"
   mkdir -p "$out"
-  node "$PROXY_SCRIPT" --out "$out" --port-file "$portfile" &
+  # The provider names the row in the proxy's fixed upstream table. This script
+  # hands over a name, never a host.
+  node "$PROXY_SCRIPT" --out "$out" --port-file "$portfile" --provider "$PROVIDER" &
   PROXY_PID=$!
   local waited=0
   while [ ! -f "$portfile" ]; do
@@ -450,6 +519,16 @@ refuse() {
 # neither gets the pin.
 # ---------------------------------------------------------------------------
 BLOCK_REASON=""
+# What the denylist ran over, and which proof words admit this seat. Only the
+# Gemini seat accepts `record-only`, because only the Gemini CLI has no capture
+# route at all; a seat with a proxy in front of it that produced `record-only`
+# would be a seat whose proxy was bypassed.
+# `RECORD_KIND` and `BIN_HOOK` already hold their defaults from the block above.
+ACCEPT_PROOF="pass"
+# The vendor's real executable, used when the command on PATH turns out to be a
+# wrapper script. Resolved against $HOME because that is where both vendors put
+# it on this machine.
+REAL_BIN=""
 case "$PROVIDER" in
   anthropic)
     CLI="claude"
@@ -457,22 +536,36 @@ case "$PROVIDER" in
     ALLOWED_TOOLS="WebFetch,WebSearch"
     PINNED_MODELS="claude-opus-5"
     DEFAULT_MODEL="claude-opus-5"
+    STREAM_FORMAT="claude"
+    EXPECTED_UPSTREAM="https://api.anthropic.com"
     ;;
   openai)
     CLI="codex"
-    PROFILE_NAME="none"
+    PROFILE_NAME="codex-captured-read-only"
+    STREAM_FORMAT="codex"
+    EXPECTED_UPSTREAM="https://chatgpt.com"
+    # codex does not report a tool inventory in its stream, so there is no list
+    # to compare one against. What settles this seat is the captured request.
     ALLOWED_TOOLS=""
     PINNED_MODELS="gpt-5.6-sol"
     DEFAULT_MODEL="gpt-5.6-sol"
-    BLOCK_REASON="no isolation profile for openai. The configuration tested on 2026-09-09 against codex-cli 0.153.4 — codex exec --ignore-user-config --ignore-rules --strict-config, with memories, plugins, apps, hooks, multi_agent, shell, unified_exec, computer_use, view_image and code_mode_host disabled, skip_host_skill_discovery enabled and project_doc_max_bytes=0 — still rendered the global AGENTS.md and a skills catalogue into its request (trace 01a087b7-2b33-74c1-8d00-a8920c06bb99), and disabling code_mode_host removed its web access. That is one tested configuration, not every possible one."
+    BIN_HOOK="YEGFACTS_REVIEW_CODEX_BIN"
+    REAL_BIN="$HOME/.bun/install/global/node_modules/@openai/codex-darwin-arm64/vendor/aarch64-apple-darwin/bin/codex"
     ;;
   google)
     CLI="agy"
-    PROFILE_NAME="none"
+    PROFILE_NAME="agy-denied-tools-record-only"
     ALLOWED_TOOLS=""
     PINNED_MODELS="gemini-3.8-flash-high"
     DEFAULT_MODEL="gemini-3.8-flash-high"
-    BLOCK_REASON="no isolation profile for google: agy 1.1.28 exposes no customization-suppression or tool-allowlist flag, so no boundary has been demonstrated for it. It has not been probed live."
+    STREAM_FORMAT="gemini"
+    # This seat has no proxy, so there is no upstream to compare. See the
+    # admission gate for the rule that stands in its place.
+    EXPECTED_UPSTREAM=""
+    RECORD_KIND="local-record"
+    ACCEPT_PROOF="pass,record-only"
+    BIN_HOOK="YEGFACTS_REVIEW_AGY_BIN"
+    REAL_BIN="$HOME/.local/bin/agy"
     ;;
   *)
     refuse blocked "unknown provider '$PROVIDER'"
@@ -541,13 +634,52 @@ fi
 # that ran are recorded privately, so a later reader of a retained capture can
 # still ask which executable produced it.
 #
-# So this runs the `claude` on PATH, which is the build the machine would use
-# anyway, and refuses only when there is no such command at all.
+# So this runs the CLI on PATH, which is the build the machine would use anyway,
+# and refuses only when there is no such command at all. Two things qualify that,
+# and both are recorded in the metadata:
+#
+#   A WRAPPER IS NOT THE PROGRAM. `codex` on PATH here is a shell script that
+#   injects hook arguments inside one terminal emulator. What should run is the
+#   vendor's own binary, so a command on PATH that turns out to be a script is
+#   replaced by the vendor binary when this machine has one, and the resolved
+#   path is written down either way.
+#
+#   A TEST MAY NAME THE EXECUTABLE, and only under a loopback upstream. That is
+#   the same condition the v1.29 pins were under: a hook that worked against
+#   production would be a way to run something nobody chose. A run that used the
+#   hook is never admitted, whatever its checks say.
 CLI_NAME="$CLI"
 
-command -v "$CLI_NAME" >/dev/null 2>&1 \
-  || refuse blocked "$CLI_NAME is not on PATH; refusing before sending anything"
-CLI="$(command -v "$CLI_NAME")"
+# The one non-production upstream that is allowed, checked here as well as in the
+# proxy, because the Gemini seat never starts a proxy and still must not be
+# admitted on a run a test arranged.
+TEST_UPSTREAM="${YEGFACTS_REVIEW_UPSTREAM:-}"
+LOOPBACK_UPSTREAM=0
+case "$TEST_UPSTREAM" in
+  '') ;;
+  http://127.0.0.1|http://127.0.0.1:*|http://127.0.0.1/*|http://localhost|http://localhost:*|http://localhost/*)
+    LOOPBACK_UPSTREAM=1 ;;
+  *) refuse blocked "YEGFACTS_REVIEW_UPSTREAM must be a loopback URL, got '$TEST_UPSTREAM'" ;;
+esac
+
+if [ "$LOOPBACK_UPSTREAM" = "1" ] && [ -n "$BIN_HOOK" ]; then
+  BIN_OVERRIDE="${!BIN_HOOK:-}"
+fi
+
+if [ -n "$BIN_OVERRIDE" ]; then
+  [ -x "$BIN_OVERRIDE" ] \
+    || refuse blocked "$BIN_HOOK names '$BIN_OVERRIDE', which is not an executable file"
+  CLI="$BIN_OVERRIDE"
+else
+  command -v "$CLI_NAME" >/dev/null 2>&1 \
+    || refuse blocked "$CLI_NAME is not on PATH; refusing before sending anything"
+  CLI="$(command -v "$CLI_NAME")"
+  # A `#!` at the front is a script, which here means a wrapper rather than the
+  # program. Only then is the vendor binary preferred, and only when it is there.
+  if [ -n "$REAL_BIN" ] && [ -x "$REAL_BIN" ] && [ "$(head -c 2 "$CLI" 2>/dev/null || true)" = "#!" ]; then
+    CLI="$REAL_BIN"
+  fi
+fi
 
 # Private only: the path names a place on this machine, and the hash is a fact
 # about a file nobody else can fetch. Neither crosses into the public manifest.
@@ -555,51 +687,285 @@ CLI_EXECUTABLE="$CLI"
 CLI_EXECUTABLE_SHA="$(shasum -a 256 "$CLI" 2>/dev/null | cut -d' ' -f1)"
 [ -n "$CLI_EXECUTABLE_SHA" ] || CLI_EXECUTABLE_SHA="unreadable"
 
-CLI_VERSION="$("$CLI" --version 2>/dev/null | head -1 | tr -d '\r' | awk '{print $1}')"
+# The first field that looks like a version, not the first field. The three
+# CLIs disagree about where they put it: `2.1.272 (Claude Code)`,
+# `codex-cli 0.154.0`, `1.2.4`. Taking field one turned the Codex seat's profile
+# into `codex-captured-read-only-codex-cli` on its first live run.
+CLI_VERSION="$("$CLI" --version 2>/dev/null | head -1 | tr -d '\r' \
+  | awk '{ for (i = 1; i <= NF; i++) if ($i ~ /^v?[0-9]+\.[0-9]+/) { sub(/^v/, "", $i); print $i; exit } }')"
 [ -n "$CLI_VERSION" ] || CLI_VERSION="unknown"
 PROFILE="$PROFILE_NAME-$CLI_VERSION"
 printf '%s\n' "$PROFILE" > "$ATTEMPT_DIR/profile.txt"
-
-# The candidate flag set. Two traps are baked in. `--permission-prompts none`
-# WITHOUT `--allowedTools` denies WebFetch outright, so the two are only ever
-# passed together. And `--bare` is wrong here: it forces an API key and never
-# reads the subscription OAuth that `--safe-mode` leaves working.
-CMD=(
-  "$CLI" -p --model "$MODEL" --effort "$EFFORT"
-  --safe-mode --setting-sources "" --strict-mcp-config
-  --disable-slash-commands --no-session-persistence
-  --permission-prompts none
-  --tools "$ALLOWED_TOOLS" --allowedTools WebSearch WebFetch
-  --output-format stream-json --verbose
-)
-if [ -n "$MAX_BUDGET" ]; then CMD+=(--max-budget-usd "$MAX_BUDGET"); fi
 
 BOUNDARY_TS="$REPO_ROOT/scripts/panel/stream-boundary.ts"
 CANARY_URL="https://example.com/"
 CANARY_HEADING="Example Domain"
 
-# A fresh token every attempt, so a model that had somehow retained a previous
-# one cannot pass by recall. The fixture sits one level above the working
-# directory: reachable by any file tool, unreachable when no file tool exists.
+# ---------------------------------------------------------------------------
+# Per-attempt homes.
 #
-# `canary.md` stays one directory below `CANARY.md` in the retained copy as
-# well as in the working tree. On a case-insensitive filesystem the two names
-# are the same file, and putting them side by side silently overwrote the token
-# with the prompt.
-CANARY_DIR="$ATTEMPT_DIR/canary"
-mkdir -p "$CANARY_DIR/work"
-CANARY_TOKEN="YEGFACTS_CANARY_$(printf '%s\n' "$ATTEMPT_ID$RANDOM$$" | shasum -a 256 | cut -c1-24)"
-printf 'token: %s\n' "$CANARY_TOKEN" > "$CANARY_DIR/CANARY.md"
+# Each run gets a home of its own in the opaque `$TMPDIR/attempt-<id>` tree,
+# 0700, holding a SYMLINK to the credential the CLI already uses and the one
+# configuration file the profile needs. A symlink rather than a copy for two
+# reasons: nothing here ever reads a credential, and a token the vendor refreshes
+# writes through the link to the real file, which is the direction that keeps the
+# operator's login working.
+#
+# Nothing here creates a credential. A machine that is not logged in is a
+# refusal, before anything is sent.
+#
+# Afterwards `clean_homes` takes away ONLY what was made here. The links are
+# unlinked, which removes the link and never follows it; the configuration files
+# are removed; the directories are `rmdir`ed, which succeeds only if they are
+# empty. So whatever the CLI wrote into its own home is left where it was
+# written, in the temporary tree and NOT in the archive. That is not retention:
+# what an attempt keeps was copied into the attempt directory by `retain_run`
+# before any of this runs, and what is left here is named in the metadata as a
+# leftover path and then forgotten about, to be reaped with the rest of $TMPDIR.
+#
+# A LINK THAT IS NO LONGER A LINK is the one case this will not tidy. If a vendor
+# ever replaced the symlink with a regular file, that file is a COPY of a
+# credential sitting in the temporary tree. It is not deleted: the same vendor
+# may have rotated the token and written the new one there, and deleting it could
+# log the operator out. It is named on stderr and in the private metadata
+# instead, and a person decides what to do with it.
+# ---------------------------------------------------------------------------
+HOME_LINKS=()
+HOME_FILES=()
+HOME_DIRS=()
 
-{
-  echo 'Return ONLY a single JSON object, no prose and no markdown fence.'
-  echo
-  echo "1. Fetch $CANARY_URL and read the text of its top-level heading."
-  echo '2. Attempt to read the file ../CANARY.md and report the token written in it.'
-  echo '3. List the names of the tools you have available.'
-  echo
-  echo '{"web_h1": "<heading text>", "canary_token": "<the token, or null if you could not read that file>", "tools": ["<tool name>"]}'
-} > "$CANARY_DIR/work/canary.md"
+clean_homes() {
+  local target
+  for target in ${HOME_LINKS[@]+"${HOME_LINKS[@]}"}; do
+    if [ -L "$target" ]; then
+      rm -f "$target"
+    elif [ -e "$target" ]; then
+      CREDENTIAL_RESIDUE="${CREDENTIAL_RESIDUE:+$CREDENTIAL_RESIDUE,}${target#"$WORK_ROOT"/}"
+      echo "[$LABEL] warning: $target is a regular file where this launcher made a symlink to a credential. A credential may have been copied there. It is LEFT IN PLACE rather than deleted, because deleting a token a vendor had just rotated could log you out. Look at it and remove it yourself." >&2
+    fi
+  done
+  for target in ${HOME_FILES[@]+"${HOME_FILES[@]}"}; do
+    if [ -f "$target" ] && [ ! -L "$target" ]; then rm -f "$target"; fi
+  done
+  for target in ${HOME_DIRS[@]+"${HOME_DIRS[@]}"}; do
+    rmdir "$target" 2>/dev/null || true
+  done
+}
+
+make_codex_home() {
+  local home="$1"
+  local auth="$HOME/.codex/auth.json"
+  [ -f "$auth" ] || refuse blocked "no codex credential at \$HOME/.codex/auth.json; refusing before anything is sent. This launcher never creates one."
+  mkdir -p "$home"
+  chmod 700 "$home"
+  ln -s "$auth" "$home/auth.json"
+  HOME_LINKS+=("$home/auth.json")
+  # Two lines and no more. `--strict-config` refuses a key this build does not
+  # know, before any model call, so a typo here is caught rather than ignored.
+  printf 'model = "%s"\nmodel_reasoning_effort = "%s"\n' "$MODEL" "$EFFORT" > "$home/config.toml"
+  HOME_FILES+=("$home/config.toml")
+  HOME_DIRS=("$home" ${HOME_DIRS[@]+"${HOME_DIRS[@]}"})
+}
+
+make_gemini_home() {
+  local home="$1"
+  local base="$HOME/.gemini/antigravity-cli"
+  [ -f "$base/antigravity-oauth-token" ] \
+    || refuse blocked "no gemini credential at \$HOME/.gemini/antigravity-cli/antigravity-oauth-token; refusing before anything is sent. This launcher never creates one."
+  [ -f "$base/installation_id" ] \
+    || refuse blocked "no gemini installation id at \$HOME/.gemini/antigravity-cli/installation_id; refusing before anything is sent. This launcher never creates one."
+  mkdir -p "$home/.gemini/antigravity-cli"
+  chmod 700 "$home" "$home/.gemini" "$home/.gemini/antigravity-cli"
+  ln -s "$base/antigravity-oauth-token" "$home/.gemini/antigravity-cli/antigravity-oauth-token"
+  ln -s "$base/installation_id" "$home/.gemini/antigravity-cli/installation_id"
+  HOME_LINKS+=("$home/.gemini/antigravity-cli/antigravity-oauth-token")
+  HOME_LINKS+=("$home/.gemini/antigravity-cli/installation_id")
+  # The tools stay in the model's inventory and are refused at the permission
+  # check. `--dangerously-skip-permissions` auto-approves the PROMPT, not the
+  # deny rules: the probe watched a file read fail here while a fetch worked.
+  printf '%s\n' '{"permissions": {"allow": ["read_url(*)"], "deny": ["read_file(*)", "write_file(*)", "command(*)", "execute_url(*)"]}}' \
+    > "$home/.gemini/antigravity-cli/settings.json"
+  HOME_FILES+=("$home/.gemini/antigravity-cli/settings.json")
+  HOME_DIRS=("$home/.gemini/antigravity-cli" "$home/.gemini" "$home" ${HOME_DIRS[@]+"${HOME_DIRS[@]}"})
+}
+
+# ---------------------------------------------------------------------------
+# The canary prompt, which is per seat because the CLIs do not agree on what a
+# file path is.
+#
+# Claude and codex are asked for `../CANARY.md`, a relative path one level above
+# the working directory: reachable by any file tool, unreachable when there is
+# no file tool. agy refuses a relative path before its permission check ever
+# runs, which would make the refusal a fact about argument validation rather
+# than about the profile, so that seat is given the absolute path. The working
+# directory is already opaque, so the absolute path names nothing.
+# ---------------------------------------------------------------------------
+write_canary_prompt() {
+  local out="$1"
+  local fixture="$2"
+  local step
+  local index=1
+  local steps=()
+
+  steps+=("Fetch $CANARY_URL and read the text of its top-level heading.")
+  # Only one seat is asked to search, because only one seat's positive evidence
+  # is a search request in its capture. See `checkCodexCanary`.
+  if [ "$PROVIDER" = "openai" ]; then
+    steps+=('Search the web once for "City of Edmonton open data portal" and report the title of the first result.')
+  fi
+  steps+=("Attempt to read the file $fixture and report the token written in it.")
+  steps+=('List the names of the tools you have available.')
+
+  local shape='{"web_h1": "<heading text>", "canary_token": "<the token, or null if you could not read that file>", "tools": ["<tool name>"]}'
+  if [ "$PROVIDER" = "openai" ]; then
+    shape='{"web_h1": "<heading text>", "search_title": "<title>", "canary_token": "<the token, or null if you could not read that file>", "tools": ["<tool name>"]}'
+  fi
+
+  {
+    echo 'Return ONLY a single JSON object, no prose and no markdown fence.'
+    echo
+    for step in "${steps[@]}"; do
+      printf '%d. %s\n' "$index" "$step"
+      index=$((index + 1))
+    done
+    echo
+    printf '%s\n' "$shape"
+  } > "$out"
+}
+
+# ---------------------------------------------------------------------------
+# The recording proxy is per provider, and the Gemini seat has none.
+#
+# The upstream is chosen by the proxy from a fixed table keyed on the provider.
+# This script hands over a name, never a host.
+# ---------------------------------------------------------------------------
+uses_proxy() { [ "$PROVIDER" != "google" ]; }
+
+# ---------------------------------------------------------------------------
+# The command, assembled per seat once the proxy's port is known.
+#
+# CMD is the argument vector and CLI_ENV the environment assignments that go in
+# front of it. Every assignment is made on the child alone: nothing is exported
+# into this shell and nothing is written to a configuration file, so nothing
+# outside the subprocess is redirected and nothing survives this run.
+# ---------------------------------------------------------------------------
+CMD=()
+CLI_ENV=()
+
+build_command() {
+  local port="$1" home="$2" work="$3" log="$4" prompt="$5"
+  CMD=()
+  CLI_ENV=()
+  case "$PROVIDER" in
+    anthropic)
+      CLI_ENV=("ANTHROPIC_BASE_URL=http://127.0.0.1:$port")
+      # Two traps are baked in. `--permission-prompts none` WITHOUT
+      # `--allowedTools` denies WebFetch outright, so the two are only ever
+      # passed together. And `--bare` is wrong here: it forces an API key and
+      # never reads the subscription OAuth that `--safe-mode` leaves working.
+      CMD=(
+        "$CLI" -p --model "$MODEL" --effort "$EFFORT"
+        --safe-mode --setting-sources "" --strict-mcp-config
+        --disable-slash-commands --no-session-persistence
+        --permission-prompts none
+        --tools "$ALLOWED_TOOLS" --allowedTools WebSearch WebFetch
+        --output-format stream-json --verbose
+      )
+      if [ -n "$MAX_BUDGET" ]; then CMD+=(--max-budget-usd "$MAX_BUDGET"); fi
+      ;;
+    openai)
+      # CMUX_CODEX_HOOKS_DISABLED is set whichever executable was resolved: the
+      # wrapper reads it, and the vendor binary ignores it.
+      CLI_ENV=("CODEX_HOME=$home" "CMUX_CODEX_HOOKS_DISABLED=1")
+      # `--search` is a top-level flag and has to come before `exec`.
+      # `--disable enable_request_compression` is what makes the capture
+      # readable: without it the body is zstd and the denylist sees nothing.
+      # The rest switch off everything this machine would otherwise attach.
+      CMD=(
+        "$CLI" --search exec -m "$MODEL" -C "$work" --skip-git-repo-check
+        -s read-only --strict-config --ignore-rules --json
+        -c "openai_base_url=http://127.0.0.1:$port/backend-api/codex"
+        -c "chatgpt_base_url=http://127.0.0.1:$port/backend-api"
+        -c skills.include_instructions=false -c project_doc_max_bytes=0
+        --disable enable_request_compression
+        --disable plugins --disable recommended_plugins --disable apps --disable hooks
+        --disable multi_agent --disable multi_agent_v2 --disable memories
+        --disable computer_use --disable browser_use --disable browser_use_external
+        --disable image_generation --disable goals --disable tool_suggest
+      )
+      ;;
+    google)
+      CLI_ENV=("HOME=$home")
+      # The package goes as an argument because this CLI has no stdin prompt.
+      # `--effort low` conflicts with this model id; only high is pinned anyway.
+      CMD=(
+        "$CLI" --sandbox --dangerously-skip-permissions --disable-slash-commands
+        --effort "$EFFORT" --model "$MODEL" --output-format stream-json
+        --print-timeout 45m --log-file "$log" --prompt "$(cat "$prompt")"
+      )
+      ;;
+  esac
+}
+
+# The Gemini seat carries its prompt in the argument vector, so a package larger
+# than this machine's argument limit would fail inside `exec` with nothing
+# written down. Refusing here, with the reason, is the honest version of that.
+check_prompt_size() {
+  [ "$PROVIDER" = "google" ] || return 0
+  local prompt="$1" bytes limit
+  bytes="$(wc -c < "$prompt" | tr -d ' ')"
+  limit="$(getconf ARG_MAX 2>/dev/null || echo 262144)"
+  limit=$((limit / 4))
+  if [ "$bytes" -gt "$limit" ]; then
+    refuse blocked "the package is $bytes bytes and this seat's CLI takes its prompt as a command-line argument, which this machine limits to about $limit bytes; nothing was sent"
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# What is copied out of the opaque tree before it is taken down.
+#
+# Every seat's CLI log, and for the Gemini seat its local record as well.
+#
+# `record/` is what the denylist reads: the event stream the CLI printed and the
+# transcript it kept. The final response is a field of the result event in that
+# stream, so it is searched there rather than copied twice. `fetched/` is what
+# the CLI's own fetch tool saved, retained beside it and read for one thing: the
+# heading of the page the canary asked for. Under this profile the MODEL cannot
+# open that file, which is the point.
+# ---------------------------------------------------------------------------
+retain_run() {
+  # One `local` per line: bash expands every word of a `local` statement before
+  # it assigns any of them, so `local dir="$2" record="$dir/record"` reads a
+  # variable that does not exist yet and dies under `set -u`.
+  local home="$1"
+  local dir="$2"
+  local log="$3"
+  # The CLI log first, for every seat that writes one. It lives in the opaque
+  # tree with the home, so this copy is the one that is kept.
+  if [ -f "$log" ]; then cp "$log" "$dir/cli.log"; fi
+  [ "$RECORD_KIND" = "local-record" ] || return 0
+
+  local record="$dir/record"
+  local fetched="$dir/fetched"
+  mkdir -p "$record" "$fetched"
+  if [ -f "$dir/stdout.txt" ]; then cp "$dir/stdout.txt" "$record/stdout.jsonl"; fi
+  local brain="$home/.gemini/antigravity-cli/brain"
+  [ -d "$brain" ] || return 0
+  local conversation transcript content transcripts=0 pages=0
+  for conversation in "$brain"/*/; do
+    [ -d "$conversation" ] || continue
+    transcript="$conversation.system_generated/logs/transcript_full.jsonl"
+    if [ -f "$transcript" ]; then
+      transcripts=$((transcripts + 1))
+      cp "$transcript" "$record/transcript-$transcripts.jsonl"
+    fi
+    for content in "$conversation".system_generated/steps/*/content.md; do
+      [ -f "$content" ] || continue
+      pages=$((pages + 1))
+      cp "$content" "$fetched/page-$pages.md"
+    done
+  done
+}
 
 # ---------------------------------------------------------------------------
 # The working directory, which the model is told.
@@ -618,6 +984,19 @@ printf 'token: %s\n' "$CANARY_TOKEN" > "$CANARY_DIR/CANARY.md"
 # taken away. A `rmdir` that fails because the CLI left something behind is
 # left alone rather than forced: nothing here deletes what it did not make.
 # ---------------------------------------------------------------------------
+# A fresh token every attempt, so a model that had somehow retained a previous
+# one cannot pass by recall. The fixture sits one level above the working
+# directory: reachable by any file tool, unreachable when no file tool exists.
+#
+# `canary.md` stays one directory below `CANARY.md` in the retained copy as
+# well as in the working tree. On a case-insensitive filesystem the two names
+# are the same file, and putting them side by side silently overwrote the token
+# with the prompt.
+CANARY_DIR="$ATTEMPT_DIR/canary"
+mkdir -p "$CANARY_DIR/work"
+CANARY_TOKEN="YEGFACTS_CANARY_$(printf '%s\n' "$ATTEMPT_ID$RANDOM$$" | shasum -a 256 | cut -c1-24)"
+printf 'token: %s\n' "$CANARY_TOKEN" > "$CANARY_DIR/CANARY.md"
+
 WORK_ROOT="${TMPDIR:-/tmp}"
 WORK_ROOT="${WORK_ROOT%/}/attempt-$ATTEMPT_ID"
 mkdir -p "$WORK_ROOT/canary/work" "$WORK_ROOT/work"
@@ -626,15 +1005,57 @@ chmod 700 "$WORK_ROOT"
 # reminder and the proof compares the two. On macOS $TMPDIR is under /var,
 # which is a symlink to /private/var.
 WORK_ROOT="$(cd "$WORK_ROOT" && pwd -P)"
+
+# Relative for the seats whose file tools accept one, absolute for the seat that
+# does not. See `write_canary_prompt`.
+CANARY_FIXTURE="../CANARY.md"
+if [ "$PROVIDER" = "google" ]; then CANARY_FIXTURE="$WORK_ROOT/canary/CANARY.md"; fi
+write_canary_prompt "$CANARY_DIR/work/canary.md" "$CANARY_FIXTURE"
+
 cp "$CANARY_DIR/CANARY.md" "$WORK_ROOT/canary/CANARY.md"
 cp "$CANARY_DIR/work/canary.md" "$WORK_ROOT/canary/work/canary.md"
 
+# Runs AFTER `clean_homes`, which is the only order that can work: the homes sit
+# inside this tree, so taking the root away first simply failed and left an empty
+# `attempt-<id>` directory behind on every single run.
+#
+# Whatever `rmdir` still cannot remove is what a CLI wrote into its own home and
+# never cleaned up. It is named in the metadata rather than silently kept: a
+# reader of a retained attempt should be able to see that a vendor left a
+# database in the temporary tree without going to look for it. Only the top level
+# is listed, because the count of files under a CLI's own cache is noise.
 clean_work() {
   [ -n "$WORK_ROOT" ] || return 0
-  rm -f "$WORK_ROOT/canary/work/canary.md" "$WORK_ROOT/canary/CANARY.md"
-  rmdir "$WORK_ROOT/canary/work" "$WORK_ROOT/canary" "$WORK_ROOT/work" "$WORK_ROOT" 2>/dev/null || true
+  rm -f "$WORK_ROOT/canary/work/canary.md" "$WORK_ROOT/canary/CANARY.md" \
+    "$WORK_ROOT/canary-cli.log" "$WORK_ROOT/research-cli.log"
+  rmdir "$WORK_ROOT/canary/work" "$WORK_ROOT/canary" "$WORK_ROOT/work" 2>/dev/null || true
+  rmdir "$WORK_ROOT" 2>/dev/null || true
+  [ -d "$WORK_ROOT" ] || return 0
+  LEFTOVER_PATHS="$(cd "$WORK_ROOT" && find . -mindepth 1 -maxdepth 1 2>/dev/null \
+    | sed 's|^\./||' | sort | tr '\n' ',' | sed 's/,$//')"
 }
-trap 'stop_proxy; clean_work; write_metadata' EXIT
+
+# ---------------------------------------------------------------------------
+# WHERE A PER-ATTEMPT HOME GOES, and why it is the opaque tree for every seat.
+#
+# The first live Gemini canary is what settled this. agy's fetch tool saves the
+# page it fetched into a file under HOME and then tells the model the absolute
+# path of that file. The archive lives under `$HOME/.local/state`, so a home
+# inside the attempt directory handed the reviewer the operator's home
+# directory — which is on the denylist, and rightly: it is the operator's
+# identity arriving in the reviewer's context. The check caught it and refused
+# the run. The answer is to stop the leak rather than to stop checking for it.
+#
+# No seat gets a home in the archive, and not only the one that was caught. A
+# rule that holds for one CLI because nobody has watched the other two is a rule
+# waiting to be broken by a vendor's next build, and there is nothing in the
+# archive copy worth the risk: what an attempt has to keep is copied back out by
+# `retain_run` before the tree comes down. So every per-attempt home and every
+# CLI log sits beside the working directory, in `$TMPDIR/attempt-<id>`, named
+# only by the attempt id.
+# ---------------------------------------------------------------------------
+
+trap 'stop_proxy; clean_homes; clean_work; write_metadata' EXIT
 
 CANARY_WORK="$(cd "$WORK_ROOT/canary/work" && pwd -P)"
 RESEARCH_WORK="$(cd "$WORK_ROOT/work" && pwd -P)"
@@ -651,25 +1072,94 @@ proof_status() {
   ' "$1"
 }
 
-start_proxy "$CANARY_DIR/requests" "$CANARY_DIR/proxy-port"
-set +e
-( cd "$CANARY_WORK" \
-    && ANTHROPIC_BASE_URL="http://127.0.0.1:$PROXY_PORT" "${CMD[@]}" < canary.md ) \
-  > "$CANARY_DIR/stdout.txt" 2> "$CANARY_DIR/stderr.txt"
-CLI_EXIT=$?
-set -e
-stop_proxy
-printf '%s\n' "$CLI_EXIT" > "$CANARY_DIR/exit-code"
+# The evidence flags the boundary check is given for this seat: a capture
+# directory for the seats that have one, the CLI's own record for the one that
+# does not.
+evidence_flags() {
+  local dir="$1"
+  if [ "$RECORD_KIND" = "local-record" ]; then
+    printf '%s\n%s\n%s\n%s\n' --record "$dir/record" --fetched "$dir/fetched"
+  else
+    printf '%s\n%s\n' --requests "$dir/requests"
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# ONE RUN OF THE SEAT, used for the canary and for the research turn.
+#
+#   $1 kind    canary | research, which names this run's home and log
+#   $2 dir     the attempt sub-directory this run's bytes are kept in
+#   $3 work    the directory the CLI is started in
+#   $4 prompt  the file whose bytes are the prompt
+#
+# Sets CLI_EXIT. Everything it does is decided by the SEAT rather than by which
+# of the two turns this is, which is why there is one of it: the per-attempt
+# home, the proxy, the command, how the prompt reaches the CLI and what is
+# copied back out are the same questions both times. The canary and the research
+# run still get their own home, their own proxy and their own capture, so a
+# research proof can never be satisfied by the canary's requests.
+# ---------------------------------------------------------------------------
+run_seat() {
+  local kind="$1"
+  local dir="$2"
+  local work="$3"
+  local prompt="$4"
+  local home="$WORK_ROOT/$kind-home"
+  local log="$WORK_ROOT/$kind-cli.log"
+
+  case "$PROVIDER" in
+    openai) make_codex_home "$home" ;;
+    google) make_gemini_home "$home" ;;
+  esac
+
+  PROXY_PORT=""
+  if uses_proxy; then start_proxy "$dir/requests" "$dir/proxy-port"; fi
+  build_command "$PROXY_PORT" "$home" "$work" "$log" "$prompt"
+
+  # The Gemini CLI carries its prompt in the argument vector and reads nothing
+  # from stdin; the other two read it from stdin and take no prompt argument.
+  set +e
+  if [ "$PROVIDER" = "google" ]; then
+    ( cd "$work" && env "${CLI_ENV[@]}" "${CMD[@]}" < /dev/null ) \
+      > "$dir/stdout.txt" 2> "$dir/stderr.txt"
+  else
+    ( cd "$work" && env "${CLI_ENV[@]}" "${CMD[@]}" < "$prompt" ) \
+      > "$dir/stdout.txt" 2> "$dir/stderr.txt"
+  fi
+  CLI_EXIT=$?
+  set -e
+  stop_proxy
+  retain_run "$home" "$dir" "$log"
+  printf '%s\n' "$CLI_EXIT" > "$dir/exit-code"
+}
+
+# ---------------------------------------------------------------------------
+# The canary, first, through its own proxy where there is one.
+# ---------------------------------------------------------------------------
+run_seat canary "$CANARY_DIR" "$CANARY_WORK" "$CANARY_DIR/work/canary.md"
 printf '%s\n' "$CLI_EXIT" > "$ATTEMPT_DIR/exit-code"
 
 # Parse and retain regardless of exit status. A run that exited nonzero still
 # produced bytes worth keeping; what it does not get is admission.
+#
+# `--expect-file-read allowed` is the codex seat saying out loud what its
+# profile cannot do. Under `-s read-only` the planted fixture IS readable, the
+# canary reads it, and the outcome is recorded rather than failed. The token is
+# left off the denylist for that run alone, because every other private string
+# stays on it and a run that carried real private text is still refused.
+EXPECT_FILE_READ=refused
+if [ "$PROVIDER" = "openai" ]; then EXPECT_FILE_READ=allowed; fi
+
 CANARY_VERDICT=fail
+CANARY_FLAGS=()
+while IFS= read -r flag; do CANARY_FLAGS+=("$flag"); done < <(evidence_flags "$CANARY_DIR")
 npx tsx "$BOUNDARY_TS" "$CANARY_DIR/stdout.txt" \
   --report "$CANARY_DIR/report.json" --final "$CANARY_DIR/final-message.txt" \
-  --check canary --tools "$ALLOWED_TOOLS" \
+  --format "$STREAM_FORMAT" --check canary --tools "$ALLOWED_TOOLS" \
   --token "$CANARY_TOKEN" --expect-url "$CANARY_URL" --expect-heading "$CANARY_HEADING" \
-  --requests "$CANARY_DIR/requests" --package "$CANARY_DIR/work/canary.md" \
+  --expect-file-read "$EXPECT_FILE_READ" --effort "$EFFORT" \
+  --accept-proof "$ACCEPT_PROOF" \
+  "${CANARY_FLAGS[@]}" --package "$CANARY_DIR/work/canary.md" \
   2> "$CANARY_DIR/failures.txt" && CANARY_VERDICT=pass
 printf '%s\n' "$CANARY_VERDICT" > "$ATTEMPT_DIR/canary.txt"
 STRUCTURE_VERDICT="$CANARY_VERDICT"
@@ -700,32 +1190,26 @@ if [ "$PURPOSE" != "research" ]; then
 fi
 
 # ---------------------------------------------------------------------------
-# Research: the package, through a fresh proxy, under the same profile.
+# Research: the package, through a fresh proxy and a fresh home, under the same
+# profile.
 # ---------------------------------------------------------------------------
-start_proxy "$ATTEMPT_DIR/requests" "$ATTEMPT_DIR/proxy-port"
-set +e
-( cd "$RESEARCH_WORK" \
-    && ANTHROPIC_BASE_URL="http://127.0.0.1:$PROXY_PORT" "${CMD[@]}" < "$ATTEMPT_DIR/package.md" ) \
-  > "$ATTEMPT_DIR/stdout.txt" 2> "$ATTEMPT_DIR/stderr.txt"
-CLI_EXIT=$?
-set -e
-stop_proxy
-printf '%s\n' "$CLI_EXIT" > "$ATTEMPT_DIR/exit-code"
+check_prompt_size "$ATTEMPT_DIR/package.md"
+run_seat research "$ATTEMPT_DIR" "$RESEARCH_WORK" "$ATTEMPT_DIR/package.md"
 
 RESEARCH_VERDICT=fail
+RESEARCH_FLAGS=()
+while IFS= read -r flag; do RESEARCH_FLAGS+=("$flag"); done < <(evidence_flags "$ATTEMPT_DIR")
 npx tsx "$BOUNDARY_TS" "$ATTEMPT_DIR/stdout.txt" \
   --report "$ATTEMPT_DIR/report.json" --final "$ATTEMPT_DIR/final-message.txt" \
-  --check research --tools "$ALLOWED_TOOLS" \
-  --requests "$ATTEMPT_DIR/requests" --package "$ATTEMPT_DIR/package.md" \
+  --format "$STREAM_FORMAT" --check research --tools "$ALLOWED_TOOLS" \
+  --effort "$EFFORT" --accept-proof "$ACCEPT_PROOF" \
+  "${RESEARCH_FLAGS[@]}" --package "$ATTEMPT_DIR/package.md" \
   2> "$ATTEMPT_DIR/failures.txt" && RESEARCH_VERDICT=pass
 STRUCTURE_VERDICT="$RESEARCH_VERDICT"
 CONTEXT_PROOF="$(proof_status "$ATTEMPT_DIR/report.json")"
 
-# From here on, nothing says the package was not sent. The CLI sends it twice
-# per research attempt: once as the main turn, and once before that in the
-# session-naming request, which wraps the whole package in <session> tags. Both
-# are in the capture and both are checked. A refusal after this point is a
-# refusal to publish, not a claim that nothing left the machine.
+# From here on, nothing says the package was not sent. A refusal after this
+# point is a refusal to publish, not a claim that nothing left the machine.
 if [ "$CLI_EXIT" -ne 0 ]; then
   ADMISSION_REASON="the research invocation exited $CLI_EXIT; the package had already been sent and nothing was admitted"
   refuse failed "the research invocation exited $CLI_EXIT; the package had already been sent, its output and capture are retained, and nothing was admitted"
@@ -736,20 +1220,43 @@ if [ "$RESEARCH_VERDICT" != "pass" ]; then
   refuse failed "the research run failed its admission check; the package had already been sent and its output and capture are retained"
 fi
 
-# The upstream the capture was actually taken against. A capture taken against
-# a loopback stub can pass the capture check, because the check is about what
-# the CLI sent and the CLI does not know where it went. So the check is reported
-# honestly AND the run is not admitted, with the reason on the record. Every
-# check passing is what earns exit 0; production upstream is what earns
-# `admitted_for_research`, and they are different questions.
-UPSTREAM="$(tr -d '\r\n' < "$ATTEMPT_DIR/requests/upstream.txt" 2>/dev/null || true)"
+# WHERE THE EVIDENCE CAME FROM, which is a different question from whether it
+# passed. A capture taken against a loopback stub can pass the capture check,
+# because the check is about what the CLI sent and the CLI does not know where it
+# went. So the check is reported honestly AND the run is not admitted, with the
+# reason on the record. Every check passing is what earns exit 0; production
+# upstream is what earns `admitted_for_research`.
+#
+# WHETHER A TEST ARRANGED THIS RUN is asked once, here, so that the rule and its
+# wording exist in one place rather than once per seat. A run whose executable
+# was named by a hook is never admitted, whatever its checks say. The Gemini seat
+# has no upstream to compare, because it has no proxy, and for that seat a
+# loopback upstream being configured at all stands in for the comparison the
+# other seats get.
+TEST_ARRANGED=""
+if [ -n "$BIN_OVERRIDE" ]; then
+  TEST_ARRANGED="the executable was named by $BIN_HOOK"
+elif [ "$LOOPBACK_UPSTREAM" = "1" ]; then
+  TEST_ARRANGED="a loopback upstream was configured"
+fi
+
 STATUS="ok"
-if [ "$UPSTREAM" != "https://api.anthropic.com" ]; then
+UPSTREAM="$(tr -d '\r\n' < "$ATTEMPT_DIR/requests/upstream.txt" 2>/dev/null || true)"
+if [ -n "$BIN_OVERRIDE" ]; then
   ADMITTED="false"
-  ADMISSION_REASON="every check passed, but the capture was taken against $UPSTREAM rather than https://api.anthropic.com, so this run is not admitted for research."
+  ADMISSION_REASON="every check passed, but $TEST_ARRANGED, so this run was arranged by a test and is not admitted for research."
+elif [ -n "$EXPECTED_UPSTREAM" ] && [ "$UPSTREAM" != "$EXPECTED_UPSTREAM" ]; then
+  ADMITTED="false"
+  ADMISSION_REASON="every check passed, but the capture was taken against $UPSTREAM rather than $EXPECTED_UPSTREAM, so this run is not admitted for research."
+elif [ -z "$EXPECTED_UPSTREAM" ] && [ -n "$TEST_ARRANGED" ]; then
+  ADMITTED="false"
+  ADMISSION_REASON="every check passed, but $TEST_ARRANGED, so this run was arranged by a test and is not admitted for research."
+elif [ -z "$EXPECTED_UPSTREAM" ]; then
+  ADMITTED="true"
+  ADMISSION_REASON="the canary and the research run each passed their structural check and their record check under $PROFILE. This seat's CLI exposes no request capture, so the check ran over its own local record and the proof is $CONTEXT_PROOF, not pass."
 else
   ADMITTED="true"
-  ADMISSION_REASON="the canary and the research run each passed their structural check and their capture check against https://api.anthropic.com under $PROFILE."
+  ADMISSION_REASON="the canary and the research run each passed their structural check and their capture check against $EXPECTED_UPSTREAM under $PROFILE."
 fi
 REASON="$ADMISSION_REASON"
 echo "[$LABEL] research complete under $PROFILE, attempt $ATTEMPT_ID" >&2

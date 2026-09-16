@@ -17,11 +17,12 @@
 #
 # Whether it runs at all is the launcher's decision, not this script's. The
 # launcher captures the CLI's outgoing request and, from methodology v1.30,
-# searches it for the private text on this machine, so an anthropic audit can
-# complete; openai and google have no capture at all and are still refused, which
-# is why the consultation's commissioned Google audit remains blocked. The whole
-# reason a framing check once read the founder's private memory is that it had
-# its own invocation and its own idea of what was safe.
+# searches it for the private text on this machine. From v1.31 all three vendors
+# have a profile: anthropic and openai are checked against a captured request,
+# google against its CLI's own local record, because agy exposes no capture
+# route at all. Each seat's limit is stated in the launcher and on the public
+# page. The whole reason a framing check once read the founder's private memory
+# is that it had its own invocation and its own idea of what was safe.
 #
 # A zero exit is not admission. This script reads `admitted_for_research` from
 # the attempt metadata and writes no report unless it is exactly true. The

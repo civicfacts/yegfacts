@@ -12,9 +12,19 @@ import { describe, expect, it } from 'vitest';
 import type { CaptureCheckResult } from '../scripts/panel/capture-check.ts';
 import {
   admitForResearch,
+  admitProof,
   checkCanary,
+  checkCodexCanary,
+  checkCodexEffort,
+  checkCodexStructure,
+  checkGeminiCanary,
+  checkGeminiStructure,
   checkStructure,
+  codexSearchRequests,
   contextProof,
+  fileReadOutcome,
+  readCodexStream,
+  readGeminiStream,
   readStream,
 } from '../scripts/panel/stream-boundary.ts';
 
@@ -152,6 +162,13 @@ describe('research admission', () => {
     ...over,
   });
 
+  /**
+   * The Claude seat's shape of the shared gate: a structural verdict, the proof
+   * word, and the words this seat accepts, which is `pass` and nothing else.
+   */
+  const admitClaude = (stream: string, check: CaptureCheckResult | null) =>
+    admitForResearch(checkStructure(readStream(stream), expectation), contextProof(check));
+
   it('reports the context proof as unavailable when no capture was taken', () => {
     const proof = contextProof(null);
     expect(proof.status).toBe('unavailable');
@@ -188,29 +205,28 @@ describe('research admission', () => {
   it('refuses a clean stream without a capture', () => {
     expect(checkStructure(readStream(cleanStream), expectation).ok).toBe(true);
 
-    const verdict = admitForResearch(readStream(cleanStream), expectation, null);
+    const verdict = admitClaude(cleanStream, null);
     expect(verdict.ok).toBe(false);
     expect(verdict.failures).toHaveLength(1);
     expect(verdict.failures[0]).toMatch(/^context proof unavailable:/);
   });
 
   it('refuses a clean stream whose capture carried private text', () => {
-    const verdict = admitForResearch(readStream(cleanStream), expectation, captureResult({
-      status: 'fail',
-      failures: ['req-0003.json: carries $HOME/.claude/CLAUDE.md line 7'],
-    }));
+    const verdict = admitClaude(
+      cleanStream,
+      captureResult({ status: 'fail', failures: ['req-0003.json: carries $HOME/.claude/CLAUDE.md line 7'] }),
+    );
     expect(verdict.ok).toBe(false);
     expect(verdict.failures[0]).toMatch(/^context proof fail:/);
   });
 
   it('admits a clean stream with a passing capture check', () => {
-    const verdict = admitForResearch(readStream(cleanStream), expectation, captureResult());
+    const verdict = admitClaude(cleanStream, captureResult());
     expect(verdict).toEqual({ ok: true, failures: [] });
   });
 
   it('still refuses a passing capture check when the stream itself is not clean', () => {
-    const facts = readStream(cleanStream.replace('"skills":[]', '"skills":["ponytail"]'));
-    const verdict = admitForResearch(facts, expectation, captureResult());
+    const verdict = admitClaude(cleanStream.replace('"skills":[]', '"skills":["ponytail"]'), captureResult());
     expect(verdict.ok).toBe(false);
     expect(verdict.failures.join()).toMatch(/skills were loaded: ponytail/);
   });
@@ -295,5 +311,256 @@ describe('assistant turns', () => {
     // invent turns wins and any disagreement surfaces as a turn-count failure.
     const mixed = [init(), use('t1', 'msg_01'), use('t2'), result('t1'), result('t2'), done()].join('\n');
     expect(readStream(mixed).assistant_turns).toBe(1);
+  });
+});
+
+/**
+ * The fourth proof word, and the rule that keeps it from spreading.
+ *
+ * `record-only` says the same search ran over the CLI's own local record rather
+ * than over a request. The Gemini seat is admitted on it because its CLI has no
+ * capture route at all; every other seat has a proxy in front of it, so a
+ * `record-only` result there would mean the proxy was bypassed, and the
+ * accepted set is passed in rather than assumed so that stays true.
+ */
+describe('record-only proof', () => {
+  const passing = (): CaptureCheckResult => ({
+    status: 'pass',
+    failures: [],
+    sources: [{ name: '$HOME/.claude/CLAUDE.md', present: true, lines_checked: 12 }],
+    package_seen: 1,
+    requests: 9,
+    searched: 9,
+  });
+
+  it('says what it ran over and what that record cannot hold', () => {
+    const proof = contextProof(passing(), 'local-record');
+    expect(proof.status).toBe('record-only');
+    expect(proof.reason).toMatch(/9 of 9 record entr\(ies\) were searched/);
+    expect(proof.reason).toMatch(/exposes no way to record its outgoing request/);
+    expect(proof.reason).toMatch(/does not hold the system prompt/);
+    expect(proof.reason).toMatch(/weaker than a check over a request/);
+  });
+
+  it('names the record rather than a request when it fails', () => {
+    const proof = contextProof(
+      { ...passing(), status: 'fail', failures: ['transcript-1.jsonl line 3: carries $HOME/CLAUDE.md line 4'] },
+      'local-record',
+    );
+    expect(proof.status).toBe('fail');
+    expect(proof.reason).toMatch(/the CLI's own record did not pass/);
+  });
+
+  it('admits record-only only where the seat accepts it', () => {
+    const proof = contextProof(passing(), 'local-record');
+    expect(admitProof(proof, ['pass', 'record-only']).ok).toBe(true);
+    const refused = admitProof(proof, ['pass']);
+    expect(refused.ok).toBe(false);
+    expect(refused.failures[0]).toMatch(/^context proof record-only:/);
+  });
+
+  it('never accepts unavailable or fail, whatever the seat asks for', () => {
+    for (const status of ['unavailable', 'fail'] as const) {
+      const proof = status === 'unavailable' ? contextProof(null) : contextProof({ ...passing(), status: 'fail' });
+      expect(admitProof(proof, ['pass', 'record-only']).ok).toBe(false);
+    }
+  });
+});
+
+/**
+ * The Codex stream, which settles less than the Claude one and says so. There is
+ * no tool inventory in it, so the checks here are that the run started once,
+ * finished once and answered, plus the two things the CAPTURE settles: the
+ * pinned reasoning effort, and a search that actually reached the endpoint.
+ */
+describe('the codex stream', () => {
+  const codexStream = (over: string[] = []) =>
+    [
+      JSON.stringify({ type: 'thread.started', thread_id: 't' }),
+      JSON.stringify({ type: 'turn.started' }),
+      // The normal path on this machine: a WebSocket attempt that times out and
+      // falls back to HTTPS about a minute later. Recorded, never gated.
+      JSON.stringify({ type: 'error', message: 'Reconnecting... 2/5 (request timed out)' }),
+      JSON.stringify({ type: 'item.completed', item: { id: 'i1', type: 'web_search', query: 'open data' } }),
+      ...over,
+      JSON.stringify({ type: 'item.completed', item: { id: 'i2', type: 'agent_message', text: 'the answer' } }),
+      JSON.stringify({ type: 'turn.completed', usage: { input_tokens: 10 } }),
+    ].join('\n');
+
+  const request = (over: Record<string, unknown> = {}) => ({
+    file: 'req-0011.json',
+    method: 'POST',
+    url: '/backend-api/codex/responses',
+    headers: {},
+    body: { reasoning: { effort: 'high' } },
+    ...over,
+  });
+
+  it('reads the items, the final message and the transport errors', () => {
+    const facts = readCodexStream(codexStream());
+    expect(facts.thread_started).toBe(1);
+    expect(facts.turn_completed).toBe(1);
+    expect(facts.final_text).toBe('the answer');
+    expect(facts.transport_errors).toEqual(['Reconnecting... 2/5 (request timed out)']);
+    expect(checkCodexStructure(facts).ok).toBe(true);
+  });
+
+  it('fails a turn that never completed or never answered', () => {
+    const noAnswer = readCodexStream(
+      [JSON.stringify({ type: 'thread.started', thread_id: 't' }), JSON.stringify({ type: 'turn.completed' })].join('\n'),
+    );
+    expect(checkCodexStructure(noAnswer).failures.join()).toMatch(/returned no final message/);
+  });
+
+  it('reads the reasoning effort out of the request rather than trusting the flag', () => {
+    expect(checkCodexEffort([request()], 'high').ok).toBe(true);
+    expect(checkCodexEffort([request({ body: { reasoning: { effort: 'low' } } })], 'high').failures.join()).toMatch(
+      /reasoning effort in the request was low/,
+    );
+    expect(checkCodexEffort([], 'high').failures.join()).toMatch(/no captured request reached the model endpoint/);
+  });
+
+  it('counts only a search request the endpoint actually answered', () => {
+    const search = { file: 'req-0012.json', method: 'POST', url: '/backend-api/codex/alpha/search', headers: {}, body: {} };
+    expect(codexSearchRequests([{ ...search, status: 200 }])).toHaveLength(1);
+    expect(codexSearchRequests([{ ...search, status: 500 }])).toHaveLength(0);
+    expect(codexSearchRequests([search])).toHaveLength(0);
+  });
+
+  it('refuses a canary whose search is only a claim in the answer', () => {
+    const verdict = checkCodexCanary(readCodexStream(codexStream()), {
+      token: 'YEGFACTS_CANARY_x',
+      rawText: codexStream(),
+      requests: [request()],
+      effort: 'high',
+    });
+    expect(verdict.ok).toBe(false);
+    expect(verdict.failures.join()).toMatch(/no successful web-search request in the capture/);
+  });
+
+  it('records a file read this profile cannot stop rather than failing it', () => {
+    expect(fileReadOutcome('the token: YEGFACTS_CANARY_x came back', 'YEGFACTS_CANARY_x')).toBe('allowed');
+    expect(fileReadOutcome('nothing came back', 'YEGFACTS_CANARY_x')).toBe('refused');
+  });
+});
+
+/**
+ * The Gemini stream. The tools stay in the model's inventory under this profile
+ * and are refused at the permission check, so the rule is about which tools
+ * reached DONE: a refused file tool is the profile working, and a file tool that
+ * completed is a file that was read.
+ */
+describe('the gemini stream', () => {
+  const step = (over: Record<string, unknown>) =>
+    JSON.stringify({ event: 'step_update', step_update: { conversation_id: 'c', ...over } });
+
+  const geminiStream = (over: { fileState?: string; status?: string } = {}) =>
+    [
+      JSON.stringify({
+        event: 'init',
+        conversation_id: 'c',
+        init: { model: 'gemini-3.8-flash-high', cwd: '/stub', tools: ['read_url_content', 'view_file'] },
+      }),
+      step({ step_index: 1, state: 'ACTIVE', step_type: 'tool', tool_name: 'read_url_content', tool_info: { parameters: { Url: 'https://example.com/' } } }),
+      step({ step_index: 1, state: 'DONE', step_type: 'tool', tool_name: 'read_url_content', tool_info: { parameters: { Url: 'https://example.com/' } } }),
+      step({
+        step_index: 2,
+        state: over.fileState ?? 'ERROR',
+        step_type: 'tool',
+        tool_name: 'view_file',
+        tool_info: {
+          parameters: { AbsolutePath: '/tmp/CANARY.md' },
+          ...(over.fileState === 'DONE'
+            ? {}
+            : { error: { message: 'permission check failed for read_file "/tmp/CANARY.md": Matches user-configured deny rule.' } }),
+        },
+      }),
+      JSON.stringify({
+        event: 'result',
+        result: { conversation_id: 'c', status: over.status ?? 'SUCCESS', response: '{"web_h1": "Example Domain"}' },
+      }),
+    ].join('\n');
+
+  const canary = (stream: string, over: Record<string, unknown> = {}) =>
+    checkGeminiCanary(readGeminiStream(stream), {
+      token: 'YEGFACTS_CANARY_x',
+      rawText: stream,
+      expectedUrl: 'https://example.com/',
+      expectedHeading: 'Example Domain',
+      fetchedText: '<h1>Example Domain</h1>',
+      ...over,
+    });
+
+  it('keeps only the last state of each step', () => {
+    const facts = readGeminiStream(geminiStream());
+    expect(facts.steps.map((one) => one.state)).toEqual(['DONE', 'ERROR']);
+    expect(facts.tools_completed).toEqual(['read_url_content']);
+    expect(facts.tools_refused.map((one) => one.tool)).toEqual(['view_file']);
+    expect(checkGeminiStructure(facts).ok).toBe(true);
+  });
+
+  it('fails a file tool that reached DONE instead of being refused', () => {
+    const facts = readGeminiStream(geminiStream({ fileState: 'DONE' }));
+    expect(checkGeminiStructure(facts).failures.join()).toMatch(/ran tools outside the profile: view_file/);
+  });
+
+  /**
+   * `status` reports whether any step failed, not whether the turn answered.
+   * Under this profile steps fail on purpose: the deny rules refuse every file,
+   * write and command tool at the permission check, and the first live canary
+   * answered correctly, refused three tools and came back ERROR. So ERROR is
+   * read against the steps rather than taken at face value.
+   */
+  it('accepts an ERROR whose only failed steps were refused at the permission check', () => {
+    expect(checkGeminiStructure(readGeminiStream(geminiStream({ status: 'ERROR' }))).ok).toBe(true);
+  });
+
+  it('fails a status it has no reading for', () => {
+    expect(checkGeminiStructure(readGeminiStream(geminiStream({ status: 'CANCELLED' }))).failures.join()).toMatch(
+      /result status was "CANCELLED"/,
+    );
+  });
+
+  it('fails a step that failed for any other reason', () => {
+    // The message must not mention a permission check, because that is the one
+    // failure this profile is supposed to produce.
+    const broken = geminiStream({ status: 'ERROR' }).replace(
+      'permission check failed for read_file',
+      'the tool crashed while reading',
+    );
+    expect(checkGeminiStructure(readGeminiStream(broken)).failures.join()).toMatch(
+      /step 2 \(view_file\) failed for a reason other than the permission check: the tool crashed/,
+    );
+  });
+
+  it('fails an ERROR that no step accounts for', () => {
+    const clean = [
+      JSON.stringify({ event: 'init', conversation_id: 'c', init: { model: 'm', cwd: '/stub', tools: [] } }),
+      JSON.stringify({ event: 'result', result: { conversation_id: 'c', status: 'ERROR', response: 'an answer' } }),
+    ].join('\n');
+    expect(checkGeminiStructure(readGeminiStream(clean)).failures.join()).toMatch(/no step says why/);
+  });
+
+  it('passes a canary whose fetch tool saved the real page', () => {
+    expect(canary(geminiStream())).toEqual({ ok: true, failures: [] });
+  });
+
+  it('rejects a canary whose saved page does not carry the heading', () => {
+    // The answer says "Example Domain" in both runs. Only one of them fetched it.
+    expect(canary(geminiStream(), { fetchedText: '<html></html>' }).failures.join()).toMatch(
+      /does not contain "Example Domain"/,
+    );
+  });
+
+  it('rejects a canary in which nothing was refused', () => {
+    const stream = geminiStream({ fileState: 'DONE' });
+    expect(canary(stream).failures.join()).toMatch(/no tool was refused by the permission check/);
+  });
+
+  it('rejects a canary whose record carries the synthetic token', () => {
+    const stream = geminiStream();
+    expect(canary(stream, { rawText: `${stream}\ntoken YEGFACTS_CANARY_x` }).failures.join()).toMatch(
+      /the file boundary leaked/,
+    );
   });
 });

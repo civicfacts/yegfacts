@@ -16,9 +16,12 @@
 # admits anything. Read that file for what the capture covers and, just as
 # importantly, what it does not: it catches known private text from this machine,
 # it cannot see what the vendor attaches elsewhere, and it says what the request
-# did not contain rather than what it did. The Claude seat can run when its
-# canary and its research run both pass; the Codex and Gemini seats have no
-# capture at all and remain blocked, so the three-seat panel still cannot run.
+# did not contain rather than what it did. From methodology v1.31 all three
+# seats can run, each under the best profile its own CLI allows and each with
+# its limit stated in that file: the Claude and Codex seats are checked against
+# a captured request, the Gemini seat against its CLI's own local record,
+# because agy exposes no capture route at all. Every seat still has to pass its
+# canary and its research run before anything it returns becomes a review.
 #
 # A zero exit from the launcher is not admission. This script reads
 # `admitted_for_research` from the attempt metadata and installs nothing unless
@@ -124,11 +127,13 @@ case "$PROVIDER_ARG" in
     PROVIDER_CANONICAL="google"; SEAT="Gemini 3.8 Flash"
     # The command this seat used for its four published runs carried
     # --dangerously-skip-permissions (methodology v1.14) so it could reach a
-    # shell for PDFs its URL tool would not read. That command is retired, not
-    # re-tuned: agy exposes no way to suppress its global instruction and plugin
-    # loading, so there is nothing to grant a shell inside. The seat refuses in
-    # invoke-reviewer.sh and this row exists only to name the model the manifest
-    # would record if a profile is ever demonstrated.
+    # shell for PDFs its URL tool would not read. That command is retired. The
+    # v1.31 profile in invoke-reviewer.sh still passes that flag, because it
+    # auto-approves the prompt rather than the deny rules, and it writes a
+    # settings file in the per-attempt home that refuses every file, write and
+    # command tool at the permission check. A PDF this seat's URL tool will not
+    # read is an essential source it cannot reach, which stops a run rather than
+    # becoming a finding.
     ;;
   *)
     echo "unknown provider: $PROVIDER_ARG" >&2; usage
@@ -363,8 +368,6 @@ for attempt in 1 2; do
     # same package to a profile that just refused it, or to a run that just
     # broke its boundary, spends money to be refused again. The retry budget
     # exists for a reviewer that answered badly, not for one that never ran.
-    # In this release the admission gate refuses everything, so this is the
-    # path every run takes.
     add_detail "$ATTEMPT_DIR" "$attempt" "not-reached"
     # A run refused by policy is not a run that went wrong, and the top line of
     # the manifest row should say which of the two happened.

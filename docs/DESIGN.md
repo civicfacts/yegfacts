@@ -253,11 +253,13 @@ stopped.
    launcher also runs the CLI through a local recording proxy and retains the
    outgoing request; from v1.30 it searches that capture for the private text on
    this machine, on the canary and on the research run. Both must pass before a
-   result is admitted. Public-web research is allowed and expected, but retrieval
-   can be more limited without shell tools. Missing essential sources stop a run,
-   not produce a finding. Output is validated against the schema with at most one
-   schema retry. Providers with no capture at all block the three-seat panel;
-   they are not replaced.
+   result is admitted. From v1.31 all three seats have a profile, each under the
+   best isolation its own CLI allows and each with its limit stated: Claude and
+   Codex are checked against a captured request, Google against its CLI's own
+   local record, because agy exposes no capture route at all. Public-web research
+   is allowed and expected, but retrieval can be more limited without shell tools.
+   Missing essential sources stop a run, not produce a finding. Output is
+   validated against the schema with at most one schema retry.
 3. **Evidence staging, then deterministic merge.** Split in two because network
    work is not deterministic. Staging fetches the cited URLs, hashes them and
    snapshots them; a failed fetch is recorded, not fatal. The merge
@@ -423,14 +425,104 @@ story, the round or the seat.
 
 **The CLI build is recorded, not pinned.** v1.30 removed the version gate, the pin
 table and the archived build with the request pins they protected. The launcher
-runs the `claude` on PATH and refuses only when there is none. `cli_version` is
-public; the executable's resolved path and the SHA-256 of its bytes are retained
-privately as observations, so a reader of a retained capture can still ask which
-file produced it. `path_cli_version` is gone, because the launcher no longer
-overrides the machine's own choice of build. Codex and Google have no capture at
-all and stay blocked, so the three-seat panel still cannot run. Candidate
+runs the CLI on PATH and refuses only when there is none, with two qualifications
+added in v1.31 and both recorded in the metadata: a command on PATH that turns
+out to be a wrapper script is replaced by the vendor's own binary when the machine
+has one, and a test may name the executable through `YEGFACTS_REVIEW_CODEX_BIN` or
+`YEGFACTS_REVIEW_AGY_BIN` under a loopback upstream only. A run that used either
+hook is never admitted. `cli_version` is public and is read as the first
+whitespace-separated field that looks like a version, because the three CLIs put
+it in three different places; the executable's resolved path and the SHA-256 of
+its bytes are retained privately as observations, so a reader of a retained
+capture can still ask which file produced it. `path_cli_version` is gone, because
+the launcher no longer overrides the machine's own choice of build. Candidate
 diagnostics do not authorize a research run, and a source-audit helper does not
 authorize another framing check or reset a cap.
+
+**v1.31: the Codex and Gemini seats, under stated limits.** The founder's ground
+is that complete isolation is not available on a subscription CLI, a fully
+controlled context needs direct API calls, and the project does not pay for those.
+So each seat runs under the best profile its CLI allows and the limit is written
+down rather than papered over. The September 9 disposition, that a convention plus
+disclosure is not enough to admit a reviewer, stands beside this and is not
+answered by it.
+
+`openai` (codex-cli 0.154.0) is captured, because codex honours `openai_base_url`
+and `chatgpt_base_url`. The launcher builds a per-attempt `CODEX_HOME` beside the
+working directory, 0700, holding `auth.json` as a SYMLINK to `$HOME/.codex/auth.json`
+and a two-line `config.toml` naming the model and `model_reasoning_effort`. It
+resolves the real vendor binary rather than the cmux shim, sets
+`CMUX_CODEX_HOOKS_DISABLED=1` either way, and runs
+`codex --search exec -m <model> -C <work> --skip-git-repo-check -s read-only
+--strict-config --ignore-rules --json` with the two base URLs, `skills.include_instructions=false`,
+`project_doc_max_bytes=0` and `--disable` for request compression, plugins,
+recommended plugins, apps, hooks, multi-agent, multi-agent v2, memories, computer
+use, browser use, external browser use, image generation, goals and tool suggest.
+The package goes on stdin. `--strict-config` rejects an unknown key before any
+model call. The structural check requires a parseable `--json` stream with one
+`thread.started`, one `turn.completed` last, and a final message; the reconnect
+and WebSocket-fallback errors build 0.154.0 prints on its way to HTTPS are
+recorded, not gated. The reasoning effort is read out of `reasoning.effort` in
+the captured body rather than trusted because it was on the command line. The
+canary additionally requires at least one successful request to
+`/backend-api/codex/alpha/search` IN THE CAPTURE, because the 2026-09-09 probe
+watched the model fabricate a fetch and exit zero.
+
+**The Codex limit.** Shell and web run through one host and cannot be separated;
+disabling that host removes web access. `-s read-only` reads the whole filesystem
+and the canary's planted fixture IS read, which is recorded as `file_read:
+allowed` rather than failed, and the canary's own token is left off the denylist
+for that reason alone. What refuses a run that touched private text is the
+denylist over the capture: a tool's output returns in the next turn's request
+body. The check refuses the run; it cannot prevent the read.
+
+`google` (agy, 1.2.4 at release; recorded, not gated) has NO capture. `BAICODE_PREDICTION_ENDPOINT_URL` and
+`GOOGLE_GEMINI_BASE_URL` are ignored under this login, the log holds no request
+bodies, and the CLI's own transcript omits the system prompt. The launcher builds
+a per-attempt `HOME` holding symlinks to
+`.gemini/antigravity-cli/antigravity-oauth-token` and `installation_id`, plus a
+`settings.json` denying `read_file(*)`, `write_file(*)`, `command(*)` and
+`execute_url(*)` and allowing `read_url(*)`. The tools stay in the model's
+inventory and are refused at the permission check, so the structural rule is about
+which tools reached `DONE`: only `read_url_content` and `search_web` may. The
+denylist runs over the CLI's own local record instead of a request, and the proof
+word is `record-only` rather than `pass`. Admission accepts `record-only` for this
+seat and no other.
+
+**Every per-attempt home is in the opaque tree, not in the archive.** The first
+live Gemini canary settled this. agy's fetch tool saves the page it fetched under
+HOME and then tells the model that file's absolute path; with the archive under
+`$HOME/.local/state`, that path handed the reviewer the operator's home directory,
+which is on the denylist, and the check correctly refused the run. The answer was
+to stop the leak rather than to stop checking for it, and the rule is applied to
+every seat rather than only to the one that was caught: a rule that holds for one
+CLI because nobody has watched the other two is a rule waiting to be broken by a
+vendor's next build. So every seat's `CODEX_HOME`, `HOME` and CLI log sit under
+`${TMPDIR}/attempt-<id>`, beside the working directory and named only by the
+attempt id, and `retain_run` copies what an attempt must keep back into the
+attempt directory before that tree comes down: the CLI log for every seat, and
+the local record and fetched pages for the Gemini seat.
+
+**The Gemini limit.** There is no request capture, so the check sees what the
+model produced and what its tools returned and nothing of what was sent. Global
+instructions and extensions are kept out by running from an empty home, which the
+probe supports and cannot prove. The CLI writes logs, caches and builtin skills
+into the real `~/.gemini/antigravity-cli` regardless of HOME. And with no capture,
+nothing establishes where the request went; what stands in for the upstream gate
+is that a run using a test hook or a loopback upstream is never admitted.
+
+**`result.status` is read against the steps.** agy reports `ERROR` when any step
+failed, and under this profile steps fail on purpose at the permission check. The
+live canary that passed, attempt `ba2fe4d58dcf61c1`, answered correctly, had two
+file reads refused exactly as designed, and came back `ERROR`. So `ERROR` is accepted only when every failed step failed at
+the permission check, and any other failed step is named and fails.
+
+**Credentials.** Auth reaches a subprocess through a symlink and never a copy.
+Nothing in this project reads a credential file and nothing creates one: a missing
+login is a refusal before anything is sent. Afterwards the links are unlinked with
+`rm -f`, which removes the link and never follows it, the launcher's own files are
+removed, and its directories are `rmdir`ed, so whatever the CLI wrote into its own
+home is left where it was written.
 
 This changes the shell-access practice described in v1.14. A reviewer may be
 unable to retrieve a PDF that the earlier shell-enabled command could read.

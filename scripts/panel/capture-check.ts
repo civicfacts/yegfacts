@@ -48,6 +48,12 @@ export type CapturedRequest = {
   url: string;
   headers: Record<string, unknown>;
   body: unknown;
+  /**
+   * The HTTP status the upstream answered with, read off the matching
+   * `res-NNNN.txt`. Absent when no response was captured, and absent on a local
+   * record, which is not an HTTP exchange at all.
+   */
+  status?: number;
 };
 
 /**
@@ -397,21 +403,47 @@ export type Capture = {
 };
 
 /**
+ * A capture read out of a CLI's own local record, which also hands back the text
+ * it read. The Gemini canary is judged on that same text, and reading the
+ * directory twice would be two different answers to one question.
+ */
+export type LocalRecord = Capture & { text: string };
+
+/**
  * Read a capture directory. The manifest hash covers the sorted list of
  * `<file> <hash>` lines over every `req-*`/`res-*` file, so a published row can
  * be checked against the retained bytes without republishing them, and a file
  * removed after the fact changes the hash.
  */
+/**
+ * The number that pairs a request with its response: `req-0007.json` and
+ * `res-0007.txt` are two halves of exchange 0007.
+ */
+const idOf = (name: string): string => /^(?:req|res)-(\d+)\./.exec(name)?.[1] ?? '';
+
 export function readCapture(dir: string): Capture {
-  const entries = readdirSync(dir).sort();
   const requests: CapturedRequest[] = [];
   const manifest: string[] = [];
+  /** `res-0007.txt` opens `HTTP 200 ...`, and nothing below that line is read. */
+  const statusById = new Map<string, number>();
+  const requestById = new Map<string, CapturedRequest>();
 
-  for (const name of entries) {
-    if (!/^(req|res)-\d+\.(json|txt)$/.test(name)) continue;
+  // One read per file. Every matching file is hashed into the manifest, and what
+  // else happens to it depends on which half of an exchange it is.
+  for (const name of readdirSync(dir).sort()) {
+    if (!/^(req|res)-\d+\.(json|txt|bin)$/.test(name)) continue;
     const raw = readFileSync(path.join(dir, name));
     manifest.push(`${name} ${createHash('sha256').update(raw).digest('hex')}`);
-    if (!name.startsWith('req-')) continue;
+
+    if (name.startsWith('res-')) {
+      const newline = raw.indexOf(0x0a);
+      const first = raw.subarray(0, newline === -1 ? raw.length : newline).toString('utf8');
+      const status = /^HTTP (\d{3})/.exec(first);
+      if (status) statusById.set(idOf(name), Number(status[1]));
+      continue;
+    }
+    if (!name.endsWith('.json')) continue;
+
     let parsed: Record<string, unknown> = {};
     try {
       parsed = JSON.parse(raw.toString('utf8')) as Record<string, unknown>;
@@ -420,7 +452,7 @@ export function readCapture(dir: string): Capture {
       // and pushed through with no body rather than skipped.
     }
     const headers = parsed.headers;
-    requests.push({
+    const request: CapturedRequest = {
       file: name,
       method: typeof parsed.method === 'string' ? parsed.method : '?',
       url: typeof parsed.url === 'string' ? parsed.url : '?',
@@ -429,7 +461,17 @@ export function readCapture(dir: string): Capture {
           ? (headers as Record<string, unknown>)
           : {},
       body: parsed.body,
-    });
+    };
+    requests.push(request);
+    requestById.set(idOf(name), request);
+  }
+
+  // Attached afterwards rather than during the walk: `res-0007.txt` sorts after
+  // the request it answers, so its status is not known yet when that request is
+  // built. A status with no request is simply dropped.
+  for (const [id, status] of statusById) {
+    const request = requestById.get(id);
+    if (request) request.status = status;
   }
 
   const upstreamFile = path.join(dir, 'upstream.txt');
@@ -441,4 +483,70 @@ export function readCapture(dir: string): Capture {
   }
 
   return { requests, upstream, requestsManifestSha256: sha256(manifest.join('\n')) };
+}
+
+/**
+ * Read a CLI's own local record as if it were a capture, so that the same
+ * denylist runs over it.
+ *
+ * WHY THIS EXISTS, and what it is not. The Gemini CLI (agy, 1.2.4 at release) has no
+ * capture route at all: it ignores every base-URL environment variable this
+ * project could set, its log carries no request bodies, and its own transcript
+ * omits the system prompt. Methodology v1.31 admits the seat anyway, under a
+ * check that runs over what the CLI does write down — the event stream it
+ * printed, the transcript it kept, the fetched page contents its own tool saved,
+ * and the final response. That is a check of the CLI's local record, never of a
+ * request, and every caller of this function labels it `record-only` for exactly
+ * that reason.
+ *
+ * A `.jsonl` file becomes one entry per line, so a failure names the line that
+ * carried the private text. A line that is not JSON is still searched, wrapped
+ * as `{ text }`, because an unparsed line is text the model saw. Any other file
+ * becomes one entry holding its whole contents the same way. A file that is not
+ * there contributes nothing and is not an error here: the package-presence rule
+ * in `checkCapture` is what fails a record that is missing the piece that
+ * matters.
+ */
+export function readLocalRecord(files: { name: string; file: string }[]): LocalRecord {
+  const requests: CapturedRequest[] = [];
+  const manifest: string[] = [];
+  const texts: string[] = [];
+
+  for (const { name, file } of files) {
+    let raw: Buffer;
+    try {
+      raw = readFileSync(file);
+    } catch {
+      continue;
+    }
+    manifest.push(`${name} ${createHash('sha256').update(raw).digest('hex')}`);
+    const text = raw.toString('utf8');
+    texts.push(text);
+    const entry = (label: string, body: unknown) =>
+      requests.push({ file: label, method: 'record', url: name, headers: {}, body });
+
+    if (file.endsWith('.jsonl')) {
+      text.split('\n').forEach((line, index) => {
+        if (line.trim() === '') return;
+        let parsed: unknown;
+        try {
+          parsed = JSON.parse(line);
+        } catch {
+          parsed = { text: line };
+        }
+        // A bare string or number on a line would not be walked by the check,
+        // which only looks inside objects, so everything is wrapped.
+        entry(`${name} line ${index + 1}`, parsed !== null && typeof parsed === 'object' ? parsed : { text: line });
+      });
+      continue;
+    }
+    entry(name, { text });
+  }
+
+  return {
+    requests,
+    upstream: '',
+    requestsManifestSha256: sha256(manifest.join('\n')),
+    text: texts.join('\n'),
+  };
 }

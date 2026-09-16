@@ -17,7 +17,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import zlib from 'node:zlib';
 import { afterAll, describe, expect, it } from 'vitest';
-import { resolveUpstream } from '../scripts/panel/record-proxy.mjs';
+import { PROVIDER_UPSTREAMS, resolveUpstream } from '../scripts/panel/record-proxy.mjs';
 
 const PROXY = path.join(fileURLToPath(new URL('..', import.meta.url)), 'scripts', 'panel', 'record-proxy.mjs');
 const root = mkdtempSync(path.join(tmpdir(), 'yegfacts-proxy-'));
@@ -108,6 +108,27 @@ describe('the upstream rule', () => {
     expect(resolveUpstream('')).toBe('https://api.anthropic.com');
     expect(resolveUpstream('http://127.0.0.1:51234')).toBe('http://127.0.0.1:51234');
     expect(resolveUpstream('http://localhost:80/')).toBe('http://localhost:80');
+  });
+
+  /**
+   * One row per provider and no other way in. The proxy is handed a NAME, never
+   * a host, so nothing on a command line can point a package somewhere nobody
+   * chose (methodology v1.31).
+   */
+  it('reads the production upstream out of a fixed table keyed by provider', () => {
+    expect(PROVIDER_UPSTREAMS).toEqual({
+      anthropic: 'https://api.anthropic.com',
+      openai: 'https://chatgpt.com',
+    });
+    expect(Object.isFrozen(PROVIDER_UPSTREAMS)).toBe(true);
+    expect(resolveUpstream(undefined, 'openai')).toBe('https://chatgpt.com');
+    // The loopback override still stands in front of every row.
+    expect(resolveUpstream('http://127.0.0.1:51234', 'openai')).toBe('http://127.0.0.1:51234');
+  });
+
+  it('refuses a provider it has no row for rather than guessing one', () => {
+    expect(() => resolveUpstream(undefined, 'google')).toThrow(/no upstream is recorded for provider "google"/);
+    expect(() => resolveUpstream(undefined, 'mystery')).toThrow(/no upstream is recorded/);
   });
 
   it.each([
