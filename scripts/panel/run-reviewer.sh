@@ -185,6 +185,12 @@ SCHEMA="$REPO_ROOT/prompts/review-schema.json"
 # the seats answered, and the re-run's own hashes sit beside its own answers.
 OUT_DIR="$RUN_DIR/${INTO:-round$ROUND}"
 OUT_FILE="$OUT_DIR/$SLOT.json"
+# A --into directory that is a symbolic link is a destination whose name says
+# one thing and whose contents land somewhere else. Nothing legitimate needs
+# one, and for the shadow seat it is the one way left to reach round1/.
+if test -n "$INTO" && test -L "$OUT_DIR"; then
+  echo "--into '$INTO' is a symbolic link; refusing to write through it" >&2; exit 2
+fi
 MANIFEST="${INTO:+$RUN_DIR/$INTO/run.yaml}"
 MANIFEST="${MANIFEST:-$RUN_DIR/run.yaml}"
 

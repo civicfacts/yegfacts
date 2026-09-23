@@ -367,7 +367,8 @@ OpenAI seat. Its answer is committed under `<run>/shadow-<name>/` with its own
 manifest (`scripts/panel/run-reviewer.sh luna <story> <date> 1 --into
 shadow-round1`). It is never merged and never synthesised: `scripts/merge.ts`
 reads every JSON file in a round directory, so the runner refuses any `--into`
-that is not a `shadow-` directory and refuses round 2 outright, and `run.yaml`'s
+that is not a `shadow-` directory or that is a symbolic link, and refuses round
+2 outright, and `run.yaml`'s
 `synthesis_scope` names no shadow. `run-record.md` compares its sources and
 findings against the three counted seats. After two runs the editor recommends
 and the founder decides whether a cheap-tier model takes a counted seat; until

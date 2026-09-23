@@ -31,19 +31,7 @@
  */
 import { spawnSync } from 'node:child_process';
 import http from 'node:http';
-import {
-  chmodSync,
-  cpSync,
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  readdirSync,
-  realpathSync,
-  rmSync,
-  symlinkSync,
-  writeFileSync,
-} from 'node:fs';
+import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -1221,6 +1209,14 @@ describe('run-reviewer', { timeout: 120_000 }, () => {
       expect(result.ok).toBe(false);
       expect(result.stderr).toMatch(expected);
     }
+    // A shadow- name that is a link into round1/ is the last way in, and it is
+    // refused before anything is assembled.
+    const runDir = path.join(repo, 'reviews', STORY, RUN_DATE);
+    mkdirSync(path.join(runDir, 'round1'), { recursive: true });
+    symlinkSync(path.join(runDir, 'round1'), path.join(runDir, 'shadow-linked'));
+    const linked = run([script, 'luna', STORY, RUN_DATE, '1', '--into', 'shadow-linked', '--dry-run'], stub.env);
+    expect(linked.ok).toBe(false);
+    expect(linked.stderr).toMatch(/is a symbolic link/);
     expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
   });
 
