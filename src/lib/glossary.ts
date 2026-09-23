@@ -191,7 +191,8 @@ export function panelForClaim(claim: Claim): { term: string; label: string } {
       throw new Error('round-one seats are incomplete');
     }
     const providers = new Set(seats.map((seat) => seat.provider));
-    if (providers.size === 3) return historical;
+    const historicalVendors = ['anthropic', 'openai', 'google'];
+    if (providers.size === 3 && historicalVendors.every((vendor) => providers.has(vendor))) return historical;
     if (
       providers.size === 2 &&
       seats.filter((seat) => seat.provider === 'anthropic').length === 1 &&

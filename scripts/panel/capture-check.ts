@@ -166,33 +166,56 @@ function binarySaveNote(home: string): RegExp {
 }
 
 /**
- * The string values that sit inside tool_result blocks of a Messages request:
- * `messages[].content[].content` as a string, or the `text` of its blocks. The
- * CLI writes its binary-save note there and nowhere else, so the cut is
- * allowed there and nowhere else; the same note in a text block, a system
- * prompt or a tool input is searched as sent.
+ * Every string value in a request body, each marked with whether it was
+ * reached through a tool_result block: `messages[].content[]` of type
+ * tool_result, as its string `content` or the `text` of its parts. The mark is
+ * positional, not textual: the same words in a tool result and in a text block
+ * are two values, one cuttable and one not. The CLI writes its binary-save note
+ * in tool results and nowhere else, so the cut is allowed there and nowhere
+ * else.
  */
-function toolResultStrings(body: unknown): Set<string> {
-  const found = new Set<string>();
-  const messages = asRecord(body)?.messages;
-  if (!Array.isArray(messages)) return found;
+function* placedStrings(body: unknown): Generator<{ value: string; toolResult: boolean }> {
+  const record = asRecord(body);
+  const messages = record?.messages;
+  if (record === null || !Array.isArray(messages)) {
+    for (const value of strings(body)) yield { value, toolResult: false };
+    return;
+  }
+  const { messages: _messages, ...rest } = record;
+  for (const value of strings(rest)) yield { value, toolResult: false };
   for (const message of messages) {
     const content = asRecord(message)?.content;
-    if (!Array.isArray(content)) continue;
+    if (!Array.isArray(content)) {
+      for (const value of strings(message)) yield { value, toolResult: false };
+      continue;
+    }
+    const { content: _content, ...messageRest } = asRecord(message) as Record<string, unknown>;
+    for (const value of strings(messageRest)) yield { value, toolResult: false };
     for (const block of content) {
-      const record = asRecord(block);
-      if (record?.type !== 'tool_result') continue;
-      const inner = record.content;
-      if (typeof inner === 'string') found.add(inner);
+      const blockRecord = asRecord(block);
+      if (blockRecord?.type !== 'tool_result') {
+        for (const value of strings(block)) yield { value, toolResult: false };
+        continue;
+      }
+      const { content: inner, ...blockRest } = blockRecord;
+      for (const value of strings(blockRest)) yield { value, toolResult: false };
+      if (typeof inner === 'string') yield { value: inner, toolResult: true };
       else if (Array.isArray(inner)) {
         for (const part of inner) {
-          const text = asRecord(part)?.text;
-          if (typeof text === 'string') found.add(text);
+          const partRecord = asRecord(part);
+          if (partRecord && typeof partRecord.text === 'string') {
+            const { text, ...partRest } = partRecord;
+            yield { value: text, toolResult: true };
+            for (const value of strings(partRest)) yield { value, toolResult: false };
+          } else {
+            for (const value of strings(part)) yield { value, toolResult: false };
+          }
         }
+      } else {
+        for (const value of strings(inner)) yield { value, toolResult: false };
       }
     }
   }
-  return found;
 }
 
 /**
@@ -446,20 +469,19 @@ export function checkCapture(input: CaptureCheckInput): CaptureCheckResult {
 
     // Collected once per request rather than re-walked per source: a main turn
     // carries a few hundred strings and the denylist runs to thousands of lines.
-    const values = [...strings(request.body)];
-    const toolResults = note ? toolResultStrings(request.body) : new Set<string>();
+    const placed = [...placedStrings(request.body)];
 
-    if (packageText !== '' && values.some((value) => value.includes(packageText))) packageSeen += 1;
+    if (packageText !== '' && placed.some(({ value }) => value.includes(packageText))) packageSeen += 1;
 
     let notesHere = 0;
     for (const source of sources) {
       const hit = new Set<number>();
-      for (const value of values) {
+      for (const { value, toolResult } of placed) {
         // v1.38: the home path inside the CLI's own binary-save note, inside a
         // tool result, is counted, not refused. The cut is made for this one
-        // source, in those values, and nowhere else.
+        // source, in those positions, and nowhere else.
         let text = value;
-        if (source === homeSource && note && toolResults.has(value)) {
+        if (source === homeSource && note && toolResult) {
           const cut = withoutSaveNotes(value, note);
           text = cut.text;
           notesHere += cut.notes;
