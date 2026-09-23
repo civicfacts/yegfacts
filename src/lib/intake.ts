@@ -145,6 +145,11 @@ export interface Claim {
   triage?: string;
   /** Why it carries a decline of its own. `right-of-reply` is the only value. */
   ground?: string;
+  /**
+   * Where a `no-instrument` park was decided: `framing` before any research
+   * ran, `panel` after the panel answered. Absent means `panel`.
+   */
+  parked_at?: string;
   /** One public sentence saying why. Mandatory on a decline of its own. */
   reason?: string;
   /**
@@ -302,6 +307,7 @@ function toClaim(entry: Record<string, unknown>, questions: Map<string, Question
     names_person: entry.names_person === true,
     triage: own,
     ground: optional(entry.ground),
+    parked_at: optional(entry.parked_at),
     reason: optional(entry.reason),
   };
   return redact(claim, own ?? questions.get(question)?.triage ?? '');

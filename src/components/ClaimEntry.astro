@@ -55,8 +55,11 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
  * accusation to them. A claim parked on the `no-instrument` ground went to the
  * panel and came back unpublishable: the only instrument that exists cannot
  * carry the proposition, and the site will not make the proposition weaker to
- * fit it. Either way two decisions differ here, so the page prints both rather
- * than the question's alone.
+ * fit it. A claim parked at framing (methodology v1.35) never reached the panel:
+ * the third framing report found the record cannot answer it as asserted, and
+ * the page says so rather than claiming a panel run that did not happen. Either
+ * way two decisions differ here, so the page prints both rather than the
+ * question's alone.
  */
 const declinedApart = claim.triage === 'no' && question.triage !== 'no';
 const parkedApart = claim.triage === 'park' && question.triage !== 'park';
@@ -111,6 +114,8 @@ const ruledApart = declinedApart || parkedApart;
       {
         declinedApart
           ? 'This claim has not been checked and will not be. It is an allegation about a named person, and the site declines those; the reason is below.'
+          : parkedApart && claim.parked_at === 'framing'
+            ? 'This claim was parked before any research ran. The fairness check found that no published record can answer it at the level people assert it, so it is parked rather than answered on something that would not carry it. The reason is below, with the condition on which we come back to it.'
           : parkedApart
             ? 'This claim was put to the panel and came back without one. No published record can settle it as the claim was made, so it is parked rather than answered on something that would not carry it. The reason is below, with the condition on which we come back to it.'
             : question.triage === 'no'

@@ -168,7 +168,29 @@ that can park it. Nothing in this exception touches the bound
 above: the value of a cutoff is a framing question, capped at three, and
 is not reopened in a defect round.
 
-That confirmation is the last report a brief gets. If it returns further
+A second narrow exception (methodology v1.35). Where your third report
+says REVISE and its standing findings include that the identified record
+cannot answer a claim at the level people assert it, the editor may
+apply every standing finding of that report in your wording, remove
+each claim you found uncheckable and park it on the register with the
+instrument that would reopen it, and send the brief back to you once as
+a **park confirmation**. This route exists only for an editor who has
+conceded every standing finding; a brief whose editor disputes any of
+them is parked under the cap. You are the same seat that wrote the
+third report, and you re-examine no finding. Read the whole difference
+between the brief you last saw and this one. Confirm that each park is
+what you asked for and that every other edit traces to one of your
+findings; then re-apply checks 8 and 9 to what remains. Head the report
+`Verdict: PARKS CONFIRMED` when both hold and you find no framing
+finding against a remaining claim, and the brief freezes with the
+claims that remain. Head it `Verdict: PARKS REJECTED` when an edit does
+not trace to a finding, a park is not what you asked for, or a
+remaining claim carries a framing finding; the brief is then parked and
+reopens only on new intake evidence. FRAME OK and REVISE are not
+available in this round either, for the same reason as above. Nothing
+about a cutoff value is reopened here.
+
+A defect confirmation is the last report a brief gets. If it returns further
 defects and no framing finding, the editor corrects them in writing in
 the wording you supplied, records each against the finding it answers,
 and the brief freezes. There is no fifth report. So write the fourth

@@ -35,6 +35,7 @@ const short: ReadonlyArray<{ name: string; body: string; exits: readonly Exit[] 
     exits: [
       { kind: 'Loops back', text: 'A brief that fails its fairness check is rewritten before it can be frozen.' },
       { kind: 'Stops here', text: 'After three reports, a brief the check still calls unfair is parked until new evidence arrives.' },
+      { kind: 'Loops back', text: 'If the third report says the record cannot answer some claims, those claims are parked in public and the same checker confirms once what is left.' },
     ],
   },
   {
