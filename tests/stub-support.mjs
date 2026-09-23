@@ -11,6 +11,7 @@
  */
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import http from 'node:http';
+import https from 'node:https';
 import path from 'node:path';
 
 /**
@@ -69,16 +70,21 @@ export function leakedLine(mutate, home) {
  * One request, over real HTTP, to whatever loopback base URL the launcher put in
  * front of this stub. Real requests through the real proxy are the whole point:
  * what lands in `requests/` then is a genuine capture rather than a file a test
- * wrote where the capture should be.
+ * wrote where the capture should be. An https base is trusted the way codex
+ * trusts it: through the certificate named by CODEX_CA_CERTIFICATE, and nothing
+ * else.
  */
 export const send = (base, request, headers = {}) =>
   new Promise((resolve, reject) => {
     const url = new URL(base);
     const payload = request.body === null ? null : Buffer.from(JSON.stringify(request.body), 'utf8');
-    const outgoing = http.request(
+    const secure = url.protocol === 'https:';
+    const ca = secure && process.env.CODEX_CA_CERTIFICATE ? readFileSync(process.env.CODEX_CA_CERTIFICATE) : undefined;
+    const outgoing = (secure ? https : http).request(
       {
         host: url.hostname,
         port: url.port,
+        ...(ca ? { ca } : {}),
         method: request.method,
         path: request.url,
         headers: {

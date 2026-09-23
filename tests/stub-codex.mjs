@@ -35,7 +35,7 @@ let effort = 'high';
 for (let index = 0; index < argv.length; index += 1) {
   const value = argv[index];
   if (value === '-m') model = argv[index + 1] ?? '';
-  const match = /^openai_base_url=(http:\/\/[^/]+)\//.exec(value ?? '');
+  const match = /^openai_base_url=(https?:\/\/[^/]+)\//.exec(value ?? '');
   if (match) base = match[1];
 }
 // The effort is in CODEX_HOME/config.toml, which is what the launcher writes.

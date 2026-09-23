@@ -4,6 +4,7 @@
  *
  *   node scripts/panel/record-proxy.mjs --out <dir> --port-file <file>
  *                                      [--provider anthropic|openai]
+ *                                      [--tls-dir <dir>]
  *
  * This is the piece that was missing when v1.28 said the context boundary was
  * undemonstrated. Claude Code honours `ANTHROPIC_BASE_URL` and codex honours
@@ -56,7 +57,14 @@
  * An upstream error is written to `res-NNNN.txt` and returned to the CLI as a
  * 502. It is never swallowed: a run that failed to reach the API has to look
  * different from one that succeeded.
+ *
+ * `--tls-dir` makes the listener HTTPS. A fresh self-signed certificate for
+ * 127.0.0.1 is made with `openssl` before the listener opens and left at
+ * `<dir>/cert.pem` for the CLI to trust; the private key is read into memory
+ * and deleted from disk. It exists because codex 0.156 refuses a ChatGPT
+ * backend that is not an HTTPS origin, and a loopback listener is one.
  */
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import http from 'node:http';
 import https from 'node:https';
@@ -119,7 +127,35 @@ function decodeBody(buffer, encoding) {
   return { text: buffer.toString('base64'), note: ` (undecoded ${name}; body is base64)` };
 }
 
-export function startRecordingProxy({ out, upstream }) {
+/**
+ * Make a throwaway self-signed certificate for 127.0.0.1 in `dir`.
+ *
+ * Returns the PEM key and certificate. The certificate stays at
+ * `<dir>/cert.pem`; the key file is removed before this returns, so the key
+ * lives only in this process. Not a CA: rustls rejects a CA certificate
+ * presented as the server's own.
+ */
+export function makeLoopbackCertificate(dir) {
+  fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
+  const keyFile = path.join(dir, 'key.pem');
+  const certFile = path.join(dir, 'cert.pem');
+  execFileSync(
+    'openssl',
+    [
+      'req', '-x509', '-newkey', 'ec', '-pkeyopt', 'ec_paramgen_curve:prime256v1', '-nodes',
+      '-keyout', keyFile, '-out', certFile, '-days', '1', '-subj', '/CN=127.0.0.1',
+      '-addext', 'subjectAltName=IP:127.0.0.1',
+      '-addext', 'basicConstraints=critical,CA:FALSE',
+      '-addext', 'extendedKeyUsage=serverAuth',
+    ],
+    { stdio: ['ignore', 'ignore', 'pipe'] },
+  );
+  const key = fs.readFileSync(keyFile);
+  fs.unlinkSync(keyFile);
+  return { key, cert: fs.readFileSync(certFile) };
+}
+
+export function startRecordingProxy({ out, upstream, tls }) {
   fs.mkdirSync(out, { recursive: true });
   fs.writeFileSync(path.join(out, 'upstream.txt'), `${upstream}\n`);
 
@@ -127,7 +163,7 @@ export function startRecordingProxy({ out, upstream }) {
   const transport = target.protocol === 'https:' ? https : http;
   let counter = 0;
 
-  const server = http.createServer((req, res) => {
+  const handler = (req, res) => {
     const chunks = [];
     req.on('data', (chunk) => chunks.push(chunk));
     req.on('end', () => {
@@ -215,9 +251,9 @@ export function startRecordingProxy({ out, upstream }) {
       if (body.length > 0) upstreamRequest.write(body);
       upstreamRequest.end();
     });
-  });
+  };
 
-  return server;
+  return tls ? https.createServer(tls, handler) : http.createServer(handler);
 }
 
 /**
@@ -241,7 +277,7 @@ if (invoked === self) {
   }
   if (!flags.out || !flags['port-file']) {
     console.error(
-      'usage: node scripts/panel/record-proxy.mjs --out <dir> --port-file <file> [--provider anthropic|openai]',
+      'usage: node scripts/panel/record-proxy.mjs --out <dir> --port-file <file> [--provider anthropic|openai] [--tls-dir <dir>]',
     );
     process.exit(2);
   }
@@ -254,7 +290,17 @@ if (invoked === self) {
     process.exit(2);
   }
 
-  const server = startRecordingProxy({ out: flags.out, upstream });
+  let tls;
+  if (flags['tls-dir']) {
+    try {
+      tls = makeLoopbackCertificate(flags['tls-dir']);
+    } catch (error) {
+      console.error(`record-proxy: could not make a loopback certificate: ${error.message}`);
+      process.exit(2);
+    }
+  }
+
+  const server = startRecordingProxy({ out: flags.out, upstream, tls });
   server.listen(0, '127.0.0.1', () => {
     // Renamed into place rather than written in place: the launcher polls for
     // this file, and a half-written one would be read as a port number.

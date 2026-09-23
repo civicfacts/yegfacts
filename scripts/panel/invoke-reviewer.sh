@@ -76,7 +76,11 @@
 #   checks its request, and never sends the package.
 #
 #   openai (codex 0.154.0): the request is captured, because codex honours
-#   `openai_base_url` and `chatgpt_base_url`. Per-attempt CODEX_HOME holding
+#   `openai_base_url` and `chatgpt_base_url`. From 0.156.1 codex refuses a
+#   ChatGPT backend that is not an HTTPS origin ("workspace backend must use an
+#   HTTPS origin"), so for this seat the proxy serves HTTPS on 127.0.0.1 with a
+#   one-run self-signed certificate that codex trusts through
+#   CODEX_CA_CERTIFICATE; the capture is the same. Per-attempt CODEX_HOME holding
 #   nothing but a symlink to the credential and a two-line config; the host
 #   skills catalogue, plugins, apps, hooks, memories, multi-agent and the rest
 #   are switched off by flag. WHAT THIS CANNOT DO: shell and web run through one
@@ -465,11 +469,13 @@ PROXY_PID=""
 PROXY_PORT=""
 
 start_proxy() {
-  local out="$1" portfile="$2"
+  local out="$1" portfile="$2" tls_dir="${3:-}"
+  local tls=()
+  if [ -n "$tls_dir" ]; then tls=(--tls-dir "$tls_dir"); fi
   mkdir -p "$out"
   # The provider names the row in the proxy's fixed upstream table. This script
   # hands over a name, never a host.
-  node "$PROXY_SCRIPT" --out "$out" --port-file "$portfile" --provider "$PROVIDER" &
+  node "$PROXY_SCRIPT" --out "$out" --port-file "$portfile" --provider "$PROVIDER" ${tls[@]+"${tls[@]}"} &
   PROXY_PID=$!
   local waited=0
   while [ ! -f "$portfile" ]; do
@@ -853,7 +859,7 @@ CMD=()
 CLI_ENV=()
 
 build_command() {
-  local port="$1" home="$2" work="$3" log="$4" prompt="$5"
+  local port="$1" home="$2" work="$3" log="$4" prompt="$5" tls_dir="$6"
   CMD=()
   CLI_ENV=()
   case "$PROVIDER" in
@@ -876,7 +882,9 @@ build_command() {
     openai)
       # CMUX_CODEX_HOOKS_DISABLED is set whichever executable was resolved: the
       # wrapper reads it, and the vendor binary ignores it.
-      CLI_ENV=("CODEX_HOME=$home" "CMUX_CODEX_HOOKS_DISABLED=1")
+      # The proxy serves HTTPS on loopback for this seat (see the header), and
+      # CODEX_CA_CERTIFICATE adds its one-run certificate to codex's roots.
+      CLI_ENV=("CODEX_HOME=$home" "CMUX_CODEX_HOOKS_DISABLED=1" "CODEX_CA_CERTIFICATE=$tls_dir/cert.pem")
       # `--search` is a top-level flag and has to come before `exec`.
       # `--disable enable_request_compression` is what makes the capture
       # readable: without it the body is zstd and the denylist sees nothing.
@@ -884,8 +892,8 @@ build_command() {
       CMD=(
         "$CLI" --search exec -m "$MODEL" -C "$work" --skip-git-repo-check
         -s read-only --strict-config --ignore-rules --json
-        -c "openai_base_url=http://127.0.0.1:$port/backend-api/codex"
-        -c "chatgpt_base_url=http://127.0.0.1:$port/backend-api"
+        -c "openai_base_url=https://127.0.0.1:$port/backend-api/codex"
+        -c "chatgpt_base_url=https://127.0.0.1:$port/backend-api"
         -c skills.include_instructions=false -c project_doc_max_bytes=0
         --disable enable_request_compression
         --disable plugins --disable recommended_plugins --disable apps --disable hooks
@@ -1106,15 +1114,23 @@ run_seat() {
   local prompt="$4"
   local home="$WORK_ROOT/$kind-home"
   local log="$WORK_ROOT/$kind-cli.log"
+  local tls_dir=""
 
   case "$PROVIDER" in
-    openai) make_codex_home "$home" ;;
+    openai)
+      make_codex_home "$home"
+      # Beside the home, never in the archive, so the path the CLI is handed
+      # names no directory of the operator's. The proxy deletes the key itself.
+      tls_dir="$WORK_ROOT/$kind-tls"
+      HOME_FILES+=("$tls_dir/cert.pem")
+      HOME_DIRS=("$tls_dir" ${HOME_DIRS[@]+"${HOME_DIRS[@]}"})
+      ;;
     google) make_gemini_home "$home" ;;
   esac
 
   PROXY_PORT=""
-  if uses_proxy; then start_proxy "$dir/requests" "$dir/proxy-port"; fi
-  build_command "$PROXY_PORT" "$home" "$work" "$log" "$prompt"
+  if uses_proxy; then start_proxy "$dir/requests" "$dir/proxy-port" "$tls_dir"; fi
+  build_command "$PROXY_PORT" "$home" "$work" "$log" "$prompt" "$tls_dir"
 
   # The Gemini CLI carries its prompt in the argument vector and reads nothing
   # from stdin; the other two read it from stdin and take no prompt argument.
