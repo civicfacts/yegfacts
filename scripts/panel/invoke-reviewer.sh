@@ -555,10 +555,10 @@ case "$PROVIDER" in
     ALLOWED_TOOLS=""
     # gpt-6-sol is the seat (v1.34); gpt-6-luna is the uncounted shadow seat
     # under the same profile. gpt-5.6-sol is superseded and stays pinned, never
-    # default, while a framing check that ran on it is still open: v1.35 makes
-    # a park confirmation run on the same pinned model as the report it
-    # confirms, and lanes-and-congestion's check 3 ran on gpt-5.6-sol. Remove
-    # it when the last such check closes.
+    # default, because v1.35 makes a park confirmation run on the same pinned
+    # model as the report it confirms, and every framing check before v1.34
+    # ran on gpt-5.6-sol. Remove it when no brief parked on those checks can
+    # still be confirmed.
     PINNED_MODELS="gpt-6-sol,gpt-6-luna,gpt-5.6-sol"
     DEFAULT_MODEL="gpt-6-sol"
     BIN_HOOK="YEGFACTS_REVIEW_CODEX_BIN"
