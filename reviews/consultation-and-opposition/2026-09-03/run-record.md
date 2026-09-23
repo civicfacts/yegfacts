@@ -481,3 +481,38 @@ quota before research. Execution remains blocked pending independent
 source verification. The request and attempt metadata are preserved under
 `verification/`; no panel result or source-audit result exists. This does
 not change the historical freeze or mark the brief PARKED.
+
+## 2026-09-23: the source-existence audit ran twice on an empty package
+
+The editor sent `verification/source-existence-request.md` to the Google
+seat as the whole package. That file is the instruction text alone; it
+says "the brief below" and nothing follows it. The 2026-09-09 attempt had
+been assembled by hand with the brief appended and not committed, and
+the editor did not check the package before dispatch. Two runs on
+2026-09-23: 16:37Z (attempt 20260923T163724Z), refused at admission
+because a fetch returned 404 and the launcher read that as a broken
+tool, fixed in yegfacts PR #83 so a missing page counts as a research
+result; and 16:52Z (attempt bd42f64b4b3ca2e1), admitted, whose report
+says in its first section that no brief was in the input and audits
+nothing. That report is kept unedited as
+`verification/source-existence-audit-empty-package-2026-09-23.md`. The
+correct package, request plus the frozen brief verbatim, is committed as
+`verification/source-existence-package-2026-09-23.md` and is what the
+next run sends. Both runs were the editor's error and cost Google-seat
+quota the lanes-and-congestion round 1 also needs; that run goes first.
+Execution of the consultation panel remains blocked on the source audit.
+
+## 2026-09-23, 17:15Z: third run, correct package, quota exhausted mid-run
+
+Attempt `20260923T170604Z` (agy 1.2.9, gemini-3.8-flash-high), package
+`verification/source-existence-package-2026-09-23.md` (sha256
+f0c610c0457bd9552043ec0fc80c0119089380f956242da559377835da7001f1), canary
+pass. The research run made 117 steps over eight minutes and then agy
+returned "Individual quota reached ... Resets in 167h16m8s" with no final
+message. Nothing admitted, no report. The quota reset that morning had
+carried: two empty-package audits of eight to ten minutes each (both the
+editor's error, recorded above) and the lanes-and-congestion round 1
+Gemini seat (about eight minutes); this run was the fourth and did not
+finish. The seat is out until about 2026-09-30 16:30Z. The source audit
+stays owed, the panel stays blocked, and the package to send is the one
+named here.
