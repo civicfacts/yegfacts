@@ -172,7 +172,7 @@ const writePackage = (name: string) => {
 
 const readJson = (file: string) => JSON.parse(readFileSync(file, 'utf8')) as Record<string, unknown>;
 
-const MODELS: Record<Seat, string> = { openai: 'gpt-5.6-sol', google: 'gemini-3.8-flash-high' };
+const MODELS: Record<Seat, string> = { openai: 'gpt-6-sol', google: 'gemini-3.8-flash-high' };
 
 const invoke = (
   seat: Seat,
@@ -272,7 +272,7 @@ describe('the Codex seat', { timeout: 120_000 }, () => {
     const seen = readJson(path.join(one.dir, 'home-seen.json'));
     expect(seen.mode).toBe('700');
     expect(seen.entries).toContain('auth.json');
-    expect(seen.config).toBe('model = "gpt-5.6-sol"\nmodel_reasoning_effort = "high"\n');
+    expect(seen.config).toBe('model = "gpt-6-sol"\nmodel_reasoning_effort = "high"\n');
     expect(seen.auth_is_symlink).toBe(true);
     expect(seen.auth_target).toBe(one.credential);
     expect(seen.hooks_disabled).toBe('1');

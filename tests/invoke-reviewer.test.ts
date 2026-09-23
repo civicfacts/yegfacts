@@ -210,7 +210,7 @@ const initEvent = (over: Record<string, unknown> = {}) =>
     session_id: 'stub-session',
     tools: ['WebFetch', 'WebSearch'],
     mcp_servers: [],
-    model: 'claude-opus-5',
+    model: 'claude-opus-5-5',
     permissionMode: 'default',
     slash_commands: [],
     claude_code_version: STUB_VERSION,
@@ -468,9 +468,9 @@ describe('research admission', { timeout: 60_000 }, () => {
    * sent, exactly as an unknown vendor does.
    */
   it.each([
-    ['openai', 'gpt-5.6-sol', /no codex credential at \$HOME\/\.codex\/auth\.json/],
+    ['openai', 'gpt-6-sol', /no codex credential at \$HOME\/\.codex\/auth\.json/],
     ['google', 'gemini-3.8-flash-high', /no gemini credential at \$HOME\/\.gemini/],
-    ['mystery-vendor', 'claude-opus-5', /unknown provider/],
+    ['mystery-vendor', 'claude-opus-5-5', /unknown provider/],
   ])('refuses %s for research without invoking anything', (provider, model, expected) => {
     const stub = stubClaude();
     const attempt = path.join(stub.archive, 'refusal', provider);
@@ -500,7 +500,7 @@ describe('research admission', { timeout: 60_000 }, () => {
   });
 
   it.each([
-    ['openai', 'gpt-5.6-sol', /no codex credential at \$HOME\/\.codex\/auth\.json/],
+    ['openai', 'gpt-6-sol', /no codex credential at \$HOME\/\.codex\/auth\.json/],
     ['google', 'gemini-3.8-flash-high', /no gemini credential at \$HOME\/\.gemini/],
   ])('records %s with its own seat and its own reason when no model is named', (provider, model, expected) => {
     const stub = stubClaude();
@@ -526,8 +526,8 @@ describe('research admission', { timeout: 60_000 }, () => {
 
   it.each([
     ['model', ['--model', 'claude-fable-5-1', '--effort', 'high'], /model 'claude-fable-5-1' is not pinned/],
-    ['effort', ['--model', 'claude-opus-5', '--effort', 'max'], /reasoning effort 'max' is not pinned/],
-    ['low-effort', ['--model', 'claude-opus-5', '--effort', 'low'], /reasoning effort 'low' is not pinned/],
+    ['effort', ['--model', 'claude-opus-5-5', '--effort', 'max'], /reasoning effort 'max' is not pinned/],
+    ['low-effort', ['--model', 'claude-opus-5-5', '--effort', 'low'], /reasoning effort 'low' is not pinned/],
   ])('refuses an unpinned %s before the admission gate', (_label, args, expected) => {
     const stub = stubClaude();
     const attempt = path.join(stub.archive, 'pins', _label);
@@ -558,7 +558,7 @@ describe('research run', { timeout: 120_000 }, () => {
     const pkg = writePackage(`research-${name}.md`);
     const result = run(
       [INVOKE, '--purpose', 'research', '--provider', 'anthropic', '--package', pkg,
-        '--attempt-dir', attempt, '--model', 'claude-opus-5', '--effort', 'high', ...extra],
+        '--attempt-dir', attempt, '--model', 'claude-opus-5-5', '--effort', 'high', ...extra],
       stub.env,
     );
     return { ...result, attempt, pkg };
@@ -780,7 +780,7 @@ describe('candidate diagnostic', { timeout: 60_000 }, () => {
     const pkg = writePackage(`diag-${name}.md`);
     const result = run(
       [INVOKE, '--purpose', 'diagnostic', '--provider', 'anthropic', '--package', pkg,
-        '--attempt-dir', attempt, '--model', 'claude-opus-5', '--effort', 'high', ...extra],
+        '--attempt-dir', attempt, '--model', 'claude-opus-5-5', '--effort', 'high', ...extra],
       stub.env,
     );
     return { ...result, attempt, pkg };
@@ -1014,7 +1014,7 @@ describe('candidate diagnostic', { timeout: 60_000 }, () => {
     symlinkSync(process.execPath, path.join(tools, 'node'));
     const result = run(
       [INVOKE, '--purpose', 'diagnostic', '--provider', 'anthropic', '--package', writePackage('no-cli.md'),
-        '--attempt-dir', attempt, '--model', 'claude-opus-5', '--effort', 'high'],
+        '--attempt-dir', attempt, '--model', 'claude-opus-5-5', '--effort', 'high'],
       { ...stub.env, PATH: `${tools}:/usr/bin:/bin` },
     );
 
@@ -1058,7 +1058,7 @@ describe('archive safety', { timeout: 60_000 }, () => {
     const result = run(
       [INVOKE, '--purpose', 'research', '--provider', 'anthropic', '--package', writePackage('trav.md'),
         '--attempt-dir', `${stub.archive}/../${path.basename(escape)}/attempt-1`,
-        '--model', 'claude-opus-5', '--effort', 'high'],
+        '--model', 'claude-opus-5-5', '--effort', 'high'],
       stub.env,
     );
     expect(result.ok).toBe(false);
@@ -1075,7 +1075,7 @@ describe('archive safety', { timeout: 60_000 }, () => {
     const result = run(
       [INVOKE, '--purpose', 'research', '--provider', 'anthropic', '--package', writePackage('symlink.md'),
         '--attempt-dir', path.join(stub.archive, 'sneaky', 'attempt-1'),
-        '--model', 'claude-opus-5', '--effort', 'high'],
+        '--model', 'claude-opus-5-5', '--effort', 'high'],
       stub.env,
     );
     expect(result.ok).toBe(false);
@@ -1091,7 +1091,7 @@ describe('archive safety', { timeout: 60_000 }, () => {
 
     const result = run(
       [INVOKE, '--purpose', 'research', '--provider', 'anthropic', '--package', writePackage('collide.md'),
-        '--attempt-dir', attempt, '--model', 'claude-opus-5', '--effort', 'high'],
+        '--attempt-dir', attempt, '--model', 'claude-opus-5-5', '--effort', 'high'],
       stub.env,
     );
     expect(result.ok).toBe(false);
@@ -1472,7 +1472,7 @@ describe.runIf(process.env.YEGFACTS_LIVE_CANARY === '1')('live candidate diagnos
 
     const diagnostic = run(
       [INVOKE, '--purpose', 'diagnostic', '--provider', 'anthropic', '--package', writePackage('live.md'),
-        '--attempt-dir', attempt, '--model', 'claude-opus-5', '--effort', 'high', '--max-budget-usd', '2'],
+        '--attempt-dir', attempt, '--model', 'claude-opus-5-5', '--effort', 'high', '--max-budget-usd', '2'],
       env,
     );
     expect(diagnostic.ok).toBe(true);

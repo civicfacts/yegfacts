@@ -540,8 +540,8 @@ case "$PROVIDER" in
     CLI="claude"
     PROFILE_NAME="claude-safe-web-candidate"
     ALLOWED_TOOLS="WebFetch,WebSearch"
-    PINNED_MODELS="claude-opus-5"
-    DEFAULT_MODEL="claude-opus-5"
+    PINNED_MODELS="claude-opus-5-5"
+    DEFAULT_MODEL="claude-opus-5-5"
     STREAM_FORMAT="claude"
     EXPECTED_UPSTREAM="https://api.anthropic.com"
     ;;
@@ -553,8 +553,8 @@ case "$PROVIDER" in
     # codex does not report a tool inventory in its stream, so there is no list
     # to compare one against. What settles this seat is the captured request.
     ALLOWED_TOOLS=""
-    PINNED_MODELS="gpt-5.6-sol"
-    DEFAULT_MODEL="gpt-5.6-sol"
+    PINNED_MODELS="gpt-6-sol,gpt-6-luna"
+    DEFAULT_MODEL="gpt-6-sol"
     BIN_HOOK="YEGFACTS_REVIEW_CODEX_BIN"
     REAL_BIN="$HOME/.bun/install/global/node_modules/@openai/codex-darwin-arm64/vendor/aarch64-apple-darwin/bin/codex"
     ;;

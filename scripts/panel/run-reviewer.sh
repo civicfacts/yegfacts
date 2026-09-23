@@ -6,6 +6,7 @@
 #   scripts/panel/run-reviewer.sh claude electric-buses 2026-08-31 1
 #
 # Providers: claude | codex | agy  (aliases: anthropic, gpt/openai, gemini/google)
+#           luna | shadow  (the uncounted shadow seat, v1.34; needs --into)
 #
 # Isolation is NOT this script's business, and the older version of this comment
 # claiming a fresh mktemp -d was the boundary was wrong: a CLI loads its
@@ -57,6 +58,8 @@ usage() {
   cat >&2 <<'USAGE'
 usage: scripts/panel/run-reviewer.sh <provider> <story> <date> <round> [options]
   provider  claude | codex | agy   (aliases: anthropic, gpt, openai, gemini, google)
+            luna | shadow          the uncounted shadow seat (v1.34): round 1 only,
+                                   and --into is required so it never lands in round1/
   story     story slug, e.g. electric-buses
   date      run date, e.g. 2026-08-31
   round     1 (blind research) or 2 (cross-review)
@@ -89,6 +92,16 @@ case "$INTO" in
 esac
 
 case "$ROUND" in 1|2) ;; *) echo "round must be 1 or 2, got '$ROUND'" >&2; exit 2 ;; esac
+case "$PROVIDER_ARG" in
+  luna|shadow)
+    # The shadow seat is never merged. scripts/merge.ts reads every JSON file
+    # in a round directory, so the only way to keep that promise is to refuse
+    # to write into one. Round 2 hands a seat the other seats' findings, which
+    # a seat that is not on the panel has no business reading.
+    [ -n "$INTO" ] || { echo "the shadow seat needs --into <dirname>; it must never be written into round1/" >&2; exit 2; }
+    [ "$ROUND" = "1" ] || { echo "the shadow seat runs round 1 only" >&2; exit 2; }
+    ;;
+esac
 
 # ---------------------------------------------------------------------------
 # Provider → pinned command (spec §5.2). The output filename is the panel's
@@ -104,17 +117,35 @@ EFFORT="high"
 
 case "$PROVIDER_ARG" in
   claude|anthropic)
-    # v1.15 (2026-09-02): moved off Fable 5.1, whose allowance on the
-    # founder's subscription is nearly used up. A cost decision, not a
-    # finding about which model reviews better; nothing here measures that.
-    # Runs already published under Fable 5.1 keep the model their manifests
-    # record.
-    SLOT="claude"; CLI="claude"; MODEL_ID="claude-opus-5"
-    PROVIDER_CANONICAL="anthropic"; SEAT="Claude Opus 5"
+    # v1.34 (2026-09-23): Opus 5 to Opus 5.5, the day after its release. A
+    # cost decision, as v1.15's move off Fable 5.1 was: the new model is
+    # priced a fifth below the old one and its vendor claims fewer invented
+    # figures; nothing here measures either. Opus 5.5 defaults to medium
+    # effort, so the pin below is what keeps this seat at the level v1.6
+    # pinned. Runs already published under Opus 5 or Fable 5.1 keep the model
+    # their manifests record.
+    SLOT="claude"; CLI="claude"; MODEL_ID="claude-opus-5-5"
+    PROVIDER_CANONICAL="anthropic"; SEAT="Claude Opus 5.5"
     ;;
   codex|gpt|openai)
-    SLOT="gpt"; CLI="codex"; MODEL_ID="gpt-5.6-sol"
-    PROVIDER_CANONICAL="openai"; SEAT="GPT-5.6 Sol"
+    # v1.34 (2026-09-23): GPT-5.6 Sol to GPT-6 Sol, released the same day as
+    # Opus 5.5 at half the price of the seat it replaces. Same kind of
+    # decision as above; runs published under GPT-5.6 Sol keep their model.
+    SLOT="gpt"; CLI="codex"; MODEL_ID="gpt-6-sol"
+    PROVIDER_CANONICAL="openai"; SEAT="GPT-6 Sol"
+    ;;
+  luna|shadow)
+    # v1.34 (2026-09-23): the shadow seat. GPT-6 Luna is the cheapest model
+    # any panel vendor sells, and whether a model that cheap can hold a
+    # research seat is an open question this site answers by measurement,
+    # not by guessing. It runs the same frozen package as the three counted
+    # seats and its answer is committed, but it is never merged and never
+    # synthesised: it must be run with --into (a directory other than
+    # round<N>/), because scripts/merge.ts reads every JSON file in a round
+    # directory, and the run's synthesis_scope names no shadow. The
+    # comparison against the counted seats is written into run-record.md.
+    SLOT="gpt-luna"; CLI="codex"; MODEL_ID="gpt-6-luna"
+    PROVIDER_CANONICAL="openai"; SEAT="GPT-6 Luna (shadow, not counted)"
     ;;
   agy|gemini|google)
     # v1.20 (2026-09-03): the seat moves from Gemini 3.1 Pro to Gemini 3.8
