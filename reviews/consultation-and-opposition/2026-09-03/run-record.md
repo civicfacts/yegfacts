@@ -501,3 +501,18 @@ correct package, request plus the frozen brief verbatim, is committed as
 next run sends. Both runs were the editor's error and cost Google-seat
 quota the lanes-and-congestion round 1 also needs; that run goes first.
 Execution of the consultation panel remains blocked on the source audit.
+
+## 2026-09-23, 17:15Z: third run, correct package, quota exhausted mid-run
+
+Attempt `20260923T170604Z` (agy 1.2.9, gemini-3.8-flash-high), package
+`verification/source-existence-package-2026-09-23.md` (sha256
+f0c610c0457bd9552043ec0fc80c0119089380f956242da559377835da7001f1), canary
+pass. The research run made 117 steps over eight minutes and then agy
+returned "Individual quota reached ... Resets in 167h16m8s" with no final
+message. Nothing admitted, no report. The quota reset that morning had
+carried: two empty-package audits of eight to ten minutes each (both the
+editor's error, recorded above) and the lanes-and-congestion round 1
+Gemini seat (about eight minutes); this run was the fourth and did not
+finish. The seat is out until about 2026-09-30 16:30Z. The source audit
+stays owed, the panel stays blocked, and the package to send is the one
+named here.
