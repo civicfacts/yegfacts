@@ -1,16 +1,16 @@
 # Review brief: Do Edmonton's bike lanes ease traffic congestion or make it worse?
 
-Status: **REVISED 2026-09-23 under methodology v1.35 after framing check 3;
-awaiting the park confirmation. NOT frozen; no panel may run.** Checks 1,
-2 and 3 (`framing/check-1.md`, `check-2.md`, `check-3.md`), all from the
-OpenAI seat through `scripts/panel/audit-package.sh`, each returned
-REVISE. Check 3 parked the brief under the v1.12 cap on 2026-09-16. Under
-v1.35 the editor has applied every standing finding of check 3 in the
-checker's wording (`framing/response-3.md`), removed the three claims
-check 3 found uncheckable at the asserted level from the identified
-record, and parked them on the register with the instrument that would
-reopen each. One claim remains. This brief goes back to the same seat
-once, as a park confirmation, and freezes on PARKS CONFIRMED. One claim,
+Status: **FROZEN 2026-09-23 on PARKS CONFIRMED (`framing/check-4.md`,
+methodology v1.35).** Checks 1, 2 and 3 (`framing/check-1.md`,
+`check-2.md`, `check-3.md`), all from the OpenAI seat through
+`scripts/panel/audit-package.sh`, each returned REVISE, and check 3
+parked the brief under the v1.12 cap on 2026-09-16. Under v1.35 the
+editor applied every standing finding of check 3 in the checker's
+wording (`framing/response-3.md`), removed the three claims check 3
+found uncheckable at the asserted level from the identified record, and
+parked them on the register with the instrument that would reopen each.
+The same seat confirmed the parks and re-applied checks 8 and 9 on
+2026-09-23. One claim goes to the panel. One claim,
 `79-street-relieves-75-street`, left the brief after check 1; see
 "Dropped at the brief".
 Drafted 2026-09-16, revised twice that day, and revised once more on

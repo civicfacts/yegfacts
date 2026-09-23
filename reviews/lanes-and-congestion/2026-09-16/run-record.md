@@ -157,3 +157,28 @@ whole difference between the check-3 brief and this one in the package.
 PARKS CONFIRMED freezes the brief with claim 3; PARKS REJECTED parks it
 under the cap, reopening only on new intake evidence. Its result is
 recorded below when it lands.
+
+## 2026-09-23, later: PARKS CONFIRMED, brief frozen
+
+The park confirmation ran on the OpenAI seat (gpt-5.6-sol, the seat that
+wrote check 3) through the shared launcher at 15:51Z, attempt
+`2e6dff95dc39e17b`, profile codex-captured-read-only-0.156.1, after
+yegfacts PR #80 moved the capture proxy to HTTPS on loopback for
+codex-cli 0.156.1. The first launch at 15:26Z (attempt under
+`audits/park-confirmation-lanes-and-congestion/openai/20260923T152624Z`)
+failed at the canary on that CLI change and sent nothing.
+
+`framing/check-4.md`: **PARKS CONFIRMED.** All three parks confirmed as
+what report 3 asked for, with the reopening instruments matching. The
+difference trace found every substantive edit traces to report 3,
+including the as-of date moving to the snapshot's capture date. Checks 8
+and 9 OK on the remaining claim; the report notes that neither side is
+invited to treat the antecedent fact as resolving the parked dispute.
+
+**The freeze is the sha256 of `brief.md`, and it is
+`ddaa04ae53a85b81e63c126a69de275943585f23e0b6a221e87088c134f0aff9`**, taken after the status
+block above was written. Register: `lanes-and-congestion` moves to
+`lifecycle: briefed`; the three parked claims already carry their state.
+Next: round 1 on `city-removed-traffic-lanes`, three seats, under
+whichever seat pins main carries when it runs (D-0041 moves them); the
+story leads with the three parks.
