@@ -5,48 +5,88 @@ runs:
   - provider: anthropic
     round: 1
     command: scripts/panel/invoke-reviewer.sh --provider anthropic --model claude-opus-5-5 --effort high --package package.md
-    cli_version: 2.1.280 (Claude Code)
+    cli_version: 2.1.281 (Claude Code)
     model_id: claude-opus-5-5
     seat: Claude Opus 5.5
     reasoning_effort: high
     prompt_sha256: e86e4caf15257b8eb9e56763e9e6716d3a6119325cb9e1ea4ca6e0f8574f5823
-    methodology_version: "1.36"
-    started_at: 2026-09-23T16:19:34Z
-    finished_at: 2026-09-23T16:19:42Z
+    methodology_version: "1.38"
+    started_at: 2026-09-23T19:41:35Z
+    finished_at: 2026-09-23T19:50:11Z
     attempts: 1
-    status: failed
+    status: ok
     package_files:
       - brief.md
       - reviewer.md
       - review-schema.json
     attempts_detail:
       - attempt: 1
-        attempt_id: 8b92f1e800aa48f7
-        status: failed
+        attempt_id: d2658c44f0afbcad
+        status: ok
         purpose: research
         exit_code: 0
-        profile: claude-safe-web-candidate-2.1.280
+        profile: claude-safe-web-candidate-2.1.281
         model_id: claude-opus-5-5
         reasoning_effort: high
-        cli_version: 2.1.280
-        canary: fail
-        structure: fail
-        context_proof: unavailable
+        cli_version: 2.1.281
+        canary: pass
+        structure: pass
+        context_proof: pass
         record_kind: request
-        admitted_for_research: false
+        operator_path_notes: 0
+        admitted_for_research: true
         canary_context_proof: pass
-        admission_reason: the launcher exited before reaching a decision
-        schema: not-reached
-        reason: "the candidate profile failed its canary: the structural check or the capture check did not pass. The package was never sent."
+        admission_reason: the canary and the research run each passed their structural check and their capture check against https://api.anthropic.com under claude-safe-web-candidate-2.1.281.
+        schema: valid
+        reason: the canary and the research run each passed their structural check and their capture check against https://api.anthropic.com under claude-safe-web-candidate-2.1.281.
         package_sha256: e86e4caf15257b8eb9e56763e9e6716d3a6119325cb9e1ea4ca6e0f8574f5823
-        canary_stdout_sha256: 378cfd0382dc9b308d3927d138b0344687ed9fa795fd624a2610464a7b29c53c
+        stdout_sha256: d8a7661c4faaaf4bf765990793000eee440098af9c8f311644242bbfae65fadd
+        final_message_sha256: b05a29151e205fd58f2ca3fe18856e48dd69abbffaa58203a3672a9aab816309
+        canary_stdout_sha256: d5d9beddaf6a7a306fd628a64e3d4c2a4a0d98023ae9111a213a411026bacd68
         canary_stderr_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
         canary_final_message_sha256: 717dc08b1ccee4b69fa13ca51b2dfc6ae34f9630076cb1d9f277625a33c7819c
-        canary_report_sha256: 95da156180a2c836a723cc18fdc49cd1d26ae7df336cb6bb1d54f022765808bd
+        canary_report_sha256: 9a5c78a68daf67d5b62251abe13fd1f4e9881f18f88071dbdc831d9332fece4b
+        proof_report_sha256: 909d4aca843e5f6c17599352b0a69ac59484039c7532369b81b47e07492b94d7
+        upstream: https://api.anthropic.com
         canary_upstream: https://api.anthropic.com
+        request_count: 48
         canary_request_count: 4
+        requests_searched: 47
         canary_requests_searched: 3
+        package_seen: 21
         canary_package_seen: 2
+        capture_check_sources:
+          - name: $HOME/.claude/CLAUDE.md
+            present: true
+            lines_checked: 35
+          - name: $HOME/CLAUDE.md
+            present: true
+            lines_checked: 97
+          - name: $HOME/AGENTS.md
+            present: true
+            lines_checked: 97
+          - name: $HOME/.codex/AGENTS.md
+            present: true
+            lines_checked: 97
+          - name: <repo>/CLAUDE.md
+            present: true
+            lines_checked: 18
+          - name: <repo>/AGENTS.md
+            present: true
+            lines_checked: 19
+          - name: $HOME/.claude/projects/*/memory/*.md
+            present: true
+            lines_checked: 1337
+            files: 101
+          - name: the repository path
+            present: true
+            lines_checked: 1
+          - name: the home directory
+            present: true
+            lines_checked: 1
+          - name: the canary token
+            present: false
+            lines_checked: 0
         canary_capture_check_sources:
           - name: $HOME/.claude/CLAUDE.md
             present: true
@@ -68,8 +108,8 @@ runs:
             lines_checked: 19
           - name: $HOME/.claude/projects/*/memory/*.md
             present: true
-            lines_checked: 1283
-            files: 100
+            lines_checked: 1332
+            files: 101
           - name: the repository path
             present: true
             lines_checked: 1
@@ -79,7 +119,8 @@ runs:
           - name: the canary token
             present: true
             lines_checked: 1
-        canary_requests_manifest_sha256: eb40d988de17865d50cebc21ca62d7b4e71a5b568e40fa868238447f14873829
+        requests_manifest_sha256: dfa4d6b1b1f1620b7541882db462b0a1a5f517f8cd1471ac4c62dbdd6f14cb21
+        canary_requests_manifest_sha256: 454226024ddb999e4eac003f37277f69f09c57c4eaccd1e609ff62cf3bda519a
   - provider: google
     round: 1
     command: scripts/panel/invoke-reviewer.sh --provider google --model gemini-3.8-flash-high --effort high --package package.md
