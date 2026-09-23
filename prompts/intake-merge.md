@@ -64,6 +64,26 @@ asserted it, not as a question.
 note follows these instructions and is the same paragraph the extractor
 seats were given. Where seats disagree, decide it yourself from the forms.
 
+## A claim the register already holds
+
+A source is rarely the first place a claim is made. When one of your merged
+claims and a claim in `intake/register.yaml` would be settled by **the same
+evidence**, the test above for joining two extractor claims, the register
+already holds it. Set `"register_id"` on your merged claim to that register
+claim's `id`, and keep everything else as you would for any claim: the forms,
+`from`, `side` and `commenters`. The register generator then adds this
+source's wordings to the existing claim instead of registering a second claim
+beside it.
+
+Do not rewrite the existing claim's wording, and do not stretch it to fit.
+Your `claim` sentence stays as your own reading of this source; the register
+keeps the wording it already has. One register claim can take several of your
+merged claims, and a merged claim takes at most one `register_id`.
+
+When you are unsure, do not fold. A near-duplicate costs a duplicated check. A
+wrong fold puts a person's words under a claim they did not make, on a page
+that already has other people's words and perhaps a finding.
+
 ## Forms
 
 Carry **every** form from every seat onto the claim it belongs to. A form is
@@ -121,6 +141,17 @@ A single JSON object, and nothing else — no markdown fence, no commentary:
       "forms": [
         {"index": 2, "commenter": "Boreal Hare I.", "quote": "Edmonton recorded nearly 1.3 million cycling trips across its automated counters", "seats": ["haiku", "flash", "luna"]}
       ]
+    },
+    {
+      "id": "roads-in-poor-condition",
+      "claim": "Edmonton's roads are in poor condition.",
+      "side": "against",
+      "commenters": 1,
+      "register_id": "basic-services-in-poor-condition",
+      "from": {"flash": ["e-017"], "luna": ["e-020"]},
+      "forms": [
+        {"index": 31, "commenter": "Rustic Lynx P.", "quote": "the roads are a disaster", "seats": ["flash", "luna"]}
+      ]
     }
   ],
   "dropped": [
@@ -131,7 +162,8 @@ A single JSON object, and nothing else — no markdown fence, no commentary:
 
 `id` is a short slug, unique in the file, describing the claim.
 `from` maps each seat name to the extractor ids it contributed; omit a seat
-that found nothing for that claim.
+that found nothing for that claim. `register_id` appears only on a claim the
+register already holds.
 
 Order the claims by how many seats found them, most first.
 

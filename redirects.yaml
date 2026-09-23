@@ -126,6 +126,20 @@ redirects:
     why: "The money-for-bike-lanes question is what the active-transportation check answers."
 
   # ---------------------------------------------------------------------------
+  # Claims folded onto a claim the register already held (D-0030)
+  #
+  # A second source registered a claim beside one the first source had already
+  # raised. Its wording now sits on the older claim, and the question it was
+  # alone under is gone with it. Both were published addresses.
+  # ---------------------------------------------------------------------------
+  - from: /questions/road-condition
+    to: /questions/infrastructure-deficit
+    why: "Its one claim was the first source's road-condition claim, and its wording moved there."
+  - from: /claims/tax-funded-road-condition
+    to: /claims/basic-services-in-poor-condition
+    why: "The same claim, registered twice; the second source's wording is on the first."
+
+  # ---------------------------------------------------------------------------
   # The six published articles
   #
   # Each is a question under the slug it was published with, so every one of

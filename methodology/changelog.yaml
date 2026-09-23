@@ -14,6 +14,31 @@
 # The sentence above used to describe a check that did not exist: the rule sat
 # as a TODO in scripts/validate.ts, and a change under methodology/ shipped
 # clean. It runs now.
+- version: "1.36"
+  date: "2026-09-23"
+  scope: register-fold
+  summary: >
+    When a new source raises a claim the register already holds, the merge
+    now marks it with that claim's id, and its wordings are added to the
+    existing claim under the new source's name. No near-duplicate claim is
+    registered beside it. The register generator prints this as an addition
+    to the existing claim. On the second source, one claim was folded this
+    way and one was kept apart.
+  highlights:
+    - "Decision D-0030 required this, and the second source showed it could not happen. The merge prompt gave the seat the register and did not say what to do with a match, and the generator could only print new claims. The prompt now says: when a merged claim and a register claim would be settled by the same evidence, set `register_id` to the register claim's id and keep the forms, seats, side and commenters as usual. It does not rewrite the existing wording, and when unsure it does not fold. A near-duplicate costs one extra check. A wrong fold puts a person's words under a claim they did not make."
+    - "The generator prints a third block beside the new questions and claims. For each existing claim, it lists the wordings to append, the seats to add and how much the claim's people count and its question's count rise. It still prints and does not write. A folded claim is not grouped into a question, because it already has one, and the grouping check accepts it being absent and refuses it being present."
+    - "One pseudonym is one person within one source. A wording from another source therefore always adds one person to the count, even if the pseudonym matches one already counted. The site stopped printing people counts under D-0030 for this reason. The register validator already checked each wording against the capture its own source names, so a claim with wordings from two sources passes. Tests now cover that case."
+    - "On the second source, the claim that Edmonton's roads are in poor condition although taxes pay for them was folded onto the first source's claim about the poor condition of roads and basic services. The same road-condition records settle both, and that claim already held wordings about roads alone. The question the second source had registered around it held nothing else and was removed. Its address now redirects to the older question. The claim that Edmonton plans to raise taxes substantially over four years was kept apart from the property-taxes question, because past bills and a future budget plan are settled by different records."
+  links:
+    - label: The merge prompt
+      href: https://github.com/civicfacts/yegfacts/blob/main/prompts/intake-merge.md
+    - label: What was folded on the second source, and why
+      href: https://github.com/civicfacts/yegfacts/blob/main/reviews/intake/edmonton-rant-and-rave-2026-09-10/fold-note.md
+  note: >
+    A register that grows a near-duplicate for each source stops being a
+    register. The second source is the first time this could happen, and the
+    step was missing. It has been added now, before a third source makes the
+    fix a cleanup job.
 - version: "1.35"
   date: "2026-09-23"
   scope: park-confirmation-after-the-third-report

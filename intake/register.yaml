@@ -68,12 +68,17 @@
 # ---------------
 #
 # question:     the id of the `questions` entry it is checked under.
+# source:       the source the claim was first registered from. A later source
+#               that raises the same claim adds its wordings to `variations`
+#               rather than registering a second claim (D-0030), so a claim's
+#               wordings can come from more than one source.
 # proposition:  what would have to be true, in one plain sentence. This is what
 #               the site shows as the claim.
 # wording:      the representative captured quote, verbatim.
 # side:         for | against | neither — which side of the source's argument
 #               the claim serves.
-# accounts:     how many distinct people argued it, either way. Somebody counted
+# accounts:     how many distinct people argued it, either way, counting one
+#               pseudonym per source. Somebody counted
 #               here may have been arguing against it, which is why the site
 #               says a claim was discussed by so many and never that it was
 #               agreed.
@@ -274,8 +279,8 @@ questions:
     reason: "Infrastructure-condition reports and budgets can show the size of Edmonton’s renewal shortfall, what was funded and whether money was actually redirected from the cited services."
     grouping_note: "The City's infrastructure deficit reporting and its renewal and operating budgets cover both the condition of the basics and what was funded instead."
     accounts:
-      total: 15
-      against: 15
+      total: 16
+      against: 16
     run: reviews/intake/yegscoop-2026-08-26
   - id: property-taxes
     recorded: "2026-09-03"
@@ -995,19 +1000,6 @@ questions:
     accounts:
       total: 2
       against: 2
-    run: reviews/intake/edmonton-rant-and-rave-2026-09-10
-  - id: road-condition
-    recorded: "2026-09-16"
-    source: edmonton-rant-and-rave-2026-09-10
-    question: "Are Edmonton's tax-funded roads in poor condition?"
-    topics: [transportation, city-finances]
-    lifecycle: registered
-    triage: go
-    publication: unpublished
-    reason: "The City's infrastructure condition reports rate what share of Edmonton's roads are in poor condition, which tests whether residents are getting passable roads for their taxes."
-    accounts:
-      total: 1
-      against: 1
     run: reviews/intake/edmonton-rant-and-rave-2026-09-10
   - id: withheld-edmonton-rant-and-rave-2026-09-10-q1
     recorded: "2026-09-16"
@@ -2005,9 +1997,10 @@ claims:
     proposition: "Edmonton's roads, alleys and basic services are in poor condition, with potholes unfixed and snow and grass left uncut."
     wording: "The city can’t even cut the grass or remove snow"
     side: against
-    accounts: 10
+    accounts: 11
     seats:
       - luna
+      - sonnet
     variations:
       - wording: "The city can’t even cut the grass or remove snow"
         source_id: yegscoop-2026-08-26
@@ -2039,6 +2032,9 @@ claims:
       - wording: "What you DID tell me: Fix our roads and sidewalks. Improve snow clearing. Community safety. Quality of life."
         source_id: yegscoop-2026-08-26
         author_name: "Councillor Jennifer Rice"
+      - wording: "Taxes also pay for the roads .... Oh wait those suck too!"
+        source_id: edmonton-rant-and-rave-2026-09-10
+        author_name: "Aurora Chickadee H."
   - id: spending-100-million-despite-deficit
     recorded: "2026-09-03"
     origin: captured
@@ -4735,22 +4731,6 @@ claims:
       - wording: "parking enforcement is a joke now 3 days to come"
         source_id: edmonton-rant-and-rave-2026-09-10
         author_name: "Amber Vole C."
-  - id: tax-funded-road-condition
-    recorded: "2026-09-16"
-    origin: captured
-    source: edmonton-rant-and-rave-2026-09-10
-    question: road-condition
-    proposition: "Edmonton's roads are in poor condition despite being funded through taxes."
-    wording: "Taxes also pay for the roads .... Oh wait those suck too!"
-    side: against
-    accounts: 1
-    seats:
-      - luna
-      - sonnet
-    variations:
-      - wording: "Taxes also pay for the roads .... Oh wait those suck too!"
-        source_id: edmonton-rant-and-rave-2026-09-10
-        author_name: "Aurora Chickadee H."
   - id: withheld-edmonton-rant-and-rave-2026-09-10-1
     recorded: "2026-09-16"
     origin: captured

@@ -19,8 +19,10 @@
  *
  * Reads `merged.json` and `groups.json`, in either spelling: a run merged
  * before D-0029 says `propositions` and `stories`, one merged after says
- * `claims` and `questions`. Non-zero exit on a merged claim that is missing,
- * placed twice, or invented; on a claim that mixes sides; on a claim whose
+ * `claims` and `questions`. A merged claim carrying `register_id` is one the
+ * register already holds; its wordings go onto that claim, so it must be in no
+ * group. Non-zero exit on a merged claim that is missing, placed twice,
+ * invented, or folded onto the register and grouped anyway; on a claim that mixes sides; on a claim whose
  * wording is not verbatim from one of the claims it folds in; and on an id that
  * could not be a URL. Whether a two-sided question presupposes its answer is a
  * judgement, so those questions are printed for a person to read rather than
@@ -37,6 +39,8 @@ type MergedClaim = {
   proposition?: string;
   side?: string;
   commenters?: number;
+  /** Set when the register already holds the claim; see intake-register.ts. */
+  register_id?: string;
   forms: unknown[];
 };
 type Merged = { claims?: MergedClaim[]; propositions?: MergedClaim[] };
@@ -118,6 +122,12 @@ for (const question of questions) {
         problems.push(`invented claim  ${claim.id} cites ${id}, which is not in merged.json`);
         continue;
       }
+      if (part.register_id !== undefined) {
+        problems.push(
+          `folded claim  ${id} — the register already holds it as ${part.register_id}; ` +
+            `it belongs in no group`,
+        );
+      }
       const seen = placed.get(id);
       if (seen) seen.push(claim.id);
       else placed.set(id, [claim.id]);
@@ -140,8 +150,11 @@ for (const question of questions) {
 for (const [id, claims] of placed) {
   if (claims.length > 1) problems.push(`placed twice  ${id} — in ${claims.join(', ')}`);
 }
-for (const id of parts.keys()) {
-  if (!placed.has(id)) problems.push(`unplaced  ${id} — in merged.json, in no claim`);
+const foldedOntoRegister = mergedClaims.filter((claim) => claim.register_id !== undefined);
+for (const [id, part] of parts) {
+  if (!placed.has(id) && part.register_id === undefined) {
+    problems.push(`unplaced  ${id} — in merged.json, in no claim`);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -169,6 +182,7 @@ console.log(`  merged claims  ${mergedClaims.length}`);
 console.log(`  claims         ${claimCount}`);
 console.log(`  questions      ${questions.length}`);
 console.log(`  merged claims placed  ${foldedCount}`);
+console.log(`  folded onto the register  ${foldedOntoRegister.length}`);
 console.log(`  questions carrying both sides  ${bothSided}`);
 
 const sizes = questions
@@ -197,4 +211,6 @@ if (problems.length > 0) {
   process.exit(1);
 }
 
-console.log('\nintake-groups: every merged claim placed once, no claim mixes sides');
+console.log(
+  '\nintake-groups: every merged claim placed once or folded onto the register, no claim mixes sides',
+);

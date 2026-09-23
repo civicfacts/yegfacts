@@ -107,6 +107,10 @@ Every merged-claim id you were given appears in exactly one claim, under
 exactly one question. None twice, none missing, none invented. A script checks
 it.
 
+The one exception is a merged claim carrying `register_id`. The merge found
+that the register already holds it, so it already has a claim and a question,
+and its wordings are added there. Leave it out of every group.
+
 ## Output
 
 A single JSON object and nothing else. No fence, no commentary.

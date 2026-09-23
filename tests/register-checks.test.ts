@@ -814,6 +814,53 @@ describe('registerProblems: a variation is somebody’s own words', () => {
   });
 
   /**
+   * D-0030: a claim the register already holds takes a second source's
+   * wordings. `source` names where the claim was first registered; each
+   * wording is checked against the capture its own `source_id` names.
+   */
+  describe('from a second source', () => {
+    const SECOND = 'intake/captures/second';
+    const secondSource = { ...source, id: 'second', capture: SECOND, run: 'reviews/intake/second' };
+    const twoWorld = world({
+      isDirectory: (path) =>
+        [CAPTURE, SECOND, 'reviews/intake/thread', 'reviews/intake/second'].includes(path),
+      capture: (path: string) =>
+        path === CAPTURE
+          ? readCapture(COMMENTS)
+          : path === SECOND
+            ? readCapture(
+                JSON.stringify({ index: 1, commenter: 'Amber Vole C.', text: 'Lanes gone everywhere.' }),
+              )
+            : undefined,
+    });
+    const fromSecond = variation({
+      wording: 'Lanes gone everywhere.',
+      source_id: 'second',
+      author_name: 'Amber Vole C.',
+    });
+    const across = (second: Record<string, unknown>) =>
+      check(
+        {
+          sources: [source, secondSource],
+          questions: [question({ accounts: { total: 3, against: 2, for: 1 } })],
+          claims: [claim({ accounts: 2, variations: [variation(), second] }), otherSide()],
+        },
+        twoWorld,
+      );
+
+    it('accepts wordings from two sources on one claim', () => {
+      expect(across(fromSecond)).toEqual([]);
+    });
+
+    it('checks each wording against its own source’s capture, not the claim’s', () => {
+      expect(across({ ...fromSecond, source_id: 'thread' })).toEqual([
+        'lanes-removed variations[1]: the wording is in no comment in thread\'s capture: "Lanes gone everywhere."',
+        'lanes-removed variations[1]: author_name "Amber Vole C." is not a commenter in thread\'s capture',
+      ]);
+    });
+  });
+
+  /**
    * A capture that cannot be read is reported by the directory rule; the
    * wording rules stay quiet rather than reporting the same defect again as
    * dozens of false quote failures.
