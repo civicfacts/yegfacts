@@ -940,8 +940,23 @@ export function checkGeminiStructure(facts: GeminiFacts): Verdict {
   // So `ERROR` is accepted only when every failed step failed at the permission
   // check. A step that failed for any other reason — a tool that broke, a model
   // error — is named and fails, which is what `SUCCESS` was standing in for.
+  //
+  // One more reading, learned from the first source-existence audit on this
+  // seat. A fetch tool that reached the web and was told the page is not there
+  // has not broken: the tool ran, the remote answered, and the answer is a
+  // research result. On an audit whose job is to find which sources exist, a
+  // 404 is the finding itself, and a rule that refused the run for it would
+  // refuse every audit that found a missing source. So an allowed fetch tool
+  // whose error names an HTTP status from the remote is not counted here. A
+  // fetch that could not run at all still is.
   const refusal = /permission/i;
-  const other = facts.steps.filter((step) => step.state === 'ERROR' && !refusal.test(step.error ?? ''));
+  const remoteStatus = /\bstatus code \d{3}\b/i;
+  const other = facts.steps.filter(
+    (step) =>
+      step.state === 'ERROR' &&
+      !refusal.test(step.error ?? '') &&
+      !(GEMINI_ALLOWED_TOOLS.has(step.tool ?? '') && remoteStatus.test(step.error ?? '')),
+  );
   if (facts.result_status === null) failures.push('the run did not report a result status');
   else if (facts.result_status !== 'SUCCESS' && facts.result_status !== 'ERROR') {
     failures.push(`result status was "${facts.result_status}"`);
