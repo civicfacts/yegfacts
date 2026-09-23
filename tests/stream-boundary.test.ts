@@ -521,6 +521,41 @@ describe('the gemini stream', () => {
     );
   });
 
+  it('accepts an allowed fetch tool that reached the web and was told the page is missing', () => {
+    // A 404 from the remote is a research result, and on a source-existence
+    // audit it is the finding; the tool did not break.
+    const missing = geminiStream({ status: 'ERROR' }).replace(
+      step({ step_index: 1, state: 'DONE', step_type: 'tool', tool_name: 'read_url_content', tool_info: { parameters: { Url: 'https://example.com/' } } }),
+      step({
+        step_index: 1,
+        state: 'ERROR',
+        step_type: 'tool',
+        tool_name: 'read_url_content',
+        tool_info: {
+          parameters: { Url: 'https://example.com/' },
+          error: { message: 'Failed to fetch document content at https://example.com/: failed to get URL https://example.com/: status code 404' },
+        },
+      }),
+    );
+    expect(checkGeminiStructure(readGeminiStream(missing)).ok).toBe(true);
+  });
+
+  it('still fails a fetch tool that could not run at all', () => {
+    const broken = geminiStream({ status: 'ERROR' }).replace(
+      step({ step_index: 1, state: 'DONE', step_type: 'tool', tool_name: 'read_url_content', tool_info: { parameters: { Url: 'https://example.com/' } } }),
+      step({
+        step_index: 1,
+        state: 'ERROR',
+        step_type: 'tool',
+        tool_name: 'read_url_content',
+        tool_info: { parameters: { Url: 'https://example.com/' }, error: { message: 'the fetch tool crashed before sending' } },
+      }),
+    );
+    expect(checkGeminiStructure(readGeminiStream(broken)).failures.join()).toMatch(
+      /step 1 \(read_url_content\) failed for a reason other than the permission check: the fetch tool crashed/,
+    );
+  });
+
   it('fails a step that failed for any other reason', () => {
     // The message must not mention a permission check, because that is the one
     // failure this profile is supposed to produce.
