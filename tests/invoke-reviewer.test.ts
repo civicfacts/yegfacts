@@ -1241,7 +1241,23 @@ describe('retry mechanics', { timeout: 120_000 }, () => {
 
   const archiveEnv = () => {
     const archive = mkdtempSync(path.join(root, 'retry-archive-'));
-    return { ...process.env, YEGFACTS_REVIEW_ARCHIVE: archive } as NodeJS.ProcessEnv;
+    // The runner's preflight (methodology v1.37) asks the seat's CLI for its
+    // version before assembling a package. These tests replace the launcher
+    // with a fixture and never reach a CLI, so a stub that answers only the
+    // version check stands in for it; the machine running the tests may have
+    // no real one.
+    const bin = path.join(archive, 'bin');
+    mkdirSync(bin);
+    writeFileSync(
+      path.join(bin, 'claude'),
+      '#!/usr/bin/env bash\nif [ "${1:-}" = "--version" ]; then echo "0.0.0-stub (Claude Code)"; exit 0; fi\necho "stub claude: unexpected call $*" >&2; exit 1\n',
+    );
+    chmodSync(path.join(bin, 'claude'), 0o755);
+    return {
+      ...process.env,
+      PATH: `${bin}${path.delimiter}${process.env.PATH ?? ''}`,
+      YEGFACTS_REVIEW_ARCHIVE: archive,
+    } as NodeJS.ProcessEnv;
   };
 
   const attempts = (env: NodeJS.ProcessEnv) => {
