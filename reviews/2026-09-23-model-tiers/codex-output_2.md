@@ -1,6 +1,6 @@
 OpenAI Codex v0.156.1
 --------
-workdir: /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+workdir: <repo>
 model: gpt-6-sol
 provider: openai
 approval: never
@@ -14,11 +14,11 @@ I've revised the change based on your feedback. The updated review context is in
 codex
 I’ll read the revised context, compare each listed file against the current `origin/main`, and trace the guard and its tests. I’ll also re-read the public wording for claims the code does not support.
 exec
-/bin/zsh -lc 'cat docs/reviews/codex-8c367083-review_2.md' in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc 'cat docs/reviews/codex-8c367083-review_2.md' in <repo>
  succeeded in 0ms:
 # Review context, round 2
 
-Repository root: /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+Repository root: <repo>
 (branch model-tiers, rebased onto origin/main 74c16b0 which now carries v1.35
 and v1.36; compare with `git diff origin/main -- <file>`). Working tree clean.
 
@@ -49,7 +49,7 @@ What changed since round 1:
    the v1.34 entry and DESIGN.md.
 
 exec
-/bin/zsh -lc "sed -n '1,35p' /Users/iabdulin/Sites/yegfacts-board/context/current-state.md; sed -n '1,22p' /Users/iabdulin/Sites/yegfacts-board/context/open-questions.md" in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc "sed -n '1,35p' <board>/context/current-state.md; sed -n '1,22p' <board>/context/open-questions.md" in <repo>
  succeeded in 0ms:
 # Current state — verified 2026-09-23
 
@@ -110,7 +110,7 @@ every rehydration.
 
 
 exec
-/bin/zsh -lc 'cat /Users/iabdulin/Sites/yegfacts-board/roles/steward.md' in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc 'cat <board>/roles/steward.md' in <repo>
  succeeded in 0ms:
 # Stew — YEGFacts Project Steward
 
@@ -214,7 +214,7 @@ the founder agrees. Decisions are immutable once recorded; supersede,
 never edit.
 
 exec
-/bin/zsh -lc 'git rev-parse --short HEAD 2>/dev/null; git rev-parse --short origin/main 2>/dev/null; git status --short 2>/dev/null' in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc 'git rev-parse --short HEAD 2>/dev/null; git rev-parse --short origin/main 2>/dev/null; git status --short 2>/dev/null' in <repo>
  succeeded in 0ms:
 2d91035
 74c16b0
@@ -222,7 +222,7 @@ exec
 codex
 The branch is clean at `2d91035`, with `origin/main` at `74c16b0`. The board state is current for today and still records seven published stories. I’m checking the revised guard against reserved and symlinked directory names, then whether the tests exercise that boundary.
 exec
-/bin/zsh -lc 'git diff origin/main -- docs/DESIGN.md' in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc 'git diff origin/main -- docs/DESIGN.md' in <repo>
  succeeded in 0ms:
 diff --git a/docs/DESIGN.md b/docs/DESIGN.md
 index f8ee0ab..0fe57ca 100644
@@ -266,7 +266,7 @@ index f8ee0ab..0fe57ca 100644
  unrestricted fallback. The candidate Claude Code profile uses safe mode, empty
 
 exec
-/bin/zsh -lc 'git diff origin/main -- methodology/changelog.yaml' in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc 'git diff origin/main -- methodology/changelog.yaml' in <repo>
  succeeded in 0ms:
 diff --git a/methodology/changelog.yaml b/methodology/changelog.yaml
 index c80ddad..2a014ec 100644
@@ -314,7 +314,7 @@ index c80ddad..2a014ec 100644
    scope: intake-source-note
 
 exec
-/bin/zsh -lc 'git diff origin/main -- scripts/panel/run-reviewer.sh' in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc 'git diff origin/main -- scripts/panel/run-reviewer.sh' in <repo>
  succeeded in 0ms:
 diff --git a/scripts/panel/run-reviewer.sh b/scripts/panel/run-reviewer.sh
 index 3e2c630..3209c91 100755
@@ -405,7 +405,7 @@ index 3e2c630..3209c91 100755
      # v1.20 (2026-09-03): the seat moves from Gemini 3.1 Pro to Gemini 3.8
 
 exec
-/bin/zsh -lc 'git diff origin/main -- scripts/panel/invoke-reviewer.sh' in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc 'git diff origin/main -- scripts/panel/invoke-reviewer.sh' in <repo>
  succeeded in 0ms:
 diff --git a/scripts/panel/invoke-reviewer.sh b/scripts/panel/invoke-reviewer.sh
 index eb5278a..8b291cc 100755
@@ -441,7 +441,7 @@ index eb5278a..8b291cc 100755
      ;;
 
 exec
-/bin/zsh -lc 'git diff origin/main -- tests/invoke-reviewer.test.ts' in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc 'git diff origin/main -- tests/invoke-reviewer.test.ts' in <repo>
  succeeded in 0ms:
 diff --git a/tests/invoke-reviewer.test.ts b/tests/invoke-reviewer.test.ts
 index 7eb8a33..ecd0577 100644
@@ -606,7 +606,7 @@ index 7eb8a33..ecd0577 100644
      expect(diagnostic.ok).toBe(true);
 
 exec
-/bin/zsh -lc 'git diff origin/main -- tests/three-seats.test.ts' in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc 'git diff origin/main -- tests/three-seats.test.ts' in <repo>
  succeeded in 0ms:
 diff --git a/tests/three-seats.test.ts b/tests/three-seats.test.ts
 index c1a92ea..ae4e217 100644
@@ -632,7 +632,7 @@ index c1a92ea..ae4e217 100644
      expect(seen.hooks_disabled).toBe('1');
 
 exec
-/bin/zsh -lc "nl -ba scripts/panel/install-output.ts | sed -n '1,235p'; nl -ba scripts/panel/record-run.ts | sed -n '1,165p'" in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc "nl -ba scripts/panel/install-output.ts | sed -n '1,235p'; nl -ba scripts/panel/record-run.ts | sed -n '1,165p'" in <repo>
  succeeded in 0ms:
      1	/**
      2	 * Put a finished artefact at its destination, or fail — never over the top of
@@ -850,7 +850,7 @@ exec
    153	console.log(`recorded ${entry.provider} round ${entry.round} (${entry.status}) in ${relative(manifestPath)}`);
 
 exec
-/bin/zsh -lc "nl -ba scripts/panel/run-reviewer.sh | sed -n '76,112p;173,190p;335,365p;505,530p'; nl -ba docs/DESIGN.md | sed -n '338,386p'; nl -ba methodology/changelog.yaml | sed -n '1,115p'" in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc "nl -ba scripts/panel/run-reviewer.sh | sed -n '76,112p;173,190p;335,365p;505,530p'; nl -ba docs/DESIGN.md | sed -n '338,386p'; nl -ba methodology/changelog.yaml | sed -n '1,115p'" in <repo>
  succeeded in 0ms:
     76	
     77	[ "$#" -ge 4 ] || usage
@@ -1130,7 +1130,7 @@ exec
    115	    record says so and why.
 
 exec
-/bin/zsh -lc "git log --oneline -4 origin/main 2>/dev/null; rg -n 'v1\\.35|v1\\.36|version: \"1\\.(34|35|36)\"' methodology/changelog.yaml | head -20" in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc "git log --oneline -4 origin/main 2>/dev/null; rg -n 'v1\\.35|v1\\.36|version: \"1\\.(34|35|36)\"' methodology/changelog.yaml | head -20" in <repo>
  succeeded in 0ms:
 74c16b0 Fold a claim the register already holds onto the existing entry (methodology v1.36) (#79)
 574487e Park confirmation after the third framing report (methodology v1.35) (#77)
@@ -1142,7 +1142,7 @@ d411c6c Second whole-source intake: Edmonton Rant and Rave thread of 2026-09-10 
 85:    - "New review runs pin the Claude seat as claude-opus-5-5 and the OpenAI seat as gpt-6-sol, both at high. Opus 5.5 defaults to medium effort, so the explicit pin is what keeps the seat at the level v1.6 chose. The Google seat stays on gemini-3.8-flash-high. Runs already published under Opus 5, Fable 5.1 or GPT-5.6 Sol keep the model their manifests record. GPT-5.6 Sol also stays on the launcher's pinned list, never as the default, for as long as a framing check that ran on it is open: v1.35 has a park confirmation run on the same pinned model as the report it confirms, and one such check is open. It leaves the list when the last of them closes."
 
 exec
-/bin/zsh -lc "rg -n 'symlink|shadow-|--into' tests/invoke-reviewer.test.ts scripts/panel/install-output.ts scripts/panel/run-reviewer.sh | tail -80" in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc "rg -n 'symlink|shadow-|--into' tests/invoke-reviewer.test.ts scripts/panel/install-output.ts scripts/panel/run-reviewer.sh | tail -80" in <repo>
  succeeded in 0ms:
 scripts/panel/install-output.ts:17: * The destination is not followed: a symlink sitting there, live or dangling,
 scripts/panel/install-output.ts:31: * sides, because through a symlinked checkout the two spellings of the same
@@ -1184,14 +1184,14 @@ tests/invoke-reviewer.test.ts:1385:    symlinkSync(path.join(root, 'no-such-revi
 codex
 The new `shadow-*` check closes the plain-name bypasses, and the added tests cover those cases. I’m checking one remaining path: whether an existing `shadow-` directory can be a symlink into `round1`, and whether the output installer follows that parent link. I’ll run the focused test files as well.
 exec
-/bin/zsh -lc 'npx vitest run tests/invoke-reviewer.test.ts tests/three-seats.test.ts' in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc 'npx vitest run tests/invoke-reviewer.test.ts tests/three-seats.test.ts' in <repo>
 web search: 
 web search: https://platform.claude.com/docs/en/about-claude/pricing
 web search: 
 web search: '$0.10'
  succeeded in 44314ms:
 
- RUN  v4.1.11 /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+ RUN  v4.1.11 <repo>
 
 
  Test Files  2 passed (2)
@@ -1201,7 +1201,7 @@ web search: '$0.10'
 
 
 exec
-/bin/zsh -lc "bash -c 'pins=\"gpt-6-sol,gpt-6-luna,gpt-5.6-sol\"; for model in \"*\" \"gpt-6-*\" \"gpt-6-s?l\" \"gpt-6-luna\" \"gpt-6-lun\"; do case \","'$pins," in *",$model,"*) printf "%s ACCEPTED'"\\n\" \""'$model";; *) printf "%s refused'"\\n\" \""'$model";; esac; done'"' " in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc "bash -c 'pins=\"gpt-6-sol,gpt-6-luna,gpt-5.6-sol\"; for model in \"*\" \"gpt-6-*\" \"gpt-6-s?l\" \"gpt-6-luna\" \"gpt-6-lun\"; do case \","'$pins," in *",$model,"*) printf "%s ACCEPTED'"\\n\" \""'$model";; *) printf "%s refused'"\\n\" \""'$model";; esac; done'"' " in <repo>
  succeeded in 0ms:
 * refused
 gpt-6-* refused
@@ -1214,7 +1214,7 @@ The focused tests pass: 91 passed, 1 skipped. The official pricing pages support
 codex
 ## Required fix
 
-[run-reviewer.sh](/Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers/scripts/panel/run-reviewer.sh:102) checks that `--into` starts with `shadow-`, but not where that directory resolves. If `<run>/shadow-round1` is a symlink to `<run>/round1`, the runner follows it at line 365 and can install `round1/gpt-luna.json`. Refuse symlinked shadow destinations before invocation and add that case to [the guard tests](/Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers/tests/invoke-reviewer.test.ts:1209). Until then, the “never merged” statements in [DESIGN.md](/Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers/docs/DESIGN.md:368) and [changelog.yaml](/Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers/methodology/changelog.yaml:88) overclaim.
+[run-reviewer.sh](scripts/panel/run-reviewer.sh:102) checks that `--into` starts with `shadow-`, but not where that directory resolves. If `<run>/shadow-round1` is a symlink to `<run>/round1`, the runner follows it at line 365 and can install `round1/gpt-luna.json`. Refuse symlinked shadow destinations before invocation and add that case to [the guard tests](tests/invoke-reviewer.test.ts:1209). Until then, the “never merged” statements in [DESIGN.md](docs/DESIGN.md:368) and [changelog.yaml](methodology/changelog.yaml:88) overclaim.
 
 The direct-name guard cases and model pins are covered; 91 focused tests passed, with 1 skipped. DESIGN.md now separates historical commands from current pins, v1.35 and v1.36 are preserved, and the price ratios match [Anthropic’s](https://platform.claude.com/docs/en/about-claude/pricing) and [OpenAI’s](https://openai.com/index/introducing-gpt-6-sol-and-luna/) published prices.
 
@@ -1223,7 +1223,7 @@ tokens used
 164,953
 ## Required fix
 
-[run-reviewer.sh](/Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers/scripts/panel/run-reviewer.sh:102) checks that `--into` starts with `shadow-`, but not where that directory resolves. If `<run>/shadow-round1` is a symlink to `<run>/round1`, the runner follows it at line 365 and can install `round1/gpt-luna.json`. Refuse symlinked shadow destinations before invocation and add that case to [the guard tests](/Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers/tests/invoke-reviewer.test.ts:1209). Until then, the “never merged” statements in [DESIGN.md](/Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers/docs/DESIGN.md:368) and [changelog.yaml](/Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers/methodology/changelog.yaml:88) overclaim.
+[run-reviewer.sh](scripts/panel/run-reviewer.sh:102) checks that `--into` starts with `shadow-`, but not where that directory resolves. If `<run>/shadow-round1` is a symlink to `<run>/round1`, the runner follows it at line 365 and can install `round1/gpt-luna.json`. Refuse symlinked shadow destinations before invocation and add that case to [the guard tests](tests/invoke-reviewer.test.ts:1209). Until then, the “never merged” statements in [DESIGN.md](docs/DESIGN.md:368) and [changelog.yaml](methodology/changelog.yaml:88) overclaim.
 
 The direct-name guard cases and model pins are covered; 91 focused tests passed, with 1 skipped. DESIGN.md now separates historical commands from current pins, v1.35 and v1.36 are preserved, and the price ratios match [Anthropic’s](https://platform.claude.com/docs/en/about-claude/pricing) and [OpenAI’s](https://openai.com/index/introducing-gpt-6-sol-and-luna/) published prices.
 

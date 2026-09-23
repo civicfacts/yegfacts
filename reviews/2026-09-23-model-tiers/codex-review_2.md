@@ -1,6 +1,6 @@
 # Review context, round 2
 
-Repository root: /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+Repository root: <repo>
 (branch model-tiers, rebased onto origin/main 74c16b0 which now carries v1.35
 and v1.36; compare with `git diff origin/main -- <file>`). Working tree clean.
 

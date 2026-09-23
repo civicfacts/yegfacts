@@ -1,6 +1,6 @@
 OpenAI Codex v0.156.1
 --------
-workdir: /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+workdir: <repo>
 model: gpt-6-sol
 provider: openai
 approval: never
@@ -14,7 +14,7 @@ Round 3. Context in ./docs/reviews/codex-8c367083-review_3.md. Re-inspect script
 codex
 I’ll read the round-3 context, inspect the three named diffs against `origin/main`, and check that the symlink regression test exercises the same path as a real shadow run.
 exec
-/bin/zsh -lc 'cat docs/reviews/codex-8c367083-review_3.md' in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc 'cat docs/reviews/codex-8c367083-review_3.md' in <repo>
  succeeded in 0ms:
 # Review context, round 3
 
@@ -29,7 +29,7 @@ expects the refusal with no launcher call. DESIGN.md's shadow paragraph now says
 "or that is a symbolic link".
 
 exec
-/bin/zsh -lc 'git diff origin/main -- scripts/panel/run-reviewer.sh' in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc 'git diff origin/main -- scripts/panel/run-reviewer.sh' in <repo>
  succeeded in 0ms:
 diff --git a/scripts/panel/run-reviewer.sh b/scripts/panel/run-reviewer.sh
 index 3e2c630..5037262 100755
@@ -133,9 +133,9 @@ index 3e2c630..5037262 100755
  
 
 exec
-/bin/zsh -lc "sed -n '1,26p' /Users/iabdulin/Sites/yegfacts-board/context/current-state.md" in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc "sed -n '1,26p' <board>/context/current-state.md" in <repo>
 exec
-/bin/zsh -lc 'git diff origin/main -- tests/invoke-reviewer.test.ts' in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc 'git diff origin/main -- tests/invoke-reviewer.test.ts' in <repo>
  succeeded in 0ms:
 # Current state — verified 2026-09-23
 
@@ -357,7 +357,7 @@ index 7eb8a33..a3b5367 100644
      expect(diagnostic.ok).toBe(true);
 
 exec
-/bin/zsh -lc 'git diff origin/main -- docs/DESIGN.md' in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc 'git diff origin/main -- docs/DESIGN.md' in <repo>
  succeeded in 0ms:
 diff --git a/docs/DESIGN.md b/docs/DESIGN.md
 index f8ee0ab..cc5a0aa 100644
@@ -402,18 +402,18 @@ index f8ee0ab..cc5a0aa 100644
  unrestricted fallback. The candidate Claude Code profile uses safe mode, empty
 
 exec
-/bin/zsh -lc 'git rev-parse --short HEAD 2>/dev/null; git rev-parse --short origin/main 2>/dev/null; git status --short 2>/dev/null' in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc 'git rev-parse --short HEAD 2>/dev/null; git rev-parse --short origin/main 2>/dev/null; git status --short 2>/dev/null' in <repo>
  succeeded in 0ms:
 1d12c3b
 74c16b0
 
 exec
-/bin/zsh -lc 'npx vitest run tests/invoke-reviewer.test.ts' in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc 'npx vitest run tests/invoke-reviewer.test.ts' in <repo>
 exec
-/bin/zsh -lc 'bash -n scripts/panel/run-reviewer.sh' in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc 'bash -n scripts/panel/run-reviewer.sh' in <repo>
  succeeded in 0ms:
 exec
-/bin/zsh -lc "nl -ba scripts/panel/run-reviewer.sh | sed -n '90,110p;180,205p;315,345p;350,370p'; nl -ba tests/invoke-reviewer.test.ts | sed -n '1185,1245p'; nl -ba docs/DESIGN.md | sed -n '359,379p'" in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc "nl -ba scripts/panel/run-reviewer.sh | sed -n '90,110p;180,205p;315,345p;350,370p'; nl -ba tests/invoke-reviewer.test.ts | sed -n '1185,1245p'; nl -ba docs/DESIGN.md | sed -n '359,379p'" in <repo>
  succeeded in 0ms:
     90	done
     91	case "$INTO" in
@@ -598,11 +598,11 @@ exec
    379	unrestricted fallback. The candidate Claude Code profile uses safe mode, empty
 
 exec
-/bin/zsh -lc 'git diff --check origin/main -- scripts/panel/run-reviewer.sh tests/invoke-reviewer.test.ts docs/DESIGN.md' in /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+/bin/zsh -lc 'git diff --check origin/main -- scripts/panel/run-reviewer.sh tests/invoke-reviewer.test.ts docs/DESIGN.md' in <repo>
  succeeded in 0ms:
  succeeded in 43437ms:
 
- RUN  v4.1.11 /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+ RUN  v4.1.11 <repo>
 
 
  Test Files  1 passed (1)
@@ -614,11 +614,11 @@ exec
 codex
 The symlink check runs before package assembly, dry-run, invocation, and directory creation. Its new test creates a link into `round1` and verifies the runner refuses it. I’m waiting for the focused test run to finish, then I’ll give the verdict.
 codex
-The symlink fix closes the reported bypass. [run-reviewer.sh](/Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers/scripts/panel/run-reviewer.sh:186) refuses a linked shadow directory before invocation; [the regression test](/Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers/tests/invoke-reviewer.test.ts:1214) exercises that path; and [DESIGN.md](/Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers/docs/DESIGN.md:368) matches the guard. The focused suite passed: 63 tests passed, 1 skipped. Shell syntax and diff checks passed.
+The symlink fix closes the reported bypass. [run-reviewer.sh](scripts/panel/run-reviewer.sh:186) refuses a linked shadow directory before invocation; [the regression test](tests/invoke-reviewer.test.ts:1214) exercises that path; and [DESIGN.md](docs/DESIGN.md:368) matches the guard. The focused suite passed: 63 tests passed, 1 skipped. Shell syntax and diff checks passed.
 
 VERDICT: APPROVED
 tokens used
 186,959
-The symlink fix closes the reported bypass. [run-reviewer.sh](/Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers/scripts/panel/run-reviewer.sh:186) refuses a linked shadow directory before invocation; [the regression test](/Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers/tests/invoke-reviewer.test.ts:1214) exercises that path; and [DESIGN.md](/Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers/docs/DESIGN.md:368) matches the guard. The focused suite passed: 63 tests passed, 1 skipped. Shell syntax and diff checks passed.
+The symlink fix closes the reported bypass. [run-reviewer.sh](scripts/panel/run-reviewer.sh:186) refuses a linked shadow directory before invocation; [the regression test](tests/invoke-reviewer.test.ts:1214) exercises that path; and [DESIGN.md](docs/DESIGN.md:368) matches the guard. The focused suite passed: 63 tests passed, 1 skipped. Shell syntax and diff checks passed.
 
 VERDICT: APPROVED

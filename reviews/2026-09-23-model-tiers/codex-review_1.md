@@ -1,6 +1,6 @@
 # Review context
 
-Repository root: /Users/iabdulin/Sites/yegfacts/.claude/worktrees/model-tiers
+Repository root: <repo>
 (a git worktree on branch model-tiers; compare against origin/main, commit
 f360010; the change under review is commit 0054a9e, PR #78).
 
