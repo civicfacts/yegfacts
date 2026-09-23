@@ -52,15 +52,19 @@ const findingCounts = CANONICAL_FINDINGS.map((finding) => ({
  * is the round the sentence is about.
  */
 let reviewerCount: number | undefined;
+let vendorCount: number | undefined;
 const newest = rows[0];
 if (newest) {
   const manifestPath = path.join(process.cwd(), newest.claim.data.review_run, 'run.yaml');
   if (existsSync(manifestPath)) {
     const manifest = loadRunManifest(manifestPath);
-    const providers = new Set(
-      manifest.runs.filter((seat) => seat.round === 1).map((seat) => seat.provider),
+    // Seats that answered: rows without a status predate the field (v1.28).
+    const seats = manifest.runs.filter(
+      (seat) => seat.round === 1 && (seat.status === undefined || seat.status === 'ok'),
     );
-    reviewerCount = providers.size > 0 ? providers.size : undefined;
+    const providers = new Set(seats.map((seat) => seat.provider));
+    reviewerCount = seats.length > 0 ? seats.length : undefined;
+    vendorCount = providers.size > 0 ? providers.size : undefined;
   }
 }
 
@@ -361,9 +365,11 @@ const jsonLd = [
           <h3 class="font-sans text-base leading-[1.3] font-bold">Blind research</h3>
           <p class="mt-2 text-base text-ink">
             {
-              reviewerCount
-                ? `${reviewerCount} AI reviewers, each from a different company, research every claim without seeing each other's work.`
-                : "AI reviewers from different companies research every claim without seeing each other's work."
+              reviewerCount && vendorCount && vendorCount === reviewerCount
+                ? `On the newest finding, ${reviewerCount} AI reviewers, each from a different company, researched the claim without seeing each other's work. Every finding names its own panel.`
+                : reviewerCount && vendorCount
+                  ? `On the newest finding, ${reviewerCount} AI reviewer seats from ${vendorCount} companies researched the claim without seeing each other's work; seats that share a company are not independent of each other. Every finding names its own panel.`
+                  : "AI reviewers research every claim without seeing each other's work. Every finding names its own panel."
             }{' '}
             <a href="/methodology#stages" class="link">How the rounds run</a>.
           </p>
