@@ -16,7 +16,11 @@ for cli in "${clis[@]}"; do
     continue
   fi
   printf '%s: %s\n' "$cli" "$("$cli" --version 2>&1)"
-  if [[ "$cli" == claude ]]; then
+  if [[ "$cli" == agy ]]; then
+    # The retired Google seat, reachable only to finish a run frozen before
+    # its retirement. Its login lives in its own home; the canary proves it.
+    printf 'agy login: proven by the canary, not checked here\n'
+  elif [[ "$cli" == claude ]]; then
     # Claude Code keeps its login in the Keychain and exposes no read that
     # does not also start a session. The launcher's canary, the first thing
     # every attempt does, is what proves that login; this step proves the

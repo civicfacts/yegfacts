@@ -291,6 +291,18 @@ describe('capture check', () => {
     expect(result.operator_path_notes).toBe(0);
   });
 
+  it('cuts the note in the tool result and still fails the same words in a text block beside it', () => {
+    const machine = stubMachine('save-note');
+    const result = check(machine, [
+      connectivity(),
+      sessionTitle(),
+      toolResultTurn([saveNote(machine.home)], [saveNote(machine.home)]),
+    ]);
+    expect(result.status).toBe('fail');
+    expect(result.failures).toEqual(['req-0003.json: carries the home directory line 1']);
+    expect(result.operator_path_notes).toBe(1);
+  });
+
   it('does not cut a note whose path is not under the CLI projects directory', () => {
     const machine = stubMachine('save-note');
     const result = check(machine, [

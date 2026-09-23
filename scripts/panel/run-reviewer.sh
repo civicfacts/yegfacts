@@ -210,6 +210,15 @@ else
 fi
 [ -f "$PROMPT_FILE" ] || { echo "prompt not found: $PROMPT_FILE" >&2; exit 1; }
 
+# Methodology v1.37: the seat's CLI is checked for a version and, where its
+# CLI exposes one, a reported login before anything is assembled, so a dead
+# seat is found here rather than after a package exists. The launcher's canary
+# is the quota probe. A dry run assembles and prints; it checks nothing.
+if [ "$DRY_RUN" != "1" ]; then
+  "$REPO_ROOT/scripts/panel/preflight.sh" "$CLI" >&2 \
+    || { echo "[$SLOT round $ROUND] preflight failed for $CLI; nothing was assembled or sent" >&2; exit 2; }
+fi
+
 # ---------------------------------------------------------------------------
 # Scratch directory: where the package is assembled and the extracted review is
 # staged. It is no longer the isolation boundary and no longer holds the only
@@ -328,14 +337,6 @@ COMMAND_STRING="scripts/panel/invoke-reviewer.sh --provider $PROVIDER_CANONICAL 
 ARCHIVE_ROOT="$("$INVOKE" --archive-root)"
 RUN_STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 ATTEMPT_BASE="$ARCHIVE_ROOT/$STORY/$RUN_DATE/${INTO:-round$ROUND}/$SLOT/$RUN_STAMP"
-
-# Methodology v1.37: the seat's CLI is checked for a version and a reported
-# login before a package is assembled, so a dead seat is found here rather
-# than after a run has been filed. The launcher's canary is the quota probe.
-if [ "$DRY_RUN" != "1" ] && [ "$CLI" != "agy" ]; then
-  "$REPO_ROOT/scripts/panel/preflight.sh" "$CLI" >&2 \
-    || { echo "[$SLOT round $ROUND] preflight failed for $CLI; nothing was assembled or sent" >&2; exit 2; }
-fi
 
 if [ "$DRY_RUN" = "1" ]; then
   echo "DRY RUN — no CLI executed, nothing written under reviews/"
