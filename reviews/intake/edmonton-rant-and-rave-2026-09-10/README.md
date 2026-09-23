@@ -155,6 +155,10 @@ so the fold cannot happen under the current scripts. Existing entries were
 not edited in this run at the founder's direction. This is the D-0030
 finding, recorded rather than fixed here.
 
+Methodology v1.34 added the missing step. `fold-note.md` records what it did
+to these two pairs: the road-condition claim was folded onto the older claim,
+and the four-year tax plan stays a question of its own.
+
 ## Topics
 
 Waste collection has no topic in the site's vocabulary, so the nine questions
@@ -176,3 +180,5 @@ shape for "no topic applies". A waste-and-utilities topic is a change under
 - `triage-stories.md`, `triage-stories.json`, `triage-<reader>.raw.txt` —
   the two readers, their split, and the combined decision.
 - `manifest.md` — every command, model and timing.
+- `fold-note.md` — the two claims checked against the register afterwards,
+  under methodology v1.34, and why one was folded and one was not.

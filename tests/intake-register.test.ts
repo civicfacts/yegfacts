@@ -14,8 +14,10 @@
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
 import {
+  foldEntries,
   registerEntries,
   toYamlBlock,
+  type RegisterClaim,
   type Groups,
   type Merged,
   type Triage,
@@ -350,5 +352,124 @@ describe('toYamlBlock', () => {
   it('parses a questions block back to the entries too', () => {
     const block = toYamlBlock(run(triage).questions, 'question');
     expect(parse(`questions:\n${block}`).questions).toEqual(run(triage).questions);
+  });
+});
+
+/**
+ * D-0030: a claim the register already holds takes this source's wordings
+ * instead of a near-duplicate beside it. The fold is printed as additions, and
+ * the counts it prints are the only derived numbers in it.
+ */
+describe('foldEntries', () => {
+  const second = { id: 'second-thread', run: 'reviews/intake/second-thread' };
+
+  const register: RegisterClaim[] = [
+    {
+      id: 'roads-poor',
+      question: 'infrastructure',
+      side: 'against',
+      seats: ['flash', 'luna'],
+      variations: [
+        { wording: 'Roads are a mess', source_id: 'thread', author_name: 'Sunny Crow C.' },
+      ],
+    },
+    {
+      id: 'drainage-damage',
+      question: 'infrastructure',
+      side: 'against',
+      variations: [
+        { wording: 'drainage issues', source_id: 'thread', author_name: 'Sunny Sparrow M.' },
+      ],
+    },
+  ];
+
+  const folding: Merged = {
+    claims: [
+      {
+        id: 'roads-suck',
+        claim: 'Edmonton roads are in poor condition.',
+        // The second source's own argument, which the fold does not carry over.
+        side: 'for',
+        register_id: 'roads-poor',
+        from: { luna: ['e-003'], sonnet: ['e-007'] },
+        forms: [
+          // Same pseudonym as the register's wording, different source: a
+          // different person as far as the register can tell.
+          { index: 4, commenter: 'Sunny Crow C.', quote: 'those suck too' },
+          { index: 9, commenter: 'Amber Vole C.', quote: 'potholes everywhere' },
+          { index: 11, commenter: 'Amber Vole C.', quote: 'potholes everywhere' },
+        ],
+      },
+      {
+        id: 'bins-fine',
+        claim: 'One black bin every two weeks is enough.',
+        side: 'for',
+        forms: [{ index: 2, commenter: 'Quiet Goose B.', quote: 'plenty for us' }],
+      },
+    ],
+  };
+
+  const folds = () => foldEntries(folding, register, second);
+
+  it('prints one fold per register claim and nothing for a claim that is new', () => {
+    expect(folds().claims.map((fold) => fold.id)).toEqual(['roads-poor']);
+  });
+
+  it('appends this source’s wordings, collapsed the same way as a new claim’s', () => {
+    expect(folds().claims[0]!.variations).toEqual([
+      { wording: 'those suck too', source_id: 'second-thread', author_name: 'Sunny Crow C.' },
+      { wording: 'potholes everywhere', source_id: 'second-thread', author_name: 'Amber Vole C.' },
+    ]);
+  });
+
+  it('adds only the seats the claim does not already list', () => {
+    expect(folds().claims[0]!.seats_added).toEqual(['sonnet']);
+  });
+
+  it('counts a pseudonym from another source as somebody new', () => {
+    expect(folds().claims[0]!.accounts_added).toBe(2);
+  });
+
+  it('raises the question on the register claim’s side, not the merged claim’s', () => {
+    expect(folds().questions).toEqual([
+      { id: 'infrastructure', accounts_added: { total: 2, against: 2 } },
+    ]);
+  });
+
+  it('adds nothing a claim already carries, so a rerun prints no new people', () => {
+    const [fold] = folds().claims;
+    const again = foldEntries(
+      folding,
+      [{ ...register[0]!, variations: [...register[0]!.variations!, ...fold!.variations] }, register[1]!],
+      second,
+    );
+    expect(again.claims[0]).toMatchObject({ variations: [], accounts_added: 0 });
+    expect(again.questions[0]!.accounts_added).toEqual({ total: 0 });
+  });
+
+  it('throws on a fold onto a claim the register does not have', () => {
+    const astray: Merged = { claims: [{ ...folding.claims![0]!, register_id: 'nowhere' }] };
+    expect(() => foldEntries(astray, register, second)).toThrow(/nowhere/);
+  });
+
+  it('refuses to register a folded claim as a new one too', () => {
+    const grouped: Groups = {
+      questions: [
+        {
+          id: 'roads',
+          question: 'Are the roads poor?',
+          claims: [{ id: 'roads-suck', claim: 'x', merged_from: ['roads-suck'] }],
+        },
+      ],
+    };
+    expect(() => registerEntries(folding, grouped, undefined, second, '2026-09-23')).toThrow(
+      /folded onto roads-poor/,
+    );
+  });
+
+  it('prints as YAML that parses back to the folds', () => {
+    const block = toYamlBlock(folds().claims);
+    expect(block).toContain('      - wording: "those suck too"');
+    expect(parse(`folds:\n${block}`).folds).toEqual(folds().claims);
   });
 });

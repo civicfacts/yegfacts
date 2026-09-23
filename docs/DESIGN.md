@@ -189,7 +189,9 @@ published at `/considered`.
    claim.
 3. **Merge.** One strong seat (`prompts/intake-merge.md`) folds the three lists
    into propositions and carries every surviving form onto the proposition it
-   belongs to.
+   belongs to. A proposition the register already holds is marked with that
+   claim's id, and its wordings are added to the existing claim rather than
+   registered beside it (methodology v1.34).
 4. **Coverage check.** `scripts/intake-coverage.ts` exits non-zero unless every
    extractor claim id from every seat is accounted for exactly once: under some
    proposition's `from`, or in `dropped` with one of three permitted reasons

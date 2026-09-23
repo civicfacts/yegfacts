@@ -6,7 +6,8 @@
  * Reads `merged.json`, `groups.json` and, when it is there,
  * `triage-stories.json` from the run directory, matches the run to its
  * `sources` entry in `intake/register.yaml`, and prints the two YAML blocks to
- * paste under `questions:` and under `claims:`. It prints; it does not write.
+ * paste under `questions:` and under `claims:`, and a third, the folds, for
+ * claims the register already holds. It prints; it does not write.
  * The register is a public record and a script that edits it in place is a
  * script that can quietly rewrite one.
  *
@@ -25,6 +26,14 @@
  * counts unioned across its claims, per side and overall. Somebody who argued
  * both ways is counted on both sides, so the sides can sum to more than the
  * total.
+ *
+ * A claim the register already holds is not registered twice (D-0030). The
+ * merge marks it with `register_id`, the grouping leaves it out, and it comes
+ * out here as a fold: this source's wordings to append to that claim's
+ * `variations`, the seats to add, and how far its account count and its
+ * question's rise. One pseudonym is one person within one source, so a
+ * wording from another source is always somebody new to the count, which is
+ * why the site stopped printing people counts once claims could span sources.
  *
  * The run's own JSON keeps the words it was written with where they still fit,
  * and this reads both spellings: a run merged before D-0029 says `propositions`
@@ -56,6 +65,8 @@ export interface MergedClaim {
   proposition?: string;
   side: string;
   names_person?: boolean;
+  /** The register claim this one is, when the register already holds it. */
+  register_id?: string;
   from?: Record<string, string[]>;
   forms?: MergedForm[];
 }
@@ -148,6 +159,40 @@ export interface ClaimEntry {
   variations?: Array<{ wording: string; source_id: string; author_name: string }>;
 }
 
+type Variation = NonNullable<ClaimEntry['variations']>[number];
+
+/** The parts of a register claim a fold reads. */
+export interface RegisterClaim {
+  id: string;
+  question?: string;
+  side?: string;
+  seats?: string[];
+  variations?: Variation[];
+}
+
+/**
+ * What to add to one claim the register already holds. Everything here is an
+ * addition: the claim keeps its id, question, proposition, wording and side.
+ */
+export interface ClaimFold {
+  id: string;
+  question: string;
+  /** How much the claim's `accounts` rises: people new to it. */
+  accounts_added: number;
+  /** Seats to add to the claim's `seats`. */
+  seats_added?: string[];
+  /** Set when a folded part names a person, which triage has not read. */
+  names_person?: true;
+  /** Wordings to append to the claim's `variations`. */
+  variations: Variation[];
+}
+
+/** How much a question's `accounts` rises once its claims take their folds. */
+export interface QuestionFold {
+  id: string;
+  accounts_added: Accounts;
+}
+
 /** The sides, in the order the register prints them. */
 const SIDES = ['for', 'against', 'neither'] as const;
 
@@ -207,6 +252,93 @@ function variationsOf(merged: MergedClaim[], sourceId: string): ClaimEntry['vari
   return variations.length > 0 ? variations : undefined;
 }
 
+/** A person, as the register can tell them apart: a pseudonym within a source. */
+const personKey = (sourceId: string, name: string): string => `${sourceId} ${name}`;
+
+/**
+ * The run's claims the register already holds, as additions to those claims.
+ *
+ * One entry per register claim, in the order the merge first names it. A
+ * wording the claim already carries from this source is not added twice, and a
+ * person already counted on the claim or its question is not counted again.
+ * The question's side counts rise on the register claim's side, not the merged
+ * claim's: `side` is read against each source's own argument, and the claim
+ * keeps the side it was registered with.
+ */
+export function foldEntries(
+  merged: Merged,
+  register: RegisterClaim[],
+  source: SourceEntry,
+): { claims: ClaimFold[]; questions: QuestionFold[] } {
+  const byId = new Map(register.map((claim) => [claim.id, claim]));
+  const parts = new Map<string, MergedClaim[]>();
+  for (const claim of mergedClaims(merged)) {
+    if (claim.register_id === undefined) continue;
+    if (!byId.has(claim.register_id)) {
+      throw new Error(
+        `merged claim ${claim.id} folds onto ${claim.register_id}, which is not a claim in the register`,
+      );
+    }
+    parts.set(claim.register_id, [...(parts.get(claim.register_id) ?? []), claim]);
+  }
+
+  const peopleOn = (claims: RegisterClaim[]): Set<string> =>
+    new Set(
+      claims.flatMap((claim) =>
+        (claim.variations ?? []).map((v) => personKey(v.source_id, v.author_name)),
+      ),
+    );
+
+  const claims: ClaimFold[] = [];
+  const addedToQuestion = new Map<string, Map<string, Set<string>>>();
+  for (const [id, folded] of parts) {
+    const target = byId.get(id)!;
+    const question = target.question ?? '';
+    const onClaim = peopleOn([target]);
+    const onQuestion = peopleOn(register.filter((claim) => claim.question === question));
+    const had = new Set(
+      (target.variations ?? []).map((v) => `${v.source_id} ${v.author_name} ${v.wording}`),
+    );
+
+    const variations = (variationsOf(folded, source.id) ?? []).filter(
+      (v) => !had.has(`${v.source_id} ${v.author_name} ${v.wording}`),
+    );
+    const people = new Set(variations.map((v) => personKey(v.source_id, v.author_name)));
+    const side = target.side ?? 'neither';
+    const bySide = addedToQuestion.get(question) ?? new Map<string, Set<string>>();
+    for (const person of people) {
+      if (onQuestion.has(person)) continue;
+      for (const key of ['total', side]) {
+        bySide.set(key, (bySide.get(key) ?? new Set<string>()).add(person));
+      }
+    }
+    addedToQuestion.set(question, bySide);
+
+    const seats = (seatsOf(folded) ?? []).filter((seat) => !(target.seats ?? []).includes(seat));
+    claims.push(
+      pruned<ClaimFold>({
+        id,
+        question,
+        accounts_added: [...people].filter((person) => !onClaim.has(person)).length,
+        seats_added: seats.length > 0 ? seats : undefined,
+        names_person: folded.some((part) => part.names_person === true) ? true : undefined,
+        variations,
+      }),
+    );
+  }
+
+  const questions: QuestionFold[] = [...addedToQuestion].map(([id, bySide]) => {
+    const accounts: Accounts = { total: bySide.get('total')?.size ?? 0 };
+    for (const side of SIDES) {
+      const added = bySide.get(side)?.size ?? 0;
+      if (added > 0) accounts[side] = added;
+    }
+    return { id, accounts_added: accounts };
+  });
+
+  return { claims, questions };
+}
+
 /** The distinct people who gave any of these merged claims a wording. */
 function accountsOf(merged: MergedClaim[]): Set<string> {
   return new Set(merged.flatMap((claim) => (claim.forms ?? []).map((form) => form.commenter)));
@@ -250,10 +382,11 @@ export function registerEntries(
     for (const grouped of group.claims ?? []) {
       const parts = mergedFrom(grouped).map((id) => {
         const found = byId.get(id);
-        if (!found) {
+        if (!found || found.register_id !== undefined) {
           throw new Error(
-            `claim ${grouped.id} cites ${id}, which is not in merged.json — ` +
-              'run scripts/intake-groups.ts first',
+            `claim ${grouped.id} cites ${id}, which is ` +
+              (found ? `folded onto ${found.register_id}` : 'not in merged.json') +
+              ' — run scripts/intake-groups.ts first',
           );
         }
         return found;
@@ -402,7 +535,8 @@ function main(): void {
   // The run directory is what ties a run to its source, so the register says
   // which source these entries belong to rather than the command line guessing.
   const registerFile = repoPath('intake', 'register.yaml');
-  const sources = loadYaml<{ sources?: SourceEntry[] }>(registerFile).sources ?? [];
+  const register = loadYaml<{ sources?: SourceEntry[]; claims?: RegisterClaim[] }>(registerFile);
+  const sources = register.sources ?? [];
   const source = sources.find((entry) => entry.run === runPath);
   if (!source) {
     console.error(
@@ -421,6 +555,8 @@ function main(): void {
     recorded,
   );
 
+  const folds = foldEntries(merged, register.claims ?? [], source);
+
   for (const id of untriaged) {
     console.error(`intake-register: ${id} has no triage decision — printed with no triage answer`);
   }
@@ -431,9 +567,20 @@ function main(): void {
   process.stdout.write(`${toYamlBlock(questions, 'question')}\n`);
   process.stdout.write('# ----- paste under `claims:` -----\n');
   process.stdout.write(`${toYamlBlock(claims)}\n`);
+  if (folds.claims.length > 0) {
+    // Not pasted under a key: each entry is an edit to an entry already there.
+    process.stdout.write(
+      '# ----- folds: for each claim, append `variations`, add `seats_added` to its seats and ' +
+        'raise `accounts` by `accounts_added`; raise each question\'s accounts by its ' +
+        '`accounts_added` -----\n',
+    );
+    process.stdout.write(`${toYamlBlock(folds.claims)}\n`);
+    process.stdout.write(`${toYamlBlock(folds.questions)}\n`);
+  }
 
   console.error(
-    `\nintake-register: ${questions.length} questions, ${claims.length} claims from ${runPath}`,
+    `\nintake-register: ${questions.length} questions, ${claims.length} claims, ` +
+      `${folds.claims.length} folds from ${runPath}`,
   );
 }
 
