@@ -380,7 +380,14 @@ unrestricted fallback. The candidate Claude Code profile uses safe mode, empty
 settings sources, strict MCP configuration, no slash commands or session
 persistence, and an explicit WebSearch/WebFetch allowlist. From v1.30 it is not
 tied to one build: the flag set is what the profile is. This is not a filesystem
-jail or a vendor-wide guarantee.
+jail or a vendor-wide guarantee. Claude Code builds from 2.1.280 list two
+plugins the build itself ships, `agents-md` and `telemetry`, marked `builtin` in
+the inventory, and no flag in the profile removes them. The structural check
+records their names on every attempt and does not refuse on them, because they
+are the CLI rather than a customization of this machine; a plugin from anywhere
+else still refuses the run. What excludes their text from the request is the
+capture check, which passed on the attempt that first met them
+(2026-09-23, attempt `8b92f1e800aa48f7`, refused on the older rule and retained).
 
 v1.28 refused every seat because an empty startup inventory shows what was not
 loaded and cannot show what was sent, and no inspected path emitted the request.

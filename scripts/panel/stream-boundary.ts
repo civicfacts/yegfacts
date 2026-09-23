@@ -110,6 +110,13 @@ function names(value: unknown): string[] | null {
   });
 }
 
+/** A plugin entry the CLI itself shipped, as against one this machine installed. */
+function isBuiltinPlugin(item: unknown): boolean {
+  const record = asRecord(item);
+  if (!record) return false;
+  return record.path === 'builtin' || (typeof record.source === 'string' && record.source.endsWith('@builtin'));
+}
+
 export type ToolCall = {
   id: string;
   name: string;
@@ -134,6 +141,15 @@ export type StreamFacts = {
   slash_commands: string[] | null;
   skills: string[] | null;
   plugins: string[] | null;
+  /**
+   * Plugins the init inventory marks as the CLI's own (`path: "builtin"` or a
+   * source ending in `@builtin`). Claude Code 2.1.280 began listing two of them,
+   * agents-md and telemetry, and no flag in the profile removes them. They are
+   * part of the build, not a customization of this machine, so they are
+   * recorded here and do not count as loaded plugins; the capture check is what
+   * excludes their text from the request.
+   */
+  builtin_plugins: string[];
   agents: string[] | null;
   tool_calls: ToolCall[];
   /**
@@ -195,6 +211,7 @@ export function readStream(text: string): StreamFacts {
     slash_commands: null,
     skills: null,
     plugins: null,
+    builtin_plugins: [],
     agents: null,
     tool_calls: [],
     assistant_turns: 0,
@@ -233,7 +250,9 @@ export function readStream(text: string): StreamFacts {
       facts.mcp_servers = names(event.mcp_servers);
       facts.slash_commands = names(event.slash_commands);
       facts.skills = names(event.skills);
-      facts.plugins = names(event.plugins);
+      const plugins = Array.isArray(event.plugins) ? (event.plugins as unknown[]) : null;
+      facts.plugins = plugins === null ? names(event.plugins) : names(plugins.filter((item) => !isBuiltinPlugin(item)));
+      facts.builtin_plugins = plugins === null ? [] : (names(plugins.filter(isBuiltinPlugin)) ?? []);
       facts.agents = names(event.agents);
       continue;
     }
@@ -1190,6 +1209,7 @@ if (isEntryPoint()) {
   let verdict: Verdict;
   let facts: unknown;
   let finalText: string | null;
+  let builtinPlugins: string[] = [];
 
   if (format === 'codex') {
     const codex = readCodexStream(raw);
@@ -1255,6 +1275,7 @@ if (isEntryPoint()) {
     const claude = readStream(raw);
     facts = claude;
     finalText = claude.final_text;
+    builtinPlugins = claude.builtin_plugins;
     const expectation: StructureExpectation = { allowedTools: list(flags.tools) };
     if (flags.check === 'canary') {
       verdict = withCaptureFailures(
@@ -1286,6 +1307,8 @@ if (isEntryPoint()) {
           format,
           ...verdict,
           context_proof: proof,
+          // Recorded, not gated: the plugins the CLI build itself ships.
+          builtin_plugins: builtinPlugins,
           // What the denylist ran over. A reader of a run row should not have to
           // know which seat had a proxy in front of it to read the proof word.
           record_kind: check ? recordKind : null,
