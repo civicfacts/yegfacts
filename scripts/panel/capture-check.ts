@@ -109,6 +109,18 @@ export type CaptureCheckResult = {
    * of a run record should not have to assume the two numbers are the same.
    */
   searched: number;
+  /**
+   * How many captured requests carried the operator's home path only inside
+   * the CLI's own binary-save note (methodology v1.38). Claude Code writes
+   * "[Binary content (<type>, <size>) also saved to <path>]" into a tool
+   * result when a fetch returns a binary, and the path is under the operator's
+   * home. That is the CLI describing its own file, not an instruction from this
+   * machine, so it is counted and disclosed rather than refused. The path was
+   * still sent to the vendor; the count is what says so on the run row. Any
+   * occurrence of the home path outside that note, and any other protected
+   * string anywhere, still fails the check.
+   */
+  operator_path_notes: number;
 };
 
 export type CaptureCheckInput = {
@@ -130,6 +142,24 @@ export type CaptureCheckInput = {
  * same way, which is rare enough to be worth looking at when it happens.
  */
 const MIN_LINE = 24;
+
+/** The CLI's fixed note for a fetched binary it wrote to disk. Nothing else matches. */
+const BINARY_SAVE_NOTE = /\[Binary content \([^()\]]*\) also saved to [^\]]*\]/g;
+export const HOME_SOURCE = 'the home directory';
+
+/**
+ * A value with the CLI's binary-save notes cut out, and how many of the notes
+ * carried `home`. Only the home-directory source is searched over the cut
+ * text; every other source searches the value as sent.
+ */
+function withoutSaveNotes(value: string, home: string): { text: string; notes: number } {
+  let notes = 0;
+  const text = value.replace(BINARY_SAVE_NOTE, (note) => {
+    if (home !== '' && note.includes(home)) notes += 1;
+    return '';
+  });
+  return { text, notes };
+}
 
 /**
  * The one family of sources reported as a single row. See `PrivateSource.group`.
@@ -356,6 +386,10 @@ export function checkCapture(input: CaptureCheckInput): CaptureCheckResult {
     failures.push('the denylist holds no lines at all, so nothing was searched for and a pass would mean nothing');
   }
 
+  const homeSource = sources.find((source) => source.name === HOME_SOURCE);
+  const home = homeSource?.lines[0] ?? '';
+  let operatorPathNotes = 0;
+
   for (const request of requests) {
     if (!isJsonBody(request.body)) continue;
     jsonBodies += 1;
@@ -366,17 +400,27 @@ export function checkCapture(input: CaptureCheckInput): CaptureCheckResult {
 
     if (packageText !== '' && values.some((value) => value.includes(packageText))) packageSeen += 1;
 
+    let notesHere = 0;
     for (const source of sources) {
       const hit = new Set<number>();
       for (const value of values) {
+        // v1.38: the home path inside the CLI's own binary-save note is counted,
+        // not refused. The cut is made for this one source only.
+        let text = value;
+        if (source === homeSource) {
+          const cut = withoutSaveNotes(value, home);
+          text = cut.text;
+          notesHere += cut.notes;
+        }
         source.lines.forEach((line, index) => {
-          if (!hit.has(index) && value.includes(line)) hit.add(index);
+          if (!hit.has(index) && text.includes(line)) hit.add(index);
         });
       }
       for (const index of [...hit].sort((a, b) => a - b)) {
         failures.push(`${request.file}: carries ${source.name} line ${index + 1}`);
       }
     }
+    if (notesHere > 0) operatorPathNotes += 1;
   }
 
   if (packageText !== '' && packageSeen === 0) {
@@ -393,6 +437,7 @@ export function checkCapture(input: CaptureCheckInput): CaptureCheckResult {
     package_seen: packageSeen,
     requests: requests.length,
     searched: jsonBodies,
+    operator_path_notes: operatorPathNotes,
   };
 }
 

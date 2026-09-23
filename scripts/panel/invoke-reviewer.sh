@@ -352,6 +352,10 @@ write_metadata() {
       // Which private sources were read and how many lines each contributed.
       // Names and counts only: the lines themselves never leave the check.
       [prefix + "capture_check_sources"]: value.sources,
+      // v1.38: requests whose only trace of the home path was the note the CLI
+      // itself wrote after saving a fetched binary. Public; the count is the
+      // disclosure.
+      [prefix + "operator_path_notes"]: value.operator_path_notes ?? null,
       [prefix + "requests_manifest_sha256"]: value.requests_manifest_sha256 ?? null,
     });
     fs.writeFileSync(out, JSON.stringify({

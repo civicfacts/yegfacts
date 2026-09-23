@@ -479,13 +479,19 @@ export function contextProof(check: CaptureCheckResult | null, kind: RecordKind 
       (kind === 'request' ? 'request(s)' : 'record entr(ies)') +
       ' carried the declared package byte for byte.';
     if (kind === 'request') {
+      const notes =
+        check.operator_path_notes > 0
+          ? ` ${check.operator_path_notes} request(s) carried the operator's home-directory path inside the ` +
+            "CLI's own note about a fetched binary it saved to disk; that path was sent to the vendor, and " +
+            'is recorded rather than refused (methodology v1.38).'
+          : '';
       return {
         status: 'pass',
         reason:
           `${searched} Only the string values of those bodies were searched, not the HTTP headers, the ` +
           'request URLs or the responses. This says what the request bodies did not contain; it does not ' +
           'say what they did contain, and it cannot see text the vendor attaches that is not on this ' +
-          'machine.',
+          `machine.${notes}`,
       };
     }
     return {

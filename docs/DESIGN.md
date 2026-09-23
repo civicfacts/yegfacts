@@ -174,7 +174,8 @@ Captures live in `intake/captures/<slug>/`, extraction and merge artifacts in
 `reviews/intake/<slug>/`, and the candidate register in `intake/register.yaml`,
 published at `/considered`.
 
-1. **Extraction.** Three cheap seats, one per panel vendor, each read the whole
+1. **Extraction.** Three cheap seats from the panel's vendors (from v1.37, Haiku
+   4.5, GPT-6 Luna and Sonnet 5, two vendors) each read the whole
    thread as rendered by `scripts/intake-render-thread.ts`, under
    `prompts/intake-extract.md`, and list every materially factual claim with a
    verbatim quote and the comment index it came from. Seats do no research, do
@@ -198,7 +199,11 @@ published at `/considered`.
    (not a claim, duplicate quote, not about Edmonton civic government). This is
    the guarantee the arrangement exists to provide.
 5. **Triage.** `prompts/intake-triage-batch.md` goes to two readers, both from
-   a different vendor than the editor, neither seeing the other. Each rules on
+   a different vendor than the editor, neither seeing the other. From v1.37 both
+   are OpenAI models (GPT-6 Sol and GPT-6 Luna), one vendor, and the register
+   says so; a proposition both decline or park is re-decided by an Anthropic
+   audit reader before the register records it, so one vendor cannot quietly
+   remove a claim. Each rules on
    every proposition in one batch, GO, PARK or NO, with a reason written for a
    reader. They combine so that GO takes both, or one GO and one PARK; NO takes
    both; everything else parks, a GO set against a NO included. Throwing out a
@@ -248,8 +253,12 @@ stopped.
    accounting window, and any calculation the verdict depends on. The brief is
    frozen before round 1, so the framing cannot be adjusted once the findings
    arrive.
-2. **Blind research round.** Three models independently receive the identical
-   package — brief, `prompts/reviewer.md`, and the required output schema
+2. **Blind research round.** Three seats independently receive the identical
+   package. From v1.37 they are three model seats from two vendors, one Anthropic
+   model and two OpenAI models; the two OpenAI seats are not independent of each
+   other, so three agreeing verdicts are not three independent confirmations.
+   Runs frozen before 2026-09-23 had three vendors and keep that label. The
+   package is — brief, `prompts/reviewer.md`, and the required output schema
    `prompts/review-schema.json`. From v1.28, the shared launcher must check the
    execution profile and a separate per-attempt canary before research. The
    candidate Claude profile suppresses host customizations and exposes only
@@ -344,35 +353,34 @@ record earlier execution, **not commands approved for new runs**:
 | GPT-5.6 Sol | `codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check` |
 | Gemini 3.8 Flash | `agy --model gemini-3.8-flash-high --effort high --sandbox --dangerously-skip-permissions --print-timeout 45m -p` (v1.26; Gemini 3.1 Pro before that, and v1.14 added the permissions flag, without which the headless seat returned nothing on PDF-heavy briefs). The founder retired 3.1 Pro from every seat on this site after the intake extraction run, where 3.8 Flash at high turned the weakest extractor seat into the cleanest; no panel-round comparison of the two exists. Runs already published under 3.1 Pro keep the model their manifests record. |
 
-**Current pins (v1.34).** The commands approved for new runs are the ones
+**Current pins (v1.37).** The commands approved for new runs are the ones
 `scripts/panel/run-reviewer.sh` assembles and `scripts/panel/invoke-reviewer.sh`
-admits; nothing else runs a seat. From v1.34 the Claude seat is
-`claude-opus-5-5`, the OpenAI seat `gpt-6-sol` and the Google seat
-`gemini-3.8-flash-high`, every seat at `high`. Opus 5.5 defaults to medium
-effort, so the pin is what keeps the seat at the level v1.6 chose. Both moves
-are cost decisions (Opus 5.5 is listed a fifth below Opus 5, GPT-6 Sol at half
-of GPT-5.6 Sol), not findings about which model reviews better, which nothing
-on this site measures. Runs already published under Opus 5, Fable 5.1 or
-GPT-5.6 Sol keep the model their manifests record. A superseded model stays on
-the launcher's pinned list, never as the default, while a brief parked on a
-check it ran can still be confirmed, because v1.35 confirms a park on the same
-pinned model as the report it confirms.
+admits; nothing else runs a seat. From v1.37 the seats are `claude-opus-5-5`,
+`gpt-6-sol` and `gpt-6-luna`, every seat at `high`. Opus 5.5 defaults to medium
+effort, so the pin is what keeps the seat at the level v1.6 chose. The Google
+seat (`gemini-3.8-flash-high`) is retired for runs frozen after 2026-09-23: the
+founder's Google usage ran out twice in a week and he will not buy more. Its
+profile stays in the launcher for the record of the runs it did, and the runner
+starts it only with `--finish-frozen-run`, for a run that froze under the
+three-provider rule. A superseded model stays on the launcher's pinned list,
+never as the default, while a brief parked on a check it ran can still be
+confirmed (v1.35). Runs already published keep the model their manifests
+record.
 
-**The shadow seat (v1.34).** The founder's question is whether a model as cheap
-as GPT-6 Luna, listed at a twentieth of the OpenAI seat's price, can hold a
-research seat. This site answers that by measurement rather than by guessing.
-For the next two panel runs a fourth seat, `gpt-6-luna` at `high`, receives the
-identical frozen package through the same launcher and profile as the counted
-OpenAI seat. Its answer is committed under `<run>/shadow-<name>/` with its own
-manifest (`scripts/panel/run-reviewer.sh luna <story> <date> 1 --into
-shadow-round1`). It is never merged and never synthesised: `scripts/merge.ts`
-reads every JSON file in a round directory, so the runner refuses any `--into`
-that is not a `shadow-` directory or that is a symbolic link, and refuses round
-2 outright, and `run.yaml`'s
-`synthesis_scope` names no shadow. `run-record.md` compares its sources and
-findings against the three counted seats. After two runs the editor recommends
-and the founder decides whether a cheap-tier model takes a counted seat; until
-then no finding rests on it.
+**The vendor split (v1.37).** When the Anthropic seat differs from both OpenAI
+seats, the finding names the vendor split beside the seat agreement and the
+drafting addresses it from the sources. It is never presented as a plain
+two-to-one majority. The quality ledger tracks the Luna seat's catches and
+misses and any miss the two OpenAI seats share, with a review point after
+several counted runs.
+
+**The shadow seat (v1.34, ended by v1.37).** For one run, lanes-and-congestion
+round 1 on 2026-09-23, a fourth uncounted seat on `gpt-6-luna` received the
+identical frozen package; its answer sits under `<run>/shadow-round1/` and was
+never merged. The same day the Google seat retired and Luna became a counted
+seat, so the two-run comparison ended after one. The one comparison stands in
+that run's record: same verdict as the OpenAI seat, six minutes against eleven,
+29 requests against 119, two supporting items against six.
 
 From v1.28, `scripts/panel/invoke-reviewer.sh` is the common execution path for
 panel reviews and package-in/report-out framing or source audits. There is no
@@ -388,6 +396,20 @@ are the CLI rather than a customization of this machine; a plugin from anywhere
 else still refuses the run. What excludes their text from the request is the
 capture check, which passed on the attempt that first met them
 (2026-09-23, attempt `8b92f1e800aa48f7`, refused on the older rule and retained).
+
+One thing the capture check permits, from v1.38, and says so on every run row.
+When a fetch returns a binary such as a PDF, Claude Code saves it to disk under
+the operator's home directory and writes "[Binary content (…) also saved to
+<path>]" into the tool result, and that note then travels in every later
+request. On 2026-09-23 fourteen requests of one attempt (`09c6859382ba86e9`,
+refused, retained) carried the operator's home path that way. The path was sent
+to the vendor; the check now counts those requests (`operator_path_notes` on the
+row) instead of refusing the run, for that fixed note only. The home path
+anywhere else, the repository path anywhere, and the canary token anywhere still
+refuse. This is a disclosed exposure, not a clean capture, and a separate account
+for the seat (OQ-30 in the board record) remains the structural fix. The same
+attempt also shows the profile's known limit: the fetch handed the reviewer raw
+PDF bytes, so the document was saved and not read.
 
 v1.28 refused every seat because an empty startup inventory shows what was not
 loaded and cannot show what was sent, and no inspected path emitted the request.

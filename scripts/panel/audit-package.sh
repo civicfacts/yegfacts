@@ -54,8 +54,9 @@ usage: scripts/panel/audit-package.sh --package <file> --report <file> [options]
   --report <file>     where to write the complete response; must not exist
 
 options:
-  --provider <name>   anthropic (default) | openai | google. The vendor the
-                      audit is commissioned from, recorded even when refused.
+  --provider <name>   anthropic (default) | openai. The vendor the audit is
+                      commissioned from, recorded even when refused. google is
+                      retired (methodology v1.37) and refused here.
   --label <text>      what to call this audit in the log
 
 The model and reasoning effort are pinned per vendor in invoke-reviewer.sh and
@@ -82,8 +83,13 @@ done
 # The vendor names the launcher knows. Checked here so a typo is a usage error
 # rather than a retained attempt filed against a provider that does not exist.
 case "$PROVIDER" in
-  anthropic|openai|google) ;;
-  *) echo "unknown provider: $PROVIDER (expected anthropic, openai or google)" >&2; usage ;;
+  anthropic|openai) ;;
+  google)
+    # Methodology v1.37 (2026-09-23): the Google seat is retired. Audits have
+    # no frozen run to finish, so there is no flag; the profile stays in the
+    # launcher for the record of the runs it did.
+    echo "the Google seat is retired for new audits (methodology v1.37, 2026-09-23)" >&2; exit 2 ;;
+  *) echo "unknown provider: $PROVIDER (expected anthropic or openai)" >&2; usage ;;
 esac
 
 # -L as well as -e: a dangling symlink at the destination is still something a
