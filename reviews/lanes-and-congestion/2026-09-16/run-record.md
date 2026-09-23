@@ -182,3 +182,28 @@ block above was written. Register: `lanes-and-congestion` moves to
 Next: round 1 on `city-removed-traffic-lanes`, three seats, under
 whichever seat pins main carries when it runs (D-0041 moves them); the
 story leads with the three parks.
+
+## 2026-09-23: round 1 on the frozen brief, under the rule in force at the freeze
+
+The brief froze on 2026-09-23 (sha256 ddaa04ae…) under the three-provider rule,
+before methodology v1.37 retired the Google seat the same evening. v1.37's
+effective-date rule applies: this run finishes under the rule it froze under.
+Every seat received the identical package (brief.md, reviewer.md,
+review-schema.json, 32,223 bytes) through scripts/panel/run-reviewer.sh and the
+v1.31 launcher; each seat's manifest row is in run.yaml.
+
+| Seat | Attempt | Outcome |
+|---|---|---|
+| GPT-6 Sol, high (counted) | 16:19Z to 16:30Z | admitted, one attempt, 119 requests captured and searched: Not established, moderate; 6 supporting, 4 challenging items. round1/gpt.json |
+| Gemini 3.8 Flash, high (counted) | ae6e378fd252efcb, 16:57Z to 17:05Z | admitted record-only, one attempt, after PR #83 let a fetch 404 count as a result: Partially supported, high; 4 supporting, 3 challenging; counts through-lane removals in 4 of 15 district-plan areas, under both thresholds. round1/gemini.json. The week's last Gemini run before the quota closed. |
+| GPT-6 Luna, high (shadow, not counted, methodology v1.34) | 16:19Z to 16:25Z | admitted, one attempt, 29 requests: Not established, moderate; 2 and 2. shadow-round1/gpt-luna.json, never merged. The shadow experiment ended after this one run when v1.37 made Luna a counted seat for later runs; the board pass declined to count this answer for this run, since promoting an uncounted answer after its verdict is known would make seat selection outcome-dependent. |
+| Claude Opus 5.5, high (counted) | 8b92f1e800aa48f7, 16:19Z | refused at the canary: the structural check read two plugins Claude Code 2.1.280 ships as builtin (agents-md, telemetry) as loaded customizations; the capture check passed. Package never sent. Rule adapted in PR #82 (builtin plugins recorded, not refused). |
+| Claude Opus 5.5, high (counted) | 09c6859382ba86e9, 16:25Z to about 16:40Z | canary passed; research ran (42 requests); refused by the capture check: fourteen requests carried the operator's home-directory path inside the CLI's own note after it saved a fetched 2.6 MB City PDF to disk. Not an instruction file. The fetch handed the reviewer the PDF's raw bytes, so the document was saved and not read (the web-only profile's disclosed limit). Its answer (Not established) is not a finding of this site. Stays refused and retained; methodology v1.38 permits that one note prospectively and counts it. The seat reruns under v1.38. |
+
+The Sol and Gemini verdicts differ (Not established against Partially
+supported on the same claim and package). That difference goes to the
+cross-review round as designed and is named on the finding if it survives
+synthesis. Round 2 needs the Google seat again and waits for its allowance to
+reset, about 2026-09-30, unless the founder closes this attempt as incomplete
+and starts a clean run under v1.37. No panel is assembled from the answers on
+hand.
