@@ -74,8 +74,19 @@ export const DECLINE_GROUND = 'right-of-reply';
  * it carries the reason and the condition on which it reopens, because a claim
  * dropped at the last stage without a public reason cannot be told apart from a
  * claim dropped for the answer it was going to give.
+ *
+ * Since v1.35 a claim can also be parked on this ground at framing, before any
+ * research ran; `parked_at` records which. See `PARKED_AT`.
  */
 export const PARK_GROUND = 'no-instrument';
+
+/**
+ * Where a `no-instrument` park was decided (methodology v1.35). `panel` is the
+ * v1.24 case: the panel answered and the claim came back unanswerable. `framing`
+ * is a park the third framing report asked for, confirmed before any research
+ * ran. Absent means `panel`, which is what every earlier park was.
+ */
+export const PARKED_AT = ['framing', 'panel'] as const;
 
 /** A capture, as the rules need to see it. */
 export interface Capture {
@@ -489,6 +500,13 @@ function checkClaimState(where: string, claim: Record_, fail: (message: string) 
   }
 
   const ground = claim.ground;
+  if (claim.parked_at !== undefined) {
+    if (ground !== PARK_GROUND) {
+      fail(`${where}: parked_at only ever accompanies a park on the ${PARK_GROUND} ground`);
+    } else if (!(PARKED_AT as readonly string[]).includes(named(claim.parked_at))) {
+      fail(`${where} parked_at: "${String(claim.parked_at)}" is not one of ${PARKED_AT.join(', ')}`);
+    }
+  }
   if (claim.triage === undefined && ground === undefined) return;
 
   if (ground === PARK_GROUND) {

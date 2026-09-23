@@ -455,6 +455,23 @@ describe('registerProblems: state sits on the question, not the claim', () => {
     ).toEqual([]);
   });
 
+  it('accepts a no-instrument park recorded as parked at framing, and nothing else', () => {
+    const parked = (parked_at: string) =>
+      grouped([
+        claim({
+          triage: 'park',
+          ground: 'no-instrument',
+          parked_at,
+          reason: 'The record holds counts, not before-and-after studies; it reopens on one.',
+        }),
+        otherSide(),
+      ]);
+    expect(parked('framing')).toEqual([]);
+    expect(parked('elsewhere').join('\n')).toContain(
+      'parked_at: "elsewhere" is not one of framing, panel',
+    );
+  });
+
   it('refuses a no-instrument ground on anything but a park', () => {
     expect(
       grouped([
