@@ -41,7 +41,7 @@ const short: ReadonlyArray<{ name: string; body: string; exits: readonly Exit[] 
   },
   {
     name: 'Three AI model seats research it blind',
-    body: "Three AI model seats from two vendors get the same brief and search the public record without seeing each other's work: one Anthropic model and two OpenAI models. The two OpenAI seats are not independent of each other, so three agreeing verdicts are not three independent confirmations. Each seat returns a verdict, the evidence for and against, and what it could not find.",
+    body: "Three seats, one Anthropic and two OpenAI, get the same brief and search the public record without seeing each other's work. Two of them share a vendor, which the panel section below spells out. Each seat returns a verdict, the evidence for and against, and what it could not find.",
     exits: [
       { kind: 'Stops here', text: 'A reviewer that returns nothing after its retry halts the run before any finding.' },
       {
@@ -51,7 +51,7 @@ const short: ReadonlyArray<{ name: string; body: string; exits: readonly Exit[] 
       },
       {
         kind: 'Continues',
-        text: 'As of September 23, 2026 the Google seat is retired. The panel is three AI model seats from two vendors: one Anthropic model and two OpenAI models.',
+        text: 'As of September 23, 2026 the Google seat is retired. The panel is three seats from two vendors, Anthropic and OpenAI.',
         link: { href: '/methodology/changes#v1-37', text: 'Methodology v1.37' },
       },
       { kind: 'Loops back', text: "Afterwards the three read each other's work. A fabricated citation caught there sends that claim back for a fresh blind round." },
@@ -112,7 +112,7 @@ const stages = [
   },
   {
     name: 'Blind research round',
-    body: 'Three AI model seats from two vendors, one Anthropic model and two OpenAI models, receive the identical package: the brief, the public reviewer prompt, and a required JSON output schema. The two OpenAI seats are not independent of each other, so three agreeing verdicts are not three independent confirmations. New runs must pass an execution check intended to keep host instructions and private files out of the review. A separate working directory alone did not provide that protection. The execution profiles and their limits are set out below. Each seat returns a per-claim verdict, its confidence, the evidence supporting and challenging it, its limitations, what it could not find, and comparison cities with a judgement about whether those cases transfer to Edmonton.',
+    body: 'The three seats, one Anthropic and two OpenAI, receive the identical package: the brief, the public reviewer prompt, and a required JSON output schema. The two GPT seats share a vendor, so their agreeing is one company agreeing with itself. New runs must pass an execution check intended to keep host instructions and private files out of the review. A separate working directory alone did not provide that protection. The execution profiles and their limits are set out below. Each seat returns a per-claim verdict, its confidence, the evidence supporting and challenging it, its limitations, what it could not find, and comparison cities with a judgement about whether those cases transfer to Edmonton.',
   },
   {
     name: 'Evidence staging and deterministic merge',
@@ -124,7 +124,7 @@ const stages = [
   },
   {
     name: 'Deterministic synthesis',
-    body: 'A script computes the canonical finding from the three locked round-one verdicts, using a published lookup table over every possible combination. Round one keeps the seats blind to one another, so only its verdicts enter the calculation. The two OpenAI seats are not independent of each other. Model identity never enters the calculation, and the property is tested. A genuinely split panel produces Mixed, with the split shown. Beside the finding the site publishes panel agreement, Unanimous, Adjacent or Split. Those words describe seats, not vendors. That replaced a confidence score in v1.3, because agreement is what the method actually measures and confidence implied a probability of truth that nothing here computes. All published arithmetic lives in a tested script, never in prose. Since v1.24 a run can also publish fewer claims than it asked. Where a framing concern is right and no repair exists that does not weaken the claim, that claim is parked with a public reason, and its answers stay committed.',
+    body: 'A script computes the canonical finding from the three locked round-one verdicts, using a published lookup table over every possible combination. Round one keeps the seats blind to one another, so only its verdicts enter the calculation. Agreement counts seats, not vendors. Model identity never enters the calculation, and the property is tested. A genuinely split panel produces Mixed, with the split shown. Beside the finding the site publishes panel agreement, Unanimous, Adjacent or Split. Those words describe seats, not vendors. That replaced a confidence score in v1.3, because agreement is what the method actually measures and confidence implied a probability of truth that nothing here computes. All published arithmetic lives in a tested script, never in prose. Since v1.24 a run can also publish fewer claims than it asked. Where a framing concern is right and no repair exists that does not weaken the claim, that claim is parked with a public reason, and its answers stay committed.',
   },
   {
     name: 'Drafting, faithfulness check and plain-speech read',
