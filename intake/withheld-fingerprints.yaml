@@ -57,3 +57,38 @@ entries:
           decision from the run-artifact redaction, and this exemption is here
           so the audit states it out loud on every run rather than passing in
           silence.
+  - id: withheld-edmonton-rant-and-rave-2026-09-10-1
+    # Seven strings: the three descriptive ids the run gave the claim, its
+    # grouped claim and its question; the proposition; the question text; the
+    # commenter's wording; and a clause of one reader's reason that restated
+    # the accusation. All were redacted out of the run artifacts before they
+    # were committed, on 2026-09-16. The question row is on the register as
+    # withheld-edmonton-rant-and-rave-2026-09-10-q1.
+    fingerprints:
+      - tokens: 5
+        chars: 38
+        sha256: 2bca5d04efb85b85be0663632cacd22f6780f76f17e4f0b86b66b4083c9ea0a2
+      - tokens: 3
+        chars: 30
+        sha256: fddc5dce6c97b20b24291df0c8e1e8da042be8c4edc63f26465af267e61a9359
+      - tokens: 3
+        chars: 31
+        sha256: 5304fe6c21018d115beb63ee5651dbabbef8bb307d6609d7c76724f6f9cfcdf9
+      - tokens: 11
+        chars: 68
+        sha256: 661cf0a67ca715b043724f209ac545721bd4cc446dd3c29a7f0ddb113ec2964d
+      - tokens: 13
+        chars: 83
+        sha256: 1db492b8b7b00bbbe31adb366425720e6ad39cb373b080a6ffe5923e0b6800db
+      - tokens: 6
+        chars: 39
+        sha256: 3e61fda69a6cd29015cb18dd373d0177c42b8ef967f2fceeb7db651c7d105d7d
+      - tokens: 9
+        chars: 53
+        sha256: af24a14d2774febe62a11bc26592376443f44357d2fd5425fe49ecbebab452fa
+    allow:
+      - path: intake/captures/edmonton-rant-and-rave-2026-09-10/comments.jsonl
+        reason: >-
+          The capture is held verbatim under D-0026, so the commenter's sentence
+          is still in it at index 93, under the same exemption the first
+          source carries.
