@@ -1,3 +1,7 @@
+import { existsSync } from 'node:fs';
+import path from 'node:path';
+import { loadRunManifest } from '../../scripts/lib/review-schema';
+import type { Claim } from './content';
 import { FINDING_GLOSS, PANEL_AGREEMENT_GLOSS } from './findings';
 
 /**
@@ -97,6 +101,11 @@ export const glossary: Record<string, GlossaryEntry> = {
   // popover and the methodology page cannot drift apart.
   ...withHref(FINDING_GLOSS, VOCABULARY),
   ...withHref(PANEL_AGREEMENT_GLOSS, AGREEMENT),
+  Unanimous: {
+    definition:
+      'All three seats reached the same verdict. Panel agreement describes seats, not vendors; two OpenAI seats agreeing are not two independent vendor confirmations.',
+    href: AGREEMENT,
+  },
 
   'evidence basis': {
     definition:
@@ -125,7 +134,12 @@ export const glossary: Record<string, GlossaryEntry> = {
   },
   'three-model AI panel': {
     definition:
-      'Three AI reviewers from different vendors research each claim independently in a first round that is blind to the other two, then read one another\u2019s findings in a second round that documents errors. Which models ran is recorded with every run and shown in the AI review section of every question.',
+      'Three AI models from three vendors (Claude, GPT, Gemini) researched this claim in a blind first round, then read one another\u2019s findings in a second round that documented errors. This label describes a run frozen before September 23, 2026.',
+    href: STAGES,
+  },
+  'three-seat AI panel, two vendors': {
+    definition:
+      'Three AI model seats from two vendors: one Anthropic model and two OpenAI models. The two OpenAI seats are not independent of each other, so three agreeing verdicts are not three independent confirmations.',
     href: STAGES,
   },
   'published rule': {
@@ -136,7 +150,7 @@ export const glossary: Record<string, GlossaryEntry> = {
 
   panel: {
     definition:
-      'The three models that research each claim independently, blind to each other and to this repo. They never vote: the finding is computed from their locked first-round verdicts by a rule published in advance.',
+      'The three model seats that research each claim blind to each other. Current runs use three AI model seats from two vendors: one Anthropic model and two OpenAI models. The two OpenAI seats are not independent of each other. A published rule computes the finding from their locked first-round verdicts.',
     href: STAGES,
   },
   'cross-review': {
@@ -145,6 +159,45 @@ export const glossary: Record<string, GlossaryEntry> = {
     href: STAGES,
   },
 };
+
+const missingPanels = new Set<string>();
+
+/** The panel that produced a claim, or the historical label with one warning if its manifest cannot be read. */
+export function panelForClaim(claim: Claim): { term: string; label: string } {
+  const historical = {
+    term: 'three-model AI panel',
+    label: 'three-model AI panel (Claude, GPT, Gemini)',
+  };
+  try {
+    const file = path.join(process.cwd(), claim.data.review_run, 'run.yaml');
+    if (!existsSync(file)) throw new Error('run.yaml is missing');
+    const seats = loadRunManifest(file).runs
+      .filter((run) => run.round === 1)
+      .map((run) => ({ provider: run.provider.toLowerCase(), name: run.seat ?? run.model_id }));
+    if (seats.length !== 3 || seats.some((seat) => !seat.name)) {
+      throw new Error('round-one seats are incomplete');
+    }
+    const providers = new Set(seats.map((seat) => seat.provider));
+    if (providers.size === 3) return historical;
+    if (
+      providers.size === 2 &&
+      seats.filter((seat) => seat.provider === 'anthropic').length === 1 &&
+      seats.filter((seat) => seat.provider === 'openai').length === 2
+    ) {
+      return {
+        term: 'three-seat AI panel, two vendors',
+        label: 'three-seat AI panel, two vendors (Claude; GPT × 2)',
+      };
+    }
+    throw new Error('round-one providers do not match a published panel');
+  } catch (error) {
+    if (!missingPanels.has(claim.data.id)) {
+      console.warn(`Panel label for claim ${claim.data.id}: ${String(error)}; using historical label`);
+      missingPanels.add(claim.data.id);
+    }
+    return historical;
+  }
+}
 
 export function define(term: string): GlossaryEntry | undefined {
   return glossary[term] ?? glossary[term.toLowerCase()];

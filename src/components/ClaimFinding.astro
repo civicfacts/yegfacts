@@ -5,7 +5,7 @@ import Gloss from './Gloss.astro';
 import TopicTags from './TopicTags.astro';
 import { claimTopics, type Claim, type Story } from '../lib/content';
 import { saidIn, sourceRegister, variationsFrom, type Question } from '../lib/intake';
-import { requireTerm as gloss } from '../lib/glossary';
+import { panelForClaim, requireTerm as gloss } from '../lib/glossary';
 
 /**
  * One checked claim, answering on its own.
@@ -27,6 +27,7 @@ interface Props {
 }
 
 const { claim, story, question, pageUrl } = Astro.props;
+const panel = panelForClaim(claim);
 
 const sources = new Map(sourceRegister().map((source) => [source.id, source]));
 
@@ -97,7 +98,7 @@ const heading = 'section-heading mt-14';
 
     {/* Who decided this, under what rule, and how old it is. */}
     <p class="mt-5 text-[0.8125rem] text-muted">
-      Verdict by a <Gloss {...gloss('three-model AI panel')}>three-model AI panel</Gloss> under a{' '}
+      Verdict by a <Gloss {...gloss(panel.term)}>{panel.label}</Gloss> under a{' '}
       <Gloss {...gloss('published rule')}>published rule</Gloss> ·{' '}
       <Gloss {...gloss('as of')}>as of</Gloss>{' '}
       <time datetime={story.data.as_of}>{story.data.as_of}</time> ·{' '}

@@ -4,6 +4,7 @@ import path from 'node:path';
 import { loadRunManifest } from '../../scripts/lib/review-schema.ts';
 import type { Claim, Story } from '../lib/content';
 import { FINDING_TONE } from '../lib/findings';
+import { panelForClaim } from '../lib/glossary';
 import { effortSentence } from '../lib/runs';
 import { repoPath } from '../lib/site';
 
@@ -46,6 +47,7 @@ interface Props {
 const { story, claims } = Astro.props;
 
 const reviewed = claims.filter((claim) => claim.data.review !== undefined);
+const panelTypes = new Set(reviewed.map((claim) => panelForClaim(claim).term));
 
 /** Seat column order, taken from the first reviewed claim and held steady. */
 const models = reviewed[0]?.data.review?.reviewers.map((reviewer) => reviewer.model) ?? [];
@@ -89,19 +91,32 @@ const runArtifacts = runs.map((run) => ({
  * run's behalf. This is NOT the "High" in the matrix above, which is a
  * reviewer's confidence in its own verdict.
  */
-const effort = effortSentence(
-  runs.flatMap((run) => {
-    const file = path.join(REPO_ROOT, run, 'run.yaml');
+const manifestRuns = runs.flatMap((run) => {
+  const file = path.join(REPO_ROOT, run, 'run.yaml');
+  try {
     return existsSync(file) ? loadRunManifest(file).runs : [];
-  }),
-);
+  } catch {
+    return [];
+  }
+});
+const effort = panelTypes.has('three-seat AI panel, two vendors') &&
+  manifestRuns.length > 0 && manifestRuns.every((run) => run.reasoning_effort === 'high')
+  ? 'Every seat ran at its pinned high reasoning setting; the manifest records it per run.'
+  : effortSentence(manifestRuns);
 ---
 
 <section id="ai-review" class="mt-14">
   <h2 class="section-heading">AI review</h2>
   <p class="mt-1.5 text-sm leading-relaxed text-muted">
-    Three models research each claim independently, then cross-review each other’s findings. The
-    canonical finding is computed from the blind round-one verdicts by a deterministic rule
+    {panelTypes.has('three-seat AI panel, two vendors') && (
+      <>Three AI model seats from two vendors research each claim: one Anthropic model and two OpenAI
+      models. The two OpenAI seats are not independent of each other, so three agreeing verdicts
+      are not three independent confirmations. </>
+    )}
+    {panelTypes.has('three-model AI panel') && (
+      <>Earlier findings used three AI models from three vendors (Claude, GPT, Gemini). </>
+    )}
+    The canonical finding is computed from the blind round-one verdicts by a deterministic rule
     published in advance; the models never vote and never decide. Cross-review documents their
     errors, and what it changed is shown below rather than folded into the finding. Authority comes
     from the <a href="/methodology" class="link">methodology</a>, not from the
