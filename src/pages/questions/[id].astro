@@ -33,7 +33,7 @@ import {
   type Question,
 } from '../../lib/intake';
 import { questionRows, type QuestionRow } from '../../lib/questions';
-import { requireTerm as gloss } from '../../lib/glossary';
+import { panelForClaim, requireTerm as gloss } from '../../lib/glossary';
 import { SITE } from '../../lib/site';
 import { subheads, toc } from '../../lib/toc';
 
@@ -138,6 +138,10 @@ const missing = answered.flatMap((claim) => claim.data.missing_evidence);
 const methodologyVersions = [
   ...new Set(answered.map((claim) => claim.data.methodology_version)),
 ];
+const panelLabels = [...new Map(answered.map((claim) => {
+  const panel = panelForClaim(claim);
+  return [panel.label, panel] as const;
+})).values()];
 
 const withdrawn = story?.data.withdrawn;
 
@@ -336,7 +340,12 @@ const Content = rendered?.Content;
               this?" where the finding is.
             */}
             <p class="mt-8 border-t border-rule pt-4 text-[0.8125rem] text-muted">
-              Verdicts by a <Gloss {...gloss('three-model AI panel')}>three-model AI panel</Gloss>{' '}
+              Verdicts by {panelLabels.map((panel, index) => (
+                <>
+                  {index > 0 && ' and '}
+                  a <Gloss {...gloss(panel.term)}>{panel.label}</Gloss>
+                </>
+              ))}{' '}
               under a <Gloss {...gloss('published rule')}>published rule</Gloss> ·{' '}
               <Gloss {...gloss('as of')}>as of</Gloss>{' '}
               <time datetime={story.data.as_of}>{story.data.as_of}</time> ·{' '}
@@ -453,6 +462,14 @@ const Content = rendered?.Content;
                         panel
                       </span>
                     </p>
+
+                    {panelLabels.length > 1 && (
+                      <p class="mt-2 text-xs text-muted">
+                        Verdict by a <Gloss {...gloss(panelForClaim(claim).term)}>
+                          {panelForClaim(claim).label}
+                        </Gloss>
+                      </p>
+                    )}
 
                     <p class="mt-2.5 text-sm leading-relaxed text-muted">
                       <Gloss {...gloss('evidence basis')}>Evidence basis</Gloss>:{' '}

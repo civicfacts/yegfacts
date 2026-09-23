@@ -150,6 +150,7 @@ describe('canary', () => {
 
 describe('research admission', () => {
   const captureResult = (over: Partial<CaptureCheckResult> = {}): CaptureCheckResult => ({
+    operator_path_notes: 0,
     status: 'pass',
     failures: [],
     sources: [
@@ -355,6 +356,7 @@ describe('record-only proof', () => {
     package_seen: 1,
     requests: 9,
     searched: 9,
+    operator_path_notes: 0,
   });
 
   it('says what it ran over and what that record cannot hold', () => {

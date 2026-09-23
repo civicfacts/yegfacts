@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Finding from '../../components/Finding.astro';
 import NumberedSteps, { type Exit } from '../../components/NumberedSteps.astro';
 import { PANEL_AGREEMENT_GLOSS } from '../../lib/findings';
+import { requireTerm as gloss } from '../../lib/glossary';
 import { SITE, repoPath } from '../../lib/site';
 import { PANEL_AGREEMENT_LEVELS } from '../../lib/vocabulary';
 import { toc } from '../../lib/toc';
@@ -39,14 +40,19 @@ const short: ReadonlyArray<{ name: string; body: string; exits: readonly Exit[] 
     ],
   },
   {
-    name: 'Three AI models research it blind',
-    body: "Claude, GPT and Gemini each get the same brief and search the public record on their own, without seeing each other's work. Each comes back with a verdict, the evidence for and against, and what it could not find.",
+    name: 'Three AI model seats research it blind',
+    body: "Three seats, one Anthropic and two OpenAI, get the same brief and search the public record without seeing each other's work. Two of them share a vendor, which the panel section below spells out. Each seat returns a verdict, the evidence for and against, and what it could not find.",
     exits: [
       { kind: 'Stops here', text: 'A reviewer that returns nothing after its retry halts the run before any finding.' },
       {
         kind: 'Stops here',
-        text: 'As of September 16, 2026 all three seats can run again, each under a check whose limits are set out below. No panel has run since September 4, and no finding has been published under these checks.',
+        text: 'As of September 16, 2026 all three seats could run again, each under a check whose limits are set out below. No panel had run since September 4, and no finding had been published under those checks.',
         link: { href: '#reviewer-execution', text: 'What the check is, and what it does not show' },
+      },
+      {
+        kind: 'Continues',
+        text: 'As of September 23, 2026 the Google seat is retired. The panel is three seats from two vendors, Anthropic and OpenAI.',
+        link: { href: '/methodology/changes#v1-37', text: 'Methodology v1.37' },
       },
       { kind: 'Loops back', text: "Afterwards the three read each other's work. A fabricated citation caught there sends that claim back for a fresh blind round." },
     ],
@@ -83,7 +89,7 @@ const intake = [
   },
   {
     name: 'Every claim in it is written down',
-    body: 'Three inexpensive models read that capture separately. Each lists every factual assertion in it: numbers, counts, dates, what somebody says a document said, and the factual premise sitting inside an opinion. They are told not to work out whether any of it is true, and not to decide which parts are interesting. Each one is recorded with the exact words that carry it and the comment those words came from.',
+    body: 'Three extraction seats from two vendors read that capture separately. Each lists every factual assertion in it: numbers, counts, dates, what somebody says a document said, and the factual premise sitting inside an opinion. They are told not to work out whether any of it is true, and not to decide which parts are interesting. Each one is recorded with the exact words that carry it and the comment those words came from.',
   },
   {
     name: 'The three lists become one',
@@ -95,7 +101,7 @@ const intake = [
   },
   {
     name: 'Triage rules on the questions',
-    body: 'The questions go to two readers, one pass each, and neither reader sees the other. Each returns GO, PARK or NO on every one, with a reason short enough to show the person who raised it. Where they disagree the question is kept rather than dropped, because throwing out a real question costs a reader more than holding one too long. Only a GO reaches stage 1 below. The rest are listed anyway, with their reasons, and the questions most people are arguing about are checked first.',
+    body: 'The questions go to two OpenAI readers from one vendor, one pass each, and neither reader sees the other. Each returns GO, PARK or NO on every one, with a reason short enough to show the person who raised it. An Anthropic audit reader re-decides a question both OpenAI readers decline or park before the register records it. Where the two OpenAI readers disagree the question is kept rather than dropped, because throwing out a real question costs a reader more than holding one too long. Only a GO reaches stage 1 below. The rest are listed anyway, with their reasons, and the questions most people are arguing about are checked first.',
   },
 ];
 
@@ -106,7 +112,7 @@ const stages = [
   },
   {
     name: 'Blind research round',
-    body: 'Three models, Claude, GPT and Gemini, receive the identical package: the brief, the public reviewer prompt, and a required JSON output schema. New runs must pass an execution check intended to keep host instructions and private files out of the review. A separate working directory alone did not provide that protection. Since September 16, 2026 every seat has a demonstrated profile again, and what each of those profiles does and does not establish is set out below. Each returns a per-claim verdict, its confidence, the evidence supporting and challenging it, its limitations, what it could not find, and comparison cities with a judgement about whether those cases transfer to Edmonton.',
+    body: 'The three seats, one Anthropic and two OpenAI, receive the identical package: the brief, the public reviewer prompt, and a required JSON output schema. The two GPT seats share a vendor, so their agreeing is one company agreeing with itself. New runs must pass an execution check intended to keep host instructions and private files out of the review. A separate working directory alone did not provide that protection. The execution profiles and their limits are set out below. Each seat returns a per-claim verdict, its confidence, the evidence supporting and challenging it, its limitations, what it could not find, and comparison cities with a judgement about whether those cases transfer to Edmonton.',
   },
   {
     name: 'Evidence staging and deterministic merge',
@@ -118,11 +124,11 @@ const stages = [
   },
   {
     name: 'Deterministic synthesis',
-    body: 'A script computes the canonical finding from the three locked round-one verdicts, using a published lookup table over every possible combination. Round one is designed to keep the three judgements separate, so only its verdicts enter the calculation. The execution limits below qualify that claim of independence. Model identity never enters the calculation, and the property is tested. A genuinely split panel produces Mixed, with the split shown. Beside the finding the site publishes panel agreement, Unanimous, Adjacent or Split. That replaced a confidence score in v1.3, because agreement is what the method actually measures and confidence implied a probability of truth that nothing here computes. All published arithmetic lives in a tested script, never in prose. Since v1.24 a run can also publish fewer claims than it asked. Where a framing concern is right and no repair exists that does not weaken the claim, that claim is parked with a public reason, and its answers stay committed.',
+    body: 'A script computes the canonical finding from the three locked round-one verdicts, using a published lookup table over every possible combination. Round one keeps the seats blind to one another, so only its verdicts enter the calculation. Agreement counts seats, not vendors. Model identity never enters the calculation, and the property is tested. A genuinely split panel produces Mixed, with the split shown. Beside the finding the site publishes panel agreement, Unanimous, Adjacent or Split. Those words describe seats, not vendors. That replaced a confidence score in v1.3, because agreement is what the method actually measures and confidence implied a probability of truth that nothing here computes. All published arithmetic lives in a tested script, never in prose. Since v1.24 a run can also publish fewer claims than it asked. Where a framing concern is right and no repair exists that does not weaken the claim, that claim is parked with a public reason, and its answers stay committed.',
   },
   {
     name: 'Drafting, faithfulness check and plain-speech read',
-    body: 'Claude drafts the question page and the claim records from the merged evidence, a fixed choice disclosed here. The other two models then check the draft against the evidence sentence by sentence, looking for anything asserted that the evidence does not carry. Flags are fixed before a human sees it. Then a model from a different vendor than the drafter reads the answers, the sentence under the title and the TL;DR as a person would: would anyone say this out loud, does it make sense to somebody who has not seen the question, and has anything true been dropped rather than moved down. Since v1.32 a page is written in layers, ten seconds for a resident at the top and the exact figures with their sources below, and the read checks that every figure that left the top is still on the page. Its report is committed with the run, and a claim that cannot name its read does not publish.',
+    body: 'Claude drafts the question page and the claim records from the merged evidence, a fixed choice disclosed here. OpenAI seats then check the draft against the evidence sentence by sentence, looking for anything asserted that the evidence does not carry. Flags are fixed before a human sees it. Then a model from a different vendor than the drafter reads the answers, the sentence under the title and the TL;DR as a person would: would anyone say this out loud, does it make sense to somebody who has not seen the question, and has anything true been dropped rather than moved down. Since v1.32 a page is written in layers, ten seconds for a resident at the top and the exact figures with their sources below, and the read checks that every figure that left the top is still on the page. Its report is committed with the run, and a claim that cannot name its read does not publish.',
   },
   {
     name: 'Publication gate',
@@ -137,7 +143,7 @@ const stages = [
  */
 const agreements = PANEL_AGREEMENT_LEVELS.map((level) => ({
   word: level,
-  body: PANEL_AGREEMENT_GLOSS[level],
+  body: level === 'Unanimous' ? gloss(level).definition : PANEL_AGREEMENT_GLOSS[level],
 }));
 
 /**
@@ -198,17 +204,18 @@ const sections = toc([
 <Base
   sections={sections}
   title="Methodology"
-  description="How YEGFacts checks a claim: every claim in a source is listed, a brief is frozen before any research, three AI models research it without seeing each other, a published table turns their verdicts into one finding, and every fact is checked against archived sources before it is published."
+  description="How YEGFacts checks a claim: every claim in a source is listed, a brief is frozen before research, three AI model seats from two vendors review it, a published table turns their verdicts into one finding, and every fact is checked against archived sources before publication."
 >
   <header class="border-b border-rule pb-6">
     <h1 class="text-[1.75rem] leading-[1.15] font-bold tracking-[-0.022em] sm:text-display">
       Methodology
     </h1>
     <p class="mt-3 max-w-prose text-base leading-relaxed text-muted">
-      Three AI models from three companies each check a claim against the public record without
-      seeing each other's work. A rule written down in advance turns their three answers into one
-      finding. Nothing is published until every fact in it has been checked against a saved copy of
-      its source.
+      Three AI model seats from two vendors check each claim against the public record: one
+      Anthropic model and two OpenAI models. The two OpenAI seats are not independent of each other,
+      so three agreeing verdicts are not three independent confirmations. A rule written down in
+      advance turns their three answers into one finding. Nothing is published until every fact in
+      it has been checked against a saved copy of its source.
     </p>
     <p class="mt-3">
       <a href="/methodology/changes" class="link">Methodology changes</a>
@@ -260,7 +267,7 @@ const sections = toc([
     <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">The words we use</h2>
     <p class="mt-2 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
       No true or false, and no score out of ten. A finding is one of five words. Beside it sit two
-      more things: what kind of record answered the question, and whether the three reviewers
+      more things: what kind of record answered the question, and whether the three seats
       agreed. A claim can be Supported on a thin record, or Not established by a panel that agreed
       unanimously that the record does not exist.
     </p>
@@ -449,8 +456,14 @@ const sections = toc([
       project, the memory files kept for every project on this computer, the name of the home
       folder, the path of the project, and the one-off token each attempt plants for its own
       test. Every line of them long enough to be distinctive is then looked for in the body of
-      each request that was sent, at any depth, and if any of it is there the run is refused. So
-      is a run whose recording does not carry the declared package word for word, since a
+      each request that was sent, at any depth, and if any of it is there the run is refused,
+      with one exception since September 23, 2026 (v1.38): when Claude's tool fetches a file
+      such as a PDF, the tool saves it to disk and writes a note into its own result naming the
+      path, and that path is in the operator's home folder. That one note, in that one place,
+      is counted rather than refused, and the count is printed on the run's row, because the
+      path was still sent to the vendor. The same words anywhere else, and every other private
+      string anywhere, still refuse the run. So is a run refused whose recording does not carry
+      the declared package word for word, since a
       recording that cannot be tied to the package it was meant to carry says nothing about it.
       A refusal names the file and the line number, never the line, and neither does the
       published record: the private text is read, compared and dropped. What it searches is the
@@ -572,10 +585,10 @@ const sections = toc([
       errors it could make.
     </p>
     <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
-      The obvious objection is that this hands a single reviewer a veto. The answer is disclosure
+      The obvious objection is that this hands a single seat a veto. The answer is disclosure
       rather than averaging. Every claim shows what each of the three said, so a reader who thinks
       the lone qualifier was wrong can see precisely that and weigh it, without the site publishing
-      a stronger claim than every reviewer accepted.
+      a stronger claim than every seat accepted.
     </p>
 
     {/*

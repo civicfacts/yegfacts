@@ -188,6 +188,12 @@ function attemptRecord(dir: string, attempt: number, schema?: string): AttemptRe
     // was never asked, and it always is.
     context_proof: text('context_proof') ?? 'unavailable',
     ...(text('record_kind') ? { record_kind: text('record_kind') } : {}),
+    // v1.38: how many requests carried the operator's home path inside the
+    // CLI's own binary-save note. Zero is worth printing; absent means the
+    // check never ran.
+    ...(typeof metadata.operator_path_notes === 'number'
+      ? { operator_path_notes: metadata.operator_path_notes }
+      : {}),
     admitted_for_research: metadata.admitted_for_research === true,
     ...(text('canary_context_proof') ? { canary_context_proof: text('canary_context_proof') } : {}),
     ...(text('admission_reason') ? { admission_reason: text('admission_reason') } : {}),

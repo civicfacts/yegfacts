@@ -1,3 +1,7 @@
+import { existsSync } from 'node:fs';
+import path from 'node:path';
+import { loadRunManifest } from '../../scripts/lib/review-schema';
+import type { Claim } from './content';
 import { FINDING_GLOSS, PANEL_AGREEMENT_GLOSS } from './findings';
 
 /**
@@ -97,6 +101,11 @@ export const glossary: Record<string, GlossaryEntry> = {
   // popover and the methodology page cannot drift apart.
   ...withHref(FINDING_GLOSS, VOCABULARY),
   ...withHref(PANEL_AGREEMENT_GLOSS, AGREEMENT),
+  Unanimous: {
+    definition:
+      'All three seats reached the same verdict. Panel agreement describes seats, not vendors; two OpenAI seats agreeing are not two independent vendor confirmations.',
+    href: AGREEMENT,
+  },
 
   'evidence basis': {
     definition:
@@ -125,7 +134,17 @@ export const glossary: Record<string, GlossaryEntry> = {
   },
   'three-model AI panel': {
     definition:
-      'Three AI reviewers from different vendors research each claim independently in a first round that is blind to the other two, then read one another\u2019s findings in a second round that documents errors. Which models ran is recorded with every run and shown in the AI review section of every question.',
+      'Three AI models from three vendors (Claude, GPT, Gemini) researched this claim in a blind first round, then read one another\u2019s findings in a second round that documented errors. This label describes a run frozen before September 23, 2026.',
+    href: STAGES,
+  },
+  'AI panel': {
+    definition:
+      'The seats that produced this finding are listed in its run manifest. This page could not read that manifest, so it names no vendors here.',
+    href: STAGES,
+  },
+  'three-seat AI panel, two vendors': {
+    definition:
+      'Three AI model seats from two vendors: one Anthropic model and two OpenAI models. The two OpenAI seats are not independent of each other, so three agreeing verdicts are not three independent confirmations.',
     href: STAGES,
   },
   'published rule': {
@@ -136,7 +155,7 @@ export const glossary: Record<string, GlossaryEntry> = {
 
   panel: {
     definition:
-      'The three models that research each claim independently, blind to each other and to this repo. They never vote: the finding is computed from their locked first-round verdicts by a rule published in advance.',
+      'The three model seats that research each claim blind to each other. Current runs use three AI model seats from two vendors: one Anthropic model and two OpenAI models. The two OpenAI seats are not independent of each other. A published rule computes the finding from their locked first-round verdicts.',
     href: STAGES,
   },
   'cross-review': {
@@ -145,6 +164,56 @@ export const glossary: Record<string, GlossaryEntry> = {
     href: STAGES,
   },
 };
+
+const missingPanels = new Set<string>();
+
+/** The panel that produced a claim, or the historical label with one warning if its manifest cannot be read. */
+export function panelForClaim(claim: Claim): { term: string; label: string } {
+  const historical = {
+    term: 'three-model AI panel',
+    label: 'three-model AI panel (Claude, GPT, Gemini)',
+  };
+  const unreadable = {
+    term: 'AI panel',
+    label: 'AI panel (seats in the run record)',
+  };
+  try {
+    const file = path.join(process.cwd(), claim.data.review_run, 'run.yaml');
+    if (!existsSync(file)) throw new Error('run.yaml is missing');
+    // Only the seats that answered. A refused or failed attempt keeps its
+    // manifest row (that is the retention rule) and is not a seat on the panel.
+    // Manifests written before methodology v1.28 carry no status field; every
+    // row in them is an answered seat.
+    const seats = loadRunManifest(file).runs
+      .filter((run) => run.round === 1 && (run.status === undefined || run.status === 'ok'))
+      .map((run) => ({ provider: run.provider.toLowerCase(), name: run.seat ?? run.model_id }));
+    if (seats.length !== 3 || seats.some((seat) => !seat.name)) {
+      throw new Error('round-one seats are incomplete');
+    }
+    const providers = new Set(seats.map((seat) => seat.provider));
+    if (providers.size === 3) return historical;
+    if (
+      providers.size === 2 &&
+      seats.filter((seat) => seat.provider === 'anthropic').length === 1 &&
+      seats.filter((seat) => seat.provider === 'openai').length === 2
+    ) {
+      return {
+        term: 'three-seat AI panel, two vendors',
+        label: 'three-seat AI panel, two vendors (Claude; GPT × 2)',
+      };
+    }
+    throw new Error('round-one providers do not match a published panel');
+  } catch (error) {
+    // Never the historical label by default: a manifest this page cannot read
+    // is not evidence of three vendors. The page says the seats are in the
+    // run record, and the build says which claim, once.
+    if (!missingPanels.has(claim.data.id)) {
+      console.warn(`Panel label for claim ${claim.data.id}: ${String(error)}; the page names no vendors`);
+      missingPanels.add(claim.data.id);
+    }
+    return unreadable;
+  }
+}
 
 export function define(term: string): GlossaryEntry | undefined {
   return glossary[term] ?? glossary[term.toLowerCase()];

@@ -6,11 +6,11 @@
 
 **[yegfacts.ca](https://yegfacts.ca)**. Claims about Edmonton civic government, checked against the public record, published with the evidence attached.
 
-This repository is the whole site and the whole method. Every published finding can be audited from here without asking anyone anything: the frozen brief, the three independent model reviews, the merge, the synthesis rule, the archived evidence with its hashes, the publication gate report, and the edit history.
+This repository is the whole site and the whole method. Every published finding can be audited from here without asking anyone anything: the frozen brief, the three round-one seat reviews, the merge, the synthesis rule, the archived evidence with its hashes, the publication gate report, and the edit history. Current runs use three AI model seats from two vendors: one Anthropic model and two OpenAI models. The two OpenAI seats are not independent of each other, so three agreeing verdicts are not three independent confirmations.
 
 ## Who builds it
 
-Hello, I'm Stew, a magpie and the AI Project Steward. I build and maintain this repository: the research runs, the code, the evidence archive, the audits, and most of the words. The findings themselves are not mine. They come from a three-model review panel working under the [published methodology](https://yegfacts.ca/methodology), and a deterministic rule turns the panel's verdicts into the finding you read.
+Hello, I'm Stew, a magpie and the AI Project Steward. I build and maintain this repository: the research runs, the code, the evidence archive, the audits, and most of the words. The findings themselves are not mine. New runs use three AI model seats from two vendors, one Anthropic model and two OpenAI models, under the [published methodology](https://yegfacts.ca/methodology); published findings retain the panel recorded in their run. A deterministic rule turns the panel's verdicts into the finding you read.
 
 The human behind the project is Ildar Abdulin, in Edmonton. He supplies the idea, the direction, and the judgment calls, and he is the named person accountable for everything published. The [About page](https://yegfacts.ca/about) has his interests note and the argument for why neither of us gets to pick answers.
 
@@ -19,7 +19,7 @@ The human behind the project is Ildar Abdulin, in Edmonton. He supplies the idea
 One run per story, all of its claims together. State lives in `reviews/<story>/state.yaml` so any session can resume.
 
 1. **Brief.** I write it. It defines each claim precisely (what counts, whose money, the as-of date) before any model runs. A model from a different vendor checks the framing. Then the brief is frozen.
-2. **Blind round.** Three models from three companies (Claude, GPT, Gemini) each get the identical package in an empty working directory. They cannot see each other, the site, or this pipeline. Output is validated against `prompts/review-schema.json`.
+2. **Blind round.** Three AI model seats from two vendors, one Anthropic model and two OpenAI models, each get the identical package. They cannot see each other's work. The two OpenAI seats are not independent of each other, so three agreeing verdicts are not three independent confirmations. Runs frozen before September 23, 2026 used three AI models from three vendors (Claude, GPT, Gemini) and keep that label. Output is validated against `prompts/review-schema.json`.
 3. **Evidence and merge.** Every cited source is fetched, its bytes hashed and archived, and given a registry entry under `evidence/registry/`. The three reviews are merged by script, not by a model.
 4. **Cross-review.** Each reviewer reads the others' work and may document errors. Verdicts do not change here.
 5. **Synthesis.** `scripts/synthesize.ts` computes the finding and the panel agreement from the round-one verdicts with a rule that is published in advance and tested over every possible combination.
@@ -68,7 +68,7 @@ npm run build        # astro build + pagefind index
 
 CI runs all of that plus `astro check` and an in-page duplication audit on every push. Production deploys from `main` when a pull request merges. Every other branch gets a Cloudflare Pages preview, linked on the PR.
 
-Running the panel needs three vendor CLIs and their subscriptions. Each run's `run.yaml` records the exact command, model and reasoning effort per seat (effort pinned since methodology v1.6).
+Running the panel needs two vendor CLIs, `claude` and `codex`, and their subscriptions. The three seats use one Anthropic model and two OpenAI models. Each run's `run.yaml` records the exact command, model and reasoning effort per seat (effort pinned since methodology v1.6).
 
 ## Contributing
 

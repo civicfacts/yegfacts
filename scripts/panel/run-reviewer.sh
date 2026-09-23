@@ -5,8 +5,8 @@
 #   scripts/panel/run-reviewer.sh <provider> <story> <date> <round> [--dry-run]
 #   scripts/panel/run-reviewer.sh claude electric-buses 2026-08-31 1
 #
-# Providers: claude | codex | agy  (aliases: anthropic, gpt/openai, gemini/google)
-#           luna | shadow  (the uncounted shadow seat, v1.34; needs --into)
+# Providers: claude | codex | luna  (aliases: anthropic, gpt/openai)
+#           agy | gemini | google: retired under v1.37, only with --finish-frozen-run
 #
 # Isolation is NOT this script's business, and the older version of this comment
 # claiming a fresh mktemp -d was the boundary was wrong: a CLI loads its
@@ -57,10 +57,10 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 usage() {
   cat >&2 <<'USAGE'
 usage: scripts/panel/run-reviewer.sh <provider> <story> <date> <round> [options]
-  provider  claude | codex | agy   (aliases: anthropic, gpt, openai, gemini, google)
-            luna | shadow          the uncounted shadow seat (v1.34): round 1 only,
-                                   and --into shadow-<name> is required so it never
-                                   lands in a round directory
+  provider  claude | codex | luna  (aliases: anthropic, gpt, openai)
+            agy | gemini | google  retired for runs frozen after 2026-09-23
+                                   (methodology v1.37); refused unless
+                                   --finish-frozen-run says the run froze before
   story     story slug, e.g. electric-buses
   date      run date, e.g. 2026-08-31
   round     1 (blind research) or 2 (cross-review)
@@ -70,6 +70,8 @@ options:
   --claims <id,...>  answer only these claim ids (claim-scoped re-run)
   --into <dirname>   write the review and the manifest under <run>/<dirname>
                      instead of <run>/round<N> and <run>/run.yaml
+  --finish-frozen-run  the run froze under the three-provider rule before
+                     2026-09-23, so the retired Google seat may finish it
 USAGE
   exit 2
 }
@@ -80,11 +82,13 @@ PROVIDER_ARG="$1"; STORY="$2"; RUN_DATE="$3"; ROUND="$4"; shift 4
 DRY_RUN=0
 CLAIMS=""
 INTO=""
+FINISH_FROZEN=0
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --dry-run) DRY_RUN=1; shift ;;
     --claims) CLAIMS="${2:-}"; [ -n "$CLAIMS" ] || { echo "--claims needs a value" >&2; usage; }; shift 2 ;;
     --into) INTO="${2:-}"; [ -n "$INTO" ] || { echo "--into needs a value" >&2; usage; }; shift 2 ;;
+    --finish-frozen-run) FINISH_FROZEN=1; shift ;;
     *) echo "unknown option: $1" >&2; usage ;;
   esac
 done
@@ -94,22 +98,23 @@ esac
 
 case "$ROUND" in 1|2) ;; *) echo "round must be 1 or 2, got '$ROUND'" >&2; exit 2 ;; esac
 case "$PROVIDER_ARG" in
-  luna|shadow)
-    # The shadow seat is never merged. scripts/merge.ts reads every JSON file
-    # in a round directory, so the only way to keep that promise is to refuse
-    # to write into one. Round 2 hands a seat the other seats' findings, which
-    # a seat that is not on the panel has no business reading.
-    case "$INTO" in
-      shadow-*) ;;
-      *) echo "the shadow seat needs --into shadow-<name>; it is never written into a round directory" >&2; exit 2 ;;
-    esac
-    [ "$ROUND" = "1" ] || { echo "the shadow seat runs round 1 only" >&2; exit 2; }
+  agy|gemini|google)
+    # Methodology v1.37 (2026-09-23): the Google seat is retired for every run
+    # frozen after that date. A run frozen under the three-provider rule
+    # finishes under it, and the flag is how the operator says so; the run
+    # record is where they say which run and why.
+    if [ "$FINISH_FROZEN" != "1" ]; then
+      echo "the Google seat is retired for runs frozen after 2026-09-23 (methodology v1.37);" >&2
+      echo "pass --finish-frozen-run only for a run that froze under the three-provider rule" >&2
+      exit 2
+    fi
     ;;
 esac
 
 # ---------------------------------------------------------------------------
 # Provider → pinned command (spec §5.2). The output filename is the panel's
-# short name so a run directory reads round1/{claude,gpt,gemini}.json.
+# short name so a run directory reads round1/{claude,gpt,gpt-luna}.json
+# (round1/gemini.json on runs frozen before v1.37).
 #
 # Reasoning effort is pinned per seat (methodology v1.6), not left to whatever
 # the local CLI configuration happens to default to. `high` is the highest
@@ -138,18 +143,14 @@ case "$PROVIDER_ARG" in
     SLOT="gpt"; CLI="codex"; MODEL_ID="gpt-6-sol"
     PROVIDER_CANONICAL="openai"; SEAT="GPT-6 Sol"
     ;;
-  luna|shadow)
-    # v1.34 (2026-09-23): the shadow seat. GPT-6 Luna is the cheapest model
-    # any panel vendor sells, and whether a model that cheap can hold a
-    # research seat is an open question this site answers by measurement,
-    # not by guessing. It runs the same frozen package as the three counted
-    # seats and its answer is committed, but it is never merged and never
-    # synthesised: it must be run with --into shadow-<name>, because
-    # scripts/merge.ts reads every JSON file in a round directory, and the
-    # run's synthesis_scope names no shadow. The
-    # comparison against the counted seats is written into run-record.md.
+  luna)
+    # v1.37 (2026-09-23): the third counted seat. It was v1.34's uncounted
+    # shadow seat for exactly one run (lanes-and-congestion round 1); the
+    # Google seat's retirement the same day made it a panel seat. Two OpenAI
+    # seats on one panel are not independent of each other, and every page
+    # that names the panel says so.
     SLOT="gpt-luna"; CLI="codex"; MODEL_ID="gpt-6-luna"
-    PROVIDER_CANONICAL="openai"; SEAT="GPT-6 Luna (shadow, not counted)"
+    PROVIDER_CANONICAL="openai"; SEAT="GPT-6 Luna"
     ;;
   agy|gemini|google)
     # v1.20 (2026-09-03): the seat moves from Gemini 3.1 Pro to Gemini 3.8
@@ -187,7 +188,7 @@ OUT_DIR="$RUN_DIR/${INTO:-round$ROUND}"
 OUT_FILE="$OUT_DIR/$SLOT.json"
 # A --into directory that is a symbolic link is a destination whose name says
 # one thing and whose contents land somewhere else. Nothing legitimate needs
-# one, and for the shadow seat it is the one way left to reach round1/.
+# one.
 if test -n "$INTO" && test -L "$OUT_DIR"; then
   echo "--into '$INTO' is a symbolic link; refusing to write through it" >&2; exit 2
 fi
@@ -328,6 +329,14 @@ ARCHIVE_ROOT="$("$INVOKE" --archive-root)"
 RUN_STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 ATTEMPT_BASE="$ARCHIVE_ROOT/$STORY/$RUN_DATE/${INTO:-round$ROUND}/$SLOT/$RUN_STAMP"
 
+# Methodology v1.37: the seat's CLI is checked for a version and a reported
+# login before a package is assembled, so a dead seat is found here rather
+# than after a run has been filed. The launcher's canary is the quota probe.
+if [ "$DRY_RUN" != "1" ] && [ "$CLI" != "agy" ]; then
+  "$REPO_ROOT/scripts/panel/preflight.sh" "$CLI" >&2 \
+    || { echo "[$SLOT round $ROUND] preflight failed for $CLI; nothing was assembled or sent" >&2; exit 2; }
+fi
+
 if [ "$DRY_RUN" = "1" ]; then
   echo "DRY RUN — no CLI executed, nothing written under reviews/"
   echo
@@ -400,7 +409,9 @@ for attempt in 1 2; do
   echo "[$SLOT round $ROUND] attempt $attempt: $COMMAND_STRING" >&2
 
   INVOKE_OK=1
-  "$INVOKE" --purpose research --provider "$PROVIDER_CANONICAL" --package "$PACKAGE" \
+  FROZEN_FLAG=()
+  if [ "$FINISH_FROZEN" = "1" ]; then FROZEN_FLAG=(--finish-frozen-run); fi
+  "$INVOKE" --purpose research --provider "$PROVIDER_CANONICAL" --package "$PACKAGE" ${FROZEN_FLAG[@]+"${FROZEN_FLAG[@]}"} \
     --attempt-dir "$ATTEMPT_DIR" --model "$MODEL_ID" --effort "$EFFORT" \
     --label "$SLOT round $ROUND" || INVOKE_OK=0
 

@@ -186,7 +186,11 @@ const invoke = (
   const result = run(
     [
       INVOKE, '--purpose', purpose, '--provider', seat, '--package', pkg, '--attempt-dir', attempt,
-      '--model', MODELS[seat], '--effort', 'high', ...extra,
+      '--model', MODELS[seat], '--effort', 'high',
+      // v1.37: the Google profile is kept for runs frozen before the retirement
+      // and reachable only with the flag; these tests exercise that profile.
+      ...(seat === 'google' ? ['--finish-frozen-run'] : []),
+      ...extra,
     ],
     one.env,
   );

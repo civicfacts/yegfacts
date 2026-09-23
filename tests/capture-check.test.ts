@@ -242,6 +242,78 @@ describe('capture check', () => {
     expect(JSON.stringify(result)).not.toContain(machine.repoRoot);
   });
 
+  // v1.38: the CLI's own binary-save note, inside a tool result, may carry the
+  // operator's home path. It is counted and disclosed, not refused; the same
+  // path anywhere else, or the same note anywhere else, still refuses.
+  const saveNote = (home: string) =>
+    `Summary of the page.\n\n[Binary content (application/pdf, 2.6MB) also saved to ${home}/.claude/projects/x/tool-results/webfetch-1.pdf]`;
+  const toolResultTurn = (results: string[], extraText: string[] = []) =>
+    request('req-0003.json', {
+      model: 'claude-opus-5',
+      messages: [
+        { role: 'user', content: [{ type: 'text', text: PACKAGE }] },
+        { role: 'assistant', content: [{ type: 'tool_use', id: 't1', name: 'WebFetch', input: { url: 'https://example.com/a.pdf' } }] },
+        {
+          role: 'user',
+          content: [
+            ...results.map((text) => ({ type: 'tool_result', tool_use_id: 't1', content: text })),
+            ...extraText.map((text) => ({ type: 'text', text })),
+          ],
+        },
+      ],
+    });
+
+  it('counts the home path inside the binary-save note in a tool result and does not fail on it', () => {
+    const machine = stubMachine('save-note');
+    const result = check(machine, [connectivity(), sessionTitle(), toolResultTurn([saveNote(machine.home)])]);
+    expect(result.status).toBe('pass');
+    expect(result.operator_path_notes).toBe(1);
+    expect(result.failures).toEqual([]);
+  });
+
+  it('still fails the home path outside the note, and counts the note beside it', () => {
+    const machine = stubMachine('save-note');
+    const result = check(machine, [
+      connectivity(),
+      sessionTitle(),
+      toolResultTurn([saveNote(machine.home)], [`The operator's files live under ${machine.home}/Sites.`]),
+    ]);
+    expect(result.status).toBe('fail');
+    expect(result.failures).toEqual(['req-0003.json: carries the home directory line 1']);
+    expect(result.operator_path_notes).toBe(1);
+  });
+
+  it('does not cut the note when it sits in a text block rather than a tool result', () => {
+    const machine = stubMachine('save-note');
+    const result = check(machine, [connectivity(), sessionTitle(), mainTurn([saveNote(machine.home)])]);
+    expect(result.status).toBe('fail');
+    expect(result.failures).toEqual(['req-0003.json: carries the home directory line 1']);
+    expect(result.operator_path_notes).toBe(0);
+  });
+
+  it('does not cut a note whose path is not under the CLI projects directory', () => {
+    const machine = stubMachine('save-note');
+    const result = check(machine, [
+      connectivity(),
+      sessionTitle(),
+      toolResultTurn([`[Binary content (application/pdf, 2.6MB) also saved to ${machine.home}/Downloads/a.pdf]`]),
+    ]);
+    expect(result.status).toBe('fail');
+    expect(result.operator_path_notes).toBe(0);
+  });
+
+  it('does not cut the note for any other source', () => {
+    const machine = stubMachine('save-note');
+    const result = check(machine, [
+      connectivity(),
+      sessionTitle(),
+      toolResultTurn([`[Binary content (text/plain, 1KB) also saved to ${machine.repoRoot}/x.txt]`]),
+    ]);
+    expect(result.status).toBe('fail');
+    expect(result.failures).toEqual(['req-0003.json: carries the repository path line 1']);
+    expect(result.operator_path_notes).toBe(0);
+  });
+
   it('fails a body carrying the canary token', () => {
     const machine = stubMachine('token');
     const token = 'YEGFACTS_CANARY_0123456789abcdef01234567';

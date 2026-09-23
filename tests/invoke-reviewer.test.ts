@@ -465,7 +465,7 @@ describe('research admission', { timeout: 60_000 }, () => {
     // credential check. A model on no list stops earlier.
     ['openai', 'gpt-5.6-sol', /no codex credential at \$HOME\/\.codex\/auth\.json/],
     ['openai', 'gpt-5.6-luna', /model 'gpt-5\.6-luna' is not pinned for openai/],
-    ['google', 'gemini-3.8-flash-high', /no gemini credential at \$HOME\/\.gemini/],
+    ['google', 'gemini-3.8-flash-high', /retired for runs frozen after 2026-09-23 \(methodology v1\.37\)/],
     ['mystery-vendor', 'claude-opus-5-5', /unknown provider/],
   ])('refuses %s for research without invoking anything', (provider, model, expected) => {
     const stub = stubClaude();
@@ -497,7 +497,7 @@ describe('research admission', { timeout: 60_000 }, () => {
 
   it.each([
     ['openai', 'gpt-6-sol', /no codex credential at \$HOME\/\.codex\/auth\.json/],
-    ['google', 'gemini-3.8-flash-high', /no gemini credential at \$HOME\/\.gemini/],
+    ['google', 'gemini-3.8-flash-high', /retired for runs frozen after 2026-09-23 \(methodology v1\.37\)/],
   ])('records %s with its own seat and its own reason when no model is named', (provider, model, expected) => {
     const stub = stubClaude();
     const attempt = path.join(stub.archive, 'defaults', provider);
@@ -1188,49 +1188,29 @@ describe('run-reviewer', { timeout: 120_000 }, () => {
   });
 
   /**
-   * The shadow seat (methodology v1.34) is never merged. scripts/merge.ts
-   * reads every JSON file in a round directory, so the only way to keep that
-   * promise is to refuse every destination that is not a shadow- directory,
-   * and to refuse round 2, which would hand a seat that is not on the panel
-   * the panel's findings.
+   * Methodology v1.37: the Google seat is retired for runs frozen after
+   * 2026-09-23. The runner refuses it unless the operator says the run froze
+   * under the three-provider rule; audits have no such flag.
    */
-  it('refuses the shadow seat anywhere but round 1 of a shadow- directory', () => {
+  it('refuses the retired Google seat unless the run froze before the retirement', () => {
     const stub = stubClaude();
     const script = path.join(repo, 'scripts', 'panel', 'run-reviewer.sh');
-    const cases: [string[], RegExp][] = [
-      [['1'], /needs --into shadow-<name>/],
-      [['1', '--into', 'round1'], /needs --into shadow-<name>/],
-      [['1', '--into', 'round1-rerun-1'], /needs --into shadow-<name>/],
-      [['1', '--into', 'round2'], /needs --into shadow-<name>/],
-      [['2', '--into', 'shadow-round1'], /round 1 only/],
-    ];
-    for (const [args, expected] of cases) {
-      const result = run([script, 'luna', STORY, RUN_DATE, ...args, '--dry-run'], stub.env);
-      expect(result.ok).toBe(false);
-      expect(result.stderr).toMatch(expected);
-    }
-    // A shadow- name that is a link into round1/ is the last way in, and it is
-    // refused before anything is assembled.
-    const runDir = path.join(repo, 'reviews', STORY, RUN_DATE);
-    mkdirSync(path.join(runDir, 'round1'), { recursive: true });
-    symlinkSync(path.join(runDir, 'round1'), path.join(runDir, 'shadow-linked'));
-    const linked = run([script, 'luna', STORY, RUN_DATE, '1', '--into', 'shadow-linked', '--dry-run'], stub.env);
-    expect(linked.ok).toBe(false);
-    expect(linked.stderr).toMatch(/is a symbolic link/);
+    const refused = run([script, 'agy', STORY, RUN_DATE, '1', '--dry-run'], stub.env);
+    expect(refused.ok).toBe(false);
+    expect(refused.stderr).toMatch(/retired for runs frozen after 2026-09-23/);
+    const allowed = run([script, 'agy', STORY, RUN_DATE, '1', '--finish-frozen-run', '--dry-run'], stub.env);
+    expect(allowed.ok).toBe(true);
+    expect(allowed.stdout).toMatch(/model:\s+gemini-3\.8-flash-high/);
     expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
   });
 
-  it('describes the shadow seat as gpt-6-luna writing into its own directory', () => {
+  it('describes the Luna seat as a counted seat writing into round1', () => {
     const stub = stubClaude();
-    const result = run(
-      [path.join(repo, 'scripts', 'panel', 'run-reviewer.sh'), 'luna', STORY, RUN_DATE, '1', '--into', 'shadow-round1', '--dry-run'],
-      stub.env,
-    );
+    const result = run([path.join(repo, 'scripts', 'panel', 'run-reviewer.sh'), 'luna', STORY, RUN_DATE, '1', '--dry-run'], stub.env);
     expect(result.ok).toBe(true);
     expect(result.stdout).toMatch(/model:\s+gpt-6-luna/);
     expect(result.stdout).toMatch(/effort:\s+high/);
-    expect(result.stdout).toMatch(/shadow-round1\/gpt-luna\.json/);
-    expect(result.stdout).not.toMatch(/\/round1\/gpt/);
+    expect(result.stdout).toMatch(/round1\/gpt-luna\.json/);
     expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
   });
 });
@@ -1261,7 +1241,23 @@ describe('retry mechanics', { timeout: 120_000 }, () => {
 
   const archiveEnv = () => {
     const archive = mkdtempSync(path.join(root, 'retry-archive-'));
-    return { ...process.env, YEGFACTS_REVIEW_ARCHIVE: archive } as NodeJS.ProcessEnv;
+    // The runner's preflight (methodology v1.37) asks the seat's CLI for its
+    // version before assembling a package. These tests replace the launcher
+    // with a fixture and never reach a CLI, so a stub that answers only the
+    // version check stands in for it; the machine running the tests may have
+    // no real one.
+    const bin = path.join(archive, 'bin');
+    mkdirSync(bin);
+    writeFileSync(
+      path.join(bin, 'claude'),
+      '#!/usr/bin/env bash\nif [ "${1:-}" = "--version" ]; then echo "0.0.0-stub (Claude Code)"; exit 0; fi\necho "stub claude: unexpected call $*" >&2; exit 1\n',
+    );
+    chmodSync(path.join(bin, 'claude'), 0o755);
+    return {
+      ...process.env,
+      PATH: `${bin}${path.delimiter}${process.env.PATH ?? ''}`,
+      YEGFACTS_REVIEW_ARCHIVE: archive,
+    } as NodeJS.ProcessEnv;
   };
 
   const attempts = (env: NodeJS.ProcessEnv) => {
@@ -1446,7 +1442,10 @@ describe('audit-package', { timeout: 60_000 }, () => {
     expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
   });
 
-  it('records a Google audit as a Google refusal, without running agy', () => {
+  it('refuses a Google audit as retired, before anything is filed or run', () => {
+    // Methodology v1.37: the Google seat is retired. An audit cannot be
+    // commissioned from it, so there is nothing to file against Google; the
+    // wrapper refuses as a usage error and the launcher is never reached.
     const stub = stubClaude();
     const report = path.join(root, 'audit-google-report.md');
     const result = run(
@@ -1456,19 +1455,10 @@ describe('audit-package', { timeout: 60_000 }, () => {
     );
 
     expect(result.ok).toBe(false);
-    // Google's own reason, not the Claude candidate's. The Gemini seat can run
-    // from v1.31; this machine has no Gemini credential, and the refusal is
-    // still filed against Google with Google's seat.
-    expect(result.stderr).toMatch(/no gemini credential at \$HOME\/\.gemini/);
+    expect(result.stderr).toMatch(/the Google seat is retired for new audits \(methodology v1\.37/);
     expect(existsSync(report)).toBe(false);
-
-    // The retained attempt is filed under google, with google's seat.
-    const base = path.join(stub.archive, 'audits', 'consultation-framing', 'google');
-    const stamps = readdirSync(base);
-    const metadata = readJson(path.join(base, stamps[0]!, 'attempt-1', 'metadata.json'));
-    expect(metadata.provider).toBe('google');
-    expect(metadata.model_id).toBe('gemini-3.8-flash-high');
-    expect(metadata.reasoning_effort).toBe('high');
+    expect(existsSync(path.join(stub.archive, 'audits', 'consultation-framing'))).toBe(false);
+    expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
   });
 
   it('rejects a vendor the launcher does not know', () => {
