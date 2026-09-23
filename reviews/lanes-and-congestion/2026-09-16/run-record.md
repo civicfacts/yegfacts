@@ -198,12 +198,18 @@ v1.31 launcher; each seat's manifest row is in run.yaml.
 | Gemini 3.8 Flash, high (counted) | ae6e378fd252efcb, 16:57Z to 17:05Z | admitted record-only, one attempt, after PR #83 let a fetch 404 count as a result: Partially supported, high; 4 supporting, 3 challenging; counts through-lane removals in 4 of 15 district-plan areas, under both thresholds. round1/gemini.json. The week's last Gemini run before the quota closed. |
 | GPT-6 Luna, high (shadow, not counted, methodology v1.34) | 16:19Z to 16:25Z | admitted, one attempt, 29 requests: Not established, moderate; 2 and 2. shadow-round1/gpt-luna.json, never merged. The shadow experiment ended after this one run when v1.37 made Luna a counted seat for later runs; the board pass declined to count this answer for this run, since promoting an uncounted answer after its verdict is known would make seat selection outcome-dependent. |
 | Claude Opus 5.5, high (counted) | 8b92f1e800aa48f7, 16:19Z | refused at the canary: the structural check read two plugins Claude Code 2.1.280 ships as builtin (agents-md, telemetry) as loaded customizations; the capture check passed. Package never sent. Rule adapted in PR #82 (builtin plugins recorded, not refused). |
+| Claude Opus 5.5, high (counted) | d2658c44f0afbcad, 19:41Z to 19:50Z, Claude Code 2.1.281 | admitted, one attempt, after methodology v1.37 and v1.38 merged (PRs #85, #86) and the branch was rebased onto them: 48 requests captured, 47 searched, none carrying any protected string; operator_path_notes 0, so the v1.38 exception was not used and the positional refinement of PR #86 changes nothing about this attempt. Partially supported, moderate; 7 supporting, 6 challenging; through-lane removals confirmed on 102 Avenue and 132 Avenue, in 2 to 3 of 15 districts. round1/claude.json |
 | Claude Opus 5.5, high (counted) | 09c6859382ba86e9, 16:25Z to about 16:40Z | canary passed; research ran (42 requests); refused by the capture check: fourteen requests carried the operator's home-directory path inside the CLI's own note after it saved a fetched 2.6 MB City PDF to disk. Not an instruction file. The fetch handed the reviewer the PDF's raw bytes, so the document was saved and not read (the web-only profile's disclosed limit). Its answer (Not established) is not a finding of this site. Stays refused and retained; methodology v1.38 permits that one note prospectively and counts it. The seat reruns under v1.38. |
 
-The Sol and Gemini verdicts differ (Not established against Partially
-supported on the same claim and package). That difference goes to the
+Round 1 is complete: Claude Partially supported (moderate), Sol Not
+established (moderate), Gemini Partially supported (high), all on the same
+frozen package. Claude and Gemini each count removals in a few districts and
+call that Partially supported; Sol reads the same shortfall against the
+brief's threshold as Not established. The difference goes to the
 cross-review round as designed and is named on the finding if it survives
-synthesis. Round 2 needs the Google seat again and waits for its allowance to
+synthesis. Under the v1.37 vendor-split rule the Anthropic seat does not
+differ from both OpenAI seats here (the Luna answer is shadow, not counted),
+so no vendor split is recorded for this round. Round 2 needs the Google seat again and waits for its allowance to
 reset, about 2026-09-30, unless the founder closes this attempt as incomplete
 and starts a clean run under v1.37. No panel is assembled from the answers on
 hand.
