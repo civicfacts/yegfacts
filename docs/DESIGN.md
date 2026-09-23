@@ -353,7 +353,10 @@ effort, so the pin is what keeps the seat at the level v1.6 chose. Both moves
 are cost decisions (Opus 5.5 is listed a fifth below Opus 5, GPT-6 Sol at half
 of GPT-5.6 Sol), not findings about which model reviews better, which nothing
 on this site measures. Runs already published under Opus 5, Fable 5.1 or
-GPT-5.6 Sol keep the model their manifests record.
+GPT-5.6 Sol keep the model their manifests record. A superseded model stays on
+the launcher's pinned list, never as the default, while a framing check that ran
+on it is open, because v1.35 confirms a park on the same pinned model as the
+report it confirms; it leaves the list when the last such check closes.
 
 **The shadow seat (v1.34).** The founder's question is whether a model as cheap
 as GPT-6 Luna, listed at a twentieth of the OpenAI seat's price, can hold a

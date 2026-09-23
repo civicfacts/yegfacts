@@ -472,8 +472,11 @@ describe('research admission', { timeout: 60_000 }, () => {
     // The shadow seat's model is pinned for the same vendor: it clears the pin
     // check and stops, like the counted seat, at the missing credential.
     ['openai', 'gpt-6-luna', /no codex credential at \$HOME\/\.codex\/auth\.json/],
-    // The model the seat left behind is no longer pinned, so it stops earlier.
-    ['openai', 'gpt-5.6-sol', /model 'gpt-5\.6-sol' is not pinned for openai/],
+    // The superseded seat stays pinned while a check that ran on it is open
+    // (v1.35 confirms on the same pinned model), so it too reaches the
+    // credential check. A model on no list stops earlier.
+    ['openai', 'gpt-5.6-sol', /no codex credential at \$HOME\/\.codex\/auth\.json/],
+    ['openai', 'gpt-5.6-luna', /model 'gpt-5\.6-luna' is not pinned for openai/],
     ['google', 'gemini-3.8-flash-high', /no gemini credential at \$HOME\/\.gemini/],
     ['mystery-vendor', 'claude-opus-5-5', /unknown provider/],
   ])('refuses %s for research without invoking anything', (provider, model, expected) => {
