@@ -128,3 +128,32 @@ source that adds claims to this question. Under the change OQ-27
 proposes: a fourth report confined to confirming the parks above and the
 remaining ladder for claim 3, in the shape of the v1.20 defect
 confirmation, after which claim 3 freezes and runs.
+
+## 2026-09-23: revised under methodology v1.35, sent for a park confirmation
+
+The founder decided OQ-27 on 2026-09-23 (D-0040 on the board, methodology
+v1.35, yegfacts PR #77): after a third REVISE whose standing findings say
+the record cannot carry a claim, the editor may apply the report
+unchanged, park those claims and send the brief once for a park
+confirmation. This brief is the first case.
+
+What the editor did, all in `framing/response-3.md` finding by finding:
+applied every standing finding of check 3; removed claims 1, 2 and 4 as
+uncheckable at the asserted level and parked them on the register
+(`triage: park`, `ground: no-instrument`, `parked_at: framing`) with the
+checker's three reopening instruments as their reasons; supplied the
+immutable inventory export check 3 asked for
+(`snapshot/bike-routes-on-street.geojson`, 3,175 features, SHA-256 in
+`snapshot/sha256.txt`, captured 2026-09-23T15:17:38Z) and moved the as-of
+date to the capture date; kept claim 3 unchanged in its thresholds, unit
+and definitions; and removed the text that served only the removed
+claims. Nothing was disputed and no source was added. The three parks
+cut both ways: claim 1 is the anti-lane side's, claims 2 and 4 the
+pro-lane side's.
+
+The confirmation goes to the same seat as check 3, the OpenAI seat
+through `scripts/panel/audit-package.sh --provider openai`, with the
+whole difference between the check-3 brief and this one in the package.
+PARKS CONFIRMED freezes the brief with claim 3; PARKS REJECTED parks it
+under the cap, reopening only on new intake evidence. Its result is
+recorded below when it lands.
