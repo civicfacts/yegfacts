@@ -191,7 +191,7 @@ published at `/considered`.
    into propositions and carries every surviving form onto the proposition it
    belongs to. A proposition the register already holds is marked with that
    claim's id, and its wordings are added to the existing claim rather than
-   registered beside it (methodology v1.34).
+   registered beside it (methodology v1.36).
 4. **Coverage check.** `scripts/intake-coverage.ts` exits non-zero unless every
    extractor claim id from every seat is accounted for exactly once: under some
    proposition's `from`, or in `dropped` with one of three permitted reasons

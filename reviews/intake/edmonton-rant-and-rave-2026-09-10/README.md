@@ -155,7 +155,7 @@ so the fold cannot happen under the current scripts. Existing entries were
 not edited in this run at the founder's direction. This is the D-0030
 finding, recorded rather than fixed here.
 
-Methodology v1.34 added the missing step. `fold-note.md` records what it did
+Methodology v1.36 added the missing step. `fold-note.md` records what it did
 to these two pairs: the road-condition claim was folded onto the older claim,
 and the four-year tax plan stays a question of its own.
 
@@ -181,4 +181,4 @@ shape for "no topic applies". A waste-and-utilities topic is a change under
   the two readers, their split, and the combined decision.
 - `manifest.md` — every command, model and timing.
 - `fold-note.md` — the two claims checked against the register afterwards,
-  under methodology v1.34, and why one was folded and one was not.
+  under methodology v1.36, and why one was folded and one was not.

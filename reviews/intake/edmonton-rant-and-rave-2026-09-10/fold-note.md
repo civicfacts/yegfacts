@@ -1,4 +1,4 @@
-# Two claims checked against the register (methodology v1.34)
+# Two claims checked against the register (methodology v1.36)
 
 One of the two claims this run registered beside an older claim has been
 folded onto it. The other stays where it is. The test is the one the merge
