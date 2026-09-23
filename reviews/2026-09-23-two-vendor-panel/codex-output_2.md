@@ -2501,21 +2501,21 @@ src/components/AiReview.astro:65:const runs = [...new Set(reviewed.map((claim) =
 
 exec
 /bin/zsh -lc "node - <<'NODE'
-const home='/Users/test';
+const home='<home>';
 const escapeRegExp=text=>text.replace(/[.*+?"'^${}()|['"\\]\\\\]/g,'\\\\"'$&'"');
 const r=new RegExp('\\\\[Binary content \\\\(["'^()'"\\\\]]*\\\\) also saved to '+escapeRegExp(home)+'/\\\\.claude/projects/["'^'"\\\\]\\\\s]+/tool-results/["'^'"\\\\]\\\\s]+\\\\]','g');
 console.log(String(r));
 for(const s of [
-'[Binary content (application/pdf, 2.6MB) also saved to /Users/test/.claude/projects/x/tool-results/webfetch-1.pdf]',
-'[Binary content (application/pdf, 2.6MB) also saved to /Users/test/.claude/projects/x/tool-results/a b.pdf]',
-'[Binary content (application/pdf, 2.6MB) also saved to /Users/test/.claude/projects/x/tool-results/a.pdf] outside',
+'[Binary content (application/pdf, 2.6MB) also saved to <home>/.claude/projects/x/tool-results/webfetch-1.pdf]',
+'[Binary content (application/pdf, 2.6MB) also saved to <home>/.claude/projects/x/tool-results/a b.pdf]',
+'[Binary content (application/pdf, 2.6MB) also saved to <home>/.claude/projects/x/tool-results/a.pdf] outside',
 ]) console.log(r.test(s),s);
 NODE" in <repo>
  succeeded in 0ms:
 /\[Binary content \([^()\]]*\) also saved to \/Users\/test\/\.claude\/projects\/[^\]\s]+\/tool-results\/[^\]\s]+\]/g
-true [Binary content (application/pdf, 2.6MB) also saved to /Users/test/.claude/projects/x/tool-results/webfetch-1.pdf]
-false [Binary content (application/pdf, 2.6MB) also saved to /Users/test/.claude/projects/x/tool-results/a b.pdf]
-true [Binary content (application/pdf, 2.6MB) also saved to /Users/test/.claude/projects/x/tool-results/a.pdf] outside
+true [Binary content (application/pdf, 2.6MB) also saved to <home>/.claude/projects/x/tool-results/webfetch-1.pdf]
+false [Binary content (application/pdf, 2.6MB) also saved to <home>/.claude/projects/x/tool-results/a b.pdf]
+true [Binary content (application/pdf, 2.6MB) also saved to <home>/.claude/projects/x/tool-results/a.pdf] outside
 
 exec
 /bin/zsh -lc "sed -n '1135,1220p' docs/DESIGN.md; sed -n '385,418p' docs/DESIGN.md; sed -n '145,215p' tests/capture-check.test.ts" in <repo>
@@ -2922,7 +2922,7 @@ exec
 exec
 /bin/zsh -lc "node --import tsx --input-type=module - <<'NODE'
 import { checkCapture } from './scripts/panel/capture-check.ts';
-const home='/Users/example';
+const home='<home>';
 const value="'`[Binary content (application/pdf, 2.6MB) also saved to ${home}/.claude/projects/x/tool-results/a.pdf]`;
 const sources=[
  {name:'"'private instruction',present:true,lines:['A private instruction line long enough to check'],origin:'home'},

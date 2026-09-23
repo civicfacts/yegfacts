@@ -1271,7 +1271,7 @@ exec
 exec
 /bin/zsh -lc "node --import tsx --input-type=module - <<'NODE'
 import { checkCapture } from './scripts/panel/capture-check.ts';
-const home='/Users/example';
+const home='<home>';
 const note="'`[Binary content (application/pdf, 2.6MB) also saved to ${home}/.claude/projects/x/tool-results/a.pdf]`;
 const sources=[{name:'"'private instruction',present:true,lines:['A private instruction line long enough to check'],origin:'home'},{name:'the home directory',present:true,lines:[home],origin:'string'}];
 const request={file:'req-0001.json',method:'POST',url:'https://example.test',headers:{},body:{messages:[{role:'user',content:[{type:'text',text:'PKG'},{type:'tool_result',content:note},{type:'text',text:note}]}]}};
