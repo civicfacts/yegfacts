@@ -340,22 +340,35 @@ record earlier execution, **not commands approved for new runs**:
 
 | Panel seat | Command |
 |---|---|
-| Claude Opus 5.5 | `claude -p --model claude-opus-5-5 --effort high` (v1.34; Opus 5 from v1.15 to v1.33, Fable 5.1 before that, pinned in v1.5 and given its effort setting in v1.6). Each move was a cost decision, not a judgement about review quality: v1.15 because the founder's Fable allowance was nearly exhausted, v1.34 because Opus 5.5 is priced a fifth below Opus 5 and its vendor claims fewer invented figures, which nothing on this site measures. Opus 5.5 defaults to medium effort; the pin keeps the v1.6 level. Runs already published under Opus 5 or Fable 5.1 keep the model their manifests record. |
-| GPT-6 Sol | `codex exec -m gpt-6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check` (v1.34; GPT-5.6 Sol before that, from v1.0). Released 2026-09-22 at half the price of the seat it replaces; runs already published under GPT-5.6 Sol keep the model their manifests record. |
+| Claude Opus 5 | `claude -p --model claude-opus-5 --effort high` (v1.15; Fable 5.1 before that, pinned in v1.5 and given its effort setting in v1.6). The move is a cost decision, not a judgement about review quality: the founder's Fable allowance on his subscription is nearly exhausted. Runs already published under Fable 5.1 keep the model their manifests record. |
+| GPT-5.6 Sol | `codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check` |
 | Gemini 3.8 Flash | `agy --model gemini-3.8-flash-high --effort high --sandbox --dangerously-skip-permissions --print-timeout 45m -p` (v1.26; Gemini 3.1 Pro before that, and v1.14 added the permissions flag, without which the headless seat returned nothing on PDF-heavy briefs). The founder retired 3.1 Pro from every seat on this site after the intake extraction run, where 3.8 Flash at high turned the weakest extractor seat into the cleanest; no panel-round comparison of the two exists. Runs already published under 3.1 Pro keep the model their manifests record. |
-| GPT-6 Luna (shadow, not counted) | `codex exec -m gpt-6-luna -c model_reasoning_effort=high -s read-only --skip-git-repo-check`, run as `scripts/panel/run-reviewer.sh luna <story> <date> 1 --into shadow-round1` (v1.34). |
+
+**Current pins (v1.34).** The commands approved for new runs are the ones
+`scripts/panel/run-reviewer.sh` assembles and `scripts/panel/invoke-reviewer.sh`
+admits; nothing else runs a seat. From v1.34 the Claude seat is
+`claude-opus-5-5`, the OpenAI seat `gpt-6-sol` and the Google seat
+`gemini-3.8-flash-high`, every seat at `high`. Opus 5.5 defaults to medium
+effort, so the pin is what keeps the seat at the level v1.6 chose. Both moves
+are cost decisions (Opus 5.5 is listed a fifth below Opus 5, GPT-6 Sol at half
+of GPT-5.6 Sol), not findings about which model reviews better, which nothing
+on this site measures. Runs already published under Opus 5, Fable 5.1 or
+GPT-5.6 Sol keep the model their manifests record.
 
 **The shadow seat (v1.34).** The founder's question is whether a model as cheap
-as GPT-6 Luna, which costs a twentieth of the OpenAI seat, can hold a research
-seat. This site answers that by measurement rather than by guessing. For the
-next two panel runs a fourth seat receives the identical frozen package and its
-answer is committed under `<run>/shadow-round1/` with its own manifest. It is
-never merged and never synthesised: the launcher refuses to write it into
-`round1/`, because `scripts/merge.ts` reads every JSON file in a round
-directory, and `run.yaml`'s `synthesis_scope` names no shadow. `run-record.md`
-compares its sources and findings against the three counted seats. After two
-runs the editor recommends and the founder decides whether a cheap-tier model
-takes a counted seat; until then no finding rests on it.
+as GPT-6 Luna, listed at a twentieth of the OpenAI seat's price, can hold a
+research seat. This site answers that by measurement rather than by guessing.
+For the next two panel runs a fourth seat, `gpt-6-luna` at `high`, receives the
+identical frozen package through the same launcher and profile as the counted
+OpenAI seat. Its answer is committed under `<run>/shadow-<name>/` with its own
+manifest (`scripts/panel/run-reviewer.sh luna <story> <date> 1 --into
+shadow-round1`). It is never merged and never synthesised: `scripts/merge.ts`
+reads every JSON file in a round directory, so the runner refuses any `--into`
+that is not a `shadow-` directory and refuses round 2 outright, and `run.yaml`'s
+`synthesis_scope` names no shadow. `run-record.md` compares its sources and
+findings against the three counted seats. After two runs the editor recommends
+and the founder decides whether a cheap-tier model takes a counted seat; until
+then no finding rests on it.
 
 From v1.28, `scripts/panel/invoke-reviewer.sh` is the common execution path for
 panel reviews and package-in/report-out framing or source audits. There is no

@@ -59,7 +59,8 @@ usage() {
 usage: scripts/panel/run-reviewer.sh <provider> <story> <date> <round> [options]
   provider  claude | codex | agy   (aliases: anthropic, gpt, openai, gemini, google)
             luna | shadow          the uncounted shadow seat (v1.34): round 1 only,
-                                   and --into is required so it never lands in round1/
+                                   and --into shadow-<name> is required so it never
+                                   lands in a round directory
   story     story slug, e.g. electric-buses
   date      run date, e.g. 2026-08-31
   round     1 (blind research) or 2 (cross-review)
@@ -98,7 +99,10 @@ case "$PROVIDER_ARG" in
     # in a round directory, so the only way to keep that promise is to refuse
     # to write into one. Round 2 hands a seat the other seats' findings, which
     # a seat that is not on the panel has no business reading.
-    [ -n "$INTO" ] || { echo "the shadow seat needs --into <dirname>; it must never be written into round1/" >&2; exit 2; }
+    case "$INTO" in
+      shadow-*) ;;
+      *) echo "the shadow seat needs --into shadow-<name>; it is never written into a round directory" >&2; exit 2 ;;
+    esac
     [ "$ROUND" = "1" ] || { echo "the shadow seat runs round 1 only" >&2; exit 2; }
     ;;
 esac
@@ -140,9 +144,9 @@ case "$PROVIDER_ARG" in
     # research seat is an open question this site answers by measurement,
     # not by guessing. It runs the same frozen package as the three counted
     # seats and its answer is committed, but it is never merged and never
-    # synthesised: it must be run with --into (a directory other than
-    # round<N>/), because scripts/merge.ts reads every JSON file in a round
-    # directory, and the run's synthesis_scope names no shadow. The
+    # synthesised: it must be run with --into shadow-<name>, because
+    # scripts/merge.ts reads every JSON file in a round directory, and the
+    # run's synthesis_scope names no shadow. The
     # comparison against the counted seats is written into run-record.md.
     SLOT="gpt-luna"; CLI="codex"; MODEL_ID="gpt-6-luna"
     PROVIDER_CANONICAL="openai"; SEAT="GPT-6 Luna (shadow, not counted)"

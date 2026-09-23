@@ -469,6 +469,11 @@ describe('research admission', { timeout: 60_000 }, () => {
    */
   it.each([
     ['openai', 'gpt-6-sol', /no codex credential at \$HOME\/\.codex\/auth\.json/],
+    // The shadow seat's model is pinned for the same vendor: it clears the pin
+    // check and stops, like the counted seat, at the missing credential.
+    ['openai', 'gpt-6-luna', /no codex credential at \$HOME\/\.codex\/auth\.json/],
+    // The model the seat left behind is no longer pinned, so it stops earlier.
+    ['openai', 'gpt-5.6-sol', /model 'gpt-5\.6-sol' is not pinned for openai/],
     ['google', 'gemini-3.8-flash-high', /no gemini credential at \$HOME\/\.gemini/],
     ['mystery-vendor', 'claude-opus-5-5', /unknown provider/],
   ])('refuses %s for research without invoking anything', (provider, model, expected) => {
@@ -1188,6 +1193,45 @@ describe('run-reviewer', { timeout: 120_000 }, () => {
       stub.env,
     );
     expect(result.ok).toBe(true);
+    expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
+  });
+
+  /**
+   * The shadow seat (methodology v1.34) is never merged. scripts/merge.ts
+   * reads every JSON file in a round directory, so the only way to keep that
+   * promise is to refuse every destination that is not a shadow- directory,
+   * and to refuse round 2, which would hand a seat that is not on the panel
+   * the panel's findings.
+   */
+  it('refuses the shadow seat anywhere but round 1 of a shadow- directory', () => {
+    const stub = stubClaude();
+    const script = path.join(repo, 'scripts', 'panel', 'run-reviewer.sh');
+    const cases: [string[], RegExp][] = [
+      [['1'], /needs --into shadow-<name>/],
+      [['1', '--into', 'round1'], /needs --into shadow-<name>/],
+      [['1', '--into', 'round1-rerun-1'], /needs --into shadow-<name>/],
+      [['1', '--into', 'round2'], /needs --into shadow-<name>/],
+      [['2', '--into', 'shadow-round1'], /round 1 only/],
+    ];
+    for (const [args, expected] of cases) {
+      const result = run([script, 'luna', STORY, RUN_DATE, ...args, '--dry-run'], stub.env);
+      expect(result.ok).toBe(false);
+      expect(result.stderr).toMatch(expected);
+    }
+    expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
+  });
+
+  it('describes the shadow seat as gpt-6-luna writing into its own directory', () => {
+    const stub = stubClaude();
+    const result = run(
+      [path.join(repo, 'scripts', 'panel', 'run-reviewer.sh'), 'luna', STORY, RUN_DATE, '1', '--into', 'shadow-round1', '--dry-run'],
+      stub.env,
+    );
+    expect(result.ok).toBe(true);
+    expect(result.stdout).toMatch(/model:\s+gpt-6-luna/);
+    expect(result.stdout).toMatch(/effort:\s+high/);
+    expect(result.stdout).toMatch(/shadow-round1\/gpt-luna\.json/);
+    expect(result.stdout).not.toMatch(/\/round1\/gpt/);
     expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
   });
 });
