@@ -31,19 +31,7 @@
  */
 import { spawnSync } from 'node:child_process';
 import http from 'node:http';
-import {
-  chmodSync,
-  cpSync,
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  readdirSync,
-  realpathSync,
-  rmSync,
-  symlinkSync,
-  writeFileSync,
-} from 'node:fs';
+import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -210,7 +198,7 @@ const initEvent = (over: Record<string, unknown> = {}) =>
     session_id: 'stub-session',
     tools: ['WebFetch', 'WebSearch'],
     mcp_servers: [],
-    model: 'claude-opus-5',
+    model: 'claude-opus-5-5',
     permissionMode: 'default',
     slash_commands: [],
     claude_code_version: STUB_VERSION,
@@ -468,9 +456,17 @@ describe('research admission', { timeout: 60_000 }, () => {
    * sent, exactly as an unknown vendor does.
    */
   it.each([
+    ['openai', 'gpt-6-sol', /no codex credential at \$HOME\/\.codex\/auth\.json/],
+    // The shadow seat's model is pinned for the same vendor: it clears the pin
+    // check and stops, like the counted seat, at the missing credential.
+    ['openai', 'gpt-6-luna', /no codex credential at \$HOME\/\.codex\/auth\.json/],
+    // The superseded seat stays pinned while a check that ran on it is open
+    // (v1.35 confirms on the same pinned model), so it too reaches the
+    // credential check. A model on no list stops earlier.
     ['openai', 'gpt-5.6-sol', /no codex credential at \$HOME\/\.codex\/auth\.json/],
+    ['openai', 'gpt-5.6-luna', /model 'gpt-5\.6-luna' is not pinned for openai/],
     ['google', 'gemini-3.8-flash-high', /no gemini credential at \$HOME\/\.gemini/],
-    ['mystery-vendor', 'claude-opus-5', /unknown provider/],
+    ['mystery-vendor', 'claude-opus-5-5', /unknown provider/],
   ])('refuses %s for research without invoking anything', (provider, model, expected) => {
     const stub = stubClaude();
     const attempt = path.join(stub.archive, 'refusal', provider);
@@ -500,7 +496,7 @@ describe('research admission', { timeout: 60_000 }, () => {
   });
 
   it.each([
-    ['openai', 'gpt-5.6-sol', /no codex credential at \$HOME\/\.codex\/auth\.json/],
+    ['openai', 'gpt-6-sol', /no codex credential at \$HOME\/\.codex\/auth\.json/],
     ['google', 'gemini-3.8-flash-high', /no gemini credential at \$HOME\/\.gemini/],
   ])('records %s with its own seat and its own reason when no model is named', (provider, model, expected) => {
     const stub = stubClaude();
@@ -526,8 +522,8 @@ describe('research admission', { timeout: 60_000 }, () => {
 
   it.each([
     ['model', ['--model', 'claude-fable-5-1', '--effort', 'high'], /model 'claude-fable-5-1' is not pinned/],
-    ['effort', ['--model', 'claude-opus-5', '--effort', 'max'], /reasoning effort 'max' is not pinned/],
-    ['low-effort', ['--model', 'claude-opus-5', '--effort', 'low'], /reasoning effort 'low' is not pinned/],
+    ['effort', ['--model', 'claude-opus-5-5', '--effort', 'max'], /reasoning effort 'max' is not pinned/],
+    ['low-effort', ['--model', 'claude-opus-5-5', '--effort', 'low'], /reasoning effort 'low' is not pinned/],
   ])('refuses an unpinned %s before the admission gate', (_label, args, expected) => {
     const stub = stubClaude();
     const attempt = path.join(stub.archive, 'pins', _label);
@@ -558,7 +554,7 @@ describe('research run', { timeout: 120_000 }, () => {
     const pkg = writePackage(`research-${name}.md`);
     const result = run(
       [INVOKE, '--purpose', 'research', '--provider', 'anthropic', '--package', pkg,
-        '--attempt-dir', attempt, '--model', 'claude-opus-5', '--effort', 'high', ...extra],
+        '--attempt-dir', attempt, '--model', 'claude-opus-5-5', '--effort', 'high', ...extra],
       stub.env,
     );
     return { ...result, attempt, pkg };
@@ -780,7 +776,7 @@ describe('candidate diagnostic', { timeout: 60_000 }, () => {
     const pkg = writePackage(`diag-${name}.md`);
     const result = run(
       [INVOKE, '--purpose', 'diagnostic', '--provider', 'anthropic', '--package', pkg,
-        '--attempt-dir', attempt, '--model', 'claude-opus-5', '--effort', 'high', ...extra],
+        '--attempt-dir', attempt, '--model', 'claude-opus-5-5', '--effort', 'high', ...extra],
       stub.env,
     );
     return { ...result, attempt, pkg };
@@ -1014,7 +1010,7 @@ describe('candidate diagnostic', { timeout: 60_000 }, () => {
     symlinkSync(process.execPath, path.join(tools, 'node'));
     const result = run(
       [INVOKE, '--purpose', 'diagnostic', '--provider', 'anthropic', '--package', writePackage('no-cli.md'),
-        '--attempt-dir', attempt, '--model', 'claude-opus-5', '--effort', 'high'],
+        '--attempt-dir', attempt, '--model', 'claude-opus-5-5', '--effort', 'high'],
       { ...stub.env, PATH: `${tools}:/usr/bin:/bin` },
     );
 
@@ -1058,7 +1054,7 @@ describe('archive safety', { timeout: 60_000 }, () => {
     const result = run(
       [INVOKE, '--purpose', 'research', '--provider', 'anthropic', '--package', writePackage('trav.md'),
         '--attempt-dir', `${stub.archive}/../${path.basename(escape)}/attempt-1`,
-        '--model', 'claude-opus-5', '--effort', 'high'],
+        '--model', 'claude-opus-5-5', '--effort', 'high'],
       stub.env,
     );
     expect(result.ok).toBe(false);
@@ -1075,7 +1071,7 @@ describe('archive safety', { timeout: 60_000 }, () => {
     const result = run(
       [INVOKE, '--purpose', 'research', '--provider', 'anthropic', '--package', writePackage('symlink.md'),
         '--attempt-dir', path.join(stub.archive, 'sneaky', 'attempt-1'),
-        '--model', 'claude-opus-5', '--effort', 'high'],
+        '--model', 'claude-opus-5-5', '--effort', 'high'],
       stub.env,
     );
     expect(result.ok).toBe(false);
@@ -1091,7 +1087,7 @@ describe('archive safety', { timeout: 60_000 }, () => {
 
     const result = run(
       [INVOKE, '--purpose', 'research', '--provider', 'anthropic', '--package', writePackage('collide.md'),
-        '--attempt-dir', attempt, '--model', 'claude-opus-5', '--effort', 'high'],
+        '--attempt-dir', attempt, '--model', 'claude-opus-5-5', '--effort', 'high'],
       stub.env,
     );
     expect(result.ok).toBe(false);
@@ -1188,6 +1184,53 @@ describe('run-reviewer', { timeout: 120_000 }, () => {
       stub.env,
     );
     expect(result.ok).toBe(true);
+    expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
+  });
+
+  /**
+   * The shadow seat (methodology v1.34) is never merged. scripts/merge.ts
+   * reads every JSON file in a round directory, so the only way to keep that
+   * promise is to refuse every destination that is not a shadow- directory,
+   * and to refuse round 2, which would hand a seat that is not on the panel
+   * the panel's findings.
+   */
+  it('refuses the shadow seat anywhere but round 1 of a shadow- directory', () => {
+    const stub = stubClaude();
+    const script = path.join(repo, 'scripts', 'panel', 'run-reviewer.sh');
+    const cases: [string[], RegExp][] = [
+      [['1'], /needs --into shadow-<name>/],
+      [['1', '--into', 'round1'], /needs --into shadow-<name>/],
+      [['1', '--into', 'round1-rerun-1'], /needs --into shadow-<name>/],
+      [['1', '--into', 'round2'], /needs --into shadow-<name>/],
+      [['2', '--into', 'shadow-round1'], /round 1 only/],
+    ];
+    for (const [args, expected] of cases) {
+      const result = run([script, 'luna', STORY, RUN_DATE, ...args, '--dry-run'], stub.env);
+      expect(result.ok).toBe(false);
+      expect(result.stderr).toMatch(expected);
+    }
+    // A shadow- name that is a link into round1/ is the last way in, and it is
+    // refused before anything is assembled.
+    const runDir = path.join(repo, 'reviews', STORY, RUN_DATE);
+    mkdirSync(path.join(runDir, 'round1'), { recursive: true });
+    symlinkSync(path.join(runDir, 'round1'), path.join(runDir, 'shadow-linked'));
+    const linked = run([script, 'luna', STORY, RUN_DATE, '1', '--into', 'shadow-linked', '--dry-run'], stub.env);
+    expect(linked.ok).toBe(false);
+    expect(linked.stderr).toMatch(/is a symbolic link/);
+    expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
+  });
+
+  it('describes the shadow seat as gpt-6-luna writing into its own directory', () => {
+    const stub = stubClaude();
+    const result = run(
+      [path.join(repo, 'scripts', 'panel', 'run-reviewer.sh'), 'luna', STORY, RUN_DATE, '1', '--into', 'shadow-round1', '--dry-run'],
+      stub.env,
+    );
+    expect(result.ok).toBe(true);
+    expect(result.stdout).toMatch(/model:\s+gpt-6-luna/);
+    expect(result.stdout).toMatch(/effort:\s+high/);
+    expect(result.stdout).toMatch(/shadow-round1\/gpt-luna\.json/);
+    expect(result.stdout).not.toMatch(/\/round1\/gpt/);
     expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
   });
 });
@@ -1472,7 +1515,7 @@ describe.runIf(process.env.YEGFACTS_LIVE_CANARY === '1')('live candidate diagnos
 
     const diagnostic = run(
       [INVOKE, '--purpose', 'diagnostic', '--provider', 'anthropic', '--package', writePackage('live.md'),
-        '--attempt-dir', attempt, '--model', 'claude-opus-5', '--effort', 'high', '--max-budget-usd', '2'],
+        '--attempt-dir', attempt, '--model', 'claude-opus-5-5', '--effort', 'high', '--max-budget-usd', '2'],
       env,
     );
     expect(diagnostic.ok).toBe(true);
