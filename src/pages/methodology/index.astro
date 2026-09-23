@@ -456,8 +456,14 @@ const sections = toc([
       project, the memory files kept for every project on this computer, the name of the home
       folder, the path of the project, and the one-off token each attempt plants for its own
       test. Every line of them long enough to be distinctive is then looked for in the body of
-      each request that was sent, at any depth, and if any of it is there the run is refused. So
-      is a run whose recording does not carry the declared package word for word, since a
+      each request that was sent, at any depth, and if any of it is there the run is refused,
+      with one exception since September 23, 2026 (v1.38): when Claude's tool fetches a file
+      such as a PDF, the tool saves it to disk and writes a note into its own result naming the
+      path, and that path is in the operator's home folder. That one note, in that one place,
+      is counted rather than refused, and the count is printed on the run's row, because the
+      path was still sent to the vendor. The same words anywhere else, and every other private
+      string anywhere, still refuse the run. So is a run refused whose recording does not carry
+      the declared package word for word, since a
       recording that cannot be tied to the package it was meant to carry says nothing about it.
       A refusal names the file and the line number, never the line, and neither does the
       published record: the private text is read, compared and dropped. What it searches is the

@@ -191,7 +191,7 @@ fi
 
 # ---------------------------------------------------------------------------
 PROVIDER=""; PACKAGE=""; ATTEMPT_DIR=""; MODEL=""; EFFORT=""; LABEL=""
-PURPOSE="research"; MAX_BUDGET=""
+PURPOSE="research"; MAX_BUDGET=""; FINISH_FROZEN=0
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --provider) PROVIDER="${2:-}"; shift 2 ;;
@@ -202,6 +202,7 @@ while [ "$#" -gt 0 ]; do
     --label) LABEL="${2:-}"; shift 2 ;;
     --purpose) PURPOSE="${2:-}"; shift 2 ;;
     --max-budget-usd) MAX_BUDGET="${2:-}"; shift 2 ;;
+    --finish-frozen-run) FINISH_FROZEN=1; shift ;;
     *) die "unknown option: $1" ;;
   esac
 done
@@ -597,6 +598,17 @@ DEFAULT_EFFORT="high"
 # Applied before any refusal, so the retained metadata names the seat.
 MODEL="${MODEL:-$DEFAULT_MODEL}"
 EFFORT="${EFFORT:-$DEFAULT_EFFORT}"
+
+# Methodology v1.37 (2026-09-23): the Google seat is retired for every run
+# frozen after that date. The profile stays so the runs it did can be
+# read; a new run reaches it only when the caller says the run froze under the
+# three-provider rule, and says so again in the run record. Refused here as
+# well as in the two callers, because a launcher that trusts its callers is a
+# way to run a retired seat by hand.
+if [ "$PROVIDER" = "google" ] && [ "$FINISH_FROZEN" != "1" ]; then
+  refuse blocked "the Google seat is retired for runs frozen after 2026-09-23 (methodology v1.37); pass --finish-frozen-run only for a run that froze under the three-provider rule"
+fi
+
 PROFILE="$PROFILE_NAME"
 
 case ",$PINNED_MODELS," in

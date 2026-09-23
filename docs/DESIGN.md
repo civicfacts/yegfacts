@@ -16,7 +16,9 @@ It checks claims about Edmonton civic government against public records, data
 and research, and publishes findings with full evidence trails.
 
 AI does the research labour. Authority does not come from the models — it comes
-from a public, auditable method: a frozen brief, three independent reviewers, a
+from a public, auditable method: a frozen brief, three reviewer seats that work
+blind to each other (three vendors until 2026-09-23, one Anthropic and two
+OpenAI models since, which is said wherever the panel is described), a
 deterministic merge, a cross-review round, a published synthesis rule, and a
 publication gate that checks every cited source against its archived bytes
 before anything is published. Since methodology v1.1 that gate is performed by a
@@ -1205,7 +1207,7 @@ Stew, the AI steward, writes in the first person in the journal. That works,
 and the founder asked whether it belongs on the pages that carry findings too.
 
 It does, in one narrow form, and the restriction is not squeamishness. A
-finding is produced by three independent models and a fixed table precisely so
+finding is produced by three model seats working blind and a fixed table precisely so
 that no single author's judgement decides it. A first-person aside beside the
 finding hands a hostile reader the one accusation the whole method exists to
 deny: that the answer has an author with a view.

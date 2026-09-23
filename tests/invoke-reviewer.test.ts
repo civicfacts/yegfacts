@@ -465,7 +465,7 @@ describe('research admission', { timeout: 60_000 }, () => {
     // credential check. A model on no list stops earlier.
     ['openai', 'gpt-5.6-sol', /no codex credential at \$HOME\/\.codex\/auth\.json/],
     ['openai', 'gpt-5.6-luna', /model 'gpt-5\.6-luna' is not pinned for openai/],
-    ['google', 'gemini-3.8-flash-high', /no gemini credential at \$HOME\/\.gemini/],
+    ['google', 'gemini-3.8-flash-high', /retired for runs frozen after 2026-09-23 \(methodology v1\.37\)/],
     ['mystery-vendor', 'claude-opus-5-5', /unknown provider/],
   ])('refuses %s for research without invoking anything', (provider, model, expected) => {
     const stub = stubClaude();
@@ -497,7 +497,7 @@ describe('research admission', { timeout: 60_000 }, () => {
 
   it.each([
     ['openai', 'gpt-6-sol', /no codex credential at \$HOME\/\.codex\/auth\.json/],
-    ['google', 'gemini-3.8-flash-high', /no gemini credential at \$HOME\/\.gemini/],
+    ['google', 'gemini-3.8-flash-high', /retired for runs frozen after 2026-09-23 \(methodology v1\.37\)/],
   ])('records %s with its own seat and its own reason when no model is named', (provider, model, expected) => {
     const stub = stubClaude();
     const attempt = path.join(stub.archive, 'defaults', provider);

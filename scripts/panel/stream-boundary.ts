@@ -471,27 +471,30 @@ export function contextProof(check: CaptureCheckResult | null, kind: RecordKind 
   if (check.status === 'pass') {
     const read = check.sources.filter((source) => source.present);
     const lines = read.reduce((total, source) => total + source.lines_checked, 0);
+    // v1.38: a pass with counted notes must not also claim that none of the
+    // private text appeared. The home path did appear, inside the note the CLI
+    // wrote about a binary it saved, and the sentence says exactly that.
+    const appeared =
+      check.operator_path_notes > 0
+        ? `and none of it appeared except the operator's home-directory path, which ${check.operator_path_notes} ` +
+          "request(s) carried inside the CLI's own note about a fetched binary it saved to disk; that path was " +
+          'sent to the vendor and is recorded rather than refused (methodology v1.38)'
+        : 'and none of it appeared';
     const searched =
       `${check.searched} of ${check.requests} ` +
       (kind === 'request' ? 'captured request(s) had a JSON body and were searched' : 'record entr(ies) were searched') +
-      ` for ${lines} line(s) of private text from ${read.length} source(s) on this machine, and none of it ` +
-      `appeared. ${check.package_seen} ` +
+      ` for ${lines} line(s) of private text from ${read.length} source(s) on this machine, ${appeared}. ` +
+      `${check.package_seen} ` +
       (kind === 'request' ? 'request(s)' : 'record entr(ies)') +
       ' carried the declared package byte for byte.';
     if (kind === 'request') {
-      const notes =
-        check.operator_path_notes > 0
-          ? ` ${check.operator_path_notes} request(s) carried the operator's home-directory path inside the ` +
-            "CLI's own note about a fetched binary it saved to disk; that path was sent to the vendor, and " +
-            'is recorded rather than refused (methodology v1.38).'
-          : '';
       return {
         status: 'pass',
         reason:
           `${searched} Only the string values of those bodies were searched, not the HTTP headers, the ` +
           'request URLs or the responses. This says what the request bodies did not contain; it does not ' +
           'say what they did contain, and it cannot see text the vendor attaches that is not on this ' +
-          `machine.${notes}`,
+          'machine.',
       };
     }
     return {

@@ -137,6 +137,11 @@ export const glossary: Record<string, GlossaryEntry> = {
       'Three AI models from three vendors (Claude, GPT, Gemini) researched this claim in a blind first round, then read one another\u2019s findings in a second round that documented errors. This label describes a run frozen before September 23, 2026.',
     href: STAGES,
   },
+  'AI panel': {
+    definition:
+      'The seats that produced this finding are listed in its run manifest. This page could not read that manifest, so it names no vendors here.',
+    href: STAGES,
+  },
   'three-seat AI panel, two vendors': {
     definition:
       'Three AI model seats from two vendors: one Anthropic model and two OpenAI models. The two OpenAI seats are not independent of each other, so three agreeing verdicts are not three independent confirmations.',
@@ -168,11 +173,19 @@ export function panelForClaim(claim: Claim): { term: string; label: string } {
     term: 'three-model AI panel',
     label: 'three-model AI panel (Claude, GPT, Gemini)',
   };
+  const unreadable = {
+    term: 'AI panel',
+    label: 'AI panel (seats in the run record)',
+  };
   try {
     const file = path.join(process.cwd(), claim.data.review_run, 'run.yaml');
     if (!existsSync(file)) throw new Error('run.yaml is missing');
+    // Only the seats that answered. A refused or failed attempt keeps its
+    // manifest row (that is the retention rule) and is not a seat on the panel.
+    // Manifests written before methodology v1.28 carry no status field; every
+    // row in them is an answered seat.
     const seats = loadRunManifest(file).runs
-      .filter((run) => run.round === 1)
+      .filter((run) => run.round === 1 && (run.status === undefined || run.status === 'ok'))
       .map((run) => ({ provider: run.provider.toLowerCase(), name: run.seat ?? run.model_id }));
     if (seats.length !== 3 || seats.some((seat) => !seat.name)) {
       throw new Error('round-one seats are incomplete');
@@ -191,11 +204,14 @@ export function panelForClaim(claim: Claim): { term: string; label: string } {
     }
     throw new Error('round-one providers do not match a published panel');
   } catch (error) {
+    // Never the historical label by default: a manifest this page cannot read
+    // is not evidence of three vendors. The page says the seats are in the
+    // run record, and the build says which claim, once.
     if (!missingPanels.has(claim.data.id)) {
-      console.warn(`Panel label for claim ${claim.data.id}: ${String(error)}; using historical label`);
+      console.warn(`Panel label for claim ${claim.data.id}: ${String(error)}; the page names no vendors`);
       missingPanels.add(claim.data.id);
     }
-    return historical;
+    return unreadable;
   }
 }
 

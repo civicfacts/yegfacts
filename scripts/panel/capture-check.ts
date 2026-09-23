@@ -143,19 +143,68 @@ export type CaptureCheckInput = {
  */
 const MIN_LINE = 24;
 
-/** The CLI's fixed note for a fetched binary it wrote to disk. Nothing else matches. */
-const BINARY_SAVE_NOTE = /\[Binary content \([^()\]]*\) also saved to [^\]]*\]/g;
 export const HOME_SOURCE = 'the home directory';
 
+const asRecord = (value: unknown): Record<string, unknown> | null =>
+  value !== null && typeof value === 'object' && !Array.isArray(value) ? (value as Record<string, unknown>) : null;
+
+const escapeRegExp = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 /**
- * A value with the CLI's binary-save notes cut out, and how many of the notes
- * carried `home`. Only the home-directory source is searched over the cut
- * text; every other source searches the value as sent.
+ * The CLI's fixed note for a fetched binary it wrote to disk, with the path
+ * pinned to where Claude Code writes such files: under its own projects
+ * directory in the operator's home, in a tool-results folder. A note naming any
+ * other path is not this note and is not cut. Nothing else matches.
  */
-function withoutSaveNotes(value: string, home: string): { text: string; notes: number } {
+function binarySaveNote(home: string): RegExp {
+  return new RegExp(
+    '\\[Binary content \\([^()\\]]*\\) also saved to ' +
+      escapeRegExp(home) +
+      '/\\.claude/projects/[^\\]\\s]+/tool-results/[^\\]\\s]+\\]',
+    'g',
+  );
+}
+
+/**
+ * The string values that sit inside tool_result blocks of a Messages request:
+ * `messages[].content[].content` as a string, or the `text` of its blocks. The
+ * CLI writes its binary-save note there and nowhere else, so the cut is
+ * allowed there and nowhere else; the same note in a text block, a system
+ * prompt or a tool input is searched as sent.
+ */
+function toolResultStrings(body: unknown): Set<string> {
+  const found = new Set<string>();
+  const messages = asRecord(body)?.messages;
+  if (!Array.isArray(messages)) return found;
+  for (const message of messages) {
+    const content = asRecord(message)?.content;
+    if (!Array.isArray(content)) continue;
+    for (const block of content) {
+      const record = asRecord(block);
+      if (record?.type !== 'tool_result') continue;
+      const inner = record.content;
+      if (typeof inner === 'string') found.add(inner);
+      else if (Array.isArray(inner)) {
+        for (const part of inner) {
+          const text = asRecord(part)?.text;
+          if (typeof text === 'string') found.add(text);
+        }
+      }
+    }
+  }
+  return found;
+}
+
+/**
+ * A tool-result value with the CLI's binary-save notes cut out, and how many
+ * of them there were. Only the home-directory source is searched over the cut
+ * text; every other source searches the value as sent. Every note that matches
+ * carries the home path by construction, so the count is the count of notes.
+ */
+function withoutSaveNotes(value: string, note: RegExp): { text: string; notes: number } {
   let notes = 0;
-  const text = value.replace(BINARY_SAVE_NOTE, (note) => {
-    if (home !== '' && note.includes(home)) notes += 1;
+  const text = value.replace(note, () => {
+    notes += 1;
     return '';
   });
   return { text, notes };
@@ -388,6 +437,7 @@ export function checkCapture(input: CaptureCheckInput): CaptureCheckResult {
 
   const homeSource = sources.find((source) => source.name === HOME_SOURCE);
   const home = homeSource?.lines[0] ?? '';
+  const note = home === '' ? null : binarySaveNote(home);
   let operatorPathNotes = 0;
 
   for (const request of requests) {
@@ -397,6 +447,7 @@ export function checkCapture(input: CaptureCheckInput): CaptureCheckResult {
     // Collected once per request rather than re-walked per source: a main turn
     // carries a few hundred strings and the denylist runs to thousands of lines.
     const values = [...strings(request.body)];
+    const toolResults = note ? toolResultStrings(request.body) : new Set<string>();
 
     if (packageText !== '' && values.some((value) => value.includes(packageText))) packageSeen += 1;
 
@@ -404,11 +455,12 @@ export function checkCapture(input: CaptureCheckInput): CaptureCheckResult {
     for (const source of sources) {
       const hit = new Set<number>();
       for (const value of values) {
-        // v1.38: the home path inside the CLI's own binary-save note is counted,
-        // not refused. The cut is made for this one source only.
+        // v1.38: the home path inside the CLI's own binary-save note, inside a
+        // tool result, is counted, not refused. The cut is made for this one
+        // source, in those values, and nowhere else.
         let text = value;
-        if (source === homeSource) {
-          const cut = withoutSaveNotes(value, home);
+        if (source === homeSource && note && toolResults.has(value)) {
+          const cut = withoutSaveNotes(value, note);
           text = cut.text;
           notesHere += cut.notes;
         }
