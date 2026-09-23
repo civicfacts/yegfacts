@@ -1,11 +1,11 @@
 story: lanes-and-congestion
 run: "2026-09-16"
 methodology_version: "1.35"
-stage: framing
+stage: merge
 stages:
   framing: {status: complete, at: "2026-09-23", frozen_sha256: "ddaa04ae53a85b81e63c126a69de275943585f23e0b6a221e87088c134f0aff9", note: "brief drafted by Stew (Claude Fable 5.1). Three framing checks on the OpenAI seat via audit-package.sh under v1.31 (attempts 84f1024447e77441, dade890214bac256, 8d4b4dafb150ad13), all REVISE; check 3 parked the brief under the v1.12 cap on 2026-09-16. Revised 2026-09-23 under v1.35: every check-3 finding applied, claims 1, 2 and 4 parked at framing on the register with reopening instruments, claim 3 remains. Claim 79-street-relieves-75-street carried to the 79 Street question (register-note.md). See run-record.md and framing/response-3.md. Park confirmation on the same seat (attempt 2e6dff95dc39e17b): PARKS CONFIRMED; brief frozen 2026-09-23."}
-  round1: {status: pending}
-  merge: {status: pending}
+  round1: {status: complete, at: "2026-09-23", note: "Three counted seats under the rule in force at the freeze (three vendors): Claude Opus 5.5 admitted on the third attempt (d2658c44f0afbcad; 8b92f1e800aa48f7 refused at the canary on builtin plugins, 09c6859382ba86e9 refused by the capture check on the CLI's PDF-save note, both retained), GPT-6 Sol admitted, Gemini 3.8 Flash admitted record-only. Shadow seat GPT-6 Luna under shadow-round1/, never merged. No material framing concern. Two seats could not reach the brief's GeoJSON snapshot under the web-only profile and used the live layer; recorded in their limitations. See run-record.md."}
+  merge: {status: complete, at: "2026-09-23", note: "scripts/merge.ts over round1/: 27 distinct sources, one contested claim (Partially supported x2, Not established x1). combined-evidence.json, disagreements.json."}
   round2: {status: pending}
   synthesis: {status: pending}
   drafting: {status: pending}

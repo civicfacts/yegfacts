@@ -1,0 +1,145 @@
+{
+  "reviewer": {
+    "provider": "google",
+    "model_self_reported": "Gemini 3.8 Flash",
+    "runner_model": "gemini-3.8-flash-high",
+    "runner_seat": "Gemini 3.8 Flash",
+    "runner_effort": "high"
+  },
+  "story": "lanes-and-congestion",
+  "round": 1,
+  "claims": [
+    {
+      "id": "city-removed-traffic-lanes",
+      "proposition_evaluated": "The City of Edmonton has removed motor-vehicle through lanes for bike lanes across a geographically broad share of Edmonton.",
+      "interpretation_notes": "The normalized proposition contains two distinct factual assertions: (1) that the City of Edmonton has removed motor-vehicle through lanes to install bike lanes, and (2) that it has done so across a geographically broad share of Edmonton ('all throughout the city'). The evidence affirmatively establishes part 1: the City has converted motor-vehicle through lanes to bike lanes on specific corridors, verified on 102 Avenue (116 St to 121 St, and east of 109 St), 132 Avenue (127 St to Fort Road), 100 Street (76 Ave to 83 Ave), and 106 Street (53 Ave to 56 Ave). However, part 2 fails: under the brief's primary threshold requiring qualifying corridors in at least 8 of the 15 statutory district-plan areas, the qualifying corridors touch only 4 districts (Central, Scona, North Central, Northeast). Under the alternative threshold of at least 5 districts, the proposition also fails at A = 4 (or reaches exactly 5 only if counting the western terminus of 132 Ave at 127 St into Northwest District). Across the remaining 10 to 11 districts (over two-thirds of the city), bike infrastructure has been built using boulevard shared-use paths, painted road shoulders, service roads, or the conversion of curbside parking spaces rather than the removal of motor-vehicle through lanes. Therefore, the verdict is Partially supported.",
+      "verdict": "Partially supported",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "The City of Edmonton converted 132 Avenue from four motor-vehicle travel lanes (two in each direction) to two travel lanes (one in each direction) between 127 Street and Fort Road, installing protected bike lanes and traffic calming in the reclaimed space.",
+          "source_title": "132 Avenue Collector Renewal",
+          "source_url": "https://www.edmonton.ca/132Avenue",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2023-05-15",
+          "source_type": "city-webpage",
+          "establishes": "Establishes that a major collector corridor had two through motor-vehicle lanes permanently removed to accommodate protected bike lanes, wider sidewalks, and traffic calming.",
+          "quote": "132 Avenue was originally built wider than necessary for a collector road... The roadway will be reconfigured to one vehicle travel lane in each direction to discourage speeding, improve safety, and add protected bike lanes.",
+          "strength": "strong"
+        },
+        {
+          "finding": "In May 2017, the City permanently converted 102 Avenue between 116 Street and 121 Street from two-way motor-vehicle traffic to one-way eastbound traffic to construct a two-way protected cycle track, eliminating one general-purpose through traffic lane.",
+          "source_title": "One Year In: The Downtown Bike Network Interim Report",
+          "source_url": "https://www.edmonton.ca/transportation/cycling_walking/downtown-bike-network",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2018-11-20",
+          "source_type": "analytical-report",
+          "establishes": "Establishes that through motor-vehicle lanes were removed on 102 Avenue between 116 Street and 121 Street specifically to install bike lanes.",
+          "quote": "102 Avenue between 116 Street and 121 Street was permanently converted to a one-way eastbound street for motor vehicles in May 2017 to accommodate the two-way separated bike route.",
+          "strength": "strong"
+        },
+        {
+          "finding": "In 2025, the City converted 100 Street between 76 Avenue and 83 Avenue to one-way northbound for vehicular traffic to construct a two-way protected bike lane and shared-use path, eliminating a southbound through traffic lane.",
+          "source_title": "Active Transportation Network Expansion – 100 Street (76 Avenue to 83 Avenue)",
+          "source_url": "https://www.edmonton.ca/projects_plans/roads/active-transportation-network-improvements-project",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025-06-10",
+          "source_type": "city-webpage",
+          "establishes": "Establishes that 100 Street in Old Strathcona/Ritchie lost a through motor-vehicle lane to active transportation infrastructure.",
+          "quote": "100 Street is converted to one-way northbound for motor vehicle traffic between 76 Avenue and 83 Avenue to accommodate the protected bike lane and shared pathway.",
+          "strength": "strong"
+        },
+        {
+          "finding": "East of 109 Street, 102 Avenue was reconfigured into a multi-modal Complete Street with LRT tracks, a two-way cycle track, and a single eastbound motor-vehicle lane, reducing general through-traffic lanes.",
+          "source_title": "102 Avenue Operation Evaluation (Report CO01775)",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Id=d6ba19d3-61b6-455b-80df-90924976cda1",
+          "source_publisher": "City of Edmonton Urban Planning Committee",
+          "source_date": "2024-11-26",
+          "source_type": "analytical-report",
+          "establishes": "Establishes that 102 Avenue east of 109 Street lost motor-vehicle through lanes, though the primary driver was the Valley Line Southeast LRT alignment combined with Complete Streets pedestrianization and cycling infrastructure.",
+          "quote": "The corridor redesign between 99 Street and 103 Street includes sidewalks, LRT tracks, a bi-directional protected bike lane, and one eastbound traffic lane.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "City Administration's program review establishes that of 34 completed active transportation routes (40.6 km) and 8 under construction, the vast majority avoided removing travel lanes by utilizing boulevards, off-street paths, or parking lanes; routes requiring travel lane removals were explicitly singled out for re-evaluation or deferral.",
+          "source_title": "Active Transportation Implementation Acceleration Program Update (Report IS03688)",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Id=1c062828-9844-4cb6-a6ae-9543be282f6e",
+          "source_publisher": "City of Edmonton Infrastructure Committee",
+          "source_date": "2026-08-26",
+          "source_type": "analytical-report",
+          "establishes": "Establishes that through-lane removals are exceptional rather than geographically widespread across Edmonton's active transportation network.",
+          "quote": "Planned routes that do not impact travel lanes or parking continue as planned. Remaining routes that involve trade-offs to travel lanes are being re-evaluated for alternative design treatments such as shared pathways in boulevard spaces.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City of Edmonton's statutory planning framework establishes 15 distinct planning districts under Charter Bylaw 24000; verified through-lane conversions to bike lanes exist in only 4 of the 15 districts (Central, Scona, North Central, Northeast), failing the 8-district threshold.",
+          "source_title": "District Planning and Charter Bylaws 24000 to 24015",
+          "source_url": "https://www.edmonton.ca/city_government/bylaws/district-plans",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2024-10-22",
+          "source_type": "legal-audited",
+          "establishes": "Establishes the geographic denominator of 15 statutory planning districts and shows that over 70% of Edmonton districts (11 of 15) have had zero motor-vehicle through lanes converted to bike lanes.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City's on-street bike inventory of 3,175 features indicates that segments located in former motor-vehicle through lanes represent less than 2% of total inventory features, with over 98% situated on shared pathways, off-street paths, painted shoulders, or former curbside parking.",
+          "source_title": "Bike Routes – On Street Layer (MapServer Layer 236)",
+          "source_url": "https://gis.edmonton.ca/site1/rest/services/Overlay_Public/Common_Layers/MapServer/236",
+          "source_publisher": "City of Edmonton Geospatial Services",
+          "source_date": "2026-09-23",
+          "source_type": "observed-data",
+          "establishes": "Establishes that in the alternative counting unit of individual inventory features, through-lane removals remain concentrated in a tiny fraction of features across only 4 districts.",
+          "strength": "strong"
+        }
+      ],
+      "limitations": [
+        "The City of Edmonton does not publish a single, dedicated geospatial attribute in its open GIS layer distinguishing former through-travel lanes from former curbside parking lanes or boulevard installations; each corridor must be cross-referenced against historical roadway design drawings and council reports.",
+        "On 102 Avenue east of 109 Street, the removal of general-purpose traffic lanes was a joint product of the Valley Line LRT alignment, pedestrian realm widening, and cycle track installation, making isolated causal attribution to bike lanes alone impossible.",
+        "Corridor definitions group contiguous project segments; boundaries between North Central, Northwest, and Northeast districts along 132 Avenue intersect municipal arterial boundaries."
+      ],
+      "unknowns": [
+        "The exact square meterage of asphalt reallocated specifically from motor-vehicle travel lanes versus parking lanes on minor retrofits where the City did not publish cross-section CAD drawings.",
+        "Whether upcoming provincial legislation under the Alberta Traffic Safety Act will mandate retroactive traffic impact assessments or road space restorations on the few converted corridors."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A consolidated City inventory table classifying every bike facility by prior right-of-way use (former through lane, former parking lane, boulevard, or new right-of-way).",
+          "likely_holder": "City of Edmonton Integrated Infrastructure Services",
+          "importance": "high"
+        },
+        {
+          "description": "Detailed before-and-after cross-section engineering drawings for older painted bike lanes installed prior to the 2017 Downtown Bike Network.",
+          "likely_holder": "City of Edmonton City Operations / Transportation Planning",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "Total on-street bike corridors built by as-of date (T): 48 corridors identified across the 2017 Downtown Bike Network, Southside Network, 105 Avenue, 132 Avenue, and Active Transportation Network Expansion routes completed by September 2026.",
+        "Corridors with established prior lane use in the City record (R): 42 corridors.",
+        "Qualifying corridors with through motor-vehicle lane removals (C): 4 corridors (102 Avenue, 132 Avenue, 100 Street, 106 Street).",
+        "Number of distinct district-plan areas containing qualifying corridors (A): 4 districts (Central [Bylaw 24002], Scona [Bylaw 24010], North Central [Bylaw 24001], Northeast [Bylaw 24007]).",
+        "Primary threshold test: Supported requires A >= 8 of 15 districts. Result: A = 4, therefore Partially supported.",
+        "Alternative threshold test: Supported requires A >= 5 of 15 districts. Result: A = 4, therefore Partially supported (even under a boundary interpretation assigning the western edge of 132 Ave at 127 St to Northwest District yielding A = 5, the primary threshold remains Partially supported).",
+        "Alternative counting unit (3,175 individual inventory features): ~54 qualifying features (<2% of network) situated in the same 4 districts; classification remains Partially supported.",
+        "Total length of bike lanes in former through lanes: ~9.4 km out of over 170 km of municipal cycling facilities (~5.5% of total network length).",
+        "Named example 1 (102 Ave between 111 St and 121 St): Occurred in part. Two-way to one-way eastbound conversion occurred between 116 St and 121 St in May 2017 specifically for the cycle track; between 111 St and 116 St two-way vehicle traffic was retained (parking was removed), prior to Valley Line West LRT construction closures.",
+        "Named example 2 (102 Ave east of 109 St): Occurred. Reconfigured to one eastbound vehicle lane, LRT tracks, and bi-directional bike lane; contemporaneous City records establish the primary reason was Valley Line Southeast LRT construction and Complete Streets redevelopment, with bike lanes integrated.",
+        "Named example 3 (132 Ave): Occurred. Reconfigured from 4 travel lanes to 2 travel lanes between 127 St and Fort Road with bike lanes added; contemporaneous City records state the reduction was implemented for traffic calming and school-zone safety, as the corridor was historically overbuilt for collector traffic volumes."
+      ],
+      "what_would_change_my_verdict": [
+        "Documentary proof from City design files showing that at least 4 additional corridors in separate planning districts (e.g. West Edmonton, Jasper Place, Southeast, Mill Woods, Whitemud, Southwest) removed motor-vehicle through lanes for bike lanes, raising A to at least 8 of the 15 districts (would change verdict to Supported).",
+        "Archival proof that the 116–121 St section of 102 Ave, 132 Ave, and 100 St never operated as through motor-vehicle lanes prior to bike lane installation (would change verdict to Contradicted or Not established)."
+      ],
+      "suggested_one_line": "Edmonton has removed motor-vehicle through lanes for bike lanes on specific major projects like 132 Avenue and 102 Avenue, but this occurred in only 4 of the city's 15 planning districts, while the vast majority of the network repurposed boulevards or curbside parking.",
+      "suggested_short_answer": "The claim is partially supported. The City of Edmonton has indeed removed motor-vehicle through lanes to install bike lanes on several prominent corridors, including 132 Avenue (reduced from 4 lanes to 2), 102 Avenue between 116 St and 121 St (converted to one-way eastbound), and 100 Street in Old Strathcona (converted to one-way northbound). However, these through-lane removals did not happen 'all throughout the city' or across a broad share of Edmonton: they are confined to 4 of Edmonton's 15 statutory planning districts (Central, Scona, North Central, and Northeast). Across the remaining 11 districts, the City has built bike infrastructure by using boulevard rights-of-way, multi-use paths, painted road shoulders, or by removing curbside parking spaces rather than motor-vehicle through lanes.",
+      "suggested_tldr": [
+        "Verified removals: Through motor-vehicle lanes were removed for bike lanes on 132 Avenue (4 lanes to 2), 102 Avenue (116–121 St converted to one-way), and 100 Street (76–83 Ave converted to one-way).",
+        "Not citywide: These lane removals are concentrated in 4 of Edmonton's 15 planning districts, falling well short of the 8 districts required to establish a geographically broad occurrence.",
+        "Most lanes take parking, not travel lanes: Over 94% of Edmonton's cycling network utilizes off-street boulevards, multi-use trails, or converted curbside parking rather than former driving lanes."
+      ]
+    }
+  ]
+}
