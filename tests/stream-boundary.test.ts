@@ -230,6 +230,30 @@ describe('research admission', () => {
     expect(verdict.ok).toBe(false);
     expect(verdict.failures.join()).toMatch(/skills were loaded: ponytail/);
   });
+
+  // Claude Code 2.1.280 lists two plugins the build itself ships, marked
+  // builtin. They are the CLI, not a customization of this machine, so they are
+  // recorded and not refused. A plugin from anywhere else still is.
+  const builtinPlugins =
+    '"plugins":[{"name":"agents-md","path":"builtin","source":"agents-md@builtin"},' +
+    '{"name":"telemetry","path":"builtin","source":"telemetry@builtin"}]';
+
+  it('admits a stream whose only plugins are the ones the CLI build ships', () => {
+    const stream = cleanStream.replace('"plugins":[]', builtinPlugins);
+    expect(readStream(stream).builtin_plugins).toEqual(['agents-md', 'telemetry']);
+    expect(readStream(stream).plugins).toEqual([]);
+    expect(admitClaude(stream, captureResult())).toEqual({ ok: true, failures: [] });
+  });
+
+  it('still refuses an installed plugin listed beside the built-in ones', () => {
+    const stream = cleanStream.replace(
+      '"plugins":[]',
+      builtinPlugins.replace(']', ',{"name":"ponytail","path":"/x/ponytail","source":"ponytail@superpowers-marketplace"}]'),
+    );
+    const verdict = admitClaude(stream, captureResult());
+    expect(verdict.ok).toBe(false);
+    expect(verdict.failures.join()).toMatch(/plugins were loaded: ponytail$/);
+  });
 });
 
 describe('assistant turns', () => {
