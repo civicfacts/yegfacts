@@ -6,7 +6,7 @@
 #   scripts/panel/run-reviewer.sh claude electric-buses 2026-08-31 1
 #
 # Providers: claude | codex | luna  (aliases: anthropic, gpt/openai)
-#           agy | gemini | google: retired (methodology v1.37, v1.39); always refused
+#           agy | gemini | google: retired (methodology v1.37, v1.40); always refused
 #
 # Isolation is NOT this script's business, and the older version of this comment
 # claiming a fresh mktemp -d was the boundary was wrong: a CLI loads its
@@ -58,7 +58,7 @@ usage() {
   cat >&2 <<'USAGE'
 usage: scripts/panel/run-reviewer.sh <provider> <story> <date> <round> [options]
   provider  claude | codex | luna  (aliases: anthropic, gpt, openai)
-            agy | gemini | google  retired (methodology v1.37, v1.39); refused
+            agy | gemini | google  retired (methodology v1.37, v1.40); refused
   story     story slug, e.g. electric-buses
   date      run date, e.g. 2026-08-31
   round     1 (blind research) or 2 (cross-review)
@@ -93,11 +93,11 @@ esac
 case "$ROUND" in 1|2) ;; *) echo "round must be 1 or 2, got '$ROUND'" >&2; exit 2 ;; esac
 case "$PROVIDER_ARG" in
   agy|gemini|google)
-    # Methodology v1.39 (2026-09-24): the Google seat is out of every stage of
+    # Methodology v1.40 (2026-09-24): the Google seat is out of every stage of
     # every run. v1.37 kept one exception, a run frozen before the retirement
     # could finish on it; the one such run was closed and restarted instead,
     # and the exception went with it.
-    echo "the Google seat is retired (methodology v1.37, v1.39); no run uses it" >&2
+    echo "the Google seat is retired (methodology v1.37, v1.40); no run uses it" >&2
     exit 2
     ;;
 esac

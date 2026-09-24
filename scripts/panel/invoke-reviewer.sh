@@ -599,7 +599,7 @@ DEFAULT_EFFORT="high"
 MODEL="${MODEL:-$DEFAULT_MODEL}"
 EFFORT="${EFFORT:-$DEFAULT_EFFORT}"
 
-# Methodology v1.37 and v1.39: the Google seat is retired from every run.
+# Methodology v1.37 and v1.40: the Google seat is retired from every run.
 # The flag below survives only so the tests can exercise the profile that
 # produced the published Gemini answers; no caller in the pipeline passes it,
 # and a run started with it by hand is a reproduction, not a review. The

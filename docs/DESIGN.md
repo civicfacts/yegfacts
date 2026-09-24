@@ -364,7 +364,7 @@ seat (`gemini-3.8-flash-high`) is retired from every run: the
 founder's Google usage ran out twice in a week and he will not buy more. v1.37
 let a run frozen before the retirement finish on it; the one such run,
 lanes-and-congestion, was closed and restarted on the current seats instead,
-and v1.39 removed the exception. The runner refuses the seat outright; the
+and v1.40 removed the exception. The runner refuses the seat outright; the
 profile stays in the launcher only so the tests can exercise the code that
 produced the published Gemini answers. A superseded model stays on the launcher's pinned list,
 never as the default, while a brief parked on a check it ran can still be

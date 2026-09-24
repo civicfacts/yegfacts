@@ -1198,7 +1198,7 @@ describe('run-reviewer', { timeout: 120_000 }, () => {
     for (const args of [['1', '--dry-run'], ['1', '--finish-frozen-run', '--dry-run'], ['2', '--dry-run']]) {
       const refused = run([script, 'agy', STORY, RUN_DATE, ...args], stub.env);
       expect(refused.ok).toBe(false);
-      expect(refused.stderr).toMatch(/retired \(methodology v1\.37, v1\.39\)|unknown option: --finish-frozen-run/);
+      expect(refused.stderr).toMatch(/retired \(methodology v1\.37, v1\.40\)|unknown option: --finish-frozen-run/);
     }
     expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
   });
