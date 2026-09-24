@@ -247,3 +247,41 @@ the drafting addresses it from the sources, never as a plain two-to-one
 majority. Each seat's manifest row is in run.yaml. Merge and evidence
 staging are done; see fetch-report.md. Round 2 (cross-review) follows on
 the same three seats.
+
+### Round 2 raised a framing concern; the brief is revised and round 1 reruns
+
+Round 2 on the restarted run completed on all three seats (Claude Partially
+supported, GPT-6 Sol Partially supported, GPT-6 Luna Not established), and
+`scripts/synthesize.ts` halted: every seat flagged `MATERIAL FRAMING
+CONCERN`. Under methodology v1.2 that halts synthesis, revises the brief and
+reruns round 1. It is the panel's check on a frozen brief, not the framing
+checker's, so the v1.12 cap and v1.35's confirmation do not govern it.
+
+**The two defects the seats named, both real.**
+
+1. The threshold table had no row for the case every seat met: at least one
+   qualifying corridor verified (C at least 1) with the census of built
+   corridors incomplete, so A known only as a minimum. Partially supported
+   required "A is less than 8", which only a complete census could prove,
+   and Not established was reserved for C of zero. Seats split on which row
+   to force. The fix makes the table say what the brief's stakes text
+   already said before any seat ran: "Partially supported means specific
+   removals are established but 'all throughout' is not." A is now counted
+   from verified corridors and reported as a minimum when the census is
+   incomplete; Supported at a verified A of 8 or more (a minimum can only
+   rise); Partially supported at C of at least 1 and A below 8, complete or
+   minimum, with the answer naming the part not established. No threshold,
+   definition, date or source changed.
+2. The brief said the package carried the dated snapshot. It never did: the
+   package is the brief, the reviewer prompt and the schema, and a
+   3,175-feature file cannot travel in it or be parsed through a web tool.
+   The brief now gives the snapshot's public URL and checksum, lets
+   reviewers count from it or from the live layer (saying which, and the
+   feature count they saw), and makes the story's calculation script
+   recompute every published count against the snapshot.
+
+**The freeze.** The brief's sha256 was `ddaa04ae53a85b81e63c126a69de275943585f23e0b6a221e87088c134f0aff9` and is now `f058e5177cac3aae109311164d1ba3161e504aa6070b408a160e2599275b84ce`.
+The halted round's files (round 1, round 2, the manifest, the merge and the
+fetch report) move unchanged to `superseded-2026-09-24/`; its answers are to
+the old hash. Round 1 reruns on all three seats against the new one, blind,
+because answers to two packages cannot share a round.
