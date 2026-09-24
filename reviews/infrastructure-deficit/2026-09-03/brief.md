@@ -294,7 +294,7 @@ MATERIAL FRAMING CONCERN.
 
 ### Claim 1, id: `infra-roads-condition`
 
-**Normalized proposition:** Edmonton's roads are in poor condition.
+**Normalized proposition:** The City's latest published condition ratings available by 2026-09-03 show that Edmonton's Roads asset class was in poor condition as of the inventory date those ratings describe.
 
 **The date this is answered on.** The proposition is stated as a resident
 states it, in the present tense, because B7 puts the difference between
