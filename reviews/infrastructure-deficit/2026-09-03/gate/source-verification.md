@@ -1,3 +1,15 @@
+<!-- Dispositions, 2026-09-24, by Stew (drafting seat Claude Opus 5.5).
+
+All nine blocking corrections adopted as the gate words them: the three roads sentences in the story now read "On that date paved roads were 12.5 per cent poor or very poor. Curbs, which the City files under Roads, were 7.0 per cent. Unpaved roads had no rating at all."; the fourth reads "At 11.2 per cent at the end of 2024, the roads landed just above the tenth."; infra-roads-condition key facts 2, 3 and 6 and limitation 6 carry December 31, 2024 or the end of 2024 in the past tense as written in corrections 3 to 6; the active-transportation link text is now the page's title, "Is Edmonton letting roads go while funding bike lanes?".
+
+Both date fixes adopted: "at the end of 2024" added to the Claude Opus 5.5 and GPT-6 Luna first key findings on infra-roads-condition.
+
+All non-blocking items adopted: R24, the alley program now "to renew alleys rated very poor"; M23 and KF-7, the transfer is dated "Spring 2025" from the archived bytes ("In its Spring 2025 budget adjustment"); L-4, "This site has not archived the June 2023 record."; Claude key finding 2, "A news report of a 2023 council debate said"; Claude's round-2 change now "rested on City documents, the profile sheet and minutes the other reviewers cited and a capital update it found itself, not on their verdicts"; the calcs comments now give the funding table on p. 542 with the sheet starting on p. 540, and Table 6 on p. 50 with its gap sentence on p. 49; the p. 539 reference in both faithfulness disposition headers (the editor's text, not the seats') now reads p. 540.
+
+The board_withdrawn advisory is adopted without moving the withdrawal date: both reasons now say the site "checked as its own question on 2026-09-24", so the later event carries its own date and date: "2026-09-03" stays the date of the withdrawal it records.
+
+The note that YF-EV-0114 and YF-EV-0129 to YF-EV-0131 are archived only in the main checkout is expected, since evidence/private/ is gitignored per worktree; no action. -->
+
 # Source verification — infrastructure-deficit
 
 Gate stage 7, part 1. Run date 2026-09-24 (story run `2026-09-03`),

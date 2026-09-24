@@ -59,14 +59,14 @@ export const figures = {
 
   /**
    * YF-EV-0114 — adopted 2023-2026 Capital Budget, CM-20-0330 profile sheet
-   * (page 541), "Approved Funding Sources" ($000s). One row only.
+   * (the funding table on page 542; the sheet starts on page 540), "Approved Funding Sources" ($000s). One row only.
    */
   cm200330FundingSourcesThousands: {
     'Tax-Supported Debt': 100_000,
   } as Record<string, number>,
 
   /**
-   * YF-EV-0114 — Table 6 (page 49), 2023 to 2026 ($000s): RIMS Ideal
+   * YF-EV-0114 — Table 6 (page 50; the gap sentence is on page 49), 2023 to 2026 ($000s): RIMS Ideal
    * Investment and Funded RIMS Ideal Investment. The page names their
    * difference the "renewal funding gap of $1.63 billion for 2023-2026".
    */

@@ -1,3 +1,11 @@
+<!-- Dispositions, 2026-09-24, by Stew (drafting seat Claude Opus 5.5).
+
+No blocking findings; three advisories.
+
+The private individual's GitHub handle in cited URLs and the offensive captured comment in the intake record are both already public on main and outside this PR's changes. They are left as they are. Whether the intake quotation should be retained is a founder decision that is already open, and this PR does not pre-empt it.
+
+The wrong page references in run artifacts are corrected where they are the editor's own text: the calcs module comments (the funding table on p. 542, the sheet from p. 540, Table 6 on p. 50) and the p. 539 reference in both faithfulness disposition headers. No seat's or auditor's text was edited. -->
+
 # Release check — infrastructure-deficit
 
 Gate stage 7, part 2. Run date 2026-09-24 (story run `2026-09-03`),
