@@ -190,6 +190,26 @@ reopens only on new intake evidence. FRAME OK and REVISE are not
 available in this round either, for the same reason as above. Nothing
 about a cutoff value is reopened here.
 
+A third REVISE whose standing findings you have all written out in full
+has one more route (methodology v1.39). If every standing finding in your
+third report carries copy-ready replacement text, or asks for a park in
+the way above, the editor may apply every one of them exactly as you wrote
+it, with no new quotation, calculation, source, lookup or drafting, and send
+the brief back to you once as a **wording confirmation**. A reader who is
+not the editor has already decided, in a report committed beside the brief,
+that every finding qualified. You are the same seat and pinned model that
+wrote the third report, and you re-examine no finding. Read the whole
+difference between the brief you last saw and this one, against your third
+report and the sources the brief already cites. Head the report
+`Verdict: CONFIRMED` when every edit is your own replacement text applied to
+its own finding, nothing else changed, the changed passages are supported by
+what the brief already cites, and checks 8 and 9 hold for what remains; the
+brief then freezes. Head it `Verdict: REJECTED` when any edit departs from
+your text, anything else changed, or a changed passage outruns the cited
+record; the brief is then parked and reopens only on new intake evidence.
+FRAME OK and REVISE are not available in this round, for the same reason as
+above, and nothing about a cutoff value is reopened.
+
 A defect confirmation is the last report a brief gets. If it returns further
 defects and no framing finding, the editor corrects them in writing in
 the wording you supplied, records each against the finding it answers,

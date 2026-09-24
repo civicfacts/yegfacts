@@ -14,6 +14,30 @@
 # The sentence above used to describe a check that did not exist: the rule sat
 # as a TODO in scripts/validate.ts, and a change under methodology/ shipped
 # clean. It runs now.
+- version: "1.39"
+  date: "2026-09-24"
+  scope: wording-confirmation
+  summary: >
+    A brief whose third framing report leaves only fixes the checker has
+    already written out word for word can now be applied and confirmed
+    instead of parked. The editor pastes the checker's text and nothing
+    else; a separate reader decides beforehand that every finding qualifies;
+    the same checker then confirms the edit or rejects it. One of the two
+    briefs that asked for this qualifies. The other does not, and stays
+    parked.
+  highlights:
+    - "What happened. Two questions many people asked in the first source, whether Edmonton's roads are in poor condition (infrastructure-deficit) and who pays for roads (who-pays-for-roads), have been parked since 2026-09-03 by the three-report cap. v1.35 gave a route for a third report that parks claims; neither brief's report does. infrastructure-deficit's report leaves one finding, with its replacement sentence written out by the checker. who-pays-for-roads leaves four."
+    - "The rule. Every standing finding of the third report must carry copy-ready replacement text, or ask for a park the v1.35 way. The editor applies every one of them exactly as written, with no new quotation, calculation, source, lookup or drafting. A finding whose fix needs any of those makes the whole brief ineligible, and no new wording is asked of the checker to make it eligible. Before the confirmation, a reader who is not the editor (a separate read-only model session) reads the third report, this rule and the editor's finding-to-edit table and records ELIGIBLE or INELIGIBLE for each finding. The brief then goes once to the same seat and pinned model as the third report, which reads the whole difference against its own report and the sources the brief already cites, and answers CONFIRMED (the brief freezes) or REJECTED (it parks, reopening only on new intake evidence). There is no dispute route, no cutoff is reopened, and there is no further report."
+    - "Applied. infrastructure-deficit qualifies on the editor's reading and goes to the separate eligibility reader, then to confirmation; the result is published in its run record. who-pays-for-roads does not: one replacement names attachment addresses without giving them, one asks for phrases to be replaced throughout with no text supplied, and one depends on what the 2024 provincial manual says, which is a source reading. It stays parked. The editor disputed one of its findings in September and has since conceded it after the 2026-09-09 audit withdrew a related allegation; that history stays in its run record."
+    - "Who did what. The founder asked for the two parked briefs to be worked on and decided the rule. The editor proposed it, applies the edits and conceded the findings. The board, four role memos run on GPT-6 Sol, reviewed it and made it stricter: copy-ready text only, and a separate eligibility reader. The confirming seat checks a bounded edit and does not re-verify the claims. This is the third change made to the framing cap after the cap stopped the editor's own briefs, after v1.20 and v1.35, and the site says so rather than leaving it to be found."
+  links:
+    - label: How a finding is produced
+      href: /methodology#stages
+  note: >
+    The cap stops an editor revising until the checker gives up. A report
+    whose every fix is already written by the checker leaves the editor
+    nothing to revise, so the route lets the editor paste and nothing more,
+    and puts the gate in someone else's hands.
 - version: "1.38"
   date: "2026-09-23"
   scope: capture-check-binary-note
