@@ -83,6 +83,27 @@ export const figures = {
   shortfall2023to2026LaterMillions: 1_520,
   tenYearGap2023to2032Millions: 4_800,
 
+  /**
+   * YF-EV-0208 — 2025 Financial Annual Report (page 53): the forward renewal
+   * investment shortfall for 2027-2030 and the 2027-2036 gap ($ millions).
+   * Different years from the finding; context only, never classified.
+   */
+  shortfall2027to2030Millions: 2_700,
+  tenYearGap2027to2036Millions: 10_000,
+
+  /**
+   * YF-EV-0114 — the adopted budget's statement of its new tax-supported
+   * borrowing ($ millions) and the yearly debt servicing it equates to, with
+   * the tax increase the City estimated for it (per cent).
+   */
+  newTaxSupportedDebtMillions: 1_300,
+  annualDebtServicingMillions: 99.7,
+  debtServicingTaxIncreasePct: 4.52,
+
+  /** YF-EV-0202 — the 2019-2022 budget's alley estimate: length and share in poor condition. */
+  alleysKilometres2019: 1_180,
+  alleysPoorShare2019: 2 / 3,
+
   /** The approved amount both claims 2 and 3 are about, in $ millions. */
   programMillions: 100,
 } as const;

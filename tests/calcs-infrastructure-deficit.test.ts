@@ -102,3 +102,19 @@ describe('the money beside the shortfall', () => {
     expect(story).toContain('1.39 per cent');
   });
 });
+
+describe('context figures carried on the page', () => {
+  it('prints the forward shortfall, the debt servicing and the old alley estimate as transcribed', () => {
+    const shortfall = claimText('infra-hundred-million-vs-shortfall');
+    expect(figures.shortfall2027to2030Millions).toBe(2_700);
+    expect(shortfall).toContain('$2.7 billion');
+    expect(shortfall).toContain('$10.0 billion');
+    const money = claimText('infra-bike-money-renewal-eligible') + ' ' + loadYaml<{ key_facts: { text: string }[] }>(
+      repoPath('src', 'content', 'claims', 'infra-bike-money-renewal-eligible.yaml'),
+    ).key_facts.map((f) => f.text).join(' ');
+    expect(money).toContain(`$${figures.annualDebtServicingMillions} million`);
+    expect(money).toContain(`${figures.debtServicingTaxIncreasePct} per cent`);
+    expect(claimText('infra-roads-condition')).toContain(`${figures.alleysKilometres2019.toLocaleString('en-CA')} kilometres`);
+    expect(story).toContain('$2.7 billion');
+  });
+});
