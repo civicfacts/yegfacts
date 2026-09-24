@@ -1,0 +1,291 @@
+{
+  "reviewer": {
+    "provider": "anthropic",
+    "model_self_reported": "claude-opus-5-5",
+    "runner_model": "claude-opus-5-5",
+    "runner_seat": "Claude Opus 5.5",
+    "runner_effort": "high"
+  },
+  "story": "infrastructure-deficit",
+  "round": 1,
+  "claims": [
+    {
+      "id": "infra-roads-condition",
+      "proposition_evaluated": "The City's latest published condition ratings available by 2026-09-03 (the 2025 Infrastructure State and Condition Report) show that Edmonton's asset class published under the City's label for roads ('Roads') had a D (poor) plus F (very poor) share p of at least 25% (Supported), 10% to <25% (Partially supported), or <10% (Contradicted), by replacement value, as of the inventory date those ratings describe.",
+      "interpretation_notes": "Partially supported under the primary cutoffs. The part of the proposition that holds: a non-trivial share of the City's 'Roads' class is rated D or F. The part that fails: the generality 'the roads are in poor condition', which needs p of 25% or more. The only figure I could find is p = 11.2% (Roads, 2025 report, Appendix B, p. 37). It is in the 10% to <25% band. Alternative cutoffs (Supported 20%+, Partial 7.5% to <20%, Contradicted <7.5%) give the same result: 11.2% is Partially supported. Sub-classes the 2025 report reportedly nests under 'Roads': Paved (reportedly 12.5% D+F), Unpaved (share not recovered), and a Curbs line of about $2.1B at 7% D+F. Following the brief, curbs are kept inside the City's own class and not removed by hand; I report them here as a qualification under the City's label. With curbs, p is 11.2%. Paved alone would be 12.5%, but that is a category I would have assembled, so it is not used. The margin over the 10% boundary is 1.2 percentage points, which is thin given that the figure comes from a transcription. Previous rating (2023 values, reportedly printed beside 2025 in the same appendix): 11.4% D+F, so a -0.2 point change, reported and not judged. The 2020 edition's Roads row (11.0%) was assembled differently: it reportedly included alleys at 64% D+F and had no curbs line. The report itself reportedly says its methodology differs from previous years, so the three values are not a like-for-like trend. Excluded classes (bridges, sidewalks, streetlights, transit/LRT, buildings, parks) were not examined, because the report itself could not be opened.",
+      "verdict": "Partially supported",
+      "confidence": "Low",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "A third-party transcription of the 2025 ISC report's Appendix B (p. 37) gives the 'Roads' D+F share as 11.2% for 2025 on a replacement value of $10,484M, and 11.4% for 2023 on $9,747M. It also gives 2025 Good 70.8% and Fair 16.2%.",
+          "source_title": "docs: the Roads poor-condition share has not moved in five years (PR #471, edmonton-tax-viz)",
+          "source_url": "https://github.com/PeterFriedrich/edmonton-tax-viz/pull/471",
+          "source_publisher": "Independent GitHub project (private individual)",
+          "source_date": "2026-09-18",
+          "source_type": "advocacy",
+          "establishes": "That a reader of the City report transcribed these figures. It does not establish them as City figures: I could not verify them against the primary PDF.",
+          "quote": "the methodology of this report is different from previous years",
+          "strength": "weak"
+        },
+        {
+          "finding": "A follow-up transcription says the printed Roads figure of 11.2% combines Paved Roads at 12.5% D+F with a $2.1B curbs line at 7%. It also says the 2020 Roads row included alleys at 64% D+F.",
+          "source_title": "docs: cross-read of the three pro-50 road-life sections (PR #473, edmonton-tax-viz)",
+          "source_url": "https://github.com/PeterFriedrich/edmonton-tax-viz/pull/473",
+          "source_publisher": "Independent GitHub project",
+          "source_date": "2026-09",
+          "source_type": "advocacy",
+          "establishes": "A lead to the sub-class structure of the City's Roads class. Not verified against the primary document.",
+          "strength": "weak"
+        },
+        {
+          "finding": "The 2025 Appendix B check covers the Roads, Curbs, Paved and Unpaved strings, which suggests these are the rows printed under Roads.",
+          "source_title": "Roads notebooks: pin Paved/Unpaved 2025 (PR #548, edmonton-tax-viz)",
+          "source_url": "https://github.com/PeterFriedrich/edmonton-tax-viz/pull/548",
+          "source_publisher": "Independent GitHub project",
+          "source_date": "2026-09-23",
+          "source_type": "advocacy",
+          "establishes": "A lead to the sub-class names only. No values.",
+          "strength": "weak"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "CBC reported (Feb 2026, on the infrastructure committee reports) that the City has kept the share of all its assets rated poor 'hovering around 10 per cent since 2017'. Only the search-result excerpt was read; the page returned 403.",
+          "source_title": "Edmonton mayor wants more infrastructure funding in provincial budget (CBC News)",
+          "source_url": "https://www.cbc.ca/news/canada/edmonton/edmonton-mayor-infrastructure-funding-provincial-budget-9.7106037",
+          "source_publisher": "CBC News",
+          "source_date": "2026-02-26",
+          "source_type": "media",
+          "establishes": "That the City's portfolio-wide poor share was reported at about 10%. This is consistent with a Roads figure near the 10% boundary, which is what keeps the verdict out of the Supported band. It is portfolio-wide, not Roads.",
+          "strength": "weak"
+        }
+      ],
+      "limitations": [
+        "The named primary source (2025 ISC report PDF) exceeded my fetch tool's 10 MB limit and could not be opened. The City web page for Infrastructure State and Condition returned HTTP 502 on repeated attempts. So p rests on a third-party transcription, and I could not verify the class name, sub-class list, denominator, data date or publication date against the City document.",
+        "Denominator: the transcription pairs the shares with replacement value, but it does not say explicitly that the shares are value-weighted. I found no length-based (km or lane-km) distribution, so the required alternative denominator is unreported.",
+        "Dates: publication date not verified. The report appears to have gone to the Infrastructure Committee in February 2026 (CBC, 2026-02-26, refers to reports presented 'on Monday'). I could not establish the inventory date the data describes. I could not identify the committee agenda page URL.",
+        "City target: I found no City-published target or service level for the D/F share of roads. A CBC excerpt refers to a forecast that 28% of all assets could be D/F by 2036. That is a forecast, not a target.",
+        "Rating method, re-rating frequency and the share of assets rated in the latest cycle versus carried forward: not determined."
+      ],
+      "unknowns": [
+        "The full A-to-F distribution for Roads, and for each sub-class, as printed.",
+        "Whether the shares are by replacement value or by another measure.",
+        "The date the 2025 inventory describes.",
+        "Whether Paved/Unpaved include alleys in the 2025 edition.",
+        "The Unpaved D+F share."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Appendix B (p. 37) of the 2025 Infrastructure State and Condition Report, read directly, with its denominator and data date.",
+          "likely_holder": "City of Edmonton, Integrated Infrastructure Services / Infrastructure Planning & Design",
+          "importance": "critical"
+        },
+        {
+          "description": "The Infrastructure Committee agenda page (Feb 2026) presenting the report.",
+          "likely_holder": "City Clerk (eSCRIBE portal)",
+          "importance": "high"
+        }
+      ],
+      "calculations_needed": [
+        "p = D+F share of the Roads class by replacement value: 11.2% (transcribed, unverified).",
+        "Direction of change 2023 to 2025: 11.4% to 11.2%, -0.2 points. Composition differs across editions.",
+        "Required calc 6: I found no City roads condition target."
+      ],
+      "what_would_change_my_verdict": [
+        "The primary Appendix B showing Roads D+F below 10% (Contradicted) or at 25% or above (Supported).",
+        "The City printing a different class name, or a structure where 'Roads' excludes curbs and carries a materially different share."
+      ],
+      "suggested_one_line": "On the City's 2025 condition report, about 11% of its 'Roads' asset class (by replacement value) was reportedly rated poor or very poor. That is a real minority, not the network as a whole. The figure describes an inventory date before August 2026 and has not been verified against the City PDF.",
+      "suggested_short_answer": "Partially. The latest City rating, as transcribed from its 2025 report, puts about 11.2% of the Roads class in D or F. Paved roads alone are about 12.5%, and a curbs line pulls the class total down. That is above a tenth and well below a quarter. It describes the inventory date of the 2025 report, not August 2026.",
+      "suggested_tldr": [
+        "Roads class D+F: about 11.2% (2025), about 11.4% (2023). Transcribed, primary not opened.",
+        "The City's Roads class includes curbs (about 7% D+F), which dilutes Paved (about 12.5%).",
+        "No City target for the road D/F share found."
+      ]
+    },
+    {
+      "id": "infra-bike-money-renewal-eligible",
+      "proposition_evaluated": "Of the $100.0M approved for CM-20-0330 (2023-2026), at least $50.0M (E) came from funding sources whose terms permitted road or alley renewal. General municipal capital funding (tax-supported debt, pay-as-you-go, unrestricted reserves) counts as eligible unless the record says otherwise. Restricted grants count as eligible only if the granting body's published terms permit renewal.",
+      "interpretation_notes": "Not established, as a finding about what I could reach, not about what the City publishes. The profile sheet for CM-20-0330 in the adopted 2023-2026 Capital Budget (which carries the funding sources) could not be read: the PDF text was not extractable by my tool, and all eSCRIBE council documents returned HTTP 403. No primary document I reached gives a dollar breakdown of funding sources, so U = $100.0M, E = 0, X = 0, which falls in the Not established band under both cutoff sets. The leads point strongly one way. Taproot reported that in the 22 Nov 2023 deliberations the mover of a motion to halve the programme said it was financed through tax-supported debt, and that administration quantified tax-supported debt savings of $123,000 (2024), $776,000 (2025) and $1.9M (2026) from a $50M cut. Tax-supported debt is general municipal capital funding, so it is eligible under this brief. If the profile sheet confirms that the programme is at least half tax-supported debt or pay-as-you-go, E is $50M or more and the verdict becomes Supported under both cutoffs. The brief bars a news report from being the source of a figure in a verdict, so I have not classified on these leads. The story must not use the Stakes line 'Edmonton does not publish enough' on the strength of this review. That would convert an access failure into a claim about the record. I found no restricted grant tied to CM-20-0330. The federal Active Transportation Fund contribution of $8.9M in April 2023 was announced for other named projects (Jasper Avenue and planning studies), and I found no link to this profile.",
+      "verdict": "Not established",
+      "confidence": "Low",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "22 Nov 2023: Coun. Principe (seconded by Coun. Rice) moved to halve the $100M. She said the aim was to minimize tax-supported debt. Administration said the cut would save $123,000 (2024), $776,000 (2025) and $1.9M (2026) in tax-supported debt. The motion was defeated; Principe, Cartmell and Hamilton were in favour.",
+          "source_title": "Edmonton's budget adjustment so far (Taproot Edmonton)",
+          "source_url": "https://edmonton.taproot.news/briefs/2023/11/27/edmontons-budget-adjustment-so-far",
+          "source_publisher": "Taproot Edmonton",
+          "source_date": "2023-11-27",
+          "source_type": "media",
+          "establishes": "That administration's reported answer in council treated the programme as financed by tax-supported debt. This is a lead to the profile sheet and minutes, not a verdict figure.",
+          "quote": "to try to minimize the tax-supported debt because that's our third-largest expense",
+          "strength": "moderate"
+        },
+        {
+          "finding": "An advocacy group states that the programme is capital, funded through debt servicing with costs 'split over decades'.",
+          "source_title": "We'll say it again, it's not because of bike lanes... Spring Budget Adjustment 2024 (Paths for People)",
+          "source_url": "https://pathsforpeople.org/2024/04/well-say-it-again-its-not-because-of-bike-lanes-spring-budget-adjustment-2024/",
+          "source_publisher": "Paths for People",
+          "source_date": "2024-04",
+          "source_type": "advocacy",
+          "establishes": "The advocate's position only. It agrees with the Taproot lead.",
+          "strength": "weak"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The Dec 9, 2022 amendment ($100M) passed 9-4; Cartmell, Hamilton, Principe and Rice were opposed. The article names no funding source, and the mover is not named.",
+          "source_title": "Edmonton city council 100 million bike lanes (Global News)",
+          "source_url": "https://globalnews.ca/news/9338993/edmonton-city-council-100-million-bike-lanes/",
+          "source_publisher": "Global News",
+          "source_date": "2022-12-09",
+          "source_type": "media",
+          "establishes": "Approval and vote. It does not establish the funding source, which is why U stays at $100.0M on admissible evidence.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Options from a $30M reduced version to $200M were discussed before council settled on $100M. The article does not name movers or give dispositions for the other options.",
+          "source_title": "Budget deliberations continue following $100M for Edmonton Bike Plan (Taproot Edmonton)",
+          "source_url": "https://edmonton.taproot.news/news/2022/12/12/budget-deliberations-continue-following-100m-for-edmonton-bike-plan",
+          "source_publisher": "Taproot Edmonton",
+          "source_date": "2022-12-12",
+          "source_type": "media",
+          "establishes": "That other amounts were discussed in December 2022. It does not establish the minutes' record of any motion to reduce.",
+          "strength": "weak"
+        }
+      ],
+      "limitations": [
+        "The adopted 2023-2026 Capital Budget PDF (about 695 pages) was retrieved but its text could not be extracted. Appendix A, the CM-20-0330 profile sheet and the funding sources were not read. Required calc 1 amounts (5,950 / 26,750 / 33,650 / 33,650 in $000s, total 100,000) are the brief's figures and I did not independently verify them.",
+        "eSCRIBE (pub-edmonton.escribemeetings.com) returned HTTP 403 for every document. December 2022 minutes, capital budget adjustment reports and council records were not read.",
+        "Qualification 2 (motions in Dec 2022 to reduce CM-20-0330): not determinable from the minutes. The media leads show the Nov 22, 2023 halving motion (a fall 2023 budget adjustment, not December 2022) was defeated. A search-result summary also reported a Dec 2024 attempt to move $67M out of bike projects to the tax levy that failed, and a Sept 2025 motion to pause construction that was defeated 9-4. I did not open the article behind the Dec 2024 item. The councillor's claim of two motions may refer to 2023 and 2024 rather than December 2022.",
+        "Qualification 3 and required calc 3 (budget adjustments to CM-20-0330, and transfers from renewal-funded allocations in either direction): none found in any source I reached. That is not evidence that none exists.",
+        "Required calc 5 (actuals 2023-2025): not found.",
+        "The budget.edmonton.ca capital_projects.csv carries no funding-source fields, and CM-20-0330 did not appear in the visible, truncated portion."
+      ],
+      "unknowns": [
+        "Dollar split of CM-20-0330 by funding source (tax-supported debt, pay-as-you-go, grants, reserves).",
+        "Whether any City debt policy restricts tax-supported debt from road or alley renewal (the brief treats it as eligible unless the record says otherwise).",
+        "Current approved amount at 2026-09-03, and any adjustments."
+      ],
+      "missing_evidence": [
+        {
+          "description": "CM-20-0330 capital profile sheet (funding sources table) in the adopted 2023-2026 Capital Budget and in later adjustment reports.",
+          "likely_holder": "City of Edmonton Financial and Corporate Services",
+          "importance": "critical"
+        },
+        {
+          "description": "Minutes and amendment list of the December 2022 budget deliberations, and of the fall 2023, fall 2024 and 2025-2026 adjustments.",
+          "likely_holder": "Office of the City Clerk (eSCRIBE)",
+          "importance": "high"
+        },
+        {
+          "description": "Year-end capital reports with cumulative actuals for CM-20-0330.",
+          "likely_holder": "City of Edmonton Financial and Corporate Services",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "E, X, U from the profile sheet. On admissible evidence reached: E = 0, X = 0, U = 100.0.",
+        "Actuals 2023-2025 by differencing cumulative actuals: not computed, source not reached."
+      ],
+      "what_would_change_my_verdict": [
+        "The profile sheet showing at least $50.0M from tax-supported debt, pay-as-you-go or unrestricted reserves would make it Supported under both cutoffs. The leads suggest this is likely.",
+        "The profile sheet showing the programme funded wholly by grants whose published terms bar road or alley renewal would make it Contradicted."
+      ],
+      "suggested_one_line": "Reporting on council debate says the $100M is financed through tax-supported debt, which is general money that could have funded road renewal. This reviewer could not open the City's profile sheet to confirm the dollar split, so the claim is not yet established on the City's own documents.",
+      "suggested_short_answer": "Not established here, because the City's budget documents could not be read. Reports of the November 2023 debate say administration costed the programme as tax-supported debt, and if that is confirmed the answer is almost certainly yes. No restricted grant tied to this programme was found."
+    },
+    {
+      "id": "infra-hundred-million-vs-shortfall",
+      "proposition_evaluated": "$100M is at least 0.25 (Supported), 0.05 to <0.25 (Partially supported) or <0.05 (Contradicted) of S. S is the City's own published unfunded renewal figure covering the 2023-2026 capital budget cycle, across all its assets.",
+      "interpretation_notes": "Partially supported. The part that holds: the $100M is a real fraction of the City's 2023-2026 renewal shortfall. The part that fails: 'serious share' (r of 0.25 or more). The City figures for 2023-2026 I could reach, all through search excerpts of City reports that returned 403 when opened: (a) the Spring 2024 Supplemental Capital Budget Adjustment says 'in the originally approved 2023-2026 Capital Budget, the ideal renewal investment was identified as $3.5 billion; however, funding available for renewal was only 54 per cent of this ideal requirement'. By my arithmetic the unfunded part is $3.5B x 0.46 = about $1.61B; the excerpt does not show the City printing that dollar figure. (b) FCS02696 (City Council, June 10, 2025) says '$2.06 billion is allocated to the ideal renewal investment' of a $9.44B approved budget, and CBC reported this report as finding a $1.5B shortfall for 2023-26. (c) The City's budget FAQ, reported via search, puts ideal renewal needs over 2023-2026 at 'about $3.6 billion'; $3.6B - $2.06B = $1.54B. r = 100/1,610 = 0.062; 100/1,540 = 0.065; 100/1,500 = 0.067. Each lands in the Partially supported band under the primary cutoffs (0.05 to 0.25) and under the alternative cutoffs (0.03 to 0.15). The classification only changes if S is at or below $400M or above $2.0B (primary), or at or below $667M or above $3.33B (alternative), and no City figure for 2023-2026 is near those values. The difference figures are subtractions of two City figures on the same basis, not rescaled figures. I could not read the City's own heading for the difference on pp. 42-49 of the capital budget. Longer-span figures, reported and not classified: the 10-year gap of $4.8B (2023-2032 Capital Investment Outlook, June 2022, reported via search), r = 0.021; the roughly $10B 10-year gap (2026 outlook), r = 0.010. Both are different periods and are not classified.",
+      "verdict": "Partially supported",
+      "confidence": "Moderate",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "The originally approved 2023-2026 Capital Budget identified ideal renewal investment of $3.5B, with funding available for renewal at only 54% of it. Once constrained programs (e.g. Neighbourhood Renewal) and bridges are set aside, the remainder was funded at about 30.7% of ideal. Read via search excerpt; direct fetch returned 403.",
+          "source_title": "Spring 2024 Supplemental Capital Budget Adjustment, 2023-2026 Capital Budget (City of Edmonton report)",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=224915",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2024-04",
+          "source_type": "analytical-report",
+          "establishes": "The City's own 2023-2026 renewal requirement and funded share. The unfunded part, about $1.61B, is arithmetic on City figures.",
+          "quote": "ideal renewal investment was identified as $3.5 billion; however, funding available for renewal was only 54 per cent",
+          "strength": "moderate"
+        },
+        {
+          "finding": "FCS02696: approved 2023-2026 capital budget $9.44B, of which $2.06B is allocated to the ideal renewal investment, which is 21.8% of the approved budget. Read via search excerpt; direct fetch returned 403. Council agenda item 24, June 10, 2025.",
+          "source_title": "Prioritization of Renewal in 2027-2030 Capital Budget (FCS02696)",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=261618",
+          "source_publisher": "City of Edmonton, Financial and Corporate Services",
+          "source_date": "2025-06-10",
+          "source_type": "analytical-report",
+          "establishes": "The City's funded renewal figure for the same four years. Agenda page: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Id=22126c13-fd9b-48d2-b130-51a3fc7e10d0&Agenda=Agenda&lang=English&Item=24&Tab=attachments",
+          "strength": "moderate"
+        },
+        {
+          "finding": "At the June 10, 2025 fiscal update, city administration reported a $1.5B capital funding shortfall in the current cycle and another $1.8B expected next cycle.",
+          "source_title": "Edmonton capital funding 2025 fiscal update (Global News)",
+          "source_url": "https://globalnews.ca/news/11234828/edmonton-capital-funding-2025-fiscal-update",
+          "source_publisher": "Global News",
+          "source_date": "2025-06-10",
+          "source_type": "media",
+          "establishes": "A lead that corroborates an S of about $1.5B. It is not itself the verdict figure.",
+          "strength": "weak"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "CBC (June 2025) reported the report's shortfall as $1.5B for 2023-26. Read via search excerpt; the page returned 403. The Spring 2024 figures imply about $1.61B, so the City's dollar figure varies with the budget version used ($3.5B vs $3.6B ideal).",
+          "source_title": "City of Edmonton renewal investment shortfall sits at $1.5B: report (CBC News)",
+          "source_url": "https://www.cbc.ca/news/canada/edmonton/city-edmonton-renewal-investment-shortfall-1.7548467",
+          "source_publisher": "CBC News",
+          "source_date": "2025-06",
+          "source_type": "media",
+          "establishes": "That S is not a single fixed City number. The classification holds across the range.",
+          "strength": "weak"
+        }
+      ],
+      "limitations": [
+        "The capital budget pp. 42-49 (the City's own heading for the difference) could not be read. PDF text was not extractable, and all eSCRIBE reports returned 403, so City wording comes from search-engine excerpts.",
+        "Whether the 2023-2026 figures are nominal or constant dollars is not stated in the excerpts. The 2027-2030 requirement is stated in 2021 dollars ($3.8B, or $4.4B in 2025 dollars), which suggests the 2023-2026 figures may also be constant-dollar. Treat them as the City's stated figures.",
+        "Qualification 1 (roads-and-alleys shortfall for 2023-2026): I found no such City figure. The Spring 2024 excerpt suggests Neighbourhood Renewal is a constrained-funding program funded differently from unconstrained assets, but I found no roads-and-alleys gap in dollars.",
+        "Qualification 3 (unit cost): not found.",
+        "Qualification 4: $100M / $9.44B (approved as at mid-2025) = 1.06%; $100M / $2.06B funded renewal = 4.85%. This is my arithmetic. The original December 2022 adopted total was not verified from the primary document.",
+        "City benchmark for share of renewal funded: none found. The 54% figure is descriptive, not a target.",
+        "Drainage: Edmonton's drainage utility is not in these figures as far as I could tell. I did not test this (B6)."
+      ],
+      "unknowns": [
+        "The City's exact label for the 2023-2026 difference (e.g. 'renewal gap', 'unfunded renewal').",
+        "Whether the $3.5B/$3.6B requirement is nominal.",
+        "The roads-and-alleys component of the requirement."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Adopted 2023-2026 Capital Budget pp. 42-49 renewal tables and heading, read directly.",
+          "likely_holder": "City of Edmonton Financial and Corporate Services",
+          "importance": "high"
+        },
+        {
+          "description": "Roads and alleys renewal requirement vs funded, 2023-2026.",
+          "likely_holder": "City of Edmonton Integrated Infrastructure Services",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "S range $1.50B to $1.61B, giving r = 0.062 to 0.067: Partially supported under both cutoff sets.",
+        "Unclassified (different span): r against the 10-year $4.8B gap = 0.021; against about $10B = 0.010.",
+        "Qualification 4: 1.06% of the $9.44B budget; 4.85% of the $2.06B funded renewal."
+      ],
+      "what_would_change_my_verdict": [
+        "A City figure for 2023-2026 unfunded renewal above $2.0B would make it Contradicted, or at or below $400M would make it Supported.",
+        "Evidence that the City's 2023-2026 pair is not on a like-for-like basis, or that no City document states a same-period pair, would make it Not established."
+      ],
+      "suggested_one_line": "The $100M equals roughly 6 to 7 cents on each dollar of the City's own 2023-2026 renewal shortfall (about $1.5-1.6B). That is a real fraction, not a large share.",
+      "suggested_short_answer": "Partially. The City says it needed about $3.5-3.6B of renewal over 2023-2026 and funded about $2.06B, or 54%. The $100M is about 6-7% of the unfunded remainder."
+    }
+  ]
+}
