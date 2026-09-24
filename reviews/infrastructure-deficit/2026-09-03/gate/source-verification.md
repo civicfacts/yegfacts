@@ -472,3 +472,100 @@ statement:
 A second pass need only re-read the nine blocking statements, the two
 seat-attributed date fixes, and any of the five non-blocking items the editor
 takes.
+
+---
+
+## Confirmation, 2026-09-24
+
+Scope: the tree at `8ee615d`, status `published`. The drafter applied this
+gate's corrections in `18eba72` and the rendered-page critique in `8ee615d`
+(`critique-1.md`). Checked here: every blocking finding and both required date
+additions above, then every sentence changed in `git diff af6542c --
+src/content/ scripts/calcs/`, then the new split gloss (`src/lib/findings.ts`)
+and the `wording_notes` on `infra-roads-condition`. Same method as before:
+archived bytes, round files, `brief.md`, and the capture for wordings.
+
+### The nine blocking findings and the two date additions
+
+| Finding | Now reads | Result |
+|---|---|---|
+| Story R8 to R10 | "On that date paved roads were 12.5 per cent … Curbs … were 7.0 per cent. Unpaved roads had no rating at all." | corrected as the source supports |
+| Story R15 | "At 11.2 per cent at the end of 2024, the roads landed just above the tenth." | corrected |
+| Roads KF-2 | "… $10,484,313,206 on December 31, 2024. By that value, 70.8 per cent was rated good …" | corrected |
+| Roads KF-3 | "On December 31, 2024, the City's Roads class held three things … none of which were rated …" | corrected |
+| Roads KF-6 | "… 11.6 per cent poor or very poor on December 31, 2024. That grouping landed in the same band …" | corrected |
+| Roads L-6 | "… at 12.5 per cent at the end of 2024, sat in the same band." | corrected |
+| active-transportation pointer | "now checked on its own page: *Is Edmonton letting roads go while funding bike lanes?*", the linked page's title | corrected |
+| Date rule, Claude Opus 5.5 key finding 1 | "… in D or F at the end of 2024 …" | added |
+| Date rule, GPT-6 Luna key finding 1 | "… at 11.2 per cent poor or very poor at the end of 2024." | added |
+
+The drafter also took all five non-blocking items: "renew" for "clear";
+"Spring 2025 budget adjustment" (the archived bytes' own label) for "June
+2025"; "This site has not archived the June 2023 record"; "A news report";
+and the Claude `changed_between_rounds` naming every document it rested on.
+The calcs comments now give p. 542 for the funding table and p. 50 for Table
+6, with the gap sentence on p. 49. All three are right.
+
+A search of the story and the roads claim for a percentage beside "is",
+"are", "sits", "lands", "has" or "have" finds only statements already graded
+above: the 2023 report's printed 11.4 (story line 76, KF-5), the old arterial
+target, the computed margin and not-rated share, and the ratio arithmetic.
+None states a roads condition as current.
+
+### Changed sentences since `af6542c` (39)
+
+| Statement | Grade | Basis |
+|---|---|---|
+| one_line: "… and the $100 million for bike lanes was about a fifteenth of the City's renewal shortfall" | CALC | 15.2; roads half dated |
+| tldr 3: "general tax-supported borrowing that road or alley renewal could have used, though one AI reviewer of three could not open the budget to check" | VERIFIED | YF-EV-0114 p. 542, one source row. The budget itself uses tax-supported debt for renewal: p. 31 lists LRV Replacements, High Level Bridge Rehabilitation and Hawrelak Park Rehabilitation among its new tax-supported debt, and p. 49 counts them against the renewal requirement. The brief treats general capital funding as eligible (lines 448-452). The reviewer statement: round1/claude.json. |
+| Changelog, `type: published` | VERIFIED | 18 of 34 and 10 of 24 match both faithfulness dispositions; seven of nine matches the plain-speech disposition; 181 and nine match this report. The freshness sources are YF-EV-0202, 0205/0206 (the minutes, counted as one), 0207 and 0208. The critique disposition adopted 10 of 11 items; the four the note names are among them. No finding changed. |
+| Story R8 to R10, R15, and "renew" | VERIFIED / CALC | see above |
+| "Before any figure was seen, this check fixed its lines …" | VERIFIED | `brief.md` carries none of 11.2, 1.52, 1.63 or 6.6 |
+| "The rules this check fixed in advance treated general City capital money …" | VERIFIED | brief.md 448-452 |
+| "… and those rules bar news coverage …" | VERIFIED | brief.md 280 |
+| "… and it does not change the finding. Nor does the Anthropic seat's second answer …" | VERIFIED | synthesis.json basis round1; round2/claude.json |
+| "In its Spring 2025 budget adjustment council shifted $430,000 …" | VERIFIED | YF-EV-0130 "Spring 2025 SCBA" |
+| "The check's fixed lines set a quarter … and a twentieth …" | VERIFIED | brief.md 580-605 |
+| Money answer: "The City's budget lists all $100 million as general borrowing that road or alley renewal could have used, but one of the three AI reviewers could not open that budget to check." | VERIFIED | as tldr 3. "Partly" is the finding (Split, resolved down), and the claim's first limitation names the vendor split. |
+| Money KF-1 "$100 million in all" | VERIFIED | p. 542 "100,000" ($000s) |
+| Money KF-7, L-4, Claude key finding 2, Claude `changed_between_rounds` | VERIFIED | YF-EV-0130; round2/claude.json verdict_changes |
+| Shortfall answer: "about a fifteenth of the renewal the City said it could not fund from 2023 to 2026, too much to dismiss and far short of a serious share" | CALC | 0.0658: above the brief's 0.05 floor ("where it stops being a rounding error") and well below 0.25 |
+| Shortfall KF-2 "(about $3.58 billion)", "(about $1.95 billion)" | VERIFIED | YF-EV-0114 p. 49 "identified at $3.58 billion … identified at $1.95 billion" |
+| Roads KF-2, KF-3, KF-6, L-6, and both seat key findings | VERIFIED | YF-EV-0200 pp. 2, 21, 37; round1 files |
+| `wording_notes`, Councillor Jennifer Rice, `omit: true` | VERIFIED | Capture comment 449 argues "fix the basics first" and relays constituents: "What you DID tell me: Fix our roads and sidewalks. Improve snow clearing …" It does not itself say the roads are in poor condition, so the omission and its reason stand. The register is untouched. |
+| `wording_notes`, Mossy Chickadee B. | VERIFIED | comment 67: "can't even cut the grass or remove snow" |
+| `wording_notes`, Chilly Muskrat T. | VERIFIED | comment 345: "Try removing the snow." |
+| `wording_notes`, Chilly Nuthatch V. | VERIFIED | comment 212: "fix pot holes … Snow removal would be good!" Potholes are roads; snow is not checked. |
+| active-transportation pointer and changelog note | VERIFIED | title matches `infrastructure-deficit.mdx`; the page has three findings |
+| `at-100m-vs-roads`, `at-100m-vs-snow`: "which the site checks as its own question and does not settle here" | VERIFIED | undated present tense, so the 2026-09-03 stamp no longer collides with a later event (the earlier advisory is resolved) |
+| Calcs comments: p. 542 funding table; Table 6 p. 50, gap sentence p. 49 | VERIFIED | YF-EV-0114 |
+| Split gloss: "The reviewers split, and the published rule resolves a split cautiously to this finding. It does not mean part of the claim was found to overreach." | VERIFIED | DESIGN.md §5: S S N gives Partially supported, Split. The two published claims it applies to are both S S N in round 1: `infra-bike-money-renewal-eligible` (N, S, S) and `cv-counter-total-2026` (S, S, N). In neither did a reviewer find the claim part-held. |
+
+Counts: 39 changed statements, 37 VERIFIED, 2 CALC, 0 PARTIAL, 0 NOT FOUND.
+
+Checks run: `npx vitest run tests/calcs-infrastructure-deficit.test.ts` passed
+10 of 10. `npm run validate` passes (8 stories, 20 claims, 171 evidence
+entries).
+
+### Advisory, not blocking
+
+- **The split gloss is correct only for the S S N pattern.** The matrix also
+  turns S P N into Partially supported with a Split panel. There, one
+  reviewer did find the claim part-held, and "It does not mean part of the
+  claim was found to overreach" would be false. No published claim has that
+  pattern today. `findingGlossTerm` should key on the round-1 multiset, or the
+  gloss should drop its second sentence, before one does.
+- **`npm run validate` warns about the `combined-evidence.json` entry for
+  YF-EV-0130.** The entry is `fetch_status "failed"` (this run's round-1 fetch
+  got HTTP 403), yet a published key fact cites the source. The source is
+  archived under an earlier run, and its bytes match the registry hash (see
+  the integrity table), so the citation stands. The annotation is stale, not
+  wrong about this run's fetch.
+
+### Verdict
+
+Every blocking finding and both required date additions are corrected as the
+archived sources support. The 39 changed statements verify or reproduce. No
+roads statement states a condition as current.
+
+GATE: PASS
