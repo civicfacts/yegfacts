@@ -375,3 +375,227 @@ inventory with no prior-use field, the LRT attribution east of 109 Street,
 and the 132 Avenue record that stops short of placing a bike facility in a
 former driving lane. A second pass need only re-read TL;DR 1 and limitation
 5, plus whichever advisories are taken.
+
+## Confirmation, 2026-09-24
+
+Graded tree: worktree commit `65a5b02`, rebased onto `main` after
+infrastructure-deficit was published, with the story set to `published`.
+Auditor: the same Claude (Opus 5.5) audit session, still separate from the
+drafter, the faithfulness seats, the plain-speech seat and the critique
+session.
+
+**Result: 2 blocking.** B1 and B2 are both corrected in a form the sources
+support. The new sentences add two blocking items. One is a reviewer note
+that says the route table was found after the panel ran, when a seat cited
+it in round 2. The other is that the published pages disagree about where
+the 79 Street claim stands. Neither touches the finding.
+
+**Scope.** Every sentence of the story and claim changed since `997294d`
+(`git diff 997294d -- src/content/stories/lanes-and-congestion.mdx
+src/content/claims/lc-lanes-taken-citywide.yaml
+scripts/calcs/lanes-and-congestion.ts`), and the new `parked` lines. It also
+covers three built pages that show the branch's site-wide changes. Sources:
+the archived bytes, the framing reports, `intake/register.yaml`,
+`register-note.md`, the round files and the run's committed reports.
+
+**Commands.**
+
+- `npx tsx scripts/calcs/lanes-and-congestion.ts` prints
+  `builtRecordCorridors` 3, `verifiedCorridors` 4, `verifiedDistricts`
+  Central, Scona and North Central, `distinctAcrossFourClaims` 22,
+  `inMoreThanOneClaim` 2, `snapshotFeatureCount` 3175.
+- `npx vitest run tests/calcs-lanes-and-congestion.test.ts`: 4 passed.
+- `npm run validate`: OK, 9 stories, 21 claims, 182 evidence entries.
+- `npm run build`: exit 0. Pages were read from `dist/` as flattened text.
+- The YF-EV-0173 archive matches its registry `sha256`. It is 24 pages, with
+  PDF metadata "Evaluation Report - Towards 40 - 40 Street and Hermitage
+  Road", created 2025-09-09. Its text was extracted with `pdftotext`.
+
+### B1 and B2
+
+- **B1: corrected.** TL;DR 1 now reads: "We found no study showing whether a
+  bike lane itself made drivers on an Edmonton street wait more or less."
+  The second plain-speech read reworded the gate's text but kept the
+  attribution ("itself") and the measure (waiting, which is delay). Check 3
+  identified no attribution-capable delay study. YF-EV-0173 reports queues
+  and speeds but has no delay or travel-time measure: the text has no
+  "delay" and no "travel time" anywhere. So the bullet is true against both.
+- **B2: corrected.** Limitation 5 now reads: "96 Street is the one
+  district-adding street whose district no seat confirmed in round 1.
+  Claude Opus 5.5 guessed North Central from a news report."
+  `round1/claude.json` says of 96 Street "District not verified; likely
+  North Central", and its only source for that street is the Taproot
+  report. Round 1 of GPT-6 Sol and GPT-6 Luna does not mention 96 Street.
+  The same limitation's "counted 100 Street, 96 Street and 132 Avenue" and
+  the matching review entry agree with `round1/claude.json`. The
+  calculation module now gives 96 Street `round1Seats: ['Claude Opus 5.5']`.
+
+### Changed sentences
+
+| # | Statement | Grade | Basis |
+|---|---|---|---|
+| 1 | TL;DR 1 | VERIFIED | above |
+| 2 | TL;DR 3: no record saying the City would have removed driving lanes to slow traffic even without bike lanes | VERIFIED | check-3 §4; register reason |
+| 3 | TL;DR 4: driving lanes taken for bike lanes on at least three streets, in three of fifteen districts | CALC | `builtRecordCorridors` 3 (102 Avenue, 100 Street, 96 Street; 110 Street excluded as design-only), `verifiedDistricts` 3, `districtCount` 15. See advisory D3 |
+| 4 | TL;DR 5: records do not show whether it was done all over Edmonton, or what it did to traffic | VERIFIED | `priorUseFields` empty; limitation 1 |
+| 5 | Parked line, `lane-removal-increases-congestion` | VERIFIED | check-3 §4 "attributed before-and-after peak-period travel time or delay"; YF-EV-0173 has no travel-time measure |
+| 6 | Parked line, `bike-infra-reduces-congestion` | VERIFIED | check-3 §4; register reason |
+| 7 | Parked line, `lanes-removed-for-traffic-calming` | VERIFIED | check-3 §4 on the Hermitage Road decision report; register reason ("without saying the lane would have gone without the bike lane or that the bike lane was added to combine projects or save money") |
+| 8 | "Twenty-two people argued …" | CALC | `distinctAcrossFourClaims` 22, by distinct `author_name` across the four claims' variations |
+| 9 | "Six said the opposite, in 11 comments" | VERIFIED | `bike-infra-reduces-congestion`: 6 accounts, 11 variations |
+| 10 | "Two of them made more than one of these claims." | CALC | `inMoreThanOneClaim` 2 (Granite Hare D. and Prairie Waxwing D., each in two groups) |
+| 11 | Check 3 made on 2026-09-16 and confirmed on 2026-09-23 | VERIFIED | `run-record.md`; check-4 "PARKS CONFIRMED"; brief "FROZEN 2026-09-23" |
+| 12 | The check identified no published study of that kind for any Edmonton street | VERIFIED | check-3 §4 and §6 |
+| 13 | The City published an evaluation of Hermitage Road and 40 Street in September 2025 | VERIFIED | YF-EV-0173 page headers "September 2025"; metadata above |
+| 14 | … where the changes included bike lanes | VERIFIED | YF-EV-0173 p. 11 "people using bikes/scooters in the bike lanes along 40 Street"; p. 16 cyclist volumes on Hermitage Road |
+| 15 | It compares volumes and speeds before and after, and notes some queues at intersections | VERIFIED | YF-EV-0173 p. 3 "traffic volumes, vehicle speeds"; p. 11 and p. 15 "Speed data was collected before the installation … and after"; "Traffic volumes remained consistent" with the volume chart; pp. 17–18 queue observations at Hermitage Road and 50 Street and at 40 Street, in the peak hours |
+| 16 | It does not measure delay in a way that could show what the bike lane itself did | VERIFIED | no delay or travel-time measure anywhere in the extracted text; the queue notes are single-day observations with no before-and-after comparison attributed to a measure |
+| 17 | The claims set aside come from both sides; each comes back if its record is published | VERIFIED | register `side`; register "It reopens if …" |
+| 18 | Two more claims were made under this question and are not on the page's list of checks | VERIFIED | register: six claims under `lanes-and-congestion`, four taken up |
+| 19 | The 79 Street claim "was passed to the question about the Holyrood school lane, where it belongs" | **PARTIAL, blocking** | Finding C2 |
+| 20 | The roads-carry-goods claim was turned down at triage as something both sides accept | VERIFIED | register `prior_triage`: outcome no, two readers, "a truism accepted by both sides of this argument" |
+| 21 | 96 Street "listed as a 2025 route and now open for use" | VERIFIED | YF-EV-0170 row "2025 / Open for use" |
+| 22 | 100 Street, 80 to 83 Avenue, "also a 2025 route, as open for use" | VERIFIED | YF-EV-0170 row "2025 / Open for use" |
+| 23 | The City has given up driving space for bike lanes on at least some streets; the streets documented are in 3 of 15 districts | VERIFIED / CALC | YF-EV-0163, YF-EV-0170; `verifiedDistricts` |
+| 24 | The reviewers' street disagreement, "as their round-one answers show" | VERIFIED | `round1/*.json` |
+| 25 | The 83 Avenue plan would not load when the page was checked (now linked) | VERIFIED | `gate/freshness-audit.md` disposition, item 3 |
+| 26–32 | Published changelog note: faithfulness checks; freshness audit and 2 to 3 districts; two plain-speech reads; 102 statements and two blocking items; nothing blocking at release; the critique's seven required changes made; no finding changed | VERIFIED | report headers; this report; `release-check.md`; `critique-1.md` disposition "All seven required changes made"; `synthesis.json` |
+| 33 | … "both corrected as the audit wrote them" | PARTIAL | Advisory D1 |
+| 34 | Updated changelog note: "the four claims … that the page takes up" | VERIFIED | register; row 18 |
+| 35 | KF-3: "lists it as a 2025 route and open for use" | VERIFIED | YF-EV-0170 |
+| 36 | KF-4: the same for 100 Street | VERIFIED | YF-EV-0170 |
+| 37 | KF-6 sources now include YF-EV-0164 and YF-EV-0165 | VERIFIED | Oliver label in YF-EV-0164; Garneau design in YF-EV-0165 |
+| 38 | KF-10: "The answers say the reconfiguration freed space for walking, rolling and biking, but neither record says which finished section's bike facility sits in former driving-lane space." | VERIFIED | YF-EV-0172 p. 6 "space is freed up to support other road users, including people who walk, roll and bike" |
+| 39 | Limitation 2, quotation marks only | VERIFIED | unchanged in substance |
+| 40–42 | Limitation 5: counted three streets; whose district no seat confirmed; guessed North Central from a news report | VERIFIED | B2 above |
+| 43 | Missing evidence 1 and 2, holder wording | VERIFIED | round `missing_evidence` |
+| 44 | Claude review, key finding 2: "Counted 100 Street in Scona, 96 Street in Delton and 132 Avenue, all three from a community league's notice and news reports …" | VERIFIED | `round1/claude.json` interpretation_notes and limitations[0] |
+| 45 | GPT-6 Sol review, after cross-review: "Round-2 answers do not change a seat's verdict." | PARTIAL | Finding C1 |
+| 46 | … "This page counts North Central from the City's route table, found after the panel ran." | **NOT FOUND, blocking** | Finding C1 |
+
+Counts for the changed sentences: 46 checked. VERIFIED 39, CALC 3, PARTIAL
+3, NOT FOUND 1, no cited source 0. Row 23 is counted as VERIFIED, and rows
+26–32 as seven statements.
+
+### Blocking
+
+**C1 — The GPT-6 Sol reviewer note misstates what that seat found, and how
+round 2 works.**
+
+> "No change in verdict. In cross-review it reported a third district,
+> North Central. Round-2 answers do not change a seat's verdict. This page
+> counts North Central from the City's route table, found after the panel
+> ran."
+
+`round2/gpt.json` has a `supporting_evidence` entry whose `source_url` is
+the City's Active Transportation Network Expansion page, which is
+YF-EV-0170, the route table. It reads: "The City's route table lists 96
+Street from 119 to 124 Avenue as open for use in 2025 and says vehicle
+traffic was converted to one-way southbound to accommodate a protected
+northbound contraflow bike lane". That seat's North Central district rests
+on the same table. So the table was found during the panel, in round 2, by
+the seat the note is about. The freshness audit later brought it into the
+page's record.
+
+Separately, `docs/DESIGN.md` §4 says the cross-review round "cannot move a
+canonical finding". A seat's round-2 position is recorded, and can differ
+from its round-1 verdict.
+
+Correction the round files and the design support:
+
+> "No change in verdict. In cross-review it reported a third district,
+> North Central, from the City's route table. The finding is computed from
+> the round-one answers, so round two cannot move it. This page counts
+> North Central from that same table, which the freshness audit brought
+> into the record."
+
+**C2 — The published pages disagree about where the 79 Street claim is.**
+
+The story says the claim "was passed to the question about the [Holyrood
+school lane](/questions/holyrood-school-lane), where it belongs." The
+register still files `79-street-relieves-75-street` under
+`lanes-and-congestion`. The built claim page
+`/claims/79-street-relieves-75-street` says: "This claim has not been
+checked. It is waiting on the question below …", and the question below is
+*Do Edmonton's bike lanes ease traffic congestion or make it worse?*. That
+question is now published and says the claim went elsewhere. The question
+page also lists the claim under "Claims with no finding" with no reason
+shown.
+
+`register-note.md` records the decision ("The claim goes to the 79 Street
+question, to be tested there or dropped there for want of a record"). It
+also records that the register move was deferred to that question's
+brief. So the story reports a decision whose register change has not been
+made, and the claim page, whose wording this branch changed, still gives
+the pre-publication status.
+
+Correction: make the register move now, setting the claim's `question`
+to `holyrood-school-lane`, which the register note names as the
+destination. The story sentence and the claim page then both become true.
+If the move stays deferred, the story must say "is to be tested with the
+question about the Holyrood school lane, and the register files it here
+until that question's brief is drafted". In that case the claim page must
+also stop saying the claim is waiting on this question.
+
+### Site-wide changes, spot-checked in the built site
+
+1. **`/questions/lanes-and-congestion`.**
+   - "Main claim" does not appear. The strip instead prints "What the
+     record could check. It does not answer the claims set aside above."
+     That is true, since `lc-lanes-taken-citywide` does not answer any of
+     the three parks.
+   - The dated label reads "What we expected when it was registered,
+     2026-09-03" above the question's reason. `git log -G` on that reason
+     returns only `8cbe246`, dated 2026-09-03, so the sentence is the one
+     written at registration and has not been edited since.
+   - The follow-on sentence, "The check before any research found no
+     record of that kind for the claims set aside above", matches check 3.
+   - The parked block's three lines render from the story's `parked` map
+     (rows 5–7). The comment counts are 13, 11 and 2, the variation counts.
+   - The roads claim shows "Turned down at triage, so it will not be
+     checked", with the register's `prior_triage` reason.
+   - One sentence overstates; see D2.
+2. **`/claims/city-removed-traffic-lanes`**, a register claim answered by a
+   published claim. It shows "Checked as" with the published question *Has
+   the City taken driving lanes for bike lanes all over Edmonton?*, the
+   Not established badge and the claim's answer. It no longer says "No
+   finding yet". That is true: `lc-lanes-taken-citywide` lists
+   `city-removed-traffic-lanes` in `register_claims`.
+3. **`/claims/cyclists-pay-property-taxes`**, one of the 11 claims with
+   `prior_triage.outcome: no`. It shows "This claim has not been checked
+   and will not be. Two triage readers turned it down on its own before
+   the question went ahead", followed by the register's reason.
+   - All 11 such claims carry exactly two `readers`.
+   - None has its own `triage`, and none is named in any published claim's
+     `register_claims`, so no page shows both states.
+   - The label is true for all 11.
+
+The 79 Street claim page, read while tracing C2, shows the dated label
+correctly ("What we expected when the question was registered,
+2026-09-03"). Its status sentence is the C2 defect.
+
+### Advisory
+
+- **D1.** The published changelog says both blocking items were "corrected
+  as the audit wrote them". Limitation 5 and TL;DR 1 now use other wording.
+  The second plain-speech read reworded both, and the Stew disposition
+  above says "adopted as the gate wrote it" of the earlier text. The
+  meaning holds. Suggested: "both corrected as the audit asked".
+- **D2.** On the question page: "every claim they made about it is checked
+  or parked with its reason, whichever way it points." On this question,
+  one claim was turned down at triage (its reason is shown) and one was
+  sent to another question (see C2). The sentence is a statement about
+  even-handedness, and its pre-branch form ("is checked") was already loose
+  on every two-sided question. Suggested for pages with parks: "every
+  claim they made about it is shown here with what became of it, whichever
+  way it points."
+- **D3.** TL;DR 4 counts 96 Street and 100 Street as streets where driving
+  lanes were taken. The City's record is a one-way conversion "to
+  accommodate" the bike lane. That counts under the brief's rule, as a
+  through movement removed "in space that included it", and limitation 3
+  says so beside the finding. In round 2 the Claude seat flagged that the
+  96 Street contraflow lane may sit in former parking space. The bullet is
+  true under the rule the page states. It is noted here because it is the
+  ten-second layer.
+
+GATE: FAIL — C1 (GPT-6 Sol reviewer note: "found after the panel ran" is contradicted by round2/gpt.json, and "Round-2 answers do not change a seat's verdict" misstates DESIGN §4); C2 (the story says the 79 Street claim "was passed to" the Holyrood school lane question while the register and its built claim page say it is waiting on this, now published, question)
