@@ -213,14 +213,18 @@ const fourClaims = [
  * The groups overlap (some people made more than one of these claims), so
  * their counts do not add up to a headcount.
  */
-const distinctAcrossFour = new Set(
-  register.claims
-    .filter((claim) => fourClaims.includes(claim.id))
-    .flatMap((claim) => (claim.variations ?? []).map((v) => v.author_name)),
-).size;
+const authorsPerClaim = register.claims
+  .filter((claim) => fourClaims.includes(claim.id))
+  .map((claim) => new Set((claim.variations ?? []).map((v) => v.author_name)));
+const distinctAcrossFour = new Set(authorsPerClaim.flatMap((authors) => [...authors])).size;
+/** People who made more than one of the four claims. */
+const inMoreThanOne = [...new Set(authorsPerClaim.flatMap((authors) => [...authors]))].filter(
+  (name) => authorsPerClaim.filter((authors) => authors.has(name)).length > 1,
+).length;
 
 export const people = {
   distinctAcrossFourClaims: distinctAcrossFour,
+  inMoreThanOneClaim: inMoreThanOne,
   question: register.questions.find((q) => q.id === 'lanes-and-congestion')?.accounts?.total ?? 0,
   laneRemovalIncreasesCongestion: accountsFor('lane-removal-increases-congestion'),
   bikeInfraReducesCongestion: accountsFor('bike-infra-reduces-congestion'),

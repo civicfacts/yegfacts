@@ -118,7 +118,9 @@ const entrySections = toc([
 // A question that has been checked: the article, and the register behind it.
 // ---------------------------------------------------------------------------
 const rendered = story ? await render(story) : undefined;
-const evidence: Evidence[] = story ? await evidenceForStory(answered, commitments) : [];
+const evidence: Evidence[] = story
+  ? await evidenceForStory(answered, commitments, story.body ?? '')
+  : [];
 
 /**
  * Comparable cities, grouped under the claim they were offered for. They used to
@@ -283,8 +285,12 @@ const Content = rendered?.Content;
             {/* One claim and no standfirst: the strip is the answer and comes first. */}
             {stripFirst && (
               <>
-                <ParkedClaims parked={parked} />
-                <ClaimStrip headline={headline} primaryClaim={story.data.primary_claim} />
+                <ParkedClaims parked={parked} lines={story.data.parked} />
+                <ClaimStrip
+                  headline={headline}
+                  primaryClaim={story.data.primary_claim}
+                  parkedAbove={parked.length > 0}
+                />
               </>
             )}
 
@@ -342,8 +348,13 @@ const Content = rendered?.Content;
           */}
           {!stripFirst && (
             <>
-              <ParkedClaims parked={parked} />
-              <ClaimStrip headline={headline} primaryClaim={story.data.primary_claim} class="mt-10" />
+              <ParkedClaims parked={parked} lines={story.data.parked} />
+              <ClaimStrip
+                headline={headline}
+                primaryClaim={story.data.primary_claim}
+                parkedAbove={parked.length > 0}
+                class="mt-10"
+              />
             </>
           )}
 
@@ -446,7 +457,7 @@ const Content = rendered?.Content;
                       <a href={`/claims/${claim.data.id}`} class="link-title">
                         {claim.data.question}
                       </a>
-                      {story.data.primary_claim === claim.data.id && (
+                      {parked.length === 0 && story.data.primary_claim === claim.data.id && (
                         <span class={mainClaim}>Main claim</span>
                       )}
                     </h3>
@@ -649,6 +660,19 @@ const Content = rendered?.Content;
                         {saidIn(commentsOn(claim))}
                       </p>
                     )}
+                    {/*
+                      A claim two triage readers already turned down is not
+                      waiting on anything; say so rather than list it as if it
+                      were.
+                    */}
+                    {claim.prior_triage?.outcome === 'no' && (
+                      <p class="mt-1.5 max-w-prose text-sm leading-relaxed text-muted">
+                        Turned down at triage, so it will not be checked.{' '}
+                        {claim.prior_triage.reason && (
+                          <span data-record>{claim.prior_triage.reason}</span>
+                        )}
+                      </p>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -789,9 +813,22 @@ const Content = rendered?.Content;
               ))}
             </dl>
 
+            {/*
+              The reason and grouping note are what triage expected when the
+              question was registered, kept as the record of that decision.
+              Dated and labelled as such, because the work that followed can
+              find the expected record does not exist, and an undated sentence
+              in the present tense would then contradict the page above it.
+            */}
+            {question.reason && (
+              <p class={`mt-5 ${label}`}>
+                What we expected when it was registered,{' '}
+                <time datetime={question.recorded}>{question.recorded}</time>
+              </p>
+            )}
             {question.reason && (
               <p
-                class="mt-5 max-w-prose border-l-2 border-gold pl-3.5 text-[1.0625rem] leading-relaxed text-pretty"
+                class="mt-2 max-w-prose border-l-2 border-gold pl-3.5 text-[1.0625rem] leading-relaxed text-pretty"
                 data-record
               >
                 {question.reason}
@@ -801,6 +838,17 @@ const Content = rendered?.Content;
             {question.grouping_note && (
               <p class="mt-4 max-w-prose text-[0.9375rem] leading-relaxed text-muted" data-record>
                 {question.grouping_note}
+              </p>
+            )}
+
+            {parked.length > 0 && (
+              <p class="mt-4 max-w-prose text-[0.9375rem] leading-relaxed">
+                The check before any research found no record of that kind for the claims set aside
+                above, so they carry no finding. See{' '}
+                <a href="#parked" class="link" data-crossref>
+                  what the record cannot answer
+                </a>
+                .
               </p>
             )}
 

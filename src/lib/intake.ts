@@ -150,6 +150,12 @@ export interface Claim {
    * ran, `panel` after the panel answered. Absent means `panel`.
    */
   parked_at?: string;
+  /**
+   * The claim-level decision two triage readers reached before v1.16 moved
+   * triage up to the question: history, not state. Present so a page can say
+   * a claim was already turned down rather than show it as waiting.
+   */
+  prior_triage?: { outcome: string; reason?: string };
   /** One public sentence saying why. Mandatory on a decline of its own. */
   reason?: string;
   /**
@@ -308,9 +314,17 @@ function toClaim(entry: Record<string, unknown>, questions: Map<string, Question
     triage: own,
     ground: optional(entry.ground),
     parked_at: optional(entry.parked_at),
+    prior_triage: priorTriage(entry.prior_triage),
     reason: optional(entry.reason),
   };
   return redact(claim, own ?? questions.get(question)?.triage ?? '');
+}
+
+function priorTriage(value: unknown): Claim['prior_triage'] {
+  if (typeof value !== 'object' || value === null) return undefined;
+  const record = value as Record<string, unknown>;
+  if (typeof record.outcome !== 'string') return undefined;
+  return { outcome: record.outcome, reason: optional(record.reason) };
 }
 
 function toSource(entry: Record<string, unknown>): Source {

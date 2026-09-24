@@ -40,10 +40,10 @@ aliases:
 register_claims: [city-removed-traffic-lanes]
 limitations:
   - "This finding does not measure congestion. It says what the City built on some streets, and nothing about whether traffic on them got faster or slower."
-  - "All throughout the city was fixed before the research as conversions in 8 or more districts, with 5 as an alternative bar. Both numbers are judgements rather than an outside standard. The records in hand reach 3 districts, and the true total is unknown."
+  - "“All throughout the city” was fixed before the research as conversions in 8 or more districts, with 5 as an alternative bar. Both numbers are judgements rather than an outside standard. The records in hand reach 3 districts, and the true total is unknown."
   - "On 96 Street and 100 Street the City's record is a one-way conversion made to accommodate the bike lane, with parking removed as well. It shows that a direction of traffic gave way to the bike lane, not a drawing of which strip of pavement the lane now occupies."
   - "The reviewers did not all count the same streets. All three counted 102 Avenue from 121 to 111 Street. GPT-6 Sol also counted 110 Street in Garneau and 83 Avenue at 104 to 105 Street in Strathcona, both in Scona. The April 2015 City plan it cited for 83 Avenue returned a page-not-found page on 2026-09-24, and the City's 2017 project sheet for that route does not describe the lane change, so this page does not count 83 Avenue."
-  - "The Claude seat counted 100 Street, 96 Street and 132 Avenue, from a community league's notice and news reports. This page counts 100 Street and 96 Street from the City's own route table, found by the freshness audit, and leaves 132 Avenue out. 96 Street is the one district-adding street that no seat placed in a district in round 1. The Claude seat counted it from a news report and called its district likely North Central without checking."
+  - "Claude Opus 5.5 counted 100 Street, 96 Street and 132 Avenue, from a community league's notice and news reports. This page counts 100 Street and 96 Street from the City's own route table, found by the freshness audit, and leaves 132 Avenue out. 96 Street is the one district-adding street whose district no seat confirmed in round 1. Claude Opus 5.5 guessed North Central from a news report."
   - "GPT-6 Luna confirmed the 102 Avenue conversion from the City's record but could not place it in a district."
   - "The City's addresses for the 102 Avenue fact sheet and the Garneau design no longer load. This page relies on the Internet Archive's copies of the same addresses, and its registry entries say so."
   - "Reasons are reported, never judged. The 102 Avenue fact sheet says its recommended westbound-lane removal would make room for the protected bike lane, and the route table says the 96 Street and 100 Street one-way conversions were made to accommodate the bike lanes."
@@ -52,8 +52,8 @@ unknowns:
   - "Whether any finished section of 132 Avenue put a bike lane where a driving lane had been. The City expected the remaining work between 121 and 127 Street to finish in mid-October 2026, which makes it a corridor to recheck."
   - "Whether any stretch of 102 Avenue east of 109 Street lost a driving lane to a bike lane once the LRT change is set aside."
 missing_evidence:
-  - "A street-by-street record, for every on-street bike lane built by 2026-09-23, of what the space was before, such as before-and-after cross-sections or as-built drawings (City of Edmonton transportation and project records; critical)."
-  - "As-built plans and completion dates for each section of 132 Avenue (City of Edmonton; high)."
+  - "A street-by-street record, for every on-street bike lane built by 2026-09-23, of what the space was before, such as before-and-after cross-sections or as-built drawings, held by the City of Edmonton's transportation and project records."
+  - "As-built plans and completion dates for each section of 132 Avenue, held by the City of Edmonton."
 review:
   agreement: Unanimous
   reviewers:
@@ -72,7 +72,7 @@ review:
         - "Confirmed three conversions in two districts from City records, 102 Avenue in Central and 83 Avenue and 110 Street in Scona."
         - "Did not count 132 Avenue from a draft design, or 102 Avenue east of 109 Street, where the City attributes the lane reduction to the LRT."
         - "Could not reach the full inventory, so could not count how many bike lanes there are or how many have a record of what they replaced."
-      changed_between_rounds: "No change in verdict. In cross-review it reported a third district, North Central, which is not counted here because the round-1 answers are the basis."
+      changed_between_rounds: "No change in verdict. In cross-review it reported a third district, North Central. Round-2 answers do not change a seat's verdict. This page counts North Central from the City's route table, found after the panel ran."
     - model: GPT-6 Luna
       verdict: Not established
       confidence: Moderate

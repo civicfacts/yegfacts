@@ -47,14 +47,17 @@ describe('lanes-and-congestion figures', () => {
   it('the people counts in the opening match the register', () => {
     expect(figures.people).toEqual({
       distinctAcrossFourClaims: 22,
+      inMoreThanOneClaim: 2,
       question: 24,
       laneRemovalIncreasesCongestion: 13,
       bikeInfraReducesCongestion: 6,
       cityRemovedTrafficLanes: 4,
       lanesRemovedForTrafficCalming: 1,
     });
-    expect(story).toContain('the four groups hold 22 different people');
-    for (const word of ['Twenty-four people', 'Thirteen said', 'Six said', 'Four said', 'One said']) {
+    expect(story).toContain('Two of them made more than one of these claims');
+    expect(story).toContain('three of its fifteen districts');
+    expect(story).toContain('at least four streets');
+    for (const word of ['Twenty-two people', 'Thirteen said', 'Six said', 'Four said', 'One said']) {
       expect(story).toContain(word);
     }
   });

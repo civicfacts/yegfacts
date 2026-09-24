@@ -25,10 +25,17 @@ import { findingGlossTerm } from '../lib/findings';
 interface Props {
   headline: CollectionEntry<'claims'>[];
   primaryClaim?: string;
+  /**
+   * The question has claims parked at framing (methodology v1.35). Those are
+   * the claims that answer it, so no finding here is labelled the main claim:
+   * each says instead that it is what the record could check, and that it is
+   * not the answer to the parked claims.
+   */
+  parkedAbove?: boolean;
   class?: string;
 }
 
-const { headline, primaryClaim, class: className = 'mt-6' } = Astro.props;
+const { headline, primaryClaim, parkedAbove = false, class: className = 'mt-6' } = Astro.props;
 const mainClaim = 'ml-2 align-middle text-[0.6875rem] tracking-[0.08em] text-forest uppercase';
 ---
 
@@ -44,8 +51,15 @@ const mainClaim = 'ml-2 align-middle text-[0.6875rem] tracking-[0.08em] text-for
             <a href={`#${claim.data.id}`} class="link-title">
               {claim.data.question}
             </a>
-            {primaryClaim === claim.data.id && <span class={mainClaim}>Main claim</span>}
+            {!parkedAbove && primaryClaim === claim.data.id && (
+              <span class={mainClaim}>Main claim</span>
+            )}
           </p>
+          {parkedAbove && (
+            <p class="text-sm leading-snug text-muted sm:col-start-1">
+              What the record could check. It does not answer the claims set aside above.
+            </p>
+          )}
           <div class="sm:col-start-2 sm:row-start-1">
             <Gloss {...gloss(findingGlossTerm(claim.data.finding, claim.data.panel_agreement))} variant="boxed">
               <Finding finding={claim.data.finding} size="md" />

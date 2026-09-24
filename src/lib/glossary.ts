@@ -148,6 +148,11 @@ export const glossary: Record<string, GlossaryEntry> = {
       'Three AI model seats from two vendors: one Anthropic model and two OpenAI models. The two OpenAI seats are not independent of each other, so three agreeing verdicts are not three independent confirmations.',
     href: STAGES,
   },
+  parked: {
+    definition:
+      'Set aside without a finding, because no record we could identify can answer the claim as people make it. It comes back if that record is published.',
+    href: STAGES,
+  },
   'published rule': {
     definition:
       'A fixed synthesis rule, published in advance, turns the three verdicts into one finding word, so no person chooses the finding. The rule and every change to it are versioned in the methodology changelog.',
