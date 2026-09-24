@@ -150,6 +150,12 @@ export interface Claim {
    * ran, `panel` after the panel answered. Absent means `panel`.
    */
   parked_at?: string;
+  /**
+   * The claim-level decision two triage readers reached before v1.16 moved
+   * triage up to the question: history, not state. Present so a page can say
+   * a claim was already turned down rather than show it as waiting.
+   */
+  prior_triage?: { outcome: string; reason?: string };
   /** One public sentence saying why. Mandatory on a decline of its own. */
   reason?: string;
   /**
@@ -308,9 +314,17 @@ function toClaim(entry: Record<string, unknown>, questions: Map<string, Question
     triage: own,
     ground: optional(entry.ground),
     parked_at: optional(entry.parked_at),
+    prior_triage: priorTriage(entry.prior_triage),
     reason: optional(entry.reason),
   };
   return redact(claim, own ?? questions.get(question)?.triage ?? '');
+}
+
+function priorTriage(value: unknown): Claim['prior_triage'] {
+  if (typeof value !== 'object' || value === null) return undefined;
+  const record = value as Record<string, unknown>;
+  if (typeof record.outcome !== 'string') return undefined;
+  return { outcome: record.outcome, reason: optional(record.reason) };
 }
 
 function toSource(entry: Record<string, unknown>): Source {
@@ -642,6 +656,28 @@ export function questionStateKey(): QuestionState[] {
  */
 export function claimText(claim: Claim): string {
   return claim.proposition ?? claim.wording ?? claim.id;
+}
+
+/**
+ * Whether a claim was parked at framing (methodology v1.35): removed from the
+ * brief before any research ran because the identified record cannot answer
+ * it at the level people assert it.
+ */
+export function parkedAtFraming(claim: Claim): boolean {
+  return claim.triage === 'park' && claim.parked_at === 'framing';
+}
+
+/**
+ * A park's public reason split into why the record cannot answer the claim and
+ * what would reopen it. The register writes both into one `reason`, with the
+ * reopening condition as the sentence that begins "It reopens"; a reason
+ * without that sentence comes back whole, with `reopens` undefined.
+ */
+export function parkReason(claim: Claim): { why: string; reopens?: string } {
+  const reason = claim.reason ?? '';
+  const at = reason.search(/(?<=[.!?]\s+)It reopens\b/);
+  if (at === -1) return { why: reason };
+  return { why: reason.slice(0, at).trim(), reopens: reason.slice(at).trim() };
 }
 
 const ORIGINS: Record<string, string> = {

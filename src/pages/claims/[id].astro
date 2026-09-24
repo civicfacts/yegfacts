@@ -62,7 +62,11 @@ export async function getStaticPaths() {
       },
     }));
 
-  /** The claims from the register, which carry no finding of their own. */
+  /**
+   * The claims from the register. A register claim a published claim names in
+   * `register_claims` was checked under that claim's wording, so its page says
+   * so and links to the finding rather than saying it is still waiting.
+   */
   const registered = claimsWithPages().map((claim) => ({
     params: { id: claim.id },
     props: {
@@ -72,6 +76,9 @@ export async function getStaticPaths() {
       supports: null,
       registered: claim,
       source: claim.source ? (sources.get(claim.source) ?? null) : null,
+      checkedAs:
+        findings.find(({ props }) => props.claim.data.register_claims.includes(claim.id))?.props
+          .claim ?? null,
     },
   }));
 
@@ -87,9 +94,11 @@ interface Props {
   supports: PublishedClaim | null;
   registered: RegisterClaim | null;
   source: Source | null;
+  /** On a register entry's page: the published claim it was checked as, if any. */
+  checkedAs?: PublishedClaim | null;
 }
 
-const { claim, story, question, supports, registered, source } = Astro.props;
+const { claim, story, question, supports, registered, source, checkedAs = null } = Astro.props;
 
 const checked = claim !== null && story !== null && question !== null;
 const pageUrl = new URL(
@@ -119,7 +128,7 @@ const sections = checked
       { id: 'question', label: 'The question it answers' },
     ])
   : toc([
-      { id: 'finding', label: 'No finding yet' },
+      { id: 'finding', label: checkedAs ? 'Checked as' : 'No finding yet' },
       { id: 'question', label: 'The question' },
       source && { id: 'source', label: 'Where it came from' },
       (registered!.variations ?? []).length > 0 && { id: 'said', label: 'How it was said' },
@@ -162,9 +171,11 @@ const title = checked ? claim.data.question : claimText(registered!);
 // word and the evidence basis, which is the method talking to itself.
 const description = checked
   ? claim.data.answer
-  : (registered!.reason ??
-    question?.reason ??
-    'A claim YEGFacts has registered and not yet checked.');
+  : checkedAs
+    ? checkedAs.data.answer
+    : (registered!.reason ??
+      question?.reason ??
+      'A claim YEGFacts has registered and not yet checked.');
 ---
 
 {/*
@@ -248,7 +259,7 @@ const description = checked
         <ClaimFinding claim={claim} story={story} question={question} pageUrl={pageUrl} />
       </>
     ) : (
-      <ClaimEntry claim={registered!} question={question!} source={source} />
+      <ClaimEntry claim={registered!} question={question!} source={source} checkedAs={checkedAs} />
     )
   }
 </Base>

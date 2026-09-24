@@ -133,6 +133,16 @@ const stories = defineCollection({
       commitments: z.array(z.string()).default([]),
       /** Set only when one claim clearly dominates the story. */
       primary_claim: z.string().optional(),
+      /**
+       * A plain one-line reason for each claim under this question that was
+       * parked at framing (methodology v1.35), keyed by register claim id. The
+       * question page prints it in place of the register's reason, which stays
+       * on the claim's own page. Written here rather than in the register so
+       * the line is reviewed with the page's other reader-facing text.
+       * `scripts/validate.ts` checks every key is a framing park on this
+       * question.
+       */
+      parked: z.record(z.string(), z.string().min(1)).default({}),
       seen: z.array(seenCard).default([]),
       /** Hostile or colloquial phrasings that redirect here. */
       aliases: z.array(z.string()).default([]),

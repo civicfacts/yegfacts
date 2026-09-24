@@ -150,8 +150,11 @@ export async function commitmentsForStory(story: Story): Promise<Commitment[]> {
 export async function evidenceForStory(
   claims: Claim[],
   commitments: Commitment[],
+  /** The story body: any registry entry it links to is listed too. */
+  body = '',
 ): Promise<Evidence[]> {
   const ids = new Set<string>();
+  for (const match of body.matchAll(/\/evidence\/(YF-EV-\d{4})\b/g)) ids.add(match[1]!);
   for (const claim of claims) {
     for (const id of claim.data.evidence) ids.add(id);
     for (const fact of claim.data.key_facts) for (const id of fact.sources) ids.add(id);

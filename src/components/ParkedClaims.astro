@@ -1,0 +1,92 @@
+---
+/**
+ * The claims under a question that were parked at framing (methodology v1.35),
+ * each with a plain line saying what record would answer it.
+ *
+ * It sits directly above the verdict strip, because v1.35 requires a parked
+ * claim to be shown beside the finding: a reader who met the finding first
+ * could take it for the answer to the question the parks are about.
+ *
+ * The line comes from the story's `parked` map, written for a resident and
+ * reviewed with the rest of the page. The register's full reason, in the
+ * method's words, stays on the claim's own page one click away. A claim with
+ * no plain line falls back to the register's reason, split into why and what
+ * would reopen it.
+ */
+import Gloss from './Gloss.astro';
+import { claimText, commentsOn, parkReason, saidIn, type Claim } from '../lib/intake';
+import { requireTerm as gloss } from '../lib/glossary';
+
+interface Props {
+  parked: Claim[];
+  /** Plain one-line reasons keyed by register claim id. */
+  lines?: Record<string, string>;
+  class?: string;
+}
+
+const { parked, lines = {}, class: className = 'mt-10' } = Astro.props;
+const label = 'text-xs font-semibold tracking-[0.08em] text-muted uppercase';
+const sides = new Set(parked.map((claim) => claim.side));
+const bothSides = sides.has('for') && sides.has('against');
+---
+
+{
+  parked.length > 0 && (
+    <section id="parked" class:list={[className, 'scroll-mt-6']}>
+      <h2 class="section-heading">What the record cannot answer</h2>
+      <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+        {parked.length === 1 ? 'This claim was' : 'These claims were'} set aside before any research
+        ran, so {parked.length === 1 ? 'it carries' : 'they carry'} no finding. Nothing here says
+        whether {parked.length === 1 ? 'it is' : 'any of them is'} true.
+        {bothSides && ' They come from both sides of the argument.'}
+      </p>
+      <ul class="mt-4 divide-y divide-rule border-y border-rule">
+        {parked.map((claim) => {
+          const line = lines[claim.id];
+          const { why, reopens } = parkReason(claim);
+          return (
+            <li id={claim.id} class="scroll-mt-6 py-4">
+              <p class="text-lg leading-snug font-bold text-pretty" data-record>
+                <a href={`/claims/${claim.id}`} class="link-title">
+                  {claimText(claim)}
+                </a>
+              </p>
+              <p class="mt-1.5 flex flex-wrap items-baseline gap-x-2">
+                <span class={label}>
+                  <Gloss {...gloss('parked')}>Parked</Gloss>
+                </span>
+                {commentsOn(claim) > 0 && (
+                  <span class="text-xs text-muted" data-record>
+                    · {saidIn(commentsOn(claim))}
+                  </span>
+                )}
+              </p>
+              {line ? (
+                <p class="mt-2.5 max-w-prose text-[0.9375rem] leading-relaxed text-pretty">
+                  {line}{' '}
+                  <a href={`/claims/${claim.id}`} class="link text-sm" data-crossref>
+                    The full reason
+                  </a>
+                </p>
+              ) : (
+                <>
+                  <p class="mt-2.5 max-w-prose text-[0.9375rem] leading-relaxed text-pretty" data-record>
+                    {why}
+                  </p>
+                  {reopens && (
+                    <div class="mt-2.5 max-w-prose border-l-2 border-rule pl-3.5">
+                      <p class={label}>What would reopen it</p>
+                      <p class="mt-1 text-[0.9375rem] leading-relaxed text-pretty" data-record>
+                        {reopens}
+                      </p>
+                    </div>
+                  )}
+                </>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  )
+}

@@ -945,7 +945,35 @@ function checkRegister(): void {
   checkRegisterClaims((register.claims ?? []) as Record_[], questions);
   checkQuestionTopics(questions);
   checkStoryQuestions(questions);
+  checkParkedLines((register.claims ?? []) as Record_[]);
   checkRedirects(register);
+}
+
+/**
+ * A story's `parked` lines must each name a claim parked at framing under the
+ * story's own question, so a plain reason cannot sit beside a claim it does not
+ * describe or outlive the park it explains.
+ */
+function checkParkedLines(registerClaims: Record_[]): void {
+  for (const story of stories) {
+    const parked = story.data.parked;
+    if (parked === undefined || parked === null) continue;
+    if (typeof parked !== 'object' || Array.isArray(parked)) {
+      fail(story.file, 'parked must map register claim ids to one plain line each');
+      continue;
+    }
+    for (const id of Object.keys(parked as Record_)) {
+      const claim = registerClaims.find((entry) => entry.id === id);
+      if (
+        claim === undefined ||
+        claim.question !== story.slug ||
+        claim.triage !== 'park' ||
+        claim.parked_at !== 'framing'
+      ) {
+        fail(story.file, `parked: "${id}" is not a claim parked at framing under ${story.slug}`);
+      }
+    }
+  }
 }
 
 /**

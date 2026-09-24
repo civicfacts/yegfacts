@@ -7,6 +7,7 @@ import ClaimStrip from '../../components/ClaimStrip.astro';
 import CopyButton from '../../components/CopyButton.astro';
 import Finding from '../../components/Finding.astro';
 import Gloss from '../../components/Gloss.astro';
+import ParkedClaims from '../../components/ParkedClaims.astro';
 import PendingBanner from '../../components/PendingBanner.astro';
 import QuestionEntry from '../../components/QuestionEntry.astro';
 import SeenCards from '../../components/SeenCards.astro';
@@ -25,6 +26,7 @@ import {
   PUBLICATION_LABELS,
   claimText,
   commentsOn,
+  parkedAtFraming,
   reportAnchor,
   reportsFor,
   saidIn,
@@ -116,7 +118,9 @@ const entrySections = toc([
 // A question that has been checked: the article, and the register behind it.
 // ---------------------------------------------------------------------------
 const rendered = story ? await render(story) : undefined;
-const evidence: Evidence[] = story ? await evidenceForStory(answered, commitments) : [];
+const evidence: Evidence[] = story
+  ? await evidenceForStory(answered, commitments, story.body ?? '')
+  : [];
 
 /**
  * Comparable cities, grouped under the claim they were offered for. They used to
@@ -165,6 +169,14 @@ const headline = answered.filter((claim) => claim.data.context_for === undefined
  * and the TL;DR come first and the strip follows them (docs/DESIGN.md §12).
  */
 const stripFirst = story?.data.one_line === undefined;
+/**
+ * Claims parked at framing (methodology v1.35). They render beside the verdict
+ * strip rather than under "Claims with no finding": the record cannot answer
+ * them, which is a different statement from not having been checked yet, and
+ * the finding must never read as the answer to them.
+ */
+const parked = registered.filter(parkedAtFraming);
+const unchecked = registered.filter((claim) => !parkedAtFraming(claim));
 const backgroundFor = (id: string) =>
   answered.filter((claim) => claim.data.context_for === id);
 
@@ -188,6 +200,7 @@ const lede = story ? await standfirst(story) : '';
 const articleSections = story
   ? toc([
       story.data.tldr.length > 0 && { id: 'tldr', label: 'TL;DR' },
+      parked.length > 0 && { id: 'parked', label: 'What the record cannot answer' },
       story.data.seen.length > 0 && { id: 'claims-we-are-seeing', label: 'Common forms' },
       {
         id: 'what-happened',
@@ -195,7 +208,7 @@ const articleSections = story
         children: subheads(rendered?.headings ?? []),
       },
       { id: 'claims-checked', label: 'Claims checked' },
-      registered.length > 0 && { id: 'not-checked', label: 'Claims with no finding' },
+      unchecked.length > 0 && { id: 'not-checked', label: 'Claims with no finding' },
       commitments.length > 0 && { id: 'commitments', label: 'What the City promised' },
       { id: 'evidence', label: 'Edmonton evidence' },
       comparisons.length > 0 && { id: 'comparisons', label: 'Comparable cities' },
@@ -269,9 +282,16 @@ const Content = rendered?.Content;
               {question.question}
             </p>
 
-            {/* One claim: the strip is the answer and comes first. */}
+            {/* One claim and no standfirst: the strip is the answer and comes first. */}
             {stripFirst && (
-              <ClaimStrip headline={headline} primaryClaim={story.data.primary_claim} />
+              <>
+                <ParkedClaims parked={parked} lines={story.data.parked} />
+                <ClaimStrip
+                  headline={headline}
+                  primaryClaim={story.data.primary_claim}
+                  parkedAbove={parked.length > 0}
+                />
+              </>
             )}
 
             {/*
@@ -322,9 +342,20 @@ const Content = rendered?.Content;
             </section>
           )}
 
-          {/* Several claims: the strip follows the page-level answer and the TL;DR. */}
+          {/*
+            A standfirst of its own: any claims parked at framing, then the
+            strip, follow the page-level answer and the TL;DR.
+          */}
           {!stripFirst && (
-            <ClaimStrip headline={headline} primaryClaim={story.data.primary_claim} class="mt-10" />
+            <>
+              <ParkedClaims parked={parked} lines={story.data.parked} />
+              <ClaimStrip
+                headline={headline}
+                primaryClaim={story.data.primary_claim}
+                parkedAbove={parked.length > 0}
+                class="mt-10"
+              />
+            </>
           )}
 
           {/*
@@ -426,7 +457,7 @@ const Content = rendered?.Content;
                       <a href={`/claims/${claim.data.id}`} class="link-title">
                         {claim.data.question}
                       </a>
-                      {story.data.primary_claim === claim.data.id && (
+                      {parked.length === 0 && story.data.primary_claim === claim.data.id && (
                         <span class={mainClaim}>Main claim</span>
                       )}
                     </h3>
@@ -606,16 +637,16 @@ const Content = rendered?.Content;
             checked" they would read as checked, and left off the page they
             would read as never made.
           */}
-          {registered.length > 0 && (
+          {unchecked.length > 0 && (
             <section id="not-checked">
               <h2 class={heading}>Claims with no finding</h2>
               <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
-                These were made about this question and have not been through the panel. The
-                question above is answered; these claims are not, and nothing here says whether any
-                of them is true.
+                These were made about this question and have not been through the panel.
+                {parked.length === 0 && ' The question above is answered; these claims are not.'}{' '}
+                Nothing here says whether any of them is true.
               </p>
               <ul class="mt-5 divide-y divide-rule border-t border-rule">
-                {registered.map((claim) => (
+                {unchecked.map((claim) => (
                   <li id={claim.id} class="scroll-mt-6 py-4">
                     <a
                       href={`/claims/${claim.id}`}
@@ -627,6 +658,19 @@ const Content = rendered?.Content;
                     {commentsOn(claim) > 0 && (
                       <p class={`mt-1.5 ${label}`} data-record>
                         {saidIn(commentsOn(claim))}
+                      </p>
+                    )}
+                    {/*
+                      A claim two triage readers already turned down is not
+                      waiting on anything; say so rather than list it as if it
+                      were.
+                    */}
+                    {claim.prior_triage?.outcome === 'no' && (
+                      <p class="mt-1.5 max-w-prose text-sm leading-relaxed text-muted">
+                        Turned down at triage, so it will not be checked.{' '}
+                        {claim.prior_triage.reason && (
+                          <span data-record>{claim.prior_triage.reason}</span>
+                        )}
                       </p>
                     )}
                   </li>
@@ -769,9 +813,22 @@ const Content = rendered?.Content;
               ))}
             </dl>
 
+            {/*
+              The reason and grouping note are what triage expected when the
+              question was registered, kept as the record of that decision.
+              Dated and labelled as such, because the work that followed can
+              find the expected record does not exist, and an undated sentence
+              in the present tense would then contradict the page above it.
+            */}
+            {question.reason && (
+              <p class={`mt-5 ${label}`}>
+                What we expected when it was registered,{' '}
+                <time datetime={question.recorded}>{question.recorded}</time>
+              </p>
+            )}
             {question.reason && (
               <p
-                class="mt-5 max-w-prose border-l-2 border-gold pl-3.5 text-[1.0625rem] leading-relaxed text-pretty"
+                class="mt-2 max-w-prose border-l-2 border-gold pl-3.5 text-[1.0625rem] leading-relaxed text-pretty"
                 data-record
               >
                 {question.reason}
@@ -784,10 +841,25 @@ const Content = rendered?.Content;
               </p>
             )}
 
+            {parked.length > 0 && (
+              <p class="mt-4 max-w-prose text-[0.9375rem] leading-relaxed">
+                The check before any research found no record of that kind for the claims set aside
+                above, so they carry no finding. See{' '}
+                <a href="#parked" class="link" data-crossref>
+                  what the record cannot answer
+                </a>
+                .
+              </p>
+            )}
+
             {row.twoSided && (
               <p class="mt-4 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
                 People arguing in both directions raised this question, and every claim they made
-                about it is checked, whichever way it points.
+                about it is{' '}
+                {parked.length === 0 && unchecked.length === 0
+                  ? 'checked'
+                  : 'shown here with what became of it'}
+                , whichever way it points.
               </p>
             )}
 
