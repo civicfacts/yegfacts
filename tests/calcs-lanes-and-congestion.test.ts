@@ -56,7 +56,8 @@ describe('lanes-and-congestion figures', () => {
     });
     expect(story).toContain('Two of them made more than one of these claims');
     expect(story).toContain('three of its fifteen districts');
-    expect(story).toContain('at least four streets');
+    expect(figures.builtRecordCorridors).toBe(3);
+    expect(story).toContain('at least three streets');
     for (const word of ['Twenty-two people', 'Thirteen said', 'Six said', 'Four said', 'One said']) {
       expect(story).toContain(word);
     }

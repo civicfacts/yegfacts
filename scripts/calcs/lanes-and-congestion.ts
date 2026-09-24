@@ -182,6 +182,15 @@ export const verifiedCorridors = [
 
 export const verifiedDistricts = [...new Set(verifiedCorridors.map((c) => c.district))];
 
+/**
+ * Corridors where a City record shows the change was made, not only designed.
+ * 110 Street rests on a final design with the lane shown built in the
+ * inventory, so the TL;DR's street count leaves it out.
+ */
+export const builtRecordCorridors = verifiedCorridors.filter(
+  (c) => !c.record.startsWith('final design'),
+).length;
+
 /** The brief's two judgement thresholds for "all throughout the city". */
 export const districtThresholds = { primary: 8, alternative: 5 } as const;
 
@@ -238,6 +247,7 @@ export const figures = {
   street110,
   districtCount: districts.length,
   verifiedCorridors: verifiedCorridors.length,
+  builtRecordCorridors,
   verifiedDistricts,
   districtThresholds,
   people,
