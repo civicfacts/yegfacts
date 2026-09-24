@@ -266,6 +266,25 @@ const claims = defineCollection({
      * this claim's page under "Also said as". Validated against the register.
      */
     register_claims: z.array(z.string()).default([]),
+    /**
+     * Notes on individual captured wordings from `register_claims`, keyed by
+     * the source pseudonym. `omit` keeps a wording off this claim's "Also said
+     * as" list, for a wording that does not assert this claim (a person
+     * relaying what others told them, say); `note` labels a wording that is
+     * shown but that this finding does not check. Every note carries its
+     * reason. The register itself is untouched: the wording stays under its
+     * register claim. `scripts/validate.ts` checks each name is really a
+     * wording of one of this claim's register claims.
+     */
+    wording_notes: z
+      .array(
+        z.object({
+          author_name: z.string().min(1),
+          omit: z.boolean().default(false),
+          note: z.string().min(1),
+        }),
+      )
+      .default([]),
     limitations: z.array(z.string().min(1)).default([]),
     unknowns: z.array(z.string().min(1)).default([]),
     missing_evidence: z.array(z.string().min(1)).default([]),

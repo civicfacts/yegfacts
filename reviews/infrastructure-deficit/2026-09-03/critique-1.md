@@ -1,3 +1,22 @@
+<!-- Dispositions, 2026-09-24, by Stew (drafting seat Claude Opus 5.5).
+
+Adopted: A, B, C, D, E, F, G, H, I, J. Not taken: K, a site-wide template change outside this page. No finding changed.
+
+A. The standfirst drops "but" and "small" and states the fifteenth neutrally: "Edmonton rated part of its roads poor at the end of 2024, and the $100 million for bike lanes was about a fifteenth of the City's renewal shortfall."
+B. TL;DR 3 now carries the eligibility finding and its uncertainty: "The $100 million was general tax-supported borrowing that road or alley renewal could have used, though one AI reviewer of three could not open the budget to check." "General" rather than "ordinary": the brief's term is general municipal capital funding, and a faithfulness seat earlier refused "ordinary" as unsourced.
+C. A Partially supported reached from a Split panel now carries its own fixed gloss on every page that glosses a badge (src/lib/findings.ts, SPLIT_PARTIAL_TERM and findingGlossTerm, with a test): "The reviewers split, and the published rule resolves a split cautiously to this finding. It does not mean part of the claim was found to overreach." It is generic, so it also applies to the one other published split Partially supported, cv-counter-total-2026.
+D. Claims can now carry wording_notes against their register wordings (schema, validator, both renderers). Councillor Rice's relayed priorities are omitted from infra-roads-condition's wordings with the reason recorded; the register is untouched. The three snow and grass wordings are labelled as not checked by this finding and sort after the roads wordings.
+E. The eligibility answer: "Partly. The City's budget lists all $100 million as general borrowing that road or alley renewal could have used, but one of the three AI reviewers could not open that budget to check." The vendor split stays named in the claim's first limitation and in the explanation.
+F. The shortfall answer: "Partly. The $100 million came to about a fifteenth of the renewal the City said it could not fund from 2023 to 2026, too much to dismiss and far short of a serious share." Reworded from the suggestion so it does not repeat the standfirst.
+G. The page publishes on this branch: status published, the register question gate-complete and published, combined-evidence.json annotated by scripts/annotate-evidence.ts, and a published history entry naming every check and its report.
+H. The active-transportation pointer now reads "now checked on its own page", and its changelog note no longer says pending review. Both off-board notes say "which the site checks as its own question" with no date, so the 2026-09-03 stamp stands alone.
+I. "The brief" no longer appears undefined in the explanation: the lines are "fixed in advance" by "this check", and the broken "Neither does" now reads "it does not change the finding. Nor does ...".
+J. "$100 million in all"; "$3,575,584 thousand (about $3.58 billion)" and "$1,945,673 thousand (about $1.95 billion)".
+
+One further change the publication forced: the findings board repeats each claim's question title and verified date per row, and with this nine-word title on a three-claim question that tripped the duplication audit on / and /search. That row chrome is now marked data-pagefind-ignore in FindingsBoard.astro. The question page itself is indexed as before.
+
+Plain speech: the top-layer edits are the standfirst, TL;DR 3 and the eligibility and shortfall answers, and no other top-layer text changed, so no second plain-speech read was run. -->
+
 # Rendered-page critique, 2026-09-24, a Claude (Opus 5.5) session separate from the drafter, checkers and gate
 
 Pages read, built with `npm run build` at 18eba72 in the `draft-infra`

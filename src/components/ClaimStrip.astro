@@ -20,6 +20,7 @@ import type { CollectionEntry } from 'astro:content';
 import Finding from './Finding.astro';
 import Gloss from './Gloss.astro';
 import { requireTerm as gloss } from '../lib/glossary';
+import { findingGlossTerm } from '../lib/findings';
 
 interface Props {
   headline: CollectionEntry<'claims'>[];
@@ -46,7 +47,7 @@ const mainClaim = 'ml-2 align-middle text-[0.6875rem] tracking-[0.08em] text-for
             {primaryClaim === claim.data.id && <span class={mainClaim}>Main claim</span>}
           </p>
           <div class="sm:col-start-2 sm:row-start-1">
-            <Gloss {...gloss(claim.data.finding)} variant="boxed">
+            <Gloss {...gloss(findingGlossTerm(claim.data.finding, claim.data.panel_agreement))} variant="boxed">
               <Finding finding={claim.data.finding} size="md" />
             </Gloss>
             {/* Said beside the badge too, so the strip is never read as a live board. */}

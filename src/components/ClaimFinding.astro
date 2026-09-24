@@ -4,8 +4,9 @@ import Finding from './Finding.astro';
 import Gloss from './Gloss.astro';
 import TopicTags from './TopicTags.astro';
 import { claimTopics, type Claim, type Story } from '../lib/content';
-import { saidIn, sourceRegister, variationsFrom, type Question } from '../lib/intake';
+import { saidIn, sourceRegister, wordingsForClaim, type Question } from '../lib/intake';
 import { panelForClaim, requireTerm as gloss } from '../lib/glossary';
+import { findingGlossTerm } from '../lib/findings';
 
 /**
  * One checked claim, answering on its own.
@@ -35,10 +36,9 @@ const sources = new Map(sourceRegister().map((source) => [source.id, source]));
  * The captured wordings this claim was grouped from, read through the loader
  * that redacts named-individual claims, so a withheld one contributes nothing.
  */
-const said = variationsFrom(claim.data.register_claims).map(({ variation }) => ({
-  variation,
-  source: sources.get(variation.source_id),
-}));
+const said = wordingsForClaim(claim.data.register_claims, claim.data.wording_notes).map(
+  ({ variation, note }) => ({ variation, note, source: sources.get(variation.source_id) }),
+);
 
 const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
 const heading = 'section-heading mt-14';
@@ -61,7 +61,7 @@ const heading = 'section-heading mt-14';
         words are the method's and a reader arriving from a search has not read
         the methodology. */}
     <p class="mt-5 flex flex-wrap items-baseline gap-x-2 gap-y-1.5">
-      <Gloss {...gloss(claim.data.finding)} variant="boxed">
+      <Gloss {...gloss(findingGlossTerm(claim.data.finding, claim.data.panel_agreement))} variant="boxed">
         <Finding finding={claim.data.finding} size="md" />
       </Gloss>
       <span class="text-[0.9375rem] text-muted">
@@ -225,7 +225,7 @@ const heading = 'section-heading mt-14';
           one to a person within a source, and one person can write more than one comment.
         </p>
         <ul class="mt-5 space-y-4">
-          {said.map(({ variation, source }) => (
+          {said.map(({ variation, note, source }) => (
             <li>
               <blockquote
                 class="max-w-prose border-l-2 border-gold pl-4 text-[1.0625rem] leading-relaxed text-pretty"
@@ -244,6 +244,7 @@ const heading = 'section-heading mt-14';
                   </>
                 )}
               </p>
+              {note && <p class="mt-1 max-w-prose pl-4 text-sm text-muted italic">{note}</p>}
             </li>
           ))}
         </ul>

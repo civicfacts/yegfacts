@@ -34,6 +34,7 @@ import {
 } from '../../lib/intake';
 import { questionRows, type QuestionRow } from '../../lib/questions';
 import { panelForClaim, requireTerm as gloss } from '../../lib/glossary';
+import { findingGlossTerm } from '../../lib/findings';
 import { SITE } from '../../lib/site';
 import { subheads, toc } from '../../lib/toc';
 
@@ -451,7 +452,7 @@ const Content = rendered?.Content;
 
                     {/* The verdict, then the panel behind it, then what it rests on. */}
                     <p class="mt-3.5 flex flex-wrap items-baseline gap-x-2 gap-y-1.5">
-                      <Gloss {...gloss(claim.data.finding)} variant="boxed">
+                      <Gloss {...gloss(findingGlossTerm(claim.data.finding, claim.data.panel_agreement))} variant="boxed">
                         <Finding finding={claim.data.finding} size="md" />
                       </Gloss>
                       <span class="text-[0.9375rem] text-muted">
@@ -530,7 +531,7 @@ const Content = rendered?.Content;
                       commented on the original post can find their own words
                       beside the answer.
                     */}
-                    <AlsoSaidAs registerClaims={claim.data.register_claims} />
+                    <AlsoSaidAs registerClaims={claim.data.register_claims} notes={claim.data.wording_notes} />
 
                     {claim.data.limitations.length > 0 && (
                       <div class="mt-4">
@@ -577,7 +578,7 @@ const Content = rendered?.Content;
                           </a>
                         </h4>
                         <p class="mt-2.5">
-                          <Gloss {...gloss(premise.data.finding)} variant="boxed">
+                          <Gloss {...gloss(findingGlossTerm(premise.data.finding, premise.data.panel_agreement))} variant="boxed">
                             <Finding finding={premise.data.finding} size="md" />
                           </Gloss>
                         </p>

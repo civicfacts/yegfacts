@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { loadRunManifest } from '../../scripts/lib/review-schema';
 import type { Claim } from './content';
-import { FINDING_GLOSS, PANEL_AGREEMENT_GLOSS } from './findings';
+import { FINDING_GLOSS, PANEL_AGREEMENT_GLOSS, SPLIT_PARTIAL_GLOSS, SPLIT_PARTIAL_TERM } from './findings';
 
 /**
  * Site glossary. Terms render through <Term>, which draws a dotted underline
@@ -100,6 +100,7 @@ export const glossary: Record<string, GlossaryEntry> = {
   // The five canonical findings. Wording is imported, never retyped, so the
   // popover and the methodology page cannot drift apart.
   ...withHref(FINDING_GLOSS, VOCABULARY),
+  [SPLIT_PARTIAL_TERM]: { definition: SPLIT_PARTIAL_GLOSS, href: AGREEMENT },
   ...withHref(PANEL_AGREEMENT_GLOSS, AGREEMENT),
   Unanimous: {
     definition:
