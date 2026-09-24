@@ -78,6 +78,20 @@ export function stagedBasename(url: string, digest: string): string {
   return `${digest.slice(0, 12)}-${name}`;
 }
 
+/**
+ * True when an HTML reply is a "page not found" page served with a success
+ * status. Some sites (the City of Edmonton's among them) answer a dead address
+ * with HTTP 200 and a not-found page, which would otherwise be archived as the
+ * cited document. Only the page's <title> is read, so a document that merely
+ * mentions a missing page is not caught.
+ */
+export function isSoftNotFound(bytes: Uint8Array, contentType: string): boolean {
+  if (!/html/i.test(contentType)) return false;
+  const head = new TextDecoder('utf-8', { fatal: false }).decode(bytes.subarray(0, 65536));
+  const title = /<title[^>]*>([\s\S]*?)<\/title>/i.exec(head)?.[1] ?? '';
+  return /page not found|\b404\b|not be found/i.test(title);
+}
+
 async function fetchOnce(url: string): Promise<{ bytes: Uint8Array; contentType: string; status: number }> {
   const response = await fetch(url, {
     signal: AbortSignal.timeout(TIMEOUT_MS),
@@ -90,11 +104,13 @@ async function fetchOnce(url: string): Promise<{ bytes: Uint8Array; contentType:
     (error as Error & { httpStatus?: number }).httpStatus = response.status;
     throw error;
   }
-  return {
-    bytes: buffer,
-    contentType: response.headers.get('content-type') ?? 'application/octet-stream',
-    status: response.status,
-  };
+  const contentType = response.headers.get('content-type') ?? 'application/octet-stream';
+  if (isSoftNotFound(buffer, contentType)) {
+    const error = new Error(`HTTP ${response.status} but the page says it was not found`);
+    (error as Error & { httpStatus?: number }).httpStatus = response.status;
+    throw error;
+  }
+  return { bytes: buffer, contentType, status: response.status };
 }
 
 /** Fetch one URL with a single retry, and write its bytes to the staging area. */
