@@ -601,3 +601,102 @@ correctly ("What we expected when the question was registered,
   ten-second layer.
 
 GATE: FAIL — C1 (GPT-6 Sol reviewer note: "found after the panel ran" is contradicted by round2/gpt.json, and "Round-2 answers do not change a seat's verdict" misstates DESIGN §4); C2 (the story says the 79 Street claim "was passed to" the Holyrood school lane question while the register and its built claim page say it is waiting on this, now published, question)
+
+## Second confirmation, 2026-09-24
+
+Graded tree: worktree commit `fd7dfe9`. Auditor: the same Claude (Opus 5.5)
+audit session.
+
+**Result: pass.** C1 and C2 are corrected as the sources support. So are D1
+and D2. The ten statements changed since `cd36248` all verify, and the three
+built pages state nothing false.
+
+**Commands.**
+
+- `git diff cd36248 -- src/ scripts/calcs/ intake/register.yaml`: four files.
+  They are the register, the claim, the story and
+  `src/pages/questions/[id].astro`. Nothing under `scripts/calcs/` changed.
+- `npx tsx scripts/calcs/lanes-and-congestion.ts` prints
+  `distinctAcrossFourClaims` 22, `inMoreThanOneClaim` 2,
+  `builtRecordCorridors` 3, and `people.question` 23. The page prints no
+  question total.
+- `npx vitest run tests/calcs-lanes-and-congestion.test.ts`: 4 passed.
+- `npm run validate`: OK, 9 stories, 21 claims, 182 evidence entries.
+- `npm run build`: exit 0. The pages below were read from the fresh `dist/`
+  as flattened text.
+
+### C1 and C2
+
+- **C1: corrected.** GPT-6 Sol's `changed_between_rounds` now reads: "No
+  change in verdict. In cross-review it reported a third district, North
+  Central, from the City's route table. The finding is computed from the
+  round-one answers, so round two cannot move it. This page counts North
+  Central from that same table, which the freshness audit brought into the
+  record."
+  - `round2/gpt.json` cites the route table: its `supporting_evidence` entry
+    for 96 Street has the Active Transportation Network Expansion URL.
+  - `docs/DESIGN.md` §4 and §5 say round two "cannot move a canonical
+    finding", and that synthesis reads the round-1 verdicts.
+  - `gate/freshness-audit.md` item 1 brought the table in as YF-EV-0170.
+- **C2: corrected.** In `intake/register.yaml`, `79-street-relieves-75-street`
+  now has `question: holyrood-school-lane`. That is the destination
+  `register-note.md` names ("the register already holds a question about
+  the planned route on 79 Street outside the Holyrood school … The claim
+  goes to the 79 Street question").
+  - The claim's one wording is by Hardy Vole C. Across the register,
+    Hardy Vole C. appears only in that claim and in two claims under other
+    questions (`consultation-and-opposition` and `transit-alternative`). So
+    the commenter made no other claim under `lanes-and-congestion`.
+  - Recounted from the variations, `lanes-and-congestion` now holds 23
+    distinct commenters: 7 for, 15 against, 1 neither. Granite Hare D. is
+    counted against, and the one neither is Bright Elk G. That matches the
+    new `accounts` of 23 (7/15/1).
+  - `holyrood-school-lane` now holds Hardy Vole C. and Icy Grebe A., both
+    against, which matches 2 (0/2/0).
+  - The story's figures do not depend on the question total. "Twenty-two",
+    13, 6, 4, 1 and "two of them" are all counted over the four claims the
+    page takes up, and they are unchanged.
+
+### Changed sentences
+
+| # | Statement | Grade | Basis |
+|---|---|---|---|
+| 1–3 | GPT-6 Sol note: North Central from the route table; round two cannot move the finding; the freshness audit brought the table into the record | VERIFIED | C1 above |
+| 4 | Published changelog: "both corrected as the audit asked" | VERIFIED | D1 taken; the first and second confirmations |
+| 5 | "Two more claims came up in the same argument and are not checked here." | VERIFIED | register: `roads-carry-goods-and-services` under this question, and `79-street-relieves-75-street` from the same captured source; neither has a finding |
+| 6 | The 79 Street claim "has been moved to the question about the Holyrood school lane, where it will be tested or dropped" | VERIFIED | register `question: holyrood-school-lane`; `register-note.md` "to be tested there or dropped there for want of a record" |
+| 7 | Register `lanes-and-congestion` accounts 23 (7/15/1) | VERIFIED | recount above |
+| 8 | Register `holyrood-school-lane` accounts 2 (0/2/0) | VERIFIED | recount above |
+| 9 | Register comment: "Its one commenter made no other claim under lanes-and-congestion" | VERIFIED | Hardy Vole C. search above |
+| 10 | Question pages: the two-sided note says "checked" only when no claim is parked or unchecked, and "shown here with what became of it" otherwise | VERIFIED | rendered pages below |
+
+Counts: 10 checked. VERIFIED 10, CALC 0, PARTIAL 0, NOT FOUND 0, no cited
+source 0.
+
+### Built pages
+
+1. **`/claims/79-street-relieves-75-street`** says "It is waiting on the
+   question below". The question below is now *What was planned for the
+   bike lane outside the Holyrood school, and what stopped it?*, which is
+   "Going ahead", "Registered" and "Not published yet". The dated label
+   shows that question's own reason, "What we expected when the question
+   was registered, 2026-09-03". Every statement on the page is now true.
+2. **`/questions/holyrood-school-lane`** shows "Said in 3 comments · 3
+   claims" and lists the 79 Street claim with Hardy Vole C.'s wording beside
+   the two claims that were already there. That matches the register: 3
+   claims, 3 variations, 2 commenters. The page's other two claims are
+   unchanged from `main`, and this branch adds nothing else to it.
+3. **`/questions/winter-cycling`** prints: "People arguing in both
+   directions raised this question, and every claim they made about it is
+   shown here with what became of it, whichever way it points." The page
+   has one claim under "Claims with no finding", so the new wording is the
+   correct branch and it is true. There is no stray space before the comma
+   in the HTML. The dated label "What we expected when it was registered,
+   2026-09-03" sits above a reason that `git log -G` shows unchanged since
+   `8cbe246` (2026-09-03).
+
+The lanes-and-congestion question page, reread in the same build, now
+lists only the roads claim under "Claims with no finding". It shows "Said
+in 33 comments" and the same two-sided wording.
+
+GATE: PASS
