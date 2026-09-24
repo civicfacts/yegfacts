@@ -285,3 +285,15 @@ The halted round's files (round 1, round 2, the manifest, the merge and the
 fetch report) move unchanged to `superseded-2026-09-24/`; its answers are to
 the old hash. Round 1 reruns on all three seats against the new one, blind,
 because answers to two packages cannot share a round.
+
+### The rerun on the re-frozen brief
+
+| Seat | Outcome |
+|---|---|
+| Claude Opus 5.5, high | admitted, one attempt: Partially supported, low |
+| GPT-6 Sol, high | admitted, one attempt: Partially supported, moderate |
+| GPT-6 Luna, high | admitted, one attempt: Partially supported, moderate |
+
+No seat raised a framing concern. The three agree on the verdict, so no
+vendor split arises. Merge: 25 distinct sources; evidence staging
+archived 22, 3 not (fetch-report.md). Round 2 follows.
