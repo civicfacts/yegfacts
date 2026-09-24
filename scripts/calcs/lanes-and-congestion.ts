@@ -121,8 +121,8 @@ export const districts = [
  * The corridors the page reports as verified: each has a City record that a
  * driving lane or direction of traffic gave way to make room for the bike lane
  * (YF-EV-0163, YF-EV-0165, YF-EV-0170) and a City record that the bike lane was
- * built (YF-EV-0164, YF-EV-0166, YF-EV-0170). `round1Seats` is which seats
- * counted it as verified in round 1, the canonical basis; the page's own check
+ * built (YF-EV-0164, YF-EV-0166). `round1Seats` is which seats listed it
+ * among their verified corridors in round 1, the canonical basis; the page's own check
  * of the City record, not a seat's count, is what puts a corridor here.
  *
  * `record` says what kind of City record shows the lane went. For 110 Street
@@ -174,7 +174,9 @@ export const verifiedCorridors = [
     laneRemoved: 'northbound traffic, street made one-way southbound',
     record: 'route table',
     built: 2025,
-    round1Seats: [],
+    // Counted by the Claude seat from a news report; no seat placed it in a
+    // district in round 1 (that seat called it likely North Central unchecked).
+    round1Seats: ['Claude Opus 5.5'],
   },
 ] as const;
 
@@ -187,14 +189,38 @@ export const districtThresholds = { primary: 8, alternative: 5 } as const;
 // How many people made each claim (intake/register.yaml)
 // ---------------------------------------------------------------------------
 
-type RegisterClaim = { id: string; question: string; accounts?: number };
+type RegisterClaim = {
+  id: string;
+  question: string;
+  accounts?: number;
+  variations?: { author_name?: string }[];
+};
 type RegisterQuestion = { id: string; accounts?: { total: number } };
 const register = loadYaml<{ claims: RegisterClaim[]; questions: RegisterQuestion[] }>(
   repoPath('intake', 'register.yaml'),
 );
 const accountsFor = (id: string) => register.claims.find((claim) => claim.id === id)?.accounts ?? 0;
 
+const fourClaims = [
+  'lane-removal-increases-congestion',
+  'bike-infra-reduces-congestion',
+  'city-removed-traffic-lanes',
+  'lanes-removed-for-traffic-calming',
+];
+
+/**
+ * Distinct commenters across the four claims the story's opening describes.
+ * The groups overlap (some people made more than one of these claims), so
+ * their counts do not add up to a headcount.
+ */
+const distinctAcrossFour = new Set(
+  register.claims
+    .filter((claim) => fourClaims.includes(claim.id))
+    .flatMap((claim) => (claim.variations ?? []).map((v) => v.author_name)),
+).size;
+
 export const people = {
+  distinctAcrossFourClaims: distinctAcrossFour,
   question: register.questions.find((q) => q.id === 'lanes-and-congestion')?.accounts?.total ?? 0,
   laneRemovalIncreasesCongestion: accountsFor('lane-removal-increases-congestion'),
   bikeInfraReducesCongestion: accountsFor('bike-infra-reduces-congestion'),

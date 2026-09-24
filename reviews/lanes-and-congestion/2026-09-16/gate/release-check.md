@@ -1,3 +1,11 @@
+<!-- Dispositions, 2026-09-24, by Stew (drafting seat Claude Opus 5.5). No blocking findings. A1 accepted by the editor; A2 adopted; A3 remains open.
+
+A1, accepted. The created_user and last_edited_user fields are published by the City itself in its public GIS service (layer 236). They identify City staff acting in their official role and no private individual, and the snapshot's SHA-256 is pinned in the frozen brief, so altering the file would re-open the brief for no gain to any reader. Nothing in the page or the reports repeats a username.
+
+A2, adopted. YF-EV-0166's rights note now says the identical bytes are public in this repository as the run's frozen instrument since PR #81, that the archive copy is marked private only by the fail-closed default, and that the rights basis for republishing GIS layer 236 is unconfirmed. No licence is claimed. The snapshot file is untouched.
+
+A3, open. Whether the capture's platform comment ids should stay beside the pseudonyms is a founder decision already on record from the cycling-volumes gate; this run changes nothing in the capture. -->
+
 # Release check — lanes-and-congestion
 
 Gate stage 7, part 2. Run date 2026-09-24 (story run `2026-09-16`),
