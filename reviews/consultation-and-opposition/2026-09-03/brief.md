@@ -1,8 +1,23 @@
 # Review brief: Did the City ask the streets it built on?
 
-Status: FROZEN 2026-09-04 on framing check 2 FRAME OK
-(framing/check-2.md), the second of the three reports the v1.12 cap
-allows. History: drafted 2026-09-03 by Stew under D-0019; report IS03688
+Status: NOT FROZEN. Framing check 3 (framing/check-3.md), the last of
+the three reports the v1.12 cap allows, returned REVISE on 2026-09-25.
+Its standing findings are not all written as copy-ready replacement
+text, so the v1.39 route does not apply, and the brief awaits the
+founder in writing under the v1.12 cap; the run record's 2026-09-25
+section lists the findings. Nothing in this directory goes to a panel
+in this state. This is a revision of the brief
+frozen 2026-09-04 on framing check 2 FRAME OK (framing/check-2.md), and
+under the method it is a new brief. It was revised because the council
+documents, read from archived bytes, contradict or do not support two
+things the frozen brief stated: that the Infrastructure Committee did
+not adopt administration's recommendation and the full programme
+continues (the minutes record no decision on the fourteen routes;
+verification/source-existence-audit-decision-2026-09-25.md), and that
+the heading defining set S is common to all three versions of
+Attachment 5 (it is not; verification/source-existence-audit-archived-2026-09-25.md).
+Only the sentences resting on those two facts changed; the run record's
+2026-09-25 section lists them. History: drafted 2026-09-03 by Stew under D-0019; report IS03688
 and its attachments, which the drafting session could not open, were
 retrieved and read on 2026-09-04 and the route set, the verdict ladder's
 Not established conditions and the cutoff were corrected before any
@@ -10,7 +25,7 @@ check ran; revised after framing check 1 (framing/check-1.md, REVISE on
 six findings; response in framing/response-1.md), five adopted whole and
 one — the timing cutoff — adopted as the required alternative rather
 than as the primary, for the reason given in the response. Methodology:
-v1.19. Register question: `consultation-and-opposition`, lifecycle
+v1.40. Register question: `consultation-and-opposition`, lifecycle
 `briefed`, triage `go`. Source: `yegscoop-2026-08-26`.
 
 ## Story
@@ -101,9 +116,13 @@ does not turn on any individual's conduct.
   (intake.md).
 - Civic importance: on 2026-08-26 the Infrastructure Committee considered
   administration's recommendation to proceed with 13 routes and
-  re-evaluate 14, and did not adopt it, so the full programme continues.
-  Whether the affected streets were asked is the factual question under
-  that dispute.
+  re-evaluate 14. The minutes record no motion carried on that
+  recommendation. A. Salvador's motion to continue the program at its
+  previously approved scope and advance tender-ready routes was defeated
+  2 to 2, after E. Rutherford's amendment to it was also defeated 2 to 2;
+  the only substantive motion carried kept Attachment 4 private, 4 to 0.
+  The minutes record no decision on the fourteen routes. Whether the
+  affected streets were asked is the factual question under that dispute.
 - Verifiability: the City publishes a project page with a route table and
   per-route materials, a council report and attachments on the programme,
   the Bike Plan and its engagement reports, per-route construction
@@ -123,7 +142,7 @@ the proposition below is testing.
 **One account asserts the proposition.** One commenter said the routes
 were built "relying on old data and zero community consultation
 (admitted to in the City's report)", about the routes the committee had
-just declined to pause. That is the general, programme-level assertion —
+just considered. That is the general, programme-level assertion —
 no community consultation on this set of routes — and it is what the
 proposition tests.
 
@@ -157,8 +176,8 @@ must not shade the reading of the record in either direction.
 
 A resident would ask: "Did the City invite people affected by each route
 to give route-specific input while the route or its design could still
-change?" A reporter would ask the same thing about the routes council
-declined to pause in August. The proposition below answers that question
+change?" A reporter would ask the same thing about the routes the
+committee considered in August. The proposition below answers that question
 by counting documented solicitation of affected residents or their
 representative bodies, distinguishing it from publication and one-way
 notification. An open-to-all neighbourhood process is reported as the
@@ -213,7 +232,7 @@ the specific route with the people that route affects, before the route
 was built.
 
 **Why this reading.** The holder's words are "zero community
-consultation", said about the routes the committee declined to pause.
+consultation", said about the routes the committee had just considered.
 That is the strongest captured line in the argument and it is the one
 tested. The proposition keeps the generality — it is a claim about the
 set of routes, not about one street — because a claim is tested as its
@@ -226,16 +245,26 @@ that reaches Supported with an engagement documented. It names the level
 the record answers at, the route, which is also the level residents argue
 about.
 
-**The route set, fixed here.** Set S is the fourteen projects listed
-under the heading "Will be reevaluated for feasibility and subject to
-funding availability" in Attachment 5, "Modified Approach for the Active
-Transportation Network Expansion Program", to Infrastructure Services
-report IS03688, Infrastructure Committee 2026-08-26. The report body
-names no route; Attachment 5 is where the list is. Attachment 5 is
-published in three versions, at
+**The route set, fixed here.** Set S is the fourteen projects that
+Attachment 5, "Modified Approach for the Active Transportation Network
+Expansion Program", to Infrastructure Services report IS03688,
+Infrastructure Committee 2026-08-26, lists apart from the thirteen that
+"will continue as planned". The report body names no route; Attachment 5
+is where the list is. Attachment 5 is published in three versions, at
 https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304032
 and, headed REPLACEMENT, at DocumentIds 304030 and 304031 on the same
-endpoint; the two route lists are word-for-word identical in all three.
+endpoint. The fourteen route names are word-for-word identical in all
+three, and so are the thirteen. What the versions say about the fourteen
+differs. In the original (304032) they sit under the heading "Will be
+reevaluated for feasibility and subject to funding availability" and
+"would be removed from the scope" of the programme for 2026 and 2027 if
+Council approved the change. One replacement keeps that heading and says
+they "may be revisited using alternate design approaches or other future
+initiatives". The other has no such heading, says they "may be
+re-evaluated", and says administration will report on the remaining
+routes in Q1 2027. The files carry no DocumentId, so which replacement
+is 304030 and which is 304031 is not established. Set S is defined by
+the route list, not by any version's heading or proposed treatment.
 The membership is transcribed here so reviewers check it against the
 attachment rather than build a set of their own:
 
@@ -266,10 +295,10 @@ No route is added or dropped on a reviewer's reading of what a commenter
 meant.
 
 *Required alternative route set.* Attachment 5's other list, the
-thirteen projects under "Will continue as planned", added to the
+thirteen projects it says will continue as planned, added to the
 fourteen: all twenty-seven remaining routes the report is about. A
 holder of the claim was arguing about the programme, not only about the
-routes administration proposed to pause, and a reader is entitled to see
+fourteen routes administration listed apart, and a reader is entitled to see
 whether the answer changes when the set is the whole remainder.
 Reviewers report the count and the classification for the twenty-seven
 beside the primary. The verdict uses set S.
@@ -542,9 +571,8 @@ reviewer who read the document and named the page.
    states how it was distributed.
 7. **Council and committee minutes and recorded votes for the
    2026-08-26 Infrastructure Committee**, through
-   https://pub-edmonton.escribemeetings.com. Answers: what the committee
-   decided about the modified approach, which fixes what "pushed ahead"
-   refers to.
+   https://pub-edmonton.escribemeetings.com. Answers: which motions on
+   report IS03688 the committee put, and how each vote went.
 
 Prefer the web pages and per-route documents above to the long PDFs where
 both answer the same question, and say for each claim-relevant figure
