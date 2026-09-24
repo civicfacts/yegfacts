@@ -294,7 +294,7 @@ rule; the board reviewed it and made it stricter; the editor applied the text.
    `38f01615542f5eab`) read check 3, the rule and the table and returned
    ELIGIBLE (`framing/eligibility.md`).
 3. **Confirmation, on the seat and pinned model that wrote check 3.**
-   GPT-6's predecessor gpt-5.6-sol at high, through
+   gpt-5.6-sol at high, through
    `scripts/panel/invoke-reviewer.sh --provider openai --model gpt-5.6-sol`
    (the audit wrapper cannot name a model), attempt `22b432e3f965cfc1`,
    codex-cli 0.156.1, context proof pass. Verdict: CONFIRMED
