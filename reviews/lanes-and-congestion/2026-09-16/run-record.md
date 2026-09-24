@@ -332,3 +332,16 @@ All three seats admitted, one attempt each: Claude Opus 5.5, GPT-6 Sol and
 GPT-6 Luna, all Not established (moderate). No framing concern, no vendor
 split. Merge: 21 distinct sources; staging archived 19, 2 not
 (fetch-report.md). Round 2 follows.
+
+### Round 2 and synthesis
+
+Round 2 positions: Claude Not established, GPT-6 Sol Not established, GPT-6 Luna
+Not established; no framing concern. `scripts/synthesize.ts` on the round-1
+basis: `city-removed-traffic-lanes` is **Not established**, panel agreement
+**Unanimous** (three seats from two vendors: the two OpenAI seats are not
+independent of each other). The finding means the City's records document
+through-lane removals on specific corridors but cannot show whether they
+were broad; the verified corridors and districts are reported as the part
+that is established. Drafting follows; the story leads with the three
+claims parked at framing (v1.35), and this finding is not the answer to
+whether bike lanes cause or ease congestion.

@@ -1,0 +1,72 @@
+{
+  "story": "lanes-and-congestion",
+  "run": "2026-09-16",
+  "methodology_version": "1.40",
+  "basis": "round1",
+  "claim_reruns": [],
+  "parked_claims": [],
+  "round2_documented": true,
+  "generated_at": "2026-09-24T16:59:03.921Z",
+  "claims": [
+    {
+      "id": "city-removed-traffic-lanes",
+      "finding": "Not established",
+      "panel_agreement": "Unanimous",
+      "rationale": "Unanimous.",
+      "basis": "round1",
+      "reviewers": [
+        {
+          "provider": "claude",
+          "model_self_reported": "claude-opus-5-5",
+          "verdict": "Not established",
+          "confidence": "Moderate",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "I read the conversion of a two-way street to one-way, with a bike lane placed in the reallocated cross-section, as the removal of a through lane (one direction's lane) 'in space that included it'. That reading decides whether 102 Ave (Oliver), 100 St (Ritchie/Strathcona) and 96 St (Delton) count. I used the live GIS layer through the brief's query URL on 2026-09-24, one day after the as-of date. It returned 3,175 features, the same count as the snapshot. I did not download the snapshot or check its SHA-256. Census status: the inventory has no prior-lane-use attribute. Its fields include classification, construction_year, planning_status and planning_change, but nothing records what the space was used for before. In the live layer, planning_change is null for 2,877 features, 'Decommissioned' for 156 and 'Upgraded' for 142. So R cannot come from the inventory. It needs a corridor-by-corridor document search, and I could not finish one. The City's edmonton.ca project pages returned HTTP 502 on every attempt on 2026-09-24. R is far below T, so the census is incomplete. Verified qualifying corridors (C = 4 at most; 2 rest on City-derived documents, 2 mainly on media or City-derived notices): (1) 102 Ave, 121 St–112 St, Oliver/Wîhkwêntôwin. Two-way became one-way eastbound with a two-way cycle track. Built 2016–2017. Central district. (2) 132 Ave, 127 St–Fort Rd collector renewal. Four lanes became two, with separated bike lanes in both directions. Built in phases from June 2023 to 2027. In northwest/north Edmonton; I did not verify the district against the boundaries. It is likely Northwest and/or North Central (formerly 118 Avenue). (3) 100 St, 76 Ave–83 Ave. Converted to one-way northbound, with a two-way protected lane from 83 Ave to 80 Ave. Built 2025. Scona district. (4) 96 St, Delton. Converted to one-way with an ~830 m protected lane. Inventory construction years 2024–2025. District not verified; likely North Central. Verified A: 2 districts confirmed (Central, Scona). At most 4 if 132 Ave and 96 St fall in two further, distinct districts. Under the primary threshold (A ≥ 8) and the alternative (A ≥ 5), R < T and verified A < threshold, so the brief assigns Not established. Alternative counting unit (individual inventory features): A does not depend on the unit, so the classification does not change. At feature level, 132 AVENUE NW has 96 bike-lane features, 102 AVENUE NW 27, 100 STREET NW 13 and 96 STREET NW 45. Not all of them sit on the verified segments; for example, 102 Ave features run east of 111 St and 96 St has contra-flow features from 2019–2020. The feature-level C would need geometry filtering, which I did not do. Named examples: 102 Ave 121 St–111 St — the change occurred as described (two-way to one-way plus bike lane). 102 Ave east of 109 St — I found no City or media record of through lanes removed for the bike lane; this part is unverified. 132 Ave — four lanes reduced to two, with bike lanes in both directions, described as a collector renewal and traffic-calming measure. Historical note: 95 Ave (142–189 St) and 40 Ave (106–119 St) lanes built in 2013 reportedly cut traffic lanes and parking, but council voted in July 2015 to remove them. They are not in the built-as-of-2026-09-23 set."
+        },
+        {
+          "provider": "gpt-luna",
+          "model_self_reported": "GPT-6",
+          "verdict": "Not established",
+          "confidence": "Moderate",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "I applied the brief's primary threshold of 8 areas and treated a corridor as qualifying only where City records establish prior through-lane use and a bike lane installed in that space. The 102 Avenue project record supports a lane conversion on the named segment, but I could not verify its district-plan area or the broader corridor census."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "GPT-6",
+          "verdict": "Not established",
+          "confidence": "Moderate",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "I applied the brief's on-street, built-corridor definition. I verified at least three qualifying corridors in two areas: 102 Avenue, 121–111 Street (Central; built 2017; former westbound through lane); 83 Avenue, 105–104 Street (Scona; scheduled for 2017 construction and subsequently shown as an existing bike route; former westbound through lane); and 110 Street, 76–82 Avenue (Scona; Garneau renewal completed 2023; former southbound through lane). Thus C is at least 3 and verified A is 2. I could not establish T or R for a census, so the 8-area threshold is Not established. The alternative 5-area threshold is also Not established. Counting individual inventory features instead of project corridors does not add a verified district; with prior use unverified for other features, its classification remains Not established, although I could not calculate feature-level totals. These are reviewer minimums, not a complete count."
+        }
+      ],
+      "round2_positions": [
+        {
+          "provider": "claude",
+          "model_self_reported": "Claude Opus 5.5",
+          "verdict": "Not established",
+          "confidence": "Moderate",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "My verdict is unchanged from round 1: Not established. The other reviewers' evidence raises verified C, but it does not move verified A anywhere near either threshold. Counting unit: I counted from the live layer 236, not the snapshot. The snapshot at raw.githubusercontent.com was readable only in truncated form (88 features visible, 25 attribute fields, no prior-lane-use field). The live layer's planning_change statistics (null 2,877 + Decommissioned 156 + Upgraded 142) sum to 3,175 features, which matches the brief's snapshot count. Verified qualifying corridors, each with a City record of prior through-lane use and corroboration that it was built: (1) 102 Avenue, 121 to 111 Street, Oliver, Central. Built 2017; the former westbound through lane was removed. Sources are the City fact sheets of April 2015 and 2017, the City's November 2017 West Central Bike Routes map, and inventory features dated 2016–2017. (2) 83 Avenue, 105 to 104 Street, Strathcona, Scona. Built 2017; the former westbound movement on a two-way block was removed. Sources are the City plan of April 2015 and inventory features dated 2017 marked Constructed. (3) 110 Street, 76 to 82 Avenue, Garneau, Scona. Built 2021–2022 per the inventory; the former southbound lane is per the Garneau Final Design as cited by gpt. I could not read that design (HTTP 502), so this corridor is provisional. Verified C is at least 3 (at least 2 if 110 Street is excluded), and verified A = 2 (Central, Scona). Leads not counted because I have no City record of prior use in hand: 100 Street, 83 to 80 Avenue, Scona (built 2025 per the inventory; one-way conversion per a community-league restatement of a City notice); 132 Avenue, 113A to 97 Street and 107 to 121 Street (four lanes to two with separated bike lanes, built 2023–2025; prior use per a City official quoted by the Globe and Mail and CBC; the City's September 2022 What We Decided report exists but I did not read it); 96 Street, 119 to 124 Avenue, Delton (one-way conversion with a contraflow lane that reportedly replaces parking). Even if all three leads qualified and fell in three new areas, A would be at most 5. That would reach the alternative threshold only on the most generous reading and stays below the primary threshold of 8. T was not established, and R is less than T, because the counting instrument has no prior-use field. The primary threshold (A of at least 8) and the alternative (A of at least 5) are therefore both Not established. With individual inventory features as the counting unit, the same streets carry more features but no new area, so the classification is unchanged. Named examples: 102 Avenue, 121 to 111 Street: yes, two-way to one-way eastbound with a two-way protected lane, built 2017. The City's contemporaneous reason, as the other reviewers read the 2017 fact sheet, was to fit the protected bike lane while keeping south-side parking. 102 Avenue east of 109 Street: unresolved. The City attributes the permanent 107 to 102 Street reduction to Valley Line LRT accommodation, and the bike lanes were temporarily moved to 103 Avenue in November 2025; the 2016–2017 downtown build was not checked against a City drawing. 132 Avenue: the cross-section went from four lanes to two with separated bike lanes on built sections. The reason given was traffic calming on an overbuilt collector, as part of road renewal (qualification 1). It is not counted because I have not read a City drawing. Framing note (not a material concern for the verdict): the layer has no prior-use field, so R will almost always be less than T. That makes Partially supported and Contradicted practically unreachable. Readers should know the Not established result reflects record incompleteness, not evidence that removals are rare. The brief's parking-lane exclusion is also ambiguous for local-street one-way conversions where the bike lane sits in the former parking space. This affects 96 Street. This verdict says nothing about congestion."
+        },
+        {
+          "provider": "gpt-luna",
+          "model_self_reported": "GPT-6",
+          "verdict": "Not established",
+          "confidence": "Moderate",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "The verdict is Not established because the built-corridor census and prior-use census are incomplete, and the verified geographic spread is below the threshold. The brief states that the 2026-09-23 snapshot contains 3,175 features, but I did not independently retrieve or verify that file or its hash. The GIS layer's feature count is not T: the brief defines T using project corridors, and the layer does not establish prior lane use. GPT identifies at least three plausible qualifying segments in Central and Scona: 102 Avenue, 121–111 Street; 83 Avenue, 105–104 Street; and 110 Street, 76–82 Avenue. The City's 102 Avenue fact sheet documents the planned removal of the westbound travel lane, and the 2017 route map is reported to show the resulting one-way configuration. The Garneau design explicitly documents the 110 Street lane removal, but as-built confirmation is needed. I do not count Claude's proposed 100 Street, 96 Street, or 132 Avenue corridors as established qualifying conversions on the cited evidence: the first two rely on non-City or prospective evidence, and the 132 Avenue evidence does not establish completed on-street bike-lane conversion. Even accepting three verified corridors in two areas, that does not meet either the 8-area primary threshold or 5-area alternative. The census is incomplete, so the brief's row assigns Not established. Individual inventory features do not remedy the missing census or establish prior use."
+        },
+        {
+          "provider": "gpt",
+          "model_self_reported": "GPT-6",
+          "verdict": "Not established",
+          "confidence": "Moderate",
+          "evidence_basis": "direct-edmonton",
+          "interpretation_notes": "My round-1 verdict remains Not established. City records verify conversions in Central, Scona and North Central: a verified minimum A of 3. That is below both the primary threshold of 8 and alternative threshold of 5. I can identify at least five qualifying corridors or converted corridor segments, but I cannot calculate the built-corridor total T or complete the prior-use census R from the accessible inventory and project records. The same three district areas are represented when the verified segments are considered as individual inventory features; I cannot give a defensible feature-level C without filtering their geometry. The classification remains Not established in that unit and under the alternative threshold. A corridor's lane removal says nothing about whether congestion rose or fell. I do not count 132 Avenue from its draft design or projected construction, or 102 Avenue east of 109 Street from the LRT-related lane reduction."
+        }
+      ],
+      "disagreement_notes": []
+    }
+  ]
+}
