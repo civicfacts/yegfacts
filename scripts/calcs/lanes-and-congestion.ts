@@ -96,8 +96,8 @@ export const street110 = {
 /**
  * YF-EV-0167 — the City's district plans. The fifteen districts the page lists,
  * fourteen with a plan in effect and Rabbit Hill with its plan in draft, and
- * the two neighbourhood assignments the page relies on (Oliver in Central,
- * Garneau in Scona).
+ * the neighbourhood assignments the page relies on (Oliver in Central, Garneau
+ * and Strathcona in Scona, Delton in North Central).
  */
 export const districts = [
   'Central',
@@ -118,16 +118,22 @@ export const districts = [
 ] as const;
 
 /**
- * The corridors the page reports as verified: each has a City record of the
- * driving lane that went (YF-EV-0163, YF-EV-0165) and a City record that the
- * bike lane was built (YF-EV-0164, YF-EV-0166). `round1Seats` is which seats
- * counted it in round 1, the canonical basis.
+ * The corridors the page reports as verified: each has a City record that a
+ * driving lane or direction of traffic gave way to make room for the bike lane
+ * (YF-EV-0163, YF-EV-0165, YF-EV-0170) and a City record that the bike lane was
+ * built (YF-EV-0164, YF-EV-0166, YF-EV-0170). `round1Seats` is which seats
+ * counted it as verified in round 1, the canonical basis; the page's own check
+ * of the City record, not a seat's count, is what puts a corridor here.
  *
- * Left out, because the page could not rest them on a City record in hand:
- * 83 Avenue at 104 to 105 Street (GPT-6 Sol only; the April 2015 City plan it
- * cited now returns page-not-found), and the 100 Street, 96 Street and 132
- * Avenue leads counted by the Claude seat alone from community-league and news
- * reports.
+ * `record` says what kind of City record shows the lane went. For 110 Street
+ * it is the final design, with the inventory showing the protected lane built;
+ * no as-built drawing is in hand.
+ *
+ * Left out: 83 Avenue at 104 to 105 Street (GPT-6 Sol only; the April 2015 City
+ * plan it cited returned page-not-found on 2026-09-24 and the 2017 project
+ * sheet does not describe the lane change), and 132 Avenue, whose City records
+ * describe fewer driving lanes and new bike facilities without saying which
+ * former driving-lane space the bike facilities took.
  */
 export const verifiedCorridors = [
   {
@@ -136,6 +142,7 @@ export const verifiedCorridors = [
     neighbourhood: 'Oliver',
     district: 'Central',
     laneRemoved: 'westbound travel lane',
+    record: 'plan and post-construction guide',
     built: 2017,
     round1Seats: ['Claude Opus 5.5', 'GPT-6 Sol', 'GPT-6 Luna'],
   },
@@ -145,8 +152,29 @@ export const verifiedCorridors = [
     neighbourhood: 'Garneau',
     district: 'Scona',
     laneRemoved: 'southbound travel lane',
+    record: 'final design, with the protected lane built per the inventory',
     built: 2022,
     round1Seats: ['GPT-6 Sol'],
+  },
+  {
+    street: '100 Street',
+    segment: '80 Avenue to 83 Avenue',
+    neighbourhood: 'Strathcona, Ritchie',
+    district: 'Scona',
+    laneRemoved: 'southbound traffic, street made one-way northbound',
+    record: 'route table',
+    built: 2025,
+    round1Seats: ['Claude Opus 5.5'],
+  },
+  {
+    street: '96 Street',
+    segment: '119 Avenue to 124 Avenue',
+    neighbourhood: 'Delton, Alberta Avenue',
+    district: 'North Central',
+    laneRemoved: 'northbound traffic, street made one-way southbound',
+    record: 'route table',
+    built: 2025,
+    round1Seats: [],
   },
 ] as const;
 

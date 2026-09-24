@@ -11,7 +11,10 @@ import { loadYaml, repoPath } from '../scripts/lib/repo.ts';
 type Claim = { key_facts: { text: string; sources: string[] }[] };
 
 const claim = loadYaml<Claim>(repoPath('src', 'content', 'claims', 'lc-lanes-taken-citywide.yaml'));
-const story = readFileSync(repoPath('src', 'content', 'stories', 'lanes-and-congestion.mdx'), 'utf8');
+const story = readFileSync(
+  repoPath('src', 'content', 'stories', 'lanes-and-congestion.mdx'),
+  'utf8',
+).replace(/\s+/g, ' ');
 const facts = (source: string) =>
   claim.key_facts
     .filter((fact) => fact.sources.includes(source))
@@ -32,11 +35,12 @@ describe('lanes-and-congestion figures', () => {
     expect(facts('YF-EV-0166')).toContain('built in 2022');
   });
 
-  it('two verified districts out of fifteen, below both thresholds', () => {
-    expect(figures.verifiedDistricts).toEqual(['Central', 'Scona']);
+  it('three documented districts out of fifteen, below both thresholds', () => {
+    expect(figures.verifiedDistricts).toEqual(['Central', 'Scona', 'North Central']);
     expect(figures.districtCount).toBe(15);
     expect(figures.verifiedDistricts.length).toBeLessThan(figures.districtThresholds.alternative);
-    expect(facts('YF-EV-0167')).toContain('2 of the City');
+    expect(facts('YF-EV-0167')).toContain('3 of the City');
+    expect(story).toContain('3 of its 15 districts');
     expect(facts('YF-EV-0167')).toContain('15 districts');
   });
 
@@ -48,7 +52,7 @@ describe('lanes-and-congestion figures', () => {
       cityRemovedTrafficLanes: 4,
       lanesRemovedForTrafficCalming: 1,
     });
-    for (const word of ['Twenty-four people', 'Thirteen said', 'Six said', 'Four answered', 'One said']) {
+    for (const word of ['Twenty-four people', 'Thirteen said', 'Six said', 'Four said', 'One said']) {
       expect(story).toContain(word);
     }
   });
