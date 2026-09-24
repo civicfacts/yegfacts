@@ -29,7 +29,7 @@ export const FINDING_GLOSS: Record<CanonicalFinding, string> = {
  */
 export const SPLIT_PARTIAL_TERM = 'Partially supported (split panel)';
 export const SPLIT_PARTIAL_GLOSS =
-  'The reviewers split, and the published rule resolves a split cautiously to this finding. It does not mean part of the claim was found to overreach.';
+  'The reviewers split, and the published rule resolves a split cautiously to this finding.';
 
 /**
  * The glossary key whose definition glosses a claim's finding badge: the
