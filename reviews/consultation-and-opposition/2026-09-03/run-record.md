@@ -727,3 +727,105 @@ completed with targeted community members or property owner engagement."
 That attribution is now verified against a pre-cutoff copy. The
 route-to-neighbourhood mapping in the table was not checked here; it is
 for the panel.
+
+## 2026-09-25: check 3 applied under v1.35; the last claim parked; PARKS CONFIRMED
+
+**What was decided.** Stew concedes every standing finding of check 3 and
+disputes none, so the brief takes the methodology v1.35 route rather than
+waiting under the v1.12 cap. v1.35 lets an editor who concedes every
+standing finding apply the third report in the checker's wording, park the
+claims it found uncheckable, and send the brief once to the same seat for
+a park confirmation.
+
+**What was applied.** All eight standing findings, in the checker's
+wording. `framing/wording-edits.md` maps each finding to the lines it
+changed and lists the edits that follow from the park. In short:
+
+1. The consultation counts now read "Four accounts made five consultation
+   comments. One account asserted the general no-consultation
+   proposition; three other accounts made four narrower or different
+   complaints." at all five places the brief stated them.
+2. The checker's proposition replaces the old one, in the claim and in
+   the Story's one-line statement of it. "Pushed ahead" appeared only in
+   the old proposition.
+3. New title: "Did the City ask residents about the routes singled out
+   for review?"
+4. The twenty-seven-route ladder is inserted after the fourteen-route
+   ladder.
+5. The as-of instruction is replaced with the checker's rule on retrieval
+   dates, archived versions and internal document dates.
+6. The sentence predicting that the two cutoffs differ little is replaced,
+   and so is "no route count".
+7. Stakes: the reachability sentence is replaced by the checker's
+   disposition, which parks `ca-route-level-engagement`.
+8. Who asks this: the checker's three sentences replace the final
+   sentence of the resident-question paragraph.
+
+The status block, the Story, the register summary and the claim heading
+were changed only to say the claim is parked and nothing goes to a panel.
+No source was added and no threshold, cutoff or definition changed beyond
+the findings. The brief's other claim, the opposition half, was parked
+before check 1, so no claim remains to go to a panel. The claim's framing
+stays in the brief, with the edits applied, as the test it would reopen
+with.
+
+**Hashes.** Brief as check 3 read it:
+`50eb0a013791f1543099debf98332c395eddd30cd16f6405c2d26a61f51e4ba3`. As
+sent to the park confirmation:
+`4758fb0a4e3aee52d6159bdb5f578c42f1b500a71ebc3414fd6ead503af26623`. After
+the status block was updated for the result:
+`346a98af11c9a9af1500fbdd6bd43491c33e0f9d485baed8249fe65972b30ed0`.
+Nothing but the status block changed after check 4 returned.
+
+**Check 4, the park confirmation.** The same seat and pinned model as
+check 3: OpenAI gpt-6-sol at high, `codex --search exec`, read-only,
+codex-cli 0.156.1, prompt on stdin, from an empty scratch directory with no
+repository access. The package was built the way the lanes-and-congestion
+confirmation was: the framing prompt, a note naming the round, the intake
+record, the brief as sent, the diff from the brief check 3 read, the
+finding-to-edit table in place of an author response, check 3, the earlier
+reports and response, the two audit reports check 3 had, the verdict
+vocabulary and the review schema, with no local paths. The note said
+plainly that no claim remains, so checks 8 and 9 apply to nothing, and
+asked the checker not to construct a claim to apply them to. Package
+sha256 `c71fd588415b5bf964c7ae136225005515a025a64eb0726253e706146c59b543`.
+Report verbatim in `framing/check-4.md`.
+
+Result: **PARKS CONFIRMED.** The checker confirmed the park on the
+no-instrument ground with its own reopening condition, found every other
+edit traces to check 3, and said checks 8 and 9 have no remaining claim
+to apply to.
+
+**Register changes** (`intake/register.yaml`).
+
+- `ca-route-level-engagement`: `triage: park`, `ground: no-instrument`,
+  `parked_at: framing`, and a public reason that gives the checker's why
+  and its reopening condition. Its proposition now ends "before
+  construction began or, for an unbuilt route, by September 3, 2026", as
+  finding 2 asked, in place of "before the route was built".
+- `consultation-and-opposition`: triage moves from `go` to `park`, since
+  every claim under it is parked. Lifecycle stays `briefed`: the brief was
+  written and checked, and no panel ran. Its reason, grouping note and
+  note no longer say the review is paused for source verification or
+  that the brief was frozen on 2026-09-04.
+- `fast-tracked-without-consultation`: its reason said the consultation
+  assertion "is checked as" the claim above; it now says it is parked
+  there.
+
+**Site change.** Before this, a claim parked at framing showed its reason
+only on a written-up question's page, and a claim page hid the claim's own
+park when the question was parked too. This is the first question with no
+write-up whose claim is parked at framing, so the question page now lists
+such claims under "What the record cannot answer", with the reason and
+what would reopen it, and the claim page shows the claim's own reason.
+
+**Also corrected, outside the framing edits.** `intake.md`'s account of
+Attachment 5 said both headings appear in all three versions, that the
+versions "differ only in how they describe the decision rule", and tied
+the lists to DocumentIds. It now says what the archived-source audit
+verified, with a dated correction note. The intake record went to check 4
+as check 3 read it, before this correction.
+
+**Next.** Nothing runs on this question. It reopens if the City publishes
+a route-by-route engagement account for the fourteen routes, or a
+probability-sample survey for the opposition half.

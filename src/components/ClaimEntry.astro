@@ -70,10 +70,11 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
  * the third framing report found the record cannot answer it as asserted, and
  * the page says so rather than claiming a panel run that did not happen. Either
  * way two decisions differ here, so the page prints both rather than the
- * question's alone.
+ * question's alone. A claim's own park is printed even when its question is
+ * parked too, because the claim's reason and reopening condition are its own.
  */
 const declinedApart = claim.triage === 'no' && question.triage !== 'no';
-const parkedApart = claim.triage === 'park' && question.triage !== 'park';
+const parkedApart = claim.triage === 'park';
 const ruledApart = declinedApart || parkedApart;
 /**
  * Two triage readers turned this claim down before v1.16 moved triage to the

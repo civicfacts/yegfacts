@@ -5,12 +5,14 @@ import {
   PUBLICATION_LABELS,
   claimText,
   commentsOn,
+  parkedAtFraming,
   provenance,
   saidIn,
   reportAnchor,
   sourceKind,
   triageHeading,
 } from '../lib/intake';
+import ParkedClaims from './ParkedClaims.astro';
 import type { QuestionRow } from '../lib/questions';
 import { repoFile } from '../lib/site';
 
@@ -203,6 +205,8 @@ const states = [
       <a href="/questions#states" class="link">What the states mean</a>
     </p>
   </section>
+
+  <ParkedClaims parked={claims.filter(parkedAtFraming)} class="mt-14" />
 
   {
     source && (
