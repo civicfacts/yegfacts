@@ -1,5 +1,5 @@
 ---
-import { sourceRegister, variationsFrom } from '../lib/intake';
+import { sourceRegister, wordingsForClaim, type WordingNote } from '../lib/intake';
 
 /**
  * "Also said as" — the captured wordings of a claim, on the page that checked it.
@@ -19,9 +19,11 @@ import { sourceRegister, variationsFrom } from '../lib/intake';
 interface Props {
   /** The register claim ids this published claim was grouped from. */
   registerClaims: readonly string[];
+  /** The claim's `wording_notes`: wordings to leave out or to label. */
+  notes?: readonly WordingNote[];
 }
 
-const { registerClaims } = Astro.props;
+const { registerClaims, notes = [] } = Astro.props;
 
 const sources = new Map(sourceRegister().map((source) => [source.id, source]));
 
@@ -30,9 +32,10 @@ const sources = new Map(sourceRegister().map((source) => [source.id, source]));
  * named-individual claims, so a withheld claim arrives here with no variations
  * and contributes nothing.
  */
-const said = variationsFrom(registerClaims).map(({ claim, variation }) => ({
+const said = wordingsForClaim(registerClaims, notes).map(({ claim, variation, note }) => ({
   variation,
   claim,
+  note,
   source: sources.get(variation.source_id),
 }));
 
@@ -56,7 +59,7 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
         source.
       </p>
       <ul class="space-y-3.5 pb-1">
-        {said.map(({ variation, claim, source }) => (
+        {said.map(({ variation, claim, note, source }) => (
           <li>
             <blockquote
               class="max-w-prose border-l-2 border-rule pl-3.5 text-[0.9375rem] leading-relaxed"
@@ -79,6 +82,7 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
                 </>
               )}
             </p>
+            {note && <p class="mt-1 max-w-prose pl-3.5 text-sm text-muted italic">{note}</p>}
           </li>
         ))}
       </ul>

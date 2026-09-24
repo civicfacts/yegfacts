@@ -1,0 +1,86 @@
+id: infra-roads-condition
+question: Were Edmonton's roads in poor condition in the City's latest published ratings?
+story: infrastructure-deficit
+finding: Partially supported
+answer: >-
+  Partly. The City's latest ratings put about a ninth of Edmonton's roads in poor or very
+  poor condition at the end of 2024, counting them by what they would cost to replace.
+evidence_basis: Direct Edmonton evidence
+panel_agreement: Unanimous
+methodology_version: "1.39"
+review_run: reviews/infrastructure-deficit/2026-09-03
+plain_speech_read: reviews/infrastructure-deficit/2026-09-03/plain-speech/gpt-1.md
+evidence: [YF-EV-0200, YF-EV-0202, YF-EV-0205, YF-EV-0206]
+key_facts:
+  - text: "The City's 2025 Infrastructure State and Condition Report is the latest condition rating it had published by 2026-09-03. It says its data was collected as of December 31, 2024, so it describes the roads on that date and not in the summer of 2026."
+    sources: [YF-EV-0200]
+  - text: "Appendix B of the report puts the City's Roads class at a replacement value of $10,484,313,206 on December 31, 2024. By that value, 70.8 per cent was rated good (A or B), 16.2 per cent fair (C), 11.2 per cent poor or very poor (D or F) and 1.7 per cent not rated."
+    sources: [YF-EV-0200]
+  - text: "On December 31, 2024, the City's Roads class held three things: paved roads, 12.5 per cent poor or very poor; unpaved roads, none of which were rated; and curbs, 7.0 per cent poor or very poor. The three add up to the class's replacement value, and weighting their shares by that value gives back the class's 11.2 per cent, a check made here."
+    sources: [YF-EV-0200]
+  - text: "The City grades on five steps, A very good to F very poor, on physical condition. A D asset has a major portion that is physically deficient. An F asset is physically unsound or not performing as intended, with a higher probability of failure, and needs replacement or major refurbishment."
+    sources: [YF-EV-0200]
+  - text: "Beside each 2025 row, the appendix prints the 2023 report's figure. The Roads row there is 11.4 per cent poor or very poor, with no curbs row. The report says its own methodology differs from previous years, so the two are not a like-for-like trend."
+    sources: [YF-EV-0200]
+  - text: "The report's service view groups a wider set, Roads Service Assets, at $15,697,712,522, with 11.6 per cent poor or very poor on December 31, 2024. That grouping landed in the same band as the Roads class."
+    sources: [YF-EV-0200]
+  - text: "The report went to the City's Infrastructure Committee on 2026-02-23, where Administration presented it. It had been on the Executive Committee's agenda for 2026-01-21 and was deleted from that agenda."
+    sources: [YF-EV-0205, YF-EV-0206]
+  - text: "The 2019-2022 capital budget said the City had 1,180 kilometres of alleys and that two-thirds of them were in poor condition. The same budget describes an Alley Renewal Strategy, introduced in 2017, to eliminate alleys rated to be in very poor condition."
+    sources: [YF-EV-0202]
+  - text: "The 2019-2022 capital budget measures arterial roads against a Council target, which is that under 10 per cent of them should be rated D or F. It applies to arterial roads alone."
+    sources: [YF-EV-0202]
+aliases:
+  - edmonton-roads-poor-condition
+  - are-edmonton-roads-a-mess
+register_claims: [basic-services-in-poor-condition]
+wording_notes:
+  - author_name: "Councillor Jennifer Rice"
+    omit: true
+    note: "Relays what residents told the councillor their priorities were, including roads and snow clearing, rather than saying the roads are in poor condition, so it is not listed as a wording of this claim. It stays under its register claim."
+  - author_name: "Mossy Chickadee B."
+    note: "About grass cutting and snow clearing, which this finding does not check."
+  - author_name: "Chilly Muskrat T."
+    note: "About snow clearing, which this finding does not check."
+  - author_name: "Chilly Nuthatch V."
+    note: "Its potholes are about the roads. Its snow removal is not checked by this finding."
+limitations:
+  - "The rating describes the network on December 31, 2024. Nothing in it can say what the roads were like in August 2026, when the claims were made, or whether they have got better or worse since."
+  - "This is a citywide figure. It cannot say whether any particular street or alley is in poor condition."
+  - "The lines for this finding were fixed in the brief before any figure was seen: a quarter or more of the class rated poor or very poor would have supported the claim that the roads are in poor condition, and under a tenth would have contradicted it. Neither line comes from an existing standard. The brief's alternative lines, 20 and 7.5 per cent, give the same result. The figure sits 1.2 points above the lower line."
+  - "The share is by replacement value, which is how the City publishes it. The report gives no share by length or lane-kilometre for the Roads class, so the brief's alternative measure could not be computed."
+  - "The City prints the grades in bands, A and B together and D and F together, so the separate shares of each grade are not published. Leaving the 1.7 per cent that is not rated out of the count gives 11.4 per cent, in the same band."
+  - "The class includes curbs, which a reader might not count as road. The finding uses the class as the City publishes it and does not remove them. Paved roads on their own, at 12.5 per cent at the end of 2024, sat in the same band."
+  - "The reviewers gave two different dates for when the report went to a council committee, 2026-01-21 and 2026-02-23. The council minutes settle it: the item was deleted from the January agenda and dealt with in February. The copy archived for this page is the one published on the City's website."
+  - "Nobody on the panel found a current City target for the share of the whole Roads class in poor condition. The arterial target in the 2019 to 2022 budget was not shown to be in force in 2026, and it covers fewer roads than the class does."
+  - "No reviewer found a current citywide distribution of alley condition, and the 2025 report does not use the word alley. The City's 2019-2022 budget put two-thirds of its alleys in poor condition, but that estimate carries no grades and no date of assessment, and cannot describe alleys in 2026. Alleys therefore have no finding here."
+unknowns:
+  - "The condition of Edmonton's roads at any date after December 31, 2024."
+  - "What share of the Roads class was newly inspected in the latest cycle, rather than carried forward from earlier ratings."
+missing_evidence:
+  - "A published condition distribution for alleys, with its measure and the date it describes (City of Edmonton, Parks and Roads Services; high)."
+  - "The Roads class condition distribution by length, and the share newly assessed in the latest cycle (City of Edmonton, Infrastructure Planning and Design; moderate)."
+review:
+  agreement: Unanimous
+  reviewers:
+    - model: Claude Opus 5.5
+      verdict: Partially supported
+      confidence: Low
+      key_findings:
+        - "Found 11.2 per cent of the Roads class in D or F at the end of 2024, in the partial band under both sets of lines, with paved roads at 12.5 per cent and curbs at 7 per cent."
+        - "Could not open the City's report, so the figure in its first answer rested on a third party's transcription, and it said so."
+      changed_between_rounds: "Kept its finding and raised its confidence to Moderate once two other reviewers had read the City's attachment. Dropped the third-party transcriptions it had cited, which post-date the brief's cutoff."
+    - model: GPT-6 Sol
+      verdict: Partially supported
+      confidence: High
+      key_findings:
+        - "Read Appendix B of the City's report: 11.2 per cent of the Roads class poor or very poor by replacement value, with data as of December 31, 2024."
+        - "Found an older Council target of under 10 per cent of arterial roads in D or F, which cannot classify the whole Roads class."
+      changed_between_rounds: "No change."
+    - model: GPT-6 Luna
+      verdict: Partially supported
+      confidence: Moderate
+      key_findings:
+        - "Used the City's Roads class total as published, including paved roads, unpaved roads and curbs, at 11.2 per cent poor or very poor at the end of 2024."
+        - "Found no share by length for the class, so the alternative measure could not be classified."
+      changed_between_rounds: "Same finding, with confidence up to High."

@@ -786,3 +786,27 @@ export function variationsFrom(
     .filter((claim) => wanted.has(claim.id))
     .flatMap((claim) => (claim.variations ?? []).map((variation) => ({ claim, variation })));
 }
+
+/** A published claim's note on one captured wording (`wording_notes`). */
+export interface WordingNote {
+  author_name: string;
+  omit: boolean;
+  note: string;
+}
+
+/**
+ * The captured wordings a published claim shows under "Also said as": every
+ * variation of its register claims, less the ones its `wording_notes` omit,
+ * each carrying the note the claim gives it, if any. Wordings with a note sort
+ * after the rest, so the list opens on words that assert the claim checked.
+ */
+export function wordingsForClaim(
+  claimIds: readonly string[],
+  notes: readonly WordingNote[] = [],
+): Array<{ claim: Claim; variation: Variation; note?: string }> {
+  const byAuthor = new Map(notes.map((n) => [n.author_name, n]));
+  return variationsFrom(claimIds)
+    .filter(({ variation }) => !byAuthor.get(variation.author_name)?.omit)
+    .map((row) => ({ ...row, note: byAuthor.get(row.variation.author_name)?.note }))
+    .sort((a, b) => Number(a.note !== undefined) - Number(b.note !== undefined));
+}

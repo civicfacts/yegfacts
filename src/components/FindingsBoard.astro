@@ -95,7 +95,13 @@ const { groups, showQuestion = true } = Astro.props;
                 a phone there is no second column, so the separator that divides
                 them comes back into view.
               */}
-              <small class="mt-2.5 block text-[0.9375rem] leading-normal font-medium text-ink tabular sm:col-span-2 sm:row-start-3 sm:mt-3.5 sm:flex sm:flex-wrap sm:items-baseline">
+              {/*
+                Row chrome: every claim of a question repeats its question's title
+                and verified date, so a multi-claim question with a long title
+                repeats the same run on one page by design. The question page is
+                indexed on its own, so search and the duplication audit skip it.
+              */}
+              <small data-pagefind-ignore class="mt-2.5 block text-[0.9375rem] leading-normal font-medium text-ink tabular sm:col-span-2 sm:row-start-3 sm:mt-3.5 sm:flex sm:flex-wrap sm:items-baseline">
                 <span class="min-w-0 sm:flex-auto">
                   {showQuestion && (
                     <a href={`/questions/${story.id}`} class="link">

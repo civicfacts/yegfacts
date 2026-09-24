@@ -361,3 +361,25 @@ OpenAI seats are not independent of each other.
 
 Drafting, the faithfulness and plain-speech reads and the publication gate
 follow.
+
+## 2026-09-24: the GPT-6 Luna rows restored to the manifests
+
+The run manifests (`run.yaml`, the record of which seat ran what) lost every
+GPT-6 Luna row in this run. The recorder kept one row per vendor per round,
+so whichever OpenAI seat finished second overwrote the other. Luna finished
+first each time, so only the GPT-6 Sol row survived. The review files and
+the synthesis were never affected: each seat's answers sit in their own
+`round1/`/`round2/` file, and the synthesis reads those files. The recorder
+now keys rows by seat. The lost rows were rebuilt on 2026-09-24 from the
+retained attempts, after checking that each attempt's final message
+reproduces the published review file byte for byte and, in round 1, that its
+package hash equals the Sol and Claude rows':
+
+| Manifest | Round | Attempt id | Package sha256 |
+|---|---|---|---|
+| `superseded-2026-09-24/run.yaml` | 1 | `68b96f2800e87f7d` | `b7459ebd14b473b2b8c0d1e18349400793b9dc62389e6f24e4b264771c70b34c` |
+| `run.yaml` | 1 | `18a66a99b3abaebd` | `3e6bfadd62249aecfd12ed5608b39113df0b2c7de04535e41f16c9281441e9b7` |
+| `run.yaml` | 2 | `618f9e3efc20f03a` | `4e3acaa58d22df68f4ae18ff394c6a07a9ba6849d3c374620d4e5e83e5469f05` |
+
+Each restored row's `finished_at` is the launcher's recorded finish time. The
+runner's own stamp, up to a second later, was never kept.

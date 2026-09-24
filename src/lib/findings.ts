@@ -19,6 +19,28 @@ export const FINDING_GLOSS: Record<CanonicalFinding, string> = {
 };
 
 /**
+ * The glossary key for a Partially supported that the synthesis rule produced
+ * from a Split panel, and its fixed sentence.
+ *
+ * The matrix resolves a split downwards, so a Partially supported can come from
+ * a panel that disagreed rather than from a claim that part-held. The general
+ * gloss ("as stated it overreaches") would then tell a reader something no
+ * reviewer found. The wording is fixed and generic, like the others.
+ */
+export const SPLIT_PARTIAL_TERM = 'Partially supported (split panel)';
+export const SPLIT_PARTIAL_GLOSS =
+  'The reviewers split, and the published rule resolves a split cautiously to this finding.';
+
+/**
+ * The glossary key whose definition glosses a claim's finding badge: the
+ * finding word itself, except for a Partially supported reached from a Split
+ * panel, which takes SPLIT_PARTIAL_TERM.
+ */
+export function findingGlossTerm(finding: string, panelAgreement: string): string {
+  return finding === 'Partially supported' && panelAgreement === 'Split' ? SPLIT_PARTIAL_TERM : finding;
+}
+
+/**
  * One fixed sentence per panel-agreement value (methodology v1.3).
  *
  * Every one of them says the same thing in three ways: this dimension measures

@@ -1049,6 +1049,20 @@ function checkRegisterClaims(registered: Record_[], questions: Record_[]): void 
     for (const id of stringArray(data.register_claims)) {
       if (!ids.has(id)) fail(claimFile, `register_claims: "${id}" is not a claim in the register`);
     }
+    // A wording note names a pseudonym that really wrote a wording of one of
+    // this claim's register claims, or it notes nothing.
+    const wanted = new Set(stringArray(data.register_claims));
+    const authors = new Set(
+      registered
+        .filter((claim) => wanted.has(String(claim.id)))
+        .flatMap((claim) => (Array.isArray(claim.variations) ? (claim.variations as Record_[]) : []))
+        .map((variation) => String(variation.author_name)),
+    );
+    for (const note of Array.isArray(data.wording_notes) ? (data.wording_notes as Record_[]) : []) {
+      if (!authors.has(String(note.author_name))) {
+        fail(claimFile, `wording_notes: "${String(note.author_name)}" wrote no wording of this claim's register claims`);
+      }
+    }
   }
 
   for (const row of [...questions, ...registered]) {
