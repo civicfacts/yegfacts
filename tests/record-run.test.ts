@@ -109,6 +109,31 @@ describe('record-run', () => {
     expect(runs.find((run) => run.provider === 'anthropic')?.status).toBe('blocked');
   });
 
+  it('keeps one row per seat when one provider holds two seats in a round', () => {
+    const manifest = path.join(workdir, 'two-openai-seats.yaml');
+    const sol = { provider: 'openai', seat: 'GPT-6 Sol', model: 'gpt-6-sol' };
+    const luna = { provider: 'openai', seat: 'GPT-6 Luna', model: 'gpt-6-luna' };
+    record(manifest, { ...luna, 'finished-at': '2026-09-01T06:50:00Z' });
+    record(manifest, { ...sol, 'finished-at': '2026-09-01T06:55:00Z' });
+    record(manifest, {});
+
+    let runs = read(manifest).runs;
+    expect(runs.map((run) => [run.round, run.provider, run.seat])).toEqual([
+      [1, 'anthropic', 'Claude Fable 5.1'],
+      [1, 'openai', 'GPT-6 Luna'],
+      [1, 'openai', 'GPT-6 Sol'],
+    ]);
+
+    // Re-recording a seat replaces its own row and leaves its sibling alone.
+    record(manifest, { ...luna, attempts: '2', 'finished-at': '2026-09-01T07:10:00Z' });
+    runs = read(manifest).runs;
+    expect(runs).toHaveLength(3);
+    const lunaRow = runs.find((run) => run.seat === 'GPT-6 Luna')!;
+    expect(lunaRow.attempts).toBe(2);
+    expect(lunaRow.finished_at).toBe('2026-09-01T07:10:00Z');
+    expect(runs.find((run) => run.seat === 'GPT-6 Sol')!.finished_at).toBe('2026-09-01T06:55:00Z');
+  });
+
   it('appends to a pre-v1.6 manifest without inventing an effort for its entries', () => {
     const manifest = path.join(workdir, 'legacy.yaml');
     writeFileSync(
