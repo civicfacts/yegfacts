@@ -213,3 +213,22 @@ so no vendor split is recorded for this round. Round 2 needs the Google seat aga
 reset, about 2026-09-30, unless the founder closes this attempt as incomplete
 and starts a clean run under v1.37. No panel is assembled from the answers on
 hand.
+
+## 2026-09-24: the 2026-09-23 attempt is closed incomplete; round 1 restarts clean under v1.37
+
+The founder closed the attempt rather than wait a week for the Google seat
+to finish it: "close the attempt and restart clean under v1.37, we can't
+wait for gemini reset ... we should drop gemini altogether from all work."
+v1.37 names this outcome as the alternative to waiting. The attempt's files
+move unchanged under `closed-2026-09-23/`: its three counted answers (Claude
+Partially supported, GPT-6 Sol Not established, Gemini Partially supported),
+the Luna shadow answer, its manifest, merge and fetch report. None of them is
+an input to the restarted run, and no answer is carried across: the roster
+changed, so every seat answers again from the same frozen package.
+
+The restarted roster, fixed before any seat ran: Claude Opus 5.5, GPT-6 Sol
+and GPT-6 Luna, all at high, three seats from two vendors under v1.37. The
+brief is unchanged (sha256 ddaa04ae…); the package is assembled from it by
+the runner exactly as before. The prior attempt's answers were seen by the
+editor; the seats never see each other's, and the editor chooses nothing
+about them, so the restart changes the roster and nothing else.

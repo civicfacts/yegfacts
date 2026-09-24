@@ -360,11 +360,13 @@ record earlier execution, **not commands approved for new runs**:
 admits; nothing else runs a seat. From v1.37 the seats are `claude-opus-5-5`,
 `gpt-6-sol` and `gpt-6-luna`, every seat at `high`. Opus 5.5 defaults to medium
 effort, so the pin is what keeps the seat at the level v1.6 chose. The Google
-seat (`gemini-3.8-flash-high`) is retired for runs frozen after 2026-09-23: the
-founder's Google usage ran out twice in a week and he will not buy more. Its
-profile stays in the launcher for the record of the runs it did, and the runner
-starts it only with `--finish-frozen-run`, for a run that froze under the
-three-provider rule. A superseded model stays on the launcher's pinned list,
+seat (`gemini-3.8-flash-high`) is retired from every run: the
+founder's Google usage ran out twice in a week and he will not buy more. v1.37
+let a run frozen before the retirement finish on it; the one such run,
+lanes-and-congestion, was closed and restarted on the current seats instead,
+and v1.39 removed the exception. The runner refuses the seat outright; the
+profile stays in the launcher only so the tests can exercise the code that
+produced the published Gemini answers. A superseded model stays on the launcher's pinned list,
 never as the default, while a brief parked on a check it ran can still be
 confirmed (v1.35). Runs already published keep the model their manifests
 record.

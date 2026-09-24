@@ -599,8 +599,11 @@ DEFAULT_EFFORT="high"
 MODEL="${MODEL:-$DEFAULT_MODEL}"
 EFFORT="${EFFORT:-$DEFAULT_EFFORT}"
 
-# Methodology v1.37 (2026-09-23): the Google seat is retired for every run
-# frozen after that date. The profile stays so the runs it did can be
+# Methodology v1.37 and v1.39: the Google seat is retired from every run.
+# The flag below survives only so the tests can exercise the profile that
+# produced the published Gemini answers; no caller in the pipeline passes it,
+# and a run started with it by hand is a reproduction, not a review. The
+# profile stays so the runs it did can be
 # read; a new run reaches it only when the caller says the run froze under the
 # three-provider rule, and says so again in the run record. Refused here as
 # well as in the two callers, because a launcher that trusts its callers is a
