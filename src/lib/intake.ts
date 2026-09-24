@@ -644,6 +644,28 @@ export function claimText(claim: Claim): string {
   return claim.proposition ?? claim.wording ?? claim.id;
 }
 
+/**
+ * Whether a claim was parked at framing (methodology v1.35): removed from the
+ * brief before any research ran because the identified record cannot answer
+ * it at the level people assert it.
+ */
+export function parkedAtFraming(claim: Claim): boolean {
+  return claim.triage === 'park' && claim.parked_at === 'framing';
+}
+
+/**
+ * A park's public reason split into why the record cannot answer the claim and
+ * what would reopen it. The register writes both into one `reason`, with the
+ * reopening condition as the sentence that begins "It reopens"; a reason
+ * without that sentence comes back whole, with `reopens` undefined.
+ */
+export function parkReason(claim: Claim): { why: string; reopens?: string } {
+  const reason = claim.reason ?? '';
+  const at = reason.search(/(?<=[.!?]\s+)It reopens\b/);
+  if (at === -1) return { why: reason };
+  return { why: reason.slice(0, at).trim(), reopens: reason.slice(at).trim() };
+}
+
 const ORIGINS: Record<string, string> = {
   captured: 'captured from a post',
   supplied: 'passed to us, source not captured',

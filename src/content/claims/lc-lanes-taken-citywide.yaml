@@ -1,0 +1,76 @@
+id: lc-lanes-taken-citywide
+question: Has the City taken driving lanes for bike lanes all over Edmonton?
+story: lanes-and-congestion
+finding: Not established
+answer: >-
+  Nobody can tell from the record. The City did take driving lanes for bike lanes on some
+  streets, but its records cannot show whether it did so across most of the city.
+evidence_basis: Direct Edmonton evidence
+panel_agreement: Unanimous
+methodology_version: "1.40"
+review_run: reviews/lanes-and-congestion/2026-09-16
+plain_speech_read: reviews/lanes-and-congestion/2026-09-16/plain-speech/gpt-1.md
+topics: [transportation, bike-lanes]
+evidence: [YF-EV-0163, YF-EV-0164, YF-EV-0165, YF-EV-0166, YF-EV-0167, YF-EV-0168, YF-EV-0169]
+key_facts:
+  - text: "The City's 2017 fact sheet for 102 Avenue says the stretch from 121 Street to 111 Street was a two-way road. To fit the protected bike lane, either the parking lane or one travel lane had to go, and the City's plan removed the westbound travel lane."
+    sources: [YF-EV-0163]
+  - text: "The City's November 2017 guide to its new west-central bike routes says 102 Avenue is now one-way for traffic heading east from 121 Street to 111 Street, and marks the two-way protected bike lane there as new in 2017."
+    sources: [YF-EV-0164]
+  - text: "The City's final design for the Garneau renewal, updated in April 2021, removes the southbound travel lane on 110 Street from 76 to 82 Avenue and puts a protected bike lane on the street's west side. The City's bike route inventory lists a two-way protected lane on that stretch built in 2022."
+    sources: [YF-EV-0165, YF-EV-0166]
+  - text: "The 102 Avenue stretch lies in Oliver, which the City places in its Central district, and Garneau is in its Scona district. That is 2 of the City's 15 districts in which this page can show, from the City's own records, a driving lane that gave way to a bike lane."
+    sources: [YF-EV-0167, YF-EV-0163, YF-EV-0165]
+  - text: "The City's on-street bike route inventory held 3,175 segments on 2026-09-23. It records each segment's street, type and construction year, and has no field for what the space was used for before the bike lane, so it cannot show how many bike lanes replaced a driving lane."
+    sources: [YF-EV-0166]
+  - text: "On 102 Avenue east of 109 Street, the City says the road between 107 Street and 102 Street was cut to one eastbound lane to make room for the Valley Line West LRT. It does not put that change down to a bike lane."
+    sources: [YF-EV-0168]
+  - text: "For 132 Avenue, the City's draft renewal design, shown to the public in early 2022, proposed one driving lane in each direction with traffic calming. It is a draft, and it does not say which finished sections replaced a driving lane with an on-street bike lane."
+    sources: [YF-EV-0169]
+aliases:
+  - city-removed-traffic-lanes-for-bike-lanes
+  - edmonton-took-driving-lanes-for-bike-lanes
+  - traffic-lanes-removed-all-throughout-the-city
+register_claims: [city-removed-traffic-lanes]
+limitations:
+  - "This finding does not measure congestion. It says what the City built on some streets, and nothing about whether traffic on them got faster or slower."
+  - "All throughout the city was fixed before the research as conversions in 8 or more districts, with 5 as an alternative bar. Both numbers are judgements rather than an outside standard, and the record shows 2 districts against either."
+  - "The reviewers did not all count the same streets. All three counted 102 Avenue from 121 to 111 Street. GPT-6 Sol also counted 110 Street in Garneau and 83 Avenue at 104 to 105 Street in Strathcona, both in Scona. The City plan it cited for 83 Avenue now returns a page-not-found page, so this page does not rely on it."
+  - "The Claude seat counted a different Scona street, 100 Street between 76 and 83 Avenue, together with 96 Street in Delton and 132 Avenue. It did so from a community league's notice and news reports, which the review treats as leads to a City record rather than as one. Neither OpenAI seat counted those three, and this page does not."
+  - "GPT-6 Luna confirmed the 102 Avenue conversion from the City's record but could not place it in a district."
+  - "The City's own copies of the 102 Avenue fact sheet and the Garneau design no longer load. This page relies on the Internet Archive's copies of the same addresses, and its registry entries say so."
+  - "The reason for each change is reported, never judged. The City's 102 Avenue plan says the lane went to make room for the protected bike lane."
+unknowns:
+  - "How many of the City's on-street bike lanes replaced a driving lane. Nobody has published a street-by-street record of what each bike lane replaced, and the inventory cannot say."
+  - "Whether the finished sections of 132 Avenue replaced a driving lane with an on-street bike lane, and which sections were finished by 2026-09-23."
+  - "Whether any stretch of 102 Avenue east of 109 Street lost a driving lane to a bike lane once the LRT change is set aside."
+missing_evidence:
+  - "A street-by-street record, for every on-street bike lane built by 2026-09-23, of what the space was before, such as before-and-after cross-sections or as-built drawings (City of Edmonton transportation and project records; critical)."
+  - "As-built plans and completion dates for each section of 132 Avenue (City of Edmonton; high)."
+review:
+  agreement: Unanimous
+  reviewers:
+    - model: Claude Opus 5.5
+      verdict: Not established
+      confidence: Moderate
+      key_findings:
+        - "Confirmed the 102 Avenue conversion from 121 to 111 Street and placed it in the Central district."
+        - "Counted 100 Street in Scona and named 96 Street in Delton and 132 Avenue, the last three from a community league's notice and news reports because the City's project pages returned errors that day, so it confirmed two districts and at most four."
+        - "Found that the City's bike route inventory has no field recording what a segment was used for before, so a complete count cannot come from it."
+      changed_between_rounds: "No change in verdict. In cross-review it took up 83 Avenue and, provisionally, 110 Street from GPT-6 Sol, and set 100 Street, 96 Street and 132 Avenue aside as leads without a City record in hand."
+    - model: GPT-6 Sol
+      verdict: Not established
+      confidence: Moderate
+      key_findings:
+        - "Confirmed three conversions in two districts from City records, 102 Avenue in Central and 83 Avenue and 110 Street in Scona."
+        - "Did not count 132 Avenue from a draft design, or 102 Avenue east of 109 Street, where the City attributes the lane reduction to the LRT."
+        - "Could not reach the full inventory, so could not count how many bike lanes there are or how many have a record of what they replaced."
+      changed_between_rounds: "No change in verdict. In cross-review it reported a third district, North Central, which is not counted here because the round-1 answers are the basis."
+    - model: GPT-6 Luna
+      verdict: Not established
+      confidence: Moderate
+      key_findings:
+        - "Confirmed the 102 Avenue conversion from the City's 2017 fact sheet and route map."
+        - "Could not place it in a district, and could not reach the inventory."
+        - "Found that the City's 132 Avenue report describes renewal planning, not a finished conversion."
+      changed_between_rounds: "No change in verdict. In cross-review it accepted 83 Avenue and 110 Street as plausible but said 110 Street still needed confirmation that it was built."

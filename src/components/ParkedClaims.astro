@@ -1,0 +1,68 @@
+---
+/**
+ * The claims under a question that were parked at framing (methodology v1.35),
+ * each with the reason the record cannot answer it and what would reopen it.
+ *
+ * It sits directly above the verdict strip, because v1.35 requires a parked
+ * claim to be shown beside the finding: a reader who met the finding first
+ * could take it for the answer to the question the parks are about. The claim
+ * text and the reason render straight out of the register, so they carry
+ * `data-record`, and each claim links to its own page, which carries the
+ * captured wordings.
+ */
+import { claimText, commentsOn, parkReason, saidIn, type Claim } from '../lib/intake';
+
+interface Props {
+  parked: Claim[];
+  class?: string;
+}
+
+const { parked, class: className = 'mt-10' } = Astro.props;
+const label = 'text-xs font-semibold tracking-[0.08em] text-muted uppercase';
+---
+
+{
+  parked.length > 0 && (
+    <section id="parked" class:list={[className, 'scroll-mt-6']}>
+      <h2 class="section-heading">What the record cannot answer</h2>
+      <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
+        {parked.length === 1 ? 'This claim was' : 'These claims were'} set aside before any research
+        ran, so {parked.length === 1 ? 'it carries' : 'they carry'} no finding. Nothing here says
+        whether {parked.length === 1 ? 'it is' : 'any of them is'} true.
+      </p>
+      <ul class="mt-4 divide-y divide-rule border-y border-rule">
+        {parked.map((claim) => {
+          const { why, reopens } = parkReason(claim);
+          return (
+            <li id={claim.id} class="scroll-mt-6 py-4">
+              <p class="text-lg leading-snug font-bold text-pretty" data-record>
+                <a href={`/claims/${claim.id}`} class="link-title">
+                  {claimText(claim)}
+                </a>
+              </p>
+              <p class="mt-1.5 flex flex-wrap items-baseline gap-x-2">
+                <span class={label}>Parked</span>
+                {commentsOn(claim) > 0 && (
+                  <span class="text-xs text-muted" data-record>
+                    · {saidIn(commentsOn(claim))}
+                  </span>
+                )}
+              </p>
+              <p class="mt-2.5 max-w-prose text-[0.9375rem] leading-relaxed text-pretty" data-record>
+                {why}
+              </p>
+              {reopens && (
+                <div class="mt-2.5 max-w-prose border-l-2 border-gold pl-3.5">
+                  <p class={label}>What would reopen it</p>
+                  <p class="mt-1 text-[0.9375rem] leading-relaxed text-pretty" data-record>
+                    {reopens}
+                  </p>
+                </div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  )
+}
