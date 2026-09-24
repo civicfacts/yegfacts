@@ -1,15 +1,19 @@
 # Review brief: Are Edmonton's roads in poor shape, could the $100 million for bike lanes have gone to road renewal, and how large was it beside what the City says it is short of?
 
-Status: PARKED 2026-09-03 on framing check 3 REVISE. NOT frozen, and no
-panel may run on it. History: DRAFTED 2026-09-03 by Stew under D-0019;
+Status: FROZEN 2026-09-24 under methodology v1.39: framing check 3's one
+standing finding applied in the checker's own words, found eligible by a
+separate reader (framing/eligibility.md) and confirmed by the same checker
+(framing/check-4.md). The panel runs on this text. Parked 2026-09-03 on
+framing check 3 REVISE until then. History: DRAFTED 2026-09-03 by Stew under D-0019;
 framing check 1 REVISE (framing/check-1.md), author's response
 (framing/response-1.md), first revision; framing check 2 REVISE
 (framing/check-2.md), editor's resolution under the cap
 (framing/resolution.md), second revision; framing check 3 REVISE
 (framing/check-3.md) with one finding standing, which under
-prompts/framing-check.md and methodology v1.12 parks the brief. It reopens
-only on new intake evidence, never on a further revision of this brief.
-The standing finding and what it would take are in run-record.md.
+prompts/framing-check.md and methodology v1.12 parked the brief until v1.39
+gave a report whose findings are all copy-ready one confirmation. The
+finding and what was applied are in framing/wording-edits.md and
+run-record.md.
 Methodology: v1.19. Register question `infrastructure-deficit`
 (intake/register.yaml),
 triage GO from both readers

@@ -318,3 +318,24 @@ Luna, all high), under the two-vendor rule of v1.37.
 
 who-pays-for-roads, the other brief the founder named, does not qualify on
 its existing third report and stays parked; its run record says why.
+
+### Round 1 halted on the brief's own status line (the editor's error)
+
+Round 1 ran on all three seats against the confirmed text and every seat
+raised `MATERIAL FRAMING CONCERN` on the same ground: the brief's opening
+status line still read "PARKED 2026-09-03 ... NOT frozen, and no panel may
+run on it". The seats were right to refuse to treat their answers as an
+authorised round. The editor applied the checker's sentence and did not
+update the status line, which the lanes-and-congestion brief had done in the
+text it sent to its confirmation. The status line records the brief's state,
+not its framing, and is now corrected to say it is frozen and how; the
+paragraph after it now says the cap parked the brief until v1.39 rather than
+that it parks it. That changes the frozen hash after the confirmation, so it
+is disclosed here rather than folded into the confirmed edit: the confirmed
+text is `eba325cef521378a020878bdba84655be8c68028842e0ce73984af5f400a6f9b` and the text the panel runs on is `6d5e5d7ce6674363ae20b6c37fc85b2c5e1a06783d75721583b0fda5df4e0683`, and the only
+difference between them is those two status passages. The halted round's
+answers (Claude, GPT-6 Sol and GPT-6 Luna; on the questions they answered
+as posed, roads Partially supported on all three, the $100 million eligible
+Supported on all three, and its share of the shortfall Partially supported
+on all three) are kept under `superseded-2026-09-24/` and are not an input
+to the rerun. Round 1 reruns on all three seats.
