@@ -295,5 +295,5 @@ because answers to two packages cannot share a round.
 | GPT-6 Luna, high | admitted, one attempt: Partially supported, moderate |
 
 No seat raised a framing concern. The three agree on the verdict, so no
-vendor split arises. Merge: 25 distinct sources; evidence staging
-archived 22, 3 not (fetch-report.md). Round 2 follows.
+vendor split arises. Merge: 18 distinct sources; evidence staging
+archived 13, 3 not (fetch-report.md). Round 2 follows.
