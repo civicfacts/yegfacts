@@ -325,3 +325,10 @@ supported under the previous wording, and the revision makes that verdict
 harder to reach, not easier. The brief's sha256 was `f058e5177cac3aae109311164d1ba3161e504aa6070b408a160e2599275b84ce` and is now
 `785b7ae3ee64a0bc0d67b617b6ade3048e729a0ded30f99e8e93a803cb893e39`. The halted round's files move unchanged to
 `superseded-2026-09-24b/`. Round 1 reruns on all three seats.
+
+### Round 1 on the second freeze
+
+All three seats admitted, one attempt each: Claude Opus 5.5, GPT-6 Sol and
+GPT-6 Luna, all Not established (moderate). No framing concern, no vendor
+split. Merge: 21 distinct sources; staging archived 19, 2 not
+(fetch-report.md). Round 2 follows.
