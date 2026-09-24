@@ -219,9 +219,9 @@ questions:
     reason: "Before-and-after traffic counts and travel times on converted corridors can show whether reallocating lanes changed congestion, while the general claim about roads carrying services adds nothing checkable."
     grouping_note: "The City's record of which lanes it reallocated, plus traffic counts and travel times on those corridors, answers both directions and shows what else the road carries."
     accounts:
-      total: 24
+      total: 23
       for: 7
-      against: 16
+      against: 15
       neither: 1
     run: reviews/intake/yegscoop-2026-08-26
     story: lanes-and-congestion
@@ -603,9 +603,11 @@ questions:
     publication: unpublished
     reason: "The design file, approval history and correspondence can show what was proposed outside the school, the councillor’s official role and why the design stopped."
     grouping_note: "The Holyrood design file and the correspondence about it answer both."
+    # 2 from 2026-09-24: 79-street-relieves-75-street moved here with its one
+    # commenter (see the note on that claim).
     accounts:
-      total: 1
-      against: 1
+      total: 2
+      against: 2
     run: reviews/intake/yegscoop-2026-08-26
   - id: 189-street-lane
     recorded: "2026-09-03"
@@ -1718,11 +1720,17 @@ claims:
       - wording: "service vehicles to move products; bus transportation to move people; ambulances to save lives; fire trucks to do the same"
         source_id: yegscoop-2026-08-26
         author_name: "Bright Elk G."
+  # Moved 2026-09-24 from lanes-and-congestion to holyrood-school-lane, the
+  # question about the 79 Street route outside the Holyrood school, as framing
+  # check 1 on the lanes-and-congestion brief found and
+  # reviews/lanes-and-congestion/2026-09-16/register-note.md records. Its one
+  # commenter made no other claim under lanes-and-congestion, so both
+  # questions' accounts move by one person on the against side.
   - id: 79-street-relieves-75-street
     recorded: "2026-09-03"
     origin: captured
     source: yegscoop-2026-08-26
-    question: lanes-and-congestion
+    question: holyrood-school-lane
     proposition: "79 Street carries traffic that would otherwise use 75 Street and is a school-run route for parents."
     wording: "It is an important street for alleviating traffic from 75 St and for people to navigate & drive their kids to school before work."
     side: against

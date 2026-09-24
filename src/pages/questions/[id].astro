@@ -855,8 +855,11 @@ const Content = rendered?.Content;
             {row.twoSided && (
               <p class="mt-4 max-w-prose text-[0.9375rem] leading-relaxed text-muted">
                 People arguing in both directions raised this question, and every claim they made
-                about it is {parked.length > 0 ? 'checked or parked with its reason' : 'checked'},
-                whichever way it points.
+                about it is{' '}
+                {parked.length === 0 && unchecked.length === 0
+                  ? 'checked'
+                  : 'shown here with what became of it'}
+                , whichever way it points.
               </p>
             )}
 

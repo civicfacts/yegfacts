@@ -48,7 +48,7 @@ describe('lanes-and-congestion figures', () => {
     expect(figures.people).toEqual({
       distinctAcrossFourClaims: 22,
       inMoreThanOneClaim: 2,
-      question: 24,
+      question: 23,
       laneRemovalIncreasesCongestion: 13,
       bikeInfraReducesCongestion: 6,
       cityRemovedTrafficLanes: 4,
