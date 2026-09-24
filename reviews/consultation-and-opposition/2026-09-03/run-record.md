@@ -711,3 +711,19 @@ under the v1.12 cap.
 facts bear on it: finding 4 is labelled a defect, and under v1.20 a defect
 standing after the third report does not by itself park a brief; and
 finding 7 is a framing finding on text check 2 passed.
+
+## 2026-09-25: the project page as of August 31, from the Internet Archive
+
+The audit could not open the City's Active Transportation Network Expansion
+project page and had no capture from before the cutoff. The Internet
+Archive holds one from 2026-08-31 17:06 UTC, three days before the
+September 3 cutoff (capture 20260831170636). Its raw bytes are archived
+privately, SHA-256
+`a921d766a4bf28046e567b065050abcb0dfd0d9ab804b6ed14ae711e4b62798f`. The
+capture carries the route table and the sentence the brief attributes to
+the project page: "Focused public engagement opportunities are for more
+complex route connections, while less complex connections are being
+completed with targeted community members or property owner engagement."
+That attribution is now verified against a pre-cutoff copy. The
+route-to-neighbourhood mapping in the table was not checked here; it is
+for the panel.
