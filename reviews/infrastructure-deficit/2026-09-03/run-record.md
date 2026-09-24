@@ -274,3 +274,90 @@ file was edited. Neither `board_withdrawn` note was touched. Nothing in
 3. Then, and only then, assemble the panel package.
 
 Nothing in this directory may go to a panel in its current state.
+
+## 2026-09-24: applied, found eligible, confirmed, frozen (methodology v1.39)
+
+The brief had been parked since 2026-09-03 on one standing finding of check 3:
+claim 1's proposition was in the present tense for a period the dated
+inventory cannot reach. Methodology v1.39 gives a third report whose every
+standing finding carries copy-ready replacement text one confirmation. The
+founder asked for the parked roads briefs to be worked on and decided the
+rule; the board reviewed it and made it stricter; the editor applied the text.
+
+1. **The edit.** The checker's replacement sentence, the first of its two
+   variants (the second needs the inventory date established, which is a
+   lookup), replaces the normalized proposition verbatim. Nothing else
+   changed. The finding-to-edit table is `framing/wording-edits.md`.
+2. **Eligibility, decided by someone other than the editor.** A separate
+   read-only session (GPT-6 Sol at high, through
+   `scripts/panel/audit-package.sh --provider openai`, attempt
+   `38f01615542f5eab`) read check 3, the rule and the table and returned
+   ELIGIBLE (`framing/eligibility.md`).
+3. **Confirmation, on the seat and pinned model that wrote check 3.**
+   gpt-5.6-sol at high, through
+   `scripts/panel/invoke-reviewer.sh --provider openai --model gpt-5.6-sol`
+   (the audit wrapper cannot name a model), attempt `22b432e3f965cfc1`,
+   codex-cli 0.156.1, context proof pass. Verdict: CONFIRMED
+   (`framing/check-4.md`). It re-examined no finding and did not re-verify
+   the claims.
+
+**The freeze.** The brief's sha256 is
+`eba325cef521378a020878bdba84655be8c68028842e0ce73984af5f400a6f9b`
+(before the edit, `b015e49813fb46245f790abb595803c822071114fecb5be6d489d6a1e107635d`).
+
+**One thing the rule did not let the editor touch.** The sentence after the
+new proposition still opens "The proposition is stated as a resident states
+it, in the present tense". It described the old wording. The checker's
+replacement did not cover it, v1.39 allows no edit the checker did not
+write, and the confirmation did not flag it. It stays as frozen, and the
+panel is told about it here and may raise it; the published story will use
+the dated proposition.
+
+**Next.** Round 1 on the three seats (Claude Opus 5.5, GPT-6 Sol, GPT-6
+Luna, all high), under the two-vendor rule of v1.37.
+
+who-pays-for-roads, the other brief the founder named, does not qualify on
+its existing third report and stays parked; its run record says why.
+
+### Round 1 halted on the brief's own status line (the editor's error)
+
+Round 1 ran on all three seats against the confirmed text and every seat
+raised `MATERIAL FRAMING CONCERN` on the same ground: the brief's opening
+status line still read "PARKED 2026-09-03 ... NOT frozen, and no panel may
+run on it". The seats were right to refuse to treat their answers as an
+authorised round. The editor applied the checker's sentence and did not
+update the status line, which the lanes-and-congestion brief had done in the
+text it sent to its confirmation. The status line records the brief's state,
+not its framing, and is now corrected to say it is frozen and how; the
+paragraph after it now says the cap parked the brief until v1.39 rather than
+that it parks it. That changes the frozen hash after the confirmation, so it
+is disclosed here rather than folded into the confirmed edit: the confirmed
+text is `eba325cef521378a020878bdba84655be8c68028842e0ce73984af5f400a6f9b` and the text the panel runs on is `6d5e5d7ce6674363ae20b6c37fc85b2c5e1a06783d75721583b0fda5df4e0683`, and the only
+difference between them is those two status passages. The halted round's
+answers (Claude, GPT-6 Sol and GPT-6 Luna; on the questions they answered
+as posed, roads Partially supported on all three, the $100 million eligible
+Supported on all three, and its share of the shortfall Partially supported
+on all three) are kept under `superseded-2026-09-24/` and are not an input
+to the rerun. Round 1 reruns on all three seats.
+
+## 2026-09-24: round 1, round 2 and synthesis on three seats from two vendors
+
+Round 1 reran on the corrected text: Claude Opus 5.5, GPT-6 Sol and GPT-6
+Luna, all at high, each admitted on one attempt, no framing concern. Merge:
+23 distinct sources; staging archived 15, 8 not (fetch-report.md). Round 2
+on the same seats. `scripts/synthesize.ts` on the round-1 basis:
+
+| Claim | Claude r1 | GPT-6 Sol r1 | GPT-6 Luna r1 | Round 2 (C / S / L) | Finding |
+|---|---|---|---|---|---|
+| `infra-roads-condition` | Partially supported | Partially supported | Partially supported | Partially supported / Partially supported / Partially supported | **Partially supported**, Unanimous |
+| `infra-bike-money-renewal-eligible` | Not established | Supported | Supported | Supported / Supported / Supported | **Partially supported**, Split |
+| `infra-hundred-million-vs-shortfall` | Partially supported | Partially supported | Partially supported | Partially supported / Partially supported / Partially supported | **Partially supported**, Unanimous |
+
+**Vendor split (methodology v1.37) on `infra-bike-money-renewal-eligible`.**
+The Anthropic seat differs from both OpenAI seats in round 1. The finding
+names that beside the Split agreement, and the drafting addresses it from the
+sources: it is never presented as two seats outvoting one, since the two
+OpenAI seats are not independent of each other.
+
+Drafting, the faithfulness and plain-speech reads and the publication gate
+follow.
