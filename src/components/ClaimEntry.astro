@@ -4,6 +4,7 @@ import Finding from './Finding.astro';
 import Gloss from './Gloss.astro';
 import StateBadge from './StateBadge.astro';
 import { requireTerm as gloss } from '../lib/glossary';
+import { findingGlossTerm } from '../lib/findings';
 import {
   claimText,
   commentsOn,
@@ -134,7 +135,10 @@ const turnedDown = !ruledApart && claim.prior_triage?.outcome === 'no';
       <a href={`/claims/${checkedAs.data.id}`} class="link-title">{checkedAs.data.question}</a>
     </p>
     <p class="mt-3">
-      <Gloss {...gloss(checkedAs.data.finding)} variant="boxed">
+      <Gloss
+        {...gloss(findingGlossTerm(checkedAs.data.finding, checkedAs.data.panel_agreement))}
+        variant="boxed"
+      >
         <Finding finding={checkedAs.data.finding} size="md" />
       </Gloss>
     </p>
