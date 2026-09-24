@@ -274,3 +274,47 @@ file was edited. Neither `board_withdrawn` note was touched. Nothing in
 3. Then, and only then, assemble the panel package.
 
 Nothing in this directory may go to a panel in its current state.
+
+## 2026-09-24: applied, found eligible, confirmed, frozen (methodology v1.39)
+
+The brief had been parked since 2026-09-03 on one standing finding of check 3:
+claim 1's proposition was in the present tense for a period the dated
+inventory cannot reach. Methodology v1.39 gives a third report whose every
+standing finding carries copy-ready replacement text one confirmation. The
+founder asked for the parked roads briefs to be worked on and decided the
+rule; the board reviewed it and made it stricter; the editor applied the text.
+
+1. **The edit.** The checker's replacement sentence, the first of its two
+   variants (the second needs the inventory date established, which is a
+   lookup), replaces the normalized proposition verbatim. Nothing else
+   changed. The finding-to-edit table is `framing/wording-edits.md`.
+2. **Eligibility, decided by someone other than the editor.** A separate
+   read-only session (GPT-6 Sol at high, through
+   `scripts/panel/audit-package.sh --provider openai`, attempt
+   `38f01615542f5eab`) read check 3, the rule and the table and returned
+   ELIGIBLE (`framing/eligibility.md`).
+3. **Confirmation, on the seat and pinned model that wrote check 3.**
+   GPT-6's predecessor gpt-5.6-sol at high, through
+   `scripts/panel/invoke-reviewer.sh --provider openai --model gpt-5.6-sol`
+   (the audit wrapper cannot name a model), attempt `22b432e3f965cfc1`,
+   codex-cli 0.156.1, context proof pass. Verdict: CONFIRMED
+   (`framing/check-4.md`). It re-examined no finding and did not re-verify
+   the claims.
+
+**The freeze.** The brief's sha256 is
+`eba325cef521378a020878bdba84655be8c68028842e0ce73984af5f400a6f9b`
+(before the edit, `b015e49813fb46245f790abb595803c822071114fecb5be6d489d6a1e107635d`).
+
+**One thing the rule did not let the editor touch.** The sentence after the
+new proposition still opens "The proposition is stated as a resident states
+it, in the present tense". It described the old wording. The checker's
+replacement did not cover it, v1.39 allows no edit the checker did not
+write, and the confirmation did not flag it. It stays as frozen, and the
+panel is told about it here and may raise it; the published story will use
+the dated proposition.
+
+**Next.** Round 1 on the three seats (Claude Opus 5.5, GPT-6 Sol, GPT-6
+Luna, all high), under the two-vendor rule of v1.37.
+
+who-pays-for-roads, the other brief the founder named, does not qualify on
+its existing third report and stays parked; its run record says why.

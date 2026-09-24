@@ -384,3 +384,26 @@ No fourth report, cap reset, fresh brief or panel run is authorized by this
 audit. The historical reports and substantive brief text remain unchanged.
 The capture README now states the supported completeness limitation. The
 audit contains the trace hashes, evidence limits and procedural review.
+
+## 2026-09-24: not eligible for the v1.39 wording confirmation; stays parked
+
+Methodology v1.39 lets a third report whose every standing finding carries
+copy-ready replacement text go to one confirmation. This brief's third
+report does not meet that bar on its existing text, so it stays parked
+under v1.12 and reopens only on new intake evidence:
+
+- The eScribe finding's replacement ends each item with "plus the
+  attachment URL" without giving the URLs, so applying it needs a lookup.
+- The completeness finding asks for three phrases to be replaced
+  "throughout" with wording limited to the accessible records, with no
+  replacement text for those phrases, so applying it needs drafting.
+- The transfer finding's second instruction holds "unless the cited 2024
+  manual expressly establishes" a point, so applying it needs a reading of
+  the source.
+
+No new wording was asked of the checker to make the brief eligible; the
+board ruled that out. In September the editor disputed the transfer
+finding, on the premise that the checker read the 2018 edition of the
+manual; the 2026-09-09 trace audit withdrew the editor's related allegation
+against the same report, and the editor has since conceded the finding. The
+concession does not change eligibility, which turns on the report's text.
