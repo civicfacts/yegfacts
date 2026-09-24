@@ -516,3 +516,40 @@ Gemini seat (about eight minutes); this run was the fourth and did not
 finish. The seat is out until about 2026-09-30 16:30Z. The source audit
 stays owed, the panel stays blocked, and the package to send is the one
 named here.
+
+## 2026-09-24: source-existence audit on the OpenAI seat; the council documents sit behind a browser check
+
+The founder retired the Google seat (methodology v1.37 and v1.40), so the
+source-existence audit commissioned from Google ran on the OpenAI seat
+instead, through `scripts/panel/audit-package.sh --provider openai` (GPT-6 Sol
+at high, attempt `e6261f606f5b59ae`, context proof pass), with the package
+committed on 2026-09-23 (`verification/source-existence-package-2026-09-23.md`:
+the request and the full brief). Stated limit: the framing checks on this
+brief also ran on the OpenAI seat, so this audit is not from a different
+vendor than the checker; it is from a different vendor than the editor.
+
+Report: `verification/source-existence-audit-2026-09-24.md`. Verified from
+full City PDFs: the 2019 Phase 2 report, the 2023 capital profile, three 2025
+construction bulletins; the engagement portal exists. Unverified, because the
+seat could not read them: report IS03688 and every attachment (eScribe
+DocumentIds 304024 to 304032), the August 26 agenda and minutes, and the
+project page's route table as of September 3. The audit found no mismatch; it
+could not look at the documents the brief most depends on.
+
+Why, checked the same day by the editor: every eScribe file download
+(`filestream.ashx?DocumentId=...`) now answers HTTP 403 with a Cloudflare
+"Verifying your browser" page, to the site's own fetcher, to a plain browser
+user agent, and with the meeting page's cookies and referer. The meeting
+pages themselves and the City project page still fetch (archived to local
+staging). Only a real browser passes the check. This is an access block on
+the documents, not evidence they are missing, and under v1.28 an essential
+unreadable source stops research rather than becoming a finding.
+
+Next step, and it needs a person with a browser: download the nine files
+(DocumentId 304024, 304025, 304026, 304027, 304028, 304029, 304030, 304031,
+304032) from `https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=<id>`
+into one folder. The editor then archives them with their hashes and sends
+their extracted text to the same OpenAI seat to check the brief's
+transcription against the actual bytes, the way the faithfulness packages
+carry archived source text. The panel packages will need the same, since no
+seat's web tool can pass the check either.
