@@ -553,3 +553,39 @@ their extracted text to the same OpenAI seat to check the brief's
 transcription against the actual bytes, the way the faithfulness packages
 carry archived source text. The panel packages will need the same, since no
 seat's web tool can pass the check either.
+
+## 2026-09-25: the council documents checked from archived bytes; the committee decision read from the minutes
+
+The block recorded on 2026-09-24 is resolved. A person downloaded the nine
+IS03688 files in a browser; they are archived privately (rights unconfirmed,
+fail closed) and identified by hash in `verification/escribe-archive-2026-09-25.md`.
+Their full extracted text went to the same OpenAI seat (GPT-6 Sol at high,
+`audit-package.sh --provider openai`, attempt `3c7e2a30e34d433b`, context proof
+pass). Report: `verification/source-existence-audit-archived-2026-09-25.md`.
+
+Verified from the documents: every file's identity, title and August 26, 2026
+committee date; the report's recommendation and its private Attachment 4;
+the 14 routes of set S match all three versions of Attachment 5 exactly, as
+do the 13 "continue as planned"; Attachment 3's status groups as of August 10,
+including the five routes with no delivery plan. One mismatch for the brief:
+the three Attachment 5 versions do not share the same heading or proposed
+treatment (the original says the 14 "would be removed from the scope"; the
+replacements say they "may be revisited" or "may be re-evaluated"), so any
+brief sentence that treats the heading as common to all three is wrong.
+Uncertain: which replacement is DocumentId 304030 and which 304031 (the files
+carry no id); the 93 Street/84 Avenue status row's segment match.
+
+The committee decision. The eScribe meeting pages still load for the site's
+fetcher; the agenda and post-meeting minutes were archived to staging and
+item 7.6's text went to the same seat (attempt `0d11119b021b98e4`). Report:
+`verification/source-existence-audit-decision-2026-09-25.md`. The minutes
+record no decision on set S: A. Salvador's motion to continue the program at
+its approved scope and accelerate tender-ready routes was defeated 2 to 2,
+after E. Rutherford's amendment to it was also defeated 2 to 2; the committee
+met in private in between; the only other carried motion kept Attachment 4
+private (4 to 0). No motion adopted or rejected any Attachment 5 version.
+
+What remains before a panel: the brief editor applies what these reports
+change (the heading mismatch; the committee outcome where the brief assumes
+one), and the project page's route table as of September 3 still needs an
+archived capture (the Internet Archive is the only route to that date).
