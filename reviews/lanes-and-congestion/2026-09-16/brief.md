@@ -218,19 +218,22 @@ prior lane use. Let C be the number of corridors that count, and let A be
 the number of distinct district-plan areas, as fixed under "Geography",
 in which at least one qualifying corridor lies.
 
-- **Not established** if C is zero and R is less than T. Read first.
-- **Contradicted** if C is zero and R equals T.
-- The Supported and Partially supported rows apply when C is at least 1.
-  A is counted from qualifying corridors the reviewer verified; where the
-  census of built corridors is incomplete (R less than T), A is a verified
-  minimum and is reported as one.
+A is counted from qualifying corridors the reviewer verified. Where the
+census of built corridors is incomplete (R less than T), A is a verified
+minimum and is reported as one.
+
 - **Supported** if A is at least 8 of the 15 district-plan areas, whether
   or not the census is complete, since a verified minimum can only rise.
-- **Partially supported** if C is at least 1 and A is less than 8, on a
-  complete census or as a verified minimum. This is the case the stakes
-  below describe: specific removals are established, "all throughout" is
-  not. The answer states whether A is complete or a minimum, and names the
-  part that is not established.
+- **Partially supported** if C is at least 1, the census is complete (R
+  equals T), and A is less than 8: the breadth part of the claim is shown
+  not to hold.
+- **Not established** if the census is incomplete (R less than T) and the
+  verified A is less than 8, whether C is zero or not: the record cannot
+  show whether the breadth part holds. The verified corridors, their
+  districts and the verified A are reported as the part that is
+  established, so a reader sees what was found and why it does not decide
+  the claim.
+- **Contradicted** if C is zero and R equals T.
 
 Alternative threshold, results required under both: Supported at A of at
 least 5. These are judgement thresholds rather than pre-existing
@@ -325,9 +328,11 @@ settles any of them.
 geographic occurrence and opponents must withdraw a blanket denial.
 Contradicted means holders must withdraw the claim that any through lane
 was removed and opponents may maintain the denial. Partially supported
-means specific removals are established but "all throughout" is not. Not
-established means the prior-use record is too incomplete for either
-side's generalisation.
+means a complete count shows removals in fewer areas than "all throughout".
+Not established means the prior-use record is too incomplete to say
+whether removals were broad, whatever specific removals it documents;
+those removals are reported, and a blanket denial of any removal does not
+survive them.
 
 ## Scope
 

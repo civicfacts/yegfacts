@@ -297,3 +297,31 @@ because answers to two packages cannot share a round.
 No seat raised a framing concern. The three agree on the verdict, so no
 vendor split arises. Merge: 18 distinct sources; evidence staging
 archived 13, 3 not (fetch-report.md). Round 2 follows.
+
+### Round 2 flagged a second framing concern; the table moves to the cautious reading
+
+The rerun's round 2 completed (all three seats held Partially supported) and
+synthesis halted again: GPT-6 Sol flagged `MATERIAL FRAMING CONCERN`. The
+revised table gave Partially supported to a verified minimum below 8, "even
+if unreviewed corridors could raise A to Supported", so the verdict would
+read as "fewer than 8 districts" when the record shows only "at least 2 or 3".
+
+The editor's ruling: the concern is right, for two reasons the site already
+holds. Since methodology v1.4 a Partially supported finding must name the
+part of the claim that does not hold, and "fewer than 8 areas" is not shown
+to fail on an incomplete census; it is not established. And the matrix's
+cautious lean (D-0011 in the board record, published on the methodology
+page) prefers the reading that does not imply more than the record shows.
+The table now gives Partially supported only on a complete census with A
+below 8; an incomplete census with a verified A below 8 is Not established,
+with the verified corridors, their districts and the verified A reported as
+the part that is established; Supported stays at a verified A of 8 or more.
+The stakes text is changed to match. No threshold, definition, date, unit or
+source changed.
+
+This is the second revision after answers were seen, and it moves against
+the answer on the table: all three seats had just returned Partially
+supported under the previous wording, and the revision makes that verdict
+harder to reach, not easier. The brief's sha256 was `f058e5177cac3aae109311164d1ba3161e504aa6070b408a160e2599275b84ce` and is now
+`785b7ae3ee64a0bc0d67b617b6ade3048e729a0ded30f99e8e93a803cb893e39`. The halted round's files move unchanged to
+`superseded-2026-09-24b/`. Round 1 reruns on all three seats.

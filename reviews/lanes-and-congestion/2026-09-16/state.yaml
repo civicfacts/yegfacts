@@ -1,11 +1,11 @@
 story: lanes-and-congestion
 run: "2026-09-16"
 methodology_version: "1.35"
-stage: round2
+stage: round1
 stages:
-  framing: {status: complete, at: "2026-09-23", frozen_sha256: "f058e5177cac3aae109311164d1ba3161e504aa6070b408a160e2599275b84ce", note: "brief drafted by Stew (Claude Fable 5.1). Three framing checks on the OpenAI seat via audit-package.sh under v1.31 (attempts 84f1024447e77441, dade890214bac256, 8d4b4dafb150ad13), all REVISE; check 3 parked the brief under the v1.12 cap on 2026-09-16. Revised 2026-09-23 under v1.35: every check-3 finding applied, claims 1, 2 and 4 parked at framing on the register with reopening instruments, claim 3 remains. Claim 79-street-relieves-75-street carried to the 79 Street question (register-note.md). See run-record.md and framing/response-3.md. Park confirmation on the same seat (attempt 2e6dff95dc39e17b): PARKS CONFIRMED; brief frozen 2026-09-23."}
-  round1: {status: complete, at: "2026-09-24", note: "Rerun on the re-frozen brief: Claude Opus 5.5 Partially supported (low), GPT-6 Sol Partially supported (moderate), GPT-6 Luna Partially supported (moderate); no framing concern. Rerun after round 2 raised a material framing concern on all three seats (threshold table gap; snapshot not in the package). Brief revised and re-frozen f058e5177cac (was ddaa04ae53a8). Superseded rounds under superseded-2026-09-24/. Roster unchanged: Claude Opus 5.5, GPT-6 Sol, GPT-6 Luna, high."}
-  merge: {status: complete, at: "2026-09-24", note: "18 distinct sources; 13 archived, 3 not, 2 GIS queries unmatched by parameter order (fetch-report.md)."}
+  framing: {status: complete, at: "2026-09-23", frozen_sha256: "785b7ae3ee64a0bc0d67b617b6ade3048e729a0ded30f99e8e93a803cb893e39", note: "brief drafted by Stew (Claude Fable 5.1). Three framing checks on the OpenAI seat via audit-package.sh under v1.31 (attempts 84f1024447e77441, dade890214bac256, 8d4b4dafb150ad13), all REVISE; check 3 parked the brief under the v1.12 cap on 2026-09-16. Revised 2026-09-23 under v1.35: every check-3 finding applied, claims 1, 2 and 4 parked at framing on the register with reopening instruments, claim 3 remains. Claim 79-street-relieves-75-street carried to the 79 Street question (register-note.md). See run-record.md and framing/response-3.md. Park confirmation on the same seat (attempt 2e6dff95dc39e17b): PARKS CONFIRMED; brief frozen 2026-09-23."}
+  round1: {status: pending, note: "Second rerun after round 2 flagged a framing concern (GPT-6 Sol: a verified minimum below 8 read as fewer than 8). Table moved to the cautious reading; re-frozen 785b7ae3ee64 (was f058e5177cac). Earlier halted rounds under superseded-2026-09-24/ and superseded-2026-09-24b/."}
+  merge: {status: pending}
   round2: {status: pending}
   synthesis: {status: pending}
   drafting: {status: pending}
