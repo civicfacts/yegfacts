@@ -1,8 +1,11 @@
 # Run record: `consultation-and-opposition`, run of 2026-09-03
 
-Drafted by Stew under D-0019. Methodology v1.19. **The brief is FROZEN**
-as of 2026-09-04, on framing check 2 FRAME OK. No panel has run; round 1
-has not started.
+Drafted by Stew under D-0019. Methodology v1.19. The brief was frozen
+on 2026-09-04 on framing check 2 FRAME OK. **Since 2026-09-25 it is NOT
+FROZEN**: it was revised after the council documents were read from
+archived bytes, framing check 3 returned REVISE, and it awaits the
+founder under the v1.12 cap (see the last section). No panel has run;
+round 1 has not started.
 
 ## The freeze
 
@@ -589,3 +592,138 @@ What remains before a panel: the brief editor applies what these reports
 change (the heading mismatch; the committee outcome where the brief assumes
 one), and the project page's route table as of September 3 still needs an
 archived capture (the Internet Archive is the only route to that date).
+
+## 2026-09-25: the brief revised on the two facts; framing check 3 REVISE; not frozen
+
+**Result.** The brief is no longer frozen. It was revised on the two
+points the archived council documents do not support, framing check 3
+returned REVISE, and not every standing finding comes with copy-ready
+replacement text, so the v1.39 route is closed. Under the v1.12 cap the
+brief now waits for the founder, in writing. No panel runs on it.
+
+**Why the brief changed.** The frozen brief said the Infrastructure
+Committee did not adopt administration's recommendation, "so the full
+programme continues". The minutes record no decision on the fourteen
+routes (`verification/source-existence-audit-decision-2026-09-25.md`).
+It also defined set S by the heading "Will be reevaluated for
+feasibility and subject to funding availability" as if that heading
+were in all three versions of Attachment 5. It is in the original and in
+one replacement, not in the other
+(`verification/source-existence-audit-archived-2026-09-25.md`). Editing
+a frozen brief makes a new brief, so it needed a new framing check; this
+was the third and last the cap allows.
+
+**What changed in the brief.**
+
+1. Selection rationale, civic importance. The sentence that the committee
+   "did not adopt it, so the full programme continues" is replaced by
+   what the minutes record: no motion carried on the recommendation;
+   A. Salvador's motion to continue the program at its approved scope and
+   advance tender-ready routes defeated 2 to 2, after E. Rutherford's
+   amendment to it was also defeated 2 to 2; the only substantive motion
+   carried kept Attachment 4 private, 4 to 0; no decision on the fourteen
+   routes.
+2. Set S. Now defined by the route list, the fourteen projects Attachment 5
+   lists apart from the thirteen that "will continue as planned". The
+   original's heading is quoted as where the list sits in the original,
+   and the three versions' different treatment of the fourteen is stated.
+   Which replacement is DocumentId 304030 and which 304031 is stated as
+   not established.
+3. Sentences resting on the committee decision. "the routes the committee
+   had just declined to pause" (circulating forms), "the routes council
+   declined to pause in August" (who asks this) and "the routes the
+   committee declined to pause" (why this reading) now say the routes the
+   committee considered. The minutes document (item 7) now answers which
+   motions were put and how each vote went, instead of "what the committee
+   decided about the modified approach, which fixes what 'pushed ahead'
+   refers to".
+4. Sentences resting on a heading. The alternative route set no longer
+   quotes the heading "Will continue as planned", which one replacement
+   does not carry, and no longer says administration "proposed to pause"
+   the fourteen.
+5. Status header and methodology line (v1.40).
+
+Not changed, though it rests on the committee decision: the normalized
+proposition's "the bike routes the City pushed ahead in 2026". The
+proposition was left for the check, and check 3 flagged it (finding 2).
+
+**Hashes.** Frozen brief before the revision:
+`083f4a63800a1d12f348c0186fec8dd01c6d47c557049d24b5f5149feaa02018`.
+Revised brief as sent to check 3:
+`50eb0a013791f1543099debf98332c395eddd30cd16f6405c2d26a61f51e4ba3`.
+After the status line was updated for the check 3 result:
+`d7a7c250d69a13352cd1917ef71b4455ab16b85eb02563e6233fdc33e5c46e52`.
+Nothing but the status line changed after check 3 returned.
+
+**Check 3.** OpenAI gpt-6-sol at high, `codex --search exec`, read-only,
+no repository access, codex-cli 0.156.1. Package: the framing prompt,
+intake.md, the revised brief, the verdict vocabulary, the review schema,
+check-1.md, response-1.md, check-2.md and the two 2026-09-25 audit
+reports. Report verbatim in `framing/check-3.md`. Verdict: REVISE.
+
+Standing findings, in the checker's order:
+
+1. Provenance [framing]. The brief says "five commenters" made the
+   consultation complaint; the intake shows four accounts made five
+   comments (224 and 393 are one account). The checker supplied one
+   replacement sentence and asked for the counts to be replaced
+   "throughout", without text for each place. This error predates the
+   revision. Check 1's attribution finding is marked WEAKENED on it.
+2. Proposition [framing]. "the bike routes the City pushed ahead in 2026"
+   gives the fourteen a decision status the minutes do not. Replacement
+   proposition supplied, plus an instruction to use "the fourteen
+   projects listed separately in Attachment 5" wherever the old phrase
+   identifies set S, without text for each place.
+3. Title [framing]. "Did the City ask the streets it built on?" implies
+   the routes were built. Replacement title supplied.
+4. The twenty-seven-route alternative has no ladder of its own [defect].
+   Exact inserted rule supplied. Check 1's silence-and-unknown-routes
+   finding is marked WEAKENED on it.
+5. Historical availability [framing]. Mutable pages and later retrievals
+   cannot show what was public on the as-of date. Replacement as-of
+   instruction supplied.
+6. Expected-finding leak [framing]. The sentence that the two cutoffs
+   differ little "for this set" predicts the result, and "no route count"
+   is untrue now the brief states list sizes. Two replacements supplied.
+7. Stakes [framing]. Supported needs a City record stating no engagement
+   for every one of the fourteen routes, and no named source is shown to
+   supply that, so Supported is not shown to be reachable. The checker
+   asks for the only claim, `ca-route-level-engagement`, to be parked,
+   with reopening text supplied. This finding is about text that check 2
+   passed and the revision did not touch.
+8. Who asks this [framing]. Follows from 7; replacement sentence
+   supplied, which says the question stays parked.
+
+Checks 6 (checkability) and 7 (scope) are OK.
+
+**Why the v1.39 route does not apply.** v1.39 needs copy-ready text for
+every standing finding, applied with no new drafting. Findings 1 and 2
+each ask for a replacement "throughout" or "wherever" without the text
+for each place, so applying them means the editor drafting new sentences.
+That makes the whole brief ineligible, and no new wording is asked of the
+checker to fix it. No eligibility reader was run. Finding 7 also asks for
+the brief's only claim to be parked, which would leave no claim to freeze.
+
+**Freeze state.** Not frozen. The brief awaits the founder in writing
+under the v1.12 cap.
+
+**Next.** The founder decides, in writing, what happens to this brief. Two
+facts bear on it: finding 4 is labelled a defect, and under v1.20 a defect
+standing after the third report does not by itself park a brief; and
+finding 7 is a framing finding on text check 2 passed.
+
+## 2026-09-25: the project page as of August 31, from the Internet Archive
+
+The audit could not open the City's Active Transportation Network Expansion
+project page and had no capture from before the cutoff. The Internet
+Archive holds one from 2026-08-31 17:06 UTC, three days before the
+September 3 cutoff (capture 20260831170636). Its raw bytes are archived
+privately, SHA-256
+`a921d766a4bf28046e567b065050abcb0dfd0d9ab804b6ed14ae711e4b62798f`. The
+capture carries the route table and the sentence the brief attributes to
+the project page: "Focused public engagement opportunities are for more
+complex route connections, while less complex connections are being
+completed with targeted community members or property owner engagement."
+That attribution is now verified against a pre-cutoff copy. The
+route-to-neighbourhood mapping in the table was not checked here; it is
+for the panel.
