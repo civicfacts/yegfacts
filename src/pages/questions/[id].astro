@@ -106,6 +106,7 @@ const pageUrl = new URL(`/questions/${question.id}`, Astro.site ?? SITE.url).hre
 // ---------------------------------------------------------------------------
 const entrySections = toc([
   { id: 'state', label: 'State' },
+  registered.some(parkedAtFraming) && { id: 'parked', label: 'What the record cannot answer' },
   source && { id: 'source', label: 'Where it came from' },
   registered.length > 0 && {
     id: 'claims',

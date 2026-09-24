@@ -1,12 +1,19 @@
-# Review brief: Did the City ask the streets it built on?
+# Review brief: Did the City ask residents about the routes singled out for review?
 
-Status: NOT FROZEN. Framing check 3 (framing/check-3.md), the last of
-the three reports the v1.12 cap allows, returned REVISE on 2026-09-25.
-Its standing findings are not all written as copy-ready replacement
-text, so the v1.39 route does not apply, and the brief awaits the
-founder in writing under the v1.12 cap; the run record's 2026-09-25
-section lists the findings. Nothing in this directory goes to a panel
-in this state. This is a revision of the brief
+Status: EVERY CLAIM PARKED AT FRAMING; no claim in it goes to a
+panel. Framing check 3
+(framing/check-3.md), the last of the three reports the v1.12 cap
+allows, returned REVISE on 2026-09-25. Under methodology v1.35 the
+editor conceded every standing finding of that report and applied each
+in the checker's wording; framing/wording-edits.md maps each finding to
+its edit. The stakes finding parks the brief's only claim,
+`ca-route-level-engagement`, at framing. The brief's other claim, the
+opposition half, was already parked. So no claim remains to go to a
+panel. The claim's framing is kept below, with the check 3 edits
+applied, as the test it would reopen with. The same seat confirmed the
+park on 2026-09-25 (framing/check-4.md, PARKS CONFIRMED), so nothing
+here is frozen for a panel and nothing further goes to the checker. The
+earlier history follows. This is a revision of the brief
 frozen 2026-09-04 on framing check 2 FRAME OK (framing/check-2.md), and
 under the method it is a new brief. It was revised because the council
 documents, read from archived bytes, contradict or do not support two
@@ -16,8 +23,8 @@ continues (the minutes record no decision on the fourteen routes;
 verification/source-existence-audit-decision-2026-09-25.md), and that
 the heading defining set S is common to all three versions of
 Attachment 5 (it is not; verification/source-existence-audit-archived-2026-09-25.md).
-Only the sentences resting on those two facts changed; the run record's
-2026-09-25 section lists them. History: drafted 2026-09-03 by Stew under D-0019; report IS03688
+In that revision only the sentences resting on those two facts changed;
+the run record's 2026-09-25 section lists them. History: drafted 2026-09-03 by Stew under D-0019; report IS03688
 and its attachments, which the drafting session could not open, were
 retrieved and read on 2026-09-04 and the route set, the verdict ladder's
 Not established conditions and the cutoff were corrected before any
@@ -26,44 +33,48 @@ six findings; response in framing/response-1.md), five adopted whole and
 one — the timing cutoff — adopted as the required alternative rather
 than as the primary, for the reason given in the response. Methodology:
 v1.40. Register question: `consultation-and-opposition`, lifecycle
-`briefed`, triage `go`. Source: `yegscoop-2026-08-26`.
+`briefed`, triage `park`. Source: `yegscoop-2026-08-26`.
 
 ## Story
 
 Fourteen people in one Facebook thread about Edmonton's bike-lane
 expansion made two complaints between them: the City did not ask us, and
 most of us do not want this. All fourteen are on the same side; nobody in
-that source argued back on either point. One of the two complaints can be
-checked against the City's own records and one cannot, and the whole
-point of this brief is to keep them apart. Topics: transportation,
-bike-lanes, city-hall.
+that source argued back on either point. One of the two complaints was
+framed for checking against the City's own records and one could not
+be, and the whole point of this brief is to keep them apart. Framing
+check 3 then parked the first as well (see Stakes). Topics:
+transportation, bike-lanes, city-hall.
 
-Claims in this question, reviewed and reported separately:
+Claims in this question:
 
-- `ca-route-level-engagement`: whether the City ran public engagement
-  about each specific route with the people that route affects, before
-  the route was built.
+- `ca-route-level-engagement`: For the fourteen bike-route projects
+  listed separately in Attachment 5 to report IS03688, the City ran no
+  public engagement about each specific route with the people that route
+  affects, before construction began or, for an unbuilt route, by
+  September 3, 2026. The fourteen are an administration-proposed group;
+  this proposition does not assume the committee adopted that proposal
+  or that the routes were built.
 
-That is one claim. It carries its own verdict, panel agreement and
-evidence-basis label. Reviewer confidence appears only beside the
-reviewer who gave it. Under methodology v1.18 a question with exactly one
-claim may drop its standfirst and let that claim's answer be the
-sentence.
+That is one claim, and it is parked at framing. No claim in this
+question goes to a panel.
 
 ## What the register holds, and what this brief tests
 
-The register carries two claims under this question. This brief tests one
-of them, in part, and parks the rest with public reasons. Nothing is
-deleted; each disposition below goes on the register when the brief is
-frozen, and on the question's page.
+The register carries two claims under this question. This brief framed
+one of them, in part, and parks the rest with public reasons; framing
+check 3 then parked the framed part too. Nothing is deleted; each
+disposition below goes on the register and on the question's page.
 
-**Tested.** The consultation half of `fast-tracked-without-consultation`,
-in the general form one account gave it: "relying on old data and zero
-community consultation (admitted to in the City's report)". The three
-other consultation wordings under that claim — "They don't do enough
-talking to the residents", "they blatantly ignored hermitage area",
-"Stakeholder engagement fail as they did not engage parents with school
-kids" — say narrower or different things, and are recorded under
+**Framed, then parked at framing.** The consultation half of
+`fast-tracked-without-consultation`, in the general form one account
+gave it: "relying on old data and zero community consultation (admitted
+to in the City's report)". Four accounts made five consultation
+comments. One account asserted the general no-consultation proposition;
+three other accounts made four narrower or different complaints. Three
+of them, "They don't do enough talking to the residents", "they
+blatantly ignored hermitage area" and "Stakeholder engagement fail as
+they did not engage parents with school kids", are recorded under
 Circulating forms below rather than folded into the proposition. Two of
 them are about places on no route in the set tested.
 
@@ -111,9 +122,9 @@ does not turn on any individual's conduct.
 
 - Prevalence: fourteen distinct accounts in the captured source took part
   in this question, more than any other question drawn from it except the
-  usage question. Five of them complained about consultation in their own
-  words, one of them in the general form the claim below tests
-  (intake.md).
+  usage question. Four accounts made five consultation comments. One
+  account asserted the general no-consultation proposition; three other
+  accounts made four narrower or different complaints (intake.md).
 - Civic importance: on 2026-08-26 the Infrastructure Committee considered
   administration's recommendation to proceed with 13 routes and
   re-evaluate 14. The minutes record no motion carried on that
@@ -134,8 +145,9 @@ does not turn on any individual's conduct.
 
 The captured forms, with the capture's comment indexes and the
 pseudonyms, are in intake.md, which reviewers do not receive. In summary
-for the panel: five commenters, writing between 2026-08-27 and
-2026-09-01, complained about consultation on Edmonton's bike routes. They
+for the panel: Four accounts made five consultation comments. One account
+asserted the general no-consultation proposition; three other accounts
+made four narrower or different complaints. They
 did not all say the same thing, and the difference decides which of them
 the proposition below is testing.
 
@@ -146,8 +158,8 @@ just considered. That is the general, programme-level assertion —
 no community consultation on this set of routes — and it is what the
 proposition tests.
 
-**Four accounts made narrower or different complaints, and none of them
-is counted as an assertion of the proposition.** One said parents of
+**Three other accounts made four narrower or different complaints, and
+none of them is counted as an assertion of the proposition.** One said parents of
 school-age children were not engaged, about two routes in set S: a claim
 about one group, not about the neighbourhood. One said residents were
 not informed about a route in set S: a claim about notification, which
@@ -161,8 +173,9 @@ are recorded on the question's page as circulating forms of the
 consultation complaint. None supports the set-S proposition and none is
 counted toward its prevalence.
 
-**Prevalence:** one account in one source asserts the proposition as
-stated; five took part in the consultation argument. The brief does not
+**Prevalence:** Four accounts made five consultation comments. One
+account asserted the general no-consultation proposition; three other
+accounts made four narrower or different complaints. The brief does not
 claim the complaint is common in Edmonton. It is tested because it is the
 checkable core of what fourteen people were arguing about, not because
 many people phrased it this way.
@@ -181,8 +194,12 @@ committee considered in August. The proposition below answers that question
 by counting documented solicitation of affected residents or their
 representative bodies, distinguishing it from publication and one-way
 notification. An open-to-all neighbourhood process is reported as the
-stricter alternative. The level is the route, which is the level the
-record answers at and the level residents argue about.
+stricter alternative. Residents ask whether the City invited affected
+people to influence each route before its design was fixed. The
+identified public record can document invitations that occurred, but,
+without a route-complete engagement account, its silence cannot
+establish that none occurred. This question remains parked at the level
+residents ask it.
 
 The second question people ask under this heading — "do most people
 actually want this?" — is not answered here, and the brief says so above
@@ -191,9 +208,14 @@ rather than answering a measurable cousin of it.
 ## Dates fixed in this brief
 
 **As-of date:** 2026-09-03, the date of the run. Anything decided or
-published after it is out of scope. Documents dated on or before it may
-be read later; the council report and its attachments below were dated
-2026-08-26 and were retrieved on 2026-09-04. *Required alternative:*
+published after it is out of scope. A record retrieved after September 3
+may establish an as-of fact only if its relevant version and public
+availability by September 3 are verified. Apply the same rule to the
+August 26 alternative. For a mutable page, use a dated or archived
+version for historical content; otherwise report that content as
+historically unverified and do not use it to classify a route or date an
+activity. An internal document date alone does not establish
+publication date. *Required alternative:*
 2026-08-26, the date of the committee meeting the argument is about.
 Reviewers state whether using it changes any route's classification,
 naming the dated City record that makes the difference.
@@ -217,19 +239,24 @@ only.
 *Why the construction cutoff is the primary one.* The alternative is the
 better test of what consultation means and the worse one to compute: a
 date on which a design stopped being open to change is not something the
-City publishes per route. For this set the difference is small, because
-Attachment 3 records that construction has not started on any of the
-fourteen and that five of them have no delivery plan at all. Reviewers
+City publishes per route. Construction start and the last point at which
+the route or its material design remained open can differ. Reviewers
+report both cutoffs where the published record establishes them,
+identify every changed classification, and leave the alternative
+unresolved where its decision point cannot be established. Reviewers
 say for which routes the two cutoffs give different answers.
 
-## The claim under review
+## The claim, parked at framing
 
 ### Claim, id: `ca-route-level-engagement`
 
-**Normalized proposition:** For the bike routes the City pushed ahead in
-2026 — the fourteen in set S below — it ran no public engagement about
-the specific route with the people that route affects, before the route
-was built.
+**Normalized proposition:** For the fourteen bike-route projects listed
+separately in Attachment 5 to report IS03688, the City ran no public
+engagement about each specific route with the people that route affects,
+before construction began or, for an unbuilt route, by September 3,
+2026. The fourteen are an administration-proposed group; this
+proposition does not assume the committee adopted that proposal or that
+the routes were built.
 
 **Why this reading.** The holder's words are "zero community
 consultation", said about the routes the committee had just considered.
@@ -382,6 +409,15 @@ supported** if E is at least 1 and E + U is at most 9; **Contradicted**
 if E is at least 10 (more than two thirds of the set); **Not
 established** otherwise.
 
+For the required twenty-seven-route alternative, E + N + U = 27. Under
+the primary cutoff set: Supported if E = 0 and U = 0; Partially
+supported if E ≥ 1 and E + U ≤ 13; Contradicted if E ≥ 14; Not
+established otherwise. Under the alternative cutoff set: Supported if
+E = 0 and U = 0; Partially supported if E ≥ 1 and E + U ≤ 18;
+Contradicted if E ≥ 19; Not established otherwise. These are
+alternative classifications reported in interpretation notes; neither
+carries the claim's verdict.
+
 Neither cutoff set is drawn from an identified pre-existing standard.
 Under the primary set, a majority of routes with engagement is where the
 claim stops describing the programme. Under the alternative set, two
@@ -475,8 +511,13 @@ qualifying engagement was demonstrated. Additional route-specific records
 could move the result either way; no record-keeping failure is inferred
 unless separate evidence establishes one.
 
-Each of the four is reachable on the documents named below, and each
-changes something for someone.
+Park `ca-route-level-engagement`. The identified published record does
+not establish a route-by-route basis on which the absolute no-engagement
+claim could be Supported as well as Contradicted. Reopen it when the
+City publishes an auditable, route-by-route account of qualifying
+engagement and explicit non-engagement for the fourteen projects,
+covering the relevant period. Do not substitute a finding about missing
+published records for a finding that no engagement occurred.
 
 **Definition sensitivity.** The verdict applies under the primary
 definition of engagement, set S, the construction-start cutoff and the
@@ -511,8 +552,9 @@ whether any individual route's design is right.
 ## Documents the panel must read, and what each answers
 
 Named here so the panel reads the record rather than taking a figure from
-this brief. This brief asserts no participation figure, no engagement
-count and no route count; every such number in the finding comes from a
+this brief. This brief states the Attachment 5 route-list sizes for
+reviewers to check; it states no participation figure or count of
+qualifying engagement activities. Every such number in the finding comes from a
 reviewer who read the document and named the page.
 
 1. **Report IS03688, "Active Transportation Implementation Acceleration

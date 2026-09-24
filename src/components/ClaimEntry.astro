@@ -70,10 +70,11 @@ const label = 'text-xs tracking-[0.08em] text-muted uppercase tabular';
  * the third framing report found the record cannot answer it as asserted, and
  * the page says so rather than claiming a panel run that did not happen. Either
  * way two decisions differ here, so the page prints both rather than the
- * question's alone.
+ * question's alone. A claim's own park is printed even when its question is
+ * parked too, because the claim's reason and reopening condition are its own.
  */
 const declinedApart = claim.triage === 'no' && question.triage !== 'no';
-const parkedApart = claim.triage === 'park' && question.triage !== 'park';
+const parkedApart = claim.triage === 'park';
 const ruledApart = declinedApart || parkedApart;
 /**
  * Two triage readers turned this claim down before v1.16 moved triage to the
@@ -250,9 +251,13 @@ const turnedDown = !ruledApart && claim.prior_triage?.outcome === 'no';
     </p>
 
     <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
-      {triageHeading(question.triage)}. One brief covers every claim under that question, and each
-      claim still gets its own finding. The question's page carries the reason, the grouping and the
-      other claims made about it.
+      {triageHeading(question.triage)}.{' '}
+      {
+        question.triage === 'go'
+          ? 'One brief covers every claim under that question, and each claim still gets its own finding.'
+          : 'No panel checks the claims under it unless it reopens.'
+      }{' '}
+      The question's page carries the reason, the grouping and the other claims made about it.
     </p>
   </section>
 

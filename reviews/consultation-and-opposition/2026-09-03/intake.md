@@ -209,8 +209,10 @@ the August 26, 2026, Infrastructure Services report IS03688, be
 approved." Its attachment list ends: "5. Modified Approach for the
 Active Transportation Network Expansion Program".
 
-Attachment 5 carries two lists. Under "Will be reevaluated for
-feasibility and subject to funding availability" it names fourteen
+Attachment 5 carries two lists. In the original and in one of the two
+replacements the fourteen sit under the heading "Will be reevaluated for
+feasibility and subject to funding availability"; the other replacement
+has no such heading and says they "may be re-evaluated". The fourteen
 projects, verbatim and in this order:
 
 1. 50 Street (101 Avenue to 109A Avenue)
@@ -231,7 +233,7 @@ projects, verbatim and in this order:
     (142 Street to 149 Street) and 144 Street (Stony Plain Road to 107
     Avenue)
 
-Under "Will continue as planned" it names thirteen:
+The thirteen, listed under "Will continue as planned" in the original:
 
 1. 50 Street (109A Avenue to Goldbar Park Road)
 2. 84 Avenue (Mill Creek Ravine to 91 Street)
@@ -249,9 +251,31 @@ Under "Will continue as planned" it names thirteen:
 13. Victoria Park Road (116 Street to River Valley Road)
 
 The two lists are word-for-word identical in all three published
-versions of Attachment 5 (304030, 304031, 304032), which differ only in
-how they describe the decision rule. Fourteen and thirteen are also the
-counts Taproot reported on 2026-09-01 without naming a source document.
+versions of Attachment 5. The versions differ in their headings and in
+what they say would happen to the fourteen. The original says they
+"would be removed from the scope" for 2026 and 2027 if Council approved
+the change. One replacement keeps both headings and says they "may be
+revisited using alternate design approaches or other future
+initiatives". The other has no "Will be reevaluated" heading, says they
+"may be re-evaluated", and says administration will report on the
+remaining routes in Q1 2027. The PDFs carry no DocumentId, so which file
+sits at which of 304030, 304031 and 304032 rests on titles and
+REPLACEMENT labels, and which replacement is 304030 and which is 304031
+is not established. Fourteen and thirteen are also the counts Taproot
+reported on 2026-09-01 without naming a source document.
+
+*Correction, 2026-09-25.* As first written, this section put the
+fourteen under the "Will be reevaluated" heading and the thirteen under
+"Will continue as planned" as if all three versions shared both
+headings, said the versions "differ only in how they describe the
+decision rule", and tied the lists to DocumentIds 304030, 304031 and
+304032. The archived-source audit
+(verification/source-existence-audit-archived-2026-09-25.md) verified
+that the route lists match across all three versions, that one
+replacement lacks the "Will be reevaluated" heading, that the versions
+differ in introductory wording and proposed treatment, and that the
+files carry no DocumentId. The text above now says what that audit
+verified.
 
 ### What the report says about consultation, verbatim
 
