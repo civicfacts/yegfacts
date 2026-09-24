@@ -1,0 +1,176 @@
+{
+  "reviewer": {
+    "provider": "anthropic",
+    "model_self_reported": "claude-opus-5-5",
+    "runner_model": "claude-opus-5-5",
+    "runner_seat": "Claude Opus 5.5",
+    "runner_effort": "high"
+  },
+  "story": "lanes-and-congestion",
+  "round": 1,
+  "claims": [
+    {
+      "id": "city-removed-traffic-lanes",
+      "proposition_evaluated": "The City of Edmonton has removed motor-vehicle through lanes for bike lanes across a geographically broad share of Edmonton. Under the brief, a corridor counts (C) only if a City project record, design drawing or council/committee report shows that a lane used by through motor-vehicle traffic was removed and a bike lane was put in that space, or in space that included it. A is the number of the 15 district-plan areas that contain at least one qualifying corridor. The primary threshold for Supported is A of at least 8. The alternative threshold is A of at least 5.",
+      "interpretation_notes": "VERDICT ROW: C is at least 1 and A is below 8 under the primary threshold. A is also below 5 under the alternative threshold, so the claim is Partially supported under both. WHAT HOLDS: the City's own records show that through lanes were removed and bike lanes added on at least two or three corridors. (a) 102 Avenue from 121 St to 112 St in Oliver/Wîhkwêntôwin: the City's April 2015 fact sheet shows two-way traffic converted to one-way eastbound, with a two-way cycle track on the north side. (b) 102 Avenue downtown, 107 St to 99 St: a City road safety review (as reported by Bike Edmonton, 27 July 2015) proposed a south-side two-way cycle track, a north-side two-way LRT and a single centre-running one-way lane for vehicles. The lane loss there is shared between the Valley Line LRT and the cycle track. (c) 132 Avenue, 127 St to Fort Road: the collector renewal takes four vehicle lanes down to two and adds separated bike lanes. It was built in stages from 2023, with some features dated 2027 in the inventory. WHAT FAILS: the 'geographically broad share' part. I could confirm qualifying corridors in only 1 district-plan area with certainty: Central, which holds both 102 Avenue corridors. 132 Avenue adds one or more northern areas (it runs through Kensington, Calder, Rosslyn, Lauderdale, Glengarry, Killarney, Delwood, Balwin and Belvedere). I did not confirm the district boundaries along it, so my estimate is A = 2 to 4. Hermitage Road and 40 Street (Northeast, 2024) were narrowed and a turning lane was removed, but no source I consulted states the through-lane count before and after, so they are not counted. The 100 Avenue downtown lanes (2017) are also not counted: no source I consulted states that a through lane was removed there. Even if every uncertain corridor counted, A would not reach 5 on the evidence I found. REASONS (a qualification, not part of the verdict): the City gives traffic calming and an 'overbuilt' collector as the reasons for 132 Avenue, and the Valley Line LRT shares the 102 Avenue downtown right-of-way. COUNTING UNIT: I was not given the snapshot file. On 2026-09-24 I queried the live layer given in the brief. It returned 3,175 features, which matches the snapshot's feature count, but I could not check the checksum. The layer has no field for prior lane use, so R cannot be taken from the inventory. Grouping bike-lane features (Painted, Protected One Way, Protected Two Way, Contra-Flow) by street name gives 79 street-and-class rows across about 60 street names. Some of those features carry construction_year 2027, so T for corridors built by the as-of date is somewhere around 55 to 60. That is my own rough grouping, not T under the project-record rule. Using individual inventory features as the unit instead does not change A, because A counts areas, not features, so the classification is unchanged. On denominators: several of the 15 district-plan areas are mostly greenfield, and the live inventory shows no on-street bike-lane features I could attribute to them. So A ≥ 8 is a demanding standard for 'all throughout the city', but that matches the plain meaning of the words.",
+      "verdict": "Partially supported",
+      "confidence": "Moderate",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "For 102 Avenue from 121 St to 112 St, the City's design shows a two-way cycle track on the north side and conversion of the street to one-way eastbound. From 112 St to 111 St a travel lane is kept and the change is to parking.",
+          "source_title": "2014/2015 Bike Route Plan – 102 Avenue Protected Bike Lane (fact sheet)",
+          "source_url": "https://www.edmonton.ca/public-files/assets/document?path=RoadsTraffic/BikeFactSheet_DT_APR2015.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2015-04",
+          "source_type": "policy-document",
+          "establishes": "What the City designed: a through lane (westbound) removed on 121–112 St with a cycle track added. A design document, not an as-built record. A direct fetch on 2026-09-24 returned HTTP 502, so the content comes from the search engine's indexed extract.",
+          "quote": "this section of 102 Avenue converts to one-way street travelling eastbound only",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The live Bike Routes – On Street layer (queried 2026-09-24) contains 27 '102 AVENUE NW' features classed 'Protected Bike Lanes - Two Way', with construction_year from 2016 to 2022.",
+          "source_title": "Bike Routes - On Street (MapServer layer 236), statistics query",
+          "source_url": "https://gis.edmonton.ca/site1/rest/services/Overlay_Public/Common_Layers/MapServer/236/query?where=1%3D1&returnCountOnly=true&f=json",
+          "source_publisher": "City of Edmonton",
+          "source_date": "queried 2026-09-24",
+          "source_type": "observed-data",
+          "establishes": "That the 102 Avenue two-way cycle track was built. It says nothing about prior lane use.",
+          "strength": "strong"
+        },
+        {
+          "finding": "A City road safety review proposed redesigning 102 Avenue downtown (99–107 St) as a south-side two-way cycle track, a north-side two-way LRT and a centre-running one-way lane for vehicles.",
+          "source_title": "102 Avenue protected bike lane from 99 St to 107 St",
+          "source_url": "https://bikeedmonton.ca/news/102-avenue-protected-bike-lane-from-99-st-to-107-st",
+          "source_publisher": "Bike Edmonton",
+          "source_date": "2015-07-27",
+          "source_type": "advocacy",
+          "establishes": "A lead to the City's road safety review. It shows vehicle traffic reduced to one one-way lane, with the space shared by the LRT and the cycle track. It does not give the earlier lane layout.",
+          "quote": "A centre-running one-way motor vehicle travel",
+          "strength": "weak"
+        },
+        {
+          "finding": "The City chose to narrow 132 Avenue from four lanes to two as a traffic-calming measure. The freed space goes to wider sidewalks, landscaping and separated bike lanes along 127 St to Fort Road. Construction started in May 2023, with completion expected in fall 2027.",
+          "source_title": "Here's why Edmonton's 132nd Avenue renewal project is garnering attention",
+          "source_url": "https://www.cbc.ca/news/canada/edmonton/here-s-why-edmonton-s-132nd-avenue-renewal-project-is-garnering-attention-1.6990066",
+          "source_publisher": "CBC News",
+          "source_date": "2023",
+          "source_type": "media",
+          "establishes": "Reported through-lane reduction on 132 Avenue, with the City's stated reasons. Media coverage is a lead only: the City project page (edmonton.ca/transportation/on_your_streets/132-avenue-renewal) returned HTTP 502 on 2026-09-24. Content comes from the search-index extract because a direct fetch returned HTTP 403.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The live layer holds 92 '132 AVENUE NW' features classed 'Protected Bike Lanes - One Way' (construction_year 2023–2027), plus EB, WB and two-way features.",
+          "source_title": "Bike Routes - On Street (MapServer layer 236), group-by query",
+          "source_url": "https://gis.edmonton.ca/site1/rest/services/Overlay_Public/Common_Layers/MapServer/236",
+          "source_publisher": "City of Edmonton",
+          "source_date": "queried 2026-09-24",
+          "source_type": "observed-data",
+          "establishes": "That protected lanes exist on 132 Avenue. Features dated 2027 may not be built by the as-of date.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Near St. Cecilia Junior High, 132 Avenue had 'effectively seven lanes of road plus service road' and is being converted to 'four lanes for cars' plus a boulevard, a wider sidewalk and bike lanes.",
+          "source_title": "Edmonton's Newest Complete Street",
+          "source_url": "https://pathsforpeople.org/2023/08/edmontons-newest-complete-street/",
+          "source_publisher": "Paths for People",
+          "source_date": "2023-08-29",
+          "source_type": "advocacy",
+          "establishes": "An advocate's account that lane width was reduced on one 132 Avenue segment. A lead only.",
+          "strength": "weak"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The Hermitage Road and 40 Street work (2024) is described only as narrowed lanes, added buffered bike lanes, and the removal of a double left-turn and right-turn slip lanes. No through-lane counts before or after are given.",
+          "source_title": "On Hermitage Road, bike lanes, shared use paths, budget pressures, and WHY",
+          "source_url": "https://aaronpaquette.ca/blog/on-hermitage-road-bike-lanes-shared-use-paths-budget-pressures-and-why",
+          "source_publisher": "Councillor Aaron Paquette",
+          "source_date": "Sep 18 (year not shown; context suggests 2024)",
+          "source_type": "media",
+          "establishes": "That Northeast-district removals of through lanes are not established from this source. Turning-lane removals do not qualify under the brief.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Staff proposed re-evaluating 14 routes that 'would affect parking or vehicle lanes', and several are concentrated in the east-central area (50 St, 79 St, 84 Ave, 85 St, 89 St, 93 St, 106 Ave). Terrace Heights and 95 Avenue were deferred and Grovenor was cancelled.",
+          "source_title": "Bike routes cancelled or put off despite council direction",
+          "source_url": "https://edmonton.taproot.news/news/2026/09/01/bike-routes-cancelled-or-put-off-despite-council-direction",
+          "source_publisher": "Taproot Edmonton",
+          "source_date": "2026-09-01",
+          "source_type": "media",
+          "establishes": "That many routes which would affect lanes were not built by the as-of date, so they are outside the set. It also shows that 50 Street was redesigned to keep travel lanes.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The first downtown bike-network routes (2017: 100 Ave, 103 St, 107 St) are described with no statement that through lanes were removed. Coun. Knack is quoted: 'We are off the major routes where there is large volumes of traffic.'",
+          "source_title": "New Edmonton downtown bike network will be change for motorists",
+          "source_url": "https://globalnews.ca/news/3534322/edmonton-downtown-bike-network/",
+          "source_publisher": "Global News",
+          "source_date": "2017-06-16",
+          "source_type": "media",
+          "establishes": "No lane removal is established on these downtown corridors from this source.",
+          "strength": "weak"
+        },
+        {
+          "finding": "The inventory's bike-lane classes are dominated by central and south-central streets. Suburban painted lanes (Saddleback Rd, Wolf Willow Rd, 19/29/31/69 Ave, Leger Rd, 141 St SW) have no construction_year and no prior-use attribute.",
+          "source_title": "Bike Routes - On Street (MapServer layer 236), group-by STREET_NAME_FULL and classification",
+          "source_url": "https://gis.edmonton.ca/site1/rest/services/Overlay_Public/Common_Layers/MapServer/236",
+          "source_publisher": "City of Edmonton",
+          "source_date": "queried 2026-09-24",
+          "source_type": "observed-data",
+          "establishes": "That the inventory alone cannot show prior lane use, and that bike lanes are geographically concentrated, which caps the possible A.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "Most edmonton.ca pages and PDFs, including the 132 Avenue project page and FAQ, the Active Transportation Network Expansion page and the 102 Avenue route PDF, returned HTTP 502 when fetched on 2026-09-24. Two City documents are cited only through search-index extracts. That is why confidence is Moderate rather than High.",
+        "I did not receive the snapshot file. I used the live layer on 2026-09-24, one day after the as-of date. Its feature count (3,175) matches the snapshot, but the checksum could not be verified.",
+        "T and R were not computed under the brief's project-record grouping rule. My T of about 55 to 60 street-name corridors is my own grouping of feature groups, not a City figure.",
+        "District-plan areas for 132 Avenue and the Hermitage/40 Street corridors are my own inference from neighbourhood names. I did not overlay them on the district boundary maps.",
+        "Shape.STLength sums in the layer are in Web Mercator units (EPSG:3857), which overstate true length by roughly 1.7× at Edmonton's latitude. I report no network length from them.",
+        "Corridors I did not search corridor by corridor for prior lane use: 100 Ave, 103 St, 99 St, 106 St/76 Ave, 83 Ave, 100 St, 105 Ave, 110 St, 113 St, 119 Ave, 127 St, 92 St, 96 St, 84 St, Wolf Willow Rd, Saddleback Rd, Alpha Blvd, and the suburban painted lanes. Not finding a removal is not evidence that none happened.",
+        "Qualification 2 (share of the network sitting in former through lanes): I found no City publication of this figure."
+      ],
+      "unknowns": [
+        "Whether 102 Avenue from 121 to 112 St was built and operates as one-way eastbound as designed. The design document and inventory support this, but I did not see an as-built record.",
+        "What the prior lanes were on 102 Avenue downtown east of 109 St (Coun. Knack's blog reportedly mentions bus/bike/taxi lanes), and how the lost space splits between the LRT and the cycle track.",
+        "Which 132 Avenue stages were built by 2026-09-23, and which district-plan areas they fall in.",
+        "Prior lane use on the other roughly 50 built bike-lane corridors in the inventory, especially suburban painted lanes that may have come from restriping."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Before-and-after lane configuration (design drawings or as-builts) for every on-street bike-lane corridor in the Bike Routes – On Street inventory",
+          "likely_holder": "City of Edmonton, Transportation Planning and Design / Infrastructure Planning and Design",
+          "importance": "critical"
+        },
+        {
+          "description": "The 2016 Urban Planning Committee report on the downtown bike network (Stantec capacity analysis, Attachment 1), naming which downtown lanes were reduced",
+          "likely_holder": "City of Edmonton Office of the City Clerk (eSCRIBE archive)",
+          "importance": "high"
+        },
+        {
+          "description": "District-plan boundary overlay for 132 Avenue, Hermitage Road and 40 Street",
+          "likely_holder": "City of Edmonton Urban Planning (district plan GIS)",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "T: group the snapshot's bike-lane features into corridors using the project-record rule and filter to built by 2026-09-23. My rough grouping by street name (reviewer's calculation) is about 55 to 60.",
+        "R and C: C ≥ 3 confirmed in my review (102 Ave Oliver, 102 Ave downtown, 132 Ave). R is at least 3 and unknown beyond that.",
+        "A: Central is certain. 132 Avenue adds 1 to 3 northern areas (not verified). My estimate is A = 2 to 4 (reviewer's calculation), which is below both 8 and 5.",
+        "Converting Shape.STLength from EPSG:3857 units to true metres before reporting any lengths."
+      ],
+      "what_would_change_my_verdict": [
+        "City records showing qualifying through-lane removals in at least 8 district-plan areas (or at least 5 under the alternative threshold) would move the verdict to Supported.",
+        "Evidence that none of the three corridors actually lost a through lane as built, with prior use established for all T corridors, would move it to Contradicted. That is very unlikely given the 132 Avenue record."
+      ],
+      "suggested_one_line": "The City has taken through lanes for bike lanes on a few corridors, notably 102 Avenue and 132 Avenue, but the record found shows this in only a few districts, not 'all throughout the city'.",
+      "suggested_short_answer": "Partly. City records show through lanes removed for bike lanes on 102 Avenue in Oliver (converted to one-way) and downtown (shared with the LRT), and on 132 Avenue (four lanes to two, which the City describes as traffic calming). Qualifying corridors confirmed so far sit in roughly 2 to 4 of Edmonton's 15 district-plan areas.",
+      "suggested_tldr": [
+        "102 Ave, 121–112 St: two-way converted to one-way eastbound, with a cycle track (City design, 2015).",
+        "132 Ave: four lanes to two, with bike lanes added; the City's stated reason is traffic calming on an overbuilt collector.",
+        "Confirmed removals are concentrated centrally; no confirmed removal was found in most of the 15 districts."
+      ]
+    }
+  ]
+}

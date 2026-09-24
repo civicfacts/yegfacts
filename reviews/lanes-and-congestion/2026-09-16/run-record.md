@@ -232,3 +232,18 @@ brief is unchanged (sha256 ddaa04ae…); the package is assembled from it by
 the runner exactly as before. The prior attempt's answers were seen by the
 editor; the seats never see each other's, and the editor chooses nothing
 about them, so the restart changes the roster and nothing else.
+
+### Round 1 of the restarted run
+
+| Seat | Outcome |
+|---|---|
+| Claude Opus 5.5, high | admitted, one attempt: Partially supported, moderate; 6 supporting, 4 challenging |
+| GPT-6 Sol, high | admitted, one attempt: Not established, moderate; 5 and 4 |
+| GPT-6 Luna, high | admitted, one attempt: Not established, low; 2 and 2 |
+
+The Anthropic seat differs from both OpenAI seats. Under v1.37 that is a
+vendor split: the published finding names it beside the seat agreement and
+the drafting addresses it from the sources, never as a plain two-to-one
+majority. Each seat's manifest row is in run.yaml. Merge and evidence
+staging are done; see fetch-report.md. Round 2 (cross-review) follows on
+the same three seats.
