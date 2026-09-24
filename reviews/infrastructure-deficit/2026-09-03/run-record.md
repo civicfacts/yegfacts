@@ -339,3 +339,25 @@ as posed, roads Partially supported on all three, the $100 million eligible
 Supported on all three, and its share of the shortfall Partially supported
 on all three) are kept under `superseded-2026-09-24/` and are not an input
 to the rerun. Round 1 reruns on all three seats.
+
+## 2026-09-24: round 1, round 2 and synthesis on three seats from two vendors
+
+Round 1 reran on the corrected text: Claude Opus 5.5, GPT-6 Sol and GPT-6
+Luna, all at high, each admitted on one attempt, no framing concern. Merge:
+23 distinct sources; staging archived 15, 8 not (fetch-report.md). Round 2
+on the same seats. `scripts/synthesize.ts` on the round-1 basis:
+
+| Claim | Claude r1 | GPT-6 Sol r1 | GPT-6 Luna r1 | Round 2 (C / S / L) | Finding |
+|---|---|---|---|---|---|
+| `infra-roads-condition` | Partially supported | Partially supported | Partially supported | Partially supported / Partially supported / Partially supported | **Partially supported**, Unanimous |
+| `infra-bike-money-renewal-eligible` | Not established | Supported | Supported | Supported / Supported / Supported | **Partially supported**, Split |
+| `infra-hundred-million-vs-shortfall` | Partially supported | Partially supported | Partially supported | Partially supported / Partially supported / Partially supported | **Partially supported**, Unanimous |
+
+**Vendor split (methodology v1.37) on `infra-bike-money-renewal-eligible`.**
+The Anthropic seat differs from both OpenAI seats in round 1. The finding
+names that beside the Split agreement, and the drafting addresses it from the
+sources: it is never presented as two seats outvoting one, since the two
+OpenAI seats are not independent of each other.
+
+Drafting, the faithfulness and plain-speech reads and the publication gate
+follow.
