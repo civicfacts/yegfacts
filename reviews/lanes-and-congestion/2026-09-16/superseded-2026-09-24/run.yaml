@@ -123,6 +123,125 @@ runs:
         canary_requests_manifest_sha256: a850c7157481a9e4e273620310603c6cd42a887b5f148b432909811c1e242b28
   - provider: openai
     round: 1
+    command: scripts/panel/invoke-reviewer.sh --provider openai --model gpt-6-luna --effort high --package package.md
+    cli_version: codex-cli 0.156.1
+    model_id: gpt-6-luna
+    seat: GPT-6 Luna
+    reasoning_effort: high
+    prompt_sha256: e86e4caf15257b8eb9e56763e9e6716d3a6119325cb9e1ea4ca6e0f8574f5823
+    methodology_version: "1.39"
+    started_at: 2026-09-24T15:49:34Z
+    finished_at: 2026-09-24T15:55:55Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - reviewer.md
+      - review-schema.json
+    attempts_detail:
+      - attempt: 1
+        attempt_id: 0f6590dfd5fbbcce
+        status: ok
+        purpose: research
+        exit_code: 0
+        profile: codex-captured-read-only-0.156.1
+        model_id: gpt-6-luna
+        reasoning_effort: high
+        cli_version: 0.156.1
+        canary: pass
+        structure: pass
+        context_proof: pass
+        record_kind: request
+        operator_path_notes: 0
+        admitted_for_research: true
+        canary_context_proof: pass
+        admission_reason: the canary and the research run each passed their structural check and their capture check against https://chatgpt.com under codex-captured-read-only-0.156.1.
+        schema: valid
+        reason: the canary and the research run each passed their structural check and their capture check against https://chatgpt.com under codex-captured-read-only-0.156.1.
+        package_sha256: e86e4caf15257b8eb9e56763e9e6716d3a6119325cb9e1ea4ca6e0f8574f5823
+        stdout_sha256: 0cc5e39559b36a9f851aaf587771e4764e4b91cbccbafe00cd0cf39b893b32cb
+        final_message_sha256: d25e9fac67c22a1e2d32c2b460c62ffbd516b6c359d792a81f4c6e6a9d392b5b
+        canary_stdout_sha256: 1e325d1339c8a7b0de80639ba97a0160a5fc87bb1684ce50ff683b5fc7afc680
+        canary_stderr_sha256: 3e75d28a6681c31400a3f0fcb564c7613fd42796fb83294e4d53fea86bcbd401
+        canary_final_message_sha256: 35080935eeb7b4a172c8b41bd6848ff262b912c8ad0483401cceed2dd8a28766
+        canary_report_sha256: 72306a25843d623013ca825371528ded83377ce5b3fad72bfd1ad4027b08130e
+        proof_report_sha256: 82b2403dad66bb43a3d796cbb2ebfd671a44fcb106541af3773e67a58b5d4447
+        upstream: https://chatgpt.com
+        canary_upstream: https://chatgpt.com
+        request_count: 26
+        canary_request_count: 20
+        requests_searched: 15
+        canary_requests_searched: 9
+        package_seen: 9
+        canary_package_seen: 5
+        capture_check_sources:
+          - name: $HOME/.claude/CLAUDE.md
+            present: true
+            lines_checked: 35
+          - name: $HOME/CLAUDE.md
+            present: true
+            lines_checked: 97
+          - name: $HOME/AGENTS.md
+            present: true
+            lines_checked: 97
+          - name: $HOME/.codex/AGENTS.md
+            present: true
+            lines_checked: 97
+          - name: <repo>/CLAUDE.md
+            present: true
+            lines_checked: 18
+          - name: <repo>/AGENTS.md
+            present: true
+            lines_checked: 19
+          - name: $HOME/.claude/projects/*/memory/*.md
+            present: true
+            lines_checked: 1337
+            files: 101
+          - name: the repository path
+            present: true
+            lines_checked: 1
+          - name: the home directory
+            present: true
+            lines_checked: 1
+          - name: the canary token
+            present: false
+            lines_checked: 0
+        canary_capture_check_sources:
+          - name: $HOME/.claude/CLAUDE.md
+            present: true
+            lines_checked: 35
+          - name: $HOME/CLAUDE.md
+            present: true
+            lines_checked: 97
+          - name: $HOME/AGENTS.md
+            present: true
+            lines_checked: 97
+          - name: $HOME/.codex/AGENTS.md
+            present: true
+            lines_checked: 97
+          - name: <repo>/CLAUDE.md
+            present: true
+            lines_checked: 18
+          - name: <repo>/AGENTS.md
+            present: true
+            lines_checked: 19
+          - name: $HOME/.claude/projects/*/memory/*.md
+            present: true
+            lines_checked: 1337
+            files: 101
+          - name: the repository path
+            present: true
+            lines_checked: 1
+          - name: the home directory
+            present: true
+            lines_checked: 1
+          - name: the canary token
+            present: false
+            lines_checked: 0
+        requests_manifest_sha256: cd80fd94b8fd902879cb44b02ffd0485090f6abaadba38b92183a4457c97495e
+        canary_requests_manifest_sha256: 11cf4b8af91903d1ed5d947ff3084a4abb8f7d7a065e53d7fd566c552a4e1812
+  - provider: openai
+    round: 1
     command: scripts/panel/invoke-reviewer.sh --provider openai --model gpt-6-sol --effort high --package package.md
     cli_version: codex-cli 0.156.1
     model_id: gpt-6-sol
@@ -362,6 +481,128 @@ runs:
             lines_checked: 1
         requests_manifest_sha256: d103c0f7a4717f65ef49d8981bb896ab293b031759451e96143aa107d9fe1b82
         canary_requests_manifest_sha256: 8316b48ebf12f830793222a0b61b8f9acc5e7ba73588db2122e204dcbb5375df
+  - provider: openai
+    round: 2
+    command: scripts/panel/invoke-reviewer.sh --provider openai --model gpt-6-luna --effort high --package package.md
+    cli_version: codex-cli 0.156.1
+    model_id: gpt-6-luna
+    seat: GPT-6 Luna
+    reasoning_effort: high
+    prompt_sha256: 8ead697c0ff1a457086ef79aeaba7c922a7338e01de43dcbeb05d9cf265d1769
+    methodology_version: "1.39"
+    started_at: 2026-09-24T16:01:38Z
+    finished_at: 2026-09-24T16:09:14Z
+    attempts: 1
+    status: ok
+    package_files:
+      - brief.md
+      - cross-review.md
+      - review-schema.json
+      - combined-evidence.json
+      - other-review-claude.json
+      - other-review-gpt.json
+    attempts_detail:
+      - attempt: 1
+        attempt_id: 862a0f2e459b048d
+        status: ok
+        purpose: research
+        exit_code: 0
+        profile: codex-captured-read-only-0.156.1
+        model_id: gpt-6-luna
+        reasoning_effort: high
+        cli_version: 0.156.1
+        canary: pass
+        structure: pass
+        context_proof: pass
+        record_kind: request
+        operator_path_notes: 0
+        admitted_for_research: true
+        canary_context_proof: pass
+        admission_reason: the canary and the research run each passed their structural check and their capture check against https://chatgpt.com under codex-captured-read-only-0.156.1.
+        schema: valid
+        reason: the canary and the research run each passed their structural check and their capture check against https://chatgpt.com under codex-captured-read-only-0.156.1.
+        package_sha256: 8ead697c0ff1a457086ef79aeaba7c922a7338e01de43dcbeb05d9cf265d1769
+        stdout_sha256: 819a12987fa059bf1e48a15a1c82227bb1e86f38bb05804bd8d32726e2eb3031
+        final_message_sha256: afe1e5b6c0657fcf974d35be89fa655b2c86396ea181e9d83b264b036a73b72e
+        canary_stdout_sha256: cf41edfebc1ee1edde0a70699619eae3c90e49af56e0cfe796bc3f88dcb2da83
+        canary_stderr_sha256: 3e75d28a6681c31400a3f0fcb564c7613fd42796fb83294e4d53fea86bcbd401
+        canary_final_message_sha256: 8f51716448d61468dc6eb54cf538959d1a3e23d17f24e0b936af9a7910649785
+        canary_report_sha256: 9db6b62554f7052063b98490446d7bc103a236ea546f30da9a03d448d46c63c1
+        proof_report_sha256: 975d66686849d2c888e07054d346c95ad0044bbb3ecc5da07730533200baf1c2
+        upstream: https://chatgpt.com
+        canary_upstream: https://chatgpt.com
+        request_count: 30
+        canary_request_count: 17
+        requests_searched: 18
+        canary_requests_searched: 6
+        package_seen: 11
+        canary_package_seen: 3
+        capture_check_sources:
+          - name: $HOME/.claude/CLAUDE.md
+            present: true
+            lines_checked: 35
+          - name: $HOME/CLAUDE.md
+            present: true
+            lines_checked: 97
+          - name: $HOME/AGENTS.md
+            present: true
+            lines_checked: 97
+          - name: $HOME/.codex/AGENTS.md
+            present: true
+            lines_checked: 97
+          - name: <repo>/CLAUDE.md
+            present: true
+            lines_checked: 18
+          - name: <repo>/AGENTS.md
+            present: true
+            lines_checked: 19
+          - name: $HOME/.claude/projects/*/memory/*.md
+            present: true
+            lines_checked: 1337
+            files: 101
+          - name: the repository path
+            present: true
+            lines_checked: 1
+          - name: the home directory
+            present: true
+            lines_checked: 1
+          - name: the canary token
+            present: false
+            lines_checked: 0
+        canary_capture_check_sources:
+          - name: $HOME/.claude/CLAUDE.md
+            present: true
+            lines_checked: 35
+          - name: $HOME/CLAUDE.md
+            present: true
+            lines_checked: 97
+          - name: $HOME/AGENTS.md
+            present: true
+            lines_checked: 97
+          - name: $HOME/.codex/AGENTS.md
+            present: true
+            lines_checked: 97
+          - name: <repo>/CLAUDE.md
+            present: true
+            lines_checked: 18
+          - name: <repo>/AGENTS.md
+            present: true
+            lines_checked: 19
+          - name: $HOME/.claude/projects/*/memory/*.md
+            present: true
+            lines_checked: 1337
+            files: 101
+          - name: the repository path
+            present: true
+            lines_checked: 1
+          - name: the home directory
+            present: true
+            lines_checked: 1
+          - name: the canary token
+            present: false
+            lines_checked: 0
+        requests_manifest_sha256: 2712c630afa61c3c6d5bad845c5862b5dd38c0abcf8441d103073cb0bc53324c
+        canary_requests_manifest_sha256: 2cf1c4e1c669b0588cc8cbed46e68edce2b68abe9bb08f4b4698741c56aab4d2
   - provider: openai
     round: 2
     command: scripts/panel/invoke-reviewer.sh --provider openai --model gpt-6-sol --effort high --package package.md

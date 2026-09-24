@@ -345,3 +345,30 @@ were broad; the verified corridors and districts are reported as the part
 that is established. Drafting follows; the story leads with the three
 claims parked at framing (v1.35), and this finding is not the answer to
 whether bike lanes cause or ease congestion.
+
+## 2026-09-24: the GPT-6 Luna rows restored to the manifests
+
+The run manifests (`run.yaml`, the record of which seat ran what) lost every
+GPT-6 Luna row in this run. The recorder kept one row per vendor per round,
+so whichever OpenAI seat finished second overwrote the other. Luna finished
+first each time, so only the GPT-6 Sol row survived. The review files and
+the synthesis were never affected: each seat's answers sit in their own
+`round1/`/`round2/` file, and the synthesis reads those files. The recorder
+now keys rows by seat. The lost rows were rebuilt on 2026-09-24 from the
+retained attempts, after checking that each attempt's final message
+reproduces the published review file byte for byte and, in round 1, that its
+package hash equals the Sol and Claude rows':
+
+| Manifest | Round | Attempt id | Package sha256 |
+|---|---|---|---|
+| `superseded-2026-09-24/run.yaml` | 1 | `0f6590dfd5fbbcce` | `e86e4caf15257b8eb9e56763e9e6716d3a6119325cb9e1ea4ca6e0f8574f5823` |
+| `superseded-2026-09-24/run.yaml` | 2 | `862a0f2e459b048d` | `8ead697c0ff1a457086ef79aeaba7c922a7338e01de43dcbeb05d9cf265d1769` |
+| `superseded-2026-09-24b/run.yaml` | 1 | `69c7749189e5dc4f` | `70c9f61c65823406cd8367ffed14a4d7fa78097497f2218d4036c284d19ca8a2` |
+| `superseded-2026-09-24b/run.yaml` | 2 | `fb7b6a0018deb91d` | `6f8accb8df84faabe16a30859dac31ed5c41d20795f23c3815308e79b2b5db3f` |
+| `run.yaml` | 1 | `d325e25247cb632e` | `e8d93a74a9cb26cc9e19598131fc575f27782616767f5e097c86cdb375031915` |
+| `run.yaml` | 2 | `7c042c5b2cde42a3` | `6db29ce83eb12212825d26d834ba2891cf7f02a7027fc3709dda50705516c595` |
+
+Each restored row's `finished_at` is the launcher's recorded finish time. The
+runner's own stamp, up to a second later, was never kept. The 2026-09-23 shadow
+Luna run under `closed-2026-09-23/shadow-round1/` has its own manifest and
+lost nothing.

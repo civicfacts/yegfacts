@@ -12,9 +12,12 @@
  * every reader must treat a missing value as "not recorded" rather than as a
  * default.
  *
- * Re-running the same provider and round REPLACES its entry rather than adding
- * a second one, so a retried reviewer leaves one row describing what finally
- * happened, with its attempt count.
+ * Re-running the same seat in the same round REPLACES its entry rather than
+ * adding a second one, so a retried reviewer leaves one row describing what
+ * finally happened, with its attempt count. A row is keyed by provider, round
+ * and seat (the model id where a pre-v1.6 row has no seat), because one vendor
+ * can hold two seats on a panel (methodology v1.37); keying by provider alone
+ * let the second of them overwrite the first.
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -140,13 +143,18 @@ const entry: RunEntry = {
   ...(attemptsDetail(values['attempts-detail']) ?? {}),
 };
 
+/** The seat a row describes; rows written before v1.6 name only the model. */
+const seatKey = (run: RunEntry): string => run.seat ?? run.model_id ?? '';
+
 const existing = manifest.runs.findIndex(
-  (run) => run.provider === entry.provider && run.round === entry.round,
+  (run) => run.provider === entry.provider && run.round === entry.round && seatKey(run) === seatKey(entry),
 );
 if (existing === -1) manifest.runs.push(entry);
 else manifest.runs[existing] = entry;
 
-manifest.runs.sort((a, b) => a.round - b.round || a.provider.localeCompare(b.provider));
+manifest.runs.sort(
+  (a, b) => a.round - b.round || a.provider.localeCompare(b.provider) || seatKey(a).localeCompare(seatKey(b)),
+);
 
 mkdirSync(path.dirname(manifestPath), { recursive: true });
 writeFileSync(manifestPath, YAML.stringify(manifest, { lineWidth: 0 }));
