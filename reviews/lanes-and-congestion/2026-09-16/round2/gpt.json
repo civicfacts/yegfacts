@@ -1,0 +1,170 @@
+{
+  "reviewer": {
+    "provider": "openai",
+    "model_self_reported": "GPT-6",
+    "runner_model": "gpt-6-sol",
+    "runner_seat": "GPT-6 Sol",
+    "runner_effort": "high"
+  },
+  "story": "lanes-and-congestion",
+  "round": 2,
+  "round2_notes": {
+    "evidence_i_missed": [
+      "The City's Active Transportation Network Expansion route table identifies 96 Street from 119 to 124 Avenue as open for use in 2025 and says it became one-way southbound to accommodate a protected northbound contraflow bike lane: https://www.edmonton.ca/projects_plans/roads/active-transportation-network-improvements-project.",
+      "The same City table identifies the protected bike lane on 100 Street from 80 to 83 Avenue as open for use in 2025 and describes conversion to one-way northbound traffic. It does not establish that the entire 76-to-83-Avenue project was complete: https://www.edmonton.ca/projects_plans/roads/active-transportation-network-improvements-project.",
+      "The City's September 2026 update says construction was still underway on parts of 132 Avenue and describes project completion as expected in 2027. The City's final design specifies raised bike paths, so inventory features labelled protected bike lanes cannot by themselves establish a qualifying on-street conversion: https://www.edmonton.ca/transportation/on_your_streets/132-avenue-renewal and https://www.edmonton.ca/sites/default/files/public-files/132AveRenewal_FinalDesignInformationPackage.pdf.",
+      "The Garneau final design also identifies a separate 80 Avenue conversion from two-way to one-way traffic to fit a painted bike lane. Its statement that north-side parking would be removed leaves the bike lane's precise former space to be checked before counting that corridor: https://www.edmonton.ca/sites/default/files/public-files/Garneau_Flipbook__FinalDesign.pdf?cb=1651286488."
+    ],
+    "errors_in_other_reviews": [
+      "Claude, city-removed-traffic-lanes, https://www.theglobeandmail.com/real-estate/calgary-and-edmonton/article-edmontons-roadway-renewal-program-looks-beyond-the-automobile/: the article describes what the 132 Avenue project would build and its early construction, not a completed 127 Street-to-Fort Road conversion. The City's final design describes raised bike paths, and its September 2026 update says construction remained underway. Counting the whole corridor as a verified built on-street conversion treats a plan as an outcome.",
+      "Claude, city-removed-traffic-lanes, https://strathconacommunity.ca/parking-change-bike-lane/: the community-league notice describes expected work, not completed work. The City's route table verifies the 80-to-83-Avenue protected section as open but does not establish that the entire 76-to-83-Avenue route was complete by the freeze date.",
+      "Claude, city-removed-traffic-lanes, https://edmonton.taproot.news/briefs/2025/05/23/debate-grows-as-edmonton-plans-23-km-of-new-bike-lanes-for-2025: the cited report describes a planned Delton conversion, so it alone cannot verify construction. The City's route table now supplies the needed open-for-use status and operational change.",
+      "Claude, city-removed-traffic-lanes, https://gis.edmonton.ca/site1/rest/services/Overlay_Public/Common_Layers/MapServer/236/query?where=STREET_NAME_FULL+IN+%28%27102+AVENUE+NW%27%2C%27132+AVENUE+NW%27%2C%27100+STREET+NW%27%2C%2796+STREET+NW%27%29+AND+classification+LIKE+%27%25Bike+Lane%25%27&outFields=OBJECTID,STREET_NAME_FULL,classification,construction_year,planning_change,quadrant&returnGeometry=false&f=json: the totals of features on named streets include segments outside the alleged conversions and years after the freeze date. They are neither a count of qualifying features nor evidence that those features replaced through lanes.",
+      "Claude, city-removed-traffic-lanes, https://www.edmonton.ca/city_government/urban_planning_and_design/plans-in-effect: saying A is 'at most 4' treats four candidate corridors as a citywide upper bound. The incomplete corridor census permits additional qualifying districts; only a verified minimum A can be stated.",
+      "GPT-6 Luna, city-removed-traffic-lanes, https://www.edmonton.ca/public-files/assets/document?path=RoadsTraffic%2F2017_102_ave_bike_route_facts.pdf: the fact sheet says the City planned to remove the westbound travel lane and build the protected lane. By itself it does not show completion. The separately cited November 2017 City map supplies evidence that 102 Avenue had become one-way."
+    ],
+    "verdict_changes": []
+  },
+  "claims": [
+    {
+      "id": "city-removed-traffic-lanes",
+      "proposition_evaluated": "By 2026-09-23, Edmonton had removed motor-vehicle through lanes for built on-street bike lanes in at least 8 of its 15 district-plan areas.",
+      "interpretation_notes": "My round-1 verdict remains Not established. City records verify conversions in Central, Scona and North Central: a verified minimum A of 3. That is below both the primary threshold of 8 and alternative threshold of 5. I can identify at least five qualifying corridors or converted corridor segments, but I cannot calculate the built-corridor total T or complete the prior-use census R from the accessible inventory and project records. The same three district areas are represented when the verified segments are considered as individual inventory features; I cannot give a defensible feature-level C without filtering their geometry. The classification remains Not established in that unit and under the alternative threshold. A corridor's lane removal says nothing about whether congestion rose or fell. I do not count 132 Avenue from its draft design or projected construction, or 102 Avenue east of 109 Street from the LRT-related lane reduction.",
+      "verdict": "Not established",
+      "confidence": "Moderate",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "For 102 Avenue from 121 to 111 Street, the City says the road was two-way and that fitting the protected bike lane while retaining south-side parking required removal of the westbound travel lane. Its November 2017 map says the street was then one-way eastbound.",
+          "source_title": "102 Avenue Bike Route (111–136 Street) Fact Sheet, p. 1; West Central Bike Routes, p. 2",
+          "source_url": "https://www.edmonton.ca/public-files/assets/document?path=RoadsTraffic%2F2017_102_ave_bike_route_facts.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "Fact sheet May 2017; map November 2017; last-updated dates not stated. The later map existed by the freeze date: https://www.edmonton.ca/sites/default/files/public-files/assets/WestCentralBikeRoutes.pdf",
+          "source_type": "city-webpage",
+          "establishes": "A built qualifying conversion on 102 Avenue from 121 to 111 Street in the Central district.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City's route table lists 96 Street from 119 to 124 Avenue as open for use in 2025 and says vehicle traffic was converted to one-way southbound to accommodate a protected northbound contraflow bike lane.",
+          "source_title": "Active Transportation Network Expansion, route and status table",
+          "source_url": "https://www.edmonton.ca/projects_plans/roads/active-transportation-network-improvements-project",
+          "source_publisher": "City of Edmonton",
+          "source_date": "April 2026 project update; page publication and last-updated dates not displayed; no newer pre-freeze release established",
+          "source_type": "city-webpage",
+          "establishes": "A built qualifying conversion on 96 Street from 119 to 124 Avenue in Delton, in the North Central district.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City's route table lists the protected two-way bike lane on 100 Street from 80 to 83 Avenue as open for use in 2025 and describes conversion of 100 Street to one-way northbound to accommodate the bike facilities.",
+          "source_title": "Active Transportation Network Expansion, route and status table",
+          "source_url": "https://www.edmonton.ca/projects_plans/roads/active-transportation-network-improvements-project",
+          "source_publisher": "City of Edmonton",
+          "source_date": "April 2026 project update; page publication and last-updated dates not displayed; no newer pre-freeze release established",
+          "source_type": "city-webpage",
+          "establishes": "A qualifying built segment from 80 to 83 Avenue in the Scona district; the cited open-for-use row does not establish completion of the whole 76-to-83-Avenue project.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The Garneau final design specifies an on-street protected bike lane on 110 Street and removal of the southbound travel lane from 76 to 82 Avenue. A later City mobility study reports that Garneau neighbourhood renewal was completed in 2023.",
+          "source_title": "Garneau Neighbourhood Renewal Final Design, pp. 5 and 32; Priority Growth Areas Mobility Study, Part A",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/Garneau_Flipbook__FinalDesign.pdf?cb=1651286488",
+          "source_publisher": "City of Edmonton",
+          "source_date": "Final design updated April 2021; mobility study May 2, 2025; later study available by the freeze date: https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/Priority-Growth-Areas-Mobility-Study-PartA.pdf",
+          "source_type": "analytical-report",
+          "establishes": "A qualifying 110 Street segment from 76 to 82 Avenue in the Scona district, with project-wide completion evidence rather than a block-level completion report.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The City's April 2015 design identifies 83 Avenue from 105 to 104 Street as two-way and specifies one-way eastbound traffic with a two-way cycle track. Its later materials describe the 83 Avenue bike route as existing.",
+          "source_title": "2014/2015 Bike Route Plan — 83 Avenue Protected Bike Lane; Garneau Neighbourhood Renewal Final Design",
+          "source_url": "https://www.edmonton.ca/public-files/assets/document?path=RoadsTraffic%2FBikeFactSheet_83ave_APR2015.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "Design April 2015; later Garneau design updated April 2021; last-updated date for the 2015 sheet not stated: https://www.edmonton.ca/sites/default/files/public-files/Garneau_Flipbook__FinalDesign.pdf?cb=1651286488",
+          "source_type": "policy-document",
+          "establishes": "A qualifying converted segment from 105 to 104 Street within the 83 Avenue route in the Scona district, subject to the absence of a block-specific completion record.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The City's district-plan listing places Delton in North Central and Garneau and Strathcona in Scona; it places the 102 Avenue Oliver area in Central.",
+          "source_title": "Plans in Effect — District Plans",
+          "source_url": "https://www.edmonton.ca/city_government/urban_planning_and_design/plans-in-effect",
+          "source_publisher": "City of Edmonton",
+          "source_date": "Page last updated August 27, 2026; original publication date not stated; no newer pre-freeze release established",
+          "source_type": "policy-document",
+          "establishes": "The three district-plan areas used for the verified minimum A.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The on-street route inventory identifies facilities and construction years but has no attribute recording what occupied each segment before installation.",
+          "source_title": "Bike Routes – On Street, ArcGIS layer 236 metadata",
+          "source_url": "https://gis.edmonton.ca/site1/rest/services/Overlay_Public/Common_Layers/MapServer/236",
+          "source_publisher": "City of Edmonton GIS",
+          "source_date": "Publication and last-updated dates not displayed; consulted in round 1 on September 24, 2026",
+          "source_type": "observed-data",
+          "establishes": "Inventory geometry and classifications alone cannot establish prior through-lane use or complete R and C.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The 132 Avenue February 2022 report describes a draft reduction to one driving lane per direction and off-street protected bike paths. The City's September 2026 project update says construction was still underway and projected overall completion in 2027.",
+          "source_title": "132 Avenue Renewal: What We Heard Report, pp. 11 and 16; 132 Avenue Renewal project update",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/132AVE_DraftDesigns_WWH_Report.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "Report February 2022, last-updated date not stated; project page last updated September 1, 2026: https://www.edmonton.ca/transportation/on_your_streets/132-avenue-renewal",
+          "source_type": "analytical-report",
+          "establishes": "The named 132 Avenue example cannot be counted as a completed on-street through-lane-to-bike-lane conversion from these records.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City attributes the permanent reduction of 102 Avenue from 107 to 102 Street to space for the Valley Line West LRT, and reports that the 102 Avenue bike lanes were temporarily relocated to 103 Avenue in November 2025.",
+          "source_title": "Valley Line West Final Traffic Configuration; Valley Line West project update",
+          "source_url": "https://www.edmonton.ca/projects_plans/transit/valley-line-west/final-road-configuration",
+          "source_publisher": "City of Edmonton",
+          "source_date": "Page publication and last-updated dates not displayed; summer 2026 update available by the freeze date: https://www.edmonton.ca/projects_plans/transit/valley-line-west",
+          "source_type": "city-webpage",
+          "establishes": "A lane reduction east of 109 Street, but not the claimed completed replacement of a through lane by a bike lane there.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "The brief reports 3,175 features in its September 23, 2026 immutable snapshot. I could not independently retrieve and count that file in this round, so 3,175 is the supplied snapshot count, not a new calculation.",
+        "T and R at corridor level remain uncalculated. The consulted GIS layer has no prior-use field, and the project-record search is incomplete. The verified A of 3 is a minimum, not an upper bound.",
+        "The five identified qualifying segments do not constitute an exhaustive corridor list. The assessment of 83 Avenue and Garneau's 110 Street combines design documents with later evidence of route or project completion rather than block-level as-built drawings.",
+        "For 132 Avenue, the February 2022 report is a draft and the September 2026 update shows incomplete construction. The report identifies traffic calming and collector renewal as project purposes; it cannot establish that bike paths occupied former through-lane space on a completed segment.",
+        "For 102 Avenue between 121 and 111 Street, the City explicitly says it removed the westbound lane to fit the protected bike lane while retaining south-side parking. For the other qualifying segments, the City describes active transportation or neighbourhood renewal; those stated purposes do not resolve the parked counterfactual claim about why work would have proceeded without bike lanes.",
+        "I found no City-published length or network share of bike lanes occupying former through lanes."
+      ],
+      "unknowns": [
+        "The complete built on-street bike-lane corridor set T, the documented-prior-use count R and any additional qualifying districts.",
+        "Feature-level C after the verified segments are intersected with the frozen inventory geometry.",
+        "Whether a City as-built drawing establishes a qualifying completed on-street conversion on any part of 132 Avenue by September 23, 2026.",
+        "Whether 102 Avenue east of 109 Street ever met the brief's specific through-lane-to-bike-lane test before the November 2025 temporary relocation.",
+        "Whether the separate 80 Avenue Garneau conversion placed its bike lane in former through-lane space, former parking space, or both."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A frozen-inventory corridor census reconciled with City records of prior lane use and build status for every corridor.",
+          "likely_holder": "City of Edmonton Transportation Planning and active transportation program",
+          "importance": "critical"
+        },
+        {
+          "description": "Block-level as-built cross-sections for 132 Avenue and the Garneau and Strathcona conversions where design and completion records must be joined.",
+          "likely_holder": "City of Edmonton Neighbourhood Renewal and Transportation Planning",
+          "importance": "high"
+        }
+      ],
+      "calculations_needed": [
+        "Group built on-street bike-lane features in the September 23 snapshot by documented project route or the brief's contiguous-feature rule to calculate T; document prior use for each to calculate R and C.",
+        "Intersect each qualifying built segment with the district-plan boundaries. The currently verified district arithmetic is Central + Scona + North Central = 3 distinct areas, below 8 and 5.",
+        "Filter the frozen inventory geometry to qualifying segments and repeat C at feature level. Report the feature count observed and whether that unit changes the district classification."
+      ],
+      "what_would_change_my_verdict": [
+        "City records verifying qualifying built corridors in at least eight district-plan areas would change the primary verdict to Supported.",
+        "A complete census with at least one qualifying corridor but fewer than eight represented areas would change the primary verdict to Partially supported."
+      ],
+      "suggested_one_line": "City records verify through-lane conversions for bike lanes in at least three Edmonton districts, but the available corridor census cannot establish whether they extend across a broad share of the city.",
+      "suggested_short_answer": "Not established. City records document built conversions on 102 Avenue, 96 Street, part of 100 Street, and streets in Garneau and Strathcona. They verify a minimum of three of Edmonton's 15 district-plan areas. The on-street bike-route inventory does not record prior lane use, and the corridor-by-corridor check is incomplete, so that minimum cannot decide whether removals occurred in eight districts. These findings do not measure any change in congestion."
+    }
+  ]
+}

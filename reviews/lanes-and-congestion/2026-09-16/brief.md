@@ -137,15 +137,19 @@ motor-vehicle lane removed and a bike lane added. These are the
 instrument for the claim under review.
 
 **The counting unit.** Use the City's Bike Routes – On Street GIS layer.
-Reviewers are given an accessible immutable export captured on
-2026-09-23, with its URL, capture time and checksum, in the package that
-accompanies this brief: `snapshot/bike-routes-on-street.geojson`, 3,175
-features, captured 2026-09-23T15:17:38Z to 15:17:40Z from
+An immutable export of that layer, captured on 2026-09-23, is the
+reference for every published count: 3,175 features, captured
+2026-09-23T15:17:38Z to 15:17:40Z from
 `https://gis.edmonton.ca/site1/rest/services/Overlay_Public/Common_Layers/MapServer/236/query`,
 SHA-256
-`51f5e628b42c5c4b9ba17664810b5da0b5544c05d95863abf0ee6821a32ece6f`
-(`snapshot/README.md`). The live layer URL is recorded as provenance but
-does not substitute for the dated snapshot. A corridor is one route
+`51f5e628b42c5c4b9ba17664810b5da0b5544c05d95863abf0ee6821a32ece6f`,
+published at
+`https://raw.githubusercontent.com/civicfacts/yegfacts/main/reviews/lanes-and-congestion/2026-09-16/snapshot/bike-routes-on-street.geojson`.
+Reviewers may count from that file or from the live layer through its
+query URL above; state which, and the feature count you saw. Every count
+the story publishes is recomputed against the snapshot by the story's
+calculation script before publication, so a reviewer's count is an input
+to that check, not the published figure. A corridor is one route
 identified as a single project with stated endpoints in the City's
 project record. Where no project route exists, group contiguous inventory
 features with the same street name and facility type between documented
@@ -214,11 +218,22 @@ prior lane use. Let C be the number of corridors that count, and let A be
 the number of distinct district-plan areas, as fixed under "Geography",
 in which at least one qualifying corridor lies.
 
-- **Not established** if C is zero and R is less than T. Read first.
+A is counted from qualifying corridors the reviewer verified. Where the
+census of built corridors is incomplete (R less than T), A is a verified
+minimum and is reported as one.
+
+- **Supported** if A is at least 8 of the 15 district-plan areas, whether
+  or not the census is complete, since a verified minimum can only rise.
+- **Partially supported** if C is at least 1, the census is complete (R
+  equals T), and A is less than 8: the breadth part of the claim is shown
+  not to hold.
+- **Not established** if the census is incomplete (R less than T) and the
+  verified A is less than 8, whether C is zero or not: the record cannot
+  show whether the breadth part holds. The verified corridors, their
+  districts and the verified A are reported as the part that is
+  established, so a reader sees what was found and why it does not decide
+  the claim.
 - **Contradicted** if C is zero and R equals T.
-- The Supported and Partially supported rows apply when C is at least 1:
-- **Supported** if A is at least 8 of the 15 district-plan areas.
-- **Partially supported** if C is at least 1 and A is less than 8.
 
 Alternative threshold, results required under both: Supported at A of at
 least 5. These are judgement thresholds rather than pre-existing
@@ -313,9 +328,11 @@ settles any of them.
 geographic occurrence and opponents must withdraw a blanket denial.
 Contradicted means holders must withdraw the claim that any through lane
 was removed and opponents may maintain the denial. Partially supported
-means specific removals are established but "all throughout" is not. Not
-established means the prior-use record is too incomplete for either
-side's generalisation.
+means a complete count shows removals in fewer areas than "all throughout".
+Not established means the prior-use record is too incomplete to say
+whether removals were broad, whatever specific removals it documents;
+those removals are reported, and a blanket denial of any removal does not
+survive them.
 
 ## Scope
 

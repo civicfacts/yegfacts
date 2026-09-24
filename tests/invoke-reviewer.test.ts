@@ -1192,15 +1192,14 @@ describe('run-reviewer', { timeout: 120_000 }, () => {
    * 2026-09-23. The runner refuses it unless the operator says the run froze
    * under the three-provider rule; audits have no such flag.
    */
-  it('refuses the retired Google seat unless the run froze before the retirement', () => {
+  it('refuses the retired Google seat with no exception', () => {
     const stub = stubClaude();
     const script = path.join(repo, 'scripts', 'panel', 'run-reviewer.sh');
-    const refused = run([script, 'agy', STORY, RUN_DATE, '1', '--dry-run'], stub.env);
-    expect(refused.ok).toBe(false);
-    expect(refused.stderr).toMatch(/retired for runs frozen after 2026-09-23/);
-    const allowed = run([script, 'agy', STORY, RUN_DATE, '1', '--finish-frozen-run', '--dry-run'], stub.env);
-    expect(allowed.ok).toBe(true);
-    expect(allowed.stdout).toMatch(/model:\s+gemini-3\.8-flash-high/);
+    for (const args of [['1', '--dry-run'], ['1', '--finish-frozen-run', '--dry-run'], ['2', '--dry-run']]) {
+      const refused = run([script, 'agy', STORY, RUN_DATE, ...args], stub.env);
+      expect(refused.ok).toBe(false);
+      expect(refused.stderr).toMatch(/retired \(methodology v1\.37, v1\.40\)|unknown option: --finish-frozen-run/);
+    }
     expect(existsSync(path.join(stub.dir, 'calls'))).toBe(false);
   });
 

@@ -6,7 +6,7 @@
 #   scripts/panel/run-reviewer.sh claude electric-buses 2026-08-31 1
 #
 # Providers: claude | codex | luna  (aliases: anthropic, gpt/openai)
-#           agy | gemini | google: retired under v1.37, only with --finish-frozen-run
+#           agy | gemini | google: retired (methodology v1.37, v1.40); always refused
 #
 # Isolation is NOT this script's business, and the older version of this comment
 # claiming a fresh mktemp -d was the boundary was wrong: a CLI loads its
@@ -58,9 +58,7 @@ usage() {
   cat >&2 <<'USAGE'
 usage: scripts/panel/run-reviewer.sh <provider> <story> <date> <round> [options]
   provider  claude | codex | luna  (aliases: anthropic, gpt, openai)
-            agy | gemini | google  retired for runs frozen after 2026-09-23
-                                   (methodology v1.37); refused unless
-                                   --finish-frozen-run says the run froze before
+            agy | gemini | google  retired (methodology v1.37, v1.40); refused
   story     story slug, e.g. electric-buses
   date      run date, e.g. 2026-08-31
   round     1 (blind research) or 2 (cross-review)
@@ -70,8 +68,6 @@ options:
   --claims <id,...>  answer only these claim ids (claim-scoped re-run)
   --into <dirname>   write the review and the manifest under <run>/<dirname>
                      instead of <run>/round<N> and <run>/run.yaml
-  --finish-frozen-run  the run froze under the three-provider rule before
-                     2026-09-23, so the retired Google seat may finish it
 USAGE
   exit 2
 }
@@ -82,13 +78,11 @@ PROVIDER_ARG="$1"; STORY="$2"; RUN_DATE="$3"; ROUND="$4"; shift 4
 DRY_RUN=0
 CLAIMS=""
 INTO=""
-FINISH_FROZEN=0
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --dry-run) DRY_RUN=1; shift ;;
     --claims) CLAIMS="${2:-}"; [ -n "$CLAIMS" ] || { echo "--claims needs a value" >&2; usage; }; shift 2 ;;
     --into) INTO="${2:-}"; [ -n "$INTO" ] || { echo "--into needs a value" >&2; usage; }; shift 2 ;;
-    --finish-frozen-run) FINISH_FROZEN=1; shift ;;
     *) echo "unknown option: $1" >&2; usage ;;
   esac
 done
@@ -99,15 +93,12 @@ esac
 case "$ROUND" in 1|2) ;; *) echo "round must be 1 or 2, got '$ROUND'" >&2; exit 2 ;; esac
 case "$PROVIDER_ARG" in
   agy|gemini|google)
-    # Methodology v1.37 (2026-09-23): the Google seat is retired for every run
-    # frozen after that date. A run frozen under the three-provider rule
-    # finishes under it, and the flag is how the operator says so; the run
-    # record is where they say which run and why.
-    if [ "$FINISH_FROZEN" != "1" ]; then
-      echo "the Google seat is retired for runs frozen after 2026-09-23 (methodology v1.37);" >&2
-      echo "pass --finish-frozen-run only for a run that froze under the three-provider rule" >&2
-      exit 2
-    fi
+    # Methodology v1.40 (2026-09-24): the Google seat is out of every stage of
+    # every run. v1.37 kept one exception, a run frozen before the retirement
+    # could finish on it; the one such run was closed and restarted instead,
+    # and the exception went with it.
+    echo "the Google seat is retired (methodology v1.37, v1.40); no run uses it" >&2
+    exit 2
     ;;
 esac
 
@@ -410,9 +401,7 @@ for attempt in 1 2; do
   echo "[$SLOT round $ROUND] attempt $attempt: $COMMAND_STRING" >&2
 
   INVOKE_OK=1
-  FROZEN_FLAG=()
-  if [ "$FINISH_FROZEN" = "1" ]; then FROZEN_FLAG=(--finish-frozen-run); fi
-  "$INVOKE" --purpose research --provider "$PROVIDER_CANONICAL" --package "$PACKAGE" ${FROZEN_FLAG[@]+"${FROZEN_FLAG[@]}"} \
+  "$INVOKE" --purpose research --provider "$PROVIDER_CANONICAL" --package "$PACKAGE" \
     --attempt-dir "$ATTEMPT_DIR" --model "$MODEL_ID" --effort "$EFFORT" \
     --label "$SLOT round $ROUND" || INVOKE_OK=0
 

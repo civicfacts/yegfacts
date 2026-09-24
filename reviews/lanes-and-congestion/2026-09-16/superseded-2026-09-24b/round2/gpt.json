@@ -1,0 +1,139 @@
+{
+  "reviewer": {
+    "provider": "openai",
+    "model_self_reported": "GPT-6 (Codex)",
+    "runner_model": "gpt-6-sol",
+    "runner_seat": "GPT-6 Sol",
+    "runner_effort": "high"
+  },
+  "story": "lanes-and-congestion",
+  "round": 2,
+  "round2_notes": {
+    "evidence_i_missed": [
+      "GPT-6 Luna identified the City's 132 Avenue Urban Design Analysis, which cautions against treating every part of that avenue as a four-to-two-lane conversion. The City's 2021 options package also says the existing road varied between one and two through lanes per direction. This reinforces the need for segment-specific checks.",
+      "Claude identified 132 Avenue features in the City's on-street GIS layer and construction years of 2023–2025. The features help identify built sections, but do not establish former lane use or make every feature a qualifying conversion."
+    ],
+    "errors_in_other_reviews": [
+      "Claude, city-removed-traffic-lanes, https://www.cbc.ca/news/canada/edmonton/here-s-why-edmonton-s-132nd-avenue-renewal-project-is-garnering-attention-1.6990066: the review counts the whole 127 Street–Fort Road project as a completed qualifying corridor. A media account and a City design intention do not establish that every section was built by 2026-09-23 or that a through lane was removed on a specific completed section.",
+      "Claude, city-removed-traffic-lanes, https://gis.edmonton.ca/site1/rest/services/Overlay_Public/Common_Layers/MapServer/236/query?where=1%3D1&returnCountOnly=true&f=json: 74 features assigned to 132 Avenue and 27 to 102 Avenue are street-wide inventory counts, not verified counts of features in former through-lane space. The 102 Avenue total expressly includes segments outside 121–111 Street.",
+      "Claude, city-removed-traffic-lanes, https://www.cbc.ca/news/canada/edmonton/here-s-why-edmonton-s-132nd-avenue-renewal-project-is-garnering-attention-1.6990066: the review sets R to zero for directly retrieved City records while setting C to at least one. Under the brief, a corridor counted in C has documented prior lane use and therefore also belongs in R. Its stated A of '1 to 3' is not a verified minimum: only Central was verified in that review.",
+      "GPT-6 Luna, city-removed-traffic-lanes, https://www.edmonton.ca/public-files/assets/document?path=RoadsTraffic%2F2017_102_ave_bike_route_facts.pdf: the review says the fact sheet does not explicitly identify which former travel lane was removed. Page 1 expressly says the recommended plan removes the westbound travel lane to fit the protected bike lane."
+    ],
+    "verdict_changes": []
+  },
+  "claims": [
+    {
+      "id": "city-removed-traffic-lanes",
+      "proposition_evaluated": "The City of Edmonton removed motor-vehicle through lanes for bike lanes across a geographically broad share of Edmonton, defined by the brief as qualifying built corridors in at least 8 of 15 district-plan areas.",
+      "interpretation_notes": "Verdict unchanged from round 1. City records establish at least three project corridors with through-lane conversions: 102 Avenue, 121–111 Street (2017, Central); 83 Avenue, 99–106 Street except the retained two-way 102–104 Street portion (built 2017, Scona); and 100 Street, 83–80 Avenue (open in 2025, Scona). Thus C is at least 3, R is at least 3, and verified A is at least 2 of 15, Central and Scona. T, the complete built-corridor denominator, and complete R, C and A remain unknown. At A=2, both the primary threshold of 8 and alternative threshold of 5 yield Partially supported under the brief's explicit verified-minimum rule. The same two-area minimum applies when individual inventory features are used, but an exact feature-unit C or final classification cannot be independently recomputed without the snapshot. MATERIAL FRAMING CONCERN: the rule assigns Partially supported whenever a verified minimum is below threshold, even if unreviewed corridors could raise A to Supported. Therefore this verdict establishes specific removals; it does not establish that conversions occurred in fewer than 8 districts. The City's reason for the 102 Avenue change was to fit the protected bike lane. The 132 Avenue renewal has traffic-calming and wider-street objectives as well as bike paths; its reason does not alter this claim's verdict. None of these findings measures congestion.",
+      "verdict": "Partially supported",
+      "confidence": "Moderate",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "The May 2017 fact sheet, page 1, says 102 Avenue from 121 to 111 Street was two-way and the recommended bike-route plan removed its westbound travel lane to fit a protected bike lane while retaining south-side parking. The City's November 2017 route guide confirms the resulting eastbound-only vehicle operation.",
+          "source_title": "102 Avenue Bike Route (111–136 Street) Fact Sheet",
+          "source_url": "https://www.edmonton.ca/public-files/assets/document?path=RoadsTraffic%2F2017_102_ave_bike_route_facts.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "May 2017; separate last-updated date not stated; November 2017 City route guide confirms completion",
+          "source_type": "policy-document",
+          "establishes": "A completed westbound through-lane removal associated with the protected bike lane on the named 121–111 Street segment.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The April 6, 2017 pre-construction display, pages 2 and 8, describes 83 Avenue from 99 to 106 Street as a two-lane local road to become eastbound-only for cars, except 102–104 Street, with protected bike lanes. A March 2018 City display, page 8, says the 95A–106 Street portion had already been constructed in 2016 and 2017.",
+          "source_title": "83 Avenue Pre-Construction Meeting",
+          "source_url": "https://www.edmonton.ca/public-files/assets/document?path=RoadsTraffic%2F2017_83_ave_bike_route_display.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "April 6, 2017; separate last-updated date not stated; completion reported in March 2018",
+          "source_type": "policy-document",
+          "establishes": "Prior through-lane use, the specified one-way conversion, and subsequent construction on this Scona corridor; completion source: https://www.edmonton.ca/public-files/assets/document?path=RoadsTraffic%2FSouthsideDisplayBoards16-03-18.pdf.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City's route table marks the protected two-way bike lane on 100 Street from 83 to 80 Avenue as open for use in 2025 and states that vehicle travel was converted to one-way northbound to accommodate the on-street bike lane.",
+          "source_title": "Active Transportation Network Expansion, 100 Street route",
+          "source_url": "https://www.edmonton.ca/projects_plans/roads/active-transportation-network-improvements-project",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025 route and status entry; page publication and last-updated dates not displayed; no newer pre-freeze route-status release identified",
+          "source_type": "city-webpage",
+          "establishes": "A completed removal of the southbound through movement on a second Scona corridor.",
+          "strength": "moderate"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The 132 Avenue options package, page 12, says its existing configuration varied: some sections had one through lane per direction and others had two. Its final-decision report proposes one per direction and raised bike paths; the project page documents completed sections but does not by itself identify the former through-lane configuration of each completed segment.",
+          "source_title": "132 Avenue Renewal: Exploring Options and Tradeoffs",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/assets/Neighbourhoods/132Ave_ExploringOptionsandTradeoffs.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "April–May 2021; separate last-updated date not stated; 2022 final-decision report and construction updates available by the freeze date",
+          "source_type": "policy-document",
+          "establishes": "Why the named 132 Avenue example requires segment-specific before-and-after verification; the relevant final-decision report is https://www.edmonton.ca/sites/default/files/public-files/132AveRenewal_WhatWeDecided.pdf.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The City attributes the permanent reduction of 102 Avenue between 107 and 102 Street to accommodating Valley Line West LRT. Its summer 2026 update describes a temporary construction closure and relocation of the bike lanes to 103 Avenue.",
+          "source_title": "Valley Line West Final Traffic Configuration",
+          "source_url": "https://www.edmonton.ca/projects_plans/transit/valley-line-west/final-road-configuration",
+          "source_publisher": "City of Edmonton",
+          "source_date": "Publication and last-updated dates not displayed; summer 2026 construction update available by the freeze date",
+          "source_type": "city-webpage",
+          "establishes": "The named 102 Avenue example east of 109 Street cannot be counted as a bike-lane through-lane conversion from the cited lane reduction alone.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The City's route table lists a proposed removal of one vehicle travel lane in each direction on 95 Avenue from 149 to 156 Street, but marks the route as pre-construction and says its 2026 implementation was deferred for further review.",
+          "source_title": "Active Transportation Network Expansion, 95 Avenue route",
+          "source_url": "https://www.edmonton.ca/projects_plans/roads/active-transportation-network-improvements-project",
+          "source_publisher": "City of Edmonton",
+          "source_date": "Route status by 2026-09-23; page publication and last-updated dates not displayed",
+          "source_type": "city-webpage",
+          "establishes": "A proposed conversion that cannot be added to the built-corridor numerator.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "I could not retrieve the immutable 2026-09-23 GeoJSON snapshot or obtain a live GIS response in this round. I therefore saw no independently verified feature count; 3,175 is the brief's snapshot count and Claude's reported live count, not my recount. I cannot compute T or the alternative feature-unit numerator.",
+        "The verified two-area figure is a minimum. It is not evidence that the other 13 districts lack qualifying corridors.",
+        "The City does not provide, in the sources reviewed, a published length or network share of bike lanes occupying former through lanes.",
+        "For 132 Avenue, I reviewed the 2021 options package, 2022 final-decision report, City construction updates and the other reviewers' GIS findings through 2026-09-23. These do not establish a before-and-after through-lane change for a specifically identified completed inventory segment. This bounded gap does not establish that no such segment exists.",
+        "The 100 Street route table is a live page; its historical 2025 status is clear, but the page does not display a separate last-updated date."
+      ],
+      "unknowns": [
+        "The complete built on-street corridor denominator T, complete documented-prior-use count R, complete qualifying count C and complete district count A as of 2026-09-23.",
+        "Which completed 132 Avenue segments, if any, meet both the prior-through-lane and on-street-inventory conditions.",
+        "Whether 102 Avenue east of 109 Street has a separately documented bike-lane conversion outside the LRT-attributed segment.",
+        "The exact alternative-unit feature count and whether additional qualifying features would place A at 5 or 8 districts."
+      ],
+      "missing_evidence": [
+        {
+          "description": "The immutable 3,175-feature GIS snapshot and a reproducible corridor crosswalk with construction status, endpoints and district-plan-area overlay.",
+          "likely_holder": "YEGFacts snapshot repository and City of Edmonton GIS",
+          "importance": "critical"
+        },
+        {
+          "description": "Before-and-after drawings for completed 132 Avenue sections linked to their on-street inventory features.",
+          "likely_holder": "City of Edmonton 132 Avenue Renewal project team",
+          "importance": "high"
+        },
+        {
+          "description": "Prior-lane-use records for remaining built on-street corridors.",
+          "likely_holder": "City of Edmonton transportation and renewal project records",
+          "importance": "critical"
+        }
+      ],
+      "calculations_needed": [
+        "Verify the snapshot hash and feature count, group built features into corridors under the brief's rule, then report T, R, C and A with every qualifying corridor's segment, year, prior lane use, City source and district.",
+        "Repeat C and A by individual inventory feature and apply both A≥8 and A≥5 thresholds.",
+        "For any City-published network-length qualification, state its date, unit and denominator; no such figure was located in the sources reviewed."
+      ],
+      "what_would_change_my_verdict": [
+        "City records and the frozen inventory establishing qualifying built corridors in at least 8 districts would change the primary verdict to Supported.",
+        "A verified count reaching 5 but fewer than 8 districts would leave the primary verdict Partially supported and change only the alternative-threshold result to Supported.",
+        "Evidence invalidating all three verified conversions would require reassessing C and, if no qualifying corridor remained, applying the brief's R-versus-T rule."
+      ],
+      "suggested_one_line": "City records establish through-lane conversions for bike lanes on several streets, but the available corridor census cannot establish how widely they occurred across Edmonton."
+    }
+  ]
+}

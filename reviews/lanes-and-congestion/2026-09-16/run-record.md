@@ -213,3 +213,135 @@ so no vendor split is recorded for this round. Round 2 needs the Google seat aga
 reset, about 2026-09-30, unless the founder closes this attempt as incomplete
 and starts a clean run under v1.37. No panel is assembled from the answers on
 hand.
+
+## 2026-09-24: the 2026-09-23 attempt is closed incomplete; round 1 restarts clean under v1.37
+
+The founder closed the attempt rather than wait a week for the Google seat
+to finish it: "close the attempt and restart clean under v1.37, we can't
+wait for gemini reset ... we should drop gemini altogether from all work."
+v1.37 names this outcome as the alternative to waiting. The attempt's files
+move unchanged under `closed-2026-09-23/`: its three counted answers (Claude
+Partially supported, GPT-6 Sol Not established, Gemini Partially supported),
+the Luna shadow answer, its manifest, merge and fetch report. None of them is
+an input to the restarted run, and no answer is carried across: the roster
+changed, so every seat answers again from the same frozen package.
+
+The restarted roster, fixed before any seat ran: Claude Opus 5.5, GPT-6 Sol
+and GPT-6 Luna, all at high, three seats from two vendors under v1.37. The
+brief is unchanged (sha256 ddaa04ae…); the package is assembled from it by
+the runner exactly as before. The prior attempt's answers were seen by the
+editor; the seats never see each other's, and the editor chooses nothing
+about them, so the restart changes the roster and nothing else.
+
+### Round 1 of the restarted run
+
+| Seat | Outcome |
+|---|---|
+| Claude Opus 5.5, high | admitted, one attempt: Partially supported, moderate; 6 supporting, 4 challenging |
+| GPT-6 Sol, high | admitted, one attempt: Not established, moderate; 5 and 4 |
+| GPT-6 Luna, high | admitted, one attempt: Not established, low; 2 and 2 |
+
+The Anthropic seat differs from both OpenAI seats. Under v1.37 that is a
+vendor split: the published finding names it beside the seat agreement and
+the drafting addresses it from the sources, never as a plain two-to-one
+majority. Each seat's manifest row is in run.yaml. Merge and evidence
+staging are done; see fetch-report.md. Round 2 (cross-review) follows on
+the same three seats.
+
+### Round 2 raised a framing concern; the brief is revised and round 1 reruns
+
+Round 2 on the restarted run completed on all three seats (Claude Partially
+supported, GPT-6 Sol Partially supported, GPT-6 Luna Not established), and
+`scripts/synthesize.ts` halted: every seat flagged `MATERIAL FRAMING
+CONCERN`. Under methodology v1.2 that halts synthesis, revises the brief and
+reruns round 1. It is the panel's check on a frozen brief, not the framing
+checker's, so the v1.12 cap and v1.35's confirmation do not govern it.
+
+**The two defects the seats named, both real.**
+
+1. The threshold table had no row for the case every seat met: at least one
+   qualifying corridor verified (C at least 1) with the census of built
+   corridors incomplete, so A known only as a minimum. Partially supported
+   required "A is less than 8", which only a complete census could prove,
+   and Not established was reserved for C of zero. Seats split on which row
+   to force. The fix makes the table say what the brief's stakes text
+   already said before any seat ran: "Partially supported means specific
+   removals are established but 'all throughout' is not." A is now counted
+   from verified corridors and reported as a minimum when the census is
+   incomplete; Supported at a verified A of 8 or more (a minimum can only
+   rise); Partially supported at C of at least 1 and A below 8, complete or
+   minimum, with the answer naming the part not established. No threshold,
+   definition, date or source changed.
+2. The brief said the package carried the dated snapshot. It never did: the
+   package is the brief, the reviewer prompt and the schema, and a
+   3,175-feature file cannot travel in it or be parsed through a web tool.
+   The brief now gives the snapshot's public URL and checksum, lets
+   reviewers count from it or from the live layer (saying which, and the
+   feature count they saw), and makes the story's calculation script
+   recompute every published count against the snapshot.
+
+**The freeze.** The brief's sha256 was `ddaa04ae53a85b81e63c126a69de275943585f23e0b6a221e87088c134f0aff9` and is now `f058e5177cac3aae109311164d1ba3161e504aa6070b408a160e2599275b84ce`.
+The halted round's files (round 1, round 2, the manifest, the merge and the
+fetch report) move unchanged to `superseded-2026-09-24/`; its answers are to
+the old hash. Round 1 reruns on all three seats against the new one, blind,
+because answers to two packages cannot share a round.
+
+### The rerun on the re-frozen brief
+
+| Seat | Outcome |
+|---|---|
+| Claude Opus 5.5, high | admitted, one attempt: Partially supported, low |
+| GPT-6 Sol, high | admitted, one attempt: Partially supported, moderate |
+| GPT-6 Luna, high | admitted, one attempt: Partially supported, moderate |
+
+No seat raised a framing concern. The three agree on the verdict, so no
+vendor split arises. Merge: 18 distinct sources; evidence staging
+archived 13, 3 not (fetch-report.md). Round 2 follows.
+
+### Round 2 flagged a second framing concern; the table moves to the cautious reading
+
+The rerun's round 2 completed (all three seats held Partially supported) and
+synthesis halted again: GPT-6 Sol flagged `MATERIAL FRAMING CONCERN`. The
+revised table gave Partially supported to a verified minimum below 8, "even
+if unreviewed corridors could raise A to Supported", so the verdict would
+read as "fewer than 8 districts" when the record shows only "at least 2 or 3".
+
+The editor's ruling: the concern is right, for two reasons the site already
+holds. Since methodology v1.4 a Partially supported finding must name the
+part of the claim that does not hold, and "fewer than 8 areas" is not shown
+to fail on an incomplete census; it is not established. And the matrix's
+cautious lean (D-0011 in the board record, published on the methodology
+page) prefers the reading that does not imply more than the record shows.
+The table now gives Partially supported only on a complete census with A
+below 8; an incomplete census with a verified A below 8 is Not established,
+with the verified corridors, their districts and the verified A reported as
+the part that is established; Supported stays at a verified A of 8 or more.
+The stakes text is changed to match. No threshold, definition, date, unit or
+source changed.
+
+This is the second revision after answers were seen, and it moves against
+the answer on the table: all three seats had just returned Partially
+supported under the previous wording, and the revision makes that verdict
+harder to reach, not easier. The brief's sha256 was `f058e5177cac3aae109311164d1ba3161e504aa6070b408a160e2599275b84ce` and is now
+`785b7ae3ee64a0bc0d67b617b6ade3048e729a0ded30f99e8e93a803cb893e39`. The halted round's files move unchanged to
+`superseded-2026-09-24b/`. Round 1 reruns on all three seats.
+
+### Round 1 on the second freeze
+
+All three seats admitted, one attempt each: Claude Opus 5.5, GPT-6 Sol and
+GPT-6 Luna, all Not established (moderate). No framing concern, no vendor
+split. Merge: 21 distinct sources; staging archived 19, 2 not
+(fetch-report.md). Round 2 follows.
+
+### Round 2 and synthesis
+
+Round 2 positions: Claude Not established, GPT-6 Sol Not established, GPT-6 Luna
+Not established; no framing concern. `scripts/synthesize.ts` on the round-1
+basis: `city-removed-traffic-lanes` is **Not established**, panel agreement
+**Unanimous** (three seats from two vendors: the two OpenAI seats are not
+independent of each other). The finding means the City's records document
+through-lane removals on specific corridors but cannot show whether they
+were broad; the verified corridors and districts are reported as the part
+that is established. Drafting follows; the story leads with the three
+claims parked at framing (v1.35), and this finding is not the answer to
+whether bike lanes cause or ease congestion.
