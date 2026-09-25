@@ -680,6 +680,26 @@ export function parkReason(claim: Claim): { why: string; reopens?: string } {
   return { why: reason.slice(0, at).trim(), reopens: reason.slice(at).trim() };
 }
 
+/**
+ * The model behind each intake seat nickname, as the register's `seats`,
+ * `extracted_by` and `merged_by` fields use them. Both captured runs (the
+ * run manifests under reviews/intake/) ran these models under these names; a
+ * later run that puts a different model under a nickname needs a new name.
+ * An unknown nickname comes back unchanged.
+ */
+const SEAT_MODELS: Record<string, string> = {
+  flash: 'Gemini 3.8 Flash',
+  haiku: 'Claude Haiku 4.5',
+  sonnet: 'Claude Sonnet 5',
+  opus: 'Claude Opus 5',
+  luna: 'GPT-5.6 Luna',
+  sol: 'GPT-5.6 Sol',
+};
+
+export function seatModel(seat: string): string {
+  return SEAT_MODELS[seat] ?? seat;
+}
+
 const ORIGINS: Record<string, string> = {
   captured: 'captured from a post',
   supplied: 'passed to us, source not captured',

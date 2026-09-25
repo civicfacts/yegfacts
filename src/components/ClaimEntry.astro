@@ -9,6 +9,7 @@ import {
   claimText,
   commentsOn,
   saidIn,
+  seatModel,
   sourceKind,
   triageHeading,
   type Claim,
@@ -227,7 +228,7 @@ const turnedDown = !ruledApart && claim.prior_triage?.outcome === 'no';
       */
       claim.seats && claim.seats.length > 0 && (
         <p class={`mt-5 ${label}`} data-record>
-          {`Raised in extraction by ${claim.seats.join(', ')}`}
+          {`Raised in extraction by ${claim.seats.map(seatModel).join(', ')}`}
         </p>
       )
     }
