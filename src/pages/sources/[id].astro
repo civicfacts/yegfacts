@@ -5,6 +5,7 @@ import {
   claimText,
   commentsOn,
   saidIn,
+  seatModel,
   sourceKind,
   sourceRegister,
   triageEdge,
@@ -102,8 +103,8 @@ const badgeColumn = 'block md:table-cell md:w-px md:pl-4 md:text-right md:align-
     {
       source.extracted_by.length > 0 && (
         <p class={`mt-2 ${label}`} data-record>
-          {`Extracted by ${source.extracted_by.join(', ')}`}
-          {source.merged_by && ` · merged by ${source.merged_by}`}
+          {`Extracted by ${source.extracted_by.map(seatModel).join(', ')}`}
+          {source.merged_by && ` · merged by ${seatModel(source.merged_by)}`}
         </p>
       )
     }
