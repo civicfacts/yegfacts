@@ -302,3 +302,74 @@ the freeze came through v1.20's ending rather than FRAME OK: four ladder
 rows were rewritten by the checker after the framing rounds ended, and
 the editor's job was to paste them. The reports and the diffs are here
 for anyone who wants to check that nothing else moved.
+
+## 2026-09-28: round 1 with carried documents, stopped on an inaccessible essential source
+
+**Round 1 ran on all three seats, and the run stops there.** Every seat
+reported that it could not retrieve the controlling City minutes through
+its web tool. The brief says an inaccessible essential source stops a run
+rather than becoming a finding. No merge, cross-review or synthesis was
+run, and no verdict below is a finding of this site.
+
+**The package.** Under methodology v1.41 (D-0046) the package carried the
+full extracted text of four council documents that sit behind the
+portal's browser check, identical for every seat: report IS03688
+(YF-EV-0118) and the three versions of Attachment 5 (YF-EV-0222,
+YF-EV-0223, YF-EV-0140). Attachment 3 was excluded because the registry
+holds no archived copy of it. The carry manifest was committed at 12e6cb7
+before any seat ran, with sha256
+`e4942ba37610c47df142a6db9ce96d6fd3486e988b4af897b1025d49ebeeab12`. Its
+probe ran at 2026-09-28T16:53:51Z, when every carried document's public
+URL answered the site's fetcher with HTTP 403 and a challenge header. The
+carried section's sha256 was
+`ec76a674ffafcd28f0858b2d49bcf4d237266607cd0dde1d7a05f33e53dd3380` for
+every seat. The package was 111,825 bytes, sha256
+`18014acfcac994d31d1d71824e1734e1ad6088e9a0596fb5008b2846792a78ec`, the
+same for all three. All three seats launched from this checkout at commit
+12e6cb7 between 16:57:19Z and 16:57:20Z. The runner refused nothing.
+
+| Seat | Attempt | Outcome |
+|---|---|---|
+| Claude Opus 5.5 (`claude-opus-5-5`), high, Claude Code 2.1.283 | `9cb042ee7715bcbf`, 16:57Z to 17:10Z | admitted on one attempt; canary, research structure and context proof passed |
+| GPT-6 Sol (`gpt-6-sol`), high, codex-cli 0.158.0 | `f8899b8bc92b6ab8`, 16:57Z to 17:07Z | admitted on one attempt; canary, research structure and context proof passed |
+| GPT-6 Luna (`gpt-6-luna`), high, codex-cli 0.158.0 | `68bed04c27c6325a`, 16:57Z to 17:06Z | admitted on one attempt; canary, research structure and context proof passed |
+
+What each seat returned, kept for the record only:
+
+| Claim | Claude | GPT-6 Sol | GPT-6 Luna |
+|---|---|---|---|
+| `council-rejected-pause` | Partially supported, moderate | Partially supported, low | Not established, moderate |
+| `administration-recommended-freezing-14-routes` | Partially supported, moderate | Partially supported, moderate | Not established, moderate |
+| `motions-to-cut-budget-to-50-million-failed` | Partially supported, moderate | Partially supported, moderate | Partially supported, moderate |
+| `same-seven-councillors-vote-together` | Not established, moderate | Not established, moderate | Not established, moderate |
+
+No seat raised a framing concern.
+
+**Why the run stops.** Every seat cites the carried report and Attachment 5
+Version 2, so the carried documents reached them. The eScribe meeting pages
+that the brief makes controlling for the motions and the votes did not.
+The Claude seat wrote "ESSENTIAL SOURCE INACCESSIBLE" three times: for the
+Infrastructure Committee minutes of 2026-08-26, for the Council minutes
+behind the budget motions, and for every meeting in the claim 4 floor list.
+Each of those pages answered its web tool with HTTP 403. It rested its
+answers on the City's open-data voting record, which the brief allows only
+as a cross-check. GPT-6 Sol and GPT-6 Luna wrote that the committee and
+Council minutes could not be retrieved, and Luna could not query the
+open-data vote rows either. All three also said Attachment 3, which was not
+carried, could not be retrieved, so no seat could check each route's
+construction status for claim 2.
+
+The minutes pages were not carried because the site's own fetcher can read
+them, and the carry rule covers only a document it cannot. The frozen brief
+says "Meeting pages load", and at 17:11Z a request for the 2026-08-26
+committee minutes page with the site fetcher's user agent got HTTP 200. The
+seats' web tools got HTTP 403 from the same host.
+
+**What reopens the run.** A fresh round 1 needs the controlling minutes to
+reach the seats. Either the carry rule extends to a meeting page the seats'
+tools cannot retrieve even when the site's fetcher can, or the pages become
+retrievable to the seats. Claim 2 would also need an archived copy of
+Attachment 3 to carry. That is a methodology decision for the editor and
+the board, not one this run makes. The round 1 answers stay in `round1/`
+as returned, with their rows in `run.yaml`. A restart moves them under a
+superseded directory, as earlier runs did.
