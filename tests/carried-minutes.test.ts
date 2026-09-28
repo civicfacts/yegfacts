@@ -93,11 +93,15 @@ describe('reading an eScribe meeting page', () => {
 describe('withholding members of the public', () => {
   it('replaces listed public speakers and outside delegations, and the names in speaker-panel attachments', () => {
     const item = parseMeetingPage(MINUTES).items.find((i) => i.number === '3.4')!;
-    expect(item.withheld).toBe(4);
+    expect(item.withheld).toBe(6);
     expect(item.text).toContain(`The following public speakers made presentations:\n- ${WITHHELD}\n- ${WITHHELD}, Riverside Walkers`);
     expect(item.text).toContain(`- ${WITHHELD}, Valley Transit Authority`);
     expect(item.text).toContain(`3.4 - Panel 1 - ${WITHHELD}`);
-    // A title outside eScribe's speaker-panel form is left alone.
+    // The looser shapes of the same form: no hyphen before or after the panel number, any case.
+    expect(item.text).toContain(`3.4 - Panel 4 - ${WITHHELD}`);
+    expect(item.text).toContain(`3.4 - Panel 2 - ${WITHHELD}`);
+    for (const name of ['Whitlock', 'NARANJO']) expect(item.text).not.toContain(name);
+    // A title that does not start with an agenda item number is left alone.
     expect(item.text).toContain('Report - Panel 3 Recommendations.pdf');
     for (const name of ['R. Moss', 'P. Lindqvist', 'S. Haddad', 'MOSS']) expect(item.text).not.toContain(name);
   });
@@ -297,7 +301,7 @@ describe('carrying a meeting page as items', { timeout: 60_000 }, () => {
       ['1.4', true, 0, null],
       ['1.5', false, 2, null],
       ['3.', false, 0, null],
-      ['3.4', true, 4, null],
+      ['3.4', true, 6, null],
       ['3.5', false, 0, null],
       ['4.', false, 0, null],
       ['4.1', true, 0, null],
@@ -538,7 +542,7 @@ describe('carrying a meeting page as items', { timeout: 60_000 }, () => {
     expect(section).toContain('## Selected items from City meeting pages');
     expect(section).toContain('The rest of each page was not carried.');
     expect(section).toContain('Selection rule, version 1:');
-    expect(section).toContain(`Names of members of the public in these items were withheld and replaced with "${WITHHELD}" (redaction rule version 3)`);
+    expect(section).toContain(`Names of members of the public in these items were withheld and replaced with "${WITHHELD}" (redaction rule version 4)`);
     expect(section).toContain('Agendas show what was scheduled; minutes are the record of decisions and votes.');
     expect(section).toContain('- Items carried: 1.4, 3.4, 4.1 (3 of 10)');
     expect(section).toContain(`- Page SHA-256: ${sha256(MINUTES)}`);

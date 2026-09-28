@@ -26,7 +26,9 @@
  * the introduction and its list are skipped); an attachment titled in
  * eScribe's speaker-panel form "<item number> - Panel <n> - <rest>" keeps its
  * title up to the panel number and withholds the rest, and any other title is
- * unchanged; and in a procedural "Requests to Speak" motion (an item titled
+ * unchanged (the item number, an optional hyphen, "Panel <n>" in any case and
+ * an optional separator are enough: "7.6-Panel 4 <name>.pdf" and "7.6 Panel 3
+ * <name>.pdf" are the same form); and in a procedural "Requests to Speak" motion (an item titled
  * "Request(s) to Speak" whose motion reads "That <body> hear from the following
  * ... speaker(s)"), each listed entry is withheld unless it begins with an
  * agenda item number, while the operative words, mover, vote and result stay.
@@ -152,9 +154,9 @@ export function textOf(node: Node): string {
 
 /** The published rule for withholding members of the public; the manifest records its version. */
 export const REDACTION_RULE = {
-  version: 3,
+  version: 4,
   rule:
-    'In a minutes list introduced by "The following public speaker(s)" or "The following member(s) of the delegation" (not Administration\'s delegation), each listed name that is not an office-holder named in the page\'s attendance list or roll call becomes "[member of the public]"; an organisation after the name is kept. An attachment titled "<item number> - Panel <n> - <rest>" keeps the title up to the panel number and withholds the rest; no other title changes. In a Requests to Speak motion ("That ... hear from the following ... speakers"), each listed entry is withheld unless it begins with an agenda item number, and the operative words, mover, vote and result are kept. No other motion text is changed. Office-holders are matched without a leading Mayor, Deputy Mayor, Acting Mayor, Councillor, Chair or Vice-Chair, ignoring case.',
+    'In a minutes list introduced by "The following public speaker(s)" or "The following member(s) of the delegation" (not Administration\'s delegation), each listed name that is not an office-holder named in the page\'s attendance list or roll call becomes "[member of the public]"; an organisation after the name is kept. An attachment whose title starts with an agenda item number, then optionally a hyphen, then "Panel <n>" (any case), becomes "<item number> - Panel <n> - [member of the public]"; no other title changes. In a Requests to Speak motion ("That ... hear from the following ... speakers"), each listed entry is withheld unless it begins with an agenda item number, and the operative words, mover, vote and result are kept. No other motion text is changed. Office-holders are matched without a leading Mayor, Deputy Mayor, Acting Mayor, Councillor, Chair or Vice-Chair, ignoring case.',
 } as const;
 
 export const WITHHELD = '[member of the public]';
@@ -164,7 +166,7 @@ const HEAR_FROM_SPEAKERS = /^that .+ hear from the following (?:[a-z]+ )*speaker
 const PERSON = /\b(?:[A-Z]\.\s?)+[A-Z][A-Za-z'’-]+(?:[ -][A-Z][A-Za-z'’-]+)?/g;
 /** An agenda item number at the start of an entry: "7.6", "5.1.2". */
 const ITEM_NUMBER = /^\d+(\.\d+)+\b/;
-const PANEL_ATTACHMENT = /^(\d+(?:\.\d+)*\s*-\s*Panel\s*\d+)\s*-\s*(.+)$/i;
+const PANEL_ATTACHMENT = /^(\d+(?:\.\d+)+)\s*-?\s*panel\s*(\d+)\s*-?\s*(.+)$/i;
 const HONORIFIC = /^(?:deputy mayor|acting mayor|mayor|councillors?|vice-chair|chair)\s+/i;
 
 /** A name as compared with the office-holder list: no leading honorific or role, one space, lower case. */
@@ -235,8 +237,8 @@ function withholdPublic(item: Element, holders: Set<string>): number {
     const link = find(attachment, (e) => e.tag === 'a') ?? attachment;
     const title = textOf(link);
     const panel = PANEL_ATTACHMENT.exec(title);
-    if (!panel || panel[2]!.trim() === WITHHELD) continue;
-    link.children = [`${panel[1]} - ${WITHHELD}`];
+    if (!panel || panel[3]!.trim() === WITHHELD) continue;
+    link.children = [`${panel[1]} - Panel ${panel[2]} - ${WITHHELD}`];
     replaced += 1;
   }
   return replaced;
