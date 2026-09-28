@@ -1,0 +1,21 @@
+# The published rule that selects agenda items from carried meeting pages
+# (methodology v1.42, D-0047 rule 2). Append a version; never edit one.
+#
+# An item is selected when its number, title or whole text contains a term,
+# case-insensitively; a term made only of digits must not touch another digit.
+# The rule selects mechanically and is never a completeness finding: a checker
+# who is not the editor reads every item of every page, and a relevant item the
+# rule missed is fixed by adding a version here and rebuilding every page
+# (`carry-manifest.ts build --rule-version <n>`), never by adding an item by hand.
+versions:
+  - version: 1
+    reason: "D-0047 rule 2: the program's capital profile, report, names and borrowing bylaws, plus bike and cycling"
+    terms:
+      - CM-20-0330
+      - IS03688
+      - Active Transportation Implementation Acceleration
+      - Active Transportation Network Expansion
+      - "20394"
+      - "21265"
+      - bike
+      - cycling

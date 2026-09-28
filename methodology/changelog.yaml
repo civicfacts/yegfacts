@@ -14,6 +14,32 @@
 # The sentence above used to describe a check that did not exist: the rule sat
 # as a TODO in scripts/validate.ts, and a change under methodology/ shipped
 # clean. It runs now.
+- version: "1.42"
+  date: "2026-09-28"
+  scope: carried-minutes-items
+  summary: >
+    Council agendas and minutes that the reviewers' own web tools cannot open
+    can now be carried into the panel package, by item. A rule published
+    before any text is extracted picks the items; each goes in whole with the
+    page's header and attendance, and someone other than the editor checks
+    every item of every page for anything the rule missed. The reviewers are
+    told the site chose the items. A claim that needs every recorded vote runs
+    only once those votes are reconciled; otherwise it is parked for the run.
+  highlights:
+    - "What happened. The council-pause-vote run stopped in round 1. All three seats read the carried report and Attachment 5, and all three reported that the City's meeting pages, the agendas and minutes the brief makes controlling for every motion and vote, answered their web tools with HTTP 403. The site's own fetcher reads those pages, so v1.41 did not carry them, and the brief stops on an inaccessible essential source. The minutes it relies on come to about 610 KB, more than the 400 KB a seat's package may hold."
+    - "Who is refused. A page now also qualifies when a panel seat's own tool is refused there, not only when the site's fetcher is. The evidence is a dated probe through that seat's tool at that exact URL, no more than six hours old, recording the seat, the model, the tool, the time and the HTTP status. Where a tool reports no status, the refusal counts only if the tool's own error text is recorded; the model's words about it are never the evidence. The manifest says which ground applied. When any seat qualifies, every seat gets the same text."
+    - "The rule. A meeting page is carried as its header, meaning the meeting, date, time, location and attendance with the roll call item, plus every agenda item that names the program's capital profile CM-20-0330, report IS03688, the program by either of its names, its borrowing bylaws 20394 and 21265, or bike or cycling. The match is on each item's number, title and whole text, and ignores case. Each item goes in whole: its title, every motion, mover, seconder, vote and result, and the text under it. The rule is versioned in the public repository and recorded in the manifest with every page's hash and its full item index, carried or not."
+    - "The guards. Someone other than the editor reads every item of every archived page against a relevance test set by effect, not by keyword: an item holding a motion, amendment or vote that changes or proposes to change the program's funding, authorization, scope or delivery, whether or not it names the program. They record for each item whether it was carried and why. A relevant item the rule missed is fixed by publishing a new rule version and running it again on every page, then checking again; there is no way to add an item by hand. The package is refused while any page lacks a passed check, any item lacks a reason, or a missed item is on the record. For the claim about every recorded vote, the full set of relevant votes is reconciled with the City's open voting record before a round, with the brief's rules for absence, abstention and recusal applied. If that set cannot be established or does not fit the 400 KB budget, the claim is parked for the run and the seats are told so; nothing is trimmed to fit. The archived pages and the carried text stay private because their rights are unclear, so the label beside such a source says the reviewers read selected items chosen by the site under a published rule, that the rest of each page was not shown to them, and that our copies cannot be published; it links the City's page, the rule and the item index. Anyone can report an omitted item through the corrections route."
+    - "Who did what. The founder decided it: carry by item, as the editor recommended, rather than park the voting-bloc claim and carry four whole minutes pages. The board reviewed it in four memos on GPT-6 Sol, one per role, and all four answered ADOPT WITH CHANGES. Each change they required is in the rule above; none was turned down. The council-pause-vote run restarts round 1 once the completeness check and the vote reconciliation pass and the package fits; its stopped answers move to a superseded directory."
+  links:
+    - label: How carried documents are handled
+      href: /methodology#carried-documents
+    - label: The selection rule, every version
+      href: https://github.com/civicfacts/yegfacts/blob/main/scripts/panel/minutes-selection-rules.yaml
+  note: >
+    Carrying selected items puts a choice into the package that carrying a
+    whole document did not. The rule, the item index and a check by someone
+    other than the editor are what keep that choice from being the editor's.
 - version: "1.41"
   date: "2026-09-28"
   scope: carried-documents
