@@ -125,6 +125,14 @@ its public URL; you may still try to fetch it. Find every other source
 yourself. If a carried text is garbled or incomplete, say so in
 `limitations` rather than infer what it says.
 
+From a City meeting page, the package carries only the page header and the
+items a published rule selected, each item whole; the rest of the page was
+not carried, and the site, not you, chose the items. Names of members of
+the public in those items are withheld. If you think a relevant
+item is missing, name the meeting and the item in `limitations`. Agendas show
+what was scheduled; minutes are the record of decisions and votes. A claim the
+package marks as parked is not tested in this run: leave it out.
+
 ## Output
 
 Return ONLY the JSON document conforming to review-schema.json. Fill every

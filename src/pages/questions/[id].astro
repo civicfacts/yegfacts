@@ -124,7 +124,7 @@ const rendered = story ? await render(story) : undefined;
 const evidence: Evidence[] = story
   ? await evidenceForStory(answered, commitments, story.body ?? '')
   : [];
-/** Sources whose archived text the panel package carried (methodology v1.41). */
+/** Sources whose archived text, or selected items, the panel package carried (methodology v1.41, v1.42). */
 const carried = carriedSources(answered.map((claim) => claim.data.review_run));
 
 /**

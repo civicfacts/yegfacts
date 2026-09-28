@@ -12,7 +12,14 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import CarriedLabel from '../src/components/CarriedLabel.astro';
-import { CARRIED_LABEL, CARRIED_METHOD_HREF, carriedSources } from '../src/lib/carried';
+import {
+  CARRIED_ITEMS_LABEL,
+  CARRIED_ITEMS_UNPUBLISHABLE,
+  CARRIED_LABEL,
+  CARRIED_METHOD_HREF,
+  SELECTION_RULE_HREF,
+  carriedSources,
+} from '../src/lib/carried';
 
 const FIXTURE_ROOT = fileURLToPath(new URL('./fixtures/carried', import.meta.url));
 const RUN = 'reviews/fixture-story/2026-01-01';
@@ -20,7 +27,9 @@ const RUN = 'reviews/fixture-story/2026-01-01';
 describe('carried-document label', () => {
   it('reads only carried rows from a run manifest, and nothing from a run without one', () => {
     const carried = carriedSources([RUN, 'reviews/no-such-run/2026-01-01'], FIXTURE_ROOT);
-    expect([...carried.keys()]).toEqual(['YF-EV-9001']);
+    expect([...carried.keys()]).toEqual(['YF-EV-9001', 'YF-EV-9003']);
+    expect(carried.get('YF-EV-9001')!.kind).toBe('document');
+    expect(carried.get('YF-EV-9003')!.kind).toBe('items');
     expect(carriedSources(['reviews/no-such-run/2026-01-01'], FIXTURE_ROOT).size).toBe(0);
   });
 
@@ -29,6 +38,8 @@ describe('carried-document label', () => {
     ['a url that is not https', { url: 'javascript:alert(1)' }],
     ['a missing archive hash', { archive: {} }],
     ['an archive hash that is not 64 hex', { archive: { sha256: 1234 } }],
+    ['a minutes-items row with no rule version', { kind: 'minutes-items' }],
+    ['an unknown kind', { kind: 'minutes-item' }],
   ])('fails loudly on a carried row with %s', (_label, override) => {
     const dir = mkdtempSync(path.join(tmpdir(), 'yegfacts-carried-label-'));
     try {
@@ -56,5 +67,20 @@ describe('carried-document label', () => {
     expect(html).toContain('href="https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=1"');
     expect(html).toContain(`href="${CARRIED_METHOD_HREF}"`);
     expect(html).toContain('1111111111111111111111111111111111111111111111111111111111111111');
+  });
+
+  it('renders the selected-items label with the City page, the rule, the item index and the publishing limit', async () => {
+    const source = carriedSources([RUN], FIXTURE_ROOT).get('YF-EV-9003')!;
+    const container = await AstroContainer.create();
+    const html = await container.renderToString(CarriedLabel, { props: { source } });
+    expect(html).toContain(CARRIED_ITEMS_LABEL);
+    expect(html).toContain(CARRIED_ITEMS_UNPUBLISHABLE);
+    expect(html).toContain('data-carried-kind="items"');
+    expect(html).toContain('Meeting.aspx?Agenda=PostMinutes&amp;Id=00000000-0000-0000-0000-000000000000');
+    expect(html).toContain(`href="${SELECTION_RULE_HREF}"`);
+    expect(html).toContain('The rule (v1)');
+    expect(html).toContain('href="https://github.com/civicfacts/yegfacts/blob/main/reviews/fixture-story/2026-01-01/carried/manifest.yaml"');
+    expect(html).toContain(`href="${CARRIED_METHOD_HREF}"`);
+    expect(html).not.toContain(CARRIED_LABEL);
   });
 });
