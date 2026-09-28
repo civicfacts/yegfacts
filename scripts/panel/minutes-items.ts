@@ -22,11 +22,15 @@
  * minutes list introduced by "The following public speaker(s) ..." or "The
  * following member(s) of the delegation ..." (a delegation that is not the
  * City Administration's), each listed person's name becomes "[member of the
- * public]" and any organisation after the name is kept; and an attachment
- * filed for a speaker panel ("7.6 - Panel 3 - <name>.pdf") keeps its title up
- * to the panel number and withholds the rest. Motion text is never touched,
- * nor is anyone the page names as an office-holder in its attendance list or
- * roll call, nor Administration's delegation (City staff in role).
+ * public]" and any organisation after the name is kept; an attachment filed
+ * for a speaker panel ("7.6 - Panel 3 - <name>.pdf") keeps its title up to the
+ * panel number and withholds the rest; and in a procedural "Requests to Speak"
+ * motion (an item titled "Request(s) to Speak" whose motion reads "That <body>
+ * hear from the following ... speaker(s)"), each listed person is withheld
+ * while the operative words, the agenda items they list, mover, vote and
+ * result stay. No other motion text is touched, nor anyone the page names as
+ * an office-holder in its attendance list or roll call, nor Administration's
+ * delegation (City staff in role).
  */
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -145,13 +149,15 @@ export function textOf(node: Node): string {
 
 /** The published rule for withholding members of the public; the manifest records its version. */
 export const REDACTION_RULE = {
-  version: 1,
+  version: 2,
   rule:
-    'In a minutes list introduced by "The following public speaker(s)" or "The following member(s) of the delegation" (not Administration\'s delegation), each listed name that is not an office-holder named in the page\'s attendance list or roll call becomes "[member of the public]"; an organisation after the name is kept. An attachment title naming a speaker panel keeps the title up to the panel number and withholds the rest. Motion text is never changed.',
+    'In a minutes list introduced by "The following public speaker(s)" or "The following member(s) of the delegation" (not Administration\'s delegation), each listed name that is not an office-holder named in the page\'s attendance list or roll call becomes "[member of the public]"; an organisation after the name is kept. An attachment title naming a speaker panel keeps the title up to the panel number and withholds the rest. In a Requests to Speak motion ("That ... hear from the following ... speakers"), each listed person is withheld and the operative words, listed agenda items, mover, vote and result are kept. No other motion text is changed.',
 } as const;
 
 export const WITHHELD = '[member of the public]';
 const PUBLIC_LIST_INTRO = /^the following (public speakers?|members? of the delegation)\b/i;
+const REQUESTS_TO_SPEAK_TITLE = /^requests? to speak\b/i;
+const HEAR_FROM_SPEAKERS = /^that .+ hear from the following (?:[a-z]+ )*speakers?\b/i;
 const PERSON = /\b(?:[A-Z]\.\s?)+[A-Z][A-Za-z'’-]+(?:[ -][A-Z][A-Za-z'’-]+)?/g;
 
 /** Office-holders a page names in its attendance list and roll call, as "E. Rutherford". */
@@ -167,6 +173,31 @@ function officeHolders(texts: string[]): Set<string> {
  */
 function withholdPublic(item: Element, holders: Set<string>): number {
   let replaced = 0;
+  /** Replace the name at the start of a list entry, keeping any organisation after a comma. */
+  const withholdEntry = (li: Element): void => {
+    const text = textOf(li).replace(/^-\s*/, '');
+    const comma = text.indexOf(',');
+    const name = (comma === -1 ? text : text.slice(0, comma)).trim();
+    if (!name || name === WITHHELD || holders.has(name.replace(/\s+/g, ' '))) return;
+    li.children = [comma === -1 ? WITHHELD : `${WITHHELD}${text.slice(comma)}`];
+    replaced += 1;
+  };
+  // Requests to Speak: the one motion whose listed people are withheld.
+  const titleElement = find(item, (e) => has(e, 'AgendaItemTitle'));
+  if (titleElement && REQUESTS_TO_SPEAK_TITLE.test(textOf(titleElement))) {
+    for (const motion of [...walk(item)]) {
+      if (!has(motion, 'MotionText')) continue;
+      const first = find(motion, (e) => e.tag === 'p');
+      if (!first || !HEAR_FROM_SPEAKERS.test(textOf(first))) continue;
+      for (const li of [...walk(motion)]) {
+        if (li.tag !== 'li' || find(li, (e) => e.tag === 'li')) continue;
+        const text = textOf(li).replace(/^-\s*/, '');
+        // An entry that starts with an agenda item number names the item, not a person.
+        if (!text || /^\d+(\.\d+)*\.?\s/.test(text)) continue;
+        withholdEntry(li);
+      }
+    }
+  }
   for (const element of [...walk(item)]) {
     if (element.tag !== 'p' || !element.parent) continue;
     const intro = textOf(element);
@@ -179,12 +210,7 @@ function withholdPublic(item: Element, holders: Set<string>): number {
     if (!list || (list.tag !== 'ul' && list.tag !== 'ol')) continue;
     for (const li of list.children) {
       if (typeof li === 'string' || li.tag !== 'li') continue;
-      const text = textOf(li).replace(/^-\s*/, '');
-      const comma = text.indexOf(',');
-      const name = (comma === -1 ? text : text.slice(0, comma)).trim();
-      if (!name || name === WITHHELD || holders.has(name.replace(/\s+/g, ' '))) continue;
-      li.children = [comma === -1 ? WITHHELD : `${WITHHELD}${text.slice(comma)}`];
-      replaced += 1;
+      withholdEntry(li);
     }
   }
   for (const attachment of [...walk(item)]) {

@@ -63,7 +63,7 @@ describe('reading an eScribe meeting page', () => {
     expect(page.header).toContain('March 4, 2031');
     expect(page.header).toMatch(/Present:\n- Q\. Okonkwo,\n- L\. Brandt,\n- and T\. Villeneuve/);
     // The decoy inside <script> is not an item.
-    expect(page.items.map((item) => item.number)).toEqual(['1.', '1.2', '1.4', '3.', '3.4', '3.5', '4.', '4.1', '4.2']);
+    expect(page.items.map((item) => item.number)).toEqual(['1.', '1.2', '1.4', '1.5', '3.', '3.4', '3.5', '4.', '4.1', '4.2']);
     const item = page.items.find((i) => i.number === '3.4')!;
     expect(item.depth).toBe(2);
     expect(item.text).toContain('Report - MC00001.pdf');
@@ -108,9 +108,24 @@ describe('withholding members of the public', () => {
     expect(item.text).toContain('- D. Achebe, Branch Manager');
     expect(item.text).toContain('Moved by: Q. Okonkwo');
     const motion = page.items.find((i) => i.number === '1.4')!;
-    // A name inside motion text is never changed, by design; the personal-information screen sees it.
+    // Outside a Requests to Speak item, a name inside motion text is never changed.
     expect(motion.withheld).toBe(0);
     expect(motion.text).toContain('- R. Moss');
+  });
+
+  it('withholds the people listed in a Requests to Speak motion and keeps its operative words, items, mover and vote', () => {
+    const item = parseMeetingPage(MINUTES).items.find((i) => i.number === '1.5')!;
+    expect(item.withheld).toBe(2);
+    expect(item.text).toContain('That Mobility Committee hear from the following speakers, in panels when appropriate:');
+    expect(item.text).toContain('- 3.5 Library Hours Survey');
+    expect(item.text).toContain(`${WITHHELD}, Harbour Readers Society`);
+    expect(item.text).not.toContain('K. Farouk');
+    expect(item.text).not.toContain('J. Oyelaran');
+    // An office-holder in the list keeps the name, and the vote is untouched.
+    expect(item.text).toContain('- T. Villeneuve');
+    expect(item.text).toContain('Moved by: T. Villeneuve');
+    expect(item.text).toContain('In Favour (3) | Q. Okonkwo, L. Brandt, and T. Villeneuve');
+    expect(item.text).toContain('Carried (3 to 0)');
   });
 
   it('keeps every name when asked for the page as published', () => {
@@ -272,6 +287,7 @@ describe('carrying a meeting page as items', { timeout: 60_000 }, () => {
       ['1.', false, 0, null],
       ['1.2', false, 0, null],
       ['1.4', true, 0, null],
+      ['1.5', false, 2, null],
       ['3.', false, 0, null],
       ['3.4', true, 4, null],
       ['3.5', false, 0, null],
@@ -312,7 +328,7 @@ describe('carrying a meeting page as items', { timeout: 60_000 }, () => {
     expect(refusals(repo, manifest)).toEqual(
       expect.arrayContaining([
         'YF-EV-0001: completeness check not done',
-        expect.stringMatching(/^YF-EV-0001: 9 item\(s\) have no checker_reason/),
+        expect.stringMatching(/^YF-EV-0001: 10 item\(s\) have no checker_reason/),
         `gate claim:${CLAIM} is pending`,
       ]),
     );
@@ -439,7 +455,7 @@ describe('carrying a meeting page as items', { timeout: 60_000 }, () => {
     const revised = await build(repo, { rulesFile, ruleVersion: 2 });
     expect(revised.gates![`claim:${CLAIM}`]).toMatchObject({ result: 'pending', note: 'reset: the carried evidence changed since the gate passed' });
     const doc = revised.documents[0]!;
-    expect(doc.items!.filter((i) => i.carried).map((i) => i.number)).toEqual(['1.4', '3.4', '3.5', '4.1']);
+    expect(doc.items!.filter((i) => i.carried).map((i) => i.number)).toEqual(['1.4', '1.5', '3.4', '3.5', '4.1']);
     expect(doc.completeness_check?.result).toBe('pending');
     expect(revised.rule_revisions!.map((r) => r.version)).toEqual([1, 2]);
 
@@ -457,9 +473,9 @@ describe('carrying a meeting page as items', { timeout: 60_000 }, () => {
     expect(section).toContain('## Selected items from City meeting pages');
     expect(section).toContain('The rest of each page was not carried.');
     expect(section).toContain('Selection rule, version 1:');
-    expect(section).toContain(`Names of members of the public in these items were withheld and replaced with "${WITHHELD}" (redaction rule version 1)`);
+    expect(section).toContain(`Names of members of the public in these items were withheld and replaced with "${WITHHELD}" (redaction rule version 2)`);
     expect(section).toContain('Agendas show what was scheduled; minutes are the record of decisions and votes.');
-    expect(section).toContain('- Items carried: 1.4, 3.4, 4.1 (3 of 9)');
+    expect(section).toContain('- Items carried: 1.4, 3.4, 4.1 (3 of 10)');
     expect(section).toContain(`- Page SHA-256: ${sha256(MINUTES)}`);
     expect(section).not.toContain('Mobility Committee minutes');
   });

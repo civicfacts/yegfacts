@@ -181,6 +181,37 @@ describe('carry-manifest build', () => {
     expect(privateTexts(repo)).toEqual([]);
   });
 
+  it('still carries a pdf the fetcher opened on one request when the Claude seat\'s own tool was refused (v1.42)', async () => {
+    const repo = fixtureRepo();
+    const manifest = await buildCarryManifest({
+      repoRoot: repo,
+      runDir: RUN,
+      docs: [{ id: 'YF-EV-0001', meetingPage: 'YF-EV-0002' }],
+      fetcher: stubFetcher({ status: 200, contentType: 'application/pdf' }, meetingPage('Report - IS03688.pdf')),
+      extractor: stubExtractor,
+      seatProbes: [
+        {
+          url: DOC_URL,
+          seat: 'claude',
+          model: 'claude-opus-5-5',
+          tool: 'WebFetch',
+          cli_version: 'stub',
+          probed_at: '2026-09-28T11:00:00Z',
+          outcome: 'refused',
+          http_status: 403,
+          tool_url: DOC_URL,
+          raw_error: 'The server returned HTTP 403 Forbidden.',
+        },
+      ],
+      now: () => NOW,
+    });
+    const doc = manifest.documents[0]!;
+    expect(doc.status, doc.reason).toBe('carried');
+    expect(doc.probe).toMatchObject({ http_status: 200, fetcher_refused: false });
+    expect(doc.eligibility).toMatchObject({ ground: 'seat refusal', seat: 'claude', http_status: 403 });
+    expect(doc.reason).toMatch(/refused the claude seat's WebFetch/);
+  });
+
   it.each([
     ['a bare 403', { status: 403 }],
     ['a 401', { status: 401, headers: CHALLENGE }],
