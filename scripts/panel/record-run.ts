@@ -23,6 +23,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import YAML from 'yaml';
 import { currentMethodologyVersion, relative } from '../lib/repo.ts';
+import { rowRefusals } from './carry-manifest.ts';
 
 type RunEntry = {
   provider: string;
@@ -41,6 +42,15 @@ type RunEntry = {
   attempts: number;
   status: 'ok' | 'failed' | 'blocked';
   package_files?: string[];
+  /**
+   * SHA-256 of the carry manifest whose documents the package carried
+   * (methodology v1.41). Absent when nothing was carried.
+   */
+  carried_manifest_sha256?: string;
+  /** SHA-256 of the carried section the seat received; equal on every row of a run. */
+  carried_section_sha256?: string;
+  /** The carry manifest's latest probe time; round 2's must differ from round 1's. */
+  carried_probed_at?: string;
   /**
    * One row per attempt (methodology v1.28): opaque attempt id, the isolation
    * profile it ran under, the canary and boundary verdicts, the exact exit code
@@ -140,8 +150,23 @@ const entry: RunEntry = {
   attempts: Number(values.attempts ?? '1'),
   status: parseStatus(values.status),
   ...(values['package-files'] ? { package_files: values['package-files'].split(',') } : {}),
+  ...(values['carried-manifest-sha256'] ? { carried_manifest_sha256: values['carried-manifest-sha256'] } : {}),
+  ...(values['carried-section-sha256'] ? { carried_section_sha256: values['carried-section-sha256'] } : {}),
+  ...(values['carried-probed-at'] ? { carried_probed_at: values['carried-probed-at'] } : {}),
   ...(attemptsDetail(values['attempts-detail']) ?? {}),
 };
+
+// Methodology v1.41: every seat in a run, both rounds, gets the same carried
+// section, and round 2 runs on a fresh probe. The runner checks this before
+// launch; this is the backstop that keeps a mismatched row out of the record.
+if (entry.carried_section_sha256 || manifest.runs.some((run) => run.carried_section_sha256)) {
+  const refusals = rowRefusals(manifest.runs, {
+    round: entry.round,
+    sectionSha: entry.carried_section_sha256 ?? '(none)',
+    probedAt: entry.carried_probed_at ?? '',
+  });
+  if (refusals.length > 0) throw new Error(`carried section does not match this run: ${refusals.join('; ')}`);
+}
 
 /** The seat a row describes; rows written before v1.6 name only the model. */
 const seatKey = (run: RunEntry): string => run.seat ?? run.model_id ?? '';

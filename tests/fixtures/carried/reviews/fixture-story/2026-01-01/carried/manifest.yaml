@@ -1,0 +1,23 @@
+# Test fixture: the shape scripts/panel/carry-manifest.ts writes, trimmed to
+# the fields the site reads. Not a real run.
+run: reviews/fixture-story/2026-01-01
+generated_at: 2026-01-01T00:00:00Z
+rule: "methodology v1.41 (D-0046): carried documents"
+documents:
+  - registry_id: YF-EV-9001
+    title: A carried council report
+    url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=1
+    status: carried
+    reason: fixture
+    archive:
+      sha256: "1111111111111111111111111111111111111111111111111111111111111111"
+      bytes: 10
+  - registry_id: YF-EV-9002
+    title: A document the fetcher could retrieve
+    url: https://example.org/open.pdf
+    status: excluded
+    reason: fixture
+    archive:
+      sha256: "2222222222222222222222222222222222222222222222222222222222222222"
+      bytes: 10
+exclusions: []

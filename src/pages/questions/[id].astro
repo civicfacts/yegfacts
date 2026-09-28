@@ -3,6 +3,7 @@ import { getEntry, render, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import AiReview from '../../components/AiReview.astro';
 import AlsoSaidAs from '../../components/AlsoSaidAs.astro';
+import CarriedLabel from '../../components/CarriedLabel.astro';
 import ClaimStrip from '../../components/ClaimStrip.astro';
 import CopyButton from '../../components/CopyButton.astro';
 import Finding from '../../components/Finding.astro';
@@ -38,6 +39,7 @@ import { questionRows, type QuestionRow } from '../../lib/questions';
 import { panelForClaim, requireTerm as gloss } from '../../lib/glossary';
 import { findingGlossTerm } from '../../lib/findings';
 import { SITE } from '../../lib/site';
+import { carriedSources } from '../../lib/carried';
 import { subheads, toc } from '../../lib/toc';
 
 type Report = CollectionEntry<'candidateReports'>;
@@ -122,6 +124,8 @@ const rendered = story ? await render(story) : undefined;
 const evidence: Evidence[] = story
   ? await evidenceForStory(answered, commitments, story.body ?? '')
   : [];
+/** Sources whose archived text the panel package carried (methodology v1.41). */
+const carried = carriedSources(answered.map((claim) => claim.data.review_run));
 
 /**
  * Comparable cities, grouped under the claim they were offered for. They used to
@@ -721,6 +725,7 @@ const Content = rendered?.Content;
                       <time datetime={entry.data.retrieved_on}>{entry.data.retrieved_on}</time> ·{' '}
                       {entry.data.id}
                     </p>
+                    {carried.has(entry.data.id) && <CarriedLabel source={carried.get(entry.data.id)!} />}
                   </li>
                 ))}
               </ul>
