@@ -425,3 +425,74 @@ adjustment motion as moved. The completeness check starts again on v2.
 On this rebuild the site's fetcher was refused at report IS03688 again,
 so every carried PDF now rests on the fetcher-challenge ground and the
 meeting pages on the Claude seat's refusals.
+
+## 2026-09-28: round 1 under methodology v1.42, held before round 2
+
+**Round 1 ran on all three seats with the carried minutes items, and the
+run is held there for the editor.** Every seat answered claims 1 to 3
+Partially supported. Claim 4 was parked before the round and no seat
+answered it. Several seats report City records they could not open that
+are not in the carried set, so no merge, round 2 or synthesis has run
+until the editor decides whether any of them is an essential source.
+
+**The checks.** An independent read-only Claude Opus 5.5 session, not the
+editor, read every item of every carried meeting page under rule v2 and
+found no relevant item uncarried, screened the carried text for personal
+information and found it clear, and regenerated every carried text to the
+manifest's hashes. Its files are in `carried/checks/`. The meeting pages'
+download provenance is the site's evidence fetcher on the registry's
+retrieval date. Their public-open check is the fetcher's HTTP 200 on the
+live page at build time; no person opened them in a browser. Claim 4
+(`same-seven-councillors-vote-together`) is parked for this run under its
+gate: the full set of relevant recorded votes depends on budget-adjustment
+meetings and attachments that are not archived, and on bundled budget
+votes whose relevance is unresolved, and depending on those the verdict
+ranges from Not established to Contradicted (`carried/checks/gate.md`).
+The editor accepted the park. The package told every seat so.
+
+**The package.** The carry manifest was committed at 389ea18 with sha256
+`2f29a255f9a7c611dc87491a46aa9027296db67d8fd7bd79ce4b46effd8b2435`. The
+carried section's sha256 was
+`d4c57f3d44ecc1ff7d5738c0cd797cdbad9c738552e09ec1f97c87e57bd580f0` and the
+package's `6e7ed39269e1fc3cd792cd2b98a6ec5a3afb0ce4143a2efa3807dae7f061de1f`,
+the same for every seat. The earliest probe the package rests on was the
+Claude seat's refusal at 2026-09-28T19:14:35Z. All three seats launched
+from this checkout at 389ea18 at 19:43:22Z. The runner refused nothing.
+
+| Seat | Attempt | Outcome |
+|---|---|---|
+| Claude Opus 5.5 (`claude-opus-5-5`), high, Claude Code 2.1.284 | `aa19dfbc4ccaf72c`, 19:43Z to 19:50Z | admitted on one attempt under claude-safe-web-candidate-2.1.284 |
+| GPT-6 Sol (`gpt-6-sol`), high, codex-cli 0.158.0 | `03ca282790e1e0f7`, 19:43Z to 19:53Z | admitted on one attempt |
+| GPT-6 Luna (`gpt-6-luna`), high, codex-cli 0.158.0 | `99cd2fce9e5b6027`, 19:43Z to 19:50Z | admitted on one attempt |
+
+| Claim | Claude | GPT-6 Sol | GPT-6 Luna |
+|---|---|---|---|
+| `council-rejected-pause` | Partially supported, high | Partially supported, moderate | Partially supported, moderate |
+| `administration-recommended-freezing-14-routes` | Partially supported, moderate | Partially supported, moderate | Partially supported, moderate |
+| `motions-to-cut-budget-to-50-million-failed` | Partially supported, moderate | Partially supported, high | Partially supported, moderate |
+| `same-seven-councillors-vote-together` | parked, not asked | parked, not asked | parked, not asked |
+
+No seat raised a MATERIAL FRAMING CONCERN, and no seat wrote that an
+essential source was inaccessible.
+
+**Why the run is held.** The seats read the carried minutes this time and
+cite them. They also name records they could not open that the package
+did not carry:
+
+- Attachment 3, the route status record (DocumentIds 304029 and 304028),
+  named by all three seats. It has no archived copy. The manifest excludes
+  it as not an essential source, and the Claude seat says its claim 2
+  verdict does not depend on it under Version 2.
+- The Council public hearings of 2026-09-15 and 2026-09-22 and the
+  2026-10-06 Council agenda, named by the Claude and GPT-6 Sol seats for
+  claim 1. The brief lists all three. The hearings have no archived copy;
+  the agenda is archived as YF-EV-0221 and was excluded from the carried
+  set. Sol writes that without them the absence of a Council decision
+  through 2026-09-25 remains unverified.
+- The portal's meeting calendar, and the capital profile and adjustment
+  attachments, named by the Claude seat for claims 1 and 3 and by GPT-6
+  Luna for claim 3.
+
+The brief stops a run on an inaccessible essential source. Whether any of
+these is essential is the editor's decision, so the run waits for it. The
+round 1 answers stay in `round1/` with their rows in `run.yaml`.
