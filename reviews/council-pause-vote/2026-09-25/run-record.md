@@ -410,3 +410,18 @@ pages and Attachment 3 are excluded, each with its reason in the
 manifest. The completeness check, the personal-information screens, the
 meeting pages' provenance and public-open checks, and the claim-4 gate
 are pending; round 1 does not launch until they pass.
+
+**Rule v2.** The independent completeness check of the v1 selection found
+four relevant items the rule missed: the Executive Committee's item 10.1
+of 2026-09-02 and Council's item 10.7 of 2026-07-07 (both Active
+Transportation Implementation motions), the re-stated main budget motions
+of 2022 (YF-EV-0204 item 15) and the vote on the Fall 2024 Supplemental
+Capital Budget Adjustment (YF-EV-0212 item 5.1.3). Selection rule v2 adds
+the terms "Active Transportation Implementation", "Capital Budget motion"
+and "Supplemental Capital Budget Adjustment Motion", and the manifest was
+rebuilt on every page under it. v2 carries exactly v1's items, the four
+missed ones and one more, YF-EV-0212 item 5.1, which holds the same
+adjustment motion as moved. The completeness check starts again on v2.
+On this rebuild the site's fetcher was refused at report IS03688 again,
+so every carried PDF now rests on the fetcher-challenge ground and the
+meeting pages on the Claude seat's refusals.

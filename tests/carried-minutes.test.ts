@@ -32,7 +32,8 @@ import { RAW_LIMIT, classifyClaudeStream, classifyCodexStream, type SeatProbe } 
 const FIXTURES = fileURLToPath(new URL('./fixtures/minutes', import.meta.url));
 const MINUTES = readFileSync(path.join(FIXTURES, 'postminutes.html'), 'utf8');
 const AGENDA = readFileSync(path.join(FIXTURES, 'agenda.html'), 'utf8');
-const RULE = selectionRules().at(-1)!;
+// The fixtures are written against rule version 1; later published versions must not move them.
+const RULE = selectionRules()[0]!;
 
 const root = realpathSync(mkdtempSync(path.join(tmpdir(), 'yegfacts-minutes-')));
 afterAll(() => rmSync(root, { recursive: true, force: true }));
@@ -238,6 +239,7 @@ describe('carrying a meeting page as items', { timeout: 60_000 }, () => {
       fetcher: fetcher(),
       seatProbes: [seatProbe()],
       now: () => NOW,
+      ruleVersion: 1,
       ...options,
     });
 
@@ -519,7 +521,7 @@ describe('carrying a meeting page as items', { timeout: 60_000 }, () => {
     const rulesFile = path.join(repo, 'rules.yaml');
     writeFileSync(
       rulesFile,
-      YAML.stringify({ versions: [...selectionRules(), { version: 2, reason: 'the checker found 3.5', terms: [...RULE.terms, 'Library Hours'] }] }),
+      YAML.stringify({ versions: [RULE, { version: 2, reason: 'the checker found 3.5', terms: [...RULE.terms, 'Library Hours'] }] }),
     );
     const revised = await build(repo, { rulesFile, ruleVersion: 2 });
     expect(revised.gates![`claim:${CLAIM}`]).toMatchObject({ result: 'pending', note: 'reset: the carried evidence changed since the gate passed' });

@@ -1,10 +1,10 @@
 # Carry manifest (methodology v1.41, v1.42). Committed; the extracted text never is.
 # Items are selected only by the published rule; there is no way to add one by hand.
 run: reviews/council-pause-vote/2026-09-25
-generated_at: 2026-09-28T19:17:38Z
+generated_at: 2026-09-28T19:33:52Z
 rule: "methodology v1.42 (D-0046, D-0047): carried documents and minutes items"
 selection_rule:
-  version: 1
+  version: 2
   terms: &a1
     - CM-20-0330
     - IS03688
@@ -14,10 +14,24 @@ selection_rule:
     - "21265"
     - bike
     - cycling
+    - Active Transportation Implementation
+    - Capital Budget motion
+    - Supplemental Capital Budget Adjustment Motion
   match: case-insensitive, on the item number, title and whole text; a term made only of digits must not touch another digit
 rule_revisions:
   - version: 1
     reason: "D-0047 rule 2: the program's capital profile, report, names and borrowing bylaws, plus bike and cycling"
+    terms:
+      - CM-20-0330
+      - IS03688
+      - Active Transportation Implementation Acceleration
+      - Active Transportation Network Expansion
+      - "20394"
+      - "21265"
+      - bike
+      - cycling
+  - version: 2
+    reason: "Completeness check on council-pause-vote (2026-09-28): v1 missed four relevant items, YF-EV-0216 10.1 and YF-EV-0214 10.7 (Active Transportation Implementation motions), YF-EV-0204 15 (the re-stated main budget motions) and YF-EV-0212 5.1.3 (the Fall 2024 Supplemental Capital Budget Adjustment vote)"
     terms: *a1
 redaction_rule:
   version: 4
@@ -33,7 +47,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304024
     kind: pdf
     status: carried
-    reason: named in the frozen brief (exact URL); https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304024 refused the claude seat's WebFetch at 2026-09-28T19:14:12Z (403)
+    reason: "named in the frozen brief (exact URL); https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304024 answered the site's fetcher with HTTP 403 (cf-mitigated: challenge header) at 2026-09-28T19:33:47Z"
     download:
       retrieved_on: 2026-09-02
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -42,17 +56,12 @@ documents:
       sha256: a4a409732b8052a0951b2fc9b4092e95f09ab2386b27b77dba12c902e3513237
       bytes: 395857
     probe:
-      http_status: 200
-      checked_at: 2026-09-28T19:17:32Z
-      fetcher_refused: false
-    eligibility:
-      ground: seat refusal
-      seat: claude
-      model: claude-opus-5-5
-      tool: WebFetch
-      probed_at: 2026-09-28T19:14:12Z
       http_status: 403
-      raw_error: Forbidden
+      checked_at: 2026-09-28T19:33:47Z
+      fetcher_refused: true
+      signature: "cf-mitigated: challenge header"
+    eligibility:
+      ground: fetcher challenge
     meeting_page:
       registry_id: YF-EV-0210
       url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
@@ -92,7 +101,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304032
     kind: pdf
     status: carried
-    reason: "named in the frozen brief (template + DocumentId naming at line 402); https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304032 answered the site's fetcher with HTTP 403 (cf-mitigated: challenge header) at 2026-09-28T19:17:33Z"
+    reason: "named in the frozen brief (template + DocumentId naming at line 402); https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304032 answered the site's fetcher with HTTP 403 (cf-mitigated: challenge header) at 2026-09-28T19:33:48Z"
     download:
       retrieved_on: 2026-09-25
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private. Downloaded in a browser on 2026-09-25 because filestream.ashx answers scripts with a browser check (HTTP 403); identified by the hash recorded in reviews/consultation-and-opposition/2026-09-03/verification/escribe-archive-2026-09-25.md.
@@ -102,7 +111,7 @@ documents:
       bytes: 68417
     probe:
       http_status: 403
-      checked_at: 2026-09-28T19:17:33Z
+      checked_at: 2026-09-28T19:33:48Z
       fetcher_refused: true
       signature: "cf-mitigated: challenge header"
     eligibility:
@@ -146,7 +155,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304031
     kind: pdf
     status: carried
-    reason: "named in the frozen brief (template + DocumentId naming at line 402); https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304031 answered the site's fetcher with HTTP 403 (cf-mitigated: challenge header) at 2026-09-28T19:17:33Z"
+    reason: "named in the frozen brief (template + DocumentId naming at line 402); https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304031 answered the site's fetcher with HTTP 403 (cf-mitigated: challenge header) at 2026-09-28T19:33:48Z"
     download:
       retrieved_on: 2026-09-25
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private. Downloaded in a browser on 2026-09-25 because filestream.ashx answers scripts with a browser check (HTTP 403); identified by the hash recorded in reviews/consultation-and-opposition/2026-09-03/verification/escribe-archive-2026-09-25.md.
@@ -156,7 +165,7 @@ documents:
       bytes: 62745
     probe:
       http_status: 403
-      checked_at: 2026-09-28T19:17:33Z
+      checked_at: 2026-09-28T19:33:48Z
       fetcher_refused: true
       signature: "cf-mitigated: challenge header"
     eligibility:
@@ -200,7 +209,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304030
     kind: pdf
     status: carried
-    reason: "named in the frozen brief (template + DocumentId naming at line 403); https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304030 answered the site's fetcher with HTTP 403 (cf-mitigated: challenge header) at 2026-09-28T19:17:34Z"
+    reason: "named in the frozen brief (template + DocumentId naming at line 403); https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304030 answered the site's fetcher with HTTP 403 (cf-mitigated: challenge header) at 2026-09-28T19:33:48Z"
     download:
       retrieved_on: 2026-09-02
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -210,7 +219,7 @@ documents:
       bytes: 55953
     probe:
       http_status: 403
-      checked_at: 2026-09-28T19:17:34Z
+      checked_at: 2026-09-28T19:33:48Z
       fetcher_refused: true
       signature: "cf-mitigated: challenge header"
     eligibility:
@@ -254,7 +263,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (exact URL); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English refused the claude seat's WebFetch at 2026-09-28T19:15:15Z (403); 6 of 32 items selected by rule v1
+    reason: named in the frozen brief (exact URL); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English refused the claude seat's WebFetch at 2026-09-28T19:15:15Z (403); 6 of 32 items selected by rule v2
     download:
       retrieved_on: 2026-09-25
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -264,7 +273,7 @@ documents:
       bytes: 213699
     probe:
       http_status: 200
-      checked_at: 2026-09-28T19:17:34Z
+      checked_at: 2026-09-28T19:33:48Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -278,7 +287,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: minutes
-    rule_version: 1
+    rule_version: 2
     redaction_version: 4
     items:
       - number: "1."
@@ -314,6 +323,7 @@ documents:
         matched: true
         matched_terms:
           - Active Transportation Implementation Acceleration
+          - Active Transportation Implementation
         carried: true
         withheld: 0
         checker_reason: null
@@ -358,6 +368,7 @@ documents:
         matched_terms:
           - Active Transportation Implementation Acceleration
           - bike
+          - Active Transportation Implementation
         carried: true
         withheld: 79
         checker_reason: null
@@ -366,6 +377,7 @@ documents:
         matched: true
         matched_terms:
           - Active Transportation Implementation Acceleration
+          - Active Transportation Implementation
         carried: true
         withheld: 0
         checker_reason: null
@@ -462,6 +474,7 @@ documents:
           - Active Transportation Implementation Acceleration
           - Active Transportation Network Expansion
           - bike
+          - Active Transportation Implementation
         carried: true
         withheld: 57
         checker_reason: null
@@ -500,6 +513,7 @@ documents:
           - CM-20-0330
           - IS03688
           - bike
+          - Active Transportation Implementation
         carried: true
         withheld: 0
         checker_reason: null
@@ -520,7 +534,7 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v1
+      version: selection rule v2
       text_bytes: 14722
       text_sha256: d57c02193712938a123ab4e09c71478f46f643be9cf8a6f965a0c7e617d811c6
       text_file: evidence/private/carried/council-pause-vote/2026-09-25/YF-EV-0209.txt
@@ -547,7 +561,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (exact URL); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English refused the claude seat's WebFetch at 2026-09-28T19:15:45Z (403); 1 of 30 items selected by rule v1
+    reason: named in the frozen brief (exact URL); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English refused the claude seat's WebFetch at 2026-09-28T19:15:45Z (403); 1 of 30 items selected by rule v2
     download:
       retrieved_on: 2026-09-25
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -557,7 +571,7 @@ documents:
       bytes: 168742
     probe:
       http_status: 200
-      checked_at: 2026-09-28T19:17:35Z
+      checked_at: 2026-09-28T19:33:49Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -571,7 +585,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: agenda
-    rule_version: 1
+    rule_version: 2
     redaction_version: 4
     items:
       - number: "1."
@@ -749,6 +763,7 @@ documents:
           - IS03688
           - Active Transportation Implementation Acceleration
           - Active Transportation Network Expansion
+          - Active Transportation Implementation
         carried: true
         withheld: 0
         checker_reason: null
@@ -789,7 +804,7 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v1
+      version: selection rule v2
       text_bytes: 2018
       text_sha256: 52b169f6a8c09fef3e2b661681a4f37e8d7fc35e9171c2ed3d1f42b9b691bbcf
       text_file: evidence/private/carried/council-pause-vote/2026-09-25/YF-EV-0210.txt
@@ -816,7 +831,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=3195d7e4-a1e2-4923-810e-ddfa0726c299&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (template + meeting id at line 839); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=3195d7e4-a1e2-4923-810e-ddfa0726c299&lang=English refused the claude seat's WebFetch at 2026-09-28T19:15:03Z (403); 1 of 71 items selected by rule v1
+    reason: named in the frozen brief (template + meeting id at line 839); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=3195d7e4-a1e2-4923-810e-ddfa0726c299&lang=English refused the claude seat's WebFetch at 2026-09-28T19:15:03Z (403); 1 of 71 items selected by rule v2
     download:
       retrieved_on: 2026-09-25
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -826,7 +841,7 @@ documents:
       bytes: 417196
     probe:
       http_status: 200
-      checked_at: 2026-09-28T19:17:35Z
+      checked_at: 2026-09-28T19:33:49Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -840,7 +855,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: minutes
-    rule_version: 1
+    rule_version: 2
     redaction_version: 4
     items:
       - number: "1."
@@ -1298,6 +1313,7 @@ documents:
           - CM-20-0330
           - IS03688
           - bike
+          - Active Transportation Implementation
         carried: true
         withheld: 0
         checker_reason: null
@@ -1345,7 +1361,7 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v1
+      version: selection rule v2
       text_bytes: 1609
       text_sha256: 4d4b6bae8671f5f6ff988e5566d90e7379c9d2df49df3848af0a69bfd4f55538
       text_file: evidence/private/carried/council-pause-vote/2026-09-25/YF-EV-0215.txt
@@ -1372,7 +1388,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=fb2d3de4-5170-4f51-9f18-60fd93590a78&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (template + meeting id at line 843); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=fb2d3de4-5170-4f51-9f18-60fd93590a78&lang=English refused the claude seat's WebFetch at 2026-09-28T19:15:38Z (403); 1 of 30 items selected by rule v1
+    reason: named in the frozen brief (template + meeting id at line 843); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=fb2d3de4-5170-4f51-9f18-60fd93590a78&lang=English refused the claude seat's WebFetch at 2026-09-28T19:15:38Z (403); 2 of 30 items selected by rule v2
     download:
       retrieved_on: 2026-09-25
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -1382,7 +1398,7 @@ documents:
       bytes: 199017
     probe:
       http_status: 200
-      checked_at: 2026-09-28T19:17:35Z
+      checked_at: 2026-09-28T19:33:49Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -1396,7 +1412,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: minutes
-    rule_version: 1
+    rule_version: 2
     redaction_version: 4
     items:
       - number: "1."
@@ -1576,9 +1592,10 @@ documents:
         checker_reason: null
       - number: "10.1"
         title: Active Transportation Implementation Funding (A. Salvador)
-        matched: false
-        matched_terms: []
-        carried: false
+        matched: true
+        matched_terms:
+          - Active Transportation Implementation
+        carried: true
         withheld: 0
         checker_reason: null
       - number: "11."
@@ -1595,6 +1612,7 @@ documents:
           - CM-20-0330
           - IS03688
           - bike
+          - Active Transportation Implementation
         carried: true
         withheld: 0
         checker_reason: null
@@ -1614,9 +1632,9 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v1
-      text_bytes: 1432
-      text_sha256: 7ac7807fc3aa93f1fe48cc20c06e574150a457f52a6acc9831533a34ef40dccb
+      version: selection rule v2
+      text_bytes: 1674
+      text_sha256: 000acf8badc232e488d17b3afc016563ca664723ce1737a1c37f34f1eb7bac97
       text_file: evidence/private/carried/council-pause-vote/2026-09-25/YF-EV-0216.txt
     completeness_check:
       result: pending
@@ -1641,7 +1659,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=215a3a89-60c7-4eff-8533-cf94079fabd2&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (template + meeting id at line 852); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=215a3a89-60c7-4eff-8533-cf94079fabd2&lang=English refused the claude seat's WebFetch at 2026-09-28T19:14:57Z (403); 6 of 413 items selected by rule v1
+    reason: named in the frozen brief (template + meeting id at line 852); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=215a3a89-60c7-4eff-8533-cf94079fabd2&lang=English refused the claude seat's WebFetch at 2026-09-28T19:14:57Z (403); 7 of 413 items selected by rule v2
     download:
       retrieved_on: 2026-09-24
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -1651,7 +1669,7 @@ documents:
       bytes: 1367742
     probe:
       http_status: 200
-      checked_at: 2026-09-28T19:17:35Z
+      checked_at: 2026-09-28T19:33:50Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -1665,7 +1683,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: minutes
-    rule_version: 1
+    rule_version: 2
     redaction_version: 4
     items:
       - number: "1."
@@ -4249,9 +4267,10 @@ documents:
         checker_reason: null
       - number: "15."
         title: MAIN BUDGET MOTIONS (RE-STATED)
-        matched: false
-        matched_terms: []
-        carried: false
+        matched: true
+        matched_terms:
+          - Capital Budget motion
+        carried: true
         withheld: 0
         checker_reason: null
       - number: "16."
@@ -4572,9 +4591,9 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v1
-      text_bytes: 13302
-      text_sha256: 7d6764bc06f5af88fa680be8ee7f273d5e9f629dce583ff4b774aa4c8d380c6e
+      version: selection rule v2
+      text_bytes: 17966
+      text_sha256: 0ed50aa865c30328c51108b1a913df3aaa5554ed835d79570c69705dc2201f43
       text_file: evidence/private/carried/council-pause-vote/2026-09-25/YF-EV-0204.txt
     completeness_check:
       result: pending
@@ -4599,7 +4618,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=6211ce95-0dbd-439c-8cf1-42eb46ca3e50&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (template + meeting id at line 855); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=6211ce95-0dbd-439c-8cf1-42eb46ca3e50&lang=English refused the claude seat's WebFetch at 2026-09-28T19:15:21Z (403); 1 of 53 items selected by rule v1
+    reason: named in the frozen brief (template + meeting id at line 855); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=6211ce95-0dbd-439c-8cf1-42eb46ca3e50&lang=English refused the claude seat's WebFetch at 2026-09-28T19:15:21Z (403); 1 of 53 items selected by rule v2
     download:
       retrieved_on: 2026-09-25
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -4609,7 +4628,7 @@ documents:
       bytes: 261721
     probe:
       http_status: 200
-      checked_at: 2026-09-28T19:17:36Z
+      checked_at: 2026-09-28T19:33:50Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -4623,7 +4642,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: minutes
-    rule_version: 1
+    rule_version: 2
     redaction_version: 4
     items:
       - number: "1."
@@ -4892,6 +4911,7 @@ documents:
           - CM-20-0330
           - Active Transportation Implementation Acceleration
           - "20394"
+          - Active Transportation Implementation
         carried: true
         withheld: 0
         checker_reason: null
@@ -5002,7 +5022,7 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v1
+      version: selection rule v2
       text_bytes: 1398
       text_sha256: 9ef62b7450dcde242e6cb4a7e64e45908806681f83fded53117e9989d4ef69fe
       text_file: evidence/private/carried/council-pause-vote/2026-09-25/YF-EV-0218.txt
@@ -5029,7 +5049,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=1e903a6e-7613-4e5a-8b66-fe1d14cd2f57&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (template + meeting id at line 858); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=1e903a6e-7613-4e5a-8b66-fe1d14cd2f57&lang=English refused the claude seat's WebFetch at 2026-09-28T19:14:52Z (403); 1 of 52 items selected by rule v1
+    reason: named in the frozen brief (template + meeting id at line 858); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=1e903a6e-7613-4e5a-8b66-fe1d14cd2f57&lang=English refused the claude seat's WebFetch at 2026-09-28T19:14:52Z (403); 1 of 52 items selected by rule v2
     download:
       retrieved_on: 2026-09-25
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -5039,7 +5059,7 @@ documents:
       bytes: 317494
     probe:
       http_status: 200
-      checked_at: 2026-09-28T19:17:36Z
+      checked_at: 2026-09-28T19:33:50Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -5053,7 +5073,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: minutes
-    rule_version: 1
+    rule_version: 2
     redaction_version: 4
     items:
       - number: "1."
@@ -5294,6 +5314,7 @@ documents:
           - CM-20-0330
           - Active Transportation Implementation Acceleration
           - "20394"
+          - Active Transportation Implementation
         carried: true
         withheld: 0
         checker_reason: null
@@ -5425,7 +5446,7 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v1
+      version: selection rule v2
       text_bytes: 1772
       text_sha256: 5dbfe7f9cf45a2617edc5e00af9607740e3935f128867dd4340b250f2ed7ccc2
       text_file: evidence/private/carried/council-pause-vote/2026-09-25/YF-EV-0219.txt
@@ -5452,7 +5473,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=11577a3c-2540-4848-908e-18710d3d2a4c&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (template + meeting id at line 861); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=11577a3c-2540-4848-908e-18710d3d2a4c&lang=English refused the claude seat's WebFetch at 2026-09-28T19:14:40Z (403); 4 of 40 items selected by rule v1
+    reason: named in the frozen brief (template + meeting id at line 861); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=11577a3c-2540-4848-908e-18710d3d2a4c&lang=English refused the claude seat's WebFetch at 2026-09-28T19:14:40Z (403); 4 of 40 items selected by rule v2
     download:
       retrieved_on: 2026-09-25
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -5462,7 +5483,7 @@ documents:
       bytes: 347728
     probe:
       http_status: 200
-      checked_at: 2026-09-28T19:17:36Z
+      checked_at: 2026-09-28T19:33:51Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -5476,7 +5497,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: minutes
-    rule_version: 1
+    rule_version: 2
     redaction_version: 4
     items:
       - number: "1."
@@ -5639,6 +5660,8 @@ documents:
         matched_terms:
           - CM-20-0330
           - Active Transportation Implementation Acceleration
+          - Active Transportation Implementation
+          - Supplemental Capital Budget Adjustment Motion
         carried: true
         withheld: 0
         checker_reason: null
@@ -5656,6 +5679,7 @@ documents:
         matched_terms:
           - CM-20-0330
           - Active Transportation Implementation Acceleration
+          - Active Transportation Implementation
         carried: true
         withheld: 0
         checker_reason: null
@@ -5665,6 +5689,8 @@ documents:
         matched_terms:
           - CM-20-0330
           - Active Transportation Implementation Acceleration
+          - Active Transportation Implementation
+          - Supplemental Capital Budget Adjustment Motion
         carried: true
         withheld: 0
         checker_reason: null
@@ -5768,7 +5794,7 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v1
+      version: selection rule v2
       text_bytes: 15307
       text_sha256: f2c76be0f2739a6cb6ef742ccf8f43d14f2f8a8ee8589abf2ff43b944a40dd08
       text_file: evidence/private/carried/council-pause-vote/2026-09-25/YF-EV-0211.txt
@@ -5795,7 +5821,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=8c66c382-bd3c-4c28-bfad-1b5b91142ed7&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (template + meeting id at line 864); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=8c66c382-bd3c-4c28-bfad-1b5b91142ed7&lang=English refused the claude seat's WebFetch at 2026-09-28T19:15:26Z (403); 2 of 45 items selected by rule v1
+    reason: named in the frozen brief (template + meeting id at line 864); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=8c66c382-bd3c-4c28-bfad-1b5b91142ed7&lang=English refused the claude seat's WebFetch at 2026-09-28T19:15:26Z (403); 4 of 45 items selected by rule v2
     download:
       retrieved_on: 2026-09-25
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -5805,7 +5831,7 @@ documents:
       bytes: 383839
     probe:
       http_status: 200
-      checked_at: 2026-09-28T19:17:36Z
+      checked_at: 2026-09-28T19:33:51Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -5819,7 +5845,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: minutes
-    rule_version: 1
+    rule_version: 2
     redaction_version: 4
     items:
       - number: "1."
@@ -5978,9 +6004,10 @@ documents:
         checker_reason: null
       - number: "5.1"
         title: Fall 2024 Supplemental Capital Budget Adjustment - 2023-2026 Capital Budget
-        matched: false
-        matched_terms: []
-        carried: false
+        matched: true
+        matched_terms:
+          - Supplemental Capital Budget Adjustment Motion
+        carried: true
         withheld: 0
         checker_reason: null
       - number: 5.1.1
@@ -5989,6 +6016,7 @@ documents:
         matched_terms:
           - CM-20-0330
           - Active Transportation Implementation Acceleration
+          - Active Transportation Implementation
         carried: true
         withheld: 0
         checker_reason: null
@@ -5998,14 +6026,16 @@ documents:
         matched_terms:
           - CM-20-0330
           - Active Transportation Implementation Acceleration
+          - Active Transportation Implementation
         carried: true
         withheld: 0
         checker_reason: null
       - number: 5.1.3
         title: Vote on Fall 2024 Supplemental Capital Budget Adjustment and Other Related Motions
-        matched: false
-        matched_terms: []
-        carried: false
+        matched: true
+        matched_terms:
+          - Supplemental Capital Budget Adjustment Motion
+        carried: true
         withheld: 0
         checker_reason: null
       - number: "5.2"
@@ -6143,9 +6173,9 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v1
-      text_bytes: 4740
-      text_sha256: da117f9bf19499eabc9b4a941df1316fa48701580f501c52d9f6349454275385
+      version: selection rule v2
+      text_bytes: 10791
+      text_sha256: 6d3742aa866bda038d73c476e41ee2fffa291ed5093296bf9b18559aeffd4cf5
       text_file: evidence/private/carried/council-pause-vote/2026-09-25/YF-EV-0212.txt
     completeness_check:
       result: pending
@@ -6170,7 +6200,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=9132352c-8800-4286-a17c-db5db533632c&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (template + meeting id at line 866); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=9132352c-8800-4286-a17c-db5db533632c&lang=English refused the claude seat's WebFetch at 2026-09-28T19:15:32Z (403); 1 of 50 items selected by rule v1
+    reason: named in the frozen brief (template + meeting id at line 866); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=9132352c-8800-4286-a17c-db5db533632c&lang=English refused the claude seat's WebFetch at 2026-09-28T19:15:32Z (403); 1 of 50 items selected by rule v2
     download:
       retrieved_on: 2026-09-25
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -6180,7 +6210,7 @@ documents:
       bytes: 281702
     probe:
       http_status: 200
-      checked_at: 2026-09-28T19:17:37Z
+      checked_at: 2026-09-28T19:33:51Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -6194,7 +6224,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: minutes
-    rule_version: 1
+    rule_version: 2
     redaction_version: 4
     items:
       - number: "1."
@@ -6421,6 +6451,7 @@ documents:
           - Active Transportation Implementation Acceleration
           - "20394"
           - "21265"
+          - Active Transportation Implementation
         carried: true
         withheld: 0
         checker_reason: null
@@ -6552,7 +6583,7 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v1
+      version: selection rule v2
       text_bytes: 1736
       text_sha256: 6019cb59c9fcc88e45b05eef09622018cfe75fdfb4edbf6a39dc8b3070d547ef
       text_file: evidence/private/carried/council-pause-vote/2026-09-25/YF-EV-0220.txt
@@ -6579,7 +6610,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=0f0a1a9c-e89e-44dc-b776-b14a66e99487&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (template + meeting id at line 870); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=0f0a1a9c-e89e-44dc-b776-b14a66e99487&lang=English refused the claude seat's WebFetch at 2026-09-28T19:14:35Z (403); 3 of 80 items selected by rule v1
+    reason: named in the frozen brief (template + meeting id at line 870); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=0f0a1a9c-e89e-44dc-b776-b14a66e99487&lang=English refused the claude seat's WebFetch at 2026-09-28T19:14:35Z (403); 3 of 80 items selected by rule v2
     download:
       retrieved_on: 2026-09-25
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -6589,7 +6620,7 @@ documents:
       bytes: 470832
     probe:
       http_status: 200
-      checked_at: 2026-09-28T19:17:37Z
+      checked_at: 2026-09-28T19:33:51Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -6603,7 +6634,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: minutes
-    rule_version: 1
+    rule_version: 2
     redaction_version: 4
     items:
       - number: "1."
@@ -6641,6 +6672,7 @@ documents:
           - Active Transportation Implementation Acceleration
           - "20394"
           - "21265"
+          - Active Transportation Implementation
         carried: true
         withheld: 0
         checker_reason: null
@@ -6882,6 +6914,7 @@ documents:
           - Active Transportation Implementation Acceleration
           - "20394"
           - "21265"
+          - Active Transportation Implementation
         carried: true
         withheld: 0
         checker_reason: null
@@ -7175,7 +7208,7 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v1
+      version: selection rule v2
       text_bytes: 5954
       text_sha256: ebe6dd7761ae37ccbfb4841c70ed6e2914685bbf50e153c9b213c92d09ffc96e
       text_file: evidence/private/carried/council-pause-vote/2026-09-25/YF-EV-0213.txt
@@ -7202,7 +7235,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=413dfd45-5a25-4166-8e46-02a28d0382ef&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (template + meeting id at line 874); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=413dfd45-5a25-4166-8e46-02a28d0382ef&lang=English refused the claude seat's WebFetch at 2026-09-28T19:15:09Z (403); 2 of 35 items selected by rule v1
+    reason: named in the frozen brief (template + meeting id at line 874); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=413dfd45-5a25-4166-8e46-02a28d0382ef&lang=English refused the claude seat's WebFetch at 2026-09-28T19:15:09Z (403); 2 of 35 items selected by rule v2
     download:
       retrieved_on: 2026-09-25
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -7212,7 +7245,7 @@ documents:
       bytes: 207426
     probe:
       http_status: 200
-      checked_at: 2026-09-28T19:17:37Z
+      checked_at: 2026-09-28T19:33:52Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -7226,7 +7259,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: minutes
-    rule_version: 1
+    rule_version: 2
     redaction_version: 4
     items:
       - number: "1."
@@ -7458,6 +7491,7 @@ documents:
         matched: true
         matched_terms:
           - Active Transportation Implementation Acceleration
+          - Active Transportation Implementation
         carried: true
         withheld: 0
         checker_reason: null
@@ -7467,6 +7501,7 @@ documents:
         matched_terms:
           - CM-20-0330
           - Active Transportation Implementation Acceleration
+          - Active Transportation Implementation
         carried: true
         withheld: 0
         checker_reason: null
@@ -7479,7 +7514,7 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v1
+      version: selection rule v2
       text_bytes: 2697
       text_sha256: 2e384cadac1f2dc0e584a798685c5fb6d1ceea6fc67c745af2d8db15ed5f890f
       text_file: evidence/private/carried/council-pause-vote/2026-09-25/YF-EV-0217.txt
@@ -7506,7 +7541,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=1bc6d0e6-7873-441c-98b7-978523e79877&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (template + meeting id at line 875); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=1bc6d0e6-7873-441c-98b7-978523e79877&lang=English refused the claude seat's WebFetch at 2026-09-28T19:14:46Z (403); 1 of 50 items selected by rule v1
+    reason: named in the frozen brief (template + meeting id at line 875); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=1bc6d0e6-7873-441c-98b7-978523e79877&lang=English refused the claude seat's WebFetch at 2026-09-28T19:14:46Z (403); 2 of 50 items selected by rule v2
     download:
       retrieved_on: 2026-09-25
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -7516,7 +7551,7 @@ documents:
       bytes: 269318
     probe:
       http_status: 200
-      checked_at: 2026-09-28T19:17:38Z
+      checked_at: 2026-09-28T19:33:52Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -7530,7 +7565,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: minutes
-    rule_version: 1
+    rule_version: 2
     redaction_version: 4
     items:
       - number: "1."
@@ -7707,6 +7742,7 @@ documents:
         matched_terms:
           - CM-20-0330
           - Active Transportation Implementation Acceleration
+          - Active Transportation Implementation
         carried: true
         withheld: 0
         checker_reason: null
@@ -7838,9 +7874,10 @@ documents:
         checker_reason: null
       - number: "10.7"
         title: 50 Street Active Transportation Implementation (A. Salvador)
-        matched: false
-        matched_terms: []
-        carried: false
+        matched: true
+        matched_terms:
+          - Active Transportation Implementation
+        carried: true
         withheld: 0
         checker_reason: null
       - number: "10.8"
@@ -7887,9 +7924,9 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v1
-      text_bytes: 2229
-      text_sha256: fd950c70511565dd1d64ac05c2844f1868dbc58baa47ff7f93acd271d7bfb692
+      version: selection rule v2
+      text_bytes: 2460
+      text_sha256: 1bb56adbfce1e77d8d82065ff92714adb7ff1368bc412369925245b6095dab22
       text_file: evidence/private/carried/council-pause-vote/2026-09-25/YF-EV-0214.txt
     completeness_check:
       result: pending
