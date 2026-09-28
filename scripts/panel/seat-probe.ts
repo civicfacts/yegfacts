@@ -20,8 +20,9 @@
  * about errors too.
  *   - Claude's WebFetch reports the HTTP status of its request (`code` on the
  *     tool result). A status of 400 or above is a refusal; so is a tool result
- *     the CLI marks `is_error`. The tool's failure message is kept, cut to
- *     300 characters.
+ *     the CLI marks `is_error`. Only the status and the tool's error type or
+ *     code are kept (`codeText`, or an error type/code field, or "is_error");
+ *     the tool's result text and content are never recorded.
  *   - Codex's `open_page` action carries no status or error field in the
  *     current CLI. A refusal needs one (`status`, `status_code`, `http_status`
  *     or `error` on the item); without it the outcome is `unclear`, which
@@ -97,15 +98,16 @@ export function classifyClaudeStream(stdout: string): Classified {
     for (const block of event.message?.content ?? []) {
       if (block?.type !== 'tool_result' || !calls.has(block.tool_use_id)) continue;
       const meta = event.tool_use_result ?? {};
-      const content = typeof block.content === 'string' ? block.content : '';
       const status = typeof meta.code === 'number' ? meta.code : null;
       const toolUrl = calls.get(block.tool_use_id) ?? null;
-      // On a failure the tool's result is its own error message; on success it is page text and is not kept.
+      // Only the tool's own status and error type or code: never its result text or content.
+      const errorType = [meta.codeText, meta.errorType, meta.error_type, meta.errorCode, meta.error_code]
+        .find((v) => typeof v === 'string' && v.trim()) as string | undefined;
       if (status !== null && status >= 400) {
-        return { outcome: 'refused', http_status: status, tool_url: toolUrl, raw_error: String(meta.result ?? content).slice(0, RAW_LIMIT) };
+        return { outcome: 'refused', http_status: status, tool_url: toolUrl, raw_error: errorType ? errorType.slice(0, RAW_LIMIT) : null };
       }
       if (status !== null) return { outcome: 'fetched', http_status: status, tool_url: toolUrl, raw_error: null };
-      if (block.is_error === true) return { outcome: 'refused', http_status: null, tool_url: toolUrl, raw_error: content.slice(0, RAW_LIMIT) };
+      if (block.is_error === true) return { outcome: 'refused', http_status: null, tool_url: toolUrl, raw_error: (errorType ?? 'is_error').slice(0, RAW_LIMIT) };
       return { outcome: 'unclear', http_status: null, tool_url: toolUrl, raw_error: null };
     }
   }

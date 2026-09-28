@@ -96,7 +96,9 @@ describe('withholding members of the public', () => {
     expect(item.withheld).toBe(4);
     expect(item.text).toContain(`The following public speakers made presentations:\n- ${WITHHELD}\n- ${WITHHELD}, Riverside Walkers`);
     expect(item.text).toContain(`- ${WITHHELD}, Valley Transit Authority`);
-    expect(item.text).toContain(`3.4 - Panel 1 ${WITHHELD}`);
+    expect(item.text).toContain(`3.4 - Panel 1 - ${WITHHELD}`);
+    // A title outside eScribe's speaker-panel form is left alone.
+    expect(item.text).toContain('Report - Panel 3 Recommendations.pdf');
     for (const name of ['R. Moss', 'P. Lindqvist', 'S. Haddad', 'MOSS']) expect(item.text).not.toContain(name);
   });
 
@@ -104,7 +106,7 @@ describe('withholding members of the public', () => {
     const page = parseMeetingPage(MINUTES);
     const item = page.items.find((i) => i.number === '3.4')!;
     // L. Brandt is an office-holder on the attendance list, so it stays even in a speaker list.
-    expect(item.text).toMatch(/Riverside Walkers\n- L\. Brandt\n/);
+    expect(item.text).toMatch(/Riverside Walkers\n- L\. Brandt\n- Councillor T\. Villeneuve\n/);
     expect(item.text).toContain('- D. Achebe, Branch Manager');
     expect(item.text).toContain('Moved by: Q. Okonkwo');
     const motion = page.items.find((i) => i.number === '1.4')!;
@@ -118,6 +120,8 @@ describe('withholding members of the public', () => {
     expect(item.withheld).toBe(2);
     expect(item.text).toContain('That Mobility Committee hear from the following speakers, in panels when appropriate:');
     expect(item.text).toContain('- 3.5 Library Hours Survey');
+    // A bare agenda item number is an item, not a person.
+    expect(item.text).toContain('- 3.4\n');
     expect(item.text).toContain(`${WITHHELD}, Harbour Readers Society`);
     expect(item.text).not.toContain('K. Farouk');
     expect(item.text).not.toContain('J. Oyelaran');
@@ -197,7 +201,11 @@ describe('carrying a meeting page as items', { timeout: 60_000 }, () => {
         archive: { sha256: sha256(MINUTES), path: 'evidence/private/YF-EV-0001-Meeting.aspx' },
       }),
     );
+    // The run's committed files: the gates list and the seat probe the page's eligibility rests on.
+    writeFileSync(path.join(repo, RUN, 'carried', 'seat-probes.yaml'), YAML.stringify({ probes: [seatProbe()] }));
     git(repo, 'init', '-q');
+    git(repo, 'add', '--', path.join(RUN, 'carried'));
+    git(repo, 'commit', '-q', '-m', 'run files');
     return repo;
   }
 
@@ -399,11 +407,59 @@ describe('carrying a meeting page as items', { timeout: 60_000 }, () => {
     expect(section).toContain('leave it out of your `claims` array');
   });
 
-  it('builds no gate without gates.yaml, whatever the claim', async () => {
+  it('refuses to build meeting-page items without gates.yaml', async () => {
     const repo = fixtureRepo({});
+    await expect(build(repo)).rejects.toThrow(/gates\.yaml is required when meeting pages are carried as items/);
+  });
+
+  it('builds no gate from claims: [], and packaging then needs gates.yaml committed as it stands', async () => {
+    const repo = fixtureRepo({ gates: [] });
     const manifest = await build(repo);
     expect(manifest.gates).toBeUndefined();
-    expect(refusals(repo, completeChecks({ ...manifest, gates: {} }))).toEqual([]);
+    const ready = completeChecks({ ...manifest, gates: {} });
+    expect(refusals(repo, ready)).toEqual([]);
+    writeFileSync(path.join(repo, RUN, 'carried', 'gates.yaml'), YAML.stringify({ claims: [CLAIM] }));
+    expect(refusals(repo, ready)).toEqual(
+      expect.arrayContaining([`gates.yaml: ${RUN}/carried/gates.yaml has changes not committed to HEAD`]),
+    );
+    rmSync(path.join(repo, RUN, 'carried', 'gates.yaml'));
+    expect(refusals(repo, ready)).toEqual([expect.stringMatching(/gates\.yaml is missing; a run that carries meeting pages needs one/)]);
+  });
+
+  it('checks a seat-refusal ground again against the committed seat-probes.yaml row', async () => {
+    const repo = fixtureRepo();
+    const ready = completeChecks(await build(repo));
+    expect(refusals(repo, ready)).toEqual([]);
+    const probesFile = path.join(repo, RUN, 'carried', 'seat-probes.yaml');
+
+    // The committed row is for another page than the tool actually opened.
+    writeFileSync(probesFile, YAML.stringify({ probes: [seatProbe({ tool_url: 'https://pub-edmonton.escribemeetings.com/' })] }));
+    git(repo, 'commit', '-q', '-am', 'probe at another url');
+    expect(refusals(repo, ready)).toEqual([expect.stringMatching(/its seat-probes\.yaml row no longer qualifies/)]);
+
+    // The same row, but with a model the seat does not pin.
+    writeFileSync(probesFile, YAML.stringify({ probes: [seatProbe({ model: 'claude-other' })] }));
+    git(repo, 'commit', '-q', '-am', 'probe on another model');
+    expect(refusals(repo, ready)).toEqual([expect.stringMatching(/seat-probes\.yaml has no claude probe of/)]);
+
+    // The eligibility names a probe time the file does not hold.
+    writeFileSync(probesFile, YAML.stringify({ probes: [seatProbe()] }));
+    git(repo, 'commit', '-q', '-am', 'probe restored');
+    const moved = structuredClone(ready);
+    moved.documents[0]!.eligibility!.probed_at = hoursBefore(2);
+    expect(refusals(repo, moved)).toEqual([expect.stringMatching(/seat-probes\.yaml has no claude probe of .* at /)]);
+
+    // A change to the probes file not yet committed.
+    writeFileSync(probesFile, YAML.stringify({ probes: [seatProbe(), seatProbe({ seat: 'gpt' })] }));
+    expect(refusals(repo, ready)).toEqual([expect.stringMatching(/seat-probes\.yaml: .* has changes not committed to HEAD/)]);
+  });
+
+  it('fails a page whose live header changed attendance while every item stayed the same', async () => {
+    const repo = fixtureRepo();
+    const changed = MINUTES.replace('<LI > and T. Villeneuve&nbsp;</LI>', '');
+    const doc = (await build(repo, { fetcher: fetcher(changed) })).documents[0]!;
+    expect(doc.status).toBe('failed');
+    expect(doc.reason).toMatch(/has changed since it was archived \(the page header\)/);
   });
 
   it('passes a gate only on a tracked, well-formed reconciliation file under the run, bound to its hash', async () => {
@@ -418,6 +474,15 @@ describe('carrying a meeting page as items', { timeout: 60_000 }, () => {
     const outside = structuredClone(passed);
     outside.gates![`claim:${CLAIM}`]!.reconciliation_file = 'evidence/registry/YF-EV-0001.yaml';
     expect(refusals(repo, outside)[0]).toMatch(/is not inside reviews\/stub-story\/2026-09-09\/carried/);
+
+    // Committed, then edited: the file on disk is not the file in HEAD.
+    const votesFile = path.join(repo, RUN, 'carried', 'votes.yaml');
+    const committed = readFileSync(votesFile, 'utf8');
+    writeFileSync(votesFile, `${committed}- meeting: m\n  item: '9.9'\n  motion: x\n  result: Lost\n  votes: { A. B: no }\n`);
+    const edited = structuredClone(passed);
+    edited.gates![`claim:${CLAIM}`]!.reconciliation_sha256 = sha256(readFileSync(votesFile));
+    expect(refusals(repo, edited)).toEqual([`gate claim:${CLAIM}: ${path.join(RUN, 'carried', 'votes.yaml')} has changes not committed to HEAD`]);
+    writeFileSync(votesFile, committed);
 
     const untrackedRel = path.join(RUN, 'carried', 'untracked.yaml');
     writeFileSync(path.join(repo, untrackedRel), readFileSync(path.join(repo, RUN, 'carried', 'votes.yaml')));
@@ -473,7 +538,7 @@ describe('carrying a meeting page as items', { timeout: 60_000 }, () => {
     expect(section).toContain('## Selected items from City meeting pages');
     expect(section).toContain('The rest of each page was not carried.');
     expect(section).toContain('Selection rule, version 1:');
-    expect(section).toContain(`Names of members of the public in these items were withheld and replaced with "${WITHHELD}" (redaction rule version 2)`);
+    expect(section).toContain(`Names of members of the public in these items were withheld and replaced with "${WITHHELD}" (redaction rule version 3)`);
     expect(section).toContain('Agendas show what was scheduled; minutes are the record of decisions and votes.');
     expect(section).toContain('- Items carried: 1.4, 3.4, 4.1 (3 of 10)');
     expect(section).toContain(`- Page SHA-256: ${sha256(MINUTES)}`);
@@ -521,16 +586,22 @@ describe('seat refusal evidence', () => {
     expect(seatRefusalFor([probe({ outcome: 'fetched', raw_error: null })], PAGE_URL, NOW)).toBeUndefined();
   });
 
-  it('reads the status Claude\'s WebFetch reports, keeps at most 300 characters of its message, and never keeps page text', () => {
+  it('reads the status Claude\'s WebFetch reports and keeps only its error type, never its result text', () => {
     const stream = (code: number, result: string) =>
       [
         JSON.stringify({ type: 'assistant', message: { content: [{ type: 'tool_use', id: 't1', name: 'WebFetch', input: { url: PAGE_URL } }] } }),
-        JSON.stringify({ type: 'user', message: { content: [{ type: 'tool_result', tool_use_id: 't1', content: result }] }, tool_use_result: { code, result } }),
+        JSON.stringify({
+          type: 'user',
+          message: { content: [{ type: 'tool_result', tool_use_id: 't1', content: result }] },
+          tool_use_result: { code, codeText: code === 403 ? 'Forbidden' : 'OK', result },
+        }),
         JSON.stringify({ type: 'result', result: 'It worked fine.' }),
       ].join('\n');
-    const refused = classifyClaudeStream(stream(403, `The server returned HTTP 403 Forbidden. ${'x'.repeat(500)}`));
+    const refused = classifyClaudeStream(stream(403, `The server returned HTTP 403 Forbidden. Minutes text ${'x'.repeat(500)}`));
     expect(refused).toMatchObject({ outcome: 'refused', http_status: 403, tool_url: PAGE_URL });
-    expect(refused.raw_error!.length).toBe(RAW_LIMIT);
+    expect(JSON.stringify(refused)).not.toContain('Minutes text');
+    expect(JSON.stringify(refused)).not.toContain('The server returned');
+    expect(refused.raw_error).toBe('Forbidden');
     expect(classifyClaudeStream(stream(200, 'Page text about an error 403 elsewhere'))).toEqual({
       outcome: 'fetched',
       http_status: 200,

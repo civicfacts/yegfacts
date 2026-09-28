@@ -65,10 +65,13 @@
  *     carried text.
  *
  * Claim gates (D-0047 rule 5). <run>/carried/gates.yaml, committed, lists the
- * claims whose test needs every recorded vote (`claims: [<claim id>, ...]`).
+ * claims whose test needs every recorded vote (`claims: [<claim id>, ...]`,
+ * `claims: []` when none does). It must exist whenever a meeting page is
+ * carried as items: `build` refuses without it, and packaging refuses unless
+ * it is committed and unchanged from HEAD.
  * `build` gives each a gate, pending until someone parks it or `pass-gate`
- * passes it. A pass records the reconciliation file (tracked by git, under
- * <run>/carried/, a non-empty YAML list of votes each with meeting, item,
+ * passes it. A pass records the reconciliation file (committed and unchanged
+ * from HEAD, under <run>/carried/, a non-empty YAML list of votes each with meeting, item,
  * motion, result and a per-member vote map) and its SHA-256, and binds itself
  * to the rule version and the hash of every carried page and text: a rebuild
  * that changes any of them puts the gate back to pending.
@@ -89,7 +92,10 @@
  * document has: download provenance, a
  * public-open check made within 72 hours, a clear personal-information screen,
  * a fetcher probe no older than 6 hours and not in the future, and its
- * eligibility ground still on the record and fresh. A pdf also needs a passed
+ * eligibility ground still on the record and fresh. A seat-refusal ground is
+ * checked again against its row in the committed seat-probes.yaml: the same
+ * seat, model, tool and time, the tool's own URL equal to the page's, the
+ * pinned seat values, and a probe still inside the window. A pdf also needs a passed
  * extraction check, a second download that matches or is recorded as not made
  * with a reason, and a passed meeting-page check. A minutes-items page also
  * needs a passed completeness check with no missed items, a checker's reason on
@@ -588,7 +594,7 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
         const differing = changedItems(bytes.toString('utf8'), liveBody);
         row.page_check =
           differing.length === 0
-            ? { result: 'pass', reason: 'every item on the live page, with its motions and votes, matches the archived copy' }
+            ? { result: 'pass', reason: 'the header and every item on the live page, with its motions and votes, match the archived copy' }
             : { result: 'fail', reason: `the live page differs from the archived copy at ${differing.slice(0, 10).join(', ')}; archive the page again` };
         if (differing.length > 0) {
           row.reason = `${entry.url} has changed since it was archived (${differing.slice(0, 10).join(', ')}); archive it again and rebuild`;
@@ -700,7 +706,11 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
     keepHumanChecks(row, previousDocs.get(id));
   }
 
-  // Gates come from the run's committed gates.yaml, never from a flag.
+  // Gates come from the run's committed gates.yaml, never from a flag, and a run
+  // that carries meeting pages as items must have one, even if it lists no claim.
+  if (minutes.length > 0 && !existsSync(gatesFile(runDir))) {
+    throw new Error(`${path.relative(repoRoot, gatesFile(runDir))} is required when meeting pages are carried as items; write it (claims: [] if no claim needs every recorded vote) and commit it`);
+  }
   const coverage = gateCoverage(documents, minutes.length > 0 ? rule!.version : null);
   const gates: Record<string, Gate> = {};
   for (const claim of requiredGates(runDir)) {
@@ -755,11 +765,21 @@ export function carryMeetingPage(html: string, rule: SelectionRule) {
   return { layout: page.layout, text: carriedPageText(page, rule), items };
 }
 
-/** Items whose full published content differs between two copies of a meeting page, by number. */
+/**
+ * What differs between two copies of a meeting page: "header" when the
+ * meeting, date, time, location or attendance differ, then every item whose
+ * full published content (title, text, motions, movers, votes, results)
+ * differs, by number. Roll call is an item, so it is compared too.
+ */
 export function changedItems(archivedHtml: string, liveHtml: string): string[] {
+  const normalise = (text: string) => text.replace(/\s+/g, ' ').trim();
   const contents = (html: string) => {
     try {
-      return parseMeetingPage(html, { withhold: false }).items.map((item) => ({ number: item.number, text: item.text.replace(/\s+/g, ' ').trim() }));
+      const page = parseMeetingPage(html, { withhold: false });
+      return [
+        { number: 'header', text: normalise(page.header) },
+        ...page.items.map((item) => ({ number: item.number, text: normalise(item.text) })),
+      ];
     } catch (error) {
       return [{ number: `(unreadable: ${(error as Error).message})`, text: '' }];
     }
@@ -770,14 +790,35 @@ export function changedItems(archivedHtml: string, liveHtml: string): string[] {
   for (let index = 0; index < Math.max(archived.length, live.length); index += 1) {
     const a = archived[index];
     const b = live[index];
-    if (!a || !b || a.number !== b.number || a.text !== b.text) differing.push(`item ${a?.number ?? b?.number ?? index + 1}`);
+    if (!a || !b || a.number !== b.number || a.text !== b.text) {
+      const label = a?.number ?? b?.number ?? String(index + 1);
+      differing.push(label === 'header' ? 'the page header' : `item ${label}`);
+    }
   }
   return differing;
 }
 
+/** Why a repository file is not committed as it stands; empty when it is tracked and unchanged from HEAD. */
+export function commitProblems(repoRoot: string, file: string): string[] {
+  const rel = path.relative(realish(repoRoot), realish(path.resolve(repoRoot, file)));
+  try {
+    execFileSync('git', ['-C', repoRoot, 'ls-files', '--error-unmatch', '--', rel], { stdio: 'ignore' });
+  } catch {
+    return [`${rel} is not tracked by git`];
+  }
+  try {
+    execFileSync('git', ['-C', repoRoot, 'diff', '--quiet', 'HEAD', '--', rel], { stdio: 'ignore' });
+  } catch {
+    return [`${rel} has changes not committed to HEAD`];
+  }
+  return [];
+}
+
+export const gatesFile = (runDir: string) => path.join(runDir, 'carried', 'gates.yaml');
+
 /** The claims <run>/carried/gates.yaml says need a gate; none when the file is absent. */
 export function requiredGates(runDir: string): string[] {
-  const file = path.join(runDir, 'carried', 'gates.yaml');
+  const file = gatesFile(runDir);
   if (!existsSync(file)) return [];
   const claims = (loadYaml<{ claims?: unknown }>(file) ?? {}).claims;
   if (!Array.isArray(claims) || claims.some((c) => typeof c !== 'string' || !c.trim())) {
@@ -809,11 +850,8 @@ export function reconciliationProblems(repoRoot: string, runDir: string, file: s
   const carriedDir = realish(path.join(runDir, 'carried'));
   if (path.isAbsolute(file) || !absolute.startsWith(carriedDir + path.sep)) return [`${file} is not inside ${path.relative(realish(repoRoot), carriedDir)}`];
   if (!existsSync(absolute)) return [`${file} does not exist`];
-  try {
-    execFileSync('git', ['-C', repoRoot, 'ls-files', '--error-unmatch', '--', path.relative(realish(repoRoot), absolute)], { stdio: 'ignore' });
-  } catch {
-    return [`${file} is not tracked by git`];
-  }
+  const uncommitted = commitProblems(repoRoot, file);
+  if (uncommitted.length > 0) return uncommitted;
   let votes: unknown;
   try {
     votes = YAML.parse(readFileSync(absolute, 'utf8'));
@@ -875,6 +913,10 @@ export function packageRefusals(manifest: CarryManifest, context: PackageContext
   }
   const textDir = realish(carriedTextDir(realish(repoRoot), runDir));
 
+  if (manifest.documents.some((doc) => doc.status === 'carried' && doc.kind === 'minutes-items')) {
+    if (!existsSync(gatesFile(runDir))) refusals.push(`${path.relative(realish(repoRoot), gatesFile(runDir))} is missing; a run that carries meeting pages needs one, even with claims: []`);
+    else refusals.push(...commitProblems(repoRoot, gatesFile(runDir)).map((problem) => `gates.yaml: ${problem}`));
+  }
   for (const claim of requiredGates(runDir)) {
     if (!manifest.gates?.[`claim:${claim}`]) refusals.push(`gate claim:${claim} is required by gates.yaml and missing from the manifest`);
   }
@@ -980,6 +1022,7 @@ export function packageRefusals(manifest: CarryManifest, context: PackageContext
         refusals.push(`${id}: the seat refusal records neither an HTTP status nor the tool's raw error text`);
       }
       refusals.push(...freshness(`${id} (seat refusal)`, e.probed_at, now));
+      refusals.push(...seatRefusalRecheck(doc, runDir, repoRoot, now));
     } else refusals.push(`${id}: unknown eligibility ground "${String(ground)}"`);
     refusals.push(...freshness(id, doc.probe?.checked_at, now));
 
@@ -992,6 +1035,31 @@ export function packageRefusals(manifest: CarryManifest, context: PackageContext
     }
   }
   return refusals;
+}
+
+/**
+ * A seat-refusal ground checked again against the committed seat-probes.yaml:
+ * the row the eligibility names must be there, committed, and still qualify
+ * the page under seatRefusalFor, with the same status and message.
+ */
+function seatRefusalRecheck(doc: CarriedDocument, runDir: string, repoRoot: string, now: Date): string[] {
+  const id = doc.registry_id;
+  const e = doc.eligibility!;
+  const file = seatProbesPath(runDir);
+  if (!existsSync(file)) return [`${id}: the seat refusal it rests on is not in ${path.relative(realish(repoRoot), file)}`];
+  const uncommitted = commitProblems(repoRoot, file);
+  if (uncommitted.length > 0) return uncommitted.map((problem) => `${id}: seat-probes.yaml: ${problem}`);
+  const row = loadSeatProbes(file).find(
+    (probe) => probe.url === doc.url && probe.seat === e.seat && probe.model === e.model && probe.tool === e.tool && probe.probed_at === e.probed_at,
+  );
+  if (!row) return [`${id}: seat-probes.yaml has no ${e.seat} probe of ${doc.url} at ${e.probed_at}`];
+  if (row.http_status !== (e.http_status ?? null) || (row.raw_error ?? null) !== (e.raw_error ?? null)) {
+    return [`${id}: the eligibility does not match its seat-probes.yaml row`];
+  }
+  if (seatRefusalFor([row], doc.url, now) !== row) {
+    return [`${id}: its seat-probes.yaml row no longer qualifies (tool URL, pinned seat, model and tool, outcome, or freshness)`];
+  }
+  return [];
 }
 
 /**
