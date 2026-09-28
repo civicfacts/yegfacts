@@ -27,6 +27,7 @@ import { fileURLToPath } from 'node:url';
 import { afterAll, describe, expect, it } from 'vitest';
 import YAML from 'yaml';
 import {
+  briefNaming,
   buildCarryManifest,
   challengeSignature,
   titlesForDocument,
@@ -206,7 +207,38 @@ describe('carry-manifest build', () => {
     const repo = fixtureRepo({ brief: '# Brief\n\nAttachment 5 at DocumentId 304024.\n' });
     const doc = (await build(repo, stubFetcher(challenged, meetingPage('Report - IS03688.pdf')))).documents[0]!;
     expect(doc.status).toBe('failed');
-    expect(doc.reason).toMatch(/does not contain the URL/);
+    expect(doc.reason).toMatch(/does not name the URL/);
+  });
+
+  // The council-pause-vote brief's own wording (lines 165 and 402-403), with
+  // this fixture's DocumentId in the list's continuation.
+  const TEMPLATE_LINE =
+    'served from `https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=<id>`,\nwhich answers scripts and AI tools with a browser check.\n';
+  const NAMING =
+    '**The instrument.** Report IS03688, Recommendation 1 and the "Next Step"\nparagraph, and Attachment 5 in its three versions, on the committee\'s\nagenda as DocumentId 304032 (original), 304024 (REPLACEMENT, Version 1)\nand 304030 (REPLACEMENT, Version 2); Attachment 3 at 304029.\n';
+
+  it('accepts the URL template with the id in a DocumentId list, and records where', async () => {
+    const repo = fixtureRepo({ brief: `# Brief\n\n${TEMPLATE_LINE}\n${NAMING}` });
+    const doc = (await build(repo, stubFetcher(challenged, meetingPage('Report - IS03688.pdf')))).documents[0]!;
+    expect(doc.status, doc.reason).toBe('carried');
+    // The list continues onto line 8 of this brief, where 304024 sits.
+    expect(doc.named_in_brief).toBe('template + DocumentId naming at line 8');
+    expect(briefNaming(`${DOC_URL}\n`, DOC_URL)).toBe('exact URL');
+  });
+
+  it('refuses a template when the id appears only as a bare number', async () => {
+    const repo = fixtureRepo({ brief: `# Brief\n\n${TEMPLATE_LINE}\nThe budget line 304024 is unrelated.\n` });
+    const doc = (await build(repo, stubFetcher(challenged, meetingPage('Report - IS03688.pdf')))).documents[0]!;
+    expect(doc.status).toBe('failed');
+    expect(doc.reason).toMatch(/does not name the URL/);
+  });
+
+  it('refuses a template on a different host', async () => {
+    const other = TEMPLATE_LINE.replace('pub-edmonton.escribemeetings.com', 'pub-calgary.escribemeetings.com');
+    const repo = fixtureRepo({ brief: `# Brief\n\n${other}\n${NAMING}` });
+    const doc = (await build(repo, stubFetcher(challenged, meetingPage('Report - IS03688.pdf')))).documents[0]!;
+    expect(doc.status).toBe('failed');
+    expect(doc.reason).toMatch(/does not name the URL/);
   });
 
   it('fails when the archived meeting page does not match its registry hash', async () => {

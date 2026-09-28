@@ -25,7 +25,12 @@
  * depends only on the texts, so round 2 gets the same bytes as round 1.
  *
  * `build`, per document:
- *   - requires the frozen brief to contain the document's exact public URL;
+ *   - requires the frozen brief to name the document's public URL: either the
+ *     exact URL, or the portal's URL template (https://<host>/filestream.ashx?
+ *     DocumentId=<id>, same host and path) together with the id named in a
+ *     DocumentId list ("DocumentId 304032 (original), 304031 ..." in one
+ *     sentence). A bare number anywhere else does not count. The row records
+ *     which way it was named;
  *   - verifies the archived bytes against the registry's archive.sha256;
  *   - probes the public URL the way scripts/evidence-stage.ts fetches. Only an
  *     HTTP 403 carrying a recognisable challenge signature counts as a browser
@@ -81,6 +86,8 @@ export type CarriedDocument = {
   url: string;
   status: 'carried' | 'excluded' | 'failed';
   reason: string;
+  /** How the frozen brief names the URL: "exact URL" or "template + DocumentId naming at line N". */
+  named_in_brief?: string;
   download?: { retrieved_on: string | null; note: string | null };
   archive?: { sha256: string; bytes: number };
   extraction?: {
@@ -201,6 +208,34 @@ function documentIdOf(url: string): string | undefined {
   return /[?&]DocumentId=(\d+)/i.exec(url)?.[1];
 }
 
+/**
+ * How a brief names `url`, or undefined when it does not. The exact URL counts.
+ * So does the eScribe URL template, written literally with `<id>` and the same
+ * host and path, when the id itself appears in a DocumentId naming: a sentence
+ * that starts a list with "DocumentId <n>" and continues with bare ids. The
+ * registry URL must equal the template with that id filled in.
+ */
+export function briefNaming(brief: string, url: string): string | undefined {
+  if (brief.includes(url)) return 'exact URL';
+  let parsed: URL;
+  try {
+    parsed = new URL(url);
+  } catch {
+    return undefined;
+  }
+  const id = parsed.searchParams.get('DocumentId');
+  if (!id || !/^\d+$/.test(id)) return undefined;
+  const template = `${parsed.origin}${parsed.pathname}?DocumentId=<id>`;
+  if (url !== template.replace('<id>', id) || !brief.includes(template)) return undefined;
+  for (const naming of brief.matchAll(/DocumentId\s+\d+[^.]*/g)) {
+    const at = new RegExp(`(?<!\\d)${id}(?!\\d)`).exec(naming[0]);
+    if (!at) continue;
+    const line = brief.slice(0, naming.index! + at.index).split('\n').length;
+    return `template + DocumentId naming at line ${line}`;
+  }
+  return undefined;
+}
+
 /** The private directory a run's carried texts live in, e.g. evidence/private/carried/<story>/<date>. */
 export function carriedTextDir(repoRoot: string, runDir: string): string {
   return path.join(repoRoot, 'evidence', 'private', 'carried', path.relative(path.join(repoRoot, 'reviews'), runDir));
@@ -258,11 +293,13 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
     };
     documents.push(row);
 
-    // Only a document the frozen brief names by its exact public URL.
-    if (!brief.includes(entry.url)) {
-      row.reason = `the frozen brief (${path.relative(repoRoot, briefPath)}) does not contain the URL ${entry.url}`;
+    // Only a document the frozen brief names by its public URL.
+    const naming = briefNaming(brief, entry.url);
+    if (!naming) {
+      row.reason = `the frozen brief (${path.relative(repoRoot, briefPath)}) does not name the URL ${entry.url}, exactly or by template and DocumentId`;
       continue;
     }
+    row.named_in_brief = naming;
 
     // The bytes: the registry's hash is the identity of the archived copy.
     const archivePath = entry.archive?.path ? path.join(repoRoot, entry.archive.path) : '';
@@ -364,7 +401,7 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
       text_file: path.relative(repoRoot, textFile),
     };
     row.status = 'carried';
-    row.reason = `named by URL in the frozen brief; ${entry.url} answered the site's fetcher with HTTP 403 (${row.probe.signature}) at ${checkedAt}`;
+    row.reason = `named in the frozen brief (${naming}); ${entry.url} answered the site's fetcher with HTTP 403 (${row.probe.signature}) at ${checkedAt}`;
     row.download_provenance = { downloaded_by: null, downloaded_on: null, via: null };
     row.public_open_check = { checked_by: null, checked_on: null };
     row.extraction_check = { result: 'pending', reviewer: null };
