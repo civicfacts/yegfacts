@@ -6,49 +6,63 @@
  * in a browser, the panel package carries that document's full extracted text,
  * identical for every seat. This script is both halves of that:
  *
- *   build    probes, checks and extracts, and writes <run>/carried/manifest.yaml
- *   package  verifies a manifest and prints the section run-reviewer.sh appends
+ *   build       probes, checks and extracts, and writes <run>/carried/manifest.yaml
+ *   package     verifies a manifest and prints the section run-reviewer.sh appends
+ *   check-rows  refuses a launch whose carried section differs from any row
+ *               already recorded for the run, or a round 2 on round 1's probe
  *
  *   npx tsx scripts/panel/carry-manifest.ts build reviews/<story>/<date> \
  *     --doc YF-EV-0118=YF-EV-0210 [--doc <id>=<meeting page id or url> ...] \
  *     [--exclude '<what>::<reason>' ...]
- *   npx tsx scripts/panel/carry-manifest.ts package reviews/<story>/<date>/carried/manifest.yaml
+ *   npx tsx scripts/panel/carry-manifest.ts package <run>/carried/manifest.yaml \
+ *     --run <run> [--probed-at-out <file>]
+ *   npx tsx scripts/panel/carry-manifest.ts check-rows --round <n> \
+ *     --section-sha256 <hex> --probed-at <time> <run.yaml> [<run.yaml> ...]
+ *
+ * The manifest is rebuilt, which re-probes every URL and meeting page, before
+ * each round. The human-filled checks are carried over by hand from the
+ * previous build when the texts are unchanged; the section a seat receives
+ * depends only on the texts, so round 2 gets the same bytes as round 1.
  *
  * `build`, per document:
+ *   - requires the frozen brief to contain the document's exact public URL;
  *   - verifies the archived bytes against the registry's archive.sha256;
- *   - probes the public URL the way scripts/evidence-stage.ts fetches, and
- *     refuses to carry a document the fetcher can now retrieve, because the
- *     seats can retrieve it themselves;
- *   - fetches the meeting page and confirms it still lists the document's
- *     DocumentId under the title the archived copy of that page gave it; a
- *     page that no longer does is a revision or a withdrawal, and fails;
+ *   - probes the public URL the way scripts/evidence-stage.ts fetches. Only an
+ *     HTTP 403 carrying a recognisable challenge signature counts as a browser
+ *     check, and the signature that matched is recorded. A document the fetcher
+ *     can retrieve is excluded, because the seats can retrieve it themselves;
+ *     any other answer fails;
+ *   - verifies the archived meeting page against its registry hash, fetches
+ *     the live page and confirms it still lists the document's DocumentId
+ *     under the same title; a page that no longer does fails;
  *   - extracts text with `pdftotext -layout` into a gitignored file under
  *     evidence/private/carried/, and records the tool version, page count,
  *     byte count and the text's SHA-256.
  * The manifest is committed; the text never is. A document that fails or is
  * refused is still listed, with its reason, and the exit code is 1. The
- * extraction check, the second download and the personal-information screen
- * are left `pending` for the people who do them (D-0046 rules 2 and 7).
+ * download provenance, the public-open check, the extraction check, the second
+ * download and the personal-information screen are left `pending` for the
+ * people who do them (D-0046 rules 1, 2 and 7).
  *
- * `package` refuses unless every carried document has a passed extraction
+ * `package` refuses unless the manifest is <run>/carried/manifest.yaml for the
+ * run being launched, every text file resolves inside that run's private
+ * carried-text directory and matches its SHA-256, and every carried document
+ * has: browser-download provenance, a public-open check, a passed extraction
  * check, a second download that matches or is recorded as not made with a
- * reason, a clear personal-information screen, a passed meeting-page check, a
- * probe no older than 24 hours that the fetcher was refused, and a text file
- * whose SHA-256 matches the manifest. Nothing it prints depends on the time or
- * the seat, so every seat in a round, and round 2, gets the same bytes.
+ * reason, a clear personal-information screen, a passed meeting-page check, and
+ * a challenge-signed 403 probe no older than 6 hours and not in the future.
+ * Nothing it prints depends on the time or the seat.
  */
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import YAML from 'yaml';
 import { REPO_ROOT, listFiles, loadYaml, sha256 } from '../lib/repo.ts';
 
 const USER_AGENT = 'YEGFacts evidence archiver (+https://yegfacts.ca)';
 const TIMEOUT_MS = 60_000;
-/** D-0046 rule 1: a probe older than this does not describe the run it gates. */
-export const MAX_PROBE_AGE_HOURS = 24;
-/** Statuses that mean the fetcher was turned away rather than the file being gone. */
-const REFUSED_STATUSES = new Set([401, 403, 429, 503]);
+/** D-0046 rule 1: a probe older than this does not describe the round it gates. */
+export const MAX_PROBE_AGE_HOURS = 6;
 
 type RegistryEntry = {
   id: string;
@@ -77,7 +91,14 @@ export type CarriedDocument = {
     text_sha256: string;
     text_file: string;
   };
-  probe?: { http_status: number | null; checked_at: string; fetcher_refused: boolean; detail?: string };
+  probe?: {
+    http_status: number | null;
+    checked_at: string;
+    fetcher_refused: boolean;
+    /** Which browser-check signature the 403 carried; absent when none did. */
+    signature?: string;
+    detail?: string;
+  };
   meeting_page?: {
     registry_id: string;
     url: string;
@@ -86,6 +107,10 @@ export type CarriedDocument = {
     live_titles: string[];
     result: 'pass' | 'fail';
   };
+  /** Who downloaded the archived bytes, when, and that it was in a browser. Human-filled. */
+  download_provenance?: { downloaded_by: string | null; downloaded_on: string | null; via: string | null };
+  /** Who confirmed a person can open the public URL in a browser, and when. Human-filled. */
+  public_open_check?: { checked_by: string | null; checked_on: string | null };
   extraction_check?: Check;
   second_download?: { result: 'pending' | 'match' | 'not made'; sha256: string | null; reason: string | null };
   personal_information_screen?: { result: 'pending' | 'clear' | 'found'; reviewer: string | null };
@@ -101,7 +126,7 @@ export type CarryManifest = {
   exclusions: Exclusion[];
 };
 
-export type FetchResult = { status: number; contentType: string; body: string };
+export type FetchResult = { status: number; contentType: string; headers: Record<string, string>; body: string };
 export type Fetcher = (url: string) => Promise<FetchResult>;
 export type Extractor = (pdf: string) => { version: string; text: string };
 
@@ -114,6 +139,7 @@ export const realFetcher: Fetcher = async (url) => {
   return {
     status: response.status,
     contentType: response.headers.get('content-type') ?? '',
+    headers: Object.fromEntries([...response.headers].map(([key, value]) => [key.toLowerCase(), value])),
     body: await response.text(),
   };
 };
@@ -129,6 +155,21 @@ export const pdftotext: Extractor = (pdf) => {
   if (extracted.status !== 0) throw new Error(`pdftotext failed on ${pdf}: ${extracted.stderr.trim()}`);
   return { version: line?.trim() ?? 'pdftotext (version not reported)', text: extracted.stdout };
 };
+
+/**
+ * The browser-check signature a probe carries, or undefined. Only an HTTP 403
+ * can qualify: a 401, a 429 or a 5xx says nothing about a browser check, and a
+ * bare 403 could be a withdrawn file. In order of strength: Cloudflare's
+ * `cf-mitigated: challenge` header, a Cloudflare challenge page body, a
+ * `server: cloudflare` header.
+ */
+export function challengeSignature(probe: Pick<FetchResult, 'status' | 'headers' | 'body'>): string | undefined {
+  if (probe.status !== 403) return undefined;
+  if ((probe.headers['cf-mitigated'] ?? '').toLowerCase() === 'challenge') return 'cf-mitigated: challenge header';
+  if (/\/cdn-cgi\/challenge-platform|cf_chl_|cf-chl-/.test(probe.body)) return 'Cloudflare challenge page body';
+  if (/cloudflare/i.test(probe.headers.server ?? '')) return 'server: cloudflare header';
+  return undefined;
+}
 
 function loadRegistry(repoRoot: string): Map<string, RegistryEntry> {
   const entries = listFiles(path.join(repoRoot, 'evidence', 'registry'), ['.yaml', '.yml']).map((file) =>
@@ -160,6 +201,13 @@ function documentIdOf(url: string): string | undefined {
   return /[?&]DocumentId=(\d+)/i.exec(url)?.[1];
 }
 
+/** The private directory a run's carried texts live in, e.g. evidence/private/carried/<story>/<date>. */
+export function carriedTextDir(repoRoot: string, runDir: string): string {
+  return path.join(repoRoot, 'evidence', 'private', 'carried', path.relative(path.join(repoRoot, 'reviews'), runDir));
+}
+
+const isoSeconds = (date: Date) => date.toISOString().replace(/\.\d{3}Z$/, 'Z');
+
 type BuildOptions = {
   repoRoot?: string;
   runDir: string;
@@ -182,7 +230,7 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
   const now = options.now ?? (() => new Date());
   const runDir = path.resolve(repoRoot, options.runDir);
   const runRel = path.relative(repoRoot, runDir);
-  const textDir = path.join(repoRoot, 'evidence', 'private', 'carried', path.relative(path.join(repoRoot, 'reviews'), runDir));
+  const textDir = carriedTextDir(repoRoot, runDir);
   const registry = loadRegistry(repoRoot);
   const byUrl = new Map([...registry.values()].map((entry) => [entry.url, entry]));
   const briefPath = path.join(runDir, 'brief.md');
@@ -210,11 +258,9 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
     };
     documents.push(row);
 
-    // Only a document the frozen brief names, by its URL or its DocumentId.
-    const documentId = documentIdOf(entry.url);
-    const named = brief.includes(entry.url) || (documentId !== undefined && new RegExp(`\\b${documentId}\\b`).test(brief));
-    if (!named) {
-      row.reason = `the frozen brief (${path.relative(repoRoot, briefPath)}) does not name ${entry.url}`;
+    // Only a document the frozen brief names by its exact public URL.
+    if (!brief.includes(entry.url)) {
+      row.reason = `the frozen brief (${path.relative(repoRoot, briefPath)}) does not contain the URL ${entry.url}`;
       continue;
     }
 
@@ -232,21 +278,20 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
       continue;
     }
 
-    // The probe: carried only while the site's fetcher is still turned away.
-    const checkedAt = now().toISOString().replace(/\.\d{3}Z$/, 'Z');
+    // The probe: carried only while the fetcher meets a signed browser check.
+    const checkedAt = isoSeconds(now());
     try {
       const probe = await fetcher(entry.url);
-      const browserCheck = probe.status >= 200 && probe.status < 300 && /html/i.test(probe.contentType);
-      const refused = REFUSED_STATUSES.has(probe.status) || browserCheck;
-      row.probe = { http_status: probe.status, checked_at: checkedAt, fetcher_refused: refused };
-      if (browserCheck) row.probe.detail = 'HTTP success with an HTML page in place of the document';
-      if (probe.status >= 200 && probe.status < 300 && !browserCheck) {
+      const signature = challengeSignature(probe);
+      row.probe = { http_status: probe.status, checked_at: checkedAt, fetcher_refused: signature !== undefined };
+      if (signature) row.probe.signature = signature;
+      if (probe.status >= 200 && probe.status < 300 && !/html/i.test(probe.contentType)) {
         row.status = 'excluded';
         row.reason = `the fetcher retrieved ${entry.url} (HTTP ${probe.status}) at ${checkedAt}; not carried, the seats can retrieve it themselves`;
         continue;
       }
-      if (!refused) {
-        row.reason = `the fetcher got HTTP ${probe.status}, not a browser check; confirm the document is still public before any run`;
+      if (!signature) {
+        row.reason = `the fetcher got HTTP ${probe.status} with no browser-check signature; only a challenge-signed 403 qualifies. Confirm the document is still public`;
         continue;
       }
     } catch (error) {
@@ -256,16 +301,23 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
     }
 
     // The meeting page: still listing this DocumentId under the same title.
+    const documentId = documentIdOf(entry.url);
     const meeting = registry.get(meetingPage) ?? byUrl.get(meetingPage);
     if (!documentId) {
       row.reason = `${entry.url} carries no DocumentId to look for on a meeting page`;
       continue;
     }
-    if (!meeting?.archive?.path || !existsSync(path.join(repoRoot, meeting.archive.path))) {
+    const meetingArchive = meeting?.archive?.path ? path.join(repoRoot, meeting.archive.path) : '';
+    if (!meeting || !meetingArchive || !existsSync(meetingArchive)) {
       row.reason = `meeting page ${meetingPage} has no archived copy in the registry to compare titles against`;
       continue;
     }
-    const archivedTitles = titlesForDocument(readFileSync(path.join(repoRoot, meeting.archive.path), 'utf8'), documentId);
+    const meetingBytes = readFileSync(meetingArchive);
+    if (sha256(meetingBytes) !== meeting.archive?.sha256) {
+      row.reason = `the archived meeting page ${meeting.id} hashes to ${sha256(meetingBytes)}, the registry records ${meeting.archive?.sha256}; its titles cannot be trusted`;
+      continue;
+    }
+    const archivedTitles = titlesForDocument(meetingBytes.toString('utf8'), documentId);
     let liveTitles: string[] = [];
     try {
       const live = await fetchPage(meeting.url);
@@ -312,7 +364,9 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
       text_file: path.relative(repoRoot, textFile),
     };
     row.status = 'carried';
-    row.reason = `named in the frozen brief; ${entry.url} answered the site's fetcher with HTTP ${row.probe.http_status} at ${checkedAt}, and the site holds a copy downloaded in a browser`;
+    row.reason = `named by URL in the frozen brief; ${entry.url} answered the site's fetcher with HTTP 403 (${row.probe.signature}) at ${checkedAt}`;
+    row.download_provenance = { downloaded_by: null, downloaded_on: null, via: null };
+    row.public_open_check = { checked_by: null, checked_on: null };
     row.extraction_check = { result: 'pending', reviewer: null };
     row.second_download = { result: 'pending', sha256: null, reason: null };
     row.personal_information_screen = { result: 'pending', reviewer: null };
@@ -320,7 +374,7 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
 
   const manifest: CarryManifest = {
     run: runRel,
-    generated_at: now().toISOString().replace(/\.\d{3}Z$/, 'Z'),
+    generated_at: isoSeconds(now()),
     rule: 'methodology v1.41 (D-0046): carried documents',
     documents,
     exclusions: (options.exclusions ?? []).map(({ label, reason }) => ({ label, status: 'excluded', reason })),
@@ -333,9 +387,34 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
   return manifest;
 }
 
+/** True for a YYYY-MM-DD or ISO timestamp that parses and is not after `now`. */
+function pastDate(value: unknown, now: Date): boolean {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}/.test(value)) return false;
+  const time = Date.parse(value);
+  return !Number.isNaN(time) && time <= now.getTime();
+}
+
+/** Resolve symlinks for as much of `target` as exists; the rest is appended as written. */
+function realish(target: string): string {
+  return existsSync(target) ? realpathSync(target) : path.join(realish(path.dirname(target)), path.basename(target));
+}
+
+type PackageContext = { repoRoot: string; runDir: string; manifestPath: string; now: Date };
+
 /** Why a manifest cannot go into a package, one line per reason; empty when it can. */
-export function packageRefusals(manifest: CarryManifest, repoRoot: string, now: Date): string[] {
+export function packageRefusals(manifest: CarryManifest, context: PackageContext): string[] {
+  const { repoRoot, now } = context;
   const refusals: string[] = [];
+  const runDir = realish(path.resolve(context.runDir));
+  const expected = path.join(runDir, 'carried', 'manifest.yaml');
+  if (realish(path.resolve(context.manifestPath)) !== expected) {
+    refusals.push(`the carry manifest must be ${path.relative(realish(repoRoot), expected)}, the one for the run being launched`);
+  }
+  if (manifest.run !== path.relative(realish(repoRoot), runDir)) {
+    refusals.push(`the manifest describes run "${manifest.run}", not ${path.relative(realish(repoRoot), runDir)}`);
+  }
+  const textDir = realish(carriedTextDir(realish(repoRoot), runDir));
+
   const carried = manifest.documents.filter((doc) => doc.status === 'carried');
   if (carried.length === 0) refusals.push('the manifest carries no document');
   for (const doc of manifest.documents.filter((d) => d.status === 'failed')) {
@@ -343,6 +422,15 @@ export function packageRefusals(manifest: CarryManifest, repoRoot: string, now: 
   }
   for (const doc of carried) {
     const id = doc.registry_id;
+    const provenance = doc.download_provenance;
+    if (!provenance?.downloaded_by || !pastDate(provenance.downloaded_on, now) || provenance.via !== 'browser') {
+      refusals.push(`${id}: download provenance must name who downloaded it, when, and via: browser`);
+    }
+    const open = doc.public_open_check;
+    if (!open?.checked_by || !pastDate(open.checked_on, now)) {
+      refusals.push(`${id}: public-open check must record who confirmed a person can open the URL in a browser, and when`);
+    }
+
     const check = doc.extraction_check;
     if (!check || check.result === 'pending') refusals.push(`${id}: extraction check not done`);
     else if (check.result !== 'pass') refusals.push(`${id}: extraction check ${check.result}`);
@@ -359,17 +447,63 @@ export function packageRefusals(manifest: CarryManifest, repoRoot: string, now: 
 
     if (doc.meeting_page?.result !== 'pass') refusals.push(`${id}: meeting-page check not passed`);
 
+    if (doc.probe?.http_status !== 403 || !doc.probe.signature || !doc.probe.fetcher_refused) {
+      refusals.push(`${id}: the probe does not show a challenge-signed 403`);
+    }
     const probedAt = Date.parse(doc.probe?.checked_at ?? '');
-    if (!doc.probe?.fetcher_refused) refusals.push(`${id}: the probe does not show the fetcher refused`);
     if (Number.isNaN(probedAt)) refusals.push(`${id}: no probe time`);
+    else if (probedAt > now.getTime()) refusals.push(`${id}: probe time ${doc.probe!.checked_at} is in the future`);
     else if (now.getTime() - probedAt > MAX_PROBE_AGE_HOURS * 3_600_000) {
       refusals.push(`${id}: probe at ${doc.probe!.checked_at} is older than ${MAX_PROBE_AGE_HOURS} hours; rebuild the manifest`);
     }
 
-    const textFile = doc.extraction ? path.join(repoRoot, doc.extraction.text_file) : '';
-    if (!textFile || !existsSync(textFile)) refusals.push(`${id}: extracted text not found (${doc.extraction?.text_file ?? 'none'})`);
+    const textFile = doc.extraction?.text_file ? realish(path.resolve(repoRoot, doc.extraction.text_file)) : '';
+    if (!textFile || !textFile.startsWith(textDir + path.sep)) {
+      refusals.push(`${id}: text file ${doc.extraction?.text_file ?? '(none)'} is outside ${path.relative(realish(repoRoot), textDir)}`);
+    } else if (!existsSync(textFile)) refusals.push(`${id}: extracted text not found (${doc.extraction!.text_file})`);
     else if (sha256(readFileSync(textFile)) !== doc.extraction!.text_sha256) {
       refusals.push(`${id}: extracted text does not match the manifest's text_sha256`);
+    }
+  }
+  return refusals;
+}
+
+/** The latest probe time among a manifest's carried documents: the probe that gates the round. */
+export function latestProbe(manifest: CarryManifest): string {
+  return manifest.documents
+    .filter((doc) => doc.status === 'carried' && doc.probe?.checked_at)
+    .map((doc) => doc.probe!.checked_at)
+    .sort()
+    .at(-1) ?? '';
+}
+
+export type CarryRow = {
+  provider?: string;
+  seat?: string;
+  round: number;
+  carried_section_sha256?: string;
+  carried_probed_at?: string;
+};
+
+/**
+ * Why a carried launch cannot join the rows already recorded for its run.
+ * Every seat in both rounds must have received the same carried section, so a
+ * row with a different section hash, or none, refuses. A round-2 launch on the
+ * probe a round-1 row already used refuses, because each round is re-probed.
+ */
+export function rowRefusals(rows: readonly CarryRow[], current: { round: number; sectionSha: string; probedAt: string }): string[] {
+  const refusals: string[] = [];
+  for (const row of rows) {
+    const who = `${row.seat ?? row.provider ?? 'a seat'} round ${row.round}`;
+    if (row.carried_section_sha256 !== current.sectionSha) {
+      refusals.push(
+        row.carried_section_sha256
+          ? `${who} received carried section ${row.carried_section_sha256}, this launch would send ${current.sectionSha}`
+          : `${who} ran without the carried section; every seat in the run must get the same text`,
+      );
+    }
+    if (current.round === 2 && row.round === 1 && row.carried_probed_at === current.probedAt) {
+      refusals.push(`${who} used the probe of ${current.probedAt}; rebuild the manifest to re-probe before round 2`);
     }
   }
   return refusals;
@@ -422,29 +556,49 @@ export function renderCarriedSection(manifest: CarryManifest, repoRoot: string):
   return `${lines.join('\n')}\n`;
 }
 
-function parseBuildArgs(args: string[]): BuildOptions {
-  const runDir = args[0];
-  if (!runDir || runDir.startsWith('--')) throw new Error('build needs a run directory');
-  const docs: BuildOptions['docs'] = [];
-  const exclusions: NonNullable<BuildOptions['exclusions']> = [];
-  for (let index = 1; index < args.length; index += 2) {
-    const flag = args[index];
-    const value = args[index + 1];
-    if (value === undefined) throw new Error(`${flag} needs a value`);
-    if (flag === '--doc') {
-      const [id, meetingPage] = [value.slice(0, value.indexOf('=')), value.slice(value.indexOf('=') + 1)];
-      if (!value.includes('=') || !id || !meetingPage) throw new Error(`--doc takes <registry id>=<meeting page id or url>, got "${value}"`);
-      docs.push({ id, meetingPage });
-    } else if (flag === '--exclude') {
-      const at = value.indexOf('::');
-      if (at <= 0) throw new Error(`--exclude takes '<what>::<reason>', got "${value}"`);
-      exclusions.push({ label: value.slice(0, at), reason: value.slice(at + 2) });
-    } else {
-      throw new Error(`unknown option ${flag}`);
+/** `--flag value` pairs after the positional arguments. */
+function flags(args: string[]): { positional: string[]; values: Map<string, string[]> } {
+  const positional: string[] = [];
+  const values = new Map<string, string[]>();
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index]!;
+    if (!arg.startsWith('--')) {
+      positional.push(arg);
+      continue;
     }
+    const value = args[index + 1];
+    if (value === undefined) throw new Error(`${arg} needs a value`);
+    values.set(arg, [...(values.get(arg) ?? []), value]);
+    index += 1;
   }
+  return { positional, values };
+}
+
+function parseBuildArgs(args: string[]): BuildOptions {
+  const { positional, values } = flags(args);
+  const runDir = positional[0];
+  if (!runDir) throw new Error('build needs a run directory');
+  for (const key of values.keys()) {
+    if (key !== '--doc' && key !== '--exclude') throw new Error(`unknown option ${key}`);
+  }
+  const docs = (values.get('--doc') ?? []).map((value) => {
+    const at = value.indexOf('=');
+    if (at <= 0 || at === value.length - 1) throw new Error(`--doc takes <registry id>=<meeting page id or url>, got "${value}"`);
+    return { id: value.slice(0, at), meetingPage: value.slice(at + 1) };
+  });
+  const exclusions = (values.get('--exclude') ?? []).map((value) => {
+    const at = value.indexOf('::');
+    if (at <= 0) throw new Error(`--exclude takes '<what>::<reason>', got "${value}"`);
+    return { label: value.slice(0, at), reason: value.slice(at + 2) };
+  });
   if (docs.length === 0) throw new Error('build needs at least one --doc');
   return { runDir, docs, exclusions };
+}
+
+function refuse(heading: string, refusals: string[]): never {
+  console.error(heading);
+  for (const line of refusals) console.error(`  ${line}`);
+  process.exit(1);
 }
 
 async function main(): Promise<void> {
@@ -462,20 +616,38 @@ async function main(): Promise<void> {
     }
     return;
   }
-  if (command === 'package' && rest[0]) {
-    const manifest = loadYaml<CarryManifest>(path.resolve(rest[0]));
-    const refusals = packageRefusals(manifest, REPO_ROOT, new Date());
-    if (refusals.length > 0) {
-      console.error('carried documents refused; nothing was assembled:');
-      for (const line of refusals) console.error(`  ${line}`);
-      process.exit(1);
-    }
+  if (command === 'package') {
+    const { positional, values } = flags(rest);
+    const manifestPath = positional[0];
+    const runDir = values.get('--run')?.[0];
+    if (!manifestPath || !runDir) throw new Error('package needs <manifest> --run <run dir>');
+    const manifest = loadYaml<CarryManifest>(path.resolve(manifestPath));
+    const refusals = packageRefusals(manifest, { repoRoot: REPO_ROOT, runDir, manifestPath, now: new Date() });
+    if (refusals.length > 0) refuse('carried documents refused; nothing was assembled:', refusals);
+    const probedOut = values.get('--probed-at-out')?.[0];
+    if (probedOut) writeFileSync(probedOut, latestProbe(manifest));
     process.stdout.write(renderCarriedSection(manifest, REPO_ROOT));
+    return;
+  }
+  if (command === 'check-rows') {
+    const { positional, values } = flags(rest);
+    const round = Number(values.get('--round')?.[0]);
+    const sectionSha = values.get('--section-sha256')?.[0] ?? '';
+    const probedAt = values.get('--probed-at')?.[0] ?? '';
+    if (!(round === 1 || round === 2) || !sectionSha || !probedAt) {
+      throw new Error('check-rows needs --round, --section-sha256 and --probed-at');
+    }
+    const rows = positional
+      .filter((file) => existsSync(file))
+      .flatMap((file) => (loadYaml<{ runs?: CarryRow[] }>(file)?.runs ?? []));
+    const refusals = rowRefusals(rows, { round, sectionSha, probedAt });
+    if (refusals.length > 0) refuse('carried section does not match this run; nothing was sent:', refusals);
     return;
   }
   console.error(
     'usage: carry-manifest.ts build <run dir> --doc <id>=<meeting page> [--doc ...] [--exclude <what>::<reason>]\n' +
-      '       carry-manifest.ts package <manifest.yaml>',
+      '       carry-manifest.ts package <run>/carried/manifest.yaml --run <run dir> [--probed-at-out <file>]\n' +
+      '       carry-manifest.ts check-rows --round <n> --section-sha256 <hex> --probed-at <time> <run.yaml>...',
   );
   process.exit(2);
 }

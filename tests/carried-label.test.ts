@@ -6,6 +6,9 @@
  * same-copy note and the byte hash.
  */
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import CarriedLabel from '../src/components/CarriedLabel.astro';
@@ -19,6 +22,29 @@ describe('carried-document label', () => {
     const carried = carriedSources([RUN, 'reviews/no-such-run/2026-01-01'], FIXTURE_ROOT);
     expect([...carried.keys()]).toEqual(['YF-EV-9001']);
     expect(carriedSources(['reviews/no-such-run/2026-01-01'], FIXTURE_ROOT).size).toBe(0);
+  });
+
+  it.each([
+    ['a missing url', { url: undefined }],
+    ['a url that is not https', { url: 'javascript:alert(1)' }],
+    ['a missing archive hash', { archive: {} }],
+    ['an archive hash that is not 64 hex', { archive: { sha256: 1234 } }],
+  ])('fails loudly on a carried row with %s', (_label, override) => {
+    const dir = mkdtempSync(path.join(tmpdir(), 'yegfacts-carried-label-'));
+    try {
+      mkdirSync(path.join(dir, RUN, 'carried'), { recursive: true });
+      const doc = {
+        registry_id: 'YF-EV-9001',
+        url: 'https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=1',
+        status: 'carried',
+        archive: { sha256: 'a'.repeat(64) },
+        ...override,
+      };
+      writeFileSync(path.join(dir, RUN, 'carried', 'manifest.yaml'), JSON.stringify({ documents: [doc] }));
+      expect(() => carriedSources([RUN], dir)).toThrow(/documents\[0\] is carried but has a missing or invalid/);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 
   it('renders the label with the City link, the method link, the same-copy note and the hash', async () => {

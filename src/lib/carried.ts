@@ -36,8 +36,10 @@ type ManifestDocument = {
  * `carried` count; excluded and failed rows were never in a package.
  *
  * @param root the repository root the run directories resolve against.
- * @throws when a manifest exists but cannot be parsed, so a broken manifest
- *   fails the build rather than silently dropping the label.
+ * @throws when a manifest exists but cannot be parsed, or a `carried` row
+ *   lacks a registry id, an https URL or a 64-hex archive SHA-256, so a broken
+ *   row fails the build rather than silently dropping the label. An absent
+ *   manifest means nothing was carried.
  */
 export function carriedSources(runDirs: readonly string[], root: string = process.cwd()): Map<string, CarriedSource> {
   const carried = new Map<string, CarriedSource>();
@@ -45,12 +47,20 @@ export function carriedSources(runDirs: readonly string[], root: string = proces
     const file = path.join(root, run, 'carried', 'manifest.yaml');
     if (!existsSync(file)) continue;
     const manifest = YAML.parse(readFileSync(file, 'utf8')) as { documents?: ManifestDocument[] };
-    for (const doc of manifest.documents ?? []) {
-      if (doc.status !== 'carried' || !doc.registry_id || !doc.url || typeof doc.archive?.sha256 !== 'string') continue;
-      carried.set(doc.registry_id, {
-        registryId: doc.registry_id,
-        cityUrl: doc.url,
-        archiveSha256: doc.archive.sha256,
+    for (const [index, doc] of (manifest?.documents ?? []).entries()) {
+      if (doc.status !== 'carried') continue;
+      const problems = [
+        typeof doc.registry_id === 'string' && doc.registry_id ? '' : 'registry_id',
+        typeof doc.url === 'string' && /^https:\/\/\S+$/.test(doc.url) ? '' : 'url',
+        typeof doc.archive?.sha256 === 'string' && /^[0-9a-f]{64}$/.test(doc.archive.sha256) ? '' : 'archive.sha256',
+      ].filter(Boolean);
+      if (problems.length > 0) {
+        throw new Error(`${path.join(run, 'carried', 'manifest.yaml')}: documents[${index}] is carried but has a missing or invalid ${problems.join(', ')}`);
+      }
+      carried.set(doc.registry_id!, {
+        registryId: doc.registry_id!,
+        cityUrl: doc.url!,
+        archiveSha256: doc.archive!.sha256!,
       });
     }
   }

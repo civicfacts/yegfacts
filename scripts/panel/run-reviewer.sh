@@ -52,18 +52,21 @@
 #
 # --carried <manifest> (methodology v1.41) appends, after the brief, the text of
 # City documents the site archived because the City portal blocks automated
-# access. scripts/panel/carry-manifest.ts verifies the manifest first and
-# refuses on a failed or missing extraction check, second download or
-# personal-information screen, a probe older than 24 hours, or a text whose
-# SHA-256 does not match. The section it prints is the same bytes for every
-# seat and for round 2. The manifest's SHA-256 goes into run.yaml beside the
-# package files.
+# access. The manifest must be <run>/carried/manifest.yaml for this run, and
+# once that file exists every invocation for the run must pass it. It is
+# rebuilt (re-probed) before each round. scripts/panel/carry-manifest.ts
+# verifies it and refuses on any pending or failed human check, a probe older
+# than 6 hours or in the future, a text outside the run's private carried-text
+# directory, or a text whose SHA-256 does not match. The section's own SHA-256
+# must equal every row already in the run's manifests, in both rounds, and a
+# round 2 may not reuse round 1's probe. run.yaml records the manifest hash,
+# the section hash and the probe time.
 #
-# --max-package-bytes caps the assembled package. The default, 400000 bytes
-# (about 100,000 tokens), sits well inside every current seat's context and
-# leaves the rest for the seat's own research. The cap applies whenever
-# --carried or the flag is given; a package over it stops before anything is
-# sent.
+# Package size: each seat has a hard ceiling (SEAT_MAX_PACKAGE_BYTES below,
+# 400000 bytes, about 100,000 tokens, for every current seat: well inside each
+# one's context, with the rest left for its own research). --max-package-bytes
+# can lower it and never raise it. The ceiling applies whenever --carried or
+# the flag is given, and is checked before every send, the retry included.
 
 set -euo pipefail
 
@@ -86,8 +89,8 @@ options:
   --carried <file>   append the documents a carry manifest carries
                      (<run>/carried/manifest.yaml, methodology v1.41)
   --max-package-bytes <n>
-                     refuse a package over n bytes (default 400000; checked
-                     whenever --carried or this flag is given)
+                     refuse a package over n bytes; may lower the seat's
+                     ceiling (400000), never raise it
 USAGE
   exit 2
 }
@@ -194,6 +197,19 @@ case "$PROVIDER_ARG" in
     ;;
 esac
 
+# Hard package ceiling per seat (methodology v1.41). 400000 bytes is about
+# 100,000 tokens: none of the current seats documents a smaller usable input,
+# and each keeps most of its context for its own research. The flag may lower
+# it; it may not raise it.
+case "$SLOT" in
+  claude|gpt|gpt-luna) SEAT_MAX_PACKAGE_BYTES=400000 ;;
+  *) SEAT_MAX_PACKAGE_BYTES=0 ;;
+esac
+if [ -n "$MAX_PACKAGE_BYTES" ] && [ "$MAX_PACKAGE_BYTES" -gt "$SEAT_MAX_PACKAGE_BYTES" ]; then
+  echo "--max-package-bytes $MAX_PACKAGE_BYTES is over the $SLOT seat's ceiling of $SEAT_MAX_PACKAGE_BYTES; it can only lower it" >&2
+  exit 2
+fi
+
 RUN_DIR="$REPO_ROOT/reviews/$STORY/$RUN_DATE"
 BRIEF="$RUN_DIR/brief.md"
 SCHEMA="$REPO_ROOT/prompts/review-schema.json"
@@ -255,14 +271,36 @@ PACKAGE_FILES="brief.md,$(basename "$PROMPT_FILE"),review-schema.json"
 
 # Carried documents (methodology v1.41): verified and rendered before anything
 # is assembled, so a refusal leaves no package behind.
+RUN_CARRY_MANIFEST="$RUN_DIR/carried/manifest.yaml"
 CARRIED_SHA=""
+SECTION_SHA=""
+PROBED_AT=""
+if [ -z "$CARRIED" ] && [ -e "$RUN_CARRY_MANIFEST" ]; then
+  echo "[$SLOT round $ROUND] this run has ${RUN_CARRY_MANIFEST#"$REPO_ROOT"/}; every seat must get it: pass --carried" >&2
+  exit 1
+fi
 if [ -n "$CARRIED" ]; then
   [ -f "$CARRIED" ] || { echo "carry manifest not found: $CARRIED" >&2; exit 1; }
-  npx tsx "$REPO_ROOT/scripts/panel/carry-manifest.ts" package "$CARRIED" > "$SCRATCH/carried-documents.md" \
+  # Only this run's own manifest, compared after resolving links.
+  GIVEN_REAL="$(cd "$(dirname "$CARRIED")" && pwd -P)/$(basename "$CARRIED")"
+  EXPECTED_REAL="$( (cd "$RUN_DIR/carried" 2>/dev/null && pwd -P) || echo "$RUN_DIR/carried")/manifest.yaml"
+  if [ "$GIVEN_REAL" != "$EXPECTED_REAL" ]; then
+    echo "[$SLOT round $ROUND] --carried must be ${RUN_CARRY_MANIFEST#"$REPO_ROOT"/}, the manifest for this run" >&2
+    exit 1
+  fi
+  npx tsx "$REPO_ROOT/scripts/panel/carry-manifest.ts" package "$CARRIED" --run "$RUN_DIR" \
+      --probed-at-out "$SCRATCH/carried-probed-at.txt" > "$SCRATCH/carried-documents.md" \
     || { echo "[$SLOT round $ROUND] carried documents refused; nothing was assembled or sent" >&2; exit 1; }
   CARRIED_SHA="$(shasum -a 256 "$CARRIED" | cut -d' ' -f1)"
+  SECTION_SHA="$(shasum -a 256 "$SCRATCH/carried-documents.md" | cut -d' ' -f1)"
+  PROBED_AT="$(cat "$SCRATCH/carried-probed-at.txt")"
+  # Every row already recorded for this run, both rounds, must have had the
+  # same section; round 2 must be on a fresh probe.
+  npx tsx "$REPO_ROOT/scripts/panel/carry-manifest.ts" check-rows --round "$ROUND" \
+      --section-sha256 "$SECTION_SHA" --probed-at "$PROBED_AT" "$RUN_DIR/run.yaml" "$MANIFEST" \
+    || { echo "[$SLOT round $ROUND] nothing was assembled or sent" >&2; exit 1; }
   PACKAGE_FILES="$PACKAGE_FILES,carried-documents.md"
-  MAX_PACKAGE_BYTES="${MAX_PACKAGE_BYTES:-400000}"
+  MAX_PACKAGE_BYTES="${MAX_PACKAGE_BYTES:-$SEAT_MAX_PACKAGE_BYTES}"
 fi
 
 if [ "$ROUND" = "2" ]; then
@@ -392,7 +430,8 @@ if [ "$DRY_RUN" = "1" ]; then
   echo "package files: $PACKAGE_FILES"
   echo "package bytes: $PACKAGE_BYTES${MAX_PACKAGE_BYTES:+ (budget $MAX_PACKAGE_BYTES)}"
   if [ -n "$CARRIED_SHA" ]; then
-    echo "carried:       $CARRIED (manifest sha256 $CARRIED_SHA)"
+    echo "carried:       ${CARRIED#"$REPO_ROOT"/} (manifest sha256 $CARRIED_SHA)"
+    echo "carried section sha256: $SECTION_SHA (probed $PROBED_AT)"
   fi
   echo "prompt sha256: $PROMPT_SHA"
   echo "would write:   ${OUT_FILE#"$REPO_ROOT"/}"
@@ -450,6 +489,14 @@ add_detail() {
 STAGED="$SCRATCH/staged-review.json"
 
 for attempt in 1 2; do
+  # The size is checked before every send: the retry appends the validator's
+  # report, which can push a package that fitted over its budget.
+  PACKAGE_BYTES="$(wc -c < "$PACKAGE" | tr -d ' ')"
+  if [ -n "$MAX_PACKAGE_BYTES" ] && [ "$PACKAGE_BYTES" -gt "$MAX_PACKAGE_BYTES" ]; then
+    echo "[$SLOT round $ROUND] attempt $attempt: package is $PACKAGE_BYTES bytes, over the $MAX_PACKAGE_BYTES-byte budget; not sent" >&2
+    STATUS="failed"
+    break
+  fi
   ATTEMPTS="$attempt"
   ATTEMPT_DIR="$ATTEMPT_BASE/attempt-$attempt"
   echo "[$SLOT round $ROUND] attempt $attempt: $COMMAND_STRING" >&2
@@ -593,6 +640,8 @@ npx tsx "$REPO_ROOT/scripts/panel/record-run.ts" \
   --status "$STATUS" \
   --package-files "$PACKAGE_FILES" \
   ${CARRIED_SHA:+--carried-manifest-sha256 "$CARRIED_SHA"} \
+  ${SECTION_SHA:+--carried-section-sha256 "$SECTION_SHA"} \
+  ${PROBED_AT:+--carried-probed-at "$PROBED_AT"} \
   --attempts-detail "[$DETAILS]"
 
 if [ "$STATUS" != "ok" ]; then
