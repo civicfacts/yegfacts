@@ -112,7 +112,7 @@ const stages = [
   },
   {
     name: 'Blind research round',
-    body: 'The three seats, one Anthropic and two OpenAI, receive the identical package: the brief, the public reviewer prompt, and a required JSON output schema. The two GPT seats share a vendor, so their agreeing is one company agreeing with itself. New runs must pass an execution check intended to keep host instructions and private files out of the review. A separate working directory alone did not provide that protection. The execution profiles and their limits are set out below. Each seat returns a per-claim verdict, its confidence, the evidence supporting and challenging it, its limitations, what it could not find, and comparison cities with a judgement about whether those cases transfer to Edmonton.',
+    body: 'The three seats, one Anthropic and two OpenAI, receive the identical package: the brief, the public reviewer prompt, and a required JSON output schema. Since v1.41 it can also carry the full text of a City file the brief names that the City portal refuses to serve to automated tools, described under carried documents below; every seat gets the same text and finds everything else itself. The two GPT seats share a vendor, so their agreeing is one company agreeing with itself. New runs must pass an execution check intended to keep host instructions and private files out of the review. A separate working directory alone did not provide that protection. The execution profiles and their limits are set out below. Each seat returns a per-claim verdict, its confidence, the evidence supporting and challenging it, its limitations, what it could not find, and comparison cities with a judgement about whether those cases transfer to Edmonton.',
   },
   {
     name: 'Evidence staging and deterministic merge',
@@ -666,6 +666,19 @@ const sections = toc([
       the bytes we archived. Where we are allowed to mirror a file, it is committed to the public
       repo. Where we are not, the hash and the original URL are published and the file is retained
       privately, so a missing document can still be proved to be the one we read.
+    </p>
+    <p id="carried-documents" class="mt-3 max-w-prose scroll-mt-6 text-[0.9375rem] leading-relaxed">
+      Some City council files answer automated tools with a browser check, so a reviewer model
+      cannot open them even though anyone can in a browser. Since v1.41, when a frozen brief names
+      such a file and we hold a copy a person downloaded in a browser, the reviewers get its full
+      text. Before each run we check that automated access is still refused, that the council
+      meeting page still lists the file under the same title, and that someone other than the
+      editor has read the extracted text against the original. A committed manifest records the
+      file's hash, the text's hash and each of those checks; the text itself is not published.
+      Every reviewer reads the same copy, so their agreement on what that file says is not
+      independent retrieval: their independent work is the reading and the rest of the research.
+      A source read this way is labelled beside it, with the City's link and the byte hash, so
+      anyone who downloads the City's file can compare.
     </p>
   </section>
 

@@ -42,6 +42,11 @@ type RunEntry = {
   status: 'ok' | 'failed' | 'blocked';
   package_files?: string[];
   /**
+   * SHA-256 of the carry manifest whose documents the package carried
+   * (methodology v1.41). Absent when nothing was carried.
+   */
+  carried_manifest_sha256?: string;
+  /**
    * One row per attempt (methodology v1.28): opaque attempt id, the isolation
    * profile it ran under, the canary and boundary verdicts, the exact exit code
    * and content hashes. From v1.29 a row also carries the request-capture
@@ -140,6 +145,7 @@ const entry: RunEntry = {
   attempts: Number(values.attempts ?? '1'),
   status: parseStatus(values.status),
   ...(values['package-files'] ? { package_files: values['package-files'].split(',') } : {}),
+  ...(values['carried-manifest-sha256'] ? { carried_manifest_sha256: values['carried-manifest-sha256'] } : {}),
   ...(attemptsDetail(values['attempts-detail']) ?? {}),
 };
 

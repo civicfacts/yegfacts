@@ -49,6 +49,21 @@
 #
 # --dry-run assembles the package and prints what would be invoked without
 # executing any CLI, without writing into reviews/, and without that refusal.
+#
+# --carried <manifest> (methodology v1.41) appends, after the brief, the text of
+# City documents the site archived because the City portal blocks automated
+# access. scripts/panel/carry-manifest.ts verifies the manifest first and
+# refuses on a failed or missing extraction check, second download or
+# personal-information screen, a probe older than 24 hours, or a text whose
+# SHA-256 does not match. The section it prints is the same bytes for every
+# seat and for round 2. The manifest's SHA-256 goes into run.yaml beside the
+# package files.
+#
+# --max-package-bytes caps the assembled package. The default, 400000 bytes
+# (about 100,000 tokens), sits well inside every current seat's context and
+# leaves the rest for the seat's own research. The cap applies whenever
+# --carried or the flag is given; a package over it stops before anything is
+# sent.
 
 set -euo pipefail
 
@@ -68,6 +83,11 @@ options:
   --claims <id,...>  answer only these claim ids (claim-scoped re-run)
   --into <dirname>   write the review and the manifest under <run>/<dirname>
                      instead of <run>/round<N> and <run>/run.yaml
+  --carried <file>   append the documents a carry manifest carries
+                     (<run>/carried/manifest.yaml, methodology v1.41)
+  --max-package-bytes <n>
+                     refuse a package over n bytes (default 400000; checked
+                     whenever --carried or this flag is given)
 USAGE
   exit 2
 }
@@ -78,11 +98,18 @@ PROVIDER_ARG="$1"; STORY="$2"; RUN_DATE="$3"; ROUND="$4"; shift 4
 DRY_RUN=0
 CLAIMS=""
 INTO=""
+CARRIED=""
+MAX_PACKAGE_BYTES=""
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --dry-run) DRY_RUN=1; shift ;;
     --claims) CLAIMS="${2:-}"; [ -n "$CLAIMS" ] || { echo "--claims needs a value" >&2; usage; }; shift 2 ;;
     --into) INTO="${2:-}"; [ -n "$INTO" ] || { echo "--into needs a value" >&2; usage; }; shift 2 ;;
+    --carried) CARRIED="${2:-}"; [ -n "$CARRIED" ] || { echo "--carried needs a value" >&2; usage; }; shift 2 ;;
+    --max-package-bytes)
+      MAX_PACKAGE_BYTES="${2:-}"
+      case "$MAX_PACKAGE_BYTES" in ''|*[!0-9]*) echo "--max-package-bytes needs a whole number" >&2; usage ;; esac
+      shift 2 ;;
     *) echo "unknown option: $1" >&2; usage ;;
   esac
 done
@@ -226,6 +253,18 @@ cp "$PROMPT_FILE" "$SCRATCH/$(basename "$PROMPT_FILE")"
 cp "$SCHEMA" "$SCRATCH/review-schema.json"
 PACKAGE_FILES="brief.md,$(basename "$PROMPT_FILE"),review-schema.json"
 
+# Carried documents (methodology v1.41): verified and rendered before anything
+# is assembled, so a refusal leaves no package behind.
+CARRIED_SHA=""
+if [ -n "$CARRIED" ]; then
+  [ -f "$CARRIED" ] || { echo "carry manifest not found: $CARRIED" >&2; exit 1; }
+  npx tsx "$REPO_ROOT/scripts/panel/carry-manifest.ts" package "$CARRIED" > "$SCRATCH/carried-documents.md" \
+    || { echo "[$SLOT round $ROUND] carried documents refused; nothing was assembled or sent" >&2; exit 1; }
+  CARRIED_SHA="$(shasum -a 256 "$CARRIED" | cut -d' ' -f1)"
+  PACKAGE_FILES="$PACKAGE_FILES,carried-documents.md"
+  MAX_PACKAGE_BYTES="${MAX_PACKAGE_BYTES:-400000}"
+fi
+
 if [ "$ROUND" = "2" ]; then
   cp "$RUN_DIR/combined-evidence.json" "$SCRATCH/combined-evidence.json"
   PACKAGE_FILES="$PACKAGE_FILES,combined-evidence.json"
@@ -284,6 +323,12 @@ PACKAGE="$SCRATCH/package.md"
   echo
   cat "$SCRATCH/brief.md"
   echo
+  if [ -n "$CARRIED" ]; then
+    echo "---"
+    echo
+    cat "$SCRATCH/carried-documents.md"
+    echo
+  fi
   if [ "$ROUND" = "2" ]; then
     echo "---"
     echo
@@ -319,6 +364,12 @@ PACKAGE="$SCRATCH/package.md"
   fi
 } > "$PACKAGE"
 
+PACKAGE_BYTES="$(wc -c < "$PACKAGE" | tr -d ' ')"
+if [ -n "$MAX_PACKAGE_BYTES" ] && [ "$PACKAGE_BYTES" -gt "$MAX_PACKAGE_BYTES" ]; then
+  echo "[$SLOT round $ROUND] package is $PACKAGE_BYTES bytes, over the $MAX_PACKAGE_BYTES-byte budget; nothing was sent" >&2
+  exit 1
+fi
+
 PROMPT_SHA="$(shasum -a 256 "$PACKAGE" | cut -d' ' -f1)"
 INVOKE="$REPO_ROOT/scripts/panel/invoke-reviewer.sh"
 COMMAND_STRING="scripts/panel/invoke-reviewer.sh --provider $PROVIDER_CANONICAL --model $MODEL_ID --effort $EFFORT --package package.md"
@@ -339,7 +390,10 @@ if [ "$DRY_RUN" = "1" ]; then
   echo "scratch dir:   $SCRATCH"
   echo "attempt dirs:  $ATTEMPT_BASE/attempt-N"
   echo "package files: $PACKAGE_FILES"
-  echo "package bytes: $(wc -c < "$PACKAGE" | tr -d ' ')"
+  echo "package bytes: $PACKAGE_BYTES${MAX_PACKAGE_BYTES:+ (budget $MAX_PACKAGE_BYTES)}"
+  if [ -n "$CARRIED_SHA" ]; then
+    echo "carried:       $CARRIED (manifest sha256 $CARRIED_SHA)"
+  fi
   echo "prompt sha256: $PROMPT_SHA"
   echo "would write:   ${OUT_FILE#"$REPO_ROOT"/}"
   echo "would update:  ${MANIFEST#"$REPO_ROOT"/}"
@@ -538,6 +592,7 @@ npx tsx "$REPO_ROOT/scripts/panel/record-run.ts" \
   --attempts "$ATTEMPTS" \
   --status "$STATUS" \
   --package-files "$PACKAGE_FILES" \
+  ${CARRIED_SHA:+--carried-manifest-sha256 "$CARRIED_SHA"} \
   --attempts-detail "[$DETAILS]"
 
 if [ "$STATUS" != "ok" ]; then

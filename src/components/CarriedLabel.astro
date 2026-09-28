@@ -1,0 +1,27 @@
+---
+import {
+  CARRIED_LABEL,
+  CARRIED_METHOD_HREF,
+  CARRIED_SAME_COPY,
+  type CarriedSource,
+} from '../lib/carried';
+
+/**
+ * The disclosure beside a source whose text reached the reviewers as our
+ * archived copy (methodology v1.41): why, a link to the City's original and
+ * to the method, that every reviewer read the same copy, and the byte hash a
+ * reader can compare with their own download.
+ */
+interface Props {
+  source: CarriedSource;
+}
+
+const { source } = Astro.props;
+---
+
+<p class="mt-1.5 text-xs leading-relaxed text-muted" data-carried={source.registryId}>
+  {CARRIED_LABEL}. {CARRIED_SAME_COPY}{' '}
+  <a href={source.cityUrl} rel="noopener" class="link">City original</a> ·{' '}
+  <a href={CARRIED_METHOD_HREF} class="link">How we handle this</a> · SHA-256{' '}
+  <code class="break-all">{source.archiveSha256}</code>
+</p>
