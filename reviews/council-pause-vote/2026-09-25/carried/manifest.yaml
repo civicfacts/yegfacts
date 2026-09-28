@@ -1,0 +1,276 @@
+# Carry manifest (methodology v1.41). Committed; the extracted text never is.
+run: reviews/council-pause-vote/2026-09-25
+generated_at: 2026-09-28T16:53:53Z
+rule: "methodology v1.41 (D-0046): carried documents"
+documents:
+  - registry_id: YF-EV-0118
+    title: Active Transportation Implementation Acceleration Program Update
+      (Infrastructure Services report IS03688, Infrastructure Committee,
+      2026-08-26)
+    url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304024
+    status: carried
+    reason: "named in the frozen brief (exact URL);
+      https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304024
+      answered the site's fetcher with HTTP 403 (cf-mitigated: challenge header)
+      at 2026-09-28T16:53:51Z"
+    download:
+      retrieved_on: 2026-09-02
+      note: City of Edmonton document; the archived bytes carry no redistribution
+        grant. Fails closed to private.
+    named_in_brief: exact URL
+    archive:
+      sha256: a4a409732b8052a0951b2fc9b4092e95f09ab2386b27b77dba12c902e3513237
+      bytes: 395857
+    probe:
+      http_status: 403
+      checked_at: 2026-09-28T16:53:51Z
+      fetcher_refused: true
+      signature: "cf-mitigated: challenge header"
+    meeting_page:
+      registry_id: YF-EV-0210
+      url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+      document_id: "304024"
+      archived_titles:
+        - Report - IS03688 Active Transportation Implementation Acceleration
+          Program Update (2).pdf
+      live_titles:
+        - Report - IS03688 Active Transportation Implementation Acceleration
+          Program Update (2).pdf
+      result: pass
+    extraction:
+      tool: pdftotext -layout -enc UTF-8
+      version: pdftotext version 26.08.0
+      pages: 9
+      text_bytes: 28215
+      text_sha256: 088ad4d4d252a0da43e452aa810a02ecae36fcaee93905cabe944b86e2982a06
+      text_file: evidence/private/carried/council-pause-vote/2026-09-25/YF-EV-0118.txt
+    download_provenance:
+      downloaded_by: the founder
+      downloaded_on: 2026-09-28
+      via: browser
+    public_open_check:
+      checked_by: the founder (opened and downloaded the URL in an ordinary browser)
+      checked_on: 2026-09-28
+    extraction_check:
+      result: pass
+      reviewer: a separate read-only Claude Opus 5.5 session, not the editor,
+        comparing rendered page images with the text (2026-09-28)
+      note: All 9 pages, the page 1 summary table, the page 9 risk table and footnotes
+        1 to 3 intact; only the page 1 banner image and italics are absent. A
+        fresh extraction is byte-identical.
+    second_download:
+      result: match
+      sha256: a4a409732b8052a0951b2fc9b4092e95f09ab2386b27b77dba12c902e3513237
+      reason: "Two independent acquisitions give identical bytes: the site evidence
+        fetcher on 2026-09-02, before the portal added its browser check (the
+        registry archive), and the founder in a browser on 2026-09-28."
+    personal_information_screen:
+      result: clear
+      reviewer: a separate read-only Claude Opus 5.5 session, not the editor,
+        comparing rendered page images with the text (2026-09-28)
+  - registry_id: YF-EV-0222
+    title: "Attachment 5 to IS03688 as first published: the modified approach, with
+      its lists of 13 continuing and 14 re-evaluated routes (Infrastructure
+      Committee, 2026-08-26)"
+    url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304032
+    status: carried
+    reason: "named in the frozen brief (template + DocumentId naming at line 402);
+      https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304032
+      answered the site's fetcher with HTTP 403 (cf-mitigated: challenge header)
+      at 2026-09-28T16:53:52Z"
+    download:
+      retrieved_on: 2026-09-25
+      note: City of Edmonton document; the archived bytes carry no redistribution
+        grant. Fails closed to private. Downloaded in a browser on 2026-09-25
+        because filestream.ashx answers scripts with a browser check (HTTP 403);
+        identified by the hash recorded in
+        reviews/consultation-and-opposition/2026-09-03/verification/escribe-archive-2026-09-25.md.
+    named_in_brief: template + DocumentId naming at line 402
+    archive:
+      sha256: 9c76f3499566b5edcb2f80f6124d546be4876762fcb6db0d50ce0b43b33b4cc4
+      bytes: 68417
+    probe:
+      http_status: 403
+      checked_at: 2026-09-28T16:53:52Z
+      fetcher_refused: true
+      signature: "cf-mitigated: challenge header"
+    meeting_page:
+      registry_id: YF-EV-0210
+      url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+      document_id: "304032"
+      archived_titles:
+        - Attachment 5 - IS03688 - Modified Approach for Active Transportation
+          Network Expansion Program.pdf
+      live_titles:
+        - Attachment 5 - IS03688 - Modified Approach for Active Transportation
+          Network Expansion Program.pdf
+      result: pass
+    extraction:
+      tool: pdftotext -layout -enc UTF-8
+      version: pdftotext version 26.08.0
+      pages: 3
+      text_bytes: 5650
+      text_sha256: 78af6de8a65c0e7242f854becaa066d0fa1e6dd1a02bea8b5aa759d50decc839
+      text_file: evidence/private/carried/council-pause-vote/2026-09-25/YF-EV-0222.txt
+    download_provenance:
+      downloaded_by: the founder
+      downloaded_on: 2026-09-28
+      via: browser
+    public_open_check:
+      checked_by: the founder (opened and downloaded the URL in an ordinary browser)
+      checked_on: 2026-09-28
+    extraction_check:
+      result: pass
+      reviewer: a separate read-only Claude Opus 5.5 session, not the editor,
+        comparing rendered page images with the text (2026-09-28)
+      note: All 3 pages, the numbered approach, footnote 1 and both route lists (13
+        and 14) match; only underlining is lost.
+    second_download:
+      result: not made
+      sha256: null
+      reason: No download by anyone other than the founder exists. The founder
+        downloaded it in a browser on 2026-09-25 (the registry archive) and
+        again on 2026-09-28; the two are byte-identical, which shows the City
+        file is unchanged, but it is the same person. A browser session driven
+        by Stew could not be made (the Chrome extension was not connected).
+    personal_information_screen:
+      result: clear
+      reviewer: a separate read-only Claude Opus 5.5 session, not the editor,
+        comparing rendered page images with the text (2026-09-28)
+  - registry_id: YF-EV-0223
+    title: "Replacement Attachment 5, Version 1, to report IS03688: the same route
+      lists, the routes listed apart may be revisited (2026-08-26 committee
+      agenda)"
+    url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304031
+    status: carried
+    reason: "named in the frozen brief (template + DocumentId naming at line 402);
+      https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304031
+      answered the site's fetcher with HTTP 403 (cf-mitigated: challenge header)
+      at 2026-09-28T16:53:53Z"
+    download:
+      retrieved_on: 2026-09-25
+      note: City of Edmonton document; the archived bytes carry no redistribution
+        grant. Fails closed to private. Downloaded in a browser on 2026-09-25
+        because filestream.ashx answers scripts with a browser check (HTTP 403);
+        identified by the hash recorded in
+        reviews/consultation-and-opposition/2026-09-03/verification/escribe-archive-2026-09-25.md.
+    named_in_brief: template + DocumentId naming at line 402
+    archive:
+      sha256: 582a2058b166bde9d8899d6dd1b420d1340f9a20a7ac966ab694fbb59f433100
+      bytes: 62745
+    probe:
+      http_status: 403
+      checked_at: 2026-09-28T16:53:53Z
+      fetcher_refused: true
+      signature: "cf-mitigated: challenge header"
+    meeting_page:
+      registry_id: YF-EV-0210
+      url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+      document_id: "304031"
+      archived_titles:
+        - REPLACEMENT (Version 1) Attachment 5 - IS03688 - Modified Approach for
+          Active Transportation Network Expansion Program.pdf
+      live_titles:
+        - REPLACEMENT (Version 1) Attachment 5 - IS03688 - Modified Approach for
+          Active Transportation Network Expansion Program.pdf
+      result: pass
+    extraction:
+      tool: pdftotext -layout -enc UTF-8
+      version: pdftotext version 26.08.0
+      pages: 2
+      text_bytes: 4536
+      text_sha256: 711d525ae222ed3c9cad65310e58e52f330e729c3fe847ffb02f99982be6fc84
+      text_file: evidence/private/carried/council-pause-vote/2026-09-25/YF-EV-0223.txt
+    download_provenance:
+      downloaded_by: the founder
+      downloaded_on: 2026-09-28
+      via: browser
+    public_open_check:
+      checked_by: the founder (opened and downloaded the URL in an ordinary browser)
+      checked_on: 2026-09-28
+    extraction_check:
+      result: pass
+      reviewer: a separate read-only Claude Opus 5.5 session, not the editor,
+        comparing rendered page images with the text (2026-09-28)
+      note: Both pages match, including footnote 1 and both route lists.
+    second_download:
+      result: not made
+      sha256: null
+      reason: No download by anyone other than the founder exists. The founder
+        downloaded it in a browser on 2026-09-25 (the registry archive) and
+        again on 2026-09-28; the two are byte-identical, which shows the City
+        file is unchanged, but it is the same person. A browser session driven
+        by Stew could not be made (the Chrome extension was not connected).
+    personal_information_screen:
+      result: clear
+      reviewer: a separate read-only Claude Opus 5.5 session, not the editor,
+        comparing rendered page images with the text (2026-09-28)
+  - registry_id: YF-EV-0140
+    title: Modified Approach for the Active Transportation Network Expansion Program
+      (replacement Attachment 5 to IS03688, Infrastructure Committee,
+      2026-08-26)
+    url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304030
+    status: carried
+    reason: "named in the frozen brief (template + DocumentId naming at line 403);
+      https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304030
+      answered the site's fetcher with HTTP 403 (cf-mitigated: challenge header)
+      at 2026-09-28T16:53:53Z"
+    download:
+      retrieved_on: 2026-09-02
+      note: City of Edmonton document; the archived bytes carry no redistribution
+        grant. Fails closed to private.
+    named_in_brief: template + DocumentId naming at line 403
+    archive:
+      sha256: 7acca16e46a7150aa34fc2daec79328a1951b543171629f7aed86ed774061175
+      bytes: 55953
+    probe:
+      http_status: 403
+      checked_at: 2026-09-28T16:53:53Z
+      fetcher_refused: true
+      signature: "cf-mitigated: challenge header"
+    meeting_page:
+      registry_id: YF-EV-0210
+      url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+      document_id: "304030"
+      archived_titles:
+        - REPLACEMENT (Version 2) Attachment 5 - IS03688 - Modified Approach for
+          Active Transportation Network Expansion Program.pdf
+      live_titles:
+        - REPLACEMENT (Version 2) Attachment 5 - IS03688 - Modified Approach for
+          Active Transportation Network Expansion Program.pdf
+      result: pass
+    extraction:
+      tool: pdftotext -layout -enc UTF-8
+      version: pdftotext version 26.08.0
+      pages: 2
+      text_bytes: 3075
+      text_sha256: 3482e116e47eb55c5bcc21e76e1b5b3443907a53297e091de38a8a9cb5a3e6f3
+      text_file: evidence/private/carried/council-pause-vote/2026-09-25/YF-EV-0140.txt
+    download_provenance:
+      downloaded_by: the founder
+      downloaded_on: 2026-09-28
+      via: browser
+    public_open_check:
+      checked_by: the founder (opened and downloaded the URL in an ordinary browser)
+      checked_on: 2026-09-28
+    extraction_check:
+      result: pass
+      reviewer: a separate read-only Claude Opus 5.5 session, not the editor,
+        comparing rendered page images with the text (2026-09-28)
+      note: Both pages match, including the Q1 2027 report commitment and both route
+        lists.
+    second_download:
+      result: match
+      sha256: 7acca16e46a7150aa34fc2daec79328a1951b543171629f7aed86ed774061175
+      reason: "Two independent acquisitions give identical bytes: the site evidence
+        fetcher on 2026-09-02, before the portal added its browser check (the
+        registry archive), and the founder in a browser on 2026-09-28."
+    personal_information_screen:
+      result: clear
+      reviewer: a separate read-only Claude Opus 5.5 session, not the editor,
+        comparing rendered page images with the text (2026-09-28)
+exclusions:
+  - label: Attachment 3 (DocumentIds 304029, 304028)
+    status: excluded
+    reason: no archived copy in the registry; named in the brief by DocumentId only,
+      not needed as an essential source
