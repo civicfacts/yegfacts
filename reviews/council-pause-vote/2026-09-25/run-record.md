@@ -496,3 +496,52 @@ did not carry:
 The brief stops a run on an inaccessible essential source. Whether any of
 these is essential is the editor's decision, so the run waits for it. The
 round 1 answers stay in `round1/` with their rows in `run.yaml`.
+
+## 2026-09-28: the held round 1 superseded; Attachment 3 carried
+
+**The editor ruled Attachment 3 essential and the other uncarried records
+not essential, so the held round 1 is superseded and round 1 runs again
+with Attachment 3 carried.** The held round's answers (`round1/`), its
+rows in `run.yaml` and the manifest it ran on move unchanged to
+`superseded-2026-09-28b/`, as `round1/`, `run.yaml` and
+`carried-manifest.yaml`. They are kept for the record only.
+
+The editor's rulings, with the reasons:
+
+- **Attachment 3, DocumentIds 304029 (original) and 304028 (REPLACEMENT):
+  essential.** The brief's primary route-status date for claim 2 is the
+  status Attachment 3 states, and the brief names both versions by the
+  portal's URL template and their DocumentIds (lines 403 to 404 and 829).
+  Both are now carried.
+- **The Council public hearings of 2026-09-15 and 2026-09-22: not
+  essential.** They bear only on the Council strand of claim 1, which is
+  the brief's required alternative; the committee is the primary body.
+  The brief names them by date only, with no URL or meeting id, so the
+  carry rule cannot reach them. Seats report the gap as a limitation.
+- **The 2026-10-06 Council agenda (YF-EV-0221): not essential.** It was
+  published on the as-of date and cannot show a decision made before it.
+  The manifest's exclusion reason now says so.
+- **The portal's meeting calendar, the capital profile sheet and the
+  budget-adjustment attachments: not essential.** The brief's floor list
+  defines the meeting search, and every seat reached a claim 3 verdict
+  without them. Seats report them as limitations.
+
+**Attachment 3 in the registry.** The founder downloaded both versions in
+a browser on 2026-09-25, and their SHA-256 values match those recorded in
+`reviews/consultation-and-opposition/2026-09-03/verification/escribe-archive-2026-09-25.md`.
+They are registered as YF-EV-0225 (original, 304029) and YF-EV-0226
+(REPLACEMENT, 304028), private because their redistribution rights are
+unclear. The two differ only in their label and in one closing sentence
+about routes with no delivery plan.
+
+**The rebuilt manifest.** Every carried URL was probed again through all
+three seats at 2026-09-28T19:59Z; the Claude seat's WebFetch was refused
+with HTTP 403 at every one, including both Attachment 3 URLs, and the
+GPT-6 seats' probes are unclear, as before. The site's fetcher got a
+challenge-signed 403 at all six PDFs, and the committee agenda still
+lists both Attachment 3 files under their archived titles. Every other
+document's checks carried over unchanged because its archive and text
+hashes did not change, and claim 4 stays parked. For the two Attachment 3
+rows the download provenance is recorded; the public-open check, the
+second download, the extraction check and the personal-information screen
+are pending, and round 1 does not launch until they pass.
