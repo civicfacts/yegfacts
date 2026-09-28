@@ -52,11 +52,16 @@
  * `package` refuses unless the manifest is <run>/carried/manifest.yaml for the
  * run being launched, every text file resolves inside that run's private
  * carried-text directory and matches its SHA-256, and every carried document
- * has: browser-download provenance, a public-open check, a passed extraction
+ * has: browser-download provenance, a public-open check made within 72 hours, a passed extraction
  * check, a second download that matches or is recorded as not made with a
  * reason, a clear personal-information screen, a passed meeting-page check, and
  * a challenge-signed 403 probe no older than 6 hours and not in the future.
  * Nothing it prints depends on the time or the seat.
+ *
+ * run-reviewer.sh adds three checks around it: the manifest must be tracked by
+ * git and identical to HEAD before a launch, and the section hash is checked
+ * against the run's recorded rows both before the launch and again just
+ * before the seat's output is installed.
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
@@ -68,6 +73,8 @@ const USER_AGENT = 'YEGFacts evidence archiver (+https://yegfacts.ca)';
 const TIMEOUT_MS = 60_000;
 /** D-0046 rule 1: a probe older than this does not describe the round it gates. */
 export const MAX_PROBE_AGE_HOURS = 6;
+/** A confirmation that a person can open the public URL counts for this long. */
+export const PUBLIC_OPEN_MAX_AGE_HOURS = 72;
 
 type RegistryEntry = {
   id: string;
@@ -166,15 +173,15 @@ export const pdftotext: Extractor = (pdf) => {
 /**
  * The browser-check signature a probe carries, or undefined. Only an HTTP 403
  * can qualify: a 401, a 429 or a 5xx says nothing about a browser check, and a
- * bare 403 could be a withdrawn file. In order of strength: Cloudflare's
- * `cf-mitigated: challenge` header, a Cloudflare challenge page body, a
- * `server: cloudflare` header.
+ * bare 403 could be a withdrawn file. Two signatures count: Cloudflare's
+ * `cf-mitigated: challenge` header, or a Cloudflare challenge page body. A
+ * `server: cloudflare` header alone does not: a plain Cloudflare-served 403
+ * carries it too.
  */
 export function challengeSignature(probe: Pick<FetchResult, 'status' | 'headers' | 'body'>): string | undefined {
   if (probe.status !== 403) return undefined;
   if ((probe.headers['cf-mitigated'] ?? '').toLowerCase() === 'challenge') return 'cf-mitigated: challenge header';
   if (/\/cdn-cgi\/challenge-platform|cf_chl_|cf-chl-/.test(probe.body)) return 'Cloudflare challenge page body';
-  if (/cloudflare/i.test(probe.headers.server ?? '')) return 'server: cloudflare header';
   return undefined;
 }
 
@@ -216,7 +223,8 @@ function documentIdOf(url: string): string | undefined {
  * registry URL must equal the template with that id filled in.
  */
 export function briefNaming(brief: string, url: string): string | undefined {
-  if (brief.includes(url)) return 'exact URL';
+  const escaped = url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  if (new RegExp(`${escaped}(?!\\d)`).test(brief)) return 'exact URL';
   let parsed: URL;
   try {
     parsed = new URL(url);
@@ -227,7 +235,7 @@ export function briefNaming(brief: string, url: string): string | undefined {
   if (!id || !/^\d+$/.test(id)) return undefined;
   const template = `${parsed.origin}${parsed.pathname}?DocumentId=<id>`;
   if (url !== template.replace('<id>', id) || !brief.includes(template)) return undefined;
-  for (const naming of brief.matchAll(/DocumentId\s+\d+[^.]*/g)) {
+  for (const naming of brief.matchAll(/DocumentId\s+\d+[^.?!]*/g)) {
     const at = new RegExp(`(?<!\\d)${id}(?!\\d)`).exec(naming[0]);
     if (!at) continue;
     const line = brief.slice(0, naming.index! + at.index).split('\n').length;
@@ -466,6 +474,8 @@ export function packageRefusals(manifest: CarryManifest, context: PackageContext
     const open = doc.public_open_check;
     if (!open?.checked_by || !pastDate(open.checked_on, now)) {
       refusals.push(`${id}: public-open check must record who confirmed a person can open the URL in a browser, and when`);
+    } else if (now.getTime() - Date.parse(open.checked_on!) > PUBLIC_OPEN_MAX_AGE_HOURS * 3_600_000) {
+      refusals.push(`${id}: public-open check of ${open.checked_on} is more than ${PUBLIC_OPEN_MAX_AGE_HOURS} hours old; re-confirm that a person can still open it`);
     }
 
     const check = doc.extraction_check;
@@ -505,13 +515,17 @@ export function packageRefusals(manifest: CarryManifest, context: PackageContext
   return refusals;
 }
 
-/** The latest probe time among a manifest's carried documents: the probe that gates the round. */
-export function latestProbe(manifest: CarryManifest): string {
+/**
+ * The earliest probe time among a manifest's carried documents. Every carried
+ * URL must have been probed after round 1 finished, so the earliest is the one
+ * that decides whether round 2 is on a fresh probe.
+ */
+export function earliestProbe(manifest: CarryManifest): string {
   return manifest.documents
     .filter((doc) => doc.status === 'carried' && doc.probe?.checked_at)
     .map((doc) => doc.probe!.checked_at)
     .sort()
-    .at(-1) ?? '';
+    .at(0) ?? '';
 }
 
 export type CarryRow = {
@@ -520,13 +534,15 @@ export type CarryRow = {
   round: number;
   carried_section_sha256?: string;
   carried_probed_at?: string;
+  finished_at?: string;
 };
 
 /**
  * Why a carried launch cannot join the rows already recorded for its run.
  * Every seat in both rounds must have received the same carried section, so a
- * row with a different section hash, or none, refuses. A round-2 launch on the
- * probe a round-1 row already used refuses, because each round is re-probed.
+ * row with a different section hash, or none, refuses. Each round is
+ * re-probed: a round-2 launch refuses unless its earliest document probe
+ * (`probedAt`) is later than every round-1 row's finish and probe time.
  */
 export function rowRefusals(rows: readonly CarryRow[], current: { round: number; sectionSha: string; probedAt: string }): string[] {
   const refusals: string[] = [];
@@ -539,8 +555,15 @@ export function rowRefusals(rows: readonly CarryRow[], current: { round: number;
           : `${who} ran without the carried section; every seat in the run must get the same text`,
       );
     }
-    if (current.round === 2 && row.round === 1 && row.carried_probed_at === current.probedAt) {
-      refusals.push(`${who} used the probe of ${current.probedAt}; rebuild the manifest to re-probe before round 2`);
+    if (current.round === 2 && row.round === 1) {
+      const roundOne = [row.finished_at, row.carried_probed_at].filter((t): t is string => typeof t === 'string');
+      const latest = Math.max(...roundOne.map((t) => Date.parse(t)).filter((t) => !Number.isNaN(t)));
+      const earliest = Date.parse(current.probedAt);
+      if (Number.isNaN(earliest) || (Number.isFinite(latest) && earliest <= latest)) {
+        refusals.push(
+          `${who} was recorded at ${roundOne.join(' / ')}; a carried document was probed at ${current.probedAt}, not after it. Rebuild the manifest to re-probe every URL before round 2`,
+        );
+      }
     }
   }
   return refusals;
@@ -662,7 +685,7 @@ async function main(): Promise<void> {
     const refusals = packageRefusals(manifest, { repoRoot: REPO_ROOT, runDir, manifestPath, now: new Date() });
     if (refusals.length > 0) refuse('carried documents refused; nothing was assembled:', refusals);
     const probedOut = values.get('--probed-at-out')?.[0];
-    if (probedOut) writeFileSync(probedOut, latestProbe(manifest));
+    if (probedOut) writeFileSync(probedOut, earliestProbe(manifest));
     process.stdout.write(renderCarriedSection(manifest, REPO_ROOT));
     return;
   }

@@ -48,6 +48,7 @@ const DOC_URL = 'https://pub-edmonton.escribemeetings.com/filestream.ashx?Docume
 const MEETING_URL = 'https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=stub&lang=English';
 const PDF = Buffer.from('%PDF-1.7 stub bytes\n');
 const TEXT = 'REPORT IS03688\nRecommendation 1\n\f';
+const TEXT2 = 'ATTACHMENT 5\nModified approach\n\f';
 const CHALLENGE = { 'cf-mitigated': 'challenge', server: 'cloudflare' };
 
 const meetingPage = (title: string | null) =>
@@ -199,7 +200,8 @@ describe('carry-manifest build', () => {
     expect(challengeSignature({ status: 403, headers: {}, body: '<script src="/cdn-cgi/challenge-platform/h/b"></script>' })).toBe(
       'Cloudflare challenge page body',
     );
-    expect(challengeSignature({ status: 403, headers: { server: 'cloudflare' }, body: '' })).toBe('server: cloudflare header');
+    // A plain Cloudflare-served 403 names the server too; that alone is not a browser check.
+    expect(challengeSignature({ status: 403, headers: { server: 'cloudflare' }, body: 'Forbidden' })).toBeUndefined();
     expect(challengeSignature({ status: 403, headers: { server: 'nginx' }, body: 'Forbidden' })).toBeUndefined();
   });
 
@@ -231,6 +233,18 @@ describe('carry-manifest build', () => {
     const doc = (await build(repo, stubFetcher(challenged, meetingPage('Report - IS03688.pdf')))).documents[0]!;
     expect(doc.status).toBe('failed');
     expect(doc.reason).toMatch(/does not name the URL/);
+  });
+
+  it('does not take a URL whose id is the prefix of a longer id as an exact match', () => {
+    const url = 'https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304';
+    expect(briefNaming('See https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=3040240 for it.\n', url)).toBeUndefined();
+    expect(briefNaming(`See ${url}, the report.\n`, url)).toBe('exact URL');
+  });
+
+  it('ends a DocumentId naming at a question mark', () => {
+    const brief = `${TEMPLATE_LINE}\nWhich file is DocumentId 111? The figure 304024 appears elsewhere.\n`;
+    expect(briefNaming(brief, DOC_URL)).toBeUndefined();
+    expect(briefNaming(`${TEMPLATE_LINE}\nWhich file is DocumentId 111 or 304024? None.\n`, DOC_URL)).toMatch(/^template \+ DocumentId naming at line 4$/);
   });
 
   it('refuses a template on a different host', async () => {
@@ -291,7 +305,12 @@ describe('run-reviewer --carried', { timeout: 180_000 }, () => {
 
   const hoursAgo = (hours: number) => new Date(Date.now() - hours * 3_600_000).toISOString().replace(/\.\d{3}Z$/, 'Z');
 
-  function writeManifest(repo: string, edit: (doc: Record<string, any>) => void = () => {}, probedAt = hoursAgo(1)): string {
+  function writeManifest(
+    repo: string,
+    edit: (doc: Record<string, any>) => void = () => {},
+    probedAt = hoursAgo(1),
+    secondProbe?: string,
+  ): string {
     const doc: Record<string, any> = {
       registry_id: 'YF-EV-0001',
       title: 'Registry title with the editor’s reading in it',
@@ -317,14 +336,24 @@ describe('run-reviewer --carried', { timeout: 180_000 }, () => {
         result: 'pass',
       },
       download_provenance: { downloaded_by: 'the editor', downloaded_on: '2026-09-02', via: 'browser' },
-      public_open_check: { checked_by: 'a separate session', checked_on: '2026-09-27' },
+      public_open_check: { checked_by: 'a separate session', checked_on: hoursAgo(2) },
       extraction_check: { result: 'pass', reviewer: 'a separate session' },
       second_download: { result: 'not made', sha256: null, reason: 'stub' },
       personal_information_screen: { result: 'clear', reviewer: 'a separate session' },
     };
     edit(doc);
+    const documents = [doc];
+    if (secondProbe) {
+      const second = structuredClone(doc);
+      const rel = TEXT_REL.replace('YF-EV-0001', 'YF-EV-0003');
+      writeFileSync(path.join(repo, rel), TEXT2);
+      second.registry_id = 'YF-EV-0003';
+      second.extraction = { ...second.extraction, text_file: rel, text_sha256: sha256(TEXT2), text_bytes: TEXT2.length };
+      second.probe = { ...second.probe, checked_at: secondProbe };
+      documents.push(second);
+    }
     const file = path.join(repo, RUN, 'carried', 'manifest.yaml');
-    writeFileSync(file, YAML.stringify({ run: RUN, documents: [doc], exclusions: [] }));
+    writeFileSync(file, YAML.stringify({ run: RUN, documents, exclusions: [] }));
     return file;
   }
 
@@ -420,7 +449,8 @@ describe('run-reviewer --carried', { timeout: 180_000 }, () => {
     expect(omitted.stderr).toMatch(/ran without the carried section/);
   });
 
-  it('refuses round 2 on the probe round 1 used, and accepts it on a fresh one', () => {
+  // Finding 4: every document in round 2 is probed after round 1 finished.
+  it('refuses round 2 on a probe from before round 1 finished, and accepts a fresh one', () => {
     const repo = runnerRepo();
     writeFileSync(path.join(repo, RUN, 'combined-evidence.json'), '{"items": []}\n');
     const probe1 = hoursAgo(3);
@@ -428,11 +458,13 @@ describe('run-reviewer --carried', { timeout: 180_000 }, () => {
     const first = dryRun(repo, 'claude', manifest);
     expect(first.ok, first.stderr).toBe(true);
     const sha = sectionSha(first.stdout)!;
-    writeRunYaml(repo, [{ provider: 'anthropic', seat: 'Claude Opus 5.5', round: 1, carried_section_sha256: sha, carried_probed_at: probe1 }]);
+    writeRunYaml(repo, [
+      { provider: 'anthropic', seat: 'Claude Opus 5.5', round: 1, carried_section_sha256: sha, carried_probed_at: probe1, finished_at: hoursAgo(2) },
+    ]);
 
     const reused = dryRun(repo, 'claude', manifest, [], '2');
     expect(reused.ok).toBe(false);
-    expect(reused.stderr).toMatch(/rebuild the manifest to re-probe before round 2/);
+    expect(reused.stderr).toMatch(/re-probe every URL before round 2/);
 
     writeManifest(repo, () => {}, hoursAgo(1));
     const fresh = dryRun(repo, 'claude', manifest, [], '2');
@@ -440,11 +472,27 @@ describe('run-reviewer --carried', { timeout: 180_000 }, () => {
     expect(sectionSha(fresh.stdout)).toBe(sha);
   });
 
-  it('record-run refuses a round-2 row on round 1’s probe and a row with a different section', () => {
+  it('refuses round 2 when one of two documents kept its round-1 probe', () => {
+    const repo = runnerRepo();
+    writeFileSync(path.join(repo, RUN, 'combined-evidence.json'), '{"items": []}\n');
+    const roundOneProbe = hoursAgo(4);
+    const manifest = writeManifest(repo, () => {}, roundOneProbe, roundOneProbe);
+    const sha = sectionSha(dryRun(repo, 'claude', manifest).stdout)!;
+    writeRunYaml(repo, [
+      { provider: 'anthropic', seat: 'Claude Opus 5.5', round: 1, carried_section_sha256: sha, carried_probed_at: roundOneProbe, finished_at: hoursAgo(3) },
+    ]);
+    // The first document is re-probed; the second keeps its round-1 probe.
+    writeManifest(repo, () => {}, hoursAgo(1), roundOneProbe);
+    const result = dryRun(repo, 'claude', manifest, [], '2');
+    expect(result.ok).toBe(false);
+    expect(result.stderr).toContain(`probed at ${roundOneProbe}, not after it`);
+  });
+
+  it('record-run refuses a round-2 row probed before round 1 finished, and a row with a different section', () => {
     const repo = runnerRepo();
     const probe = hoursAgo(2);
     writeRunYaml(repo, [
-      { provider: 'anthropic', seat: 'Claude Opus 5.5', round: 1, carried_section_sha256: 'b'.repeat(64), carried_probed_at: probe },
+      { provider: 'anthropic', seat: 'Claude Opus 5.5', round: 1, carried_section_sha256: 'b'.repeat(64), carried_probed_at: probe, finished_at: probe },
     ]);
     const record = (round: string, section: string, probedAt: string) =>
       spawnSync(
@@ -461,7 +509,7 @@ describe('run-reviewer --carried', { timeout: 180_000 }, () => {
       );
     const reused = record('2', 'b'.repeat(64), probe);
     expect(reused.status).not.toBe(0);
-    expect(reused.stderr).toMatch(/re-probe before round 2/);
+    expect(reused.stderr).toMatch(/re-probe every URL before round 2/);
     const different = record('1', 'd'.repeat(64), probe);
     expect(different.status).not.toBe(0);
     expect(different.stderr).toMatch(/received carried section b{64}/);
@@ -503,6 +551,14 @@ describe('run-reviewer --carried', { timeout: 180_000 }, () => {
     expect(open.ok).toBe(false);
     expect(open.stderr).toMatch(/public-open check must record who confirmed/);
 
+    const stale = dryRun(
+      repo,
+      'claude',
+      writeManifest(repo, (doc) => (doc.public_open_check = { checked_by: 'a separate session', checked_on: hoursAgo(80) })),
+    );
+    expect(stale.ok).toBe(false);
+    expect(stale.stderr).toMatch(/more than 72 hours old; re-confirm that a person can still open it/);
+
     const unsigned = dryRun(repo, 'claude', writeManifest(repo, (doc) => delete doc.probe.signature));
     expect(unsigned.ok).toBe(false);
     expect(unsigned.stderr).toMatch(/does not show a challenge-signed 403/);
@@ -531,14 +587,16 @@ describe('run-reviewer --carried', { timeout: 180_000 }, () => {
     expect(raised.stderr).toMatch(/over the claude seat's ceiling of 400000; it can only lower it/);
   });
 
-  it('re-checks the size after the retry appends, and does not send an oversized retry', () => {
-    const repo = runnerRepo();
-    const manifest = writeManifest(repo);
-    const size = Number(/package bytes: (\d+)/.exec(dryRun(repo, 'claude', manifest).stdout)?.[1]);
-    expect(size).toBeGreaterThan(0);
-
-    // A launcher that answers badly and is admitted, so the runner retries.
-    const calls = path.join(root, `calls-${path.basename(repo)}`);
+  /**
+   * Replace the launcher in the copied tree with one that is admitted and
+   * answers `response`. With `injectRunYaml`, it writes that run.yaml while it
+   * "runs", as another seat of the run recording its row would.
+   */
+  function installLauncher(repo: string, response: string, injectRunYaml?: string): string {
+    const state = mkdtempSync(path.join(root, 'launcher-'));
+    writeFileSync(path.join(state, 'response.txt'), response);
+    if (injectRunYaml !== undefined) writeFileSync(path.join(state, 'run.yaml'), injectRunYaml);
+    const inject = injectRunYaml === undefined ? '' : `cp "${state}/run.yaml" "${path.join(repo, RUN, 'run.yaml')}"`;
     writeFileSync(
       path.join(repo, 'scripts', 'panel', 'invoke-reviewer.sh'),
       `#!/usr/bin/env bash
@@ -552,12 +610,13 @@ while [ "$#" -gt 0 ]; do
     *) shift 2 ;;
   esac
 done
-echo call >> "${calls}"
+echo call >> "${state}/calls"
 mkdir -p "$ATTEMPT_DIR"
 cp "$PACKAGE" "$ATTEMPT_DIR/package.md"
 printf 'fixture-%016d\\n' 1 > "$ATTEMPT_DIR/attempt-id.txt"
-printf '{"round": 1}' > "$ATTEMPT_DIR/final-message.txt"
+cp "${state}/response.txt" "$ATTEMPT_DIR/final-message.txt"
 cp "$ATTEMPT_DIR/final-message.txt" "$ATTEMPT_DIR/stdout.txt"
+${inject}
 echo 0 > "$ATTEMPT_DIR/exit-code"
 echo ok > "$ATTEMPT_DIR/status.txt"
 echo pass > "$ATTEMPT_DIR/context-proof.txt"
@@ -574,14 +633,103 @@ exit 0
 `,
     );
     chmodSync(path.join(repo, 'scripts', 'panel', 'invoke-reviewer.sh'), 0o755);
-    // The preflight asks the seat's CLI for a version; a stub answers only that.
+    return path.join(state, 'calls');
+  }
+
+  /** The preflight asks the seat's CLI for a version; a stub answers only that. */
+  function stubCliEnv(): NodeJS.ProcessEnv {
     const bin = mkdtempSync(path.join(root, 'bin-'));
     writeFileSync(path.join(bin, 'claude'), '#!/usr/bin/env bash\n[ "${1:-}" = "--version" ] && { echo "0.0.0-stub"; exit 0; }\nexit 1\n');
     chmodSync(path.join(bin, 'claude'), 0o755);
+    return { PATH: `${bin}${path.delimiter}${process.env.PATH ?? ''}` };
+  }
 
-    const result = runner(repo, ['claude', STORY, RUN_DATE, '1', '--carried', manifest, '--max-package-bytes', String(size + 5)], {
-      PATH: `${bin}${path.delimiter}${process.env.PATH ?? ''}`,
+  /** Commit the run's carry manifest in a git repository at the copied tree. */
+  function commitManifest(repo: string): void {
+    const git = (...args: string[]) => {
+      const result = spawnSync('git', ['-C', repo, '-c', 'user.name=test', '-c', 'user.email=test', ...args], {
+        encoding: 'utf8',
+      });
+      if (result.status !== 0) throw new Error(result.stderr);
+    };
+    if (!existsSync(path.join(repo, '.git'))) git('init', '-q');
+    git('add', '--', path.join(RUN, 'carried', 'manifest.yaml'));
+    git('commit', '-q', '-m', 'carry manifest');
+  }
+
+  const VALID_REVIEW = (() => {
+    const source = path.join(REAL_REPO, 'reviews', 'winter-cycling', '2026-09-01', 'round1', 'gemini.json');
+    return JSON.stringify({ ...(JSON.parse(readFileSync(source, 'utf8')) as Record<string, unknown>), story: STORY, round: 1 });
+  })();
+
+  // Review 2, finding 1: the manifest is committed before any launch.
+  it('refuses a launch whose carry manifest is uncommitted or changed since HEAD', () => {
+    const repo = runnerRepo();
+    const manifest = writeManifest(repo);
+    const calls = installLauncher(repo, VALID_REVIEW);
+    const launch = () => runner(repo, ['claude', STORY, RUN_DATE, '1', '--carried', manifest], stubCliEnv());
+
+    const untracked = launch();
+    expect(untracked.ok).toBe(false);
+    expect(untracked.stderr).toMatch(/must be committed and unchanged from HEAD before a launch/);
+
+    commitManifest(repo);
+    writeManifest(repo, (doc) => (doc.reason = 'edited after the commit'));
+    const changed = launch();
+    expect(changed.ok).toBe(false);
+    expect(changed.stderr).toMatch(/must be committed and unchanged from HEAD/);
+    expect(existsSync(calls)).toBe(false);
+  });
+
+  // Review 2, new finding: a seat finishing after another recorded a different section.
+  it('installs and records nothing when another seat recorded a different section during the run', () => {
+    const repo = runnerRepo();
+    const manifest = writeManifest(repo);
+    commitManifest(repo);
+    const other = YAML.stringify({
+      story: STORY,
+      date: RUN_DATE,
+      methodology_version: '1.41',
+      runs: [{ provider: 'openai', seat: 'GPT-6 Sol', round: 1, carried_section_sha256: 'a'.repeat(64) }],
     });
+    const calls = installLauncher(repo, VALID_REVIEW, other);
+    const result = runner(repo, ['claude', STORY, RUN_DATE, '1', '--carried', manifest], stubCliEnv());
+
+    expect(readFileSync(calls, 'utf8').trim().split('\n')).toHaveLength(1);
+    expect(result.ok).toBe(false);
+    expect(result.stderr).toMatch(/GPT-6 Sol round 1 received carried section a{64}/);
+    expect(result.stderr).toMatch(/nothing was installed or recorded/);
+    expect(existsSync(path.join(repo, RUN, 'round1', 'claude.json'))).toBe(false);
+    expect(readFileSync(path.join(repo, RUN, 'run.yaml'), 'utf8')).toBe(other);
+  });
+
+  it('installs the review and records the hashes when the section still matches after the run', () => {
+    const repo = runnerRepo();
+    const manifest = writeManifest(repo);
+    commitManifest(repo);
+    installLauncher(repo, VALID_REVIEW);
+    const result = runner(repo, ['claude', STORY, RUN_DATE, '1', '--carried', manifest], stubCliEnv());
+    expect(result.ok, result.stderr).toBe(true);
+    expect(existsSync(path.join(repo, RUN, 'round1', 'claude.json'))).toBe(true);
+    const row = (YAML.parse(readFileSync(path.join(repo, RUN, 'run.yaml'), 'utf8')) as { runs: Record<string, unknown>[] }).runs[0]!;
+    expect(row.carried_section_sha256).toMatch(/^[0-9a-f]{64}$/);
+    expect(row.carried_manifest_sha256).toBe(sha256(readFileSync(manifest)));
+  });
+
+  it('re-checks the size after the retry appends, and does not send an oversized retry', () => {
+    const repo = runnerRepo();
+    const manifest = writeManifest(repo);
+    commitManifest(repo);
+    const size = Number(/package bytes: (\d+)/.exec(dryRun(repo, 'claude', manifest).stdout)?.[1]);
+    expect(size).toBeGreaterThan(0);
+
+    // A launcher that answers badly and is admitted, so the runner retries.
+    const calls = installLauncher(repo, '{"round": 1}');
+    const result = runner(
+      repo,
+      ['claude', STORY, RUN_DATE, '1', '--carried', manifest, '--max-package-bytes', String(size + 5)],
+      stubCliEnv(),
+    );
     expect(result.ok).toBe(false);
     expect(result.stderr).toMatch(/attempt 2: package is \d+ bytes, over the \d+-byte budget; not sent/);
     expect(readFileSync(calls, 'utf8').trim().split('\n')).toHaveLength(1);

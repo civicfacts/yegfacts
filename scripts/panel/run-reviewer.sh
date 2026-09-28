@@ -58,9 +58,11 @@
 # verifies it and refuses on any pending or failed human check, a probe older
 # than 6 hours or in the future, a text outside the run's private carried-text
 # directory, or a text whose SHA-256 does not match. The section's own SHA-256
-# must equal every row already in the run's manifests, in both rounds, and a
-# round 2 may not reuse round 1's probe. run.yaml records the manifest hash,
-# the section hash and the probe time.
+# must equal every row already in the run's manifests, in both rounds, checked
+# before launch and again before the output is installed; every document in a
+# round 2 must have been probed after round 1 finished. A launch (not a dry
+# run) also needs the manifest committed and unchanged from HEAD. run.yaml
+# records the manifest hash, the section hash and the earliest probe time.
 #
 # Package size: each seat has a hard ceiling (SEAT_MAX_PACKAGE_BYTES below,
 # 400000 bytes, about 100,000 tokens, for every current seat: well inside each
@@ -456,6 +458,17 @@ if [ -e "$OUT_FILE" ] || [ -L "$OUT_FILE" ]; then
   exit 1
 fi
 
+# A carry manifest is committed before any seat sees what it selects: tracked
+# by git and identical to HEAD, with nothing staged or unstaged. A dry run
+# assembles and prints, and does not need this.
+if [ -n "$CARRIED" ]; then
+  if ! git -C "$REPO_ROOT" ls-files --error-unmatch -- "$RUN_CARRY_MANIFEST" >/dev/null 2>&1 \
+     || ! git -C "$REPO_ROOT" diff --quiet HEAD -- "$RUN_CARRY_MANIFEST"; then
+    echo "[$SLOT round $ROUND] ${RUN_CARRY_MANIFEST#"$REPO_ROOT"/} must be committed and unchanged from HEAD before a launch; nothing was sent" >&2
+    exit 1
+  fi
+fi
+
 CLI_VERSION="unknown"
 if command -v "$CLI" >/dev/null 2>&1; then
   CLI_VERSION="$("$CLI" --version 2>/dev/null | head -1 | tr -d '\r' || echo unknown)"
@@ -602,6 +615,19 @@ FINISHED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 # Everything the site displays as panel identity comes from here and from
 # run.yaml, never from the reviewer's own JSON.
 # ---------------------------------------------------------------------------
+# Another seat of this run may have recorded its row while this one ran. The
+# section check runs again here, and a mismatch installs nothing and records
+# nothing: the output stays in the private archive only, so a corrected re-run
+# is not blocked by a file with no row behind it.
+if [ "$STATUS" = "ok" ] && [ -n "$SECTION_SHA" ]; then
+  if ! npx tsx "$REPO_ROOT/scripts/panel/carry-manifest.ts" check-rows --round "$ROUND" \
+      --section-sha256 "$SECTION_SHA" --probed-at "$PROBED_AT" "$RUN_DIR/run.yaml" "$MANIFEST"; then
+    echo "[$SLOT round $ROUND] carried section no longer matches this run's rows; nothing was installed or recorded." >&2
+    echo "[$SLOT round $ROUND] The attempt is retained under $ATTEMPT_BASE" >&2
+    exit 1
+  fi
+fi
+
 if [ "$STATUS" = "ok" ]; then
   node -e '
     const fs = require("node:fs");
