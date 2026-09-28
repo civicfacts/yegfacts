@@ -1,10 +1,10 @@
 story: council-pause-vote
 run: "2026-09-25"
-methodology_version: "1.41"
+methodology_version: "1.42"
 stage: round1
 stages:
   framing: {status: complete, at: "2026-09-25", frozen_sha256: "c0f504b3d6a7ac303abb8f724eda9b415275f13c8e365bc34657da0136b09687", note: "Frozen under methodology v1.20 after three framing checks and a defect confirmation (framing/check-4.md). See run-record.md."}
-  round1: {status: stopped, at: "2026-09-28", note: "All three seats admitted on one attempt each, with the four carried council documents (carried/manifest.yaml, section ec76a674ffaf). Every seat reported that the controlling eScribe minutes pages could not be retrieved through its web tool (HTTP 403), and the Claude seat marked them ESSENTIAL SOURCE INACCESSIBLE. Under the brief an inaccessible essential source stops the run, so the run stops here. No merge, round 2 or synthesis. See run-record.md."}
+  round1: {status: pending, note: "The round 1 stopped on 2026-09-28 is superseded (superseded-2026-09-28/). Round 1 reruns under methodology v1.42 with carried minutes items once the completeness check, the claim-4 gate and the package budget pass. See run-record.md."}
   merge: {status: pending}
   round2: {status: pending}
   synthesis: {status: pending}

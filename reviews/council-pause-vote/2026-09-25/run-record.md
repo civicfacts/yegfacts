@@ -373,3 +373,23 @@ Attachment 3 to carry. That is a methodology decision for the editor and
 the board, not one this run makes. The round 1 answers stay in `round1/`
 as returned, with their rows in `run.yaml`. A restart moves them under a
 superseded directory, as earlier runs did.
+
+## 2026-09-28: round 1 superseded; restart under methodology v1.42
+
+**The stopped round 1 is superseded, and round 1 runs again under v1.42
+(D-0047), which carries selected agenda items from the eScribe meeting
+pages the seats' tools cannot open.** The stopped round's answers
+(`round1/`), its rows in `run.yaml` and the v1.41 carry manifest it ran on
+(committed at 12e6cb7, sha256
+`e4942ba37610c47df142a6db9ce96d6fd3486e988b4af897b1025d49ebeeab12`) move
+unchanged to `superseded-2026-09-28/`, as `round1/`, `run.yaml` and
+`carried-manifest.yaml`. Their answers are to the v1.41 package and are
+kept for the record only; `run.yaml` starts again with no rows. The brief
+is unchanged and still frozen at
+`c0f504b3d6a7ac303abb8f724eda9b415275f13c8e365bc34657da0136b09687`.
+
+`carried/gates.yaml` lists claim 4, `same-seven-councillors-vote-together`,
+as the claim whose test needs every recorded vote, so the package cannot
+pass while its vote reconciliation is pending. If that set cannot be
+established or does not fit the 400 KB seat budget, claim 4 is parked for
+the run and the run proceeds with claims 1 to 3.
