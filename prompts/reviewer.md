@@ -127,7 +127,8 @@ yourself. If a carried text is garbled or incomplete, say so in
 
 From a City meeting page, the package carries only the page header and the
 items a published rule selected, each item whole; the rest of the page was
-not carried, and the site, not you, chose the items. If you think a relevant
+not carried, and the site, not you, chose the items. Names of members of
+the public in those items are withheld. If you think a relevant
 item is missing, name the meeting and the item in `limitations`. Agendas show
 what was scheduled; minutes are the record of decisions and votes. A claim the
 package marks as parked is not tested in this run: leave it out.

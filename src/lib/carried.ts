@@ -57,7 +57,8 @@ type ManifestDocument = {
  * @param root the repository root the run directories resolve against.
  * @throws when a manifest exists but cannot be parsed, or a `carried` row
  *   lacks a registry id, an https URL or a 64-hex archive SHA-256, or a
- *   minutes-items row lacks its rule version, so a broken
+ *   minutes-items row lacks its rule version, or a row has a kind other than
+ *   pdf or minutes-items, so a broken
  *   row fails the build rather than silently dropping the label. An absent
  *   manifest means nothing was carried.
  */
@@ -73,6 +74,8 @@ export function carriedSources(runDirs: readonly string[], root: string = proces
         typeof doc.registry_id === 'string' && doc.registry_id ? '' : 'registry_id',
         typeof doc.url === 'string' && /^https:\/\/\S+$/.test(doc.url) ? '' : 'url',
         typeof doc.archive?.sha256 === 'string' && /^[0-9a-f]{64}$/.test(doc.archive.sha256) ? '' : 'archive.sha256',
+        // Absent is a v1.41 manifest, which carried only whole documents.
+        doc.kind === undefined || doc.kind === 'pdf' || doc.kind === 'minutes-items' ? '' : `kind "${String(doc.kind)}"`,
         doc.kind !== 'minutes-items' || (Number.isInteger(doc.rule_version) && doc.rule_version! > 0) ? '' : 'rule_version',
       ].filter(Boolean);
       if (problems.length > 0) {

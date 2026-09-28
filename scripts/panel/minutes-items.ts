@@ -17,6 +17,16 @@
  * motion text, the vote table and the result); on an agenda they hold
  * `AgendaItemDescription`. Sub-items sit in a sibling container, not inside
  * their parent item, so each item's text is its own.
+ *
+ * Members of the public are withheld (D-0047 addendum, REDACTION_RULE): in a
+ * minutes list introduced by "The following public speaker(s) ..." or "The
+ * following member(s) of the delegation ..." (a delegation that is not the
+ * City Administration's), each listed person's name becomes "[member of the
+ * public]" and any organisation after the name is kept; and an attachment
+ * filed for a speaker panel ("7.6 - Panel 3 - <name>.pdf") keeps its title up
+ * to the panel number and withholds the rest. Motion text is never touched,
+ * nor is anyone the page names as an office-holder in its attendance list or
+ * roll call, nor Administration's delegation (City staff in role).
  */
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -133,9 +143,67 @@ export function textOf(node: Node): string {
   return merged.filter((line) => line !== '-').join('\n');
 }
 
+/** The published rule for withholding members of the public; the manifest records its version. */
+export const REDACTION_RULE = {
+  version: 1,
+  rule:
+    'In a minutes list introduced by "The following public speaker(s)" or "The following member(s) of the delegation" (not Administration\'s delegation), each listed name that is not an office-holder named in the page\'s attendance list or roll call becomes "[member of the public]"; an organisation after the name is kept. An attachment title naming a speaker panel keeps the title up to the panel number and withholds the rest. Motion text is never changed.',
+} as const;
+
+export const WITHHELD = '[member of the public]';
+const PUBLIC_LIST_INTRO = /^the following (public speakers?|members? of the delegation)\b/i;
+const PERSON = /\b(?:[A-Z]\.\s?)+[A-Z][A-Za-z'’-]+(?:[ -][A-Z][A-Za-z'’-]+)?/g;
+
+/** Office-holders a page names in its attendance list and roll call, as "E. Rutherford". */
+function officeHolders(texts: string[]): Set<string> {
+  const names = new Set<string>();
+  for (const text of texts) for (const match of text.matchAll(PERSON)) names.add(match[0].replace(/\s+/g, ' '));
+  return names;
+}
+
+/**
+ * Withhold members of the public inside one item's subtree, in place.
+ * @returns how many names were replaced.
+ */
+function withholdPublic(item: Element, holders: Set<string>): number {
+  let replaced = 0;
+  for (const element of [...walk(item)]) {
+    if (element.tag !== 'p' || !element.parent) continue;
+    const intro = textOf(element);
+    if (!PUBLIC_LIST_INTRO.test(intro) || /administration/i.test(intro)) continue;
+    let inMotion = false;
+    for (let up: Element | undefined = element; up; up = up.parent) if (has(up, 'MotionText')) inMotion = true;
+    if (inMotion) continue;
+    const siblings = element.parent.children;
+    const list = siblings.slice(siblings.indexOf(element) + 1).find((n): n is Element => typeof n !== 'string');
+    if (!list || (list.tag !== 'ul' && list.tag !== 'ol')) continue;
+    for (const li of list.children) {
+      if (typeof li === 'string' || li.tag !== 'li') continue;
+      const text = textOf(li).replace(/^-\s*/, '');
+      const comma = text.indexOf(',');
+      const name = (comma === -1 ? text : text.slice(0, comma)).trim();
+      if (!name || name === WITHHELD || holders.has(name.replace(/\s+/g, ' '))) continue;
+      li.children = [comma === -1 ? WITHHELD : `${WITHHELD}${text.slice(comma)}`];
+      replaced += 1;
+    }
+  }
+  for (const attachment of [...walk(item)]) {
+    if (!has(attachment, 'AgendaItemAttachment')) continue;
+    const link = find(attachment, (e) => e.tag === 'a') ?? attachment;
+    const title = textOf(link);
+    const panel = /^(.*?\bpanel\s*\d+)\b(.+)$/i.exec(title);
+    if (!panel || panel[2]!.trim() === WITHHELD) continue;
+    link.children = [`${panel[1]} ${WITHHELD}`];
+    replaced += 1;
+  }
+  return replaced;
+}
+
 export type MinutesItem = {
   number: string;
   title: string;
+  /** Names of members of the public replaced in this item's text. */
+  withheld: number;
   /** Nesting depth: 1 for a top-level item such as "7.", 2 for "7.6". */
   depth: number;
   /** The item whole: number and title, attachment list, minutes or description, every motion and vote. */
@@ -152,17 +220,25 @@ export type MeetingPage = {
 /**
  * Read an archived Meeting.aspx page into its header and items.
  *
+ * @param options.withhold replace members of the public (REDACTION_RULE);
+ *   true by default, false to compare two copies of a page as published.
  * @throws when the page has no AgendaHeader or no items, so a changed page
  *   format stops a build instead of producing an empty selection.
  */
-export function parseMeetingPage(html: string): MeetingPage {
+export function parseMeetingPage(html: string, options: { withhold?: boolean } = {}): MeetingPage {
   const root = parseHtml(html);
   const header = find(root, (e) => e.tag === 'header' && has(e, 'AgendaHeader')) ?? find(root, (e) => has(e, 'AgendaHeader'));
   if (!header) throw new Error('no AgendaHeader: not an eScribe meeting page, or its format has changed');
+  const itemElements = [...walk(root)].filter((e) => has(e, 'AgendaItem') && e.classes.some((c) => /^AgendaItem\d+$/.test(c)));
+  const rollCalls = itemElements.filter((e) => {
+    const title = find(e, (t) => has(t, 'AgendaItemTitle'));
+    return title !== undefined && /^roll call$/i.test(textOf(title));
+  });
+  const holders = officeHolders([textOf(header), ...rollCalls.map((e) => textOf(e))]);
   const items: MinutesItem[] = [];
   let minutes = false;
-  for (const element of walk(root)) {
-    if (!has(element, 'AgendaItem') || !element.classes.some((c) => /^AgendaItem\d+$/.test(c))) continue;
+  for (const element of itemElements) {
+    const withheld = options.withhold === false ? 0 : withholdPublic(element, holders);
     const counter = find(element, (e) => has(e, 'AgendaItemCounter'));
     const title = find(element, (e) => has(e, 'AgendaItemTitle'));
     let depth = 0;
@@ -181,7 +257,7 @@ export function parseMeetingPage(html: string): MeetingPage {
       const text = textOf(row);
       if (text) parts.push(text);
     }
-    items.push({ number, title: titleText, depth, text: parts.join('\n') });
+    items.push({ number, title: titleText, withheld, depth, text: parts.join('\n') });
   }
   if (items.length === 0) throw new Error('no agenda items found: the page format has changed');
   const attendance = find(header, (e) => has(e, 'AgendaHeaderAttendance'));

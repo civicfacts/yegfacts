@@ -21,7 +21,9 @@
  *
  *   npx tsx scripts/panel/carry-manifest.ts build reviews/<story>/<date> \
  *     [--doc <id>=<meeting page id or url> ...] [--minutes <id> ...] \
- *     [--gate claim:<claim id> ...] [--rule-version <n>] [--exclude '<what>::<reason>' ...]
+ *     [--rule-version <n>] [--exclude '<what>::<reason>' ...]
+ *   npx tsx scripts/panel/carry-manifest.ts pass-gate <run>/carried/manifest.yaml \
+ *     --claim <claim id> --reviewer <who> --reconciliation <run>/carried/<file>.yaml
  *   npx tsx scripts/panel/carry-manifest.ts package <run>/carried/manifest.yaml \
  *     --run <run> [--probed-at-out <file>]
  *   npx tsx scripts/panel/carry-manifest.ts check-rows --round <n> \
@@ -54,10 +56,22 @@
  *   - for a pdf, verifies the archived meeting page against its registry hash
  *     and confirms the live page still lists the DocumentId under the same
  *     title, then extracts the text with `pdftotext -layout`;
- *   - for minutes-items, compares the live page's item index with the archived
- *     page's when the fetcher can read it (a revised page fails), then applies
- *     the selection rule to every item, records the full item index, and writes
- *     the header and every matched item as the carried text.
+ *   - for minutes-items, compares every item's full content (title, text,
+ *     motions, movers, votes, results) on the live page with the archived page
+ *     when the fetcher can read it (any difference fails: archive the page
+ *     again), withholds members of the public (minutes-items.ts,
+ *     REDACTION_RULE), applies the selection rule to every item, records the
+ *     full item index, and writes the header and every matched item as the
+ *     carried text.
+ *
+ * Claim gates (D-0047 rule 5). <run>/carried/gates.yaml, committed, lists the
+ * claims whose test needs every recorded vote (`claims: [<claim id>, ...]`).
+ * `build` gives each a gate, pending until someone parks it or `pass-gate`
+ * passes it. A pass records the reconciliation file (tracked by git, under
+ * <run>/carried/, a non-empty YAML list of votes each with meeting, item,
+ * motion, result and a per-member vote map) and its SHA-256, and binds itself
+ * to the rule version and the hash of every carried page and text: a rebuild
+ * that changes any of them puts the gate back to pending.
  * The manifest is committed; the text never is. A document that fails or is
  * refused is still listed, with its reason, and the exit code is 1.
  *
@@ -69,15 +83,19 @@
  *
  * `package` refuses unless the manifest is <run>/carried/manifest.yaml for the
  * run being launched, every text file resolves inside that run's private
- * carried-text directory and matches its SHA-256, no document failed, no gate
- * is pending, and every carried document has: download provenance, a
+ * carried-text directory and matches its SHA-256, no document failed, every
+ * gate gates.yaml requires is present and none is pending, a passed gate's
+ * reconciliation file and covered hashes still match, and every carried
+ * document has: download provenance, a
  * public-open check made within 72 hours, a clear personal-information screen,
  * a fetcher probe no older than 6 hours and not in the future, and its
  * eligibility ground still on the record and fresh. A pdf also needs a passed
  * extraction check, a second download that matches or is recorded as not made
  * with a reason, and a passed meeting-page check. A minutes-items page also
  * needs a passed completeness check with no missed items, a checker's reason on
- * every item, and the rule version the manifest names.
+ * every item, and the rule version the manifest names; its page is then read
+ * again from the registry-verified archive and its carried text and full item
+ * index regenerated, and both must match the manifest exactly.
  * Nothing it prints depends on the time or the seat.
  *
  * run-reviewer.sh adds three checks around it: the manifest must be tracked by
@@ -85,12 +103,13 @@
  * against the run's recorded rows both before the launch and again just
  * before the seat's output is installed.
  */
-import { spawnSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import YAML from 'yaml';
 import { REPO_ROOT, listFiles, loadYaml, sha256 } from '../lib/repo.ts';
 import {
+  REDACTION_RULE,
   SELECTION_MATCH,
   carriedPageText,
   matchedTerms,
@@ -98,7 +117,7 @@ import {
   selectionRules,
   type SelectionRule,
 } from './minutes-items.ts';
-import { loadSeatProbes, seatProbesPath, type SeatProbe } from './seat-probe.ts';
+import { SEAT_MODELS, loadSeatProbes, seatProbesPath, type SeatProbe } from './seat-probe.ts';
 
 const USER_AGENT = 'YEGFacts evidence archiver (+https://yegfacts.ca)';
 const TIMEOUT_MS = 60_000;
@@ -125,6 +144,8 @@ export type ItemIndexEntry = {
   matched: boolean;
   matched_terms: string[];
   carried: boolean;
+  /** Names of members of the public withheld from this item (REDACTION_RULE). */
+  withheld: number;
   /** The completeness checker's reason for carrying or not carrying it. Human-filled. */
   checker_reason: string | null;
 };
@@ -183,6 +204,8 @@ export type CarriedDocument = {
   layout?: 'agenda' | 'minutes';
   /** minutes-items: the rule version the items were selected under. */
   rule_version?: number;
+  /** minutes-items: the version of the rule that withheld members of the public. */
+  redaction_version?: number;
   /** minutes-items: every item on the page, carried or not. */
   items?: ItemIndexEntry[];
   /** minutes-items: a reader who is not the editor checks every item against D-0047 rule 2. Human-filled. */
@@ -199,7 +222,21 @@ export type CarriedDocument = {
 export type Exclusion = { label: string; status: 'excluded'; reason: string };
 
 /** A claim that cannot run until its evidence set is reconciled (D-0047 rule 5). */
-export type Gate = { result: 'pending' | 'pass' | 'parked'; reviewer: string | null; reconciliation_file: string | null; note?: string };
+export type GateCoverage = {
+  rule_version: number | null;
+  pages: Array<{ registry_id: string; archive_sha256: string; text_sha256: string }>;
+};
+
+export type Gate = {
+  result: 'pending' | 'pass' | 'parked';
+  reviewer: string | null;
+  reconciliation_file: string | null;
+  /** pass: SHA-256 of the reconciliation file as reviewed. */
+  reconciliation_sha256?: string | null;
+  /** pass: the carried evidence the reconciliation covered; any change resets the gate. */
+  covered?: GateCoverage;
+  note?: string;
+};
 
 export type CarryManifest = {
   run: string;
@@ -209,6 +246,8 @@ export type CarryManifest = {
   selection_rule?: { version: number; terms: string[]; match: string };
   /** Every rule version up to the one in force, each with the reason it exists. */
   rule_revisions?: SelectionRule[];
+  /** The rule that withheld members of the public from the carried items. */
+  redaction_rule?: { version: number; rule: string };
   /** Keyed `claim:<claim id>`. */
   gates?: Record<string, Gate>;
   documents: CarriedDocument[];
@@ -270,11 +309,20 @@ export function seatRefusalFor(probes: readonly SeatProbe[], url: string, now: D
   return probes
     .filter((probe) => {
       if (probe.url !== url || probe.outcome !== 'refused') return false;
+      // The tool's own request must be this page, by the pinned seat, model and tool.
+      if (normaliseToolUrl(probe.tool_url) !== url) return false;
+      const pinned = SEAT_MODELS[probe.seat];
+      if (!pinned || probe.model !== pinned.model || probe.tool !== pinned.tool) return false;
       if (probe.http_status == null && !(typeof probe.raw_error === 'string' && probe.raw_error.trim())) return false;
       const at = Date.parse(probe.probed_at);
       return !Number.isNaN(at) && at <= now.getTime() && now.getTime() - at <= MAX_PROBE_AGE_HOURS * 3_600_000;
     })
     .sort((a, b) => b.probed_at.localeCompare(a.probed_at))[0];
+}
+
+/** A tool's own request URL, with the `%26` some web tools write for `&` restored. */
+export function normaliseToolUrl(url: string | null | undefined): string {
+  return (url ?? '').replace(/%26/gi, '&');
 }
 
 function loadRegistry(repoRoot: string): Map<string, RegistryEntry> {
@@ -368,8 +416,6 @@ type BuildOptions = {
   docs?: Array<{ id: string; meetingPage: string }>;
   /** Registry ids of eScribe meeting pages to carry as minutes items. */
   minutes?: string[];
-  /** Claim ids that need a gate before the package can run. */
-  gates?: string[];
   /** Selection rule version; the latest when absent. */
   ruleVersion?: number;
   rulesFile?: string;
@@ -530,50 +576,35 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
         : `refused the ${row.eligibility.seat} seat's ${row.eligibility.tool} at ${row.eligibility.probed_at} (${row.eligibility.http_status ?? 'no status; raw error recorded'})`;
 
     if (kind === 'minutes-items') {
-      let page;
+      let carriedPage: ReturnType<typeof carryMeetingPage>;
       try {
-        page = parseMeetingPage(bytes.toString('utf8'));
+        carriedPage = carryMeetingPage(bytes.toString('utf8'), rule!);
       } catch (error) {
         row.reason = `the archived page could not be read as an eScribe meeting page: ${(error as Error).message}`;
         continue;
       }
-      // The live page, when the fetcher can read it, must list the same items.
+      // The live page, when the fetcher can read it, must carry the same items, word for word.
       if (liveBody !== undefined) {
-        let liveIndex: string[] = [];
-        try {
-          liveIndex = parseMeetingPage(liveBody).items.map((item) => `${item.number} ${item.title}`);
-        } catch (error) {
-          liveIndex = [`(unreadable: ${(error as Error).message})`];
-        }
-        const archivedIndex = page.items.map((item) => `${item.number} ${item.title}`);
-        const same = JSON.stringify(liveIndex) === JSON.stringify(archivedIndex);
-        row.page_check = same
-          ? { result: 'pass', reason: `the live page lists the same ${archivedIndex.length} items, by number and title` }
-          : { result: 'fail', reason: 'the live page lists different items from the archived copy; the page has been revised' };
-        if (!same) {
-          row.reason = `${entry.url} has been revised since it was archived: its item index differs`;
+        const differing = changedItems(bytes.toString('utf8'), liveBody);
+        row.page_check =
+          differing.length === 0
+            ? { result: 'pass', reason: 'every item on the live page, with its motions and votes, matches the archived copy' }
+            : { result: 'fail', reason: `the live page differs from the archived copy at ${differing.slice(0, 10).join(', ')}; archive the page again` };
+        if (differing.length > 0) {
+          row.reason = `${entry.url} has changed since it was archived (${differing.slice(0, 10).join(', ')}); archive it again and rebuild`;
           continue;
         }
       } else {
         row.page_check = { result: 'not compared', reason: `the fetcher cannot read the live page (HTTP ${row.probe.http_status})` };
       }
-      const text = carriedPageText(page, rule!);
+      const { text, layout, items } = carriedPage;
       mkdirSync(textDir, { recursive: true });
       const textFile = path.join(textDir, `${id}.txt`);
       writeFileSync(textFile, text);
-      row.layout = page.layout;
+      row.layout = layout;
       row.rule_version = rule!.version;
-      row.items = page.items.map((item) => {
-        const terms = matchedTerms(item, rule!);
-        return {
-          number: item.number,
-          title: item.title,
-          matched: terms.length > 0,
-          matched_terms: terms,
-          carried: terms.length > 0,
-          checker_reason: null,
-        };
-      });
+      row.redaction_version = REDACTION_RULE.version;
+      row.items = items.map((item) => ({ ...item, checker_reason: null }));
       row.extraction = {
         tool: 'scripts/panel/minutes-items.ts',
         version: `selection rule v${rule!.version}`,
@@ -669,10 +700,21 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
     keepHumanChecks(row, previousDocs.get(id));
   }
 
+  // Gates come from the run's committed gates.yaml, never from a flag.
+  const coverage = gateCoverage(documents, minutes.length > 0 ? rule!.version : null);
   const gates: Record<string, Gate> = {};
-  for (const claim of options.gates ?? []) {
-    const key = claim.startsWith('claim:') ? claim : `claim:${claim}`;
-    gates[key] = previous?.gates?.[key] ?? { result: 'pending', reviewer: null, reconciliation_file: null };
+  for (const claim of requiredGates(runDir)) {
+    const key = `claim:${claim}`;
+    const before = previous?.gates?.[key];
+    if (before?.result === 'parked') gates[key] = before;
+    else if (before?.result === 'pass' && JSON.stringify(before.covered) === JSON.stringify(coverage)) gates[key] = before;
+    else {
+      gates[key] = { result: 'pending', reviewer: null, reconciliation_file: null };
+      if (before?.result === 'pass') gates[key].note = 'reset: the carried evidence changed since the gate passed';
+    }
+  }
+  for (const claim of requiredGates(runDir)) {
+    if (!gates[`claim:${claim}`]) throw new Error(`gates.yaml requires a gate for ${claim} and the manifest has none`);
   }
 
   const manifest: CarryManifest = {
@@ -683,6 +725,7 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
       ? {
           selection_rule: { version: rule!.version, terms: rule!.terms, match: SELECTION_MATCH },
           rule_revisions: rules.slice(0, ruleVersion),
+          redaction_rule: { version: REDACTION_RULE.version, rule: REDACTION_RULE.rule },
         }
       : {}),
     ...(Object.keys(gates).length > 0 ? { gates } : {}),
@@ -695,6 +738,102 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
     `# Carry manifest (methodology v1.41, v1.42). Committed; the extracted text never is.\n# Items are selected only by the published rule; there is no way to add one by hand.\n${YAML.stringify(manifest, { lineWidth: 0 })}`,
   );
   return manifest;
+}
+
+/**
+ * A meeting page as it is carried: members of the public withheld, the rule
+ * applied to every item, the header and matched items as text. Build and
+ * package time both use this, so the package can regenerate what the build
+ * wrote and compare.
+ */
+export function carryMeetingPage(html: string, rule: SelectionRule) {
+  const page = parseMeetingPage(html);
+  const items = page.items.map((item) => {
+    const terms = matchedTerms(item, rule);
+    return { number: item.number, title: item.title, matched: terms.length > 0, matched_terms: terms, carried: terms.length > 0, withheld: item.withheld };
+  });
+  return { layout: page.layout, text: carriedPageText(page, rule), items };
+}
+
+/** Items whose full published content differs between two copies of a meeting page, by number. */
+export function changedItems(archivedHtml: string, liveHtml: string): string[] {
+  const contents = (html: string) => {
+    try {
+      return parseMeetingPage(html, { withhold: false }).items.map((item) => ({ number: item.number, text: item.text.replace(/\s+/g, ' ').trim() }));
+    } catch (error) {
+      return [{ number: `(unreadable: ${(error as Error).message})`, text: '' }];
+    }
+  };
+  const archived = contents(archivedHtml);
+  const live = contents(liveHtml);
+  const differing: string[] = [];
+  for (let index = 0; index < Math.max(archived.length, live.length); index += 1) {
+    const a = archived[index];
+    const b = live[index];
+    if (!a || !b || a.number !== b.number || a.text !== b.text) differing.push(`item ${a?.number ?? b?.number ?? index + 1}`);
+  }
+  return differing;
+}
+
+/** The claims <run>/carried/gates.yaml says need a gate; none when the file is absent. */
+export function requiredGates(runDir: string): string[] {
+  const file = path.join(runDir, 'carried', 'gates.yaml');
+  if (!existsSync(file)) return [];
+  const claims = (loadYaml<{ claims?: unknown }>(file) ?? {}).claims;
+  if (!Array.isArray(claims) || claims.some((c) => typeof c !== 'string' || !c.trim())) {
+    throw new Error(`${file}: claims must be a list of claim ids`);
+  }
+  return claims as string[];
+}
+
+/** What a gate's reconciliation covered: the rule version and every carried meeting page's hashes. */
+export function gateCoverage(documents: readonly CarriedDocument[], ruleVersion: number | null): GateCoverage {
+  return {
+    rule_version: ruleVersion,
+    pages: documents
+      .filter((doc) => doc.status === 'carried' && doc.kind === 'minutes-items')
+      .map((doc) => ({ registry_id: doc.registry_id, archive_sha256: doc.archive!.sha256, text_sha256: doc.extraction!.text_sha256 }))
+      .sort((a, b) => a.registry_id.localeCompare(b.registry_id)),
+  };
+}
+
+/**
+ * Why a reconciliation file cannot back a passed gate; empty when it can. It
+ * must be tracked by git, sit under <run>/carried/, and hold a non-empty YAML
+ * list of votes, each with meeting, item, motion, result and a per-member
+ * vote map.
+ */
+export function reconciliationProblems(repoRoot: string, runDir: string, file: string | null | undefined): string[] {
+  if (!file) return ['no reconciliation file named'];
+  const absolute = realish(path.resolve(repoRoot, file));
+  const carriedDir = realish(path.join(runDir, 'carried'));
+  if (path.isAbsolute(file) || !absolute.startsWith(carriedDir + path.sep)) return [`${file} is not inside ${path.relative(realish(repoRoot), carriedDir)}`];
+  if (!existsSync(absolute)) return [`${file} does not exist`];
+  try {
+    execFileSync('git', ['-C', repoRoot, 'ls-files', '--error-unmatch', '--', path.relative(realish(repoRoot), absolute)], { stdio: 'ignore' });
+  } catch {
+    return [`${file} is not tracked by git`];
+  }
+  let votes: unknown;
+  try {
+    votes = YAML.parse(readFileSync(absolute, 'utf8'));
+  } catch (error) {
+    return [`${file} is not YAML: ${(error as Error).message}`];
+  }
+  if (!Array.isArray(votes) || votes.length === 0) return [`${file} must be a non-empty list of votes`];
+  const problems: string[] = [];
+  votes.forEach((vote, index) => {
+    const v = (vote ?? {}) as Record<string, unknown>;
+    for (const field of ['meeting', 'item', 'motion', 'result']) {
+      if (typeof v[field] !== 'string' || !(v[field] as string).trim()) problems.push(`${file}: vote ${index + 1} has no ${field}`);
+    }
+    const members = v.votes;
+    if (!members || typeof members !== 'object' || Array.isArray(members) || Object.keys(members).length === 0 ||
+        Object.values(members).some((value) => typeof value !== 'string' || !value.trim())) {
+      problems.push(`${file}: vote ${index + 1} needs a per-member votes map`);
+    }
+  });
+  return problems;
 }
 
 /** True for a YYYY-MM-DD or ISO timestamp that parses and is not after `now`. */
@@ -736,12 +875,21 @@ export function packageRefusals(manifest: CarryManifest, context: PackageContext
   }
   const textDir = realish(carriedTextDir(realish(repoRoot), runDir));
 
+  for (const claim of requiredGates(runDir)) {
+    if (!manifest.gates?.[`claim:${claim}`]) refusals.push(`gate claim:${claim} is required by gates.yaml and missing from the manifest`);
+  }
+  const coverage = gateCoverage(manifest.documents, manifest.selection_rule?.version ?? null);
   for (const [name, gate] of Object.entries(manifest.gates ?? {})) {
     if (!gate || gate.result === 'pending') refusals.push(`gate ${name} is pending`);
     else if (gate.result === 'pass') {
       if (!gate.reviewer) refusals.push(`gate ${name} passed with no reviewer named`);
-      if (!gate.reconciliation_file || !existsSync(path.resolve(repoRoot, gate.reconciliation_file))) {
-        refusals.push(`gate ${name} passed without its reconciliation file in the repository`);
+      const problems = reconciliationProblems(repoRoot, runDir, gate.reconciliation_file);
+      if (problems.length > 0) refusals.push(...problems.map((problem) => `gate ${name}: ${problem}`));
+      else if (sha256(readFileSync(path.resolve(repoRoot, gate.reconciliation_file!))) !== gate.reconciliation_sha256) {
+        refusals.push(`gate ${name}: the reconciliation file has changed since the gate passed`);
+      }
+      if (JSON.stringify(gate.covered) !== JSON.stringify(coverage)) {
+        refusals.push(`gate ${name}: the carried evidence has changed since the gate passed; rebuild and pass it again`);
       }
     } else if (gate.result === 'parked') {
       if (!gate.reviewer) refusals.push(`gate ${name} parked with no reviewer named`);
@@ -802,6 +950,10 @@ export function packageRefusals(manifest: CarryManifest, context: PackageContext
         refusals.push(`${id}: items ${inconsistent.map((i) => i.number).join(', ')} are carried differently from the rule; items change only by a rule revision`);
       }
       if (doc.page_check?.result === 'fail' || !doc.page_check) refusals.push(`${id}: the live page check did not pass`);
+      if (doc.redaction_version !== REDACTION_RULE.version) {
+        refusals.push(`${id}: members of the public were withheld under rule v${doc.redaction_version ?? '?'}, the current rule is v${REDACTION_RULE.version}; rebuild`);
+      }
+      refusals.push(...regenerationProblems(doc, context));
     } else {
       const check = doc.extraction_check;
       if (!check || check.result === 'pending') refusals.push(`${id}: extraction check not done`);
@@ -840,6 +992,42 @@ export function packageRefusals(manifest: CarryManifest, context: PackageContext
     }
   }
   return refusals;
+}
+
+/**
+ * A minutes-items page regenerated from its registry-verified archive under
+ * the manifest's rule version, compared with the manifest: the carried text,
+ * its hash and the full item index (number, title, matched, matched terms,
+ * carried, withheld) must all be exactly what the build recorded.
+ */
+function regenerationProblems(doc: CarriedDocument, context: PackageContext): string[] {
+  const id = doc.registry_id;
+  const entry = loadRegistry(context.repoRoot).get(id);
+  const archivePath = entry?.archive?.path ? path.join(context.repoRoot, entry.archive.path) : '';
+  if (!entry || !archivePath || !existsSync(archivePath)) return [`${id}: no registry-verified archive to regenerate the carried text from`];
+  const bytes = readFileSync(archivePath);
+  if (sha256(bytes) !== entry.archive?.sha256 || entry.archive?.sha256 !== doc.archive?.sha256) {
+    return [`${id}: the archive, the registry and the manifest do not agree on the page's SHA-256`];
+  }
+  const rule = selectionRules(context.rulesFile)[(doc.rule_version ?? 0) - 1];
+  if (!rule) return [`${id}: selection rule v${doc.rule_version ?? '?'} is not published`];
+  let regenerated: ReturnType<typeof carryMeetingPage>;
+  try {
+    regenerated = carryMeetingPage(bytes.toString('utf8'), rule);
+  } catch (error) {
+    return [`${id}: the archived page no longer reads as a meeting page: ${(error as Error).message}`];
+  }
+  const problems: string[] = [];
+  if (sha256(regenerated.text) !== doc.extraction?.text_sha256) problems.push(`${id}: the regenerated carried text does not match the manifest's text_sha256`);
+  const textFile = doc.extraction?.text_file ? path.resolve(context.repoRoot, doc.extraction.text_file) : '';
+  if (textFile && existsSync(textFile) && readFileSync(textFile, 'utf8') !== regenerated.text) {
+    problems.push(`${id}: the carried text file is not the text the rule selects from the archived page`);
+  }
+  const recorded = (doc.items ?? []).map(({ checker_reason: _reason, ...rest }) => rest);
+  if (JSON.stringify(recorded) !== JSON.stringify(regenerated.items) || doc.layout !== regenerated.layout) {
+    problems.push(`${id}: the item index does not match the one the rule gives for the archived page`);
+  }
+  return problems;
 }
 
 /**
@@ -964,6 +1152,8 @@ export function renderCarriedSection(manifest: CarryManifest, repoRoot: string):
       '',
       `Selection rule, version ${rule.version}: an item is carried when its number, title or text contains any of these terms (${rule.match}): ${rule.terms.map((t) => `"${t}"`).join(', ')}.`,
       '',
+      `Names of members of the public in these items were withheld and replaced with "[member of the public]" (redaction rule version ${manifest.redaction_rule?.version ?? '?'}); motions, movers, seconders, votes, results and office-holders are as the City published them.`,
+      '',
       'If you think a relevant item is missing from a page, name the meeting and the item, and say so in `limitations`. Agendas show what was scheduled; minutes are the record of decisions and votes.',
       '',
     );
@@ -1013,7 +1203,7 @@ function parseBuildArgs(args: string[]): BuildOptions {
   const runDir = positional[0];
   if (!runDir) throw new Error('build needs a run directory');
   for (const key of values.keys()) {
-    if (!['--doc', '--minutes', '--gate', '--rule-version', '--exclude'].includes(key)) throw new Error(`unknown option ${key}`);
+    if (!['--doc', '--minutes', '--rule-version', '--exclude'].includes(key)) throw new Error(`unknown option ${key}`);
   }
   const docs = (values.get('--doc') ?? []).map((value) => {
     const at = value.indexOf('=');
@@ -1030,7 +1220,7 @@ function parseBuildArgs(args: string[]): BuildOptions {
   const ruleVersion = versionArg === undefined ? undefined : Number(versionArg);
   if (ruleVersion !== undefined && !(Number.isInteger(ruleVersion) && ruleVersion > 0)) throw new Error('--rule-version takes a whole number');
   if (docs.length === 0 && minutes.length === 0) throw new Error('build needs at least one --doc or --minutes');
-  return { runDir, docs, minutes, gates: values.get('--gate') ?? [], ruleVersion, exclusions };
+  return { runDir, docs, minutes, ruleVersion, exclusions };
 }
 
 function refuse(heading: string, refusals: string[]): never {
@@ -1067,6 +1257,33 @@ async function main(): Promise<void> {
     process.stdout.write(renderCarriedSection(manifest, REPO_ROOT));
     return;
   }
+  if (command === 'pass-gate') {
+    const { positional, values } = flags(rest);
+    const manifestPath = positional[0];
+    const claim = values.get('--claim')?.[0];
+    const reviewer = values.get('--reviewer')?.[0];
+    const reconciliation = values.get('--reconciliation')?.[0];
+    if (!manifestPath || !claim || !reviewer || !reconciliation) throw new Error('pass-gate needs <manifest> --claim --reviewer --reconciliation');
+    const absoluteManifest = path.resolve(manifestPath);
+    const runDir = path.dirname(path.dirname(absoluteManifest));
+    const manifest = loadYaml<CarryManifest>(absoluteManifest);
+    const key = `claim:${claim}`;
+    if (!manifest.gates?.[key]) throw new Error(`the manifest has no gate ${key}; list the claim in gates.yaml and rebuild`);
+    const file = path.relative(REPO_ROOT, path.resolve(reconciliation));
+    const problems = reconciliationProblems(REPO_ROOT, runDir, file);
+    if (problems.length > 0) refuse('the reconciliation file cannot back a passed gate:', problems);
+    manifest.gates[key] = {
+      result: 'pass',
+      reviewer,
+      reconciliation_file: file,
+      reconciliation_sha256: sha256(readFileSync(path.resolve(REPO_ROOT, file))),
+      covered: gateCoverage(manifest.documents, manifest.selection_rule?.version ?? null),
+    };
+    const header = readFileSync(absoluteManifest, 'utf8').split('\n').filter((line) => line.startsWith('#')).join('\n');
+    writeFileSync(absoluteManifest, `${header}\n${YAML.stringify(manifest, { lineWidth: 0 })}`);
+    console.error(`gate ${key} passed, bound to rule v${manifest.gates[key].covered!.rule_version} and ${manifest.gates[key].covered!.pages.length} carried pages`);
+    return;
+  }
   if (command === 'check-rows') {
     const { positional, values } = flags(rest);
     const round = Number(values.get('--round')?.[0]);
@@ -1083,7 +1300,8 @@ async function main(): Promise<void> {
     return;
   }
   console.error(
-    'usage: carry-manifest.ts build <run dir> [--doc <id>=<meeting page>] [--minutes <id>] [--gate claim:<id>] [--rule-version <n>] [--exclude <what>::<reason>]\n' +
+    'usage: carry-manifest.ts build <run dir> [--doc <id>=<meeting page>] [--minutes <id>] [--rule-version <n>] [--exclude <what>::<reason>]\n' +
+      '       carry-manifest.ts pass-gate <run>/carried/manifest.yaml --claim <id> --reviewer <who> --reconciliation <file>\n' +
       '       carry-manifest.ts package <run>/carried/manifest.yaml --run <run dir> [--probed-at-out <file>]\n' +
       '       carry-manifest.ts check-rows --round <n> --section-sha256 <hex> --probed-at <time> <run.yaml>...',
   );

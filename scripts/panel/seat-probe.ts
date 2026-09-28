@@ -14,21 +14,22 @@
  * committed: URL, seat, model, tool, CLI version, UTC time, the outcome, the
  * HTTP status when the tool reports one, and the tool's raw error text.
  *
- * What counts as a refusal, and why:
+ * What counts as a refusal, and why. Only failure metadata the tool itself
+ * emits is read: a status code or an error field. Page titles, snippets and
+ * the model's own words are never read, because a page that opened can talk
+ * about errors too.
  *   - Claude's WebFetch reports the HTTP status of its request (`code` on the
- *     tool result). A status of 400 or above is a refusal, with the tool's
- *     message as the raw error text.
- *   - Codex's web tool reports no status. Its `open_page` action returns result
- *     entries with a title and a snippet; when those read as an error page
- *     ("Internal Error", "Forbidden", "Access denied", a verification page),
- *     the outcome is a refusal with no status, and the result entries are
- *     recorded verbatim as the raw error text. Anything else is `fetched` or,
- *     when no result came back at all, `unclear`.
+ *     tool result). A status of 400 or above is a refusal; so is a tool result
+ *     the CLI marks `is_error`. The tool's failure message is kept, cut to
+ *     300 characters.
+ *   - Codex's `open_page` action carries no status or error field in the
+ *     current CLI. A refusal needs one (`status`, `status_code`, `http_status`
+ *     or `error` on the item); without it the outcome is `unclear`, which
+ *     never qualifies. In practice only the Claude seat can show a refusal.
  *   - A seat that never called its web tool for the URL is `no-tool-call`.
  * Only `refused` counts toward eligibility, and only with either an HTTP
- * status or non-empty raw error text (carry-manifest.ts, seatRefusalFor).
- * The model's own words are never the evidence: a status the model reports in
- * prose is not read.
+ * status or the tool's failure message (carry-manifest.ts, seatRefusalFor),
+ * and only when the tool's own request URL is the page's URL.
  *
  * The probe sends only the URL and a one-line instruction, so it runs without
  * the capture proxy that research runs need. It keeps the CLIs away from local
@@ -69,8 +70,8 @@ export type SeatProbe = {
 
 type Classified = Pick<SeatProbe, 'outcome' | 'http_status' | 'tool_url' | 'raw_error'>;
 
-const RAW_LIMIT = 4000;
-const ERROR_PAGE = /\b(internal error|forbidden|access denied|denied|blocked|unavailable|not available|just a moment|verif(y|ying) (you|your browser)|attention required|error \d{3})\b/i;
+/** A committed probe keeps at most this much of a tool's failure message, and never page text. */
+export const RAW_LIMIT = 300;
 
 const jsonLines = (stdout: string): Record<string, any>[] =>
   stdout.split('\n').flatMap((line) => {
@@ -96,15 +97,16 @@ export function classifyClaudeStream(stdout: string): Classified {
     for (const block of event.message?.content ?? []) {
       if (block?.type !== 'tool_result' || !calls.has(block.tool_use_id)) continue;
       const meta = event.tool_use_result ?? {};
-      const content = typeof block.content === 'string' ? block.content : JSON.stringify(block.content ?? '');
+      const content = typeof block.content === 'string' ? block.content : '';
       const status = typeof meta.code === 'number' ? meta.code : null;
       const toolUrl = calls.get(block.tool_use_id) ?? null;
+      // On a failure the tool's result is its own error message; on success it is page text and is not kept.
       if (status !== null && status >= 400) {
         return { outcome: 'refused', http_status: status, tool_url: toolUrl, raw_error: String(meta.result ?? content).slice(0, RAW_LIMIT) };
       }
-      if (status !== null && status < 400) return { outcome: 'fetched', http_status: status, tool_url: toolUrl, raw_error: null };
-      if (block.is_error) return { outcome: 'refused', http_status: null, tool_url: toolUrl, raw_error: content.slice(0, RAW_LIMIT) };
-      return { outcome: 'unclear', http_status: null, tool_url: toolUrl, raw_error: content.slice(0, RAW_LIMIT) };
+      if (status !== null) return { outcome: 'fetched', http_status: status, tool_url: toolUrl, raw_error: null };
+      if (block.is_error === true) return { outcome: 'refused', http_status: null, tool_url: toolUrl, raw_error: content.slice(0, RAW_LIMIT) };
+      return { outcome: 'unclear', http_status: null, tool_url: toolUrl, raw_error: null };
     }
   }
   return { outcome: 'unclear', http_status: null, tool_url: [...calls.values()][0] ?? null, raw_error: null };
@@ -117,18 +119,16 @@ export function classifyCodexStream(stdout: string): Classified {
     .filter((item) => item?.type === 'web_search' && item.action?.type === 'open_page');
   if (opens.length === 0) return { outcome: 'no-tool-call', http_status: null, tool_url: null, raw_error: null };
   const item = opens.at(-1)!;
-  const results = Array.isArray(item.results) ? item.results : [];
-  const raw = JSON.stringify(results.map((r: any) => ({ title: r?.title ?? null, snippet: r?.snippet ?? null, domain: r?.domain ?? null })));
   const toolUrl = String(item.action.url ?? '');
-  const text = results.map((r: any) => `${r?.title ?? ''} ${r?.snippet ?? ''}`).join('\n');
-  const status = /\b(?:HTTP|status(?: code)?|error)\s*(4\d\d|5\d\d)\b/i.exec(text)?.[1];
-  if (status) return { outcome: 'refused', http_status: Number(status), tool_url: toolUrl, raw_error: raw.slice(0, RAW_LIMIT) };
-  if (results.length === 0) return { outcome: 'unclear', http_status: null, tool_url: toolUrl, raw_error: raw };
-  const first = results[0] ?? {};
-  if (ERROR_PAGE.test(String(first.title ?? ''))) {
-    return { outcome: 'refused', http_status: null, tool_url: toolUrl, raw_error: raw.slice(0, RAW_LIMIT) };
+  const statusField = [item.status, item.status_code, item.http_status, item.action?.status].find((v) => typeof v === 'number');
+  const errorField = [item.error, item.action?.error].find((v) => typeof v === 'string' && v.trim());
+  if (typeof statusField === 'number' && statusField >= 400) {
+    return { outcome: 'refused', http_status: statusField, tool_url: toolUrl, raw_error: typeof errorField === 'string' ? errorField.slice(0, RAW_LIMIT) : null };
   }
-  return { outcome: 'fetched', http_status: null, tool_url: toolUrl, raw_error: null };
+  if (typeof errorField === 'string') return { outcome: 'refused', http_status: null, tool_url: toolUrl, raw_error: errorField.slice(0, RAW_LIMIT) };
+  if (typeof statusField === 'number') return { outcome: 'fetched', http_status: statusField, tool_url: toolUrl, raw_error: null };
+  // No failure metadata from the tool: whatever the result entries say, the outcome is unclear.
+  return { outcome: 'unclear', http_status: null, tool_url: toolUrl, raw_error: null };
 }
 
 const PROMPT = (url: string) =>
@@ -186,7 +186,7 @@ export function probeSeat(seat: SeatName, url: string, now = () => new Date()): 
         outcome: 'cli-failed',
         http_status: null,
         tool_url: null,
-        raw_error: String(result.error?.message ?? result.stderr ?? '').slice(0, RAW_LIMIT),
+        raw_error: String(result.error?.message ?? 'the CLI exited without output').slice(0, RAW_LIMIT),
       };
     }
     return { ...base, ...(cli === 'claude' ? classifyClaudeStream(result.stdout) : classifyCodexStream(result.stdout)) };

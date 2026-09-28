@@ -39,6 +39,7 @@ describe('carried-document label', () => {
     ['a missing archive hash', { archive: {} }],
     ['an archive hash that is not 64 hex', { archive: { sha256: 1234 } }],
     ['a minutes-items row with no rule version', { kind: 'minutes-items' }],
+    ['an unknown kind', { kind: 'minutes-item' }],
   ])('fails loudly on a carried row with %s', (_label, override) => {
     const dir = mkdtempSync(path.join(tmpdir(), 'yegfacts-carried-label-'));
     try {
