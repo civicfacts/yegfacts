@@ -393,3 +393,20 @@ as the claim whose test needs every recorded vote, so the package cannot
 pass while its vote reconciliation is pending. If that set cannot be
 established or does not fit the 400 KB seat budget, claim 4 is parked for
 the run and the run proceeds with claims 1 to 3.
+
+**The carry manifest, built with its checks pending.** Under rule v1 the
+manifest carries the four v1.41 documents and thirteen eScribe meeting
+pages as selected items: the committee agenda and minutes of 2026-08-26,
+the Council and Executive Committee minutes the brief names for claim 1,
+and every meeting in the claim 4 floor list, including the 2022-11-30
+budget minutes (YF-EV-0204). Each page qualifies because the Claude
+seat's WebFetch was refused there with HTTP 403 in
+`carried/seat-probes.yaml`; the two GPT-6 seats' probes are unclear, as
+v1.42 expects, and do not count. The site's fetcher read every meeting
+page and, this time, report IS03688 too, so that report is also carried
+on the seat-refusal ground. The October 6 agenda (YF-EV-0221), the open
+data about page (YF-EV-0224), the item-view duplicates of three minutes
+pages and Attachment 3 are excluded, each with its reason in the
+manifest. The completeness check, the personal-information screens, the
+meeting pages' provenance and public-open checks, and the claim-4 gate
+are pending; round 1 does not launch until they pass.
