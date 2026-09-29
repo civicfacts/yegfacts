@@ -14,7 +14,11 @@ framing finding, and named four further ladder defects, each with exact
 replacement wording; under v1.20 the editor applied each in the checker's
 wording, recorded each against the finding it answers
 (`framing/response-4.md`), and the brief froze. There is no fifth report.
-All four claims go to the panel. Drafted 2026-09-25 by Stew from the register entries for
+All four claims go to the panel. Revised once after the freeze, on 2026-09-29, under
+methodology v1.2 (a framing concern from the panel is answered by revising
+the brief and rerunning round 1): the definition of "expressly defers
+construction or advancement" now says which text it is read against, and
+claim 1's ladder reads the same text. Nothing else changed. Drafted 2026-09-25 by Stew from the register entries for
 `council-pause-vote` and from archived copies of the City's meeting records
 and report IS03688; no fact in it comes from memory or from a search
 result. Methodology v1.40. Question id: `council-pause-vote`. Register
@@ -297,9 +301,10 @@ the report, came before Council and what was done with it; and report
 IS03688 for the text of R.
 
 **Verdict ladder.** First establish, from the operative version of
-Attachment 5 under claim 2's rules, whether R proposed a hold: whether the
-recommended approach expressly defers construction or advancement of the
-routes listed apart until a further evaluation, report or decision. Then
+Attachment 5, read with the rest of report IS03688 as claim 2's rules
+fix, whether R proposed a hold: whether the recommended approach expressly
+defers construction or advancement of the routes listed apart until a
+further evaluation, report or decision. Then
 read the minutes of the committee and of every Council meeting to the
 as-of date, and classify.
 
@@ -413,9 +418,15 @@ differs between versions the finding is version-sensitive, the story says
 so beside the verdict, and neither side can cite the verdict without that
 qualification.
 
-**"Expressly defers construction or advancement", fixed here.** Primary
-reading: the recommended approach, in the operative version, expressly
-defers construction or advancement of the listed routes until a further
+**"Expressly defers construction or advancement", fixed here.** The
+recommended approach is what report IS03688 recommends, read as a whole:
+Recommendation 1, the report's own text on timing and next steps, and its
+attachments, with Attachment 5 in the operative version. "Expressly" means
+the report's text says it; the passages that say it may be in different
+parts of the report, and reviewers quote each passage they rely on. A
+reading that needs an inference beyond what the text says does not meet
+it. Primary reading: the recommended approach, so read, expressly defers
+construction or advancement of the listed routes until a further
 evaluation, report or decision. Re-evaluation, evaluation for trade-offs
 or a report back, on their own, do not meet it unless the text says the
 routes wait for that step; a hold with no end date meets it, and no stated
