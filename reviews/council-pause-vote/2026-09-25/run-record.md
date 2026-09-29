@@ -660,3 +660,61 @@ Under the brief and the method, a framing concern stops synthesis until
 the brief is revised or the concern is answered. That decision belongs to
 the editor. The answers stay in `round1/` and `round2/` with their rows
 in `run.yaml`.
+
+## 2026-09-29: the brief revised after the framing concern; rounds superseded
+
+**The editor found the round-2 framing concern real, revised the brief
+under methodology v1.2, and round 1 runs again on the revised brief.**
+Methodology v1.2 answers a framing concern from the panel by revising
+the brief and rerunning round 1, as the cycling-volumes, infill and
+low-density-history runs did. This is not a framing check, and the
+framing-check cap does not apply.
+
+**The concern.** In round 2 the Claude seat kept claim 2 at Partially
+supported and said the brief's test decided that verdict. Version 2 of
+Attachment 5 says the routes it lists apart will be evaluated and
+reported on in Q1 2027 for Council direction and approval, while the
+report says construction not yet started is best postponed to 2027 and
+Attachment 3 says tendered routes may be delayed or removed pending the
+report. Read together, the seat said, the routes wait for Council; but the
+brief applied its "expressly defers" test to Attachment 5 alone, which
+excludes that reading and is what separates Partially supported from
+Supported.
+
+**The editor's reason.** The brief listed the report's Recommendation and
+Next Step as the instrument, but applied the "expressly defers" test
+to Attachment 5 alone. That ambiguity decides Supported against Partially
+supported for claim 2, and for claim 1 through it, because claim 1's
+ladder asks first whether the recommendation proposed a hold.
+
+**The revision.** Two passages changed, plus a status note, and nothing
+else. The definition of "expressly defers construction or advancement"
+now reads the recommended approach as report IS03688 as a whole:
+Recommendation 1, the report's own text on timing and next steps, and its
+attachments, with Attachment 5 in its operative version. "Expressly"
+still means the report's text says it; the passages may be in different
+parts of the report, reviewers quote each one, and a reading that needs an
+inference beyond the text does not meet it. Claim 1's ladder reads the
+same text. The brief's sha256 was
+`c0f504b3d6a7ac303abb8f724eda9b415275f13c8e365bc34657da0136b09687` and
+is now `fb0f29b1bc15ee5408b0204d8a396dcaa45c468f2f16227aa7a325df4ba4443d`
+(commit 0118b6a). Nothing about any seat's answers went into the brief,
+so the rerun stays blind.
+
+**What moved.** Round 1 and round 2 of 2026-09-29, their rows in
+`run.yaml`, the merge (`combined-evidence.json`, `disagreements.json`),
+the fetch report and a copy of the carry manifest they ran on move
+unchanged to `superseded-2026-09-29/`. Their answers are to the earlier
+brief and are not an input to the rerun: no seat sees them, and the merge
+and synthesis read only the new rounds. `run.yaml` starts again with no
+rows.
+
+**The carried set.** Every carried URL was probed again through all three
+seats from 2026-09-29T23:23:28Z: the Claude seat's WebFetch was refused
+with HTTP 403 at all 19, and the GPT-6 seats' probes were unclear. The
+rebuilt manifest has the same documents, archive and text hashes, item
+indexes, checks, gate and exclusions as before. The only change the
+revised brief makes to it is the brief line number each document's
+naming is recorded at. Nothing in the carry tooling keys on the brief's
+hash: it reads the brief only to confirm that each carried document's
+URL is named in it.
