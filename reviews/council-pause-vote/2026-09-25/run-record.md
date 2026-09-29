@@ -584,3 +584,79 @@ Every other document's archive, text, item index and checks are
 unchanged, and claim 4 stays parked. YF-EV-0227's completeness check and
 personal-information screen are pending, and the package refuses to
 assemble until someone other than the editor makes them.
+
+## 2026-09-29: rounds 1 and 2 under methodology v1.42, stopped on a framing concern
+
+**Both rounds ran on all three seats, and the run stops before synthesis
+because the Claude seat raised a MATERIAL FRAMING CONCERN in round 2 on
+claim 2.** Every seat answered claims 1 to 3 Partially supported in both
+rounds. Claim 4 was parked for the run under its gate and no seat
+answered it. `scripts/synthesize.ts` halts on the concern and wrote
+nothing. No verdict below is a finding of this site.
+
+**The checks.** After the independent checker passed YF-EV-0227
+(`carried/checks/completeness-0227.yaml` and `check-0227.md`), its item
+reasons, completeness check and personal-information screen went into the
+manifest, which was committed at dd8d16c. All three seats launched from
+that commit.
+
+**Round 1.** The package's earliest probe was the Claude seat's refusal
+at 2026-09-29T22:47:26Z. The carried section's sha256 was
+`da1fa193d84fd3ad1e24902b6e4153b2ea76494b77c099a3909c651f29015a22` and
+the package's
+`08fc784a340719e7c0cf2a12a7f93e655628a68ecf1161c030c69b6e49881e9e`, the
+same for every seat. The runner refused nothing.
+
+| Seat | Attempt | Outcome |
+|---|---|---|
+| Claude Opus 5.5 (`claude-opus-5-5`), high, Claude Code 2.1.285 | `eb8ebfb5d1a60f24`, 22:55Z to 23:02Z | admitted on one attempt under claude-safe-web-candidate-2.1.285 |
+| GPT-6 Sol (`gpt-6-sol`), high, codex-cli 0.159.0 | `1642738e69cfc73d`, 22:55Z to 23:04Z | admitted on one attempt |
+| GPT-6 Luna (`gpt-6-luna`), high, codex-cli 0.159.0 | `3e3f0e8ebc1eeffb`, 22:55Z to 23:02Z | admitted on one attempt |
+
+No seat raised a framing concern in round 1 or wrote that an essential
+source was inaccessible. The seats named as limitations the records the
+editor had ruled not essential: the September public hearings, the
+October 6 agenda, the portal calendar and the capital profile and
+budget-adjustment attachments. The Claude seat also could not open a City
+project page that a news report cites; it treated that report as a lead
+only. The merge found 14 distinct sources and no contested claim
+(`combined-evidence.json`, `disagreements.json`); evidence staging
+archived 8 and not the 6 portal file downloads (`fetch-report.md`).
+
+**Round 2.** Before round 2 every carried URL was probed again through
+all three seats, from 2026-09-29T23:05:50Z; the Claude seat's WebFetch was
+refused with HTTP 403 at all 19 and the GPT-6 seats' probes were unclear.
+The rebuilt manifest, committed at 2e52ee7, has the same hashes, checks,
+item indexes, gate and exclusions as round 1's, and the same carried
+section, sha256 `da1fa193d84f…`. Its earliest probe was 23:06:10Z. All
+three seats launched from 2e52ee7 at 23:09:23Z and each was admitted on
+one attempt: Claude `60ab218c56c14d23` (to 23:14Z), GPT-6 Sol
+`5612f3846cb27d57` (to 23:18Z) and GPT-6 Luna `c5e932bc24cc8aa8` (to
+23:16Z).
+
+| Claim | Claude, round 1 / 2 | GPT-6 Sol, round 1 / 2 | GPT-6 Luna, round 1 / 2 |
+|---|---|---|---|
+| `council-rejected-pause` | Partially supported, high / moderate | Partially supported, moderate / moderate | Partially supported, moderate / moderate |
+| `administration-recommended-freezing-14-routes` | Partially supported, moderate / moderate | Partially supported, moderate / moderate | Partially supported, moderate / moderate |
+| `motions-to-cut-budget-to-50-million-failed` | Partially supported, moderate / moderate | Partially supported, high / moderate | Partially supported, moderate / moderate |
+| `same-seven-councillors-vote-together` | parked, not asked | parked, not asked | parked, not asked |
+
+**The concern.** In round 2 the Claude seat kept claim 2 at Partially
+supported and raised a MATERIAL FRAMING CONCERN against the brief's
+express-deferral test. Version 2 of Attachment 5 says the routes that do
+not affect travel lanes or parking "will continue as planned" and that
+"the remaining routes" will be evaluated and reported on in Q1 2027 "for
+Council direction and approval". Read with the report's "best postponed to
+2027" and Attachment 3's footnote 2, which says tendered routes "may be
+delayed ... or removed ... pending this Council report", the seat reads
+the practical effect as the 14 routes not proceeding as planned until
+Council gives direction. The brief's requirement that the deferral be
+express excludes that implication, and the seat says that exclusion is
+what separates Partially supported from Supported. It asks that any story
+say Version 2 implies, but does not state, that the 14 wait. The concern
+rests on Attachment 3, which this round carried for the first time.
+
+Under the brief and the method, a framing concern stops synthesis until
+the brief is revised or the concern is answered. That decision belongs to
+the editor. The answers stay in `round1/` and `round2/` with their rows
+in `run.yaml`.
