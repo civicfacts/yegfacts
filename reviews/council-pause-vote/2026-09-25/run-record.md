@@ -373,3 +373,418 @@ Attachment 3 to carry. That is a methodology decision for the editor and
 the board, not one this run makes. The round 1 answers stay in `round1/`
 as returned, with their rows in `run.yaml`. A restart moves them under a
 superseded directory, as earlier runs did.
+
+## 2026-09-28: round 1 superseded; restart under methodology v1.42
+
+**The stopped round 1 is superseded, and round 1 runs again under v1.42
+(D-0047), which carries selected agenda items from the eScribe meeting
+pages the seats' tools cannot open.** The stopped round's answers
+(`round1/`), its rows in `run.yaml` and the v1.41 carry manifest it ran on
+(committed at 12e6cb7, sha256
+`e4942ba37610c47df142a6db9ce96d6fd3486e988b4af897b1025d49ebeeab12`) move
+unchanged to `superseded-2026-09-28/`, as `round1/`, `run.yaml` and
+`carried-manifest.yaml`. Their answers are to the v1.41 package and are
+kept for the record only; `run.yaml` starts again with no rows. The brief
+is unchanged and still frozen at
+`c0f504b3d6a7ac303abb8f724eda9b415275f13c8e365bc34657da0136b09687`.
+
+`carried/gates.yaml` lists claim 4, `same-seven-councillors-vote-together`,
+as the claim whose test needs every recorded vote, so the package cannot
+pass while its vote reconciliation is pending. If that set cannot be
+established or does not fit the 400 KB seat budget, claim 4 is parked for
+the run and the run proceeds with claims 1 to 3.
+
+**The carry manifest, built with its checks pending.** Under rule v1 the
+manifest carries the four v1.41 documents and thirteen eScribe meeting
+pages as selected items: the committee agenda and minutes of 2026-08-26,
+the Council and Executive Committee minutes the brief names for claim 1,
+and every meeting in the claim 4 floor list, including the 2022-11-30
+budget minutes (YF-EV-0204). Each page qualifies because the Claude
+seat's WebFetch was refused there with HTTP 403 in
+`carried/seat-probes.yaml`; the two GPT-6 seats' probes are unclear, as
+v1.42 expects, and do not count. The site's fetcher read every meeting
+page and, this time, report IS03688 too, so that report is also carried
+on the seat-refusal ground. The October 6 agenda (YF-EV-0221), the open
+data about page (YF-EV-0224), the item-view duplicates of three minutes
+pages and Attachment 3 are excluded, each with its reason in the
+manifest. The completeness check, the personal-information screens, the
+meeting pages' provenance and public-open checks, and the claim-4 gate
+are pending; round 1 does not launch until they pass.
+
+**Rule v2.** The independent completeness check of the v1 selection found
+four relevant items the rule missed: the Executive Committee's item 10.1
+of 2026-09-02 and Council's item 10.7 of 2026-07-07 (both Active
+Transportation Implementation motions), the re-stated main budget motions
+of 2022 (YF-EV-0204 item 15) and the vote on the Fall 2024 Supplemental
+Capital Budget Adjustment (YF-EV-0212 item 5.1.3). Selection rule v2 adds
+the terms "Active Transportation Implementation", "Capital Budget motion"
+and "Supplemental Capital Budget Adjustment Motion", and the manifest was
+rebuilt on every page under it. v2 carries exactly v1's items, the four
+missed ones and one more, YF-EV-0212 item 5.1, which holds the same
+adjustment motion as moved. The completeness check starts again on v2.
+On this rebuild the site's fetcher was refused at report IS03688 again,
+so every carried PDF now rests on the fetcher-challenge ground and the
+meeting pages on the Claude seat's refusals.
+
+## 2026-09-28: round 1 under methodology v1.42, held before round 2
+
+**Round 1 ran on all three seats with the carried minutes items, and the
+run is held there for the editor.** Every seat answered claims 1 to 3
+Partially supported. Claim 4 was parked before the round and no seat
+answered it. Several seats report City records they could not open that
+are not in the carried set, so no merge, round 2 or synthesis has run
+until the editor decides whether any of them is an essential source.
+
+**The checks.** An independent read-only Claude Opus 5.5 session, not the
+editor, read every item of every carried meeting page under rule v2 and
+found no relevant item uncarried, screened the carried text for personal
+information and found it clear, and regenerated every carried text to the
+manifest's hashes. Its files are in `carried/checks/`. The meeting pages'
+download provenance is the site's evidence fetcher on the registry's
+retrieval date. Their public-open check is the fetcher's HTTP 200 on the
+live page at build time; no person opened them in a browser. Claim 4
+(`same-seven-councillors-vote-together`) is parked for this run under its
+gate: the full set of relevant recorded votes depends on budget-adjustment
+meetings and attachments that are not archived, and on bundled budget
+votes whose relevance is unresolved, and depending on those the verdict
+ranges from Not established to Contradicted (`carried/checks/gate.md`).
+The editor accepted the park. The package told every seat so.
+
+**The package.** The carry manifest was committed at 389ea18 with sha256
+`2f29a255f9a7c611dc87491a46aa9027296db67d8fd7bd79ce4b46effd8b2435`. The
+carried section's sha256 was
+`d4c57f3d44ecc1ff7d5738c0cd797cdbad9c738552e09ec1f97c87e57bd580f0` and the
+package's `6e7ed39269e1fc3cd792cd2b98a6ec5a3afb0ce4143a2efa3807dae7f061de1f`,
+the same for every seat. The earliest probe the package rests on was the
+Claude seat's refusal at 2026-09-28T19:14:35Z. All three seats launched
+from this checkout at 389ea18 at 19:43:22Z. The runner refused nothing.
+
+| Seat | Attempt | Outcome |
+|---|---|---|
+| Claude Opus 5.5 (`claude-opus-5-5`), high, Claude Code 2.1.284 | `aa19dfbc4ccaf72c`, 19:43Z to 19:50Z | admitted on one attempt under claude-safe-web-candidate-2.1.284 |
+| GPT-6 Sol (`gpt-6-sol`), high, codex-cli 0.158.0 | `03ca282790e1e0f7`, 19:43Z to 19:53Z | admitted on one attempt |
+| GPT-6 Luna (`gpt-6-luna`), high, codex-cli 0.158.0 | `99cd2fce9e5b6027`, 19:43Z to 19:50Z | admitted on one attempt |
+
+| Claim | Claude | GPT-6 Sol | GPT-6 Luna |
+|---|---|---|---|
+| `council-rejected-pause` | Partially supported, high | Partially supported, moderate | Partially supported, moderate |
+| `administration-recommended-freezing-14-routes` | Partially supported, moderate | Partially supported, moderate | Partially supported, moderate |
+| `motions-to-cut-budget-to-50-million-failed` | Partially supported, moderate | Partially supported, high | Partially supported, moderate |
+| `same-seven-councillors-vote-together` | parked, not asked | parked, not asked | parked, not asked |
+
+No seat raised a MATERIAL FRAMING CONCERN, and no seat wrote that an
+essential source was inaccessible.
+
+**Why the run is held.** The seats read the carried minutes this time and
+cite them. They also name records they could not open that the package
+did not carry:
+
+- Attachment 3, the route status record (DocumentIds 304029 and 304028),
+  named by all three seats. It has no archived copy. The manifest excludes
+  it as not an essential source, and the Claude seat says its claim 2
+  verdict does not depend on it under Version 2.
+- The Council public hearings of 2026-09-15 and 2026-09-22 and the
+  2026-10-06 Council agenda, named by the Claude and GPT-6 Sol seats for
+  claim 1. The brief lists all three. The hearings have no archived copy;
+  the agenda is archived as YF-EV-0221 and was excluded from the carried
+  set. Sol writes that without them the absence of a Council decision
+  through 2026-09-25 remains unverified.
+- The portal's meeting calendar, and the capital profile and adjustment
+  attachments, named by the Claude seat for claims 1 and 3 and by GPT-6
+  Luna for claim 3.
+
+The brief stops a run on an inaccessible essential source. Whether any of
+these is essential is the editor's decision, so the run waits for it. The
+round 1 answers stay in `round1/` with their rows in `run.yaml`.
+
+## 2026-09-28: the held round 1 superseded; Attachment 3 carried
+
+**The editor ruled Attachment 3 essential and the other uncarried records
+not essential, so the held round 1 is superseded and round 1 runs again
+with Attachment 3 carried.** The held round's answers (`round1/`), its
+rows in `run.yaml` and the manifest it ran on move unchanged to
+`superseded-2026-09-28b/`, as `round1/`, `run.yaml` and
+`carried-manifest.yaml`. They are kept for the record only.
+
+The editor's rulings, with the reasons:
+
+- **Attachment 3, DocumentIds 304029 (original) and 304028 (REPLACEMENT):
+  essential.** The brief's primary route-status date for claim 2 is the
+  status Attachment 3 states, and the brief names both versions by the
+  portal's URL template and their DocumentIds (lines 403 to 404 and 829).
+  Both are now carried.
+- **The Council public hearings of 2026-09-15 and 2026-09-22: not
+  essential.** They bear only on the Council strand of claim 1, which is
+  the brief's required alternative; the committee is the primary body.
+  The brief names them by date only, with no URL or meeting id, so the
+  carry rule cannot reach them. Seats report the gap as a limitation.
+- **The 2026-10-06 Council agenda (YF-EV-0221): not essential.** It was
+  published on the as-of date and cannot show a decision made before it.
+  The manifest's exclusion reason now says so.
+- **The portal's meeting calendar, the capital profile sheet and the
+  budget-adjustment attachments: not essential.** The brief's floor list
+  defines the meeting search, and every seat reached a claim 3 verdict
+  without them. Seats report them as limitations.
+
+**Attachment 3 in the registry.** The founder downloaded both versions in
+a browser on 2026-09-25, and their SHA-256 values match those recorded in
+`reviews/consultation-and-opposition/2026-09-03/verification/escribe-archive-2026-09-25.md`.
+They are registered as YF-EV-0225 (original, 304029) and YF-EV-0226
+(REPLACEMENT, 304028), private because their redistribution rights are
+unclear. The two differ only in their label and in one closing sentence
+about routes with no delivery plan.
+
+**The rebuilt manifest.** Every carried URL was probed again through all
+three seats at 2026-09-28T19:59Z; the Claude seat's WebFetch was refused
+with HTTP 403 at every one, including both Attachment 3 URLs, and the
+GPT-6 seats' probes are unclear, as before. The site's fetcher got a
+challenge-signed 403 at all six PDFs, and the committee agenda still
+lists both Attachment 3 files under their archived titles. Every other
+document's checks carried over unchanged because its archive and text
+hashes did not change, and claim 4 stays parked. For the two Attachment 3
+rows the download provenance is recorded; the public-open check, the
+second download, the extraction check and the personal-information screen
+are pending, and round 1 does not launch until they pass.
+
+## 2026-09-29: Attachment 3 checked; the 2026-09-08 minutes changed and were archived again
+
+**Attachment 3 passed its checks, but the rebuild before launch found that
+the City had changed the Council minutes of 2026-09-08, so round 1 waits
+for that page's checks.** The change does not touch the program: the
+carried text of the page is byte-identical. The rule still requires the
+page to be archived again and checked again, because the completeness
+check was made against the earlier copy.
+
+**Attachment 3.** The founder opened both Attachment 3 URLs in an
+ordinary browser on 2026-09-29 and downloaded them again. Both downloads
+are byte-identical to the 2026-09-25 archive, which shows the City's files
+are unchanged, but the same person made both downloads, so the second
+download is recorded as not made. The independent read-only checker
+found both versions extracted in full: all three pages of each, every
+route row and footnotes 1 to 4, and a fresh extraction byte-identical to
+the carried text. It found no personal information about a private
+individual (`carried/checks/attachment3.md`).
+
+**The re-probe.** The earlier probes had expired, so every carried URL
+was probed again through all three seats between 2026-09-29T22:47:05Z and
+22:49:53Z. The Claude seat's WebFetch was refused with HTTP 403 at all 19;
+the GPT-6 seats' probes were unclear, as before.
+
+**The changed page.** On the rebuild the site's fetcher found that the
+live post-meeting minutes of 2026-09-08 (YF-EV-0215) no longer matched
+the archived copy in three items: new document links for the
+attachments of items 7.7 (public art policy) and 7.11 (climate
+priorities), and one restored line of motion wording in item 11.1
+(property tax communication). None concerns the program, and the only
+carried item, 11.6, is unchanged. The page was archived again on
+2026-09-29 as YF-EV-0227, which is carried instead of YF-EV-0215. Its
+carried text hashes to the same value as before
+(`4d4b6bae8671f5f6ff988e5566d90e7379c9d2df49df3848af0a69bfd4f55538`).
+Every other document's archive, text, item index and checks are
+unchanged, and claim 4 stays parked. YF-EV-0227's completeness check and
+personal-information screen are pending, and the package refuses to
+assemble until someone other than the editor makes them.
+
+## 2026-09-29: rounds 1 and 2 under methodology v1.42, stopped on a framing concern
+
+**Both rounds ran on all three seats, and the run stops before synthesis
+because the Claude seat raised a MATERIAL FRAMING CONCERN in round 2 on
+claim 2.** Every seat answered claims 1 to 3 Partially supported in both
+rounds. Claim 4 was parked for the run under its gate and no seat
+answered it. `scripts/synthesize.ts` halts on the concern and wrote
+nothing. No verdict below is a finding of this site.
+
+**The checks.** After the independent checker passed YF-EV-0227
+(`carried/checks/completeness-0227.yaml` and `check-0227.md`), its item
+reasons, completeness check and personal-information screen went into the
+manifest, which was committed at dd8d16c. All three seats launched from
+that commit.
+
+**Round 1.** The package's earliest probe was the Claude seat's refusal
+at 2026-09-29T22:47:26Z. The carried section's sha256 was
+`da1fa193d84fd3ad1e24902b6e4153b2ea76494b77c099a3909c651f29015a22` and
+the package's
+`08fc784a340719e7c0cf2a12a7f93e655628a68ecf1161c030c69b6e49881e9e`, the
+same for every seat. The runner refused nothing.
+
+| Seat | Attempt | Outcome |
+|---|---|---|
+| Claude Opus 5.5 (`claude-opus-5-5`), high, Claude Code 2.1.285 | `eb8ebfb5d1a60f24`, 22:55Z to 23:02Z | admitted on one attempt under claude-safe-web-candidate-2.1.285 |
+| GPT-6 Sol (`gpt-6-sol`), high, codex-cli 0.159.0 | `1642738e69cfc73d`, 22:55Z to 23:04Z | admitted on one attempt |
+| GPT-6 Luna (`gpt-6-luna`), high, codex-cli 0.159.0 | `3e3f0e8ebc1eeffb`, 22:55Z to 23:02Z | admitted on one attempt |
+
+No seat raised a framing concern in round 1 or wrote that an essential
+source was inaccessible. The seats named as limitations the records the
+editor had ruled not essential: the September public hearings, the
+October 6 agenda, the portal calendar and the capital profile and
+budget-adjustment attachments. The Claude seat also could not open a City
+project page that a news report cites; it treated that report as a lead
+only. The merge found 14 distinct sources and no contested claim
+(`combined-evidence.json`, `disagreements.json`); evidence staging
+archived 8 and not the 6 portal file downloads (`fetch-report.md`).
+
+**Round 2.** Before round 2 every carried URL was probed again through
+all three seats, from 2026-09-29T23:05:50Z; the Claude seat's WebFetch was
+refused with HTTP 403 at all 19 and the GPT-6 seats' probes were unclear.
+The rebuilt manifest, committed at 2e52ee7, has the same hashes, checks,
+item indexes, gate and exclusions as round 1's, and the same carried
+section, sha256 `da1fa193d84f…`. Its earliest probe was 23:06:10Z. All
+three seats launched from 2e52ee7 at 23:09:23Z and each was admitted on
+one attempt: Claude `60ab218c56c14d23` (to 23:14Z), GPT-6 Sol
+`5612f3846cb27d57` (to 23:18Z) and GPT-6 Luna `c5e932bc24cc8aa8` (to
+23:16Z).
+
+| Claim | Claude, round 1 / 2 | GPT-6 Sol, round 1 / 2 | GPT-6 Luna, round 1 / 2 |
+|---|---|---|---|
+| `council-rejected-pause` | Partially supported, high / moderate | Partially supported, moderate / moderate | Partially supported, moderate / moderate |
+| `administration-recommended-freezing-14-routes` | Partially supported, moderate / moderate | Partially supported, moderate / moderate | Partially supported, moderate / moderate |
+| `motions-to-cut-budget-to-50-million-failed` | Partially supported, moderate / moderate | Partially supported, high / moderate | Partially supported, moderate / moderate |
+| `same-seven-councillors-vote-together` | parked, not asked | parked, not asked | parked, not asked |
+
+**The concern.** In round 2 the Claude seat kept claim 2 at Partially
+supported and raised a MATERIAL FRAMING CONCERN against the brief's
+express-deferral test. Version 2 of Attachment 5 says the routes that do
+not affect travel lanes or parking "will continue as planned" and that
+"the remaining routes" will be evaluated and reported on in Q1 2027 "for
+Council direction and approval". Read with the report's "best postponed to
+2027" and Attachment 3's footnote 2, which says tendered routes "may be
+delayed ... or removed ... pending this Council report", the seat reads
+the practical effect as the 14 routes not proceeding as planned until
+Council gives direction. The brief's requirement that the deferral be
+express excludes that implication, and the seat says that exclusion is
+what separates Partially supported from Supported. It asks that any story
+say Version 2 implies, but does not state, that the 14 wait. The concern
+rests on Attachment 3, which this round carried for the first time.
+
+Under the brief and the method, a framing concern stops synthesis until
+the brief is revised or the concern is answered. That decision belongs to
+the editor. The answers stay in `round1/` and `round2/` with their rows
+in `run.yaml`.
+
+## 2026-09-29: the brief revised after the framing concern; rounds superseded
+
+**The editor found the round-2 framing concern real, revised the brief
+under methodology v1.2, and round 1 runs again on the revised brief.**
+Methodology v1.2 answers a framing concern from the panel by revising
+the brief and rerunning round 1, as the cycling-volumes, infill and
+low-density-history runs did. This is not a framing check, and the
+framing-check cap does not apply.
+
+**The concern.** In round 2 the Claude seat kept claim 2 at Partially
+supported and said the brief's test decided that verdict. Version 2 of
+Attachment 5 says the routes it lists apart will be evaluated and
+reported on in Q1 2027 for Council direction and approval, while the
+report says construction not yet started is best postponed to 2027 and
+Attachment 3 says tendered routes may be delayed or removed pending the
+report. Read together, the seat said, the routes wait for Council; but the
+brief applied its "expressly defers" test to Attachment 5 alone, which
+excludes that reading and is what separates Partially supported from
+Supported.
+
+**The editor's reason.** The brief listed the report's Recommendation and
+Next Step as the instrument, but applied the "expressly defers" test
+to Attachment 5 alone. That ambiguity decides Supported against Partially
+supported for claim 2, and for claim 1 through it, because claim 1's
+ladder asks first whether the recommendation proposed a hold.
+
+**The revision.** Two passages changed, plus a status note, and nothing
+else. The definition of "expressly defers construction or advancement"
+now reads the recommended approach as report IS03688 as a whole:
+Recommendation 1, the report's own text on timing and next steps, and its
+attachments, with Attachment 5 in its operative version. "Expressly"
+still means the report's text says it; the passages may be in different
+parts of the report, reviewers quote each one, and a reading that needs an
+inference beyond the text does not meet it. Claim 1's ladder reads the
+same text. The brief's sha256 was
+`c0f504b3d6a7ac303abb8f724eda9b415275f13c8e365bc34657da0136b09687` and
+is now `fb0f29b1bc15ee5408b0204d8a396dcaa45c468f2f16227aa7a325df4ba4443d`
+(commit 0118b6a). Nothing about any seat's answers went into the brief,
+so the rerun stays blind.
+
+**What moved.** Round 1 and round 2 of 2026-09-29, their rows in
+`run.yaml`, the merge (`combined-evidence.json`, `disagreements.json`),
+the fetch report and a copy of the carry manifest they ran on move
+unchanged to `superseded-2026-09-29/`. Their answers are to the earlier
+brief and are not an input to the rerun: no seat sees them, and the merge
+and synthesis read only the new rounds. `run.yaml` starts again with no
+rows.
+
+**The carried set.** Every carried URL was probed again through all three
+seats from 2026-09-29T23:23:28Z: the Claude seat's WebFetch was refused
+with HTTP 403 at all 19, and the GPT-6 seats' probes were unclear. The
+rebuilt manifest has the same documents, archive and text hashes, item
+indexes, checks, gate and exclusions as before. The only change the
+revised brief makes to it is the brief line number each document's
+naming is recorded at. Nothing in the carry tooling keys on the brief's
+hash: it reads the brief only to confirm that each carried document's
+URL is named in it.
+
+## 2026-09-29: rounds 1 and 2 on the revised brief, synthesized
+
+**The panel answered all three tested claims Partially supported, and all
+three seats agreed on each in both rounds.** Synthesis, from round 1 as
+the method fixes, gives Partially supported, Unanimous, for claims 1, 2
+and 3. Claim 4 was parked for this run under its vote gate and was not
+tested. No seat raised a framing concern or wrote that an essential
+source was inaccessible. This is the panel's result, not yet a published
+finding; drafting and the human gate come next.
+
+**The package.** Every seat received the revised brief (sha256
+`fb0f29b1bc15ee5408b0204d8a396dcaa45c468f2f16227aa7a325df4ba4443d`), the
+reviewer prompt, the schema and the carried section, sha256
+`da1fa193d84fd3ad1e24902b6e4153b2ea76494b77c099a3909c651f29015a22` in
+both rounds: report IS03688, the three versions of Attachment 5, both
+versions of Attachment 3, and the items rule v2 selects from thirteen
+meeting pages. Round 1 launched from 28f4c73 on probes from
+2026-09-29T23:23:28Z, the earliest the package rests on being
+23:23:49Z; its package sha256 was
+`48078a6353a9caca76e91e5c70a4bf6b21dce2259454cd41453e53e064238fa0`.
+Before round 2 every carried URL was probed again from 23:37:31Z; the
+Claude seat's WebFetch was refused with HTTP 403 at all 19 and the GPT-6
+seats' probes were unclear. The manifest rebuilt on those probes (40a816a)
+has the same hashes, checks, item indexes, gate and exclusions, and round
+2 launched from it with its earliest probe at 23:37:54Z. The runner
+refused nothing, and every seat was admitted on one attempt in each
+round.
+
+| Seat | Round 1 attempt | Round 2 attempt |
+|---|---|---|
+| Claude Opus 5.5 (`claude-opus-5-5`), high, Claude Code 2.1.285 | `b60eb1c0a9431519`, 23:27Z to 23:33Z | `7094b82a12eab346`, 23:41Z to 23:47Z |
+| GPT-6 Sol (`gpt-6-sol`), high, codex-cli 0.159.0 | `6c0aa69c5432e776`, 23:27Z to 23:36Z | `f0d89683f223532b`, 23:41Z to 23:48Z |
+| GPT-6 Luna (`gpt-6-luna`), high, codex-cli 0.159.0 | `cf76a3bc540206f1`, 23:27Z to 23:34Z | `d3cb3ac59124dc6b`, 23:41Z to 23:50Z |
+
+| Claim | Claude, round 1 / 2 | GPT-6 Sol, round 1 / 2 | GPT-6 Luna, round 1 / 2 | Synthesis |
+|---|---|---|---|---|
+| `council-rejected-pause` | Partially supported, high / high | Partially supported, moderate / moderate | Partially supported, high / high | Partially supported, Unanimous |
+| `administration-recommended-freezing-14-routes` | Partially supported, moderate / moderate | Partially supported, moderate / moderate | Partially supported, moderate / high | Partially supported, Unanimous |
+| `motions-to-cut-budget-to-50-million-failed` | Partially supported, moderate / high | Partially supported, high / moderate | Partially supported, high / high | Partially supported, Unanimous |
+| `same-seven-councillors-vote-together` | parked | parked | parked | parked for this run |
+
+**What the seats found, in brief.** On claim 2, all three read the
+report as a whole under the revised brief and found that Version 2 of
+Attachment 5, with the report's text on timing and Attachment 3, does not
+say in terms that the 14 routes wait for the further evaluation or
+report; the Claude seat calls this a close call. All three note that the
+original Attachment 5 would meet the test, so the finding is
+version-sensitive. On claim 1, the committee left Recommendation 1
+without a decision rather than rejecting it. On claim 3, the seats found
+two jointly brought reduction motions, both defeated, of which only the
+2023 one would have left about $50 million.
+
+**Merge and limitations.** The round 1 merge found 22 distinct sources
+and no contested claim; evidence staging archived 10 and not 12, all of
+them portal file downloads or citations that join two portal URLs
+(`fetch-report.md`). The seats name as limitations the records the editor
+ruled not essential: the September public hearings, the October 6 agenda,
+the portal calendar and the capital profile and budget-adjustment
+attachments. The Claude seat also names administration's presentation at
+the committee, which the brief does not name, and a City project page
+that returned HTTP 502, which it treats as a news report's lead only.
+
+**Claim 4.** `same-seven-councillors-vote-together` is parked for this
+run. The full set of relevant recorded votes depends on budget-adjustment
+meetings and attachments that are not archived, and on bundled budget
+votes whose relevance is unresolved; depending on those, the verdict
+ranges from Not established to Contradicted (`carried/checks/gate.md`).
+The editor accepted the park. The seats were told so and did not answer
+it. `run.yaml` scopes synthesis to claims 1 to 3.

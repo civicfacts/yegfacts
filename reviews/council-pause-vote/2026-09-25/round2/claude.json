@@ -1,0 +1,394 @@
+{
+  "reviewer": {
+    "provider": "anthropic",
+    "model_self_reported": "Claude Opus 5.5",
+    "runner_model": "claude-opus-5-5",
+    "runner_seat": "Claude Opus 5.5",
+    "runner_effort": "high"
+  },
+  "story": "council-pause-vote",
+  "round": 2,
+  "round2_notes": {
+    "evidence_i_missed": [
+      "From gpt: the minutes (11577a3c, item 5.1.1) show that Fall 2023 Capital Budget Amendment 2 was first moved as 'decreased by $50,000,000 to go towards the tax levy'. It was restated before the vote as a reduction 'with a funding reduction from tax-supported debt' (item 5.1.2). Both wordings name a destination under the brief (tax levy, then a reduction in borrowing). I classify the version that was put to the vote. This does not change the verdict.",
+      "From gpt: Fall 2023 Capital Budget Amendment 3 (11577a3c, items 5.1.1 and 5.1.2) was moved by J. Rice and seconded by K. Principe, so it counts as brought under the primary rule. It would have reduced the 2024 capital budget by $26,808,000 without naming CM-20-0330, and it was withdrawn, not defeated. I list it under claim 3 qualification 4. It cannot be a defeat.",
+      "From gpt: City Council, 2025-09-16, item 10.13 (0f0a1a9c). T. Cartmell moved and K. Principe seconded a motion that construction cease on bike lane projects not yet started, pending review. It was defeated 4 to 9. Principe's seconding makes it brought under the primary rule. It is a suspension, not a capital-budget reduction, so it cannot supply the missing second '$50 million' motion. I list it under qualification 4.",
+      "From gpt: DocumentId 245911, which gpt describes as the CM-20-0330 capital profile and a capital update to 2024-09-30 showing $100,000,000. On 2026-09-29 I tried to fetch it and got HTTP 403. I could not verify it; see errors.",
+      "Found in my own round-2 recheck: I queried the open-data voting record (abcm-eai5) again on 2026-09-29, and it now holds rows up to 2026-09-22. In round 1 I said the latest row was 2026-08-26. After 2026-08-26 it has one City Council row set on this subject: City Council Public Hearing 2026-09-15, item 2.1, 'Proposed Amendments to Charter Bylaw 24007 and Charter Bylaw 24008 to Update the Active Transportation Network'. The motion approved a revised due date of December 8, 2026 for report UPE02721 and carried 13 to 0. It is not R or IS03688. It also has Urban Planning Committee 2026-09-01, item 10.1 (Janz, Complete Streets review), carried 4 to 0 by a committee. It has no Council vote on IS03688 or Attachment 5. The package did not carry the minutes of the 2026-09-15 hearing, so this item is known only from the open-data cross-check.",
+      "Found on re-reading the package, not from another reviewer: Salvador's notice of motion at the committee (55300824, item 11.1) and at Council (3195d7e4, item 11.6) refers to the 'Will be reevaluated for feasibility and subject to funding availability' section of Attachment 5. That heading appears only in the original (304032) and Version 1 (304031). Version 2 (304030) uses 'If Council approves the approach, the following projects may be re-evaluated'. This does not identify which version was before the committee, and the brief's Version-2 default still applies. It does show that at least one member worked from a version other than Version 2. It is a further reason the claim 2 finding must be stated as version-sensitive."
+    ],
+    "errors_in_other_reviews": [
+      "gpt-luna, claim motions-to-cut-budget-to-50-million-failed, interpretation_notes: says 'Rice moved the December 2, 2024 amendment and Principe seconded'. The cited minutes (https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=8c66c382-bd3c-4c28-bfad-1b5b91142ed7&lang=English, items 5.1.1 and 5.1.2) record 'Moved by: K. Principe / Seconded by: J. Rice'. gpt-luna's own supporting-evidence item for the same motion also says this. Under either reading of 'brought' the classification does not change, but the roles are misreported.",
+      "gpt-luna, claim motions-to-cut-budget-to-50-million-failed, base citation https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304024 ('As part of the 2023-2026 Capital Budget, $100 million was approved'): this wrong-denominator source is a 2026 account of the original 2022 approval. It is not the capital profile plus the approved adjustments at each motion date, which the brief requires. The $100,000,000 figure matches the carried 2022-11-30 Capital Budget Amendment 7 (215a3a89, item 12.9). But this citation does not establish the running total at 2023-11-21 or 2024-12-02, and gpt-luna did not say so beside the verdict.",
+      "gpt-luna, claim motions-to-cut-budget-to-50-million-failed: treats the December 2024 text 'decreased by $33,650,000 in 2025 and $33,650,000 in 2026 with funding from tax-supported debt, to defund…' (8c66c382, item 5.1.2) as naming the same destination as the 2023 text 'with a funding reduction from tax-supported debt'. The two wordings differ. The 2024 text names the funding source being decreased and does not say where the released funds go. On that basis gpt-luna reports 'Supported' under the alternative amount rule without flagging that the result depends on how the destination is read.",
+      "gpt-luna, claim council-rejected-pause, limitations: says 'The committee minutes record four votes on the Salvador motion'. The item 7.6 minutes (55300824) record one vote on Salvador's main motion (defeated 2 to 2) and one on Rutherford's amendment to it (defeated 2 to 2). The other two votes, on meeting in private and returning to public, are procedural.",
+      "gpt-luna, claims administration-recommended-freezing-14-routes and council-rejected-pause, quote from https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304024: the quote is given as 'For routes where construction has not yet started, construction is best postponed to 2027.' without an ellipsis. The report reads 'Realistically, for routes where construction has not yet started, construction is best postponed to 2027 to reduce the risk of incomplete construction through the winter season.' The claim 2 item then says the report 'proposed postponing construction'. The sentence is a weather assessment in the Status Update section and is not part of Recommendation 1, so an administrative assessment is presented as a recommendation. The truncation also drops the stated reason.",
+      "gpt-luna, claim administration-recommended-freezing-14-routes, citation https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304031: describes Version 1 only as saying listed projects 'may be revisited'. It omits Version 1's modified-approach rule 1, that unconstructed routes 'would be evaluated to determine if they should proceed', which decides the primary deferral reading for that version. gpt-luna also gives no classification under both readings for each version, which the brief requires.",
+      "gpt, claim administration-recommended-freezing-14-routes, interpretation_notes on https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304031: classifies Version 1 as Partially supported 'under both readings because its removal rule depends on route impacts'. That reason answers only the stricter removal reading. Under the primary reading, rule 1 of Version 1 says routes not yet constructed 'would be evaluated to determine if they should proceed', which states in terms that proceeding waits on the evaluation. Version 1 therefore meets the primary deferral definition. gpt's version-sensitivity statement understates the spread: two of the three versions meet the primary reading.",
+      "gpt, claim motions-to-cut-budget-to-50-million-failed, citation https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=245911: gpt's own limitations say 'direct opening was blocked'. My fetch on 2026-09-29 returned HTTP 403. The $100,000,000 'current approved budget' at 2024-09-30 therefore rests on search-result text that no reviewer has read. The title also merges a capital profile and a quarterly update under one DocumentId. It is presented as a strong, contemporaneous source but is unverified.",
+      "gpt, claim motions-to-cut-budget-to-50-million-failed, challenging evidence: the finding about Rice's withdrawn $26,808,000 amendment cites https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=0f0a1a9c-e89e-44dc-b776-b14a66e99487&lang=English. That is the 2025-09-16 meeting. The amendment is recorded on the Fall 2023 budget page (Id=11577a3c-2540-4848-908e-18710d3d2a4c, item 5.1.2), so the URL supports only half the finding. gpt also does not note that Principe seconded it, which makes it brought under the primary rule.",
+      "gpt, all three claims: classes the City's post-meeting minutes as source_type 'city-webpage', while gpt-luna and I class them 'legal-audited'. The brief makes the minutes the controlling record, so the lower label understates their weight in the combined registry. This is a labelling error only; it does not affect any verdict."
+    ],
+    "verdict_changes": []
+  },
+  "claims": [
+    {
+      "id": "council-rejected-pause",
+      "proposition_evaluated": "At its meeting of 2026-08-26 the Infrastructure Committee rejected administration's recommended hold on the remaining bike routes (Recommendation 1 of IS03688, R) rather than adopting it, and City Council had not adopted the hold by 2026-09-25; 'hold' meaning an approach that expressly defers construction or advancement of the routes listed apart until a further evaluation, report or decision.",
+      "interpretation_notes": "STEP 1, WHETHER R PROPOSED A HOLD. The agenda-adoption motion (55300824, item 1.4) added 'Attachments 2, 3, 5 (Version 1) and 5 (Version 2)' as replacements without saying which Attachment 5 was before the committee at item 7.6. Per the brief, Version 2 (304030) is the primary reading. I read the report as a whole: Recommendation 1, the Next Step and timing text, and the attachments. Version 2 says 'The remaining routes will be evaluated for trade-offs, alternative design treatments and budget implications' and that 'In Q1 2027, Administration will bring forward a report outlining trade-offs and options for the remaining routes … for Council direction and approval.' It lists 14 projects that 'may be re-evaluated using alternate design approaches.' No passage says those routes wait for that evaluation or report. The report's sentence that construction on unstarted routes is 'best postponed to 2027 to reduce the risk of incomplete construction through the winter season' is a weather assessment with a date. It does not defer the routes pending an evaluation, report or decision. Attachment 3's 'Next steps for these segments will depend on Council's direction' describes status pending R itself, not a further step R proposes. Under Version 2, therefore, R did NOT propose a hold. Under Version 1 (304031), rule 1 says unconstructed routes 'would be evaluated to determine if they should proceed', which meets the definition. Under the original (304032), the 14 'would be removed from the scope … for 2026 and 2027' pending evaluation, which also meets it. The hold element is version-sensitive.\n\nSTEP 2, DISPOSITION. The item 7.6 minutes record no motion to adopt R, moved or put. Salvador's motion to continue 'in accordance with the previously approved scope of Capital Profile CM-20-0330' and advance tender-ready routes would have been incompatible with R, but it was defeated 2 to 2. Only procedural motions and the Attachment 4 privacy motion carried. The committee therefore LEFT R WITHOUT A DECISION ('every substantive motion failed'). It neither rejected nor adopted R. No body adopted R by 2026-09-25.\n\nCLASSIFICATION. Under Version 2 (no hold), the committee left R without a decision and no body adopted it, so the claim is Partially supported. Under Version 1 or the original (a hold), the same disposition also gives Partially supported. The verdict is the same in every version. What differs is the description: under Version 2, what went undecided was re-evaluation plus a report, not a hold.\n\nREQUIRED ALTERNATIVE ('did not support' = non-adoption): Supported.\n\nREQUIRED ALTERNATIVE BODY (City Council): Not established. R was not carried by the committee, so it was never referred to Council. The only Council item citing IS03688 is Salvador's notice of motion on funding options (3195d7e4, item 11.6), which was laid over to 2026-10-06, after the as-of date. The open-data record (re-queried 2026-09-29) shows no Council vote on IS03688 through 2026-09-22.\n\nOVERRIDE STRAND. The committee made no decision on item 7.6 other than keeping Attachment 4 private. No later Council decision incompatible with it exists, so the minutes show no override. The absence of a Council item is reported as an absence.\n\nQUALIFICATION 5, WHAT GOVERNED THE PROGRAMME. The previously approved CM-20-0330 scope ($100,000,000, carried 2022-11-30, 215a3a89, item 12.9) remained the recorded Council direction. It was amended for 50 Street by the Council motion of 2026-07-07 (1bc6d0e6, item 7.5, carried 9 to 3). Administration's own statements are its statements only: that unstarted construction is 'best postponed to 2027', and that the southern 50 Street segment 'has been paused for reconsideration' (Attachment 3, note 1). Neither is a Council decision.\n\nROUND 2. The other reviewers reach the same verdict. My classification is unchanged on the merits, not to match theirs. I have corrected my round-1 statement about the open-data coverage date.",
+      "verdict": "Partially supported",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Infrastructure Committee, 2026-08-26, item 7.6. No motion to adopt Recommendation 1 of IS03688 was moved or put. The carried motions on the item were: meet in private (R. Clarke, 5 to 0: Rutherford, Salvador, Clarke, Janz, Knack); return to public (E. Rutherford, 5 to 0: Rutherford, Salvador, Clarke, Janz, Paquette); keep Attachment 4 private (E. Rutherford, 4 to 0: Rutherford, Salvador, Clarke, Janz).",
+          "source_title": "Infrastructure Committee Minutes, 2026-08-26, item 7.6",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English",
+          "source_publisher": "City of Edmonton, Office of the City Clerk",
+          "source_date": "2026-08-26",
+          "source_type": "legal-audited",
+          "establishes": "The committee did not adopt R, so the recommendation did not go forward to Council.",
+          "quote": "That Attachment 4 of the August 26, 2026, Infrastructure Services report IS03688 remain private … Carried (4 to 0)",
+          "strength": "strong"
+        },
+        {
+          "finding": "City Council, 2026-09-08 (continued 2026-09-16), item 11.6. This is the only carried Council item citing IS03688. It is Salvador's notice of motion asking Administration to prepare options for more CM-20-0330 funding for the 're-evaluated' routes in the 2027-2030 budget. It was laid over to 2026-10-06, after the as-of date. Under the package's selection rule, any item on that page containing 'IS03688' or 'Active Transportation' would have been carried, and no other was.",
+          "source_title": "City Council Minutes, 2026-09-08, item 11.6",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=3195d7e4-a1e2-4923-810e-ddfa0726c299&lang=English",
+          "source_publisher": "City of Edmonton, Office of the City Clerk",
+          "source_date": "2026-09-08",
+          "source_type": "legal-audited",
+          "establishes": "City Council neither adopted nor decided R at this meeting. The related item was a notice laid over past the as-of date.",
+          "quote": "Laid Over: September 8, 2026, City Council to October 6, 2026, City Council",
+          "strength": "strong"
+        },
+        {
+          "finding": "Executive Committee, 2026-09-02, items 10.1 and 11.1. Salvador was 'unable to make the motion pending' because of time constraints and restated it as a new notice to City Council.",
+          "source_title": "Executive Committee Minutes, 2026-09-02, items 10.1 and 11.1",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=fb2d3de4-5170-4f51-9f18-60fd93590a78&lang=English",
+          "source_publisher": "City of Edmonton, Office of the City Clerk",
+          "source_date": "2026-09-02",
+          "source_type": "legal-audited",
+          "establishes": "No committee decision on R came out of the follow-up notice.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Cross-check, re-queried 2026-09-29, with rows up to 2026-09-22. Item 7.6 on 2026-08-26: main motion yes Salvador and Janz, no Rutherford and Clarke, absent Knack and Paquette, defeated 2 to 2; amendment yes Rutherford and Clarke, no Salvador and Janz, defeated 2 to 2. From 2026-08-26 on, the only City Council vote with an active-transportation title is the 2026-09-15 Public Hearing item 2.1, a 13 to 0 revised due date for report UPE02721 on Charter Bylaws 24007 and 24008. That is not R. No Council row cites IS03688. The dataset also repeats the main-motion rows without a result field.",
+          "source_title": "2025-2029 Council And Committee Meetings - Voting Record (open data)",
+          "source_url": "https://data.edmonton.ca/City-Administration/2025-2029-Council-And-Committee-Meetings-Voting-Re/abcm-eai5",
+          "source_publisher": "City of Edmonton",
+          "source_date": "accessed 2026-09-29",
+          "source_type": "observed-data",
+          "establishes": "Cross-check: agrees with the committee minutes, and no Council vote on R through 2026-09-22.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Recommendation 1 asks the committee to 'recommend to City Council' approval of the Attachment 5 approach. The report labels it 'Council decision required' and says 'Council approval for a modified direction is required.'",
+          "source_title": "Report IS03688, Active Transportation Implementation Acceleration Program Update, pages 1 and 6",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304024",
+          "source_publisher": "City of Edmonton, Infrastructure Services",
+          "source_date": "2026-08-26",
+          "source_type": "policy-document",
+          "establishes": "The text of R, and that only a committee recommendation could bring R before Council.",
+          "quote": "That the updated approach for the remaining routes under the Active Transportation Network Expansion Program, as outlined in Attachment 5 of the August 26, 2026, Infrastructure Services report IS03688, be approved.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The only item 7.6 motion whose effect was incompatible with R was defeated 2 to 2: Salvador (mover) and Janz for, Rutherford and Clarke against, with Knack and Paquette recorded in neither column. It would have continued the previously approved scope and advanced tender-ready routes. The minutes therefore do not show the committee choosing to proceed against R, which is what 'ignore' and 'go their own route' assert.",
+          "source_title": "Infrastructure Committee Minutes, 2026-08-26, item 7.6",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English",
+          "source_publisher": "City of Edmonton, Office of the City Clerk",
+          "source_date": "2026-08-26",
+          "source_type": "legal-audited",
+          "establishes": "The committee did not reject R, as the brief defines rejection. It left R without a decision.",
+          "quote": "Motion, put: Moved by: A. Salvador … In Favour (2) | A. Salvador, and M. Janz Opposed (2) | E. Rutherford, and R. Clarke Defeated (2 to 2)",
+          "strength": "strong"
+        },
+        {
+          "finding": "Version 2 of Attachment 5, the declared primary, sets out evaluation plus a Q1 2027 report for 'Council direction and approval'. It says the 14 listed projects 'may be re-evaluated'. No passage says they wait for that step, so under the primary version what went undecided was not a hold.",
+          "source_title": "REPLACEMENT (Version 2) Attachment 5 - IS03688",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304030",
+          "source_publisher": "City of Edmonton, Infrastructure Services",
+          "source_date": "2026-08-26",
+          "source_type": "policy-document",
+          "establishes": "The treatment R proposed under the primary version: re-evaluation and a report back, not an express deferral.",
+          "quote": "The remaining routes will be evaluated for trade-offs, alternative design treatments and budget implications. In Q1 2027, Administration will bring forward a report outlining trade-offs and options for the remaining routes, including an update on the remaining funding and budget implications, for Council direction and approval.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The report's one statement of postponement is based on weather and names a year. It applies to all unstarted routes and does not make the 14 wait for an evaluation, report or decision. It sits in the Status Update section, not in Recommendation 1.",
+          "source_title": "Report IS03688, page 5 (Active Transportation Network Expansion Program - Status Update)",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304024",
+          "source_publisher": "City of Edmonton, Infrastructure Services",
+          "source_date": "2026-08-26",
+          "source_type": "policy-document",
+          "establishes": "The report's timing text does not supply the express deferral that Version 2 lacks.",
+          "quote": "Realistically, for routes where construction has not yet started, construction is best postponed to 2027 to reduce the risk of incomplete construction through the winter season.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "The portal blocks automated access. The committee, Executive Committee and Council minutes were read from the archived items carried in the package, which are selected items rather than whole pages. The selection terms include 'IS03688' and 'Active Transportation Implementation', so an R item on a carried page would have been carried.",
+        "The minutes of the City Council public hearings of 2026-09-15 and 2026-09-22 were not carried and could not be retrieved. The open-data record shows one active-transportation item on 2026-09-15 (item 2.1, a revised due date for UPE02721, Charter Bylaws 24007 and 24008), which is not R. The minutes of that item were not read.",
+        "The committee minutes do not record why Knack and Paquette, both committee members, appear in neither column on the two 2 to 2 votes. The roll call records Paquette as absent with notice for a portion of the meeting. The open-data record marks both as absent.",
+        "The operative version of Attachment 5 is not identified in the agenda or minutes. The verdict holds in every version, but whether what went undecided was a hold does not.",
+        "In round 1 I stated that the open-data record's latest row was 2026-08-26. On re-query on 2026-09-29 it runs to 2026-09-22. That statement is corrected here.",
+        "A Taproot report (2026-09-01) that councillors 'received the report for information' is a media lead only. No such motion appears in the carried item 7.6 minutes, and the minutes decide."
+      ],
+      "unknowns": [
+        "Whether any City Council item before 2026-09-25 that is not carried in the package or captured in the open-data record addressed R.",
+        "Whether Administration changed route schedules after 2026-08-26 under its existing authority. That would be an administrative act, not a Council decision."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Full post-meeting minutes of the City Council public hearings of 2026-09-15 and 2026-09-22, and the full 2026-09-08/16 Council minutes.",
+          "likely_holder": "City of Edmonton, Office of the City Clerk",
+          "importance": "moderate"
+        },
+        {
+          "description": "A record identifying which Attachment 5 version was before the committee when item 7.6 was considered.",
+          "likely_holder": "City of Edmonton, Office of the City Clerk",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "Disposition table, Infrastructure Committee 2026-08-26, item 7.6. Members: Rutherford, Salvador, Clarke, Janz, Knack (Mayor, ex officio under Bylaw 18156 s.15(3)) and Paquette. Also present, not entitled to vote: Elliott, Morgan, Parmar, Principe, Stevenson, Tang, Wright. (1) Main motion, moved by Salvador, to continue at the previously approved scope, advance tender-ready routes and schedule 2027. (2) Amendment, moved by Rutherford, to delete 'and maximize remaining construction season, including advancing partial and accelerated construction': for Rutherford and Clarke, against Salvador and Janz, not recorded Knack and Paquette; Defeated 2 to 2. (3) Meet in private, moved by Clarke: for Rutherford, Salvador, Clarke, Janz, Knack; Carried 5 to 0. (4) Meet in public, moved by Rutherford: for Rutherford, Salvador, Clarke, Janz, Paquette; Carried 5 to 0. (5) Main motion put: for Salvador and Janz, against Rutherford and Clarke, not recorded Knack and Paquette; Defeated 2 to 2. (6) Keep Attachment 4 private, moved by Rutherford: for Rutherford, Salvador, Clarke, Janz; Carried 4 to 0. No motion on Recommendation 1. Notices of motion: 11.1 (Salvador, funding options) and 11.2 (Janz, Complete Streets).",
+        "Council table, 2026-08-26 to 2026-09-25. Executive Committee 2026-09-02, items 10.1 and 11.1: Salvador's motion pending not made; re-noticed to Council. City Council 2026-09-08/16, item 11.6: notice laid over to 2026-10-06. City Council Public Hearing 2026-09-15, item 2.1 (from open data only): revised due date for UPE02721, carried 13 to 0; not R. Public hearing 2026-09-22: no matching open-data row. Agenda of 2026-10-06 (e5f69000): not carried; any decision there falls outside the as-of date. R did not come before Council for decision.",
+        "Override statement: the committee's only decision on item 7.6 was to keep Attachment 4 private. No later Council decision is incompatible with it, so the minutes show no override.",
+        "Classification grid. Hold status by version: Version 2 no hold; Version 1 hold; original hold. Disposition in every version: left without a decision. Primary verdict in every version: Partially supported. Alternative 'did not support' reading: Supported. Alternative body, City Council: Not established."
+      ],
+      "what_would_change_my_verdict": [
+        "A Council minute before 2026-09-25 showing R adopted would make the claim Contradicted.",
+        "A committee record showing R put and defeated, or an incompatible motion carried, would change the verdict. It would become Supported if the operative version were shown to be Version 1 or the original; under Version 2 it would stay Partially supported, because no hold was proposed."
+      ],
+      "suggested_one_line": "Infrastructure Committee neither adopted nor rejected administration's revised approach; a motion to carry on as before tied 2–2 and failed, and City Council had not decided it by 25 September.",
+      "suggested_short_answer": "At its 26 August 2026 meeting, Infrastructure Committee neither adopted nor rejected administration's recommendation (Recommendation 1 of report IS03688). Under the version of Attachment 5 read as primary, that recommendation proposed re-evaluating 14 routes and reporting back in Q1 2027, not an express hold; two earlier versions did propose one. No member moved to adopt it. A motion to continue the programme at its previous scope tied 2–2 and failed. The recommendation never went to City Council, and Council had made no decision on it by 25 September 2026. The committee is not Council, and there was no override.",
+      "suggested_tldr": [
+        "The committee did not adopt administration's approach and did not vote it down; a motion to proceed as before tied 2–2.",
+        "The primary Attachment 5 proposed re-evaluation plus a report, not an express hold; earlier versions did propose one.",
+        "City Council never received the recommendation for decision by 25 September 2026."
+      ]
+    },
+    {
+      "id": "administration-recommended-freezing-14-routes",
+      "proposition_evaluated": "In report IS03688 for the Infrastructure Committee of 2026-08-26, administration recommended an approach that expressly defers construction or advancement of 14 named, unbuilt routes of the programme until a further evaluation, report or decision.",
+      "interpretation_notes": "OPERATIVE VERSION. The committee minutes (item 1.4) and the agenda addendum list 'Attachments … 5 (Version 1) and 5 (Version 2)' as replacements and do not say which was before members at item 7.6. The operative version is uncertain, so Version 2 (304030) is the primary reading. Salvador's notices of motion (committee item 11.1; Council item 11.6) refer to a section heading that exists only in the original and Version 1. That does not identify the operative version, but it shows the uncertainty was real.\n\nRECOMMENDATION. Recommendation 1 asks for approval of 'the updated approach … as outlined in Attachment 5'. It is addressed to the Infrastructure Committee, which is to recommend it to City Council, and is marked 'Council decision required'.\n\nCOUNT. All three versions list the same 13 'continue as planned' entries and the same 14 entries set apart, counting a bullet that joins segments as one entry. Splitting the two 'and' entries and the three-street Grovenor entry would give 18 segments.\n\nUNBUILT. Under Attachment 3 and its replacement (304029, 304028), 'accurate as of August 10, 2026', none of the 14 is under construction or complete. Three are 'Tender awarded. Construction has not yet started.' Six are 'originally scheduled for construction in 2026 … installation in 2026 is no longer viable.' Five 'do not have a delivery plan and schedule at this time'. All 14 are unbuilt at the primary date. For the alternative date of 2026-08-26 I found no dated City record, so status on that date is unresolved. Unresolved routes are reported, not counted.\n\nDEFERRAL BY VERSION.\n- Version 2, primary reading: not met. The text provides evaluation, says the projects 'may be re-evaluated', and promises a Q1 2027 report 'for Council direction and approval'. Nowhere does it say the 14 wait for that step. The report's 'best postponed to 2027' sentence is a weather assessment for all unstarted routes, not a wait pending evaluation. Version 2, strict reading: not met, because it does not say the routes are removed or will not proceed.\n- Version 1, primary reading: met. Rule 1 says unconstructed routes 'would be evaluated to determine if they should proceed', so proceeding waits on the evaluation. Version 1, strict reading: not met in terms. The removal rules (1a, 1b) are conditional on travel-lane or parking impacts, and the text does not say that each of the 14 has such impacts. The list says only that they 'may be revisited'.\n- Original, both readings: met. The 14 'would be removed from the scope … for 2026 and 2027', to be revisited only after Administration evaluates the bylaw-authority changes and funding.\n\nCLASSIFICATION. Version 2 (primary) is Partially supported under both readings. Version 1 is Supported under the primary reading and Partially supported under the strict one. The original is Supported under both. The finding is VERSION-SENSITIVE and must be stated so beside the verdict.\n\nBUDGET. The report says approval 'would not result in any changes required to the existing capital profile CM-20-0330 … or associated borrowing bylaws.'\n\nROUND 2. My round-1 classification is unchanged. gpt's reading of Version 1 as Partially supported under the primary reading is addressed in the round-2 notes.",
+      "verdict": "Partially supported",
+      "confidence": "Moderate",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Recommendation 1 asks for approval of the Attachment 5 approach for 'the remaining routes'. The Next Step section says Council approval is required for the modified direction.",
+          "source_title": "Report IS03688, pages 1 and 6",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304024",
+          "source_publisher": "City of Edmonton, Infrastructure Services",
+          "source_date": "2026-08-26",
+          "source_type": "policy-document",
+          "establishes": "Recommendation 1 asks for approval of the approach in Attachment 5 and is addressed to the committee to recommend to Council.",
+          "quote": "As Council provided Administration direction to expand Edmonton's cycling network rapidly, through adaptable means, Council approval for a modified direction is required.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Original Attachment 5: the 14 listed projects would be removed from programme scope for 2026 and 2027, and revisited only after Administration's evaluation and subject to funding.",
+          "source_title": "Attachment 5 - IS03688 - Modified Approach (original)",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304032",
+          "source_publisher": "City of Edmonton, Infrastructure Services",
+          "source_date": "2026-08-26",
+          "source_type": "policy-document",
+          "establishes": "Under the original version, both the primary and the strict deferral readings are met.",
+          "quote": "If Council approves the recommended change in approach, the following projects would be removed from the scope of the Active Transportation Network Expansion Program for 2026 and 2027. After Administration evaluates any applicable changes in municipal bike lane authority and subject to available funding following the completion of other scheduled routes, these routes may be revisited",
+          "strength": "strong"
+        },
+        {
+          "finding": "Version 1 keeps the rule that unconstructed routes 'would be evaluated to determine if they should proceed', and lists the same 14 under 'Will be reevaluated for feasibility and subject to funding availability'.",
+          "source_title": "REPLACEMENT (Version 1) Attachment 5 - IS03688",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304031",
+          "source_publisher": "City of Edmonton, Infrastructure Services",
+          "source_date": "2026-08-26",
+          "source_type": "policy-document",
+          "establishes": "Under Version 1, whether the routes proceed waits on evaluation, so the primary reading is met. The strict reading is not met in terms.",
+          "quote": "Routes that have not yet been constructed in 2026 and those planned or scheduled for installation in 2027 would be evaluated to determine if they should proceed",
+          "strength": "moderate"
+        },
+        {
+          "finding": "Attachment 3 and its replacement, dated 10 August 2026. Tendered, construction not started: 84 Avenue (79–83 Street); 92A Avenue/86 Street/alley; 93 Street/84 Avenue. No longer viable for 2026: 64 Street; 79 Street; 85 Street; 88 Avenue/93 Street/87 Avenue; 89 Street; 93 Avenue/82 Street/94 Avenue and 75 Street. No delivery plan: 50 Street (101–109A Avenue, 'paused for reconsideration'); 95 Avenue; 101 Avenue; 106 Avenue; Grovenor. None is under construction or complete.",
+          "source_title": "REPLACEMENT Attachment 3 - IS03688 - Locations and Status Updates",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304028",
+          "source_publisher": "City of Edmonton, Infrastructure Services",
+          "source_date": "status as of 2026-08-10",
+          "source_type": "analytical-report",
+          "establishes": "All 14 listed entries were unbuilt at the primary status date.",
+          "quote": "The following status updates provided are accurate as of August 10, 2026.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "Version 2, the declared primary, drops Version 1's 'evaluated to determine if they should proceed' rule and the original's removal wording. It prescribes evaluation and a Q1 2027 report and says the 14 'may be re-evaluated'. It does not say they wait for either step.",
+          "source_title": "REPLACEMENT (Version 2) Attachment 5 - IS03688",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304030",
+          "source_publisher": "City of Edmonton, Infrastructure Services",
+          "source_date": "2026-08-26",
+          "source_type": "policy-document",
+          "establishes": "Under the primary version, neither the primary nor the strict deferral reading is met.",
+          "quote": "If Council approves the approach, the following projects may be re-evaluated using alternate design approaches.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The report's only express postponement is based on weather, applies to every unstarted route, and names a year rather than an evaluation, report or decision.",
+          "source_title": "Report IS03688, page 5",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304024",
+          "source_publisher": "City of Edmonton, Infrastructure Services",
+          "source_date": "2026-08-26",
+          "source_type": "policy-document",
+          "establishes": "The report's timing text does not supply an express deferral of the 14 pending a further step.",
+          "quote": "Realistically, for routes where construction has not yet started, construction is best postponed to 2027 to reduce the risk of incomplete construction through the winter season.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "The report says approval would require no change to the capital profile or the borrowing bylaws.",
+          "source_title": "Report IS03688, Budget/Financial Implications",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304024",
+          "source_publisher": "City of Edmonton, Infrastructure Services",
+          "source_date": "2026-08-26",
+          "source_type": "policy-document",
+          "establishes": "The recommendation did not propose cutting the programme's budget or borrowing.",
+          "quote": "The recommendations in this report, if approved, would not result in any changes required to the existing capital profile CM-20-0330 - Active Transportation Implementation Acceleration Program, or associated borrowing bylaws.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "The agenda and minutes do not identify which Attachment 5 version was before the committee. The verdict follows the brief's Version 2 default and is version-sensitive.",
+        "No dated City record of each route's status on 2026-08-26 was found. Status at the alternative date is unresolved for all 14.",
+        "The attachments were read from archived text supplied in the package, because the portal blocks automated retrieval.",
+        "Attachment 3 names one entry '93 Street/84 Avenue (89 Street to 82 Avenue)', and Attachment 5 names it '93 Street (82 Avenue to 84 Avenue) and 84 Avenue (91 Street to 89 Street)'. I matched them as the same entry."
+      ],
+      "unknowns": [
+        "Which Attachment 5 version members considered at item 7.6.",
+        "Whether any listed route started construction between 2026-08-10 and 2026-08-26."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A clerk's record of which Attachment 5 version was before the committee, and a route status record dated 2026-08-26.",
+          "likely_holder": "City of Edmonton, Office of the City Clerk; Infrastructure Services",
+          "importance": "high"
+        }
+      ],
+      "calculations_needed": [
+        "The 13 'continue as planned' entries, identical in all versions: 50 Street (109A Avenue to Goldbar Park Road); 84 Avenue (Mill Creek Ravine to 91 Street); 100 Street (76 Avenue to 80 Avenue); 107 Avenue (East of Groat Road to 163 Street); 110 Avenue/90 Street (92 Street to 112 Avenue) and 112 Avenue (90 Street to 76 Street); 111 Avenue (120 Street to 121 Street); 114 Avenue (81 Street to 89 Street); 127 Avenue (97 Street to 102A Street); 163 Street from 87 Avenue to 95 Avenue; 163 Street (Stony Plain Road to 107 Avenue); 167 Street/169 Street (Whitemud Drive to 87 Avenue); Kingsway (113 Street to 122 Street); Victoria Park Road (116 Street to River Valley Road).",
+        "The 14 entries set apart, identical in all versions: 50 Street (101 Avenue to 109A Avenue); 64 Street (119 Avenue to Yellowhead Trail); 79 Street (76 Avenue to 101 Avenue); 84 Avenue (79 Street to 83 Street); 85 Street (93 Avenue to 98 Avenue); 88 Avenue/93 Street/87 Avenue (85 Street to 96 Street); 89 Street (76 Avenue to Connors Road); 92A Avenue/86 Street/alley (Connors Road to 85 Street); 93 Street (82 Avenue to 84 Avenue) and 84 Avenue (91 Street to 89 Street); 93 Avenue/82 Street/94 Avenue (85 Street to 75 Street) and 75 Street (94 Avenue to 94B Avenue); 95 Avenue (142 Street to 163 Street); 101 Avenue (50 Street to west of 84 Street); 106 Avenue (50 Street to west of 84 Street); Grovenor - 148 Street, 104 Avenue and 144 Street. Count: 14 entries. Splitting the two 'and' entries (+2) and Grovenor (+2) gives 18.",
+        "Treatment passage, quoted in full. Version 2: 'The remaining routes will be evaluated for trade-offs, alternative design treatments and budget implications. In Q1 2027, Administration will bring forward a report outlining trade-offs and options for the remaining routes, including an update on the remaining funding and budget implications, for Council direction and approval.' Version 1: 'If Council approves the recommended change in approach, the following projects may be revisited using alternate design approaches or other future initiatives.' Original: 'the following projects would be removed from the scope of the Active Transportation Network Expansion Program for 2026 and 2027…'.",
+        "Classification grid. Version 2: primary no, strict no, so Partially supported. Version 1: primary yes, strict no, so Supported under the primary reading and Partially supported under the strict one. Original: primary yes, strict yes, so Supported under both. Count is 14 in all versions. All 14 unbuilt at 2026-08-10; unresolved at 2026-08-26."
+      ],
+      "what_would_change_my_verdict": [
+        "A clerk's record showing the original or Version 1 was before the committee would make the claim Supported under the primary deferral reading.",
+        "A dated City record showing a listed route under construction on 2026-08-10 would rule out Supported in any version."
+      ],
+      "suggested_one_line": "Administration listed 14 unbuilt routes for re-evaluation; the final version did not say work on them must wait, though two earlier versions did.",
+      "suggested_short_answer": "Yes on the count and the unbuilt status; the 'freeze' depends on the version. Report IS03688 set 14 unbuilt route entries apart from 13 that would continue. Under Version 2 of Attachment 5, the version used when the record does not say which was before the committee, those routes 'may be re-evaluated' and a report comes back in Q1 2027. It does not say they wait for that report. The original attachment removed them from the programme for 2026 and 2027, and Version 1 made them wait on an evaluation; both of those are a hold. The recommendation did not change the programme's budget or borrowing.",
+      "suggested_tldr": [
+        "All three versions list 14 route entries set apart, all unbuilt as of 10 August 2026.",
+        "The version used by default (Version 2) proposes re-evaluation and a Q1 2027 report, not an express hold.",
+        "The original and Version 1 wording would have been a hold, so the finding depends on the version."
+      ]
+    },
+    {
+      "id": "motions-to-cut-budget-to-50-million-failed",
+      "proposition_evaluated": "Between the programme's approval in the 2022-11-30 budget deliberations and 2026-09-25, Councillors Karen Principe and Jennifer Rice brought two motions at City Council that sought to leave about $50 million in the programme and directed the released funds to named destinations, and Council defeated both.",
+      "interpretation_notes": "TWO CANDIDATE MOTIONS. Both were moved by K. Principe and seconded by J. Rice, on separate occasions, and both were put and defeated at City Council. They meet both the primary reading of 'brought' and the co-sponsorship alternative.\n\nMOTION A: Fall 2023 SCBA, Capital Budget Amendment 2 as re-stated (11577a3c, item 5.1.2).\n- Cut: $50,000,000, split $16,350,000 (2024), $16,825,000 (2025) and $16,825,000 (2026).\n- Base: $100,000,000, from the carried 2022-11-30 Capital Budget Amendment 7 (215a3a89, item 12.9).\n- Remainder: $50,000,000 (reviewer's calculation). It is inside the $45–55M band and cuts 50%, so it meets both amount readings.\n- Destination: 'with a funding reduction from tax-supported debt', which is a reduction in borrowing. As first moved it read 'to go towards the tax levy'.\n- Vote: defeated 4 to 8.\n\nMOTION B: Fall 2024 SCBA, Capital Budget Amendment 2 (8c66c382, item 5.1.2).\n- Cut: $33,650,000 in 2025 plus $33,650,000 in 2026, totalling $67,300,000.\n- Remainder on a $100M base: $32,700,000 (reviewer's calculation). It fails the primary band and meets the at-least-half alternative, a 67.3% cut. For Motion B to fall inside the primary band, the base would have had to be between $112.3M and $122.3M. I found no approved adjustment raising it, and IS03688 (2026) still describes the programme as $100 million.\n- Destination: the text reads 'with funding from tax-supported debt, to defund planning, design and delivery'. This names the funding source being decreased. Unlike Motion A, it does not state where the released amount goes. I treat the destination as not clearly named. On a lenient reading, the reduction of a debt-funded profile is a reduction in borrowing.\n- Vote: defeated 4 to 7.\n\nCLASSIFICATION.\n- Primary: one qualifying defeat (A), and B fails the band. The ladder gives Partially supported.\n- Co-sponsorship alternative: unchanged.\n- At-least-half amount alternative: both motions pass the amount test. The result is Partially supported if B's destination is read strictly, and Supported if it is read leniently. This alternative is definition-sensitive.\n\nOTHER RECORDED MOTIONS BY EITHER COUNCILLOR (qualification 4).\n- Fall 2023 CBA 3 (Rice moved, Principe seconded): cut $26,808,000 from the 2024 capital budget. It does not name CM-20-0330 and was withdrawn.\n- 2025-09-16, item 10.13 (Cartmell moved, Principe seconded): construction to cease pending review. Defeated 4 to 9. It is a suspension, not a budget cut.\n- Neither councillor moved or seconded any 2022 amendment on CM-20-0330. Both voted against the $100M approval.\n\nROUND 2. My verdict is unchanged. I agree with gpt that Motion B's destination is doubtful, and I disagree with gpt-luna's unflagged Supported result under the alternative.",
+      "verdict": "Partially supported",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Fall 2023 SCBA Capital Budget Amendment 2, re-stated, moved by K. Principe and seconded by J. Rice. Defeated 4 to 8. In favour: Hamilton, Cartmell, Rice, Principe. Opposed: Knack, Paquette, Sohi, Salvador, Tang, Rutherford, Stevenson, Wright. Janz not recorded.",
+          "source_title": "City Council - Budget Minutes, 2023-11-21 and continuations, items 5.1.1 and 5.1.2",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=11577a3c-2540-4848-908e-18710d3d2a4c&lang=English",
+          "source_publisher": "City of Edmonton, Office of the City Clerk",
+          "source_date": "2023-11-21",
+          "source_type": "legal-audited",
+          "establishes": "One jointly brought motion that would leave $50M, with a named destination, was put and defeated.",
+          "quote": "That capital profile CM-20-0330 - Active Transportation Implementation Acceleration - Approach 3 be reduced by $50,000,000 ($16,350,000 in 2024, $16,825,000 in 2025, and $16,825,000 in 2026) with a funding reduction from tax-supported debt.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Fall 2024 SCBA Capital Budget Amendment 2, moved by K. Principe and seconded by J. Rice. Defeated 4 to 7. In favour: Cartmell, Rice, Rutherford, Principe. Opposed: Knack, Sohi, Salvador, Janz, Tang, Stevenson, Wright. Hamilton not recorded; Paquette absent.",
+          "source_title": "City Council - Budget Minutes, 2024-12-02 and continuations, items 5.1.1 and 5.1.2",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=8c66c382-bd3c-4c28-bfad-1b5b91142ed7&lang=English",
+          "source_publisher": "City of Edmonton, Office of the City Clerk",
+          "source_date": "2024-12-02",
+          "source_type": "legal-audited",
+          "establishes": "A second jointly brought reduction motion was defeated on a separate occasion.",
+          "quote": "That capital profile CM-20-0330 - Active Transportation Implementation Acceleration - Approach 3 be decreased by $33,650,000 in 2025 and $33,650,000 in 2026 with funding from tax-supported debt, to defund planning, design and delivery of the Active Transportation Implementation Acceleration - Approach 3 project.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Base budget: Capital Budget Amendment 7, re-stated, approved CM-20-0330 at $100,000,000 ($5,950,000 in 2023; $26,750,000 in 2024; $33,650,000 in 2025; $33,650,000 in 2026). Carried 9 to 4, with Rice and Principe opposed.",
+          "source_title": "City Council - Budget Minutes, 2022-11-30 and continuations, item 12.9",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=215a3a89-60c7-4eff-8533-cf94079fabd2&lang=English",
+          "source_publisher": "City of Edmonton, Office of the City Clerk",
+          "source_date": "2022-11-30",
+          "source_type": "legal-audited",
+          "establishes": "The approved capital budget of $100M at the programme's approval, which is the base for both calculations.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "Motion B's cut of $67,300,000 (reviewer's calculation) would have left $32,700,000 on the $100M base, outside the $45–55M band. Its text names the funding source being decreased but does not say where the released funds go.",
+          "source_title": "City Council - Budget Minutes, 2024-12-02, item 5.1.2",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=8c66c382-bd3c-4c28-bfad-1b5b91142ed7&lang=English",
+          "source_publisher": "City of Edmonton, Office of the City Clerk",
+          "source_date": "2024-12-02",
+          "source_type": "legal-audited",
+          "establishes": "The second motion fails the primary amount rule and is doubtful on the destination rule.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Other attempts by the pair do not supply a second qualifying motion. Rice/Principe Fall 2023 CBA 3 ($26,808,000 from the 2024 capital budget, not naming CM-20-0330) was withdrawn. The 2025 suspension motion, which Principe seconded, was not a budget cut.",
+          "source_title": "City Council - Budget Minutes, 2023-11-21, item 5.1.2; City Council Minutes, 2025-09-16, item 10.13",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=11577a3c-2540-4848-908e-18710d3d2a4c&lang=English ; https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=0f0a1a9c-e89e-44dc-b776-b14a66e99487&lang=English",
+          "source_publisher": "City of Edmonton, Office of the City Clerk",
+          "source_date": "2023-11-21; 2025-09-16",
+          "source_type": "legal-audited",
+          "establishes": "No second defeated motion by the pair meets the ~$50M rule.",
+          "strength": "strong"
+        }
+      ],
+      "limitations": [
+        "The contemporaneous base at each motion date is taken from the 2022 approval. The Fall 2023 SCBA adjustments (Attachment 6 and the Attachment 11 exception for CM-20-0330) and the capital profiles attached to the Bylaw 20394 and 21265 reports were not read, because the portal blocks retrieval. gpt's DocumentId 245911 returned HTTP 403 when I tried it. Motion B's primary result would change only if the base were between $112.3M and $122.3M.",
+        "Meetings searched: the budget of 2022-11-30 and continuations (215a3a89); 2023-03-14 (6211ce95); 2023-04-17 (1e903a6e); the budget of 2023-11-21 and continuations (11577a3c); the budget of 2024-12-02 and continuations (8c66c382); 2025-08-19 (9132352c); 2025-09-16 (0f0a1a9c); Executive Committee 2026-06-30 (413dfd45); 2026-07-07 (1bc6d0e6); Executive Committee 2026-09-02 (fb2d3de4); 2026-09-08 (3195d7e4). Only selected items were carried, not whole minutes, and other Council meetings in the period were not read.",
+        "The spring capital budget adjustment meetings of 2023 through 2026 and the fall 2025 SCBA were not in the package. A further motion there cannot be excluded."
+      ],
+      "unknowns": [
+        "Whether an approved adjustment changed the CM-20-0330 total before 2024-12-02.",
+        "Whether a further motion by either councillor appears in the minutes of an unsearched meeting."
+      ],
+      "missing_evidence": [
+        {
+          "description": "The CM-20-0330 capital profile as amended through the Fall 2023 and Spring/Fall 2024 adjustments, and the minutes of the spring adjustment meetings.",
+          "likely_holder": "City of Edmonton, Financial and Corporate Services; Office of the City Clerk",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "Motion A, 2023-11-21 (reviewer's calculation). Base $100,000,000 (215a3a89, item 12.9). Cut $16,350,000 + $16,825,000 + $16,825,000 = $50,000,000. Remainder $50,000,000. Primary band $45–55M: met. At least half: met (50%). Destination: reduction in tax-supported debt, i.e. borrowing. Brought: Principe moved, Rice seconded, so both readings are met. Defeated 4 to 8.",
+        "Motion B, 2024-12-02 (reviewer's calculation). Base $100,000,000 (same source; no later adjustment found). Cut $33,650,000 + $33,650,000 = $67,300,000. Remainder $32,700,000. Primary band: not met. At least half: met (67.3%). Destination: not clearly named ('with funding from tax-supported debt'). Brought: Principe moved, Rice seconded, so both readings are met. Defeated 4 to 7. Base needed for the primary band: $112.3M–$122.3M.",
+        "Results. Primary: Partially supported. Co-sponsorship reading: Partially supported. At-least-half reading: Partially supported with a strict destination reading, Supported with a lenient one."
+      ],
+      "what_would_change_my_verdict": [
+        "A contemporaneous approved capital profile putting the December 2024 base between $112.3M and $122.3M would make the claim Supported, but only if Motion B's destination were also read as a reduction in borrowing.",
+        "A further defeated motion by either councillor that would leave $45–55M and names a destination would make the claim Supported."
+      ],
+      "suggested_one_line": "Principe and Rice brought two defeated cuts; the 2023 one would have left $50 million, but the 2024 one would have left about $32.7 million.",
+      "suggested_short_answer": "Partly. Councillors Principe and Rice brought two motions to cut the bike-lane programme, one in November 2023 and one in December 2024, and City Council defeated both. The 2023 motion would have cut $50 million from the $100 million budget, leaving $50 million, and put the savings toward a reduction in tax-supported debt. The 2024 motion would have removed the 2025 and 2026 money, $67.3 million in total. That would have left about $32.7 million, not $50 million, and the motion did not clearly say where the money would go.",
+      "suggested_tldr": [
+        "Two jointly brought motions to cut the programme were both defeated at City Council, in 2023 and 2024.",
+        "Only the 2023 motion matches 'cut it to $50M' and names where the money goes.",
+        "The 2024 motion would have left about $32.7M."
+      ]
+    }
+  ]
+}
