@@ -545,3 +545,42 @@ hashes did not change, and claim 4 stays parked. For the two Attachment 3
 rows the download provenance is recorded; the public-open check, the
 second download, the extraction check and the personal-information screen
 are pending, and round 1 does not launch until they pass.
+
+## 2026-09-29: Attachment 3 checked; the 2026-09-08 minutes changed and were archived again
+
+**Attachment 3 passed its checks, but the rebuild before launch found that
+the City had changed the Council minutes of 2026-09-08, so round 1 waits
+for that page's checks.** The change does not touch the program: the
+carried text of the page is byte-identical. The rule still requires the
+page to be archived again and checked again, because the completeness
+check was made against the earlier copy.
+
+**Attachment 3.** The founder opened both Attachment 3 URLs in an
+ordinary browser on 2026-09-29 and downloaded them again. Both downloads
+are byte-identical to the 2026-09-25 archive, which shows the City's files
+are unchanged, but the same person made both downloads, so the second
+download is recorded as not made. The independent read-only checker
+found both versions extracted in full: all three pages of each, every
+route row and footnotes 1 to 4, and a fresh extraction byte-identical to
+the carried text. It found no personal information about a private
+individual (`carried/checks/attachment3.md`).
+
+**The re-probe.** The earlier probes had expired, so every carried URL
+was probed again through all three seats between 2026-09-29T22:47:05Z and
+22:49:53Z. The Claude seat's WebFetch was refused with HTTP 403 at all 19;
+the GPT-6 seats' probes were unclear, as before.
+
+**The changed page.** On the rebuild the site's fetcher found that the
+live post-meeting minutes of 2026-09-08 (YF-EV-0215) no longer matched
+the archived copy in three items: new document links for the
+attachments of items 7.7 (public art policy) and 7.11 (climate
+priorities), and one restored line of motion wording in item 11.1
+(property tax communication). None concerns the program, and the only
+carried item, 11.6, is unchanged. The page was archived again on
+2026-09-29 as YF-EV-0227, which is carried instead of YF-EV-0215. Its
+carried text hashes to the same value as before
+(`4d4b6bae8671f5f6ff988e5566d90e7379c9d2df49df3848af0a69bfd4f55538`).
+Every other document's archive, text, item index and checks are
+unchanged, and claim 4 stays parked. YF-EV-0227's completeness check and
+personal-information screen are pending, and the package refuses to
+assemble until someone other than the editor makes them.
