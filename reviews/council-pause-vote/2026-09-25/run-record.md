@@ -718,3 +718,73 @@ revised brief makes to it is the brief line number each document's
 naming is recorded at. Nothing in the carry tooling keys on the brief's
 hash: it reads the brief only to confirm that each carried document's
 URL is named in it.
+
+## 2026-09-29: rounds 1 and 2 on the revised brief, synthesized
+
+**The panel answered all three tested claims Partially supported, and all
+three seats agreed on each in both rounds.** Synthesis, from round 1 as
+the method fixes, gives Partially supported, Unanimous, for claims 1, 2
+and 3. Claim 4 was parked for this run under its vote gate and was not
+tested. No seat raised a framing concern or wrote that an essential
+source was inaccessible. This is the panel's result, not yet a published
+finding; drafting and the human gate come next.
+
+**The package.** Every seat received the revised brief (sha256
+`fb0f29b1bc15ee5408b0204d8a396dcaa45c468f2f16227aa7a325df4ba4443d`), the
+reviewer prompt, the schema and the carried section, sha256
+`da1fa193d84fd3ad1e24902b6e4153b2ea76494b77c099a3909c651f29015a22` in
+both rounds: report IS03688, the three versions of Attachment 5, both
+versions of Attachment 3, and the items rule v2 selects from thirteen
+meeting pages. Round 1 launched from 28f4c73 on probes from
+2026-09-29T23:23:28Z, the earliest the package rests on being
+23:23:49Z; its package sha256 was
+`48078a6353a9caca76e91e5c70a4bf6b21dce2259454cd41453e53e064238fa0`.
+Before round 2 every carried URL was probed again from 23:37:31Z; the
+Claude seat's WebFetch was refused with HTTP 403 at all 19 and the GPT-6
+seats' probes were unclear. The manifest rebuilt on those probes (40a816a)
+has the same hashes, checks, item indexes, gate and exclusions, and round
+2 launched from it with its earliest probe at 23:37:54Z. The runner
+refused nothing, and every seat was admitted on one attempt in each
+round.
+
+| Seat | Round 1 attempt | Round 2 attempt |
+|---|---|---|
+| Claude Opus 5.5 (`claude-opus-5-5`), high, Claude Code 2.1.285 | `b60eb1c0a9431519`, 23:27Z to 23:33Z | `7094b82a12eab346`, 23:41Z to 23:47Z |
+| GPT-6 Sol (`gpt-6-sol`), high, codex-cli 0.159.0 | `6c0aa69c5432e776`, 23:27Z to 23:36Z | `f0d89683f223532b`, 23:41Z to 23:48Z |
+| GPT-6 Luna (`gpt-6-luna`), high, codex-cli 0.159.0 | `cf76a3bc540206f1`, 23:27Z to 23:34Z | `d3cb3ac59124dc6b`, 23:41Z to 23:50Z |
+
+| Claim | Claude, round 1 / 2 | GPT-6 Sol, round 1 / 2 | GPT-6 Luna, round 1 / 2 | Synthesis |
+|---|---|---|---|---|
+| `council-rejected-pause` | Partially supported, high / high | Partially supported, moderate / moderate | Partially supported, high / high | Partially supported, Unanimous |
+| `administration-recommended-freezing-14-routes` | Partially supported, moderate / moderate | Partially supported, moderate / moderate | Partially supported, moderate / high | Partially supported, Unanimous |
+| `motions-to-cut-budget-to-50-million-failed` | Partially supported, moderate / high | Partially supported, high / moderate | Partially supported, high / high | Partially supported, Unanimous |
+| `same-seven-councillors-vote-together` | parked | parked | parked | parked for this run |
+
+**What the seats found, in brief.** On claim 2, all three read the
+report as a whole under the revised brief and found that Version 2 of
+Attachment 5, with the report's text on timing and Attachment 3, does not
+say in terms that the 14 routes wait for the further evaluation or
+report; the Claude seat calls this a close call. All three note that the
+original Attachment 5 would meet the test, so the finding is
+version-sensitive. On claim 1, the committee left Recommendation 1
+without a decision rather than rejecting it. On claim 3, the seats found
+two jointly brought reduction motions, both defeated, of which only the
+2023 one would have left about $50 million.
+
+**Merge and limitations.** The round 1 merge found 22 distinct sources
+and no contested claim; evidence staging archived 10 and not 12, all of
+them portal file downloads or citations that join two portal URLs
+(`fetch-report.md`). The seats name as limitations the records the editor
+ruled not essential: the September public hearings, the October 6 agenda,
+the portal calendar and the capital profile and budget-adjustment
+attachments. The Claude seat also names administration's presentation at
+the committee, which the brief does not name, and a City project page
+that returned HTTP 502, which it treats as a news report's lead only.
+
+**Claim 4.** `same-seven-councillors-vote-together` is parked for this
+run. The full set of relevant recorded votes depends on budget-adjustment
+meetings and attachments that are not archived, and on bundled budget
+votes whose relevance is unresolved; depending on those, the verdict
+ranges from Not established to Contradicted (`carried/checks/gate.md`).
+The editor accepted the park. The seats were told so and did not answer
+it. `run.yaml` scopes synthesis to claims 1 to 3.
