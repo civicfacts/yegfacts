@@ -1,6 +1,8 @@
-# Review brief: Who showed up to speak on the bike lanes at council, and who organized them?
+# Review brief: Did the committee cut speaking time at the bike-lane meeting, and how many people were approved to speak?
 
-Status: **DRAFT, not frozen. Sent to framing check 1 on 2026-10-02.**
+Status: **DRAFT, not frozen. Revised 2026-10-02 after framing check 1
+(`framing/check-1.md`, REVISE; every finding adopted, `framing/response-1.md`)
+and sent to check 2.**
 Drafted 2026-10-02 by Stew from the register entries for `council-hearing`
 and from archived copies of the Infrastructure Committee's agenda and
 post-meeting minutes of 2026-08-26, the City's Council Procedures Bylaw,
@@ -11,23 +13,34 @@ entry: `intake/register.yaml`. Source: `yegscoop-2026-08-26`.
 
 ## The question
 
+Two questions arise from the same thread and are not answered here. Who
+showed up to speak on the bike lanes at council: were there more
+supporters than opponents in the room? And who organized them: were the
+supporters special interest groups, lobbyists or paid? The register
+grouped this question under those words, "Who showed up to speak on the
+bike lanes at council, and who organized them?", and both claims that
+would answer it are parked at framing below, because no record the panel
+can read reaches both verdict directions on either. What remains, and what
+this brief tests, is the third claim from the thread: what the committee
+did to speaking time, and how many people were on its list.
+
 Eleven people in one Facebook thread, writing in the days after the
 Infrastructure Committee heard the public on the bike-lane programme on
-2026-08-26, made three factual claims between them about that hearing: who
-came to speak, who sent them, and what the committee did to their speaking
-time. One says more people spoke for the lanes than against; four answer
-that the supporters were few or only there because they do not work. Five
-say the supporters were special interest groups, lobbyists or paid. One
-says the committee cut speakers from five minutes to three with seventy
-people in the queue.
+2026-08-26, made three factual claims between them about that hearing. One
+says more people spoke for the lanes than against; four answer that the
+supporters were few or only there because they do not work. Five say the
+supporters were special interest groups, lobbyists or paid. One says the
+committee cut speakers from five minutes to three with seventy people in
+the queue.
 
 One claim is under review:
 
 - `speaking-time-cut-to-three-minutes`: whether, at its meeting of
   2026-08-26, the Infrastructure Committee cut the time each member of the
   public could speak from the five minutes the City's procedures bylaw
-  provides to three, at a meeting for which about seventy people had been
-  approved to speak on the bike-lane item.
+  provides to three, at a meeting for which about seventy people, between
+  60 and 80 on the committee's list, had been approved to speak on the
+  bike-lane item.
 
 It carries its own verdict, panel agreement and evidence-basis label.
 Reviewer confidence appears only beside the reviewer who gave it.
@@ -163,15 +176,24 @@ Council and City staff acting in role keep their names. Where the minutes
 are carried into the panel package under methodology v1.42, the names of
 members of the public are already replaced with "[member of the public]"
 and the organization after a name is kept; reviewers count entries.
+Because every withheld name becomes the same label, a person cannot be
+matched across the Requests to Speak list, the presentation lists or the
+meeting's items from that text. Every count in this brief is therefore a
+count of entries, as defined below; distinct-person counts and the count
+of approved speakers not recorded as presenting cannot be calculated from
+the carried text and are not required.
 
 **The bylaw.** Bylaw 18155, the Council Procedures Bylaw, as consolidated
 by the City on 2025-10-29 and published at
 `https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf`.
-Section 38, "Time limits", sets the standing speaking limits; section 3
-applies the bylaw's procedures to Standing Committees; section 4 lets
-Council or a Standing Committee waive or modify any part of the bylaw by
-special resolution, which section 1 defines as a vote in which at least
-two-thirds of all members of the committee vote in favour. The bylaw is
+Section 38, "Time limits", sets the standing speaking limits. Section 1
+states the bylaw's purpose as establishing procedures for the conduct of
+all meetings and excludes three bodies by name, none of them a Standing
+Committee; section 3(c) is an interpretation rule under which a
+committee's establishing bylaw prevails over this one where they conflict;
+section 4 lets Council or a Standing Committee waive or modify any part of
+the bylaw by special resolution, which section 2 defines as a vote in
+which at least two-thirds of all members of the committee vote in favour. The bylaw is
 the instrument for what the standing limit was and what kind of motion
 could change it. Reviewers confirm from the consolidation's own list of
 amendments that no amendment after 2025-10-29 bears on section 38, and
@@ -181,21 +203,25 @@ say so.
 them and because the second parked claim turns on what they cover.
 Alberta's Lobbyists Act, Statutes of Alberta 2007 chapter L-20.5, in the
 King's Printer consolidation current as of 2022-12-15 at
-`https://kings-printer.alberta.ca/documents/Acts/L20P5.pdf`, provides in
-section 3(1)(c) and (d) that the Act does not apply to members of a
-council charged with the administration of the civic or municipal affairs
-of a municipality, to individuals on their staff, or to officers or
-employees of municipalities, acting in their official capacity; the
-provincial registry it creates therefore records lobbying of provincial
-public office holders and not of a city council or its committees. The
-City of Edmonton publishes one lobbyist registry on its open data portal,
-the "Mayor's Lobbyist Registry" at
+`https://kings-printer.alberta.ca/documents/Acts/L20P5.pdf`, defines
+registrable lobbying by reference to provincial public office holders and
+decisions, not lobbying of Edmonton City Council. Section 3(1)(c) and (d)
+separately exempts municipal officials acting in their official capacity.
+In the Act's words, section 1(1)(k) defines a "public office holder" as a
+Member of the Legislative Assembly and the Member's staff, a member of the
+Executive Council, the Premier's and Ministers' staff, an appointee to a
+board, committee or council established under the Government Organization
+Act, and an employee, officer, director or member of a department or
+prescribed Provincial entity; section 1(1)(f) defines "lobby" as
+communicating with a public office holder in an attempt to influence
+provincial legislative proposals, bills, regulations, policies, programs,
+contracts and the like. The City's Mayor's Lobbyist Registry, at
 `https://data.edmonton.ca/Elected-Officials/Mayor-s-Lobbyist-Registry/3dkh-9hnu`,
-which the City describes as a registry the Mayor's Office implemented
-voluntarily for the 2017-2021 term; its export of 2026-10-02 holds rows
-dated from 2017-11-07 to 2021-09-15 and none later. Neither registry can
-record anything about this hearing, and neither is an instrument for any
-claim under review.
+is a different, historical instrument: the City describes it as a registry
+the Mayor's Office implemented voluntarily for the 2017-2021 term, and its
+export of 2026-10-02 holds rows dated from 2017-11-07 to 2021-09-15 and
+none later. Neither identified registry is a per-speaker record for this
+hearing, and neither is an instrument for any claim under review.
 
 **What the record does not hold.** No City record identified at intake
 records the position of each speaker at this hearing. The City publishes a
@@ -250,34 +276,43 @@ approved speaker shorter than the standing limit. The cut is "from five to
 three" when the standing limit is five minutes and the motion sets a
 maximum of three.
 
-**The queue, primary count N.** The number of distinct persons listed as
-approved speakers on item 7.6 in the Requests to Speak motion and any
-additional-speaker motion at the meeting. Each listed entry is one person;
-where the names have been withheld, each "[member of the public]" entry is
-counted once. Reviewers transcribe the count panel by panel and show the
-sum. Required alternative count, N-all: the number of distinct persons
-listed as approved speakers on every item of the meeting, because the
-holder says "70 is in the current cue" without naming an item and the
-committee's list that morning covered four items. Required alternative
-count, N-spoke: the number of persons the minutes record as having made a
-presentation on item 7.6, because the holder may have meant the people who
-actually spoke. Reviewers report all three and say which is which.
+**The queue, primary count N.** The number of entries listed as approved
+speakers on item 7.6 in the Requests to Speak motion and any
+additional-speaker motion at the meeting. An entry is one line of the
+committee's list; where the names have been withheld, each "[member of
+the public]" entry is counted once. Reviewers transcribe the count panel by
+panel and show the sum. Required alternative count, N-all: the number of
+entries listed as approved speakers on every item of the meeting, because
+the holder says "70 is in the current cue" without naming an item and the
+committee's list that morning covered four items; a person approved on
+two items appears twice in N-all, and reviewers say so where it is
+reported. Required alternative count, N-spoke: the number of entries the
+minutes record as having made a presentation on item 7.6, because the
+holder may have meant the people who actually spoke. Reviewers report all
+three and say which is which. Distinct-person counts and the count of
+approved speakers not recorded as presenting cannot be calculated from the
+carried text and are not required; where a reviewer reads the live minutes
+and could match names, it still reports entries, so every seat reports
+the same measure.
 
-**About seventy, the magnitude band.** The holder's figure is seventy.
-The proposition is met on magnitude when N is at least 60. Required
-alternative threshold: N at least 50. Neither comes from a pre-existing
-standard: the primary allows the holder's figure to be off by one in seven
-and still describe the queue the holder saw; the alternative allows it to
-be off by two in seven. A count above seventy meets both, because a longer
-queue does not weaken the holder's point. Reviewers report the result under
-both thresholds and under each alternative count.
+**About seventy, the magnitude bands.** For the reported figure of
+seventy, the primary band is 60 to 80 approved speakers on item 7.6; the
+required alternative band is 50 to 90. Reviewers report the count and the
+result under both bands. A count above a band still establishes a large
+queue, but does not establish that the reported figure was approximately
+seventy. Neither band comes from a pre-existing standard: the primary
+allows the holder's figure to be off by ten either way; the alternative by
+twenty. The bands apply to each alternative count in turn.
 
-**"Because of the volume of complaints."** Not tested. The minutes record
-the time-limit motion, its mover, its vote and its result, and no reason;
-why a member moved it is a question about intent, which the site does not
-test. What the brief does test is what the holder offers as the reason's
-evidence, the size of the queue, as the magnitude above. Whether the people
-in the queue were "complaints" is the business of the first parked claim.
+**"Because of the volume of complaints from all over the city."** Not
+tested, and an excluded part of the comment. The minutes record the
+time-limit motion, its mover, its vote and its result, and no reason; why a
+member moved it is a question about intent, which the site does not test.
+The size of the queue is tested because the holder gave a figure for it,
+and a count establishes nothing about why the motion was moved, whether
+the people on the list were complainants, or where they came from. Whether
+the people in the queue were for or against the programme is the business
+of the first parked claim.
 
 ## Claims under review
 
@@ -286,8 +321,9 @@ in the queue were "complaints" is the business of the first parked claim.
 **Normalized proposition:** At its meeting of 2026-08-26, the Infrastructure
 Committee carried a motion reducing the time each approved public speaker
 could speak from the five minutes the Council Procedures Bylaw provides to
-a maximum of three minutes for that meeting, at a meeting for which at
-least 60 people had been approved to speak on the bike-lane item.
+a maximum of three minutes for that meeting, at a meeting for which about
+seventy people, between 60 and 80 entries on the committee's list, had been
+approved to speak on the bike-lane item.
 
 **Reader-facing question:** Did the committee really cut everyone to three
 minutes at the bike-lane hearing, and how many people were lined up to
@@ -298,19 +334,19 @@ speak?
 elements because the holder gave both, and reads them against the two
 records that can settle them: the bylaw for what the limit was, the
 minutes for what the committee did and how many people it had agreed to
-hear. "Council" becomes the committee that sat. The holder's "due to a
-high volume of complaints" is read as the circumstance the holder offers,
-a long queue, and tested as the size of that queue; the motive behind the
-motion is not tested. "Concerns" and "complaints" are the holder's words
-for the people in the queue, and whether they were complaints is not
-tested here because the minutes do not record it. The proposition is more
-precise than the claim and not weaker: it names the body, the bylaw, the
-limit and the count.
+hear. "Council" becomes the committee that sat. "70" is read as about
+seventy, with the bands fixed above, because a round figure is what the
+holder gave. This proposition tests the reported
+change in speaking time and the reported queue size. It does not test the
+claimed reason for the change, whether registrants were complainants, or
+whether they came from across the city. Those parts of the comment remain
+unresolved by this verdict.
 
 **What this verdict establishes, stated beside it.** This proposition
 checks what the committee's minutes and the City's bylaw record: the
 standing limit, the motion that changed it for the day, and the number of
 people on the list. It does not establish why the motion was moved,
+whether the people on the list were complainants or where they came from,
 whether three minutes was enough, how many of the people in the queue were
 for or against the programme, or whether anyone's concerns were ignored.
 The published short answer carries these limits beside the verdict, not
@@ -322,36 +358,28 @@ Bylaw, section 38, as consolidated 2025-10-29. Both are essential: a
 reviewer that cannot read either says so, and an inaccessible essential
 source stops a run rather than becoming a finding.
 
-**Order of classification.** Apply the Not established conditions first.
-Then decide whether the cut is established. Only then apply the magnitude
-band. The same order applies under every alternative.
+**Verdict ladder.** The magnitude rule is the primary band fixed above,
+60 to 80 entries on item 7.6.
 
-**Verdict ladder.**
+Apply Not established first when an essential source cannot be read or the
+available minutes do not establish the disposition of a recorded
+speaking-time motion. Supported requires a five-minute standing limit, a
+carried motion setting a three-minute maximum for every approved speaker
+at this meeting, and a primary count inside the chosen magnitude rule.
+Partially supported applies when a shorter per-speaker limit is
+established but the standing limit, new limit, coverage of speakers or
+queue count does not meet every Supported condition; report exactly which
+elements are established, including when the count cannot be calculated.
+Contradicted applies when the readable bylaw and sufficiently complete
+minutes establish that no motion reducing the per-speaker maximum below
+the standing limit was carried. Apply the same rules to each required
+alternative, reporting those results as qualifications to the one primary
+verdict.
 
-- **Supported** if the standing limit under section 38(1) was five
-  minutes, the committee carried a motion at the meeting setting a maximum
-  of three minutes per approved speaker for that meeting, and N is at
-  least 60.
-- **Partially supported** if the standing limit was five minutes and the
-  committee carried such a motion, but N is below 60. What is established
-  is the cut; what is not established is the size of the queue the holder
-  gave. Also Partially supported if the cut is established but N cannot
-  be counted because the Requests to Speak motion is not in the minutes
-  or does not list speakers by item; the count is then reported as not
-  established.
-- **Contradicted** if the minutes record no motion carried at the meeting
-  that set a per-speaker maximum shorter than the standing limit, or if
-  the standing limit under section 38(1) in force on 2026-08-26 was three
-  minutes or less, so that no cut from five to three could have occurred.
-- **Not established** if the post-meeting minutes of 2026-08-26 cannot be
-  read, or do not record the disposition of any motion on speaking time,
-  or if the bylaw in force on 2026-08-26 cannot be read.
-
-Alternative threshold, results required under both: N at least 50 in place
-of 60, with the same rows otherwise. Alternative counts, results required
-under each while every other choice stays primary: N-all and N-spoke in
-place of N. Where any alternative changes the row, the finding is
-definition-sensitive, the story says so beside the verdict, and neither
+Required alternatives, each applied with every other choice held primary:
+the alternative band, 50 to 90, in place of the primary band; N-all and
+N-spoke in place of N. Where any alternative changes the row, the finding
+is definition-sensitive, the story says so beside the verdict, and neither
 side can fairly cite the verdict without that qualification.
 
 **Qualifications reported, never carrying the verdict:**
@@ -376,8 +404,10 @@ side can fairly cite the verdict without that qualification.
 6. The lists of public speakers who made presentations on item 7.6
    transcribed the same way: panels, entries per panel, the sum N-spoke,
    and the number of entries carrying an organization, with the
-   organizations named; and the number of approved speakers on the item
-   who are not recorded as having presented, as a count.
+   organizations named. The number of approved speakers not recorded as
+   presenting is not calculated, because the carried text does not let a
+   person be matched across lists; reviewers report N and N-spoke side by
+   side and nothing more.
 7. Whether the minutes record any speaker as having been given more or
    less than the limit, any motion extending the time of any speaker, and
    any speaker presentation attached under item 7.6, as a count of
@@ -439,13 +469,15 @@ may object to either.
    two triage readers refused the claim on exactly this ground before the
    question was grouped (`prior_triage: no`), and the question's own GO
    reason said the claim should be dropped unless a lobbyist registry links
-   the groups directly. The lobbyist strand: the registry that exists in
-   Alberta excludes, by section 3(1)(c) and (d) of the Lobbyists Act,
-   lobbying of a municipal council and its staff, so no registration under
-   it can link anyone to this hearing; the City's only registry covers the
-   Mayor's Office for the 2017-2021 term and holds no row after
-   2021-09-15, so it cannot either; the editor read both before parking
-   and found no registry that could. The special-interest strand: that the
+   the groups directly. The lobbyist strand: Alberta's Lobbyists Act
+   defines registrable lobbying by reference to provincial public office
+   holders and decisions, not lobbying of Edmonton City Council. Section
+   3(1)(c) and (d) separately exempts municipal officials acting in their
+   official capacity. The City's Mayor's Lobbyist Registry is a different,
+   historical instrument; neither identified registry is a per-speaker
+   record for this hearing. So no registration in either can link anyone
+   to this hearing; the editor read both before parking and found no
+   registry that could. The special-interest strand: that the
    supporters came as organized groups is, as a fact, what the minutes
    show where a speaker gives an organization's name, and nobody in the
    source disputes that organizations spoke; what the holders assert is
@@ -473,24 +505,19 @@ cannot reach both directions, and no verdict on the remaining claim settles
 either of them.
 
 **The committee cut speakers to three minutes with seventy in the queue.**
-Supported would establish that the committee did, by its own motion and
-vote, cut every approved speaker from the five minutes the bylaw gives to
-three for that day, and that at least sixty people were on its list for
-the item; an opponent of the holder could no longer treat "they limited
-concerns to three minutes" as spin, though the qualifications would show
-whether the limit fell on every speaker alike and whether the bylaw's own
-two-thirds rule for such a change was met. It would not establish why the
-motion was moved or whether the people in the queue were opponents.
-Contradicted would establish that no such cut was made, or that three
-minutes was already the rule, so that the holder's account of the hearing
-is wrong at its centre; the holder could still say the hearing was long and
-the limit short. Partially supported would establish the cut and defeat
-the seventy: the committee did cut the time, and the queue was shorter
-than the holder said, by an amount the counts show. Not established would
-leave the committee's handling of the hearing unresolved on the record.
+Supported would establish the specified five-to-three-minute change for
+every approved speaker and a queue within the declared magnitude band; the
+opponent could no longer dismiss those two reported facts. Contradicted
+would establish that the committee made no reduction in the per-speaker
+maximum; the holder's account of a cut would fail, though a long meeting or
+a short standing limit could still be argued. Partially supported would
+identify which part held and which failed or could not be counted. Not
+established would leave the motion or standing rule unresolved on the
+available record. No verdict establishes why the motion was moved or
+whether the people on the list were opponents.
 
 **Definition sensitivity.** The verdict applies under the primary count,
-threshold and body fixed above. Where a required alternative produces a
+band and body fixed above. Where a required alternative produces a
 different row, the finding is definition-sensitive, the story says so
 beside the verdict, and neither side can fairly cite the verdict without
 that qualification.
@@ -548,8 +575,8 @@ this brief. This brief states no count of speakers, panels or minutes.
 3. **Bylaw 18155, Council Procedures Bylaw, consolidated 2025-10-29**, at
    `https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf`.
    Answers: section 38, the standing limits; section 4 and the definition
-   of special resolution in section 1; section 3 on application to
-   Standing Committees; the list of amendments. The standing limit for the
+   of special resolution in section 2; section 1 on the bylaw's purpose
+   and the bodies it excludes; the list of amendments. The standing limit for the
    claim under review and qualification 1. Essential.
 4. **City Council and committee post-meeting minutes since 2025-10-29**,
    found through the portal's calendar at
@@ -568,9 +595,8 @@ behind it, never the source of a classification.
   entries per panel, the sum N, entries carrying an organization, and the
   organizations as the minutes give them.
 - N-all by item and in total; N-spoke by panel and in total, with the
-  organizations; the number of approved speakers on item 7.6 not recorded
-  as presenting.
-- The row under the primary threshold and under the alternative, for each
+  organizations.
+- The row under the primary band and under the alternative band, for each
   of N, N-all and N-spoke, and the definition-sensitivity statement.
 - The vote on the time-limit motion as recorded, against the committee's
   membership as the minutes' attendance gives it, for the two-thirds
@@ -595,7 +621,7 @@ arithmetic is shown and it is labelled as the reviewer's calculation.
 - **Bound every absence.** If no City record states a reason for the
   motion, or no earlier meeting adjusted the limits, say what was searched
   and as of when. "We did not find it" is not "it does not exist".
-- **Report one verdict** under the primary count and threshold fixed here,
+- **Report one verdict** under the primary count and band fixed here,
   and put every alternative's result in `interpretation_notes` or
   `limitations`. The schema carries one verdict per claim.
 - **Record every source URL in full**; you have no repository access. Where
