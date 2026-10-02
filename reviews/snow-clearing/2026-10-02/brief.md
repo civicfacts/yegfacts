@@ -1,8 +1,22 @@
 # Review brief: Had City administration already put two snow-clearing proposals that need more spending before council?
 
-Status: **DRAFT, revised 2026-10-02 after framing check 2 with the
-editor's written resolution under methodology v1.12, before check 3.**
-Drafted 2026-10-02 by Stew from the register entries for `snow-clearing`
+Status: **FROZEN 2026-10-02 under methodology v1.39, after the wording
+confirmation (`framing/check-4.md`, CONFIRMED).** Checks 1, 2 and 3
+(`framing/check-1.md`, `check-2.md`, `check-3.md`), all from the OpenAI
+seat, each returned REVISE; every finding was adopted and none disputed
+(`framing/response-1.md`, `response-2.md`, the latter being the editor's
+written resolution under v1.12, and `response-3.md`). Checks 1 and 2 each
+asked for claims to be parked, and the editor parked them. Check 3, the
+last report under the v1.12 cap, left one standing finding, a framing
+finding on the brief's title with copy-ready replacement text and no
+defect. The editor applied the replacement as the first line of this
+brief, byte for byte, and changed nothing else (`framing/wording-edits.md`);
+a reader who is not the editor found the application ELIGIBLE
+(`framing/eligibility.md`); the same seat that wrote check 3 read the
+whole difference and answered CONFIRMED, on which the brief freezes.
+This status block was written after the confirmation and is the only text
+changed since it. One claim goes to the panel; four are parked at
+framing. Drafted 2026-10-02 by Stew from the register entries for `snow-clearing`
 and from archived copies of the City's snow and ice control policy and
 procedure, its winter service pages, and the agendas and minutes of the
 Council and committee meetings named below; no fact in it comes from
