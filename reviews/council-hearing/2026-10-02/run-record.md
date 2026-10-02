@@ -661,7 +661,9 @@ and still matches.
 
 Nothing in the ledger's recorded modes is present in the draft as committed.
 The two seat miscounts above are round-two catches this run's records
-corroborate. The editor had them entered in the ledger as self-corrections.
+corroborate. The editor had them entered in the ledger as self-corrections, in a
+separate PR (branch `ledger-exempt`) that also exempts the ledger from the
+version rule, so this branch does not touch methodology/.
 
 **Labels.** On the built question page every carried source cited carries
 its v1.43 label: YF-EV-0209 and YF-EV-0210 the selected-items label, and

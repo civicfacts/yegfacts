@@ -2,7 +2,7 @@
 
 Disposition: 3 required changes, all made (R1 in the editor's wording); 6 suggestions, 4 adopted (S1 to S4) and 2 not taken (S5, S6). No finding changed. To keep the page's duplication audit clean after R2, the claim's answer now reads "when 64 entries were listed to speak on the bike lanes" where it said "with 64 entries on its list to speak on the bike lanes".
 
-R1, made in the editor's wording rather than the critique's, to fit the gate's B1 finding: the standfirst is "Nobody can tell from the records which side Edmonton's bike-lane speakers took. Nine entries on the list named groups that had urged people to speak, and no record shows anyone was paid." It is the share text. The parked line is the gate's fix 4, "We can't tell whether anyone paid Edmonton's bike-lane speakers, and the records tie only some of them to the groups that urged people to speak. We'll revisit this claim if a record turns up that settles it."
+R1, made in the editor's wording rather than the critique's, to fit the gate's B1 finding: the standfirst is "Nobody can tell which side Edmonton's bike-lane speakers took. Nine of 64 entries named groups that urged people to speak, and no record shows anyone was paid." At 159 characters it is the share text whole, under the 160-character cut the site applies to descriptions. The parked line is the gate's fix 4, "We can't tell whether anyone paid Edmonton's bike-lane speakers, and the records tie only some of them to the groups that urged people to speak. We'll revisit this claim if a record turns up that settles it."
 
 R2, made: TL;DR 1 is "The committee did cut each speaker's time from five minutes to three, with 64 entries on its list to speak on the bike lanes and 52 recorded as speaking." Bullet 5 stays.
 

@@ -56,7 +56,7 @@ describe('the groups behind the call to register', () => {
     expect(figures.n.count - figures.approvedUnderCallGroups).toBe(55);
     expect(story).toContain('nine of those gave one of these three groups');
     expect(story).toContain('any of the other 55 answered it');
-    expect(story).toContain('Nine entries on the list named groups that had urged people to speak');
+    expect(story).toContain('Nine of 64 entries named groups that urged people to speak');
     expect(story).toContain('nine entries on the list gave its name or a group working with it');
   });
 });
