@@ -1,0 +1,153 @@
+{
+  "reviewer": {
+    "provider": "anthropic",
+    "model_self_reported": "Claude Opus 5.5",
+    "runner_model": "claude-opus-5-5",
+    "runner_seat": "Claude Opus 5.5",
+    "runner_effort": "high"
+  },
+  "story": "council-hearing",
+  "round": 2,
+  "round2_notes": {
+    "evidence_i_missed": [
+      "Nothing in the other two round-1 reviews is new evidence on the merits. All three seats used the same carried extracts of the minutes and the bylaw, so our agreement on what they say is not independent retrieval.",
+      "I missed one point on how much the vote count can bear. The time-limit motion under item 1.4 drew 6 votes in favour. That meets two-thirds of all members for any committee of up to 9 members, so the special-resolution finding does not depend on taking the committee's membership as exactly the six people in the minutes' header. Later votes on the same day had only 4 or 5 voters: the additional-speaker motion under item 2.3 carried 4 to 0 without A. Knack or A. Paquette, and the 7.6 motions to go into private and back into public each carried 5 to 0. So attendance changed during the day, but the time-limit vote had all six present."
+    ],
+    "errors_in_other_reviews": [
+      "gpt (GPT-6 Sol), claim speaking-time-cut-to-three-minutes, citation of the post-meeting minutes https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English item 7.6, challenging evidence and calculations_needed: it gives N-spoke as 16+16+16+2=50. In the carried text, Panel 3 of the presentation lists has 18 entries: one YEG Bike Coalition entry followed by 17 entries with no organization. The correct total is 16+16+18+2=52. The rows do not change (Partially supported under 60–80, Supported under 50–90), but the published count is wrong, and at 50 the reviewer put N-spoke exactly on the lower edge of the alternative band, which 52 is not.",
+      "gpt-luna (GPT-6 Luna), claim speaking-time-cut-to-three-minutes, citation of the minutes (same URL) item 2.3, supporting evidence and calculations_needed: it says 14 entries carry an organization, with Panel 2 at 7 (2+7+3+2+0=14). Panel 2 of the item 7.6 Requests to Speak list has 8 such entries: Bike Bus Alberta; Holyrood Voice; Holyrood Community 79 St Action Group; YEG Bike Coalition; Paths for People; and Ward Métis Bikes three times. The correct total is 2+8+3+2+0=15. The same error carries into its suggested_short_answer ('14 entries with organization names') and its N-all organization total (26). Recounted by item, that total is 5 (item 7.1) + 1 (item 7.3) + 6 (item 7.4) + 15 (item 7.6) = 27.",
+      "gpt-luna (GPT-6 Luna), claim speaking-time-cut-to-three-minutes, its limitation on the agenda page https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English: it says the carried agenda's item 7.6 extract 'lists five public-speaker attachments'. The carried agenda lists 10 attachments for item 7.6, all of them report attachments or Administration's presentation, and none from a public speaker. The five public-speaker attachments (entries 11–15, 'Panel 3', 'Panel 2', 'Panel 1', 'Panel 4', 'Panel 3') appear only in item 7.6 of the post-meeting minutes. This affects qualification 7, which asks what the agenda shows against what the minutes show.",
+      "gpt-luna (GPT-6 Luna), claim speaking-time-cut-to-three-minutes, source_type on its minutes citations (same minutes URL, items 1.4, 2.3 and 7.6): it labels the post-meeting minutes 'city-webpage'. The other seats and the combined registry label them 'legal-audited'. Minutes are the statutory record of decisions under Bylaw 18155 s.19 and the Municipal Government Act, so 'legal-audited' is the right label. This mislabels the source's place in the hierarchy but does not affect the verdict.",
+      "gpt (GPT-6 Sol), claim speaking-time-cut-to-three-minutes, qualification 9 limitation: it says it searched indexed City Council minutes for January 27, February 17 and March 17, 2026, and refers to 'the examples found', but names no meeting date or limit set. Qualification 9 requires both for any earlier adjustment found. Either the examples should be reported with date and limit, or the result should read 'none identified' with the search bounds.",
+      "gpt (GPT-6 Sol), claim speaking-time-cut-to-three-minutes, bylaw citation https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf: it says 'a search of the City's bylaw index on October 2, 2026 identified no later amendment to section 38'. It cites no index URL, and in its limitations it says its direct web requests for the bylaw failed. Nobody can check that statement. The checkable basis is the consolidation's own amendment list: the last entry is Bylaw 21365 of October 29, 2025, and the most recent note under s.38 is S.15, Bylaw 20226, July 4, 2022.",
+      "claude (my own round-1 review), claim speaking-time-cut-to-three-minutes: I listed the CBC/Yahoo report (https://ca.news.yahoo.com/edmonton-bike-lane-expansion-continue-231838925.html) as supporting evidence. The brief says that report is not a source for this claim, and its 'Dozens of cyclists' wording describes speakers in a way the minutes do not. I have dropped it from evidence in round 2. I re-fetched the page today: the quote is accurate, and the report gives no count and does not mention time limits. I also titled an agenda-page citation 'agenda page and minutes item 1.4', which mixes two documents. The Orders of the Day change is recorded in the minutes, item 1.4, not on the agenda page."
+    ],
+    "verdict_changes": []
+  },
+  "claims": [
+    {
+      "id": "speaking-time-cut-to-three-minutes",
+      "proposition_evaluated": "At its meeting of 2026-08-26, the Infrastructure Committee carried a motion reducing the time each approved public speaker could speak from the five minutes the Council Procedures Bylaw provides to a maximum of three minutes for that meeting, at a meeting for which about seventy people, between 60 and 80 entries on the committee's list, had been approved to speak on the bike-lane item (item 7.6).",
+      "interpretation_notes": "Verdict unchanged from round 1. All three seats agree on the elements that decide the verdict: a 5-minute standing limit (s.38(1)), a carried 6–0 motion under item 1.4 setting a 3-minute maximum for each approved speaker at the meeting, and N = 64 entries on item 7.6, which is inside 60–80. I recounted the carried text entry by entry. N = 15+15+15+15+4 = 64, with 15 entries carrying an organization (2+8+3+2+0). N-all = 5 (item 7.1) + 1 (item 7.3) + 9 (item 7.4: 8 plus 1 additional speaker) + 64 (item 7.6) = 79; a person approved on two items would appear twice. N-spoke = 16+16+18+2 = 52, with 12 entries carrying an organization (5+6+1+0). Rows, primary band 60–80: N 64 Supported; N-all 79 Supported; N-spoke 52 Partially supported, because the cut is established but 52 is below the band. Rows, alternative band 50–90: N, N-all and N-spoke are all Supported. N-spoke changes the row under the primary band, so the finding is definition-sensitive. It holds for people approved to speak on the item and not, under the primary band, for people recorded as presenting. The motion is the committee's, not Council's. It applied to 'each approved speaker' at the meeting, on every item, not only item 7.6. It also cut members of Council to three minutes to ask questions and three minutes to speak to or close debate on a motion, down from 5 minutes under s.38(5) and (6). It sets a maximum; the minutes do not record how long anyone actually spoke. The minutes record no reason for the motion, and this verdict establishes nothing about why it was moved, whether the people listed were complainants or where they came from, whether three minutes was enough, or which way any speaker argued.",
+      "verdict": "Supported",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Section 38(1) sets the standing per-speaker limit at 5 minutes. The last amendment noted under s.38 is S.15, Bylaw 20226, July 4, 2022. The consolidation's amendment list ends with Bylaw 21365, October 29, 2025, and none of the later-listed amendments (Bylaws 20868, 21303, 21365) is noted against s.38.",
+          "source_title": "City of Edmonton Bylaw 18155, Council Procedures Bylaw (consolidated October 29, 2025), s.38",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025-10-29",
+          "source_type": "legal-audited",
+          "establishes": "The standing limit was 5 minutes per approved speaker; no amendment to s.38 was identified in the consolidation's own list.",
+          "quote": "Each approved speaker may speak for a maximum of 5 minutes.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Section 4 lets a Standing Committee waive or modify any part of the bylaw by special resolution. Section 2(2)(m) defines a special resolution as at least two-thirds of all members of a Standing Committee voting in favour.",
+          "source_title": "City of Edmonton Bylaw 18155, Council Procedures Bylaw (consolidated October 29, 2025), ss.2(2)(m) and 4",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025-10-29",
+          "source_type": "legal-audited",
+          "establishes": "The kind of vote a committee needed to change s.38 limits for one meeting.",
+          "quote": "Council or a Standing Committee may waive or modify the application of any part of this bylaw by special resolution",
+          "strength": "strong"
+        },
+        {
+          "finding": "Item 1.4 (Adoption of Agenda), third motion, moved by M. Janz: adjust the s.38 time limits for the August 26, 2026 meeting so that each approved speaker may speak for a maximum of three minutes, and each member of Council has three minutes to ask questions and three minutes to speak to or close debate on a motion. In favour (6): E. Rutherford, A. Salvador, R. Clarke, M. Janz, A. Knack, A. Paquette. Carried 6 to 0. The six voters are the six members the minutes list as present; two-thirds of 6 is 4 (reviewer's calculation), and 6 in favour would meet two-thirds of any membership up to 9.",
+          "source_title": "Infrastructure Committee, August 26, 2026, post-meeting minutes, items 1.2 and 1.4",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English",
+          "source_publisher": "City of Edmonton, Office of the City Clerk",
+          "source_date": "2026-08-26",
+          "source_type": "legal-audited",
+          "establishes": "The committee carried a cut from 5 to 3 minutes for every approved speaker at that meeting, by a vote that meets the special-resolution threshold.",
+          "quote": "each approved speaker may speak for a maximum of three minutes",
+          "strength": "strong"
+        },
+        {
+          "finding": "Item 2.3 (Requests to Speak), moved by A. Salvador, carried 6 to 0. For item 7.6 it lists five panels of 15, 15, 15, 15 and 4 entries; reviewer's calculation 64. Entries carrying an organization by panel: 2, 8, 3, 2, 0 = 15. Organizations as given: Edmonton Bike Coalition; YEG Bike Coalition (4 entries); Bike Bus Alberta; Holyrood Voice; Holyrood Community 79 St Action Group; Paths for People (2); Ward Métis Bikes (3); Let's Bike There YEG; Bike Edmonton. An organization's name beside an entry is not a position.",
+          "source_title": "Infrastructure Committee, August 26, 2026, post-meeting minutes, item 2.3",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English",
+          "source_publisher": "City of Edmonton, Office of the City Clerk",
+          "source_date": "2026-08-26",
+          "source_type": "legal-audited",
+          "establishes": "Primary count N = 64 approved-speaker entries on item 7.6, inside the 60–80 band.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Item 2.4, moved by M. Janz, carried 6 to 0, made item 7.6 the first item of business. In the minutes' order, the time-limit motion (item 1.4) comes before the Requests to Speak motion (item 2.3) and before any public presentation under item 7.6.",
+          "source_title": "Infrastructure Committee, August 26, 2026, post-meeting minutes, item 2.4",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English",
+          "source_publisher": "City of Edmonton, Office of the City Clerk",
+          "source_date": "2026-08-26",
+          "source_type": "legal-audited",
+          "establishes": "The 3-minute maximum was in place before the first bike-lane speaker was heard.",
+          "quote": "7.6 Active Transportation Implementation Acceleration Program Update - First item of business",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "Item 7.6 records four panels of public speakers who made presentations: 16, 16, 18 and 2 entries; reviewer's calculation 52. Entries carrying an organization by panel: 5, 6, 1, 0 = 12. Organizations as given: YEG Bike Coalition (3); Holyrood Voice; Holyrood Community 79 St Action Group; Paths for People (2); Bike Bus Alberta; Ward Métis Bikes (2); Let's Bike There YEG; Bike Edmonton.",
+          "source_title": "Infrastructure Committee, August 26, 2026, post-meeting minutes, item 7.6",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English",
+          "source_publisher": "City of Edmonton, Office of the City Clerk",
+          "source_date": "2026-08-26",
+          "source_type": "legal-audited",
+          "establishes": "If 'the queue' means the people recorded as presenting, 52 is below the primary 60–80 band but inside 50–90, so the finding is definition-sensitive. It does not change the approved-list count of 64.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "On 2026-10-02 I tried the live minutes page, which returned HTTP 403. The bylaw PDF downloaded, but my tool could not extract its compressed text. I relied on the carried text for both: YF-EV-0209 (6 of 32 minutes items) and YF-EV-0251 (the whole bylaw). Neither was read directly from the City's site.",
+        "The carried minutes include items 1.4, 2.3, 2.4 and 7.6 in full and show no correction to items 1.4, 2.3 or 7.6. I could not check the live page for a later correction or for the minutes' approval status.",
+        "All counts are counts of entries. Because every withheld name has the same label, I cannot count distinct people or find which approved entries did not present.",
+        "Qualification 7: in the carried items, the minutes record no motion extending any speaker's time and no speaker given more or less than the limit. They record no individual speaking times. Item 7.6 in the minutes lists 5 public-speaker attachments (titles not reproduced); the carried agenda lists 10 attachments for item 7.6, none from a public speaker.",
+        "Qualification 8: no City record stating a reason for the motion was identified. I searched the carried minutes and agenda text and ran one web search on 2026-10-02 for Edmonton section 38 three-minute motions in 2026.",
+        "Qualification 9: no earlier meeting since 2025-10-29 with a motion adjusting s.38 was identified. The search was limited to that one web search, and the portal returned 403, so I could not survey earlier minutes. This absence is bounded and does not show that no such motion exists.",
+        "The CBC/Yahoo report (https://ca.news.yahoo.com/edmonton-bike-lane-expansion-continue-231838925.html), re-read on 2026-10-02, gives no count and does not mention time limits. It is not used as evidence. The search also returned a yegfacts GitHub pull request about this brief, which I did not use as a source."
+      ],
+      "unknowns": [
+        "Whether later-approved minutes corrected items 1.4, 2.3 or 7.6.",
+        "How many distinct people were approved to speak, and how many approved entries did not present.",
+        "Whether any earlier Council or committee meeting since 2025-10-29 adjusted the s.38 limits.",
+        "Why the motion was moved; the minutes record no reason."
+      ],
+      "missing_evidence": [
+        {
+          "description": "Live or approved minutes for the 2026-08-26 meeting, to confirm there was no correction to items 1.4, 2.3 or 7.6.",
+          "likely_holder": "City of Edmonton, Office of the City Clerk",
+          "importance": "moderate"
+        },
+        {
+          "description": "Post-meeting minutes of Council and committee meetings since 2025-10-29, to show whether s.38 adjustments are routine.",
+          "likely_holder": "City of Edmonton, Office of the City Clerk (eScribe portal)",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "N (item 7.6, item 2.3): 15+15+15+15+4 = 64 entries; organization-bearing entries 2+8+3+2+0 = 15 (reviewer's calculation).",
+        "N-all (item 2.3 plus the additional-speaker motion): 7.1 = 5; 7.3 = 1; 7.4 = 8+1 = 9; 7.6 = 64; total 79 entries. Organization-bearing entries 5+1+6+15 = 27. A person approved on two items would be counted twice (reviewer's calculation).",
+        "N-spoke (item 7.6 presentations): 16+16+18+2 = 52 entries; organization-bearing entries 5+6+1+0 = 12 (reviewer's calculation).",
+        "Rows, primary band 60–80: N 64 Supported; N-all 79 Supported; N-spoke 52 Partially supported. Rows, alternative band 50–90: all three Supported. Definition-sensitive on N-spoke.",
+        "Special resolution: 6 in favour out of 6 members present; two-thirds of 6 = 4; threshold met (reviewer's calculation)."
+      ],
+      "what_would_change_my_verdict": [
+        "An approved or corrected version of the minutes showing that the item 1.4 time-limit motion did not carry, set a different maximum, or did not apply to every approved speaker.",
+        "A corrected item 2.3 list putting the item 7.6 approved entries outside 60–80.",
+        "An amendment to s.38 in force on 2026-08-26 that set a standing limit other than 5 minutes."
+      ],
+      "suggested_one_line": "Yes: the Infrastructure Committee voted 6–0 to cut every approved speaker from five minutes to three for its August 26, 2026 meeting, and 64 entries were approved to speak on the bike-lane item; 52 are recorded as presenting.",
+      "suggested_short_answer": "Supported. The Council Procedures Bylaw gives each approved speaker five minutes (s.38(1)). At the start of its August 26, 2026 meeting, the Infrastructure Committee (not Council) carried 6–0 a motion by Councillor M. Janz setting a three-minute maximum for every approved speaker that day, and three-minute limits for councillors too. The committee's list for the bike-lane item had 64 entries in five panels, inside the 'about seventy' band; the minutes record 52 entries as presenting, which is below that band. The counts are of entries on the list, not distinct people. The minutes do not say why the motion was moved or which way any speaker argued.",
+      "suggested_tldr": [
+        "The standing limit was 5 minutes per approved speaker (Bylaw 18155, s.38(1)).",
+        "Item 1.4: M. Janz moved a 3-minute maximum for every approved speaker at the meeting; carried 6–0, which meets the two-thirds special-resolution threshold.",
+        "Item 7.6 approved list: 64 entries (15, 15, 15, 15, 4), 15 with an organization's name; whole meeting: 79 entries.",
+        "Item 7.6 presentations: 52 entries (16, 16, 18, 2), below the 60–80 band, so the finding is definition-sensitive.",
+        "The minutes record no reason for the motion and no speaker's position."
+      ]
+    }
+  ]
+}

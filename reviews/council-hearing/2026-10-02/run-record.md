@@ -506,3 +506,87 @@ extraction check and personal-information screen, and, for both meeting
 pages, a v1.43 checker and role on the completeness check and a person's
 public-open check; their earlier checks were recorded in the v1.42 form,
 which v1.43 packaging refuses.
+
+## 2026-10-02: rounds 1 and 2 under methodology v1.43, synthesized
+
+**The panel answered the claim under review Supported, and all three
+seats agreed in both rounds.** Synthesis, from round 1 as the method
+fixes, gives `speaking-time-cut-to-three-minutes` Supported, Unanimous.
+No seat raised a MATERIAL FRAMING CONCERN or wrote that an essential
+source was inaccessible: every seat read the bylaw from the carried text.
+The two parked claims stay parked. This is the panel's result, not yet a
+published finding; drafting and the human gate come next.
+
+**The checks.** An independent read-only Claude Opus 5.5 checker session,
+not the editor, passed the bylaw's extraction check and
+personal-information screen, confirmed each of the six seat sentences the
+two-round ground rests on, and passed again the extraction, completeness
+and personal-information checks of the minutes and agenda pages, whose
+hashes and rule version are unchanged (`carried/checks/checks.yaml`). It
+notes that in the second superseded round the Claude seat's tool first
+retrieved the PDF but could not decompress its text, and only later
+retries returned HTTP 502; the seat still did not read the text, so the
+failure stands. The meeting pages' public-open checks are recorded in the
+site-fetcher form that PR #118 restored: the fetcher's HTTP 200 on the
+live page at build time. The founder's browser check of the bylaw stands,
+with the version established by the site's byte-identical fresh fetch.
+
+**Round 1.** The manifest with the checks was committed at 2e9ea52,
+sha256 `8ad2627bbde0c041730f7483245152ba2491cdf66b639e748bc5deb202c26621`;
+`package` passed on it. The carried section's sha256 was
+`ff04c436f8898ec009333b592b1fa85d4c8b4af7aacd77d86826b71e5513cd5f` and
+the package's
+`23e29a17c633d2f01c7a0e0291fc27b1f761308c1a3349de73f5b18ed16dd4e8`, the
+same for every seat; the earliest probe it rests on was
+2026-10-02T18:22:29Z. All three seats launched at 19:11:19Z. The runner
+refused nothing, and the Codex seats ran under codex-cli 0.160.0, a newer
+CLI than the earlier rounds' 0.159.3.
+
+| Seat | Round 1 attempt | Round 2 attempt |
+|---|---|---|
+| Claude Opus 5.5 (`claude-opus-5-5`), high, Claude Code 2.1.287 | `7cd9a6b49d789c57`, 19:11Z to 19:15Z | `130530fcc60925ed`, 19:21Z to 19:24Z |
+| GPT-6 Sol (`gpt-6-sol`), high, codex-cli 0.160.0 | `8f504fb46c6cb606`, 19:11Z to 19:19Z | `e0c8bd8db47dc15c`, 19:21Z to 19:28Z |
+| GPT-6 Luna (`gpt-6-luna`), high, codex-cli 0.160.0 | `cc15c53a99050a2c`, 19:11Z to 19:17Z | `1646d5131c869847`, 19:21Z to 19:27Z |
+
+Each seat was admitted on one attempt in each round.
+
+**The bylaw in round 1.** No seat read the bylaw directly. The Claude seat
+and GPT-6 Luna each report HTTP 502 from the PDF, and GPT-6 Sol reports
+that direct requests for the bylaw failed. All three cite sections 38(1)
+and the consolidation's amendment list from the carried text, which is
+what the carried label says: the reviewers' tools failed to retrieve it,
+and every reviewer read the same site-supplied copy, so their agreement on
+it is not independent retrieval.
+
+**Merge.** The round 1 merge found 4 distinct sources and no contested
+claim (`combined-evidence.json`, `disagreements.json`). Evidence staging
+fetched all 4; the bylaw's bytes are identical to its archive
+(`fetch-report.md`).
+
+**Round 2.** After round 1 finished, the three carried URLs were probed
+again through all three seats from 19:19:59Z: the Claude seat's WebFetch
+was refused with HTTP 403 at both meeting pages and opened the bylaw with
+HTTP 200; the GPT-6 seats' probes were unclear. The manifest rebuilt on
+those probes (6249014, sha256
+`ff03b82f6be64e7672fc79475cadfa51b635799e0f4b257820a6754e9cce010b`)
+differs only in probe and fetch times; the carried section is the same,
+`ff04c436f889…`, and the earliest probe was 19:20:23Z. The seats launched
+at 19:21:38Z and 19:21:39Z.
+
+| Claim | Claude, round 1 / 2 | GPT-6 Sol, round 1 / 2 | GPT-6 Luna, round 1 / 2 | Synthesis |
+|---|---|---|---|---|
+| `speaking-time-cut-to-three-minutes` | Supported, high / high | Supported, high / high | Supported, high / high | Supported, Unanimous |
+| `more-speakers-in-favour-at-hearing` | parked at framing | parked at framing | parked at framing | not tested |
+| `hearing-supporters-and-lobby-groups` | parked at framing | parked at framing | parked at framing | not tested |
+
+**What the seats found, in brief.** Section 38(1) of the bylaw sets a
+five-minute limit for each approved speaker, last amended in 2022, and no
+later amendment on the consolidation's list touches it. Under item 1.4
+the committee carried, 6 to 0, a motion setting a three-minute maximum for
+every approved speaker at that meeting. The item 2.3 Requests to Speak
+motion lists 64 entries for item 7.6 in five panels (15, 15, 15, 15, 4),
+15 of them with an organization, inside the 60 to 80 band; 79 entries
+across the meeting; 52 recorded as presenting on item 7.6, which is below
+the primary band and inside the alternative. The round-1 count split of
+the stopped reruns (64 against 65) did not recur. No record states a
+reason for the motion.
