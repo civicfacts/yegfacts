@@ -401,3 +401,57 @@ Immediately before the rerun the bylaw URL is probed with the Claude
 seat's tool and with the site's fetcher, and round 1 launches only if
 both get HTTP 200. If a seat again reports the bylaw unreadable during
 the round, the run stops again.
+
+## 2026-10-02: round 1 rerun, stopped again on the bylaw
+
+**Round 1 ran again on all three seats, and the run stops again for the
+same reason: every seat reports that the bylaw PDF answered its web tool
+with HTTP 502 during the round.** As the editor directed, a second report
+of the bylaw unreadable stops the run rather than starting another rerun.
+No merge, round 2 or synthesis was run, and no verdict below is a finding
+of this site.
+
+**Before launch.** At 08:28:52Z the Claude seat's WebFetch got HTTP 200
+from the bylaw URL (`carried/seat-probes.yaml`), and at 08:29:01Z the
+site's fetcher got HTTP 200. The carried pages' probes, from 08:14:50Z,
+were inside their 6-hour window, so the manifest was not rebuilt and the
+package was the same as the stopped round's: carried section sha256
+`33fba2c8d690be9e888be40e599e9abee598a8ab2b89a1e38964f25f6e39b7c7`,
+package sha256
+`dcbb16d09c8398e12a5c338672fec98d169a856cac472c087ccd42870ad90109`,
+earliest probe 08:14:50Z. All three seats launched from 3b0be90 at
+08:29:11Z. The runner refused nothing.
+
+| Seat | Attempt | Outcome |
+|---|---|---|
+| Claude Opus 5.5 (`claude-opus-5-5`), high, Claude Code 2.1.287 | `90bde1173878e906`, 08:29Z to 08:32Z | admitted on one attempt |
+| GPT-6 Sol (`gpt-6-sol`), high, codex-cli 0.159.3 | `cde57e2b2da41a6b`, 08:29Z to 08:38Z | admitted on one attempt |
+| GPT-6 Luna (`gpt-6-luna`), high, codex-cli 0.159.3 | `0eebf162cbc42460`, 08:29Z to 08:35Z | admitted on one attempt |
+
+What each seat returned, kept for the record only:
+
+| Claim | Claude | GPT-6 Sol | GPT-6 Luna |
+|---|---|---|---|
+| `speaking-time-cut-to-three-minutes` | Supported, moderate | Supported, moderate | Supported, high |
+
+No seat raised a MATERIAL FRAMING CONCERN.
+
+**Why the run stops.** The Claude seat's WebFetch retrieved the PDF once
+but could not extract its text, and later attempts got HTTP 502. GPT-6 Sol
+and GPT-6 Luna each got HTTP 502. All three read sections 38, 2 and 4
+from search-engine extracts, and none read the consolidation's list of
+amendments from the document itself. At 08:38Z, just after the round, the
+site's fetcher got HTTP 200 and the full 423,231 bytes again. The bylaw
+has now answered the probes four times out of four and the seats' research
+runs not once in two rounds, so this no longer looks like a passing
+outage. The cause is not established here: it may be how the City's
+server answers the seats' tools under a research run's request pattern,
+or a size or format limit in the tools. The decision on how the seats are
+to read the bylaw belongs to the editor.
+
+The seats' counts of entries on item 7.6 disagree: Claude and Luna count
+64, Sol counts 65 (15, 15, 16, 15 and 4 by panel). That is for the merge
+and round 2 to settle and is not resolved here.
+
+The round 1 answers stay in `round1/` as returned, with their rows in
+`run.yaml`.

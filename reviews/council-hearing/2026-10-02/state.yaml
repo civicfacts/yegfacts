@@ -4,7 +4,7 @@ methodology_version: "1.42"
 stage: round1
 stages:
   framing: {status: complete, at: "2026-10-02", frozen_sha256: "292e2d7d1a214fdd29985d483dc2c95e15da217311716ef86057be8a00ec5c0f", note: "Frozen on FRAME OK at framing check 3; one claim to the panel, two parked at framing under v1.24. See run-record.md."}
-  round1: {status: stopped, at: "2026-10-02", note: "All three seats admitted on one attempt each, with the committee minutes and agenda carried as items (carried/manifest.yaml, section 33fba2c8d690). Every seat reported HTTP 502 from the Bylaw 18155 PDF, an essential source, and read it only through search extracts. Under the brief an inaccessible essential source stops the run, so the run stops here. No merge, round 2 or synthesis. See run-record.md."}
+  round1: {status: stopped, at: "2026-10-02", note: "Stopped twice on the Bylaw 18155 PDF, an essential source: every seat got HTTP 502 from it during each round, though probes before and after got HTTP 200. The first round is in superseded-2026-10-02/; the rerun's answers are in round1/. No merge, round 2 or synthesis. See run-record.md."}
   merge: {status: pending}
   round2: {status: pending}
   synthesis: {status: pending}
