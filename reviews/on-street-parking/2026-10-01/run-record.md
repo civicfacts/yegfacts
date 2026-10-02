@@ -71,17 +71,17 @@ brief's final framing state. No panel has run.
 
    | ID | Source | Used for |
    |---|---|---|
-   | YF-EV-0228 | Route table, Internet Archive capture 2026-08-31 | claim 1, primary snapshot |
-   | YF-EV-0229 | Route table, live page as fetched 2026-10-01 | the editor's comparison copy; the brief names the capture below instead |
-   | YF-EV-0230 | Route table, Internet Archive capture 2026-07-07 | claim 1, qualification 4 |
-   | YF-EV-0231 | Parking Operations Audit, Office of the City Auditor, 2026-06-29 | the parked subsidy claim |
-   | YF-EV-0232 | Curbside Management Strategy, 2022 | the parked subsidy claim |
-   | YF-EV-0233 | Residential Parking Program page, 2026-10-01 | the parked subsidy claim |
-   | YF-EV-0234 | 132 Avenue Renewal project page, 2026-10-01 | claim 1, qualification 2 |
-   | YF-EV-0235 | 132 Avenue Collector Renewal, What We Decided Report, September 2022 | claim 1, qualification 2 |
-   | YF-EV-0236 | Urban Planning Committee 2026-06-09, agenda (attachment list with DocumentIds) | the parked subsidy claim's reopen condition |
-   | YF-EV-0237 | Urban Planning Committee 2026-06-09, post-meeting minutes | the parked subsidy claim's reopen condition |
-   | YF-EV-0238 | Route table, Internet Archive capture 2026-10-02 05:56 UTC, requested by the site after check 1 | claim 1, alternative snapshot |
+   | YF-EV-0240 | Route table, Internet Archive capture 2026-08-31 | claim 1, primary snapshot |
+   | YF-EV-0241 | Route table, live page as fetched 2026-10-01 | the editor's comparison copy; the brief names the capture below instead |
+   | YF-EV-0242 | Route table, Internet Archive capture 2026-07-07 | claim 1, qualification 4 |
+   | YF-EV-0243 | Parking Operations Audit, Office of the City Auditor, 2026-06-29 | the parked subsidy claim |
+   | YF-EV-0244 | Curbside Management Strategy, 2022 | the parked subsidy claim |
+   | YF-EV-0245 | Residential Parking Program page, 2026-10-01 | the parked subsidy claim |
+   | YF-EV-0246 | 132 Avenue Renewal project page, 2026-10-01 | claim 1, qualification 2 |
+   | YF-EV-0247 | 132 Avenue Collector Renewal, What We Decided Report, September 2022 | claim 1, qualification 2 |
+   | YF-EV-0248 | Urban Planning Committee 2026-06-09, agenda (attachment list with DocumentIds) | the parked subsidy claim's reopen condition |
+   | YF-EV-0249 | Urban Planning Committee 2026-06-09, post-meeting minutes | the parked subsidy claim's reopen condition |
+   | YF-EV-0250 | Route table, Internet Archive capture 2026-10-02 05:56 UTC, requested by the site after check 1 | claim 1, alternative snapshot |
 
    Already registered and relied on for qualification 8: YF-EV-0118
    (report IS03688, DocumentId 304024), YF-EV-0222, YF-EV-0223 and
@@ -164,7 +164,7 @@ look if the parked subsidy claim is revisited:
 - 298365: Report CO03517, High-Frequency Transit Routes and Associated
   On-Street Parking (item 8.1)
 
-The agenda page that lists them is archived as YF-EV-0236.
+The agenda page that lists them is archived as YF-EV-0248.
 
 ## Hashes
 
