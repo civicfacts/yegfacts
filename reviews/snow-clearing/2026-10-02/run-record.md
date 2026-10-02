@@ -771,3 +771,56 @@ those four, and nothing else changed. The three pages' carried texts
 grow by 6,074 bytes, and the carried section by 6,108. The estimated
 round-1 package is 429,764 bytes, within the 521,838-byte ceiling. The
 checker rechecks the four new items before any check is recorded.
+
+## 2026-10-02: round 1 under rule v6, stopped on a framing concern
+
+**Round 1 ran on all three seats and stopped because GPT-6 Luna raised a
+MATERIAL FRAMING CONCERN.** All three seats answer Supported. Luna's
+concern is the brief's timing rule. Under the primary rule, an item
+listed on a published agenda counts as put to a body, which gives two
+proposals and Supported. Requiring a body to have dealt with the item by
+2026-08-27 gives one proposal and Partially supported. Luna asks that the
+reader-facing phrase "already asked council" carry that qualification.
+Synthesis halts on any such flag, so the merge, round 2 and synthesis
+were not run. Whether this concern needs a brief revision or an editor's
+response is the editor's call.
+
+**The checks.** The independent checker's stage B was transcribed into
+the manifest at 767da34, mechanically. Before each entry was copied, its
+index, number, title and carried flag were matched against the manifest
+(`carried/checks/`). Extraction passed on every pdf, and so did the
+sections and context check on YF-EV-0304. Every personal-information
+screen is clear. Completeness passed under rule v6 after the v5 failure,
+and its record is kept as `carried/checks/completeness-v5.yaml`. The
+seven second downloads are recorded as not made: only the founder has
+downloaded these files, and the portal answers automated tools with a
+browser check, so no other copy can be made. `package` passed.
+
+**Round 1.** The manifest's sha256 was
+`585251cfc9ca7c6b93496b9838d4a7284ffdcaa22cea91acf275ce7832a08c4b`, the
+carried section's
+`a3ca8843a458fedde167ca0fb1176c2e436860ba1e4b3426c351248710e3303c` and
+the package's
+`94a4ada0539341c3d29c1785b85e5ccfef3426af841eaa84ebc224f3a6c29e5f`, the
+same for every seat. The package was 428,299 bytes, against ceilings of
+521,838 for the GPT-6 seats and 1,203,500 for Claude. The earliest probe
+it rests on was 22:45:15Z. Each seat was admitted on one attempt.
+
+| Seat | Attempt | Time | Verdict |
+|---|---|---|---|
+| Claude Opus 5.5, high, Claude Code 2.1.288 | `d4113f6aa51f8afd` | 22:56Z to 22:59Z | Supported, high |
+| GPT-6 Sol, high, codex-cli 0.160.0 | `65666047a7c61ad6` | 22:56Z to 23:03Z | Supported, moderate |
+| GPT-6 Luna, high, codex-cli 0.160.0 | `27ae178162d916d1` | 22:56Z to 23:09Z | Supported, moderate; MATERIAL FRAMING CONCERN |
+
+**What the seats counted.** Claude and Sol count three proposals:
+- the Fall 2025 active pathway snow removal and sidewalk repair package;
+- the parking ban enforcement package, from FCS03158 Attachment 2;
+- the Well Maintained City package in CO03513.
+
+Luna counts two, leaving out the parking ban package. Every seat reports
+that no proposal states its cost against an identified approved snow
+budget. Under that stricter cost reading the result is Not established
+(Claude), Contradicted (Sol) or not established on the strict test
+(Luna). No seat wrote that an essential source it could not read is
+missing. The seats' tools were refused at the portal, and every seat read
+the carried texts.
