@@ -4,11 +4,13 @@
 # changes anything under prompts/, scripts/merge*, scripts/synthesize* or
 # methodology/ must add a version entry here, or it fails.
 #
-# Two paths under methodology/ are exempt, and both exemptions are about what a
-# version number means. methodology/audits/ holds incident and audit records,
-# which report on the method rather than change it. This file is the record
-# itself, so correcting a past entry is not a new version of the method. If
-# either of those bumped the version, the number would mean "something
+# Three paths under methodology/ are exempt, and all three exemptions are about
+# what a version number means. methodology/audits/ holds incident and audit
+# records, which report on the method rather than change it. The quality ledger
+# (methodology/quality-ledger.yaml) records events in runs, slips,
+# self-corrections and escalations, for the same reason. This file is the
+# record itself, so correcting a past entry is not a new version of the method.
+# If any of those bumped the version, the number would mean "something
 # happened" instead of "the method changed".
 #
 # The sentence above used to describe a check that did not exist: the rule sat

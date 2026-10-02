@@ -10,7 +10,8 @@
  *
  * The exemptions get tests too, because each is an argument that could be
  * quietly widened later. methodology/audits/ reports on the method; the
- * changelog is the record of the method. Neither is the method.
+ * changelog is the record of the method; the quality ledger records events in
+ * runs. None of them is the method.
  */
 import { describe, expect, it } from 'vitest';
 import { diffRuleProblems, governsMethodologyVersion, type DiffWorld } from '../scripts/lib/diff-rules.ts';
@@ -50,6 +51,13 @@ describe('governsMethodologyVersion', () => {
   it('exempts the records that report on the method rather than change it', () => {
     expect(governsMethodologyVersion('methodology/audits/exposure/2026-09-03.md')).toBe(false);
     expect(governsMethodologyVersion('methodology/changelog.yaml')).toBe(false);
+    expect(governsMethodologyVersion('methodology/quality-ledger.yaml')).toBe(false);
+  });
+
+  it('exempts the quality ledger by its exact path, not the folder around it', () => {
+    expect(governsMethodologyVersion('methodology/quality-ledger.yaml.bak')).toBe(true);
+    expect(governsMethodologyVersion('methodology/quality-ledger/2026.yaml')).toBe(true);
+    expect(governsMethodologyVersion('methodology/exposure-audit.md')).toBe(true);
   });
 
   it('does not widen past the spec’s wording', () => {
@@ -85,11 +93,11 @@ describe('the methodology version rule', () => {
     ).toEqual([]);
   });
 
-  it('does not ask a version of an audit record or of the changelog itself', () => {
+  it('does not ask a version of an audit record, the quality ledger or the changelog itself', () => {
     expect(
       diffRuleProblems(
         world(
-          ['methodology/audits/exposure/2026-09-03.md', 'methodology/changelog.yaml'],
+          ['methodology/audits/exposure/2026-09-03.md', 'methodology/quality-ledger.yaml', 'methodology/changelog.yaml'],
           { 'methodology/changelog.yaml': CHANGELOG(['1.19']) },
           { 'methodology/changelog.yaml': CHANGELOG(['1.19']) },
         ),

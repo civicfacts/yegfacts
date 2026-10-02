@@ -51,6 +51,7 @@ export interface DiffWorld {
 }
 
 export const METHODOLOGY_CHANGELOG = 'methodology/changelog.yaml';
+export const METHODOLOGY_QUALITY_LEDGER = 'methodology/quality-ledger.yaml';
 
 /**
  * Does touching this path oblige the branch to bump the methodology version?
@@ -61,10 +62,19 @@ export const METHODOLOGY_CHANGELOG = 'methodology/changelog.yaml';
  * `scripts/synthesis-matrix.ts` is deliberately NOT one of them, because the
  * spec named `synthesize` and widening a rule by guessing is how a rule stops
  * meaning what it says.
+ *
+ * `methodology/audits/` is exempt because it reports on the method rather than
+ * changing it. `methodology/quality-ledger.yaml` is exempt for the same reason:
+ * it records events in runs (a seat's slip, a self-correction, an escalation)
+ * as they are adjudicated, and an entry there says what happened under the
+ * method, not what the method is. Bumping the version for each one would
+ * inflate the number the changelog exists to explain, until a new version
+ * meant "something was logged" rather than "the method changed".
  */
 export function governsMethodologyVersion(file: string): boolean {
   if (file === METHODOLOGY_CHANGELOG) return false;
   if (file.startsWith('methodology/audits/')) return false;
+  if (file === METHODOLOGY_QUALITY_LEDGER) return false;
   if (file.startsWith('methodology/')) return true;
   if (file.startsWith('prompts/')) return true;
   return /^scripts\/(merge|synthesize)[^/]*$/.test(file);
