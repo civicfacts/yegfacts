@@ -15,10 +15,11 @@ hold nothing they can be checked against, and the sources have changed or now
 refuse our requests, so a reader fetching them today gets different bytes.
 
 Fourteen of the fifteen are cited by the seven published cycling-volumes
-findings. None of those findings changes. Every figure they rest on is written
-out in the review panel's committed answers, which anyone can read on GitHub;
-one count is given there as a percentage rather than as the number we
-published. What was lost is the second, independent check: matching the bytes
+findings. None of those findings changes. The review panel's committed
+answers, which anyone can read on GitHub, write out the figures those findings
+rest on, with one exception: a few survey counts appear there only as
+percentages of the 816 respondents. Those counts follow from the percentages
+and are stated in the published claim files. What was lost is the second, independent check: matching the bytes
 the panel read against the hash.
 
 The evidence pages for these fifteen entries now say "original archive lost"
@@ -42,7 +43,8 @@ YF-EV-0158 is the Statistics Canada 2016 Census Profile for Edmonton. Its URL
 now answers HTTP 403 with a Cloudflare challenge page. That page was discarded
 rather than registered, because it is not the source.
 
-YF-EV-0078, a Wikipedia article on Glenora, is cited by no published claim.
+YF-EV-0078, a Wikipedia article on Glenora, is cited by no published claim,
+so no finding depends on it.
 
 ### How it happened
 
@@ -69,9 +71,9 @@ reviewers wrote down the figures they took from it.
 | [Do fewer than 1 percent of Edmonton commuters cycle to work?](/claims/cv-commuters-cycle) Supported | 0158, 0159 | 2021 figures on restored sources. The 2016 figure (5,575 of 466,230) and the 2012 municipal census figure (2,568 of 380,640, 0.67 percent) are written out in `combined-evidence.json` and the round 1 files. |
 | [Did the counters record nearly 1.3 million trips in the first seven months of 2026?](/claims/cv-counter-total-2026) Partially supported | 0141, 0143, 0144, 0148, 0160 | Every source it cites is lost, and none was restored. Each figure is in the committed text: the 1,291,714 total, the 2025 and 2024 totals, the last record on 2026-09-02, the City's warning that the data is raw, the API's last-update date and the CBC sentence. This finding is now checkable from the panel's text only. |
 | [Do the bike lanes the City meters carry little or no traffic?](/claims/cv-lanes-look-empty) Contradicted | 0143, 0144, 0145, 0146, 0147, 0162 | The counter medians rest on restored 0142 and the historic counts on restored 0161. The one fact citing only lost sources, 21 counters on-street and 21 off-street, is written out in `round1/claude.json`. |
-| [Do only about 1 to 2 percent of Edmontonians ride a bicycle?](/claims/cv-population-rides) Not established | 0149, 0150, 0153 | The Statistics Canada table list, the 2014 survey's recruitment counts and its answers, and the status of the 2025 travel survey are in `combined-evidence.json`. The survey answers are given as percentages of 816 (40.1 percent never ride); the published 327 and 489 follow from them. |
+| [Do only about 1 to 2 percent of Edmontonians ride a bicycle?](/claims/cv-population-rides) Not established | 0149, 0150, 0153 | The Statistics Canada table list, the 2014 survey's recruitment counts and its answers, and the status of the 2025 travel survey are in `combined-evidence.json`. The survey answers are given as percentages of 816 (40.1 percent never ride); the counts 327 and 489 follow from them and are stated in the claim file, not in the panel's answers. |
 | [Are about 2 percent of trips made by bicycle?](/claims/cv-trips-by-bike) Supported | 0153 | The figures rest on restored 0152 and 0154. The lost source supports only the statement that the 2025 survey had published no results by 2026-09-03, which is in `combined-evidence.json`. |
-| [Do only 1 percent of Edmontonians ride year-round?](/claims/cv-year-round-riders) Not established | 0141, 0149, 0150 | The 2025 counter totals (2,856,631; 139,245 in winter, 4.87 percent) and the table list are written out. The 2014 winter answers are given as percentages of 816 (87.6 percent never; daily 1.0, four or more a week 1.6). The published counts of 715, 101 and 21 follow by arithmetic but are not written out as counts anywhere committed. This is the weakest point found. |
+| [Do only 1 percent of Edmontonians ride year-round?](/claims/cv-year-round-riders) Not established | 0141, 0149, 0150 | The 2025 counter totals (2,856,631; 139,245 in winter, 4.87 percent) and the table list are written out. The 2014 winter answers are given as percentages of 816 (87.6 percent never; daily 1.0, four or more a week 1.6). The counts 715, 101 and 21 follow from those percentages by arithmetic. They are stated in the claim file `src/content/claims/cv-year-round-riders.yaml`, but not as counts in the panel's answers. This is the weakest point found. |
 
 ## Where the registry now stands
 
@@ -131,8 +133,10 @@ A copy whose bytes match a recorded hash would restore that entry exactly.
 `evidence/private/` with the main checkout's, file by file, by path and SHA-256.
 It copies every file the main checkout lacks and prints each one. If any file
 exists in both with different bytes, it lists them and refuses to remove the
-worktree. The removal itself never forces. `AGENTS.md` and `CLAUDE.md` tell
+worktree. It also stops, removing nothing, on a broken link, a file it cannot read or hash, or a folder it cannot list. The removal itself never forces. `AGENTS.md` and `CLAUDE.md` tell
 every session to use it.
 
 `scripts/verify-private.ts`, the local check that found this, now lists a
-recorded loss on every run instead of failing on it, so a new loss stands out.
+recorded loss as not checkable on every run instead of failing on it, so a new
+loss stands out. A missing file still fails unless its entry has a valid loss
+date and an existing audit record.
