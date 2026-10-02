@@ -65,9 +65,8 @@
 # records the manifest hash, the section hash and the earliest probe time.
 #
 # Package size: each seat has a hard ceiling (SEAT_MAX_PACKAGE_BYTES below,
-# 400000 bytes, about 100,000 tokens, for every current seat: well inside each
-# one's context, with the rest left for its own research). --max-package-bytes
-# can lower it and never raise it. The ceiling applies whenever --carried or
+# half the seat's usable context, D-0049). --max-package-bytes can lower it and
+# never raise it. The ceiling applies whenever --carried or
 # the flag is given, and is checked before every send, the retry included.
 
 set -euo pipefail
@@ -92,7 +91,8 @@ options:
                      (<run>/carried/manifest.yaml, methodology v1.41)
   --max-package-bytes <n>
                      refuse a package over n bytes; may lower the seat's
-                     ceiling (400000), never raise it
+                     ceiling (claude 1203500, codex and luna 521838),
+                     never raise it
 USAGE
   exit 2
 }
@@ -199,12 +199,28 @@ case "$PROVIDER_ARG" in
     ;;
 esac
 
-# Hard package ceiling per seat (methodology v1.41). 400000 bytes is about
-# 100,000 tokens: none of the current seats documents a smaller usable input,
-# and each keeps most of its context for its own research. The flag may lower
-# it; it may not raise it.
+# Hard package ceiling per seat (methodology v1.41, values from D-0049): half
+# the seat's usable context in tokens, so at least half stays free for its own
+# research, converted to bytes at the lowest bytes-per-token ratio observed on
+# the site's own packages, rounded down to three decimals.
+#
+#   claude    1,000,000 tokens (the CLI's reported contextWindow for
+#             claude-opus-5-5) x 0.5 x 2.407 = 1203500 bytes. 2.407 is the
+#             lowest of 22 round-1 and round-2 attempts: package bytes over the
+#             whole first request's input tokens, as the API reported them.
+#   gpt,      272,000 tokens x 95% effective (Codex models_cache.json for
+#   gpt-luna  gpt-6-sol and gpt-6-luna) = 258,400 usable x 0.5 x 4.039
+#             = 521838 bytes. 4.039 is the lowest of 41 attempts: package bytes
+#             over the tokens the API's usage attribution assigns to the
+#             package message alone.
+#
+# Measured 2026-10-02 on council-pause-vote, council-hearing, snow-clearing,
+# lanes-and-congestion and infrastructure-deficit. carry-manifest.ts
+# (SEAT_PACKAGE_CEILINGS) holds the same numbers. The flag may lower a ceiling;
+# it may not raise it.
 case "$SLOT" in
-  claude|gpt|gpt-luna) SEAT_MAX_PACKAGE_BYTES=400000 ;;
+  claude) SEAT_MAX_PACKAGE_BYTES=1203500 ;;
+  gpt|gpt-luna) SEAT_MAX_PACKAGE_BYTES=521838 ;;
   *) SEAT_MAX_PACKAGE_BYTES=0 ;;
 esac
 if [ -n "$MAX_PACKAGE_BYTES" ] && [ "$MAX_PACKAGE_BYTES" -gt "$SEAT_MAX_PACKAGE_BYTES" ]; then

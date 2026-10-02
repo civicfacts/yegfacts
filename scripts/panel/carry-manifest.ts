@@ -85,7 +85,7 @@
  *
  * Package budget (v1.43). Every build and every package estimates a round-1
  * package (brief, reviewer prompt, schema and the carried section) against the
- * 400000-byte seat ceiling; over it, the build exits 1 and packaging refuses.
+ * smallest seat ceiling (D-0049); over it, the build exits 1 and packaging refuses.
  * Nothing is trimmed to fit.
  *
  * `build`, per document:
@@ -182,8 +182,14 @@ const TIMEOUT_MS = 60_000;
 export const MAX_PROBE_AGE_HOURS = 6;
 /** A confirmation that a person can open the public URL counts for this long. */
 export const PUBLIC_OPEN_MAX_AGE_HOURS = 72;
-/** The seat package ceiling run-reviewer.sh enforces (SEAT_MAX_PACKAGE_BYTES). */
-export const SEAT_PACKAGE_BUDGET = 400_000;
+/**
+ * The per-seat package ceilings run-reviewer.sh enforces (SEAT_MAX_PACKAGE_BYTES),
+ * keyed by output slot: half each seat's usable context at the lowest measured
+ * bytes-per-token ratio (D-0049). run-reviewer.sh holds the derivation.
+ */
+export const SEAT_PACKAGE_CEILINGS = { claude: 1_203_500, gpt: 521_838, 'gpt-luna': 521_838 } as const;
+/** Every seat gets the same round-1 package, so the estimate is held to the smallest ceiling. */
+export const SEAT_PACKAGE_BUDGET = Math.min(...Object.values(SEAT_PACKAGE_CEILINGS));
 /** The package wrapper's own text around the brief, prompt, schema and carried section, rounded up. */
 const PACKAGE_WRAPPER_BYTES = 2_000;
 const PORTAL_HOST = /(^|\.)escribemeetings\.com$/i;
