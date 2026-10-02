@@ -858,3 +858,76 @@ The superseded directory holds the three round-1 answers, the run.yaml
 rows and a copy of the manifest they ran on. No seat in the rerun sees
 them, and the merge and synthesis read only the new rounds. `run.yaml`
 starts again with no rows.
+
+## 2026-10-02: rounds 1 and 2 on the revised brief, synthesized
+
+**The panel answered the claim under review Supported, and all three
+seats agreed in both rounds.** Synthesis is taken from round 1, as the
+method fixes, and gives `two-snow-removal-proposals-need-more-money`
+Supported, Unanimous. No seat raised a MATERIAL FRAMING CONCERN, and no
+seat wrote that an essential source it could not read was missing. Every
+seat's web tool was refused at the eScribe portal, and every seat read
+the carried texts. The four parked claims stay parked. This is the
+panel's result, not yet a published finding. Drafting and the human gate
+come next.
+
+**Round 1.** The manifest at fa08a43 (sha256
+`6f976ce395ae005cba1a6093933d2b50ba7c9ce147dd3defdba4363b70c5c584`) was
+rebuilt on probes from 23:13:31Z, and every check carried over. `package`
+passed on it. The carried section's sha256 was
+`a3ca8843a458fedde167ca0fb1176c2e436860ba1e4b3426c351248710e3303c`,
+unchanged by the brief revision. The package's sha256 was
+`7124a828867b26ddf102edc0708e89a7587eb68a618e37a923e63f0c44ec2e50`, and
+it was 428,753 bytes, the same for every seat. GPT-6 Luna's first
+attempt failed schema validation, because its output had none of the
+review's top-level fields. The runner's one retry sends the same package
+plus the validator's errors, and the second attempt was admitted. No
+runner refused anything.
+
+**Merge.** The round-1 merge found 15 distinct sources and no contested
+claim (`combined-evidence.json`, `disagreements.json`). Evidence staging
+fetched ten. The five eScribe filestream files failed with HTTP 403, and
+each of them is carried (`fetch-report.md`).
+
+**Round 2.** After round 1 finished, all 34 addresses were probed again
+through all three seats from 23:38:22Z, with the same results as before.
+The manifest rebuilt on those probes (sha256
+`8f89d3456ddb2d7a394a3ce48d368cb66ca02a89ec045690bd84d23a7e3dee35`)
+differs only in probe and check times, and its carried section is
+unchanged. The round-2 packages were 491,853 bytes for Claude (ceiling
+1,203,500), 498,968 for GPT-6 Sol and 501,063 for GPT-6 Luna (ceiling
+521,838). Luna's first attempt again failed schema validation, and its
+retry was admitted.
+
+| Seat | Round 1 attempt | Round 2 attempt |
+|---|---|---|
+| Claude Opus 5.5 (`claude-opus-5-5`), high, Claude Code 2.1.288 | `b86e6aacd11ceaf9`, 23:19Z to 23:24Z | `4c959c56aa2920be`, 23:44Z to 23:49Z |
+| GPT-6 Sol (`gpt-6-sol`), high, codex-cli 0.160.0 | `7d2863155a4389ae`, 23:19Z to 23:29Z | `44770c3c90762708`, 23:44Z to 23:51Z |
+| GPT-6 Luna (`gpt-6-luna`), high, codex-cli 0.160.0 | `cf8b77abdf7d5806` (retry of `813b92d23fedc722`), 23:19Z to 23:37Z | `5f91f7b40e38340e` (retry of `0fccd64c0c9308ad`), 23:44Z to 23:57Z |
+
+| Claim | Claude, round 1 / 2 | GPT-6 Sol, round 1 / 2 | GPT-6 Luna, round 1 / 2 | Synthesis |
+|---|---|---|---|---|
+| `two-snow-removal-proposals-need-more-money` | Supported, high / high | Supported, high / moderate | Supported, moderate / moderate | Supported, Unanimous |
+
+**What the seats found, in brief.** Under the primary readings, three
+Administration proposals with stated new spending were on a published
+agenda by 2026-08-27:
+- the Fall 2025 active pathway snow removal and sidewalk repair package
+  (FCS03158 Attachment 2, Council 2025-11-24, item 7.2);
+- the parking ban enforcement package, from the same attachment and
+  item;
+- the Well Maintained City package (CO03513, on the 2026-08-31 committee
+  agenda captured 2026-08-22).
+
+In round 1 the seats counted differently: Claude counted four, with the
+Attachment 10 enhancements once; Sol counted three; Luna counted two,
+leaving out the parking ban package. In round 2 all three count three.
+
+The result is definition-sensitive. Under the stricter cost reading,
+which needs an identified approved budget and the increase against it,
+the result is Contradicted, because no counted text states a baseline.
+Under "exactly two" it is Partially supported. Under "considered by a
+body" it stays Supported only if the parking ban package counts. Every
+seat says a reader-facing "already put" or "already asked" must name the
+agenda-placement rule. The amounts are proposals, not approvals or
+spending. The Well Maintained City figures cover more than snow.
