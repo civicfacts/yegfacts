@@ -23,7 +23,7 @@ describe('the three counts', () => {
     expect(presentedPanels.map((p) => p.entries).join(', ')).toBe('16, 16, 18, 2');
     expect(claimText).toContain('five panels of 15, 15, 15, 15 and 4');
     expect(claimText).toContain('four panels of 16, 16, 18 and 2');
-    expect(claimText).toContain('64 on its list to speak');
+    expect(claimText).toContain('64 entries on its list to speak');
     expect(claimText).toContain('the 52 recorded as speaking');
     expect(claimText).toContain('hold 79 entries');
     expect(story).toContain('for the bike-lane item has 64 entries');
@@ -37,7 +37,7 @@ describe('the three counts', () => {
     expect(claimText).toContain('Fifteen of the entries give an organization');
     expect(claimText).toContain('Twelve of those entries give an organization');
     expect(story).toContain("15 gave a group's name");
-    expect(story).toContain("Fifteen of the 64 approved to speak gave a group's name");
+    expect(story).toContain('Fifteen entries on the list of approved speakers named a group');
   });
 
   it('only the count of those who spoke falls outside 60 to 80, so the finding depends on the count', () => {

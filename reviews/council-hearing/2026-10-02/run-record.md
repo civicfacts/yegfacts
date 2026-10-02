@@ -590,3 +590,76 @@ across the meeting; 52 recorded as presenting on item 7.6, which is below
 the primary band and inside the alternative. The round-1 count split of
 the stopped reruns (64 against 65) did not recur. No record states a
 reason for the motion.
+
+## 2026-10-02: drafted and checked, before the gate
+
+**The page was drafted from the round files, the synthesis, the carry
+manifest, the register and the archived sources, then read by two
+faithfulness checks, a freshness audit and a plain-speech read; no finding
+changed and both parks stand.** The question page leads with the two claims
+parked at framing, as lanes-and-congestion does, and its standfirst answers
+the question people asked: nobody can tell from the City's minutes which side
+the speakers took, or who, if anyone, organized them. The one finding,
+`ch-speaking-time-cut` (register `speaking-time-cut-to-three-minutes`), is
+Supported, Unanimous, and its answer carries the definition sensitivity
+beside the verdict: 64 entries on the list of approved speakers, the 52
+recorded as speaking short of about seventy. Members of the public appear
+only as counts; office-holders are named for the motion and the vote. Counts
+and the two-thirds threshold are in `scripts/calcs/council-hearing.ts`, with
+a test pinning them to the prose. The status is `pending-review`.
+
+Each report is committed with the editor's dispositions at its top:
+`faithfulness/gpt-1.md` (GPT-6 Sol, 24 items, 22 adopted),
+`faithfulness/gpt-luna-1.md` (GPT-6 Luna, 17 items, 15 adopted, 2 in part),
+`gate/freshness-audit.md` (GPT-6 Sol, 6 items) and `plain-speech/gpt-1.md`
+(GPT-6 Sol, 9 rewrites, 2 as written and 7 modified). The faithfulness
+package carried the carried text of the minutes, agenda and bylaw whole,
+privately; nothing carried is committed.
+
+**Sources added after the panel ran**, from the freshness audit, all private:
+YF-EV-0315, the YEG Bike Coalition's newsletter post of 2026-08-19 urging
+readers to register to speak on item 7.6, with a Paths for People session to
+help them prepare; YF-EV-0316 and YF-EV-0317, the City Council minutes of
+2026-01-27 and 2026-02-17, at which Council adjusted its own members' section
+38 limits and set none for public speakers. Their ids start above the highest
+on any remote branch (YF-EV-0309). The 2025-12-04 and 2026-03-17 minutes the
+audit also named are filestream files, which answered the site's fetcher with
+HTTP 403, and are not relied on. The City video and an unreviewed machine
+transcript of it, which the audit says may record a reason for the motion,
+are not archived or relied on; the page says the video was not watched.
+
+**For the editor: the organizing strand of the second park.** The park's
+reason says no record links the supporters to an organizer, and its reopen
+condition is a registry covering City Council or a record of payment. The
+coalition's public call is a record that groups encouraged supporters to
+register, though not that any listed speaker answered it. The page reports
+it and keeps the park. Whether the reason and the reopen condition still
+describe that strand, or the claim should be split or re-examined, is the
+editor's call and is not decided here.
+
+**Quality ledger (D-0048 rule 7).** The recorded failure modes in
+`methodology/quality-ledger.yaml` were checked against the draft:
+
+| Recorded failure mode | Earlier case | Result here |
+|---|---|---|
+| Fabricated citation, or a figure attributed to a source that lacks it | electric-buses, winter-cycling, infill-prices | Every count was recounted from the carried minutes into the calculation; 64, 79, 52, 15 and 12 and the 6 to 0 vote match the text every seat read. |
+| A seat's miscount carried into the draft | (new in this run's round 2) | The draft uses the cross-review counts: GPT-6 Sol's round-one 50 is 52, GPT-6 Luna's round-one 14 is 15; the review notes say so. |
+| A stated rule presented as an outcome | winter-cycling (service standard as achieved) | The motion is reported as a maximum; the page says the minutes do not record how long anyone spoke. |
+| A funded or proposed figure presented as approved or achieved | climate-targets; D-0048 rule 6 | No budget document is cited. |
+| A media report treated as the document behind it | climate-targets | The CBC report is cited only for what it said about the room, with no count, and never as a source of a classification. |
+| A source misclassified | fifteen-minute-districts | The minutes are `legal-audited` from the registry, not a seat's label. |
+| Committee action described as Council's | active-transportation (gate) | The page names the Infrastructure Committee and says it is not Council. |
+| Categorical wording beyond the instrument | fifteen-minute-districts | Absences are bounded to what we found and what the reviewers read; the faithfulness checks' bounding items were adopted. |
+
+Nothing in the ledger's recorded modes is present in the draft as committed.
+The two seat miscounts above are round-two catches this run's records
+corroborate; whether they are entered in the ledger is the editor's call.
+
+**Labels.** On the built question page every carried source cited carries
+its v1.43 label: YF-EV-0209 and YF-EV-0210 the selected-items label, and
+YF-EV-0251 the two-round label. The claim page tags the same three. No
+uncarried source carries one.
+
+**Not yet done.** The publication gate and the critique of the rendered page,
+which run as separate sessions. This is the first story under the two-round
+ground, so the critique includes the cold-reader phone test (D-0048 rule 7).
