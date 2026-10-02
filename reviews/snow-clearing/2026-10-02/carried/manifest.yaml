@@ -1,10 +1,10 @@
 # Carry manifest (methodology v1.41, v1.42). Committed; the extracted text never is.
 # Items are selected only by the published rule; there is no way to add one by hand.
 run: reviews/snow-clearing/2026-10-02
-generated_at: 2026-10-02T15:03:06Z
+generated_at: 2026-10-02T15:09:27Z
 rule: "methodology v1.42 (D-0046, D-0047): carried documents and minutes items"
 selection_rule:
-  version: 3
+  version: 4
   terms: &a1
     - CM-20-0330
     - IS03688
@@ -22,6 +22,8 @@ selection_rule:
     - C409
     - calcium chloride
     - SNIC
+    - draft agendas
+    - August 31, 2026, Community and Public Services Committee
   match: case-insensitive, on the item number, title and whole text; a term made only of digits must not touch another digit
 rule_revisions:
   - version: 1
@@ -51,6 +53,25 @@ rule_revisions:
       - Supplemental Capital Budget Adjustment Motion
   - version: 3
     reason: "D-0047 addendum of 2026-10-02: relevance is judged against each run's own claims; snow-clearing needs snow and ice service terms, so v2's terms plus snow, report CO03513, Policy C409, calcium chloride and SNIC"
+    terms:
+      - CM-20-0330
+      - IS03688
+      - Active Transportation Implementation Acceleration
+      - Active Transportation Network Expansion
+      - "20394"
+      - "21265"
+      - bike
+      - cycling
+      - Active Transportation Implementation
+      - Capital Budget motion
+      - Supplemental Capital Budget Adjustment Motion
+      - snow
+      - CO03513
+      - C409
+      - calcium chloride
+      - SNIC
+  - version: 4
+    reason: "Completeness check on snow-clearing (2026-10-02): v3 missed YF-EV-0293 items 2.1 and 2.1.1, the Agenda Review Committee's record that the draft agenda for the 2026-08-31 Community and Public Services Committee meeting was before it on 2026-08-18 (qualification 4); item 2.1.1 holds only its title, so no narrower term selects it"
     terms: *a1
 redaction_rule:
   version: 4
@@ -61,7 +82,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304803
     kind: pdf
     status: carried
-    reason: "named in the frozen brief (template + DocumentId naming at line 205); https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304803 answered the site's fetcher with HTTP 403 (cf-mitigated: challenge header) at 2026-10-02T15:03:02Z"
+    reason: "named in the frozen brief (template + DocumentId naming at line 205); https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304803 answered the site's fetcher with HTTP 403 (cf-mitigated: challenge header) at 2026-10-02T15:09:24Z"
     download:
       retrieved_on: 2026-10-02
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private. Downloaded in a browser by the founder on 2026-10-02 because filestream.ashx answers scripts with a browser check (HTTP 403); the download's recorded source is https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304803, and the agenda page YF-EV-0287 lists that DocumentId under the same title.
@@ -71,7 +92,7 @@ documents:
       bytes: 425860
     probe:
       http_status: 403
-      checked_at: 2026-10-02T15:03:02Z
+      checked_at: 2026-10-02T15:09:24Z
       fetcher_refused: true
       signature: "cf-mitigated: challenge header"
     eligibility:
@@ -114,7 +135,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304812
     kind: pdf
     status: carried
-    reason: "named in the frozen brief (template + DocumentId naming at line 213); https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304812 answered the site's fetcher with HTTP 403 (cf-mitigated: challenge header) at 2026-10-02T15:03:04Z"
+    reason: "named in the frozen brief (template + DocumentId naming at line 213); https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304812 answered the site's fetcher with HTTP 403 (cf-mitigated: challenge header) at 2026-10-02T15:09:25Z"
     download:
       retrieved_on: 2026-10-02
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private. Downloaded in a browser by the founder on 2026-10-02 because filestream.ashx answers scripts with a browser check (HTTP 403); the download's recorded source is https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304812, and the agenda page YF-EV-0287 lists that DocumentId under the same title.
@@ -124,7 +145,7 @@ documents:
       bytes: 66575
     probe:
       http_status: 403
-      checked_at: 2026-10-02T15:03:04Z
+      checked_at: 2026-10-02T15:09:25Z
       fetcher_refused: true
       signature: "cf-mitigated: challenge header"
     eligibility:
@@ -167,7 +188,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304813
     kind: pdf
     status: carried
-    reason: "named in the frozen brief (template + DocumentId naming at line 214); https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304813 answered the site's fetcher with HTTP 403 (cf-mitigated: challenge header) at 2026-10-02T15:03:04Z"
+    reason: "named in the frozen brief (template + DocumentId naming at line 214); https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304813 answered the site's fetcher with HTTP 403 (cf-mitigated: challenge header) at 2026-10-02T15:09:25Z"
     download:
       retrieved_on: 2026-10-02
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private. Downloaded in a browser by the founder on 2026-10-02 because filestream.ashx answers scripts with a browser check (HTTP 403); the download's recorded source is https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304813, and the agenda page YF-EV-0287 lists that DocumentId under the same title.
@@ -177,7 +198,7 @@ documents:
       bytes: 138715
     probe:
       http_status: 403
-      checked_at: 2026-10-02T15:03:04Z
+      checked_at: 2026-10-02T15:09:25Z
       fetcher_refused: true
       signature: "cf-mitigated: challenge header"
     eligibility:
@@ -220,7 +241,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=e2eee963-953d-4bbd-834c-419a4545cbcf&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (exact URL); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=e2eee963-953d-4bbd-834c-419a4545cbcf&lang=English refused the claude seat's WebFetch at 2026-10-02T14:44:40Z (403); 1 of 25 items selected by rule v3
+    reason: named in the frozen brief (exact URL); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=e2eee963-953d-4bbd-834c-419a4545cbcf&lang=English refused the claude seat's WebFetch at 2026-10-02T14:44:40Z (403); 1 of 25 items selected by rule v4
     download:
       retrieved_on: 2026-10-02
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -230,7 +251,7 @@ documents:
       bytes: 154786
     probe:
       http_status: 200
-      checked_at: 2026-10-02T15:03:04Z
+      checked_at: 2026-10-02T15:09:26Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -244,7 +265,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: agenda
-    rule_version: 3
+    rule_version: 4
     redaction_version: 4
     items:
       - number: "1."
@@ -428,7 +449,7 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v3
+      version: selection rule v4
       text_bytes: 2146
       text_sha256: 21ea0c03d2265157d93ae84099f336966c2f6d8373ab0fa2732949bcbf0bd213
       text_file: evidence/private/carried/snow-clearing/2026-10-02/YF-EV-0287.txt
@@ -442,7 +463,7 @@ documents:
       via: site fetcher
     public_open_check:
       checked_by: the site evidence fetcher, whose request for the live page got HTTP 200 at build time; no person opened it in a browser
-      checked_on: 2026-10-02T15:03:04Z
+      checked_on: 2026-10-02T15:09:26Z
     second_download:
       result: not made
       sha256: null
@@ -455,7 +476,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=e2eee963-953d-4bbd-834c-419a4545cbcf&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (template + meeting id at line 174); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=e2eee963-953d-4bbd-834c-419a4545cbcf&lang=English refused the claude seat's WebFetch at 2026-10-02T14:45:09Z (403); 3 of 27 items selected by rule v3
+    reason: named in the frozen brief (template + meeting id at line 174); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=e2eee963-953d-4bbd-834c-419a4545cbcf&lang=English refused the claude seat's WebFetch at 2026-10-02T14:45:09Z (403); 5 of 27 items selected by rule v4
     download:
       retrieved_on: 2026-10-02
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -465,7 +486,7 @@ documents:
       bytes: 172110
     probe:
       http_status: 200
-      checked_at: 2026-10-02T15:03:04Z
+      checked_at: 2026-10-02T15:09:26Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -479,7 +500,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: minutes
-    rule_version: 3
+    rule_version: 4
     redaction_version: 4
     items:
       - number: "1."
@@ -512,9 +533,10 @@ documents:
         checker_reason: null
       - number: "1.4"
         title: Adoption of Agenda
-        matched: false
-        matched_terms: []
-        carried: false
+        matched: true
+        matched_terms:
+          - August 31, 2026, Community and Public Services Committee
+        carried: true
         withheld: 0
         checker_reason: null
       - number: "1.5"
@@ -667,9 +689,10 @@ documents:
         checker_reason: null
       - number: "11.1"
         title: Co-location of Multiple Civic Assets (J. Wright)
-        matched: false
-        matched_terms: []
-        carried: false
+        matched: true
+        matched_terms:
+          - August 31, 2026, Community and Public Services Committee
+        carried: true
         withheld: 0
         checker_reason: null
       - number: "12."
@@ -681,9 +704,9 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v3
-      text_bytes: 8398
-      text_sha256: 78dc34d8c39d6d657ef8d31f779dbddba161bddaaa30e2680d37283988b9013b
+      version: selection rule v4
+      text_bytes: 9144
+      text_sha256: 2226f7ff2bc09589bef25968dc285ebf4f307d528b24c917be3f9bcfdf8647f5
       text_file: evidence/private/carried/snow-clearing/2026-10-02/YF-EV-0289.txt
     completeness_check:
       result: pending
@@ -695,7 +718,7 @@ documents:
       via: site fetcher
     public_open_check:
       checked_by: the site evidence fetcher, whose request for the live page got HTTP 200 at build time; no person opened it in a browser
-      checked_on: 2026-10-02T15:03:04Z
+      checked_on: 2026-10-02T15:09:26Z
     second_download:
       result: not made
       sha256: null
@@ -708,7 +731,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=3195d7e4-a1e2-4923-810e-ddfa0726c299&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (template + meeting id at line 186); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=3195d7e4-a1e2-4923-810e-ddfa0726c299&lang=English refused the claude seat's WebFetch at 2026-10-02T14:45:36Z (403); 3 of 71 items selected by rule v3
+    reason: named in the frozen brief (template + meeting id at line 186); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=3195d7e4-a1e2-4923-810e-ddfa0726c299&lang=English refused the claude seat's WebFetch at 2026-10-02T14:45:36Z (403); 4 of 71 items selected by rule v4
     download:
       retrieved_on: 2026-10-02
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -718,7 +741,7 @@ documents:
       bytes: 417285
     probe:
       http_status: 200
-      checked_at: 2026-10-02T15:03:05Z
+      checked_at: 2026-10-02T15:09:26Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -732,7 +755,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: minutes
-    rule_version: 3
+    rule_version: 4
     redaction_version: 4
     items:
       - number: "1."
@@ -1176,9 +1199,10 @@ documents:
         checker_reason: null
       - number: "11.4"
         title: Co-location of Multiple Civic Assets (J. Wright)
-        matched: false
-        matched_terms: []
-        carried: false
+        matched: true
+        matched_terms:
+          - August 31, 2026, Community and Public Services Committee
+        carried: true
         withheld: 0
         checker_reason: null
       - number: "11.5"
@@ -1243,9 +1267,9 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v3
-      text_bytes: 3724
-      text_sha256: c485e45b0e2375d21955f28c0727a77ea7dfc9bf79f5845d065257642d3812d6
+      version: selection rule v4
+      text_bytes: 4304
+      text_sha256: 2146129c2ffdbe77e41bf40aab45571d05e7ff2fef3b282a381dfba8ceaf7afe
       text_file: evidence/private/carried/snow-clearing/2026-10-02/YF-EV-0290.txt
     completeness_check:
       result: pending
@@ -1257,7 +1281,7 @@ documents:
       via: site fetcher
     public_open_check:
       checked_by: the site evidence fetcher, whose request for the live page got HTTP 200 at build time; no person opened it in a browser
-      checked_on: 2026-10-02T15:03:05Z
+      checked_on: 2026-10-02T15:09:26Z
     second_download:
       result: not made
       sha256: null
@@ -1270,7 +1294,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=86bee574-31e8-424f-abbb-978f946337f3&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (template + meeting id at line 189); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=86bee574-31e8-424f-abbb-978f946337f3&lang=English refused the claude seat's WebFetch at 2026-10-02T14:46:04Z (403); 2 of 61 items selected by rule v3
+    reason: named in the frozen brief (template + meeting id at line 189); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=86bee574-31e8-424f-abbb-978f946337f3&lang=English refused the claude seat's WebFetch at 2026-10-02T14:46:04Z (403); 3 of 61 items selected by rule v4
     download:
       retrieved_on: 2026-10-02
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -1280,7 +1304,7 @@ documents:
       bytes: 373842
     probe:
       http_status: 200
-      checked_at: 2026-10-02T15:03:05Z
+      checked_at: 2026-10-02T15:09:26Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -1294,7 +1318,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: minutes
-    rule_version: 3
+    rule_version: 4
     redaction_version: 4
     items:
       - number: "1."
@@ -1663,9 +1687,10 @@ documents:
         checker_reason: null
       - number: "10.2"
         title: "Review of Traffic Bylaw 5590: Enforcement Trends, Penalty Efficacy and Deterrence Strategies (A. Salvador)"
-        matched: false
-        matched_terms: []
-        carried: false
+        matched: true
+        matched_terms:
+          - August 31, 2026, Community and Public Services Committee
+        carried: true
         withheld: 0
         checker_reason: null
       - number: "10.3"
@@ -1733,9 +1758,9 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v3
-      text_bytes: 3283
-      text_sha256: 30f339597f1472fb5806e2173a551fa332086c55091d1e037c4fb89afc05a5f0
+      version: selection rule v4
+      text_bytes: 4793
+      text_sha256: 7df517bc9ccf206d905ff3a8859aacaa4212d266e1826e4bee081f4cba016082
       text_file: evidence/private/carried/snow-clearing/2026-10-02/YF-EV-0291.txt
     completeness_check:
       result: pending
@@ -1747,7 +1772,7 @@ documents:
       via: site fetcher
     public_open_check:
       checked_by: the site evidence fetcher, whose request for the live page got HTTP 200 at build time; no person opened it in a browser
-      checked_on: 2026-10-02T15:03:05Z
+      checked_on: 2026-10-02T15:09:26Z
     second_download:
       result: not made
       sha256: null
@@ -1760,7 +1785,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=9b2fc4da-a9fb-4d8a-85e4-b89c25f6c352&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (template + meeting id at line 192); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=9b2fc4da-a9fb-4d8a-85e4-b89c25f6c352&lang=English refused the claude seat's WebFetch at 2026-10-02T14:46:30Z (403); 2 of 27 items selected by rule v3
+    reason: named in the frozen brief (template + meeting id at line 192); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=9b2fc4da-a9fb-4d8a-85e4-b89c25f6c352&lang=English refused the claude seat's WebFetch at 2026-10-02T14:46:30Z (403); 2 of 27 items selected by rule v4
     download:
       retrieved_on: 2026-10-02
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -1770,7 +1795,7 @@ documents:
       bytes: 150377
     probe:
       http_status: 200
-      checked_at: 2026-10-02T15:03:06Z
+      checked_at: 2026-10-02T15:09:27Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -1784,7 +1809,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: minutes
-    rule_version: 3
+    rule_version: 4
     redaction_version: 4
     items:
       - number: "1."
@@ -1983,7 +2008,7 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v3
+      version: selection rule v4
       text_bytes: 2867
       text_sha256: f2b55736684db59a400e880e61e9dae3aa0675ff5e922becbfb142383ecbb02b
       text_file: evidence/private/carried/snow-clearing/2026-10-02/YF-EV-0292.txt
@@ -1997,7 +2022,7 @@ documents:
       via: site fetcher
     public_open_check:
       checked_by: the site evidence fetcher, whose request for the live page got HTTP 200 at build time; no person opened it in a browser
-      checked_on: 2026-10-02T15:03:06Z
+      checked_on: 2026-10-02T15:09:27Z
     second_download:
       result: not made
       sha256: null
@@ -2010,7 +2035,7 @@ documents:
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=2e4a5472-0652-4330-a8ba-0f903d9b61ce&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (template + meeting id at line 194); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=2e4a5472-0652-4330-a8ba-0f903d9b61ce&lang=English refused the claude seat's WebFetch at 2026-10-02T14:46:56Z (403); 0 of 12 items selected by rule v3
+    reason: named in the frozen brief (template + meeting id at line 194); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=2e4a5472-0652-4330-a8ba-0f903d9b61ce&lang=English refused the claude seat's WebFetch at 2026-10-02T14:46:56Z (403); 2 of 12 items selected by rule v4
     download:
       retrieved_on: 2026-10-02
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -2020,7 +2045,7 @@ documents:
       bytes: 108675
     probe:
       http_status: 200
-      checked_at: 2026-10-02T15:03:06Z
+      checked_at: 2026-10-02T15:09:27Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
@@ -2034,7 +2059,7 @@ documents:
       result: pass
       reason: the header and every item on the live page, with its motions and votes, match the archived copy
     layout: minutes
-    rule_version: 3
+    rule_version: 4
     redaction_version: 4
     items:
       - number: "1."
@@ -2088,16 +2113,18 @@ documents:
         checker_reason: null
       - number: "2.1"
         title: Agenda Review Committee List
-        matched: false
-        matched_terms: []
-        carried: false
+        matched: true
+        matched_terms:
+          - draft agendas
+        carried: true
         withheld: 0
         checker_reason: null
       - number: 2.1.1
         title: August 31, 2026, Community and Public Services Committee
-        matched: false
-        matched_terms: []
-        carried: false
+        matched: true
+        matched_terms:
+          - August 31, 2026, Community and Public Services Committee
+        carried: true
         withheld: 0
         checker_reason: null
       - number: 2.1.2
@@ -2123,9 +2150,9 @@ documents:
         checker_reason: null
     extraction:
       tool: scripts/panel/minutes-items.ts
-      version: selection rule v3
-      text_bytes: 515
-      text_sha256: 988ab949ea1b2cc608e99a5d27bff79168d382dc856b91ea8fabd1875c3eba52
+      version: selection rule v4
+      text_bytes: 1388
+      text_sha256: 5020b089a83462a830d4385a6472724ac2bd34a614dc9c3f90ac3c6eec20a965
       text_file: evidence/private/carried/snow-clearing/2026-10-02/YF-EV-0293.txt
     completeness_check:
       result: pending
@@ -2137,7 +2164,7 @@ documents:
       via: site fetcher
     public_open_check:
       checked_by: the site evidence fetcher, whose request for the live page got HTTP 200 at build time; no person opened it in a browser
-      checked_on: 2026-10-02T15:03:06Z
+      checked_on: 2026-10-02T15:09:27Z
     second_download:
       result: not made
       sha256: null
