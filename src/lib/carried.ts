@@ -72,6 +72,13 @@ function portalUrl(url: unknown): boolean {
   }
 }
 
+/** A manifest written under v1.43 or later: marked by its methodology_version, or by a rule naming v1.43. */
+function isV143Manifest(manifest: { methodology_version?: unknown; rule?: unknown } | null): boolean {
+  const version = /^(\d+)\.(\d+)$/.exec(String(manifest?.methodology_version ?? ''));
+  if (version) return Number(version[1]) > 1 || (Number(version[1]) === 1 && Number(version[2]) >= 43);
+  return typeof manifest?.rule === 'string' && /\bv1\.43\b/.test(manifest.rule);
+}
+
 const KINDS = new Set([undefined, 'pdf', 'html', 'minutes-items', 'pdf-sections']);
 const GROUNDS = new Set([undefined, 'fetcher challenge', 'seat refusal', 'two-round seat failure']);
 
@@ -119,10 +126,12 @@ type ManifestDocument = {
  *   minutes-items row lacks its rule version, or a pdf-sections row its
  *   section rule version, or a row has a kind other than pdf, html,
  *   minutes-items or pdf-sections, or an eligibility ground the method does
- *   not define, or a v1.43 row (html, pdf-sections, or a document outside the
- *   portal) with no eligibility ground at all, so a broken row fails the build
- *   rather than silently dropping or misstating the label. Only a v1.41 or
- *   v1.42 portal row may omit its ground. An absent manifest means nothing was
+ *   not define, or no eligibility ground at all where one is required: in
+ *   every row of a v1.43 manifest (one whose `methodology_version` is 1.43 or
+ *   later, or whose `rule` names v1.43), and in any html, pdf-sections or
+ *   non-portal row. Only a portal row of a legacy (v1.41 or v1.42) manifest may
+ *   omit its ground. A broken row fails the build rather than silently
+ *   dropping or misstating the label. An absent manifest means nothing was
  *   carried.
  */
 export function carriedSources(runDirs: readonly string[], root: string = process.cwd()): Map<string, CarriedSource> {
@@ -130,11 +139,12 @@ export function carriedSources(runDirs: readonly string[], root: string = proces
   for (const run of new Set(runDirs)) {
     const file = path.join(root, run, 'carried', 'manifest.yaml');
     if (!existsSync(file)) continue;
-    const manifest = YAML.parse(readFileSync(file, 'utf8')) as { documents?: ManifestDocument[] };
+    const manifest = YAML.parse(readFileSync(file, 'utf8')) as { documents?: ManifestDocument[]; methodology_version?: unknown; rule?: unknown };
+    const v143Manifest = isV143Manifest(manifest);
     for (const [index, doc] of (manifest?.documents ?? []).entries()) {
       if (doc.status !== 'carried') continue;
       const portal = portalUrl(doc.url);
-      const v143 = doc.kind === 'html' || doc.kind === 'pdf-sections' || !portal;
+      const v143 = v143Manifest || doc.kind === 'html' || doc.kind === 'pdf-sections' || !portal;
       const problems = [
         typeof doc.registry_id === 'string' && doc.registry_id ? '' : 'registry_id',
         typeof doc.url === 'string' && /^https:\/\/\S+$/.test(doc.url) ? '' : 'url',

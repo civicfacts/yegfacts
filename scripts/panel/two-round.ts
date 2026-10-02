@@ -27,11 +27,13 @@
  * 502", "returned 403", or "502 Bad Gateway" and the like) or a failure phrase
  * ("could not read", "unable to open", "fetch error" ...). A marker is tied to
  * the document when the nearest document mentioned before it in the sentence is
- * this one: its URL, the URL's file name, or a name the run declares for it,
- * each of which must appear in the frozen brief. With no mention before the
- * marker, the sentence must mention this document and no other. A sentence that
- * mentions no document counts only inside an evidence entry whose source_url
- * is this document's URL (query string ignored), or when it opens "It", "This"
+ * this one: its URL (sameDocumentUrl: query string kept, and on the meeting
+ * portal exactly the same DocumentId), the URL's file name when the URL has no
+ * query string, or a name the run declares for it, each of which must appear
+ * in the frozen brief. With no mention before the marker, the sentence must
+ * mention this document and no other. A sentence that mentions no document
+ * counts only inside an evidence entry whose source_url is this document's
+ * URL, or when it opens "It", "This"
  * or "The PDF" right after a sentence that names this document and no other.
  * Other documents are any other URL or file name, a numbered reference such as
  * "Attachment 4" or "Bylaw 20226" that is not itself a declared name, and a
@@ -208,7 +210,44 @@ export function sentences(text: string): string[] {
     .filter(Boolean);
 }
 
-const withoutQuery = (url: string) => url.replace(/[?#].*$/, '');
+/**
+ * A URL as compared: scheme and host in lower case, `%26` read as `&`, and no
+ * trailing slash on the path. The query string is kept, because on the meeting
+ * portal it is what names the file.
+ */
+export function normaliseUrl(url: string): string {
+  const raw = url.trim().replace(/[.,;:]+$/, '').replace(/%26/gi, '&');
+  try {
+    const parsed = new URL(raw);
+    const pathname = parsed.pathname.length > 1 ? parsed.pathname.replace(/\/+$/, '') : parsed.pathname;
+    return `${parsed.protocol.toLowerCase()}//${parsed.host.toLowerCase()}${pathname}${parsed.search}${parsed.hash}`;
+  } catch {
+    return raw;
+  }
+}
+
+/**
+ * Whether two URLs name the same document. On the meeting portal
+ * (escribemeetings.com) a file is its DocumentId: the same host and path and
+ * exactly the same DocumentId value. Anywhere else the normalised URLs must be
+ * equal, query string included.
+ */
+export function sameDocumentUrl(a: string, b: string): boolean {
+  const x = normaliseUrl(a);
+  const y = normaliseUrl(b);
+  try {
+    const ux = new URL(x);
+    const uy = new URL(y);
+    const portal = /(^|\.)escribemeetings\.com$/i.test(ux.hostname);
+    const idX = ux.searchParams.get('DocumentId');
+    if (portal && idX !== null) {
+      return ux.host === uy.host && ux.pathname.toLowerCase() === uy.pathname.toLowerCase() && idX === uy.searchParams.get('DocumentId');
+    }
+  } catch {
+    // Not URLs: compared as written below.
+  }
+  return x === y;
+}
 
 type Statement = { where: string; text: string; evidenceFor?: string };
 
@@ -271,17 +310,18 @@ type Mention = { at: number; end: number; ours: boolean };
  * agenda, index or FAQ. A declared name inside another document's numbered reference is
  * that other document.
  */
-function mentionsIn(sentence: string, doc: { bare: string; fileName: string; names: readonly string[] }): Mention[] {
+function mentionsIn(sentence: string, doc: { url: string; fileName: string; names: readonly string[] }): Mention[] {
   const spans = (pattern: RegExp, ours: boolean) => [...sentence.matchAll(pattern)].map((m) => ({ at: m.index!, end: m.index! + m[0].length, ours, text: m[0] }));
   const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const declared = (text: string) => doc.names.some((name) => name.toLowerCase() === text.toLowerCase());
+  const urls = spans(ANY_URL, false);
   const ours = [
-    ...spans(new RegExp(escape(doc.bare), 'g'), true),
+    ...urls.filter((m) => sameDocumentUrl(m.text, doc.url)).map((m) => ({ ...m, ours: true })),
     ...(doc.fileName.length > 4 ? spans(new RegExp(`\\b${escape(doc.fileName)}\\b`, 'gi'), true) : []),
     ...doc.names.flatMap((name) => spans(new RegExp(`\\b${escape(name)}\\b`, 'gi'), true)),
   ];
   const others = [
-    ...spans(ANY_URL, false).filter((m) => !m.text.startsWith(doc.bare)),
+    ...urls.filter((m) => !sameDocumentUrl(m.text, doc.url)),
     ...spans(ANY_FILE, false).filter((m) => m.text.toLowerCase() !== doc.fileName.toLowerCase()),
     ...spans(NUMBERED_REFERENCE, false).filter((m) => !declared(m.text)),
     ...spans(OTHER_GENERIC, false),
@@ -328,11 +368,19 @@ function tiedToOurs(mentions: Mention[], at: number, context: boolean): boolean 
  * failure sentence refers back ("It returned HTTP 502").
  */
 export function readSeatAnswer(answer: unknown, url: string, names: readonly string[]): SeatReading {
-  const bare = withoutQuery(url);
-  const doc = { bare, fileName: decodeURIComponent(bare.split('/').pop() ?? ''), names };
+  // A file name identifies the document only when no query string does: a portal file is its DocumentId.
+  const parsed = (() => {
+    try {
+      return new URL(normaliseUrl(url));
+    } catch {
+      return undefined;
+    }
+  })();
+  const fileName = parsed && !parsed.search ? decodeURIComponent(parsed.pathname.split('/').pop() ?? '') : '';
+  const doc = { url, fileName, names };
   let failure: Extract<SeatReading, { status: 'failed' }> | undefined;
   for (const statement of statements(answer)) {
-    if (statement.evidenceFor !== undefined && withoutQuery(statement.evidenceFor) !== bare) continue;
+    if (statement.evidenceFor !== undefined && !sameDocumentUrl(statement.evidenceFor, url)) continue;
     const parts = sentences(statement.text);
     for (const [index, sentence] of parts.entries()) {
       const mentions = mentionsIn(sentence, doc);

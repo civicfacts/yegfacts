@@ -12,8 +12,9 @@
  * form feeds, printed page numbers equal to PDF page numbers):
  *   - a "Table of Contents" page, and any page continuing it, whose lines end
  *     in a page number (an entry may wrap onto a second line; any other line
- *     stops the build); every entry, top-level or indented, starts a section
- *     at its page, and the pages before the first entry are the front matter;
+ *     stops the build, on a continuation page too); every entry, top-level
+ *     or indented, starts a section at its page, and the pages before the
+ *     first entry are the front matter;
  *   - inside those parts, service packages: a page that opens with a heading
  *     "Integrated Service Package - <title>" or "Standalone Service Package -
  *     <title>" starts a package; the title runs on until a line that starts
@@ -29,7 +30,9 @@
  *     "Total" row, or the build stops.
  * Every page belongs to exactly one section, in order. Contents that cannot be
  * read or are out of order stop the build too: the format has changed or the
- * text is cut.
+ * text is cut. These checks are structural: a package's notes, or any text
+ * outside its description and cost tables, are not checked here; the
+ * independent checker reads every carried section against the full document.
  */
 import { fileURLToPath } from 'node:url';
 import { SELECTION_MATCH, matchedTermsIn, selectionRules, type SelectionRule } from './minutes-items.ts';
@@ -135,7 +138,11 @@ function bodyLines(page: string): string[] {
 /**
  * Contents entries with their start pages, in order, read from the "Table of
  * Contents" page and every page that continues it: one that opens "Table of
- * Contents (continued)", or one whose every line is a contents entry.
+ * Contents (continued)", or one with any line shaped like an entry, unless
+ * the contents read so far list it as where a part starts.
+ *
+ * @throws when a page read as contents has a line contentsLines cannot
+ *   explain, so a contents page is never cut short silently.
  */
 export function tableOfContents(pages: readonly string[]): ContentsEntry[] {
   const at = pages.findIndex((page) => page.split('\n').some((line) => TOC_HEADING.test(line)));
@@ -143,6 +150,8 @@ export function tableOfContents(pages: readonly string[]): ContentsEntry[] {
   const lines = pages[at]!.split('\n');
   const entries = contentsLines(lines.slice(lines.findIndex((line) => TOC_HEADING.test(line)) + 1), at + 1);
   for (let next = at + 1; next < pages.length; next += 1) {
+    // A page the contents already lists as where a part starts is that part, not more contents.
+    if (entries.some((entry) => entry.page === next + 1)) break;
     const body = bodyLines(pages[next]!);
     const filled = body.filter((line) => line.trim() && !FOOTER.test(line));
     if (filled.length === 0) break;
@@ -150,7 +159,9 @@ export function tableOfContents(pages: readonly string[]): ContentsEntry[] {
       entries.push(...contentsLines(body.slice(body.findIndex((line) => TOC_CONTINUED.test(line)) + 1), next + 1));
       continue;
     }
-    if (!filled.every((line) => TOC_ENTRY.test(line))) break;
+    // A page with no entry-shaped line is not contents. One with any is read as
+    // contents, and a line on it the parser cannot explain stops the build.
+    if (!filled.some((line) => TOC_ENTRY.test(line))) break;
     entries.push(...contentsLines(body, next + 1));
   }
   if (entries.length === 0) throw new Error('the contents page lists no entries');

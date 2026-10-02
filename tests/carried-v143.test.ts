@@ -27,7 +27,7 @@ import {
   type Fetcher,
 } from '../scripts/panel/carry-manifest.ts';
 import { carrySections, packageHeading, parseSections, tableOfContents, tilingProblems } from '../scripts/panel/pdf-sections.ts';
-import { failureMarker, readSeatAnswer, twoRoundGround } from '../scripts/panel/two-round.ts';
+import { failureMarker, readSeatAnswer, sameDocumentUrl, twoRoundGround } from '../scripts/panel/two-round.ts';
 import {
   CARRIED_LABEL,
   CARRIED_NOT_INDEPENDENT,
@@ -76,7 +76,7 @@ const answer = (limitations: string[], evidence: Array<Record<string, string>> =
 const FAILED = {
   claude: answer([`The bylaw at ${BYLAW_URL} was fetched once. It could not decompress the text, and retries returned HTTP 502.`]),
   gpt: answer(['The meeting portal returned 403 Forbidden, and the bylaw PDF returned 502 Bad Gateway.']),
-  'gpt-luna': answer([], [{ finding: 'Section 9 sets four minutes; direct opening of the PDF returned a fetch error.', source_url: `${BYLAW_URL}?cb=1` }]),
+  'gpt-luna': answer([], [{ finding: 'Section 9 sets four minutes; direct opening of the PDF returned a fetch error.', source_url: BYLAW_URL }]),
 };
 
 /** A run directory holding committed rounds: `rounds` oldest first, each seat's answer by file name. */
@@ -730,5 +730,64 @@ describe('review findings: who makes the human checks', () => {
     expect(write({ ...base, kind: 'pdf', url: BYLAW_URL })).toThrow(/missing or invalid eligibility ground "undefined"/);
     expect(write({ ...base, kind: 'html', url: BYLAW_URL })).toThrow(/eligibility ground/);
     expect(write({ ...base, kind: 'pdf', url: 'https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=1' })().get('YF-EV-9301')).toMatchObject({ reason: 'portal' });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Second review on PR #117
+// ---------------------------------------------------------------------------
+
+describe('second review: which document a URL names', () => {
+  const PORTAL = 'https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=';
+
+  it('never counts failures recorded for DocumentId=222 toward DocumentId=111', () => {
+    const other = answer([`${PORTAL}222 returned HTTP 403.`], [{ finding: 'Direct opening returned a fetch error.', source_url: `${PORTAL}222` }]);
+    expect(readSeatAnswer(other, `${PORTAL}111`, [])).toEqual({ status: 'no record' });
+    expect(readSeatAnswer(answer([`${PORTAL}1110 returned HTTP 403.`]), `${PORTAL}111`, [])).toEqual({ status: 'no record' });
+    expect(readSeatAnswer(answer([`${PORTAL}111 returned HTTP 403.`]), `${PORTAL}111`, [])).toMatchObject({ status: 'failed', http_status: 403 });
+    const runDir = runDirFor();
+    const at222 = answer([`${PORTAL}222 returned HTTP 403.`]);
+    writeRounds(runDir, [
+      { dir: 'superseded-2031-01-01', started: '2031-01-01T08:00:00Z', answers: { claude: at222, gpt: at222, 'gpt-luna': at222 } },
+      { dir: '.', started: '2031-01-01T10:00:00Z', answers: { claude: at222, gpt: at222, 'gpt-luna': at222 } },
+    ]);
+    expect(twoRoundGround(runDir, `${PORTAL}111`, [], '').ok).toBe(false);
+    expect(twoRoundGround(runDir, `${PORTAL}222`, [], '').ok).toBe(true);
+  });
+
+  it('normalises only the scheme, host case, a trailing slash and %26, and keeps the query string', () => {
+    expect(sameDocumentUrl('HTTPS://PUB-EDMONTON.escribemeetings.com/filestream.ashx?DocumentId=111', `${PORTAL}111`)).toBe(true);
+    expect(sameDocumentUrl('https://www.example.ca/a/b/?x=1%26y=2', 'https://www.example.ca/a/b?x=1&y=2')).toBe(true);
+    expect(sameDocumentUrl(`${BYLAW_URL}?cb=1`, BYLAW_URL)).toBe(false);
+    expect(sameDocumentUrl('https://www.example.ca/A.pdf', 'https://www.example.ca/a.pdf')).toBe(false);
+  });
+});
+
+describe('second review: v1.43 manifests and contents continuation', () => {
+  it('requires a ground on a portal pdf row of a v1.43 manifest, and not of a legacy one', () => {
+    const write = (manifest: Record<string, unknown>) => {
+      const dir = mkdtempSync(path.join(root, 'labels-'));
+      mkdirSync(path.join(dir, 'reviews/fixture-story/2026-01-05/carried'), { recursive: true });
+      writeFileSync(path.join(dir, 'reviews/fixture-story/2026-01-05/carried/manifest.yaml'), YAML.stringify(manifest));
+      return () => carriedSources(['reviews/fixture-story/2026-01-05'], dir);
+    };
+    const row = { registry_id: 'YF-EV-9401', status: 'carried', kind: 'pdf', url: 'https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=1', archive: { sha256: 'e'.repeat(64) } };
+    expect(write({ methodology_version: '1.43', documents: [row] })).toThrow(/missing or invalid eligibility ground "undefined"/);
+    expect(write({ rule: 'methodology v1.43 (D-0046, D-0047, D-0048): carried documents', documents: [row] })).toThrow(/eligibility ground/);
+    expect(write({ methodology_version: '1.43', documents: [{ ...row, eligibility: { ground: 'fetcher challenge' } }] })().get('YF-EV-9401')).toMatchObject({ reason: 'portal' });
+    expect(write({ rule: 'methodology v1.41 (D-0046): carried documents', documents: [row] })().get('YF-EV-9401')).toMatchObject({ reason: 'portal' });
+  });
+
+  it('stamps the methodology version on every manifest it builds', async () => {
+    const repo = publisherRepo();
+    expect((await buildPublisher(repo, publisherFetcher(BYLAW_PDF))).methodology_version).toMatch(/^1\.\d+$/);
+  });
+
+  it('throws on a page after the contents that looks like contents but has a line it cannot explain', () => {
+    const page = (body: string) => `${HEADER}${body}`;
+    const pages = [page('Table of Contents\nPart A                 3\n'), page('Part B                 4\nA wrapped half of an entry\n\nNot an entry either\n'), page('A'), page('B')];
+    expect(() => tableOfContents(pages)).toThrow(/contents page 2: "A wrapped half of an entry" is not followed by the rest of its entry|contents page 2: cannot read the line/);
+    // A page with no entry-shaped line ends the contents.
+    expect(tableOfContents([page('Table of Contents\nPart A                 2\n'), page('Some prose, no page numbers.\n')])).toEqual([{ title: 'Part A', page: 2 }]);
   });
 });

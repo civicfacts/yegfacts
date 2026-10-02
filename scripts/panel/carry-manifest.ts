@@ -157,7 +157,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync,
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import YAML from 'yaml';
-import { REPO_ROOT, listFiles, loadYaml, sha256 } from '../lib/repo.ts';
+import { REPO_ROOT, currentMethodologyVersion, listFiles, loadYaml, sha256 } from '../lib/repo.ts';
 import {
   REDACTION_RULE,
   SELECTION_MATCH,
@@ -352,6 +352,11 @@ export type Gate = {
 export type CarryManifest = {
   run: string;
   generated_at: string;
+  /**
+   * The methodology version that built the manifest. From v1.43 every carried
+   * row must record its eligibility ground; a manifest without it is legacy.
+   */
+  methodology_version?: string;
   /** The editor's session for this run, as the editor names it; no human check may be made by it. Human-filled, kept on rebuild. */
   editor_session?: string | null;
   rule: string;
@@ -1003,6 +1008,7 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
   const manifest: CarryManifest = {
     run: runRel,
     generated_at: isoSeconds(now()),
+    methodology_version: currentMethodologyVersion(),
     editor_session: previous?.editor_session ?? null,
     rule: v143
       ? 'methodology v1.43 (D-0046, D-0047, D-0048): carried documents, minutes items, the two-round ground, non-portal documents and sections'
