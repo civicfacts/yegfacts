@@ -308,3 +308,17 @@ is raised in the handover. Everything needed to take the brief forward is
 here: the applied text is `wording-edits.md`, the sources are in the
 registry, and the two claims parked inside the brief were accepted by the
 checker as parked.
+
+## 2026-10-02: the editor's decision on the park
+
+The park stands, and the cause was ours, not the checker's. Check 3 left two
+findings with copy-ready text, so the v1.39 route was open; the editor's
+session joined the replacements to the surrounding words instead of applying
+them exactly, and the eligibility reader was right to rule that ineligible.
+v1.39 gives one read, and the editor does not ask for a second: an exception
+made because the editor slipped is the loosening the board warned against.
+The question reopens on new intake evidence, as who-pays-for-roads does.
+Process fix for every later v1.39 attempt: before the eligibility read, the
+editor diffs each applied passage against the checker's replacement text and
+sends nothing unless they are identical; any status-block change waits until
+after the confirmation.
