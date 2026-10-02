@@ -402,3 +402,126 @@ cannot fetch, so the run depends on the founder's downloads and on the
 carry machinery. And the editor's first draft tested two claims the
 checker parked for reasons the editor accepted on reading them, which is
 the framing check doing its job and is recorded here for that reason.
+
+## 2026-10-02: round 1 with report CO03513 and the meeting pages carried, stopped on two framing concerns and an unread budget package
+
+**Round 1 ran on all three seats, and the run stops there.** Two seats
+raised a MATERIAL FRAMING CONCERN on the brief's timing rule. All three
+seats found a snow-clearing proposal in the Fall 2025 budget adjustment
+that the brief does not name, and none could read its text. The Claude
+seat calls that source essential and inaccessible. No merge, round 2 or
+synthesis was run, and no verdict below is a finding of this site.
+
+**What was carried, and how it was checked.** Under methodology v1.41 the
+package carried the full text of three files the founder downloaded in a
+browser on 2026-10-02. They are report CO03513 (YF-EV-0294, DocumentId
+304803), Attachment 9, Well Maintained City Package Summary (YF-EV-0295,
+304812), and Attachment 10, Snow and Ice Enhancements - June 2026
+(YF-EV-0296, 304813). The committee's agenda page for 2026-08-31
+(YF-EV-0287) lists each DocumentId under the same title, live and
+archived. Each carried PDF answered the site's fetcher with a
+challenge-signed HTTP 403.
+
+Under v1.42 the package also carried the items selection rule v4 picks
+from six meeting pages, each refused by the Claude seat's WebFetch with
+HTTP 403 (`carried/seat-probes.yaml`):
+- YF-EV-0287, the committee agenda of 2026-08-31: item 7.1;
+- YF-EV-0289, the committee minutes of 2026-08-31: items 1.4, 2.3, 7.1,
+  7.2 and 11.1;
+- YF-EV-0290, the Council minutes of 2026-09-08: items 2.2, 7.9, 11.4 and
+  11.6;
+- YF-EV-0291, the Council minutes of 2026-03-17: items 10.2, 10.3 and
+  10.4;
+- YF-EV-0292, the committee minutes of 2026-01-19: items 7.1 and 11.1;
+- YF-EV-0293, the Agenda Review Committee minutes of 2026-08-18: items 2.1
+  and 2.1.1.
+
+Rule v3 added snow-service terms, because the D-0047 addendum of
+2026-10-02 judges relevance against each run's own claims. Rule v4 added
+"draft agendas" and the 2026-08-31 meeting title, after the completeness
+check found v3 missed the Agenda Review Committee record of the draft
+agenda (qualification 4).
+
+An independent read-only Claude Opus 5.5 session, not the editor, checked
+the carried set (`carried/checks/`). It passed every item of every page
+under v4, found the three PDFs extracted in full, including their cost
+tables, and found all nine carried texts clear of personal information.
+The second download is recorded as not made, because only the founder
+has downloaded the files. The other CO03513 attachments, the edmonton.ca
+policy pages and the Internet Archive capture were not carried, each for
+the reason in the manifest's exclusions.
+
+**The package.** The carry manifest was committed at 4b62c1b with sha256
+`1d58f40816c6a049000c2e89ab462a6848da0e6ee9335fdd350dc68402d9f203`. The
+carried section's sha256 was
+`95cdfb60869a6888cf1842dfcd36893dfe957bf96c45c359f67b22370a39bfc9` and the
+package's `9cbf0c5b198b95e2d207799f32d1bb0595ef706f0553afe13bb3a2f58a1ae638`,
+the same for every seat. The earliest probe it rests on was the Claude
+seat's refusal at 2026-10-02T14:44:40Z. All three seats launched from
+4b62c1b at 15:12:51Z. The runner refused nothing.
+
+| Seat | Attempt | Outcome |
+|---|---|---|
+| Claude Opus 5.5 (`claude-opus-5-5`), high, Claude Code 2.1.287 | `39baaadc68643583`, 15:12Z to 15:20Z | admitted on one attempt under claude-safe-web-candidate-2.1.287 |
+| GPT-6 Sol (`gpt-6-sol`), high, codex-cli 0.160.0 | `ca07317bebe56b98`, 15:12Z to 15:26Z | admitted on one attempt under codex-captured-read-only-0.160.0 |
+| GPT-6 Luna (`gpt-6-luna`), high, codex-cli 0.160.0 | `e97880ecaa8dd97a`, 15:12Z to 15:20Z | admitted on one attempt under codex-captured-read-only-0.160.0 |
+
+What each seat returned, kept for the record only:
+
+| Claim | Claude | GPT-6 Sol | GPT-6 Luna |
+|---|---|---|---|
+| `two-snow-removal-proposals-need-more-money` | Not established, moderate | Not established, high | Partially supported, moderate |
+
+**Why the run stops.**
+
+1. **Two framing concerns.** The Claude seat and the GPT-6 Luna seat each
+   wrote MATERIAL FRAMING CONCERN on the primary timing rule.
+   - The brief reads "already put ... to council" as "considered by a body
+     by the comment date".
+   - Both seats say that in ordinary usage, putting a proposal to council
+     means submitting it. Report CO03513 and its attachments were on the
+     committee's published agenda by 2026-08-22, before the comment.
+   - Both find that the brief's alternative timing rule counts Attachments
+     9 and 10 and reaches a different rung from the primary rule.
+   - The Claude seat proposes "listed on a published agenda by the comment
+     date" as the primary rule, with "considered" as the alternative.
+
+2. **A proposal the brief does not name, unread.** All three seats
+   identified a snow-clearing service package in the Fall 2025
+   Supplemental Operating Budget Adjustment.
+   - The seats place it in Council's budget meetings of late November and
+     early December 2025, inside the reference period. Sol puts it under
+     item 7.2 of 2025-11-24/25 and Claude under meeting ids
+     `8321e64d-6394-469b-8653-65641562497c` and
+     `2925a7f5-32a8-49a6-be15-fc1cf157c764`.
+   - Sol names report FCS03158 and its Attachment 2 (DocumentId 278877),
+     and Luna names FCS03158 too; Claude and Luna trace the package to
+     report CO03079, heard by the committee on 2025-08-11.
+   - No seat could read its text: the portal refused every seat's tool.
+     They worked from search extracts and news reports.
+   - Claude writes that the source is essential and inaccessible. Sol's
+     Not established rests on the same unread report. Luna counts one
+     package from it and finds no second.
+   - The site holds no copy, the brief does not name it, and so it was
+     not carried.
+
+The brief says an inaccessible essential source stops a run rather than
+becoming a finding, and a framing concern stops a run for the editor.
+
+**Noted, not a stop.**
+- No seat said the graded verdict turns on the edmonton.ca pages or the
+  uncarried CO03513 attachments. Sol lists the other attachments as a
+  limitation of the later-window alternatives only.
+- Every seat reports that CO03513 states no approved snow and ice budget,
+  so the stricter cost reading cannot be met from it.
+- The Claude seat reports, as parked-claim context, that the report lists
+  "Calcium Chloride System Upgrades" with a cost.
+
+**What reopens the run is the editor's decision.**
+- The two concerns go to the timing rule, which is a framing matter.
+- The Fall 2025 package would need its report and attachment downloaded
+  by a person, registered, named in the brief and carried before a seat
+  could read it.
+- The round 1 answers stay in `round1/` as returned, with their rows in
+  `run.yaml`. A restart moves them under a superseded directory, as
+  earlier runs did.

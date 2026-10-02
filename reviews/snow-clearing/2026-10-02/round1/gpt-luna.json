@@ -1,0 +1,132 @@
+{
+  "reviewer": {
+    "provider": "openai",
+    "model_self_reported": "GPT-6",
+    "runner_model": "gpt-6-luna",
+    "runner_seat": "GPT-6 Luna",
+    "runner_effort": "high"
+  },
+  "story": "snow-clearing",
+  "round": 1,
+  "claims": [
+    {
+      "id": "two-snow-removal-proposals-need-more-money",
+      "proposition_evaluated": "Between 2025-11-18 and 2026-08-27, City Council or a committee of Council considered at least two distinct proposals from Administration to change snow and ice control service, each whose text states new spending to deliver it.",
+      "interpretation_notes": "On the primary reading, I count one qualifying package: the Improved Accessibility package in the Fall 2025 supplemental operating budget. Its text states new spending for snow and ice control. I found no second qualifying proposal considered by 2026-08-27. Report CO03513 and its attachments were published on the August 31 committee agenda, captured August 22, but the committee did not consider them until August 31. The September 8 Council record is later still. The brief’s definition of “already put” as “considered” materially affects the answer: it excludes proposals already on a published agenda before the comment date. MATERIAL FRAMING CONCERN The ordinary phrase “put to council” could include formally submitting proposals for a scheduled committee meeting. Under the brief’s required agenda-date alternative, the two CO03513 packages and their options enter the count, producing a different result. I would state that distinction explicitly in the story.",
+      "verdict": "Partially supported",
+      "confidence": "Moderate",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "The City Operations report CO03079 presented four service options and states that Options 2–4 require additional funding. The later integrated service package responds to the August 11, 2025 committee motion to prepare Option 3 for the Fall 2025 Supplemental Operating Budget Adjustment. The package states a $2.11 million one-time capital investment and annual ongoing increases, including $1.60 million for SNIC efforts. Council’s November 24 minutes say the budget report was postponed to December 1; Council considered the package in the December 1 budget meeting. This is one package, not separate counts for the report’s options and the follow-up package.",
+          "source_title": "Improved Accessibility – Active Pathway Snow Removal and Sidewalk Repair (CO03079); Integrated Service Package – Improved Accessibility – Active Pathway Snow Removal and Sidewalk Repair (FCS03158, Attachment 2); City Council minutes, November 24, 2025",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=268356 ; https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=282282 ; https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=8321e64d-6394-469b-8653-65641562497c&lang=English",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025-08-11 report; 2025-11-24 budget package and Council meeting",
+          "source_type": "analytical-report",
+          "establishes": "Administration presented a snow-service proposal with costed options, and the later integrated package stated new spending. The November 24 Council meeting postponed the budget item to December 1; the December 1 Council budget record shows the budget adjustments were considered.",
+          "quote": "“This service package involves a $2.11 million one-time capital investment, an annual ongoing operating increase of $1.60 million to prioritize SNIC efforts…”",
+          "strength": "strong"
+        },
+        {
+          "finding": "March 17, 2026 Council motions requested that Administration include service-delivery options and costs in its upcoming policy review. Under the brief’s fixed definition, these motions are requests for proposals, not Administration proposals themselves.",
+          "source_title": "City Council minutes, March 17, 2026, items 10.3 and 10.4",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=86bee574-31e8-424f-abbb-978f946337f3&lang=English",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-03-17",
+          "source_type": "legal-audited",
+          "establishes": "The March motions do not add proposals to the count under the brief’s definition; they direct Administration to provide options and costs.",
+          "quote": "“include options, risk analysis, operationalization timelines and resource implications” and “include public feedback and industry best practices, outlining options, costs and implications”",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The August 31, 2026 committee agenda, captured by the Internet Archive on August 22, lists report CO03513 and its attachments, including the Well Maintained City package and Snow and Ice Enhancements. The committee minutes show the report was dealt with on August 31, after the comment date. The December 1 budget proposal plus these later proposals establish only one counted CO03513 package set by the agenda-date alternative, not by the primary considered-by date.",
+          "source_title": "Community and Public Services Committee agenda, August 31, 2026 (archive capture); Community and Public Services Committee minutes, August 31, 2026",
+          "source_url": "https://web.archive.org/web/20260822162600/https://pub-edmonton.escribemeetings.com/Meeting.aspx?Id=e2eee963-953d-4bbd-834c-419a4545cbcf&Agenda=Agenda&lang=English ; https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=e2eee963-953d-4bbd-834c-419a4545cbcf&lang=English",
+          "source_publisher": "City of Edmonton; Internet Archive",
+          "source_date": "2026-08-22 capture; 2026-08-31 meeting",
+          "source_type": "legal-audited",
+          "establishes": "The CO03513 proposals were on a published agenda before the comment date but were not considered by the committee until afterward.",
+          "quote": "Agenda item 7.1 lists report CO03513 and its attachments. Minutes record the presentation, questions, and motions under item 7.1 on August 31.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City Council record for September 8, 2026 says item 7.9 was not selected for debate and was dealt with as part of the vote on reports not selected for debate. This is later than the comment date and cannot make the CO03513 proposals considered by August 27.",
+          "source_title": "City Council minutes, September 8, 2026, items 2.2 and 7.9",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=3195d7e4-a1e2-4923-810e-ddfa0726c299&lang=English",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-09-08",
+          "source_type": "legal-audited",
+          "establishes": "Council dealt with the CO03513 report after the comment date, without selecting item 7.9 for debate.",
+          "quote": "“This item was not selected for debate and was dealt with as part of item 2.2.”",
+          "strength": "strong"
+        },
+        {
+          "finding": "Report CO03513 describes a Well Maintained City package of approximately $23.6 million annually ongoing operating and $11.5 million one-time capital funding, and Attachment 10 lists 24 separately costed enhancement options. Those figures support the agenda-date and later-window alternatives, but the proposal documents were not considered by the comment date.",
+          "source_title": "Report CO03513; Attachment 9, Well Maintained City Package Summary; Attachment 10, Snow and Ice Enhancements – June 2026",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304803 ; https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304812 ; https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304813",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-08-31 report package",
+          "source_type": "analytical-report",
+          "establishes": "CO03513 proposed additional spending, but the meeting record places consideration after the claim’s date.",
+          "quote": "“The ‘Well Maintained City’ service package outlines approximately $23.6 million annually in ongoing operating and $11.5 million in one-time capital funding.”",
+          "strength": "strong"
+        }
+      ],
+      "limitations": [
+        "I tried the supplied City meeting and filestream URLs. The web tool could not fetch the portal pages or three CO03513 files (403, inaccessible, or browser-check failure). I relied on the complete carried text for CO03513, Attachments 9 and 10, and the selected meeting-page text in this package; I could not independently compare current files with their archived versions.",
+        "The claim’s primary count depends on a complete search of Council and committee meetings from 2025-11-18 through 2026-08-27. The supplied meeting extracts cover named meetings, not every page in the period. Search results located the CO03079 and FCS03158 records, but I could not independently certify that every other relevant meeting in the period contained no additional proposal. The one-proposal count is therefore limited to the records located and reviewed.",
+        "For CO03513, the archive capture and live agenda have different DocumentIds. The carried text gives their titles but not the file contents under both ID sets, so I cannot determine whether any file’s content changed between listings.",
+        "Report CO03513 states no approved snow and ice control operating budget against which the proposed costs can be compared. I do not infer an excess over an unstated budget.",
+        "The December 1, 2025 Council budget record shows the adjustments were considered; the evidence reviewed here does not establish whether the specific service package was approved in the final budget vote."
+      ],
+      "unknowns": [
+        "Whether another Administration snow-service proposal was considered at a Council or committee meeting in the primary period that was not among the records located.",
+        "The exact first published agenda date for the FCS03158 package and the CO03079 proposal, beyond their meeting records and the report’s stated dates.",
+        "Whether CO03513 files under the archived DocumentIds differ in content from the files under the live DocumentIds.",
+        "The approved snow and ice control operating budget baseline; CO03513 does not state one."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A complete meeting-calendar search and the agendas and minutes for every Council or committee meeting in the primary reference period that could have dealt with an Administration snow and ice control service proposal.",
+          "likely_holder": "City of Edmonton Office of the City Clerk / eScribe meeting portal",
+          "importance": "high"
+        },
+        {
+          "description": "The CO03513 files under both archived and current DocumentIds for a title and content comparison.",
+          "likely_holder": "City of Edmonton Office of the City Clerk",
+          "importance": "moderate"
+        },
+        {
+          "description": "The approved snow and ice control operating budget figure, if any, used as a baseline for the proposals.",
+          "likely_holder": "City of Edmonton Financial and Corporate Services / City Operations",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "Primary count from records located: P=1 service package considered; C=1 with stated new spending; U=0; rung Partially supported. The package text states $2.11 million one-time capital, $1.60 million annual ongoing for SNIC, plus annual increases for enforcement and sidewalk maintenance. These are source figures; no totals have been computed.",
+        "Alternative timing (agenda published by 2026-08-27): add the two separately presented CO03513 service packages, giving P=3, C=3, U=0; rung Supported. If counting separately costed options instead, CO03513 Attachment 10 lists 24 costed options, in addition to the Well Maintained City package and the earlier FCS03158 package; option-level P is at least 26, subject to package/option comparability.",
+        "Alternative window through 2026-10-02: CO03513 was considered by the committee on August 31 and Council on September 8. Counting the two CO03513 packages once gives P=3, C=3, U=0; rung Supported. Council’s September 8 handling was approval of the policy recommendation without debate; the committee separately handled the service-package motions.",
+        "Pre-election start (2025-01-01): the CO03079 report was considered on August 11, 2025, before the primary window. It presents four options, with Options 2–4 requiring additional funding. The November 2025 integrated package is the later presentation of Option 3 and is counted once as the same underlying service proposal. This alternative does not establish a second distinct package before 2026-08-27 on the records located.",
+        "Council alone, primary date and window: FCS03158 was considered by Council; on the located records P=1, C=1, U=0; rung Partially supported.",
+        "Separate costed options, primary date and window: the located FCS03158 package is one costed package; P=1, C=1, U=0; rung Partially supported. The March motions are not proposals under the brief’s definition.",
+        "Stricter cost reading requiring the text to establish excess over an identified approved budget: the FCS03158 text states new spending but the reviewed materials do not identify an approved snow-control budget baseline. For that comparison, P=1, C=0, U=1; rung Not established.",
+        "Exactly-two count rule under agenda-date alternative: three packages are identified, so the rung is Partially supported under that rule; the result is definition-sensitive."
+      ],
+      "what_would_change_my_verdict": [
+        "A complete review of all Council and committee agendas and minutes in the primary window that identifies a second qualifying Administration proposal would change the primary verdict to Supported.",
+        "Evidence that the FCS03158 package was not an Administration proposal or did not state new spending for a change to snow and ice control would change the primary count and verdict.",
+        "If the story intends “put to council” to include a proposal already published on an agenda for a later meeting, use the agenda-date alternative and qualify the finding as Supported."
+      ],
+      "suggested_one_line": "By August 27, the records reviewed show one costed snow-service package considered by Council; two further packages were already on a published committee agenda but were not considered until August 31.",
+      "suggested_short_answer": "Partially supported under the brief’s considered-by-date rule: one costed package is identified in the primary period. The August 31 committee agenda, published before the comment, contained two additional CO03513 packages; counting proposals once they are on an agenda changes the result to Supported. The City’s report does not identify an approved snow budget baseline.",
+      "suggested_tldr": [
+        "One costed package was considered in the primary period, based on records located.",
+        "Two additional packages appeared on a published August 31 agenda before the comment date, but were considered after it.",
+        "The result changes if “already put” includes proposals on a published agenda."
+      ]
+    }
+  ]
+}
