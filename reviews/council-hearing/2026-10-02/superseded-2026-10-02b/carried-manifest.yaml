@@ -1,10 +1,8 @@
-# Carry manifest (methodology v1.41, v1.42, v1.43). Committed; the extracted text never is.
-# Items and sections are selected only by the published rules; there is no way to add one by hand.
+# Carry manifest (methodology v1.41, v1.42). Committed; the extracted text never is.
+# Items are selected only by the published rule; there is no way to add one by hand.
 run: reviews/council-hearing/2026-10-02
-generated_at: 2026-10-02T19:21:23Z
-methodology_version: "1.43"
-editor_session: Stew editor session 0b65c2b5
-rule: "methodology v1.43 (D-0046, D-0047, D-0048): carried documents, minutes items, the two-round ground, non-portal documents and sections"
+generated_at: 2026-10-02T08:15:58Z
+rule: "methodology v1.42 (D-0046, D-0047): carried documents and minutes items"
 selection_rule:
   version: 2
   terms: &a1
@@ -39,160 +37,12 @@ redaction_rule:
   version: 4
   rule: In a minutes list introduced by "The following public speaker(s)" or "The following member(s) of the delegation" (not Administration's delegation), each listed name that is not an office-holder named in the page's attendance list or roll call becomes "[member of the public]"; an organisation after the name is kept. An attachment whose title starts with an agenda item number, then optionally a hyphen, then "Panel <n>" (any case), becomes "<item number> - Panel <n> - [member of the public]"; no other title changes. In a Requests to Speak motion ("That ... hear from the following ... speakers"), each listed entry is withheld unless it begins with an agenda item number, and the operative words, mover, vote and result are kept. No other motion text is changed. Office-holders are matched without a leading Mayor, Deputy Mayor, Acting Mayor, Councillor, Chair or Vice-Chair, ignoring case.
 documents:
-  - registry_id: YF-EV-0251
-    title: Bylaw 18155, Council Procedures Bylaw, office consolidation of October 29, 2025
-    url: https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf
-    kind: pdf
-    status: carried
-    reason: named in the frozen brief (exact URL); https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf was not read by any seat in superseded-2026-10-02/round1 and superseded-2026-10-02b/round1, each recording a failure (two-round seat failure); the site's fresh fetch matches the archive by bytes
-    download:
-      retrieved_on: 2026-10-02
-      note: City of Edmonton bylaw consolidation; the archived bytes carry no redistribution grant. Fails closed to private.
-    named_in_brief: exact URL
-    archive:
-      sha256: 762a91771c6f1c38a541e9f50593fc01749cbc606966b1cfd3177bbe56bcc519
-      bytes: 423231
-    probe:
-      http_status: 200
-      checked_at: 2026-10-02T19:21:22Z
-      fetcher_refused: false
-    eligibility:
-      ground: two-round seat failure
-      two_round:
-        names:
-          - bylaw
-          - Bylaw 18155
-        rounds:
-          - round: superseded-2026-10-02/round1
-            run_yaml: superseded-2026-10-02/run.yaml
-            round_number: 1
-            started_at: 2026-10-02T08:16:27Z
-            seats:
-              - seat: claude
-                model: claude-opus-5-5
-                tool: WebFetch
-                file: superseded-2026-10-02/round1/claude.json
-                started_at: 2026-10-02T08:16:27Z
-                finished_at: 2026-10-02T08:20:31Z
-                where: claims[0].limitations[0]
-                words: "ESSENTIAL-SOURCE ACCESS: The Bylaw 18155 PDF (https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf) returned HTTP 502 on four direct fetches on 2026-10-02, and the edmonton.ca bylaw index and Clerk FAQ also returned 502."
-                http_status: 502
-                error: null
-              - seat: gpt
-                model: gpt-6-sol
-                tool: web_search open_page
-                file: superseded-2026-10-02/round1/gpt.json
-                started_at: 2026-10-02T08:16:27Z
-                finished_at: 2026-10-02T08:24:21Z
-                where: claims[0].limitations[1]
-                words: A direct request for the bylaw PDF returned HTTP 502.
-                http_status: 502
-                error: null
-              - seat: gpt-luna
-                model: gpt-6-luna
-                tool: web_search open_page
-                file: superseded-2026-10-02/round1/gpt-luna.json
-                started_at: 2026-10-02T08:16:27Z
-                finished_at: 2026-10-02T08:23:02Z
-                where: claims[0].limitations[1]
-                words: Direct retrieval of the City bylaw PDF returned 502 Bad Gateway.
-                http_status: 502
-                error: null
-          - round: superseded-2026-10-02b/round1
-            run_yaml: superseded-2026-10-02b/run.yaml
-            round_number: 1
-            started_at: 2026-10-02T08:29:11Z
-            seats:
-              - seat: claude
-                model: claude-opus-5-5
-                tool: WebFetch
-                file: superseded-2026-10-02b/round1/claude.json
-                started_at: 2026-10-02T08:29:11Z
-                finished_at: 2026-10-02T08:32:52Z
-                where: claims[0].limitations[0]
-                words: It could not decompress the text streams, and later retries returned HTTP 502.
-                antecedent: "Bylaw 18155 (essential source): my fetch tool retrieved the City's PDF at https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf (about 413 KB)."
-                http_status: 502
-                error: null
-              - seat: gpt
-                model: gpt-6-sol
-                tool: web_search open_page
-                file: superseded-2026-10-02b/round1/gpt.json
-                started_at: 2026-10-02T08:29:11Z
-                finished_at: 2026-10-02T08:38:13Z
-                where: claims[0].limitations[1]
-                words: The bylaw PDF returned HTTP 502 to the web tool.
-                http_status: 502
-                error: null
-              - seat: gpt-luna
-                model: gpt-6-luna
-                tool: web_search open_page
-                file: superseded-2026-10-02b/round1/gpt-luna.json
-                started_at: 2026-10-02T08:29:11Z
-                finished_at: 2026-10-02T08:35:04Z
-                where: claims[0].limitations[0]
-                words: The City meeting portal returned 403 Forbidden when opened, and the City bylaw PDF returned 502 Bad Gateway.
-                http_status: 502
-                error: null
-      quick_probes:
-        - by: claude seat (WebFetch)
-          probed_at: 2026-10-02T19:19:59Z
-          http_status: 200
-          outcome: fetched
-        - by: site fetcher
-          probed_at: 2026-10-02T19:21:22Z
-          http_status: 200
-          outcome: fetched
-    publisher_check:
-      publisher_url: https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf
-      archive_sha256: 762a91771c6f1c38a541e9f50593fc01749cbc606966b1cfd3177bbe56bcc519
-      fresh_fetch:
-        fetched_at: 2026-10-02T19:21:22Z
-        http_status: 200
-        content_type: application/pdf
-        bytes: 423231
-        sha256: 762a91771c6f1c38a541e9f50593fc01749cbc606966b1cfd3177bbe56bcc519
-      identity: bytes
-      note: null
-    extraction:
-      tool: pdftotext -layout -enc UTF-8
-      version: pdftotext version 26.08.0
-      pages: 23
-      text_bytes: 52071
-      text_sha256: b8bd4a16a75d8fc5e1af429d9bfc7de736a7f47facbea707e8543a01fd0718ea
-      text_file: evidence/private/carried/council-hearing/2026-10-02/YF-EV-0251.txt
-    download_provenance:
-      downloaded_by: the site evidence fetcher
-      downloaded_on: 2026-10-02
-      via: site fetcher
-    public_open_check:
-      result: confirmed
-      checker: the founder
-      role: person (not the editor)
-      checked_on: 2026-10-02T18:26:14Z
-      reason: null
-      note: opened https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf in an ordinary browser, unauthenticated, and confirmed it is the Council Procedures Bylaw; version established by the site's fresh fetch being byte-identical to the archived 2025-10-29 consolidation
-    extraction_check:
-      result: pass
-      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
-      role: independent checker
-      note: 'Archive SHA-256 762a9177…c6bcc519 matches the manifest. A fresh pdftotext -layout -enc UTF-8 (26.08.0) run is byte-identical to evidence/private/carried/council-hearing/2026-10-02/YF-EV-0251.txt (SHA-256 b8bd4a16…0718ea, 52071 bytes, as the manifest records). All 23 pages were rendered and compared. Every section 1 to 58 with its margin headings, every amendment note, page numbers 2 to 23 and Schedule A (deleted) are present. Section 38(1) to (6) reads as on page 16-17: (1) "Each approved speaker may speak for a maximum of 5 minutes", (6) "up to 5 minutes" with note S.15, Bylaw 20226, July 4, 2022. The amendment list on page 22 is complete: ten entries from Bylaw 18549 (October 9, 2018) to Bylaw 21365 (October 29, 2025), with "passed by Council August 29, 2018". Sections 1, 2(2)(m), 3(c) and 4 are complete. Only loss: the City crest on the cover is an image (its motto words are not extracted) and the italics of "Municipal Government Act" in the consolidation note; nothing material.'
-    second_download:
-      result: match
-      sha256: 762a91771c6f1c38a541e9f50593fc01749cbc606966b1cfd3177bbe56bcc519
-      reason: the site's fresh fetch of the publisher's URL (publisher_check)
-    personal_information_screen:
-      result: clear
-      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
-      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
-      role: independent checker
-      note: A procedures bylaw; it names no person, and holds no email, phone number or address.
   - registry_id: YF-EV-0209
     title: "Infrastructure Committee, August 26, 2026: post-meeting minutes"
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (exact URL); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English refused the claude seat's WebFetch at 2026-10-02T19:20:23Z (403); 6 of 32 items selected by rule v2
+    reason: named in the frozen brief (exact URL); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English refused the claude seat's WebFetch at 2026-10-02T08:14:50Z (403); 6 of 32 items selected by rule v2
     download:
       retrieved_on: 2026-09-25
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -202,14 +52,14 @@ documents:
       bytes: 213699
     probe:
       http_status: 200
-      checked_at: 2026-10-02T19:21:23Z
+      checked_at: 2026-10-02T08:15:57Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
       seat: claude
       model: claude-opus-5-5
       tool: WebFetch
-      probed_at: 2026-10-02T19:20:23Z
+      probed_at: 2026-10-02T08:14:50Z
       http_status: 403
       raw_error: Forbidden
     page_check:
@@ -469,42 +319,28 @@ documents:
       text_file: evidence/private/carried/council-hearing/2026-10-02/YF-EV-0209.txt
     completeness_check:
       result: pass
-      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
-      role: independent checker
+      reviewer: an independent read-only Claude Opus 5.5 session, not the editor (stage B, 2026-10-02)
       missed_items: []
-      note: Unchanged from the earlier council-hearing stage B check (stage-b-hearing/completeness.yaml); hashes and rule v2 unchanged.
     download_provenance:
       downloaded_by: the site evidence fetcher
       downloaded_on: 2026-09-25
       via: site fetcher
     public_open_check:
-      result: confirmed
-      checker: the site evidence fetcher
-      role: site fetcher
-      checked_on: 2026-10-02T18:25:45Z
-      reason: null
-      http_status: 200
+      checked_by: the site evidence fetcher, whose request for the live page got HTTP 200 at build time; no person opened it in a browser
+      checked_on: 2026-10-02T08:10:05Z
     second_download:
       result: not made
       sha256: null
       reason: a meeting page is generated HTML that differs on every fetch, so bytes cannot be compared; the live item index is compared instead (page_check)
     personal_information_screen:
       result: clear
-      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
-      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
-      role: independent checker
-      note: Unchanged from stage-b-hearing/pi.yaml; 136 entries withheld, no name token survives.
-    extraction_check:
-      result: pass
-      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
-      role: independent checker
-      note: Archive SHA-256 5d933515… and regenerated carried text (rule v2, redaction v4) SHA-256 d57c0219… both match the manifest; carried items 1.4, 2.3, 2.4, 7.6, 11.1, 11.2 as before.
+      reviewer: an independent read-only Claude Opus 5.5 session, not the editor (stage B, 2026-10-02)
   - registry_id: YF-EV-0210
     title: "Infrastructure Committee, August 26, 2026: agenda page with the attachment list for item 7.6"
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
     kind: minutes-items
     status: carried
-    reason: named in the frozen brief (exact URL); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English refused the claude seat's WebFetch at 2026-10-02T19:20:46Z (403); 1 of 30 items selected by rule v2
+    reason: named in the frozen brief (exact URL); https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English refused the claude seat's WebFetch at 2026-10-02T08:15:22Z (403); 1 of 30 items selected by rule v2
     download:
       retrieved_on: 2026-09-25
       note: City of Edmonton document; the archived bytes carry no redistribution grant. Fails closed to private.
@@ -514,14 +350,14 @@ documents:
       bytes: 168742
     probe:
       http_status: 200
-      checked_at: 2026-10-02T19:21:23Z
+      checked_at: 2026-10-02T08:15:58Z
       fetcher_refused: false
     eligibility:
       ground: seat refusal
       seat: claude
       model: claude-opus-5-5
       tool: WebFetch
-      probed_at: 2026-10-02T19:20:46Z
+      probed_at: 2026-10-02T08:15:22Z
       http_status: 403
       raw_error: Forbidden
     page_check:
@@ -753,51 +589,35 @@ documents:
       text_file: evidence/private/carried/council-hearing/2026-10-02/YF-EV-0210.txt
     completeness_check:
       result: pass
-      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
-      role: independent checker
+      reviewer: an independent read-only Claude Opus 5.5 session, not the editor (stage B, 2026-10-02)
       missed_items: []
-      note: Unchanged from stage-b-hearing/completeness.yaml.
     download_provenance:
       downloaded_by: the site evidence fetcher
       downloaded_on: 2026-09-25
       via: site fetcher
     public_open_check:
-      result: confirmed
-      checker: the site evidence fetcher
-      role: site fetcher
-      checked_on: 2026-10-02T18:25:45Z
-      reason: null
-      http_status: 200
+      checked_by: the site evidence fetcher, whose request for the live page got HTTP 200 at build time; no person opened it in a browser
+      checked_on: 2026-10-02T08:10:05Z
     second_download:
       result: not made
       sha256: null
       reason: a meeting page is generated HTML that differs on every fetch, so bytes cannot be compared; the live item index is compared instead (page_check)
     personal_information_screen:
       result: clear
-      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
-      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
-      role: independent checker
-      note: Unchanged from stage-b-hearing/pi.yaml.
-    extraction_check:
-      result: pass
-      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
-      role: independent checker
-      note: Archive SHA-256 b739fd31… and regenerated carried text SHA-256 52b169f6… both match the manifest; carried item 7.6.
+      reviewer: an independent read-only Claude Opus 5.5 session, not the editor (stage B, 2026-10-02)
 exclusions:
+  - label: YF-EV-0251 (Bylaw 18155, Council Procedures Bylaw, consolidation of 2025-10-29)
+    status: excluded
+    reason: "essential, but neither ground holds: the site fetcher got HTTP 200 (application/pdf) at 2026-10-02T08:09Z and the Claude seat WebFetch got HTTP 200 at 2026-10-02T08:06Z (seat-probes.yaml); the seats can retrieve it themselves. It is also not an eScribe document, which the carry tool cannot carry"
   - label: YF-EV-0252 (Lobbyists Act, consolidation current as of 2022-12-15)
     status: excluded
-    reason: "not a source for the claim under review (the reason for a parked claim); and no ground holds: the Claude seat's WebFetch got HTTP 200 at 2026-10-02T18:23:46Z (seat-probes.yaml) and the site fetcher reads it"
+    reason: "not a source for the claim under review (the reason for a parked claim); and neither ground holds: fetcher HTTP 200 at 2026-10-02T08:09Z, Claude seat WebFetch HTTP 200 at 2026-10-02T08:06Z"
   - label: YF-EV-0253, YF-EV-0254 (Mayor's Lobbyist Registry, metadata and rows)
     status: excluded
-    reason: not a source for the claim under review (the reason for a parked claim); the brief names only the dataset page, which answered the Claude seat's WebFetch with HTTP 200 at 2026-10-02T18:24:14Z; the rows export URL is not named in the brief
+    reason: not a source for the claim under review (the reason for a parked claim); the brief names only the dataset page, which answered the fetcher and the Claude seat's WebFetch with HTTP 200 on 2026-10-02; the rows export URL is not named in the brief
   - label: YF-EV-0255 (CBC News report of 2026-08-26, as republished by Yahoo News Canada)
     status: excluded
-    reason: "not a source for the claim under review (the reason for a parked claim; the brief calls it a lead, never a source); and no ground holds: the Claude seat's WebFetch got HTTP 200 at 2026-10-02T18:24:40Z"
+    reason: "not a source for the claim under review (the reason for a parked claim; the brief calls it a lead, never a source); and neither ground holds: fetcher HTTP 200 at 2026-10-02T08:09Z, Claude seat WebFetch HTTP 200 at 2026-10-02T08:07Z"
   - label: the eScribe portal calendar and the post-meeting minutes since 2025-10-29 (brief document 4)
     status: excluded
-    reason: refused the Claude seat's WebFetch at the portal root (HTTP 403, 2026-10-02T18:23:23Z), but the brief names these meetings only by template with no meeting id and the site holds no archive of them, so the carry rule cannot reach them; they answer qualification 9 only and are not essential, so seats report the gap as a limitation
-package_budget:
-  limit: 400000
-  carried_section_bytes: 72855
-  estimated_package_bytes: 125461
-  result: within
+    reason: refused the Claude seat's WebFetch at the portal root (HTTP 403, 2026-10-02T08:07Z), but the brief names these meetings only by template with no meeting id and the site holds no archive of them, so the carry rule cannot reach them; they answer qualification 9 only and are not essential, so seats report the gap as a limitation

@@ -310,3 +310,303 @@ probes:
     http_status: 200
     tool_url: https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf
     raw_error: null
+  - url: https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf
+    seat: claude
+    model: claude-opus-5-5
+    tool: WebFetch
+    cli_version: 2.1.287 (Claude Code)
+    probed_at: 2026-10-02T18:22:01Z
+    outcome: fetched
+    http_status: 200
+    tool_url: https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf
+    raw_error: null
+  - url: https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf
+    seat: gpt
+    model: gpt-6-sol
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T18:22:10Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf
+    raw_error: null
+  - url: https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf
+    seat: gpt-luna
+    model: gpt-6-luna
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T18:22:21Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf
+    raw_error: null
+  - url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    seat: claude
+    model: claude-opus-5-5
+    tool: WebFetch
+    cli_version: 2.1.287 (Claude Code)
+    probed_at: 2026-10-02T18:22:29Z
+    outcome: refused
+    http_status: 403
+    tool_url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    raw_error: Forbidden
+  - url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    seat: gpt
+    model: gpt-6-sol
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T18:22:35Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    raw_error: null
+  - url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    seat: gpt-luna
+    model: gpt-6-luna
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T18:22:47Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    raw_error: null
+  - url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    seat: claude
+    model: claude-opus-5-5
+    tool: WebFetch
+    cli_version: 2.1.287 (Claude Code)
+    probed_at: 2026-10-02T18:22:58Z
+    outcome: refused
+    http_status: 403
+    tool_url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    raw_error: Forbidden
+  - url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    seat: gpt
+    model: gpt-6-sol
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T18:23:03Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    raw_error: null
+  - url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    seat: gpt-luna
+    model: gpt-6-luna
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T18:23:14Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    raw_error: null
+  - url: https://pub-edmonton.escribemeetings.com
+    seat: claude
+    model: claude-opus-5-5
+    tool: WebFetch
+    cli_version: 2.1.287 (Claude Code)
+    probed_at: 2026-10-02T18:23:23Z
+    outcome: refused
+    http_status: 403
+    tool_url: https://pub-edmonton.escribemeetings.com
+    raw_error: Forbidden
+  - url: https://pub-edmonton.escribemeetings.com
+    seat: gpt
+    model: gpt-6-sol
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T18:23:28Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://pub-edmonton.escribemeetings.com
+    raw_error: null
+  - url: https://pub-edmonton.escribemeetings.com
+    seat: gpt-luna
+    model: gpt-6-luna
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T18:23:39Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://pub-edmonton.escribemeetings.com
+    raw_error: null
+  - url: https://kings-printer.alberta.ca/documents/Acts/L20P5.pdf
+    seat: claude
+    model: claude-opus-5-5
+    tool: WebFetch
+    cli_version: 2.1.287 (Claude Code)
+    probed_at: 2026-10-02T18:23:46Z
+    outcome: fetched
+    http_status: 200
+    tool_url: https://kings-printer.alberta.ca/documents/Acts/L20P5.pdf
+    raw_error: null
+  - url: https://kings-printer.alberta.ca/documents/Acts/L20P5.pdf
+    seat: gpt
+    model: gpt-6-sol
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T18:23:57Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://kings-printer.alberta.ca/documents/Acts/L20P5.pdf
+    raw_error: null
+  - url: https://kings-printer.alberta.ca/documents/Acts/L20P5.pdf
+    seat: gpt-luna
+    model: gpt-6-luna
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T18:24:07Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://kings-printer.alberta.ca/documents/Acts/L20P5.pdf
+    raw_error: null
+  - url: https://data.edmonton.ca/Elected-Officials/Mayor-s-Lobbyist-Registry/3dkh-9hnu
+    seat: claude
+    model: claude-opus-5-5
+    tool: WebFetch
+    cli_version: 2.1.287 (Claude Code)
+    probed_at: 2026-10-02T18:24:14Z
+    outcome: fetched
+    http_status: 200
+    tool_url: https://data.edmonton.ca/Elected-Officials/Mayor-s-Lobbyist-Registry/3dkh-9hnu
+    raw_error: null
+  - url: https://data.edmonton.ca/Elected-Officials/Mayor-s-Lobbyist-Registry/3dkh-9hnu
+    seat: gpt
+    model: gpt-6-sol
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T18:24:24Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://data.edmonton.ca/Elected-Officials/Mayor-s-Lobbyist-Registry/3dkh-9hnu
+    raw_error: null
+  - url: https://data.edmonton.ca/Elected-Officials/Mayor-s-Lobbyist-Registry/3dkh-9hnu
+    seat: gpt-luna
+    model: gpt-6-luna
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T18:24:32Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://data.edmonton.ca/Elected-Officials/Mayor-s-Lobbyist-Registry/3dkh-9hnu
+    raw_error: null
+  - url: https://ca.news.yahoo.com/edmonton-bike-lane-expansion-continue-231838925.html
+    seat: claude
+    model: claude-opus-5-5
+    tool: WebFetch
+    cli_version: 2.1.287 (Claude Code)
+    probed_at: 2026-10-02T18:24:40Z
+    outcome: fetched
+    http_status: 200
+    tool_url: https://ca.news.yahoo.com/edmonton-bike-lane-expansion-continue-231838925.html
+    raw_error: null
+  - url: https://ca.news.yahoo.com/edmonton-bike-lane-expansion-continue-231838925.html
+    seat: gpt
+    model: gpt-6-sol
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T18:24:47Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://ca.news.yahoo.com/edmonton-bike-lane-expansion-continue-231838925.html
+    raw_error: null
+  - url: https://ca.news.yahoo.com/edmonton-bike-lane-expansion-continue-231838925.html
+    seat: gpt-luna
+    model: gpt-6-luna
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T18:24:58Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://ca.news.yahoo.com/edmonton-bike-lane-expansion-continue-231838925.html
+    raw_error: null
+  - url: https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf
+    seat: claude
+    model: claude-opus-5-5
+    tool: WebFetch
+    cli_version: 2.1.287 (Claude Code)
+    probed_at: 2026-10-02T19:19:59Z
+    outcome: fetched
+    http_status: 200
+    tool_url: https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf
+    raw_error: null
+  - url: https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf
+    seat: gpt
+    model: gpt-6-sol
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T19:20:07Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf
+    raw_error: null
+  - url: https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf
+    seat: gpt-luna
+    model: gpt-6-luna
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T19:20:16Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf
+    raw_error: null
+  - url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    seat: claude
+    model: claude-opus-5-5
+    tool: WebFetch
+    cli_version: 2.1.287 (Claude Code)
+    probed_at: 2026-10-02T19:20:23Z
+    outcome: refused
+    http_status: 403
+    tool_url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    raw_error: Forbidden
+  - url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    seat: gpt
+    model: gpt-6-sol
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T19:20:29Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    raw_error: null
+  - url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    seat: gpt-luna
+    model: gpt-6-luna
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T19:20:38Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    raw_error: null
+  - url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    seat: claude
+    model: claude-opus-5-5
+    tool: WebFetch
+    cli_version: 2.1.287 (Claude Code)
+    probed_at: 2026-10-02T19:20:46Z
+    outcome: refused
+    http_status: 403
+    tool_url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    raw_error: Forbidden
+  - url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    seat: gpt
+    model: gpt-6-sol
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T19:20:51Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    raw_error: null
+  - url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    seat: gpt-luna
+    model: gpt-6-luna
+    tool: web_search open_page
+    cli_version: codex-cli 0.160.0
+    probed_at: 2026-10-02T19:21:01Z
+    outcome: unclear
+    http_status: null
+    tool_url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English
+    raw_error: null
