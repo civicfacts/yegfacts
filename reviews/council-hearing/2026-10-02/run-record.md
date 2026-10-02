@@ -486,3 +486,23 @@ HTTP 403 at both meeting pages and at the portal root, and opened the
 bylaw, the Lobbyists Act, the open data dataset page and the Yahoo News
 page with HTTP 200. Both GPT-6 seats' probes were unclear at every
 address, as v1.42 expects.
+
+**The manifest, rebuilt under v1.43** (`carried/manifest.yaml`). The
+bylaw (YF-EV-0251) is carried whole as a document outside the portal on
+the two-round ground, read from the six committed answers; the declared
+names are "bylaw" and "Bylaw 18155". The site's fresh fetch at 18:25:45Z
+returned the archive's exact bytes (423,231 bytes, sha256
+`762a9177...c519`), and its extracted text is 52,071 bytes. The minutes
+and agenda pages (YF-EV-0209, YF-EV-0210) are carried by item under rule
+v2 as before, on fresh Claude-seat refusals; their archive and text
+hashes and rule version are unchanged, so their earlier checks carried
+over. `carried/gates.yaml` still lists no claim. The estimated round-1
+package is 125,461 of 400,000 bytes.
+
+The founder opened the bylaw's address in an ordinary browser,
+unauthenticated, and confirmed it is the Council Procedures Bylaw
+(recorded 18:26:14Z). Still pending before a launch: the bylaw's
+extraction check and personal-information screen, and, for both meeting
+pages, a v1.43 checker and role on the completeness check and a person's
+public-open check; their earlier checks were recorded in the v1.42 form,
+which v1.43 packaging refuses.
