@@ -1,0 +1,106 @@
+{
+  "reviewer": {
+    "provider": "openai",
+    "model_self_reported": "GPT-6",
+    "runner_model": "gpt-6-luna",
+    "runner_seat": "GPT-6 Luna",
+    "runner_effort": "high"
+  },
+  "story": "council-hearing",
+  "round": 1,
+  "claims": [
+    {
+      "id": "speaking-time-cut-to-three-minutes",
+      "proposition_evaluated": "At its meeting of 2026-08-26, the Infrastructure Committee carried a motion reducing the time each approved public speaker could speak from the five minutes the Council Procedures Bylaw provides to a maximum of three minutes for that meeting, at a meeting for which about seventy people, between 60 and 80 entries on the committee's list, had been approved to speak on the bike-lane item.",
+      "interpretation_notes": "The minutes record 64 approved-speaker entries for item 7.6, within the brief's primary 60–80 band, and a motion applying a three-minute maximum to each approved speaker at the meeting. Required alternatives: with the 50–90 band, N=64 remains Supported; using N-all=79, both bands remain Supported; using N-spoke=52, the primary band yields Partially supported because the time cut is established but the count is below 60, while the alternative band yields Supported. The result is definition-sensitive only for N-spoke under the primary band. Counts are entries, not deduplicated people.",
+      "verdict": "Supported",
+      "confidence": "High",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "The City’s consolidated Bylaw 18155 identifies section 38(1) as providing each approved speaker a maximum of five minutes. The City PDF search result also identifies the consolidation date as October 29, 2025.",
+          "source_title": "C18155 — Council Procedures Bylaw 18155",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf?cb=1640943484",
+          "source_publisher": "City of Edmonton",
+          "source_date": "Consolidated 2025-10-29",
+          "source_type": "legal-audited",
+          "establishes": "The standing maximum for an approved speaker under section 38(1) was five minutes.",
+          "quote": "Each approved speaker may speak for a maximum of 5 minutes.",
+          "strength": "strong"
+        },
+        {
+          "finding": "Item 1.4 records a motion by M. Janz to adjust section 38 for the August 26 meeting, setting three minutes for each approved speaker and three minutes for each member of Council to ask questions and speak to or close debate on a motion. Six members voted in favour; the motion carried 6–0.",
+          "source_title": "Infrastructure Committee — Minutes, August 26, 2026, item 1.4",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-08-26",
+          "source_type": "city-webpage",
+          "establishes": "The Infrastructure Committee carried a three-minute limit for each approved speaker at that meeting.",
+          "quote": "each approved speaker may speak for a maximum of three minutes",
+          "strength": "strong"
+        },
+        {
+          "finding": "Item 2.3 lists item 7.6 approved speakers in five panels: 15, 15, 15, 15, and 4 entries, respectively; arithmetic gives N=64. Organization entries by panel are 2, 8, 3, 2, and 0, for 15 total. Organizations as recorded: Edmonton Bike Coalition, YEG Bike Coalition, Bike Bus Alberta, Holyrood Voice, Holyrood Community 79 St Action Group, Paths for People, Ward Métis Bikes, Let's Bike There YEG, and Bike Edmonton.",
+          "source_title": "Infrastructure Committee — Minutes, August 26, 2026, item 2.3",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-08-26",
+          "source_type": "city-webpage",
+          "establishes": "The committee approved 64 entries to speak on item 7.6, within the defined primary band.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "Item 7.6 lists public presentations in four panels: 16, 16, 18, and 2 entries, respectively; arithmetic gives N-spoke=52. Organization entries by panel are 5, 6, 1, and 0, for 12 total. This is below the primary 60–80 band, but it counts recorded presenters rather than approved entries and does not contradict N=64.",
+          "source_title": "Infrastructure Committee — Minutes, August 26, 2026, item 7.6",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=55300824-2d70-4b6a-a504-df43ace1c6b4&lang=English",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-08-26",
+          "source_type": "city-webpage",
+          "establishes": "The count of entries recorded as presenting was 52, distinct from the 64 approved entries.",
+          "strength": "strong"
+        }
+      ],
+      "limitations": [
+        "The meeting-page fetch returned 403 Forbidden. I relied on the carried text of the selected minutes items; the package says names of members of the public were withheld and replaces them with the same label, so counts are entries and cannot be matched across lists.",
+        "Direct retrieval of the City bylaw PDF returned 502 Bad Gateway. The City’s indexed PDF result exposed the consolidation date and section 38(1) five-minute text. No later section 38 amendment was identified in the searches conducted; the full amendment history was not independently retrieved.",
+        "Item 1.4 records six members voting in favour and none opposed; the meeting header lists six members present, with A. Paquette absent for part of the meeting. The recorded vote is six of six listed committee members and meets a two-thirds threshold on that record.",
+        "The time-limit motion appears under item 1.4, before the Requests to Speak motion at item 2.3 and before the first public speaker on item 7.6. The minutes give no reason for the motion; none was identified in the records searched.",
+        "For N-all, item 2.3 lists 7.1: 5 entries (5 with organizations); 7.3: 1 (1 with an organization); 7.4: 9, including the additional-speaker motion (6 with organizations); and 7.6: 64 (15 with organizations). Arithmetic gives N-all=79 entries and 27 organization entries. N-all counts an entry each time it appears, including approvals on different items.",
+        "The minutes list five attachments under item 7.6 titled as public-member presentation attachments; their titles are withheld here. No individual time extension motion appears in the carried item 7.6 text, and the minutes do not record actual speaking durations.",
+        "A portal search for section 38 time-limit adjustments identified City Council meetings on 2025-12-01 (two minutes to introduce, ask questions, and close), 2026-01-27 (three minutes to introduce, ask questions, and close, with additional question rounds permitted), 2026-02-17 (two minutes to introduce, three minutes for questions and close, with additional question rounds permitted), and 2026-03-17/18 (two minutes to introduce, three minutes for questions, additional question rounds permitted, and three minutes to close). This was a phrase search of indexed portal minutes, not an exhaustive review of every meeting since 2025-10-29. The June 3, 2025 Urban Planning Committee adjustment found in search predates that period."
+      ],
+      "unknowns": [
+        "The minutes do not establish why the motion was moved, whether registrants were complainants, or where they came from.",
+        "The minutes do not record whether speakers supported or opposed the program.",
+        "The redacted carried text does not allow matching approved entries to presentation entries or calculating distinct-person counts."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A directly retrievable full copy of the consolidated bylaw and its amendment history, to independently verify the complete text and any post-consolidation amendments through 2026-08-26.",
+          "likely_holder": "City of Edmonton Office of the City Clerk",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "N by item 7.6 panel: 15 + 15 + 15 + 15 + 4 = 64 approved entries; organization entries 2 + 8 + 3 + 2 + 0 = 15.",
+        "N-all by item: 7.1=5, 7.3=1, 7.4=9, 7.6=64; total 5 + 1 + 9 + 64 = 79 entries. Organization entries by item: 5, 1, 6, 15; total 27.",
+        "N-spoke by item 7.6 panel: 16 + 16 + 18 + 2 = 52 presentation entries; organization entries 5 + 6 + 1 + 0 = 12.",
+        "Primary band rows: N=64 Supported; N-all=79 Supported; N-spoke=52 Partially supported. Alternative 50–90 band rows: N=64 Supported; N-all=79 Supported; N-spoke=52 Supported."
+      ],
+      "what_would_change_my_verdict": [
+        "A corrected or complete official minutes record showing that the motion did not carry, did not apply to every approved speaker at that meeting, or set a different maximum.",
+        "An authoritative bylaw amendment in force on 2026-08-26 showing a standing limit other than five minutes.",
+        "A correction to the item 2.3 list that changes the approved item 7.6 entry count outside 60–80."
+      ],
+      "suggested_one_line": "The Infrastructure Committee carried a three-minute limit for each approved speaker, and its item 7.6 list contained 64 approved-speaker entries.",
+      "suggested_short_answer": "Yes. The committee’s August 26 minutes record a motion setting a maximum of three minutes for each approved speaker, compared with the bylaw’s five-minute standing limit. The item 7.6 Requests to Speak list contains 64 entries across five panels; 52 entries are listed as having presented. These are entry counts, not distinct-person counts.",
+      "suggested_tldr": [
+        "The motion passed 6–0 at item 1.4, before the requests-to-speak motion and public presentations.",
+        "Item 7.6 had 64 approved-speaker entries: 15, 15, 15, 15, and 4 across five panels.",
+        "The minutes list 52 presentation entries. They do not record speaker positions or the motion’s reason."
+      ]
+    }
+  ]
+}
