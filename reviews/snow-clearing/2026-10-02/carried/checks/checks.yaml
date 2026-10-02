@@ -1,0 +1,503 @@
+checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+role: independent checker
+checked_on: 2026-10-02
+methodology_version: "1.43"
+run: reviews/snow-clearing/2026-10-02
+worktree: .claude/worktrees/snow-r2
+head: 2d1df73
+summary:
+  extraction: pass for all 9 PDFs (YF-EV-0294, 0295, 0296, 0303, 0305, 0306, 0307, 0308, 0309) and for YF-EV-0304
+  sections_0304: pass; 4 of 36 sections carried, all complete; context check no findings; no section rule v3
+  meeting_pages: "fail under selection rule v5: 4 relevant items missed on 3 pages; rule v6 proposed below"
+  personal_information: clear for all carried texts
+proposed_selection_rule_v6:
+  terms: the v5 terms plus "FCS03159"
+  reason: FCS03159 is the Fall 2025 Supplemental Capital Budget Adjustment report. Its Attachments 7 and 8 are named in the brief under item 7.1, and qualifications 3 and 4 ask what Council did with the Fall 2025 budget proposals and on which agenda. No v5 term appears in the capital items.
+  added_items:
+    - registry_id: YF-EV-0299
+      number: "7.1"
+      title: Fall 2025 Supplemental Capital Budget Adjustment - 2023-2026 Capital Budget
+      item_text_bytes: 988
+    - registry_id: YF-EV-0301
+      number: "5.1"
+      title: Fall 2025 Supplemental Capital Budget Adjustment - 2023-2026 Capital Budget
+      item_text_bytes: 1479
+    - registry_id: YF-EV-0302
+      number: "5.1"
+      title: Fall 2025 Supplemental Capital Budget Adjustment - 2023-2026 Capital Budget
+      item_text_bytes: 2509
+    - registry_id: YF-EV-0302
+      number: 5.1.3
+      title: Vote on Fall 2025 Supplemental Capital Budget Adjustment and Other Related Motions
+      item_text_bytes: 1052
+  extra_selections: none; run mechanically against all 12 pages, v6 selects exactly these four items beyond v5
+  added_bytes: 6074
+  added_bytes_note: "measured: carried text under v6 minus v5 with carryMeetingPage (YF-EV-0299 +999, YF-EV-0301 +1490, YF-EV-0302 +3585); the four item texts alone are 6028 bytes"
+  round_1_estimate:
+    before: 422191
+    after_estimate: 428265
+    gpt_ceiling: 521838
+    within: true
+  alternative_rejected: '"Supplemental Capital Budget Adjustment" would also select the Blatchford utility items, which are not relevant'
+proposed_section_rule_v3: null
+personal_information:
+  result: clear
+  reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+  role: independent checker
+  note: Screened the 12 carried meeting texts, the 9 PDF texts and the 0304 sections text. Named people are councillors (voting lists, movers, committee members, the acting mayors) and City staff named with their department or office (Administration delegations, Office of the City Clerk, the City Manager, the CFO). Public speakers appear only as "[member of the public]" with an organisation where given (33 occurrences). No email addresses. The only phone number is the Office of the City Clerk's published line (780) 496-8178. No home addresses.
+second_downloads: "not made for any PDF: filestream.ashx answered scripts with HTTP 403 (cf-mitigated challenge) and the checker has no browser"
+documents:
+  - registry_id: YF-EV-0294
+    title: Snow and Ice Control Policy and Program Review (City Operations report CO03513, Community and Public Services Committee, 2026-08-31)
+    kind: pdf
+    archive_sha256_matches_manifest: true
+    extraction_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: 'All 11 pages match the renders: headings, bullets, footnotes, the cover table, the page 7 enhancement table with every rating and cost, and the Budget/Financial Implications section. Only the decorative page 1 banner image ("COUNCIL REPORT" and the City logo) is not extracted. A fresh pdftotext -layout -enc UTF-8 run (26.08.0) is byte-identical to the carried text, and its sha256 matches text_sha256 69e681d02b74e07bfb90bbe2a560b57ae04c34527022a0288cd7c3ccde7d9e04.'
+    second_download: &a1
+      result: not made
+      sha256: null
+      reason: filestream.ashx answered the checker's curl with HTTP 403 and a cf-mitigated challenge on 2026-10-02, and the checker session has no browser; only the founder's browser download exists
+    personal_information_screen: &a2
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+  - registry_id: YF-EV-0295
+    title: "Attachment 9 to CO03513: Well Maintained City Package Summary (Community and Public Services Committee, 2026-08-31)"
+    kind: pdf
+    archive_sha256_matches_manifest: true
+    extraction_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: "Attachment 9 (Well Maintained City package summary: about $23.6M ongoing and $11.5M one-time) matches the render: every heading, bullet and figure intact. A fresh pdftotext -layout -enc UTF-8 run (26.08.0) is byte-identical to the carried text, and its sha256 matches text_sha256 e8258593bf390c82334426eaed0c4625362fa2e27768b39c52b4059a7090ff6d."
+    second_download: *a1
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0296
+    title: "Attachment 10 to CO03513: Snow and Ice Enhancements - June 2026 (Community and Public Services Committee, 2026-08-31)"
+    kind: pdf
+    archive_sha256_matches_manifest: true
+    extraction_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: "Attachment 10 (Snow and Ice Enhancements, June 2026) matches the render: every enhancement row keeps its four ratings and its ongoing and one-time costs. A fresh pdftotext -layout -enc UTF-8 run (26.08.0) is byte-identical to the carried text, and its sha256 matches text_sha256 bf7ff025903b3be94b758d3119c52e6787f55fd774f69a0cf8a4b8937de8c45d."
+    second_download: *a1
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0303
+    title: Fall 2025 Supplemental Operating Budget Adjustment - 2023-2026 Operating Budget (Financial and Corporate Services report FCS03158, City Council, 2025-11-24)
+    kind: pdf
+    archive_sha256_matches_manifest: true
+    extraction_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: All 19 pages of FCS03158 match the renders, including the $2.1M Fleet inflation adjustment naming snow and ice control and the list of unfunded packages (Active Pathway Snow Removal, Parking Ban Enforcement, Winter/Summer Temporary Assignment). Only the decorative page 1 banner image is not extracted. A fresh pdftotext -layout -enc UTF-8 run (26.08.0) is byte-identical to the carried text, and its sha256 matches text_sha256 e4970a2cdca54a022f669841923688d33a9a57218d8fa1fafbf2fda9dedb897a.
+    second_download: *a1
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0305
+    title: Replacement page 53 of Attachment 2 to FCS03158 (City Council - Budget, 2025-12-01, addendum)
+    kind: pdf
+    archive_sha256_matches_manifest: true
+    extraction_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: The single replacement page 53 (River Valley Trail Strategy, $483k in 2026, $1.663M total) matches the render; not a snow item. A fresh pdftotext -layout -enc UTF-8 run (26.08.0) is byte-identical to the carried text, and its sha256 matches text_sha256 0b8073c2c118205e438cc7ea1486f01fcc49f6c0f9f6c3ad72ef7e16bc404095.
+    second_download: *a1
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0306
+    title: "Attachment 7 to FCS03159: Emerging Items - Fall 2025 (Unfunded) (City Council, 2025-11-24)"
+    kind: pdf
+    archive_sha256_matches_manifest: true
+    extraction_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: Attachment 7 (school sites, CM-99-9000) matches the render in full; no snow item. A fresh pdftotext -layout -enc UTF-8 run (26.08.0) is byte-identical to the carried text, and its sha256 matches text_sha256 1db1c905116c04199eca0e5e6f5d17504486c38eb31f69932a0c11c7f4398c18.
+    second_download: *a1
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0307
+    title: "Attachment 8 to FCS03159: Unfunded Capital Profiles or Projects (City Council, 2025-11-24)"
+    kind: pdf
+    archive_sha256_matches_manifest: true
+    extraction_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: Attachment 8 (Growth Buses $25.22M, CM-20-2020 $4.4M) matches the render in full; the 215 Street row has no figures in the PDF either. No snow item. A fresh pdftotext -layout -enc UTF-8 run (26.08.0) is byte-identical to the carried text, and its sha256 matches text_sha256 749bc7b4fcd68bcf1eb6f73b5df992eac081f82f5c2d5562bdb1980f67ee52d9.
+    second_download: *a1
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0308
+    title: Improved Accessibility - Active Pathway Snow Removal and Sidewalk Repair (City Operations report CO03079, Community and Public Services Committee, 2025-08-11)
+    kind: pdf
+    archive_sha256_matches_manifest: true
+    extraction_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: "All 10 pages of CO03079 match the renders: the $67M a year SNIC budget and its split ($30.15M active pathways, $36.85M roadways), sidewalk $5.9M, enforcement $7.2M, and the options table (Option 2 $0.74M one-time and $3.58M ongoing; Option 3 $1.43M and $8.07M; Option 4 $5.31M and $19.01M). Only the decorative page 1 banner image is not extracted. A fresh pdftotext -layout -enc UTF-8 run (26.08.0) is byte-identical to the carried text, and its sha256 matches text_sha256 c82d08ab50bfe4d9f60021483f19001c0443aa965240f3811d5a86c5d0478f8a."
+    second_download: *a1
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0309
+    title: "Attachment 5 to CO03079: Options and Costs to Increase Service Levels (Community and Public Services Committee, 2025-08-11)"
+    kind: pdf
+    archive_sha256_matches_manifest: true
+    extraction_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: "Attachment 5 matches the render: all four options with their service levels and costs are intact. A fresh pdftotext -layout -enc UTF-8 run (26.08.0) is byte-identical to the carried text, and its sha256 matches text_sha256 7162fe812beba592360cf1d517d58ff7655e58048dfb0f2a5c6718985e7baf65."
+    second_download: *a1
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0287
+    title: Community and Public Services Committee, 2026-08-31, agenda (attachment list with DocumentIds)
+    kind: minutes-items
+    archive_and_text_sha256_match_manifest: true
+    rule_version: 5
+    completeness_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      missed_items: []
+      note: 25 items, 1 carried, 1 relevant; a checker_reason for every item is in completeness.yaml
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0289
+    title: Community and Public Services Committee, 2026-08-31, post-meeting minutes
+    kind: minutes-items
+    archive_and_text_sha256_match_manifest: true
+    rule_version: 5
+    completeness_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      missed_items: []
+      note: 27 items, 5 carried, 1 relevant; a checker_reason for every item is in completeness.yaml
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0290
+    title: City Council, 2026-09-08, post-meeting minutes
+    kind: minutes-items
+    archive_and_text_sha256_match_manifest: true
+    rule_version: 5
+    completeness_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      missed_items: []
+      note: 71 items, 4 carried, 2 relevant; a checker_reason for every item is in completeness.yaml
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0291
+    title: City Council, 2026-03-17, post-meeting minutes
+    kind: minutes-items
+    archive_and_text_sha256_match_manifest: true
+    rule_version: 5
+    completeness_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      missed_items: []
+      note: 61 items, 3 carried, 2 relevant; a checker_reason for every item is in completeness.yaml
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0292
+    title: Community and Public Services Committee, 2026-01-19, post-meeting minutes
+    kind: minutes-items
+    archive_and_text_sha256_match_manifest: true
+    rule_version: 5
+    completeness_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      missed_items: []
+      note: 27 items, 2 carried, 2 relevant; a checker_reason for every item is in completeness.yaml
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0293
+    title: Agenda Review Committee, 2026-08-18, post-meeting minutes
+    kind: minutes-items
+    archive_and_text_sha256_match_manifest: true
+    rule_version: 5
+    completeness_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      missed_items: []
+      note: 12 items, 2 carried, 2 relevant; a checker_reason for every item is in completeness.yaml
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0297
+    title: Community and Public Services Committee, 2025-08-11, agenda (attachment list with DocumentIds)
+    kind: minutes-items
+    archive_and_text_sha256_match_manifest: true
+    rule_version: 5
+    completeness_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      missed_items: []
+      note: 26 items, 1 carried, 1 relevant; a checker_reason for every item is in completeness.yaml
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0298
+    title: Community and Public Services Committee, 2025-08-11, post-meeting minutes
+    kind: minutes-items
+    archive_and_text_sha256_match_manifest: true
+    rule_version: 5
+    completeness_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      missed_items: []
+      note: 26 items, 2 carried, 1 relevant; a checker_reason for every item is in completeness.yaml
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0299
+    title: City Council, 2025-11-24 (continued 2025-11-25), agenda (attachment list with DocumentIds)
+    kind: minutes-items
+    archive_and_text_sha256_match_manifest: true
+    rule_version: 5
+    completeness_check:
+      result: fail
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      missed_items:
+        - 7.1 Fall 2025 Supplemental Capital Budget Adjustment - 2023-2026 Capital Budget
+      note: 37 items, 1 carried, 2 relevant; a checker_reason for every item is in completeness.yaml
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0300
+    title: City Council, 2025-11-24 (continued 2025-11-25), post-meeting minutes
+    kind: minutes-items
+    archive_and_text_sha256_match_manifest: true
+    rule_version: 5
+    completeness_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      missed_items: []
+      note: 37 items, 3 carried, 3 relevant; a checker_reason for every item is in completeness.yaml
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0301
+    title: City Council - Budget, 2025-12-01 (continued to 2025-12-04), agenda (attachment list with DocumentIds)
+    kind: minutes-items
+    archive_and_text_sha256_match_manifest: true
+    rule_version: 5
+    completeness_check:
+      result: fail
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      missed_items:
+        - 5.1 Fall 2025 Supplemental Capital Budget Adjustment - 2023-2026 Capital Budget
+      note: 44 items, 2 carried, 3 relevant; a checker_reason for every item is in completeness.yaml
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0302
+    title: City Council - Budget, 2025-12-01 (continued to 2025-12-04), post-meeting minutes
+    kind: minutes-items
+    archive_and_text_sha256_match_manifest: true
+    rule_version: 5
+    completeness_check:
+      result: fail
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      missed_items:
+        - 5.1 Fall 2025 Supplemental Capital Budget Adjustment - 2023-2026 Capital Budget
+        - 5.1.3 Vote on Fall 2025 Supplemental Capital Budget Adjustment and Other Related Motions
+      note: 46 items, 10 carried, 10 relevant; a checker_reason for every item is in completeness.yaml
+    personal_information_screen: *a2
+  - registry_id: YF-EV-0304
+    title: "Attachment 2 to FCS03158: Operating Budget - Fall 2025 Supplemental Operating Budget Adjustment (City Council, 2025-11-24; re-listed as DocumentId 280346 on the 2025-12-01 addendum)"
+    kind: pdf-sections
+    archive_sha256_matches_manifest: true
+    extraction_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: All 144 pages read against the renders. A fresh full-text run matches document_text sha256 6c83939954d16379401d3a28f30379e4e981d2dbaf223844471d8d776d585d2a, and the regenerated sections text (sections 9, 13, 20, 21) is byte-identical to the carried text. Section titles on the divider pages (4, 18, 19, 21, 24, 31, 62, 63, 103, 130, 141, 143) are images, which loses no content.
+    completeness_check:
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      missed_sections: []
+      context_check:
+        result: pass
+        findings: []
+      note: Section rule v2 carries every section bearing on the claim. No uncarried section holds a snow and ice package, cost or cross-reference to CO03079 or CS02945; "pathway" hits elsewhere are "Pathway 3 emissions" and "Pathways In and Out of Poverty". No section rule v3 is needed.
+    section_inventory:
+      - number: 1
+        title: Front matter
+        pages: 1-3
+        carried: false
+        checker_reason: Cover, contents and introduction; no snow and ice item.
+      - number: 2
+        title: Corporate Summary
+        pages: "4"
+        carried: false
+        checker_reason: Divider page; the title is an image.
+      - number: 3
+        title: Impact on a Typical Homeowner
+        pages: "5"
+        carried: false
+        checker_reason: Tax impact on a typical homeowner; corporate totals only, no snow and ice line.
+      - number: 4
+        title: Corporate Summary Budget Tables
+        pages: 6-17
+        carried: false
+        checker_reason: Corporate and branch budget tables; branch totals only (Parks and Roads 2026 net $256,236k), no snow and ice line or package.
+      - number: 5
+        title: Service Packages
+        pages: "18"
+        carried: false
+        checker_reason: Divider page; the title is an image.
+      - number: 6
+        title: Summary of Funded Service Packages
+        pages: 19-20
+        carried: false
+        checker_reason: Summary of the funded packages (Body Worn Video only); no snow and ice package.
+      - number: 7
+        title: Detailed Funded Service Packages
+        pages: "21"
+        carried: false
+        checker_reason: Divider page; the title is an image.
+      - number: 8
+        title: Integrated Service Package - Body Worn Video and Digital Evidence Management Systems Implementation
+        pages: 22-23
+        carried: false
+        checker_reason: Funded Body Worn Video package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
+      - number: 9
+        title: Summary of Unfunded Service Packages
+        pages: 24-30
+        carried: true
+        checker_reason: "Carried and complete: the unfunded package summary from heading to Total Unfunded $60,524k; lists the Active Pathway Snow Removal, Parking Ban Enforcement and Winter/Summer packages with their figures (qualification 1)."
+      - number: 10
+        title: Detailed Unfunded Service Packages
+        pages: "31"
+        carried: false
+        checker_reason: Divider page; the title is an image.
+      - number: 11
+        title: Standalone Service Package - Transit Rider Support at Stations
+        pages: "32"
+        carried: false
+        checker_reason: Transit Rider Support at Stations package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
+      - number: 12
+        title: Standalone Service Package - Traffic Signals Program
+        pages: "33"
+        carried: false
+        checker_reason: Traffic Signals Program package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
+      - number: 13
+        title: Standalone Service Package - Parking Ban Enforcement Strategies and Resource Allocation
+        pages: "34"
+        carried: true
+        checker_reason: "Carried and complete: Parking Ban Enforcement package, title, description, cost table to Total ($100k) and notes (qualification 1)."
+      - number: 14
+        title: Standalone Service Package - Expansion of Derelict Residential Tax Subclass
+        pages: "35"
+        carried: false
+        checker_reason: Expansion of Derelict Residential Tax Subclass package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
+      - number: 15
+        title: Standalone Service Package - Enoch Cree Nation Whitemud Drive Upgrades
+        pages: "36"
+        carried: false
+        checker_reason: Enoch Cree Nation Whitemud Drive Upgrades package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
+      - number: 16
+        title: Standalone Service Package - Commercial Redevelopment Grant
+        pages: "37"
+        carried: false
+        checker_reason: Commercial Redevelopment Grant package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
+      - number: 17
+        title: Standalone Service Package - Commercial Vacancy Reduction Grant
+        pages: "38"
+        carried: false
+        checker_reason: Commercial Vacancy Reduction Grant package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
+      - number: 18
+        title: Integrated Service Package - Bus Service Growth Operating Impacts of Capital
+        pages: 39-40
+        carried: false
+        checker_reason: Bus Service Growth Operating Impacts of Capital package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
+      - number: 19
+        title: Integrated Service Package - Permanent Enhanced Cleaning
+        pages: 41-42
+        carried: false
+        checker_reason: Permanent Enhanced Cleaning package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
+      - number: 20
+        title: Integrated Service Package - Improved Accessibility - Active Pathway Snow Removal and Sidewalk Repair
+        pages: 43-44
+        carried: true
+        checker_reason: "Carried and complete: Active Pathway Snow Removal and Sidewalk Repair package, title, description, cost table to Total ($9,938k, 35.2 FTE; Community Services $1,640k, Parks and Roads Services $8,298k; Fleet 1.0 FTE) and notes, including the $2.11M one-time capital (qualification 1)."
+      - number: 21
+        title: Integrated Service Package - Winter/Summer Temporary Assignment to Permanent Positions - Analysis and Options
+        pages: 45-46
+        carried: true
+        checker_reason: "Carried and complete: Winter/Summer Temporary Assignment package, title, description, cost table to Total ($1,777k; Parks and Roads $1,734k, CRC $43k) and notes (qualifications 1 and 3)."
+      - number: 22
+        title: Integrated Service Package - Community Standards Peace Officers Contingent
+        pages: 47-48
+        carried: false
+        checker_reason: Community Standards Peace Officers Contingent package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
+      - number: 23
+        title: Integrated Service Package - Transit Peace Officers Optimal Deployment Plan
+        pages: 49-50
+        carried: false
+        checker_reason: Transit Peace Officers Optimal Deployment Plan package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
+      - number: 24
+        title: Integrated Service Package - Infill Liaison Team
+        pages: 51-52
+        carried: false
+        checker_reason: Infill Liaison Team package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
+      - number: 25
+        title: Integrated Service Package - River Valley Trail Strategy
+        pages: 53-54
+        carried: false
+        checker_reason: River Valley Trail Strategy package (the page 53 replaced by YF-EV-0305); trails, not winter maintenance. no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
+      - number: 26
+        title: Standalone Service Package - Explore Edmonton - Operational Support
+        pages: "55"
+        carried: false
+        checker_reason: Explore Edmonton - Operational Support package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
+      - number: 27
+        title: Standalone Service Package - 2026 Funding Increase for GEF Seniors Housing Capital Expenses
+        pages: "56"
+        carried: false
+        checker_reason: 2026 Funding Increase for GEF Seniors Housing Capital Expenses package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
+      - number: 28
+        title: Standalone Service Package - DATS Service Level
+        pages: "57"
+        carried: false
+        checker_reason: DATS Service Level package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
+      - number: 29
+        title: Integrated Service Package - Bus Cleaning Service Delivery Model
+        pages: 58-59
+        carried: false
+        checker_reason: Bus Cleaning Service Delivery Model package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
+      - number: 30
+        title: Integrated Service Package - Custodial Living Wage Impacts
+        pages: 60-61
+        carried: false
+        checker_reason: Custodial Living Wage Impacts package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
+      - number: 31
+        title: Supplementary Schedules
+        pages: "62"
+        carried: false
+        checker_reason: Divider page; the title is an image.
+      - number: 32
+        title: Previously Approved User Fees, Permits and Licensing Fees Schedules
+        pages: 63-102
+        carried: false
+        checker_reason: Previously approved fee schedules; the only winter hits are Winter Ice Rental, sidewalk occupancy permits and the U-Pass Winter Semester fee, none a snow and ice proposal or cost.
+      - number: 33
+        title: Updates to User Fees, Permits and Licensing Fee Schedules
+        pages: 103-129
+        carried: false
+        checker_reason: Fee schedule updates; same winter hits as section 32 (ice rental, U-Pass), none a snow and ice proposal or cost.
+      - number: 34
+        title: Reserves Schedule
+        pages: 130-140
+        carried: false
+        checker_reason: Reserves schedule; no snow and ice reserve or line.
+      - number: 35
+        title: Debt Schedule
+        pages: 141-142
+        carried: false
+        checker_reason: Debt schedule; no snow and ice line.
+      - number: 36
+        title: Amortization Schedule
+        pages: 143-144
+        carried: false
+        checker_reason: Amortization schedule; no snow and ice line.
+    second_download: *a1
+    personal_information_screen: *a2

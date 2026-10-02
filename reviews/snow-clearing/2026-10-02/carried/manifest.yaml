@@ -198,15 +198,16 @@ documents:
       note: recorded under v1.42 as checked by the founder, in an ordinary browser, on 2026-10-02; restated in the v1.43 form
     extraction_check:
       result: pass
-      reviewer: an independent read-only Claude Opus 5.5 session, not the editor (stage B, 2026-10-02)
-      note: All 11 pages, headings, bullets, footnotes 1 to 4, the cover table and the routing line intact; the page 7 enhancement table keeps all five rows with every rating and the ongoing and one-time costs, and the Budget/Financial Implications section is complete. Only the page 1 banner image ("COUNCIL REPORT" and the City logo) is not extracted, which is decorative. A fresh extraction is byte-identical.
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: 'All 11 pages match the renders: headings, bullets, footnotes, the cover table, the page 7 enhancement table with every rating and cost, and the Budget/Financial Implications section. Only the decorative page 1 banner image ("COUNCIL REPORT" and the City logo) is not extracted. A fresh pdftotext -layout -enc UTF-8 run (26.08.0) is byte-identical to the carried text, and its sha256 matches text_sha256 69e681d02b74e07bfb90bbe2a560b57ae04c34527022a0288cd7c3ccde7d9e04.'
     second_download:
       result: not made
       sha256: null
       reason: only the founder has downloaded it; no other person's copy exists
     personal_information_screen:
       result: clear
-      reviewer: an independent read-only Claude Opus 5.5 session, not the editor (stage B, 2026-10-02)
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0295
     title: "Attachment 9 to CO03513: Well Maintained City Package Summary (Community and Public Services Committee, 2026-08-31)"
     url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304812
@@ -256,15 +257,16 @@ documents:
       note: recorded under v1.42 as checked by the founder, in an ordinary browser, on 2026-10-02; restated in the v1.43 form
     extraction_check:
       result: pass
-      reviewer: an independent read-only Claude Opus 5.5 session, not the editor (stage B, 2026-10-02)
-      note: All 3 pages; the package figures ($23.6 million ongoing, $11.5 million one-time) and all four areas with every bullet intact; only bold run-in labels are lost. A fresh extraction is byte-identical.
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: "Attachment 9 (Well Maintained City package summary: about $23.6M ongoing and $11.5M one-time) matches the render: every heading, bullet and figure intact. A fresh pdftotext -layout -enc UTF-8 run (26.08.0) is byte-identical to the carried text, and its sha256 matches text_sha256 e8258593bf390c82334426eaed0c4625362fa2e27768b39c52b4059a7090ff6d."
     second_download:
       result: not made
       sha256: null
       reason: only the founder has downloaded it; no other person's copy exists
     personal_information_screen:
       result: clear
-      reviewer: an independent read-only Claude Opus 5.5 session, not the editor (stage B, 2026-10-02)
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0296
     title: "Attachment 10 to CO03513: Snow and Ice Enhancements - June 2026 (Community and Public Services Committee, 2026-08-31)"
     url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304813
@@ -314,15 +316,16 @@ documents:
       note: recorded under v1.42 as checked by the founder, in an ordinary browser, on 2026-10-02; restated in the v1.43 form
     extraction_check:
       result: pass
-      reviewer: an independent read-only Claude Opus 5.5 session, not the editor (stage B, 2026-10-02)
-      note: All 4 pages; the 24-row cost table matches the rendered pages in every rating, ongoing and one-time cost (row 6 one-time is blank in the PDF too), with the legend and all 24 numbered descriptions; two-line labels in rows 2 and 13 put the row number on the second line, still readable. A fresh extraction is byte-identical.
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: "Attachment 10 (Snow and Ice Enhancements, June 2026) matches the render: every enhancement row keeps its four ratings and its ongoing and one-time costs. A fresh pdftotext -layout -enc UTF-8 run (26.08.0) is byte-identical to the carried text, and its sha256 matches text_sha256 bf7ff025903b3be94b758d3119c52e6787f55fd774f69a0cf8a4b8937de8c45d."
     second_download:
       result: not made
       sha256: null
       reason: only the founder has downloaded it; no other person's copy exists
     personal_information_screen:
       result: clear
-      reviewer: an independent read-only Claude Opus 5.5 session, not the editor (stage B, 2026-10-02)
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0303
     title: Fall 2025 Supplemental Operating Budget Adjustment - 2023-2026 Operating Budget (Financial and Corporate Services report FCS03158, City Council, 2025-11-24)
     url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=278875
@@ -371,16 +374,17 @@ documents:
       reason: null
       note: the founder opened and downloaded the file in an ordinary browser, unauthenticated, at about 17:09Z on 2026-10-02
     extraction_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: All 19 pages of FCS03158 match the renders, including the $2.1M Fleet inflation adjustment naming snow and ice control and the list of unfunded packages (Active Pathway Snow Removal, Parking Ban Enforcement, Winter/Summer Temporary Assignment). Only the decorative page 1 banner image is not extracted. A fresh pdftotext -layout -enc UTF-8 run (26.08.0) is byte-identical to the carried text, and its sha256 matches text_sha256 e4970a2cdca54a022f669841923688d33a9a57218d8fa1fafbf2fda9dedb897a.
     second_download:
-      result: pending
+      result: not made
       sha256: null
-      reason: null
+      reason: only the founder has downloaded these files; the portal answers automated tools with a browser check, so no other copy can be made
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0305
     title: Replacement page 53 of Attachment 2 to FCS03158 (City Council - Budget, 2025-12-01, addendum)
     url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=280345
@@ -429,16 +433,17 @@ documents:
       reason: null
       note: the founder opened and downloaded the file in an ordinary browser, unauthenticated, at about 17:09Z on 2026-10-02
     extraction_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: The single replacement page 53 (River Valley Trail Strategy, $483k in 2026, $1.663M total) matches the render; not a snow item. A fresh pdftotext -layout -enc UTF-8 run (26.08.0) is byte-identical to the carried text, and its sha256 matches text_sha256 0b8073c2c118205e438cc7ea1486f01fcc49f6c0f9f6c3ad72ef7e16bc404095.
     second_download:
-      result: pending
+      result: not made
       sha256: null
-      reason: null
+      reason: only the founder has downloaded these files; the portal answers automated tools with a browser check, so no other copy can be made
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0306
     title: "Attachment 7 to FCS03159: Emerging Items - Fall 2025 (Unfunded) (City Council, 2025-11-24)"
     url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=278865
@@ -487,16 +492,17 @@ documents:
       reason: null
       note: the founder opened and downloaded the file in an ordinary browser, unauthenticated, at about 17:09Z on 2026-10-02
     extraction_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: Attachment 7 (school sites, CM-99-9000) matches the render in full; no snow item. A fresh pdftotext -layout -enc UTF-8 run (26.08.0) is byte-identical to the carried text, and its sha256 matches text_sha256 1db1c905116c04199eca0e5e6f5d17504486c38eb31f69932a0c11c7f4398c18.
     second_download:
-      result: pending
+      result: not made
       sha256: null
-      reason: null
+      reason: only the founder has downloaded these files; the portal answers automated tools with a browser check, so no other copy can be made
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0307
     title: "Attachment 8 to FCS03159: Unfunded Capital Profiles or Projects (City Council, 2025-11-24)"
     url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=278866
@@ -545,16 +551,17 @@ documents:
       reason: null
       note: the founder opened and downloaded the file in an ordinary browser, unauthenticated, at about 17:09Z on 2026-10-02
     extraction_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: Attachment 8 (Growth Buses $25.22M, CM-20-2020 $4.4M) matches the render in full; the 215 Street row has no figures in the PDF either. No snow item. A fresh pdftotext -layout -enc UTF-8 run (26.08.0) is byte-identical to the carried text, and its sha256 matches text_sha256 749bc7b4fcd68bcf1eb6f73b5df992eac081f82f5c2d5562bdb1980f67ee52d9.
     second_download:
-      result: pending
+      result: not made
       sha256: null
-      reason: null
+      reason: only the founder has downloaded these files; the portal answers automated tools with a browser check, so no other copy can be made
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0308
     title: Improved Accessibility - Active Pathway Snow Removal and Sidewalk Repair (City Operations report CO03079, Community and Public Services Committee, 2025-08-11)
     url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=268207
@@ -603,16 +610,17 @@ documents:
       reason: null
       note: the founder opened and downloaded the file in an ordinary browser, unauthenticated, at about 17:09Z on 2026-10-02
     extraction_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: "All 10 pages of CO03079 match the renders: the $67M a year SNIC budget and its split ($30.15M active pathways, $36.85M roadways), sidewalk $5.9M, enforcement $7.2M, and the options table (Option 2 $0.74M one-time and $3.58M ongoing; Option 3 $1.43M and $8.07M; Option 4 $5.31M and $19.01M). Only the decorative page 1 banner image is not extracted. A fresh pdftotext -layout -enc UTF-8 run (26.08.0) is byte-identical to the carried text, and its sha256 matches text_sha256 c82d08ab50bfe4d9f60021483f19001c0443aa965240f3811d5a86c5d0478f8a."
     second_download:
-      result: pending
+      result: not made
       sha256: null
-      reason: null
+      reason: only the founder has downloaded these files; the portal answers automated tools with a browser check, so no other copy can be made
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0309
     title: "Attachment 5 to CO03079: Options and Costs to Increase Service Levels (Community and Public Services Committee, 2025-08-11)"
     url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=268212
@@ -661,16 +669,17 @@ documents:
       reason: null
       note: the founder opened and downloaded the file in an ordinary browser, unauthenticated, at about 17:09Z on 2026-10-02
     extraction_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: "Attachment 5 matches the render: all four options with their service levels and costs are intact. A fresh pdftotext -layout -enc UTF-8 run (26.08.0) is byte-identical to the carried text, and its sha256 matches text_sha256 7162fe812beba592360cf1d517d58ff7655e58048dfb0f2a5c6718985e7baf65."
     second_download:
-      result: pending
+      result: not made
       sha256: null
-      reason: null
+      reason: only the founder has downloaded these files; the portal answers automated tools with a browser check, so no other copy can be made
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0287
     title: Community and Public Services Committee, 2026-08-31, agenda (attachment list with DocumentIds)
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=e2eee963-953d-4bbd-834c-419a4545cbcf&lang=English
@@ -709,119 +718,119 @@ documents:
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.1"
         title: Call to Order and Land Acknowledgement
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.2"
         title: Roll Call
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.3"
         title: Declaration of Pecuniary or Conflict of Interest
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.4"
         title: Adoption of Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.5"
         title: Approval of Minutes
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.6"
         title: Council Protocol Recognition
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2."
         title: Items for Discussion and Related Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.1"
         title: Select Items for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.2"
         title: Vote on Reports not Selected for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.3"
         title: Requests to Speak
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Reads only "Refer to Summary of Agenda Changes"; no list on the page.
       - number: "2.4"
         title: Requests for Specific Time on Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Reads only "Refer to Summary of Agenda Changes".
       - number: "3."
         title: Councillor Inquiries
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "4."
         title: Reports to be Dealt with at a Different Meeting
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "5."
         title: Requests to Reschedule Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "6."
         title: Unfinished Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7."
         title: Public Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7.1"
         title: Snow and Ice Control Policy and Program Review
         matched: true
@@ -832,56 +841,56 @@ documents:
           - calcium chloride
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Agenda entry for report CO03513 with its 13 attachments and presentation and their DocumentIds; when the proposals were first on an agenda (qualification 4, alternative timing rule).
       - number: "7.2"
         title: "Review of Traffic Bylaw 5590: Enforcement Trends, Penalty Efficacy and Deterrence Strategies"
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Traffic Bylaw enforcement report (Community Services); not a snow and ice control proposal.
       - number: "7.3"
         title: "Parking Enforcement: Strategy for Growth and Service Improvement"
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Parking enforcement strategy report (Community Services); title and files name no snow and ice control change.
       - number: "8."
         title: Responses to Councillor Inquiries
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "9."
         title: Private Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "10."
         title: Motions Pending
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "11."
         title: Notices of Motion and Motions without Customary Notice
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "12."
         title: Adjournment
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
     extraction:
       tool: scripts/panel/minutes-items.ts
       version: selection rule v6
@@ -889,10 +898,11 @@ documents:
       text_sha256: 21ea0c03d2265157d93ae84099f336966c2f6d8373ab0fa2732949bcbf0bd213
       text_file: evidence/private/carried/snow-clearing/2026-10-02/YF-EV-0287.txt
     completeness_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
       missed_items: []
+      note: selection rule v6; 25 items, 1 carried, 1 relevant; checker's reasons transcribed from carried/checks/completeness-v6.yaml
     download_provenance:
       downloaded_by: the site evidence fetcher
       downloaded_on: 2026-10-02
@@ -909,8 +919,8 @@ documents:
       sha256: null
       reason: a meeting page is generated HTML that differs on every fetch, so bytes cannot be compared; the live item index is compared instead (page_check)
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0289
     title: Community and Public Services Committee, 2026-08-31, post-meeting minutes
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=e2eee963-953d-4bbd-834c-419a4545cbcf&lang=English
@@ -949,28 +959,28 @@ documents:
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.1"
         title: Call to Order and Land Acknowledgement
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.2"
         title: Roll Call
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.3"
         title: Declaration of Pecuniary or Conflict of Interest
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.4"
         title: Adoption of Agenda
         matched: true
@@ -978,49 +988,49 @@ documents:
           - August 31, 2026, Community and Public Services Committee
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion. Carried by v4 as an extra; harmless.
       - number: "1.5"
         title: Approval of Minutes
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.6"
         title: Council Protocol Recognition
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: 1.6.1
         title: International Overdose Awareness Day (J. Wright)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "2."
         title: Items for Discussion and Related Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.1"
         title: Select Items for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.2"
         title: Vote on Reports not Selected for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.3"
         title: Requests to Speak
         matched: true
@@ -1029,49 +1039,49 @@ documents:
           - snow
         carried: true
         withheld: 8
-        checker_reason: null
+        checker_reason: Requests to Speak for 7.1 and 7.3 (names withheld); no proposal, cost or motion bearing on the claim. Carried by keyword, harmless.
       - number: "2.4"
         title: Requests for Specific Time on Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "3."
         title: Councillor Inquiries
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "4."
         title: Reports to be Dealt with at a Different Meeting
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "5."
         title: Requests to Reschedule Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "6."
         title: Unfinished Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7."
         title: Public Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7.1"
         title: Snow and Ice Control Policy and Program Review
         matched: true
@@ -1083,7 +1093,7 @@ documents:
           - calcium chloride
         carried: true
         withheld: 7
-        checker_reason: null
+        checker_reason: "Committee dealt with CO03513 on 2026-08-31: presentation, the C409L recommendation (5 to 0), the withdrawn motion to bring the Well Maintained City package to Council, and two carried motions for unfunded service packages (qualification 3; alternative window)."
       - number: "7.2"
         title: "Review of Traffic Bylaw 5590: Enforcement Trends, Penalty Efficacy and Deterrence Strategies"
         matched: true
@@ -1091,42 +1101,42 @@ documents:
           - bike
         carried: true
         withheld: 1
-        checker_reason: null
+        checker_reason: "Traffic Bylaw and parking enforcement items 7.2 and 7.3: a disabled-parking fine and a request for a parking enforcement service-standard report; not snow and ice control. Carried by keyword, harmless."
       - number: "7.3"
         title: "Parking Enforcement: Strategy for Growth and Service Improvement"
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Parking enforcement report dealt with under 7.2; no snow and ice content in the minutes.
       - number: "8."
         title: Responses to Councillor Inquiries
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "9."
         title: Private Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "10."
         title: Motions Pending
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "11."
         title: Notices of Motion and Motions without Customary Notice
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "11.1"
         title: Co-location of Multiple Civic Assets (J. Wright)
         matched: true
@@ -1134,14 +1144,14 @@ documents:
           - August 31, 2026, Community and Public Services Committee
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Notice of motion on co-location of civic assets; unrelated. Carried by v4 as an extra; harmless.
       - number: "12."
         title: Adjournment
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
     extraction:
       tool: scripts/panel/minutes-items.ts
       version: selection rule v6
@@ -1149,10 +1159,11 @@ documents:
       text_sha256: 2226f7ff2bc09589bef25968dc285ebf4f307d528b24c917be3f9bcfdf8647f5
       text_file: evidence/private/carried/snow-clearing/2026-10-02/YF-EV-0289.txt
     completeness_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
       missed_items: []
+      note: selection rule v6; 27 items, 5 carried, 1 relevant; checker's reasons transcribed from carried/checks/completeness-v6.yaml
     download_provenance:
       downloaded_by: the site evidence fetcher
       downloaded_on: 2026-10-02
@@ -1169,8 +1180,8 @@ documents:
       sha256: null
       reason: a meeting page is generated HTML that differs on every fetch, so bytes cannot be compared; the live item index is compared instead (page_check)
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0290
     title: City Council, 2026-09-08, post-meeting minutes
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=3195d7e4-a1e2-4923-810e-ddfa0726c299&lang=English
@@ -1209,98 +1220,98 @@ documents:
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.1"
         title: Call to Order and Land Acknowledgement
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.2"
         title: Roll Call
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.3"
         title: Declaration of Pecuniary or Conflict of Interest
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.4"
         title: Adoption of Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.5"
         title: Approval of Minutes
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.6"
         title: Council Protocol Recognition
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: 1.6.1
         title: Firefighters' National Memorial Day (J. Wright)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: 1.6.2
         title: United Way Campaign Kickoff (M. Elliott)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: 1.6.3
         title: Condolences and Tribute on the Passing of The Honourable Ritu Khullar, Chief Justice of Alberta and Chief Justice of the Courts of Appeal of Alberta, the Northwest Territories and Nunavut (E. Rutherford)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: 1.6.4
         title: Third Canadian Division and National Merchant Navy Veterans’ Day (K. Principe)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: 1.6.5
         title: Welcoming Week (A. Knack)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "2."
         title: Items for Discussion and Related Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.1"
         title: Select Items for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.2"
         title: Vote on Reports not Selected for Debate
         matched: true
@@ -1308,126 +1319,126 @@ documents:
           - snow
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Council approved 7.9 (Snow and Ice Control Policy C409L) without debate in this bundled vote (alternative body and window).
       - number: "2.3"
         title: Requests to Speak
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.4"
         title: Requests for Specific Time on Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.5"
         title: Vote on Bylaws not Selected for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "3."
         title: Councillor Inquiries
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "3.1"
         title: Parking Provisions For New Development in Low and Medium Density Residential Zones (E. Rutherford)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "4."
         title: Reports to be Dealt with at a Different Meeting
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "5."
         title: Requests to Reschedule Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "6."
         title: Unfinished Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7."
         title: Public Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7.1"
         title: Operating Financial Update - June 30, 2026
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Operating financial update and fiscal policy motions; no snow and ice item in the minutes.
       - number: "7.2"
         title: Capital Financial Update - June 30, 2026
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Capital financial update; no motion and no snow and ice content.
       - number: "7.3"
         title: 2027-2030 Budget Public Engagement
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "7.4"
         title: City Services and Quality of Life Survey Results 2026
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "7.5"
         title: Valley Line Transition Management Office
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "7.6"
         title: 2028-2031 EPCOR Performance Based Regulation Application Work Plan Update
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "7.7"
         title: Public Art to Enhance Edmonton's Public Realm Policy C458E Review
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "7.8"
         title: Climate Resilience Policy C627A Review
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "7.9"
         title: Snow and Ice Control Policy and Program Review
         matched: true
@@ -1438,210 +1449,210 @@ documents:
           - calcium chloride
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Council approval of C409L under 7.9 on 2026-09-08, not selected for debate (alternative body and window).
       - number: "7.10"
         title: Heritage Places Strategy
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "7.11"
         title: 2027 Update - Climate Implementation Priorities
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8."
         title: Bylaws
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "8.1"
         title: Charter Bylaw 21497 - Non-Residential Assessment and Supplementary Assessment Subclass Charter Bylaw
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8.2"
         title: Bylaw 21583 - To amend Bylaw 19519 Residential Assessment and Supplementary Assessment Subclass Bylaw, Amendment No. 2
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8.3"
         title: Charter Bylaw 21584 - To amend Bylaw 18652 Municipal Tax Relief Delegation Charter Bylaw, Amendment No. 1
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8.4"
         title: Bylaw 21414 - To authorize the City of Edmonton to construct, finance and assess Sidewalk Reconstruction Local Improvements in the Hillview Neighbourhood - Crown Land
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8.5"
         title: "Bylaw 21545 - To amend Revised Bylaw 17862, City of Edmonton Blatchford District Energy Sharing System (DESS) Project, Amendment #4"
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8.6"
         title: "Bylaw 21593 - To amend Bylaw 20442, City of Edmonton City Operations Project, Landfill Gas to Renewable Natural Gas (RNG), Amendment #1"
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8.7"
         title: "Bylaw 21594 - To amend Bylaw 18735, City of Edmonton Integrated Infrastructure Services Project, Waste Services IIS Infrastructure Delivery, Amendment #6"
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8.8"
         title: "Bylaw 21595 - To amend Revised Bylaw 18736, City of Edmonton City Operations Project, Waste Services Facilities & Infrastructure Project Delivery, Amendment #3"
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8.9"
         title: "Bylaw 21596 - To amend Bylaw 20128, City of Edmonton Blatchford Renewable Energy Utility Project, Distribution Piping System, Amendment #2"
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8.10"
         title: Bylaw 21631 - Council and Committee Meeting Agendas
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8.11"
         title: Bylaw 21549 - Closure of Vehicular Access to Titled Parcel
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8.12"
         title: Bylaw 21547 - To Repeal Bylaw 11575 to Designate the Arlington Apartments Building as a Municipal Historic Resource
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "9."
         title: Statutory Public Hearing
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "9.1"
         title: Explanation of Public Hearing Process
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: 9.1.1
         title: Call for Persons to Speak
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "9.2"
         title: Bylaws and Related Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: 9.2.1
         title: Rosenthal Municipal Reserve Removal
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "10."
         title: Private Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "10.1"
         title: "Public Safety: Edmonton Police Service and Peace Officers"
         matched: false
         matched_terms: []
         carried: false
         withheld: 7
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "10.2"
         title: Intergovernmental Update
         matched: false
         matched_terms: []
         carried: false
         withheld: 1
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "10.3"
         title: Intergovernmental Update - Provincial Pre-Budget Submission and Partnership Opportunity
         matched: false
         matched_terms: []
         carried: false
         withheld: 1
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "10.4"
         title: Continuation of Strategic Planning Session - Verbal report
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "11."
         title: Motions Pending
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "11.1"
         title: Communication of Property Tax Impacts in Budget Presentations and Documents (M. Janz)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "11.2"
         title: Meeting Speaking Time (M. Janz)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "11.3"
         title: Vision Zero Bereavement (M. Janz)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "11.4"
         title: Co-location of Multiple Civic Assets (J. Wright)
         matched: true
@@ -1649,14 +1660,14 @@ documents:
           - August 31, 2026, Community and Public Services Committee
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion. Carried by v4 as an extra; harmless.
       - number: "11.5"
         title: October 13, 2023, Integrated Infrastructure Services report IIS01767, Asset Rationalization Framework and Pilot Review (M. Janz)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "11.6"
         title: Active Transportation Implementation Funding (A. Salvador)
         matched: true
@@ -1667,49 +1678,49 @@ documents:
           - Active Transportation Implementation
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Notice of motion on bike-lane funding options; nothing on snow. Carried by v1/v2 terms, harmless.
       - number: "11.7"
         title: Reallocation of Funding from Neighbourhood Renewal to Arterial Renewal (T. Parmar)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "12."
         title: Notices of Motion and Motions without Customary Notice
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "12.1"
         title: Changes to Council Calendar - September 2026 Council and Committee Calendar (K. Tang)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "12.2"
         title: Options to Regulate Large-Scale Data Centres (A. Salvador)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "12.3"
         title: Options to Enhance Notice to Residents Regarding High Intensity Rezoning (R. Clarke)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "13."
         title: Adjournment
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
     extraction:
       tool: scripts/panel/minutes-items.ts
       version: selection rule v6
@@ -1717,10 +1728,11 @@ documents:
       text_sha256: 2146129c2ffdbe77e41bf40aab45571d05e7ff2fef3b282a381dfba8ceaf7afe
       text_file: evidence/private/carried/snow-clearing/2026-10-02/YF-EV-0290.txt
     completeness_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
       missed_items: []
+      note: selection rule v6; 71 items, 4 carried, 2 relevant; checker's reasons transcribed from carried/checks/completeness-v6.yaml
     download_provenance:
       downloaded_by: the site evidence fetcher
       downloaded_on: 2026-10-02
@@ -1737,8 +1749,8 @@ documents:
       sha256: null
       reason: a meeting page is generated HTML that differs on every fetch, so bytes cannot be compared; the live item index is compared instead (page_check)
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0291
     title: City Council, 2026-03-17, post-meeting minutes
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=86bee574-31e8-424f-abbb-978f946337f3&lang=English
@@ -1777,364 +1789,364 @@ documents:
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.1"
         title: Call to Order and Land Acknowledgement
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.2"
         title: Roll Call
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.3"
         title: Declaration of Pecuniary or Conflict of Interest
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.4"
         title: Adoption of Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.5"
         title: Approval of Minutes
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.6"
         title: Council Protocol Recognition
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: 1.6.1
         title: Québec City Delegation (A. Knack)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: 1.6.2
         title: McKernan School (A. Knack)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: 1.6.3
         title: Donald R. Getty School (A. Knack)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: 1.6.4
         title: Holyrood School (A. Knack)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: 1.6.5
         title: Transit Operator and Worker Appreciation Day (J. Morgan)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: 1.6.6
         title: International Day for the Elimination of Racial Discrimination (A. Knack)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: 1.6.7
         title: Joey Moss School (A. Knack)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "2."
         title: Items for Discussion and Related Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.1"
         title: Select Items for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.2"
         title: Vote on Reports not Selected for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.3"
         title: Requests to Speak
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.4"
         title: Requests for Specific Time on Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.5"
         title: Vote on Bylaws not Selected for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "3."
         title: Councillor Inquiries
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "4."
         title: Reports to be Dealt with at a Different Meeting
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "5."
         title: Requests to Reschedule Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "5.1"
         title: Edmonton's Economic Development Agencies Review
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "6."
         title: Unfinished Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "6.1"
         title: Bylaw 21424 - Spring 2026 Minor Revisions and General Repeals - Bylaws, Policies and Motions
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "6.2"
         title: Removal of Restrictive Covenants and Exclusivity Controls for Grocery Stores
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "6.3"
         title: Edmonton 2026 Federation of Canadian Municipalities Conference (FCM) Update
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "6.4"
         title: Council Liaison Appointment - Do North Events
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "7."
         title: Public Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7.1"
         title: Capital Financial Update - December 31, 2025
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Capital financial update, dealt with; no snow and ice motion or proposal in the minutes.
       - number: "7.2"
         title: Operating Financial Update - December 31, 2025
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Operating budget carryforward motions; none names snow and ice control.
       - number: "7.3"
         title: Lewis Farms Community Recreation Centre and Library - Capital Project Update
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "7.4"
         title: City Council's Governance Framework for Council Committees
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "7.5"
         title: Downtown Attainable Housing Incentive
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "7.6"
         title: Options to Fund Francis Winspear Centre Expansion
         matched: false
         matched_terms: []
         carried: false
         withheld: 2
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "7.7"
         title: "2026 Council and Committee Calendar Changes #2"
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "7.8"
         title: 2025 Edmonton Election Financial Disclosures - Non-Compliance
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8."
         title: Bylaws
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "8.1"
         title: "Bylaw 21384 - To amend Bylaw 20392, City of Edmonton Integrated Infrastructure Services Project, Climate Resilient City Facility Upgrades, Amendment #4"
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8.2"
         title: "Bylaw 21385 - To amend Revised Bylaw 19979, City of Edmonton Integrated Infrastructure Services Project, Ambleside Integrated Site - Phase I, Amendment #1"
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8.3"
         title: Bylaw 21397 - To authorize the City of Edmonton to impose a special tax for the repair and maintenance of Alley Lighting
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8.4"
         title: "Bylaw 21382 - To amend Revised Bylaw 19781, City of Edmonton Integrated Infrastructure Services Project, Capital Line South LRT: Century Park to Ellerslie Road, Amendment #4"
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8.5"
         title: "Bylaw 21383 - To amend Revised Bylaw 18880, City of Edmonton Integrated Infrastructure Services Project, Metro Line (Nait - Blatchford) Extension, Amendment #2"
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8.6"
         title: Bylaw 21408 - Designation of Reserve - Oxford Community Park
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8.7"
         title: Bylaw 21396 - To Designate the Harcourt House as a Municipal Historic Resource
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "9."
         title: Private Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "9.1"
         title: Edmonton Police Service (EPS) Procurement Update
         matched: false
         matched_terms: []
         carried: false
         withheld: 5
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "9.2"
         title: "City Manager Annual Performance Evaluation Update #4 (2026)"
         matched: false
         matched_terms: []
         carried: false
         withheld: 1
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "9.3"
         title: Office of the Mayor Report (20260312)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "10."
         title: Motions Pending
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "10.1"
         title: Minor Sport Rental Subsidy Options (J. Wright)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "10.2"
         title: "Review of Traffic Bylaw 5590: Enforcement Trends, Penalty Efficacy and Deterrence Strategies (A. Salvador)"
         matched: true
@@ -2142,7 +2154,7 @@ documents:
           - August 31, 2026, Community and Public Services Committee
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Request for a Traffic Bylaw enforcement report; not snow and ice control. Carried by v4 as an extra; harmless.
       - number: "10.3"
         title: Options for Enhanced Snow and Ice Control (SNIC) Service Delivery (J. Morgan)
         matched: true
@@ -2153,7 +2165,7 @@ documents:
           - SNIC
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Council motion of 2026-03-17 (10.3, J. Morgan) asking for options and resource implications for snow and ice tactics including calcium chloride (qualification 2).
       - number: "10.4"
         title: Snow and Ice Control Surge Capacity Strategy (A. Paquette)
         matched: true
@@ -2163,49 +2175,49 @@ documents:
           - SNIC
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Council motion of 2026-03-17 (10.4, A. Paquette) asking for options and costs for a snow and ice surge capacity strategy (qualification 2).
       - number: "10.5"
         title: City of Edmonton Strategic Priorities and Opportunities for Defense (A. Knack)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "10.6"
         title: Patio Program Fees (K. Principe)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "10.7"
         title: 132 Avenue Collector Renewal (K. Principe)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "11."
         title: Notices of Motion and Motions without Customary Notice
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "11.1"
         title: Garth Worthington School Fundraising Society (J. Morgan)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "12."
         title: Adjournment
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
     extraction:
       tool: scripts/panel/minutes-items.ts
       version: selection rule v6
@@ -2213,10 +2225,11 @@ documents:
       text_sha256: 7df517bc9ccf206d905ff3a8859aacaa4212d266e1826e4bee081f4cba016082
       text_file: evidence/private/carried/snow-clearing/2026-10-02/YF-EV-0291.txt
     completeness_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
       missed_items: []
+      note: selection rule v6; 61 items, 3 carried, 2 relevant; checker's reasons transcribed from carried/checks/completeness-v6.yaml
     download_provenance:
       downloaded_by: the site evidence fetcher
       downloaded_on: 2026-10-02
@@ -2233,8 +2246,8 @@ documents:
       sha256: null
       reason: a meeting page is generated HTML that differs on every fetch, so bytes cannot be compared; the live item index is compared instead (page_check)
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0292
     title: Community and Public Services Committee, 2026-01-19, post-meeting minutes
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=9b2fc4da-a9fb-4d8a-85e4-b89c25f6c352&lang=English
@@ -2273,133 +2286,133 @@ documents:
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.1"
         title: Call to Order and Land Acknowledgement
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.2"
         title: Roll Call
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.3"
         title: Declaration of Pecuniary or Conflict of Interest
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.4"
         title: Adoption of Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.5"
         title: Approval of Minutes
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.6"
         title: Council Protocol Recognition
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: 1.6.1
         title: Michael Strembitsky School (J. Wright)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "2."
         title: Items for Discussion and Related Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.1"
         title: Select Items for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.2"
         title: Vote on Reports not Selected for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.3"
         title: Requests to Speak
         matched: false
         matched_terms: []
         carried: false
         withheld: 5
-        checker_reason: null
+        checker_reason: Requests to Speak on 7.1 (names withheld); a speaker list, nothing the claim counts.
       - number: "2.4"
         title: Requests for Specific Time on Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "3."
         title: Councillor Inquiries
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "4."
         title: Reports to be Dealt with at a Different Meeting
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "5."
         title: Requests to Reschedule Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "5.1"
         title: Bylaw 21301 - Amendments to Bylaw 14600 Community Standards Bylaw
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "6."
         title: Unfinished Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7."
         title: Public Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7.1"
         title: Bylaw 21283 - Amendments to the Traffic Bylaw 5590
         matched: true
@@ -2407,42 +2420,42 @@ documents:
           - snow
         carried: true
         withheld: 5
-        checker_reason: null
+        checker_reason: Administration report CS03123 (Traffic Bylaw amendments, with the 2025 Snow and Ice Control Communications Survey) dealt with 2026-01-19; a candidate snow-operations proposal in the window, cost not stated in the minutes.
       - number: "7.2"
         title: Bylaw 21337 - Amendments to the Animal Care and Control Bylaw 21244
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Unrelated subject; no snow and ice control proposal, cost or motion.
       - number: "8."
         title: Responses to Councillor Inquiries
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "9."
         title: Private Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "10."
         title: Motions Pending
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "11."
         title: Notices of Motion and Motions without Customary Notice
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "11.1"
         title: Options for Enhanced Snow and Ice Control (SNIC) Service Delivery (J. Morgan)
         matched: true
@@ -2453,14 +2466,14 @@ documents:
           - SNIC
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Notice of motion of 2026-01-19 (J. Morgan) on options for enhanced snow and ice control service delivery including calcium chloride (qualification 2).
       - number: "12."
         title: Adjournment
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
     extraction:
       tool: scripts/panel/minutes-items.ts
       version: selection rule v6
@@ -2468,10 +2481,11 @@ documents:
       text_sha256: f2b55736684db59a400e880e61e9dae3aa0675ff5e922becbfb142383ecbb02b
       text_file: evidence/private/carried/snow-clearing/2026-10-02/YF-EV-0292.txt
     completeness_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
       missed_items: []
+      note: selection rule v6; 27 items, 2 carried, 2 relevant; checker's reasons transcribed from carried/checks/completeness-v6.yaml
     download_provenance:
       downloaded_by: the site evidence fetcher
       downloaded_on: 2026-10-02
@@ -2488,8 +2502,8 @@ documents:
       sha256: null
       reason: a meeting page is generated HTML that differs on every fetch, so bytes cannot be compared; the live item index is compared instead (page_check)
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0293
     title: Agenda Review Committee, 2026-08-18, post-meeting minutes
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=2e4a5472-0652-4330-a8ba-0f903d9b61ce&lang=English
@@ -2528,49 +2542,49 @@ documents:
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.1"
         title: Call to Order and Land Acknowledgement
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.2"
         title: Roll Call
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Roll call; carried as the attendance block.
       - number: "1.3"
         title: Declaration of Pecuniary or Conflict of Interest
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.4"
         title: Adoption of Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.5"
         title: Approval of Minutes
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2."
         title: Private Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.1"
         title: Agenda Review Committee List
         matched: true
@@ -2578,7 +2592,7 @@ documents:
           - draft agendas
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Agenda Review Committee motion amending the draft agendas, including the 2026-08-31 committee agenda, on 2026-08-18 (qualification 4). Missed by v3, carried by v4.
       - number: 2.1.1
         title: August 31, 2026, Community and Public Services Committee
         matched: true
@@ -2586,28 +2600,28 @@ documents:
           - August 31, 2026, Community and Public Services Committee
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Records that the draft 2026-08-31 Community and Public Services Committee agenda was before the committee on 2026-08-18, the fact the brief cites this page for (qualification 4). Missed by v3, carried by v4.
       - number: 2.1.2
         title: September 1, 2026, Urban Planning Committee
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Draft agenda of the 2026-09-01 Urban Planning Committee; not the snow report.
       - number: 2.1.3
         title: September 2, 2026, Executive Committee
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Draft agenda of the 2026-09-02 Executive Committee; not the snow report.
       - number: "3."
         title: Adjournment
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
     extraction:
       tool: scripts/panel/minutes-items.ts
       version: selection rule v6
@@ -2615,10 +2629,11 @@ documents:
       text_sha256: 5020b089a83462a830d4385a6472724ac2bd34a614dc9c3f90ac3c6eec20a965
       text_file: evidence/private/carried/snow-clearing/2026-10-02/YF-EV-0293.txt
     completeness_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
       missed_items: []
+      note: selection rule v6; 12 items, 2 carried, 2 relevant; checker's reasons transcribed from carried/checks/completeness-v6.yaml
     download_provenance:
       downloaded_by: the site evidence fetcher
       downloaded_on: 2026-10-02
@@ -2635,8 +2650,8 @@ documents:
       sha256: null
       reason: a meeting page is generated HTML that differs on every fetch, so bytes cannot be compared; the live item index is compared instead (page_check)
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0297
     title: Community and Public Services Committee, 2025-08-11, agenda (attachment list with DocumentIds)
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=09050f7e-7108-4015-be41-e1d6ce2e862e&lang=English
@@ -2675,133 +2690,133 @@ documents:
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.1"
         title: Call to Order and Land Acknowledgement
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.2"
         title: Roll Call
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.3"
         title: Adoption of Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.4"
         title: Approval of Minutes
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.5"
         title: Protocol Items
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Protocol item; no snow and ice proposal, cost or motion.
       - number: 1.5.1
         title: Former City Councillor Michael Phair (A. Salvador)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Protocol item; no snow and ice proposal, cost or motion.
       - number: "2."
         title: Items for Discussion and Related Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.1"
         title: Select Items for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.2"
         title: Vote on Reports not Selected for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.3"
         title: Requests to Speak
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.4"
         title: Requests for Specific Time on Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "3."
         title: Councillor Inquiries
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "4."
         title: Reports to be Dealt with at a Different Meeting
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "5."
         title: Requests to Reschedule Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "6."
         title: Unfinished Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7."
         title: Public Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7.1"
         title: Community Leagues Life Safety Infrastructure Needs
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "7.2"
         title: Bylaw 21244 - Animal Care and Control Bylaw
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "7.3"
         title: Improved Accessibility - Active Pathway Snow Removal and Sidewalk Repair
         matched: true
@@ -2811,49 +2826,49 @@ documents:
           - CO03079
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: The CO03079 report item (Improved Accessibility - Active Pathway Snow Removal and Sidewalk Repair) with its attachment list and DocumentIds; when the committee first had the active pathway snow proposal and its costs (qualifications 1, 2 and 4).
       - number: "8."
         title: Responses to Councillor Inquiries
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "9."
         title: Private Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "10."
         title: Motions Pending
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "10.1"
         title: External Review of the Business Licence Review Policy (A. Stevenson)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "11."
         title: Notices of Motion and Motions without Customary Notice
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "12."
         title: Adjournment
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
     extraction:
       tool: scripts/panel/minutes-items.ts
       version: selection rule v6
@@ -2861,10 +2876,11 @@ documents:
       text_sha256: acad0efa30502a19e04121b9b9dd409d27564f1c2a64720425da3394fe9a579f
       text_file: evidence/private/carried/snow-clearing/2026-10-02/YF-EV-0297.txt
     completeness_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
       missed_items: []
+      note: selection rule v6; 26 items, 1 carried, 1 relevant; checker's reasons transcribed from carried/checks/completeness-v6.yaml
     download_provenance:
       downloaded_by: the site evidence fetcher
       downloaded_on: 2026-10-02
@@ -2881,8 +2897,8 @@ documents:
       sha256: null
       reason: a meeting page is generated HTML that differs on every fetch, so bytes cannot be compared; the live item index is compared instead (page_check)
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0298
     title: Community and Public Services Committee, 2025-08-11, post-meeting minutes
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=09050f7e-7108-4015-be41-e1d6ce2e862e&lang=English
@@ -2921,70 +2937,70 @@ documents:
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.1"
         title: Call to Order and Land Acknowledgement
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.2"
         title: Roll Call
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.3"
         title: Adoption of Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.4"
         title: Approval of Minutes
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.5"
         title: Protocol Items
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Protocol item; no snow and ice proposal, cost or motion.
       - number: 1.5.1
         title: Former City Councillor Michael Phair (A. Salvador)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Protocol item; no snow and ice proposal, cost or motion.
       - number: "2."
         title: Items for Discussion and Related Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.1"
         title: Select Items for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.2"
         title: Vote on Reports not Selected for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.3"
         title: Requests to Speak
         matched: true
@@ -2992,63 +3008,63 @@ documents:
           - snow
         carried: true
         withheld: 10
-        checker_reason: null
+        checker_reason: Requests to speak; lists redacted speakers for items 7.1, 7.2 and 7.3 but holds no motion on the proposal, cost or vote bearing on the claim. Carried by a term match; harmless.
       - number: "2.4"
         title: Requests for Specific Time on Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "3."
         title: Councillor Inquiries
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "4."
         title: Reports to be Dealt with at a Different Meeting
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "5."
         title: Requests to Reschedule Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "6."
         title: Unfinished Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7."
         title: Public Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7.1"
         title: Community Leagues Life Safety Infrastructure Needs
         matched: false
         matched_terms: []
         carried: false
         withheld: 3
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "7.2"
         title: Bylaw 21244 - Animal Care and Control Bylaw
         matched: false
         matched_terms: []
         carried: false
         withheld: 5
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "7.3"
         title: Improved Accessibility - Active Pathway Snow Removal and Sidewalk Repair
         matched: true
@@ -3059,49 +3075,49 @@ documents:
           - Operating Budget Adjustment
         carried: true
         withheld: 2
-        checker_reason: null
+        checker_reason: "Committee disposition of CO03079: the motion to prepare an unfunded service package for Option 3 ($1.43M capital, $8.07M operating) carried 4-0, and the total cost of ownership memo motion (qualifications 1 and 2)."
       - number: "8."
         title: Responses to Councillor Inquiries
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "9."
         title: Private Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "10."
         title: Motions Pending
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "10.1"
         title: External Review of the Business Licence Review Policy (A. Stevenson)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "11."
         title: Notices of Motion and Motions without Customary Notice
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "12."
         title: Adjournment
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
     extraction:
       tool: scripts/panel/minutes-items.ts
       version: selection rule v6
@@ -3109,10 +3125,11 @@ documents:
       text_sha256: 043e3791588c901369624ec653d70348a8f96ae05ad254e787d1958137d28d63
       text_file: evidence/private/carried/snow-clearing/2026-10-02/YF-EV-0298.txt
     completeness_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
       missed_items: []
+      note: selection rule v6; 26 items, 2 carried, 1 relevant; checker's reasons transcribed from carried/checks/completeness-v6.yaml
     download_provenance:
       downloaded_by: the site evidence fetcher
       downloaded_on: 2026-10-02
@@ -3129,8 +3146,8 @@ documents:
       sha256: null
       reason: a meeting page is generated HTML that differs on every fetch, so bytes cannot be compared; the live item index is compared instead (page_check)
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0299
     title: City Council, 2025-11-24 (continued 2025-11-25), agenda (attachment list with DocumentIds)
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=8321e64d-6394-469b-8653-65641562497c&lang=English
@@ -3169,133 +3186,133 @@ documents:
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.1"
         title: Call to Order and Land Acknowledgement
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.2"
         title: Roll Call
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.3"
         title: Declaration of Pecuniary or Conflict of Interest
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.4"
         title: Adoption of Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.5"
         title: Approval of Minutes
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.6"
         title: Protocol Items
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Protocol item; no snow and ice proposal, cost or motion.
       - number: "2."
         title: Items for Discussion and Related Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.1"
         title: Select Items for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.2"
         title: Vote on Reports not Selected for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.3"
         title: Requests to Speak
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.4"
         title: Requests for Specific Time on Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.5"
         title: Vote on Bylaws not Selected for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "3."
         title: Councillor Inquiries
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "4."
         title: Reports to be Dealt with at a Different Meeting
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "5."
         title: Requests to Reschedule Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "6."
         title: Unfinished Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "6.1"
         title: Intergovernmental Update
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "7."
         title: Public Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7.1"
         title: Fall 2025 Supplemental Capital Budget Adjustment - 2023-2026 Capital Budget
         matched: true
@@ -3303,7 +3320,7 @@ documents:
           - FCS03159
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: The Fall 2025 Supplemental Capital Budget Adjustment item, listing FCS03159 and its Attachments 7 (Emerging Items, Unfunded) and 8 (Unfunded Capital Profiles) with DocumentIds; the brief names these under item 7.1. Agenda dates and DocumentIds for qualification 4, and the capital side of the Fall 2025 budget proposals for qualification 3. Carried under v6 by the term FCS03159.
       - number: "7.2"
         title: Fall 2025 Supplemental Operating Budget Adjustment - 2023-2026 Operating Budget
         matched: true
@@ -3312,119 +3329,119 @@ documents:
           - Operating Budget Adjustment
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: The Fall 2025 Supplemental Operating Budget Adjustment item, listing FCS03158 and Attachment 2 (YF-EV-0304) with DocumentIds; the agenda record for qualifications 3 and 4.
       - number: "7.3"
         title: Fall 2025 Carbon Budget Update - 2023-2026 Carbon Budget
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "7.4"
         title: Blatchford Renewable Energy Utility 2026 Rate Filing and Fall 2025 Supplemental Budget Adjustment
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "7.5"
         title: Waste Services 2026 Rate Filing
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "7.6"
         title: GEF Seniors Housing Annual Report - 2024 Financial Reporting and 2026 Operating and Capital Budgets
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "8."
         title: Bylaws
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "8.1"
         title: Bylaw 21367 - To Amend Bylaw 17943 Blatchford Renewable Energy Utility, Amendment No. 7
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "8.2"
         title: Bylaw 21349 - Waste Services Bylaw 20363, Amendment No. 3
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "9."
         title: Private Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "9.1"
         title: Edmonton Regional Airports Authority - Candidate Shortlisting
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "9.2"
         title: Edmonton Police Commission - Candidate Shortlisting
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "9.3"
         title: Strong Cities Network Sixth Global Summit - Toronto Declaration
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "10."
         title: Motions Pending
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "10.1"
         title: Elizabeth Fry Shelter - Station Pointe (A. Paquette)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "10.2"
         title: "Fireworks Management: Communications, Regulatory Options, and 2026 Diwali Pilot (K. Tang)"
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "11."
         title: Notices of Motion and Motions without Customary Notice
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "12."
         title: Adjournment
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
     extraction:
       tool: scripts/panel/minutes-items.ts
       version: selection rule v6
@@ -3432,10 +3449,11 @@ documents:
       text_sha256: 6078a761bda767ceb483fa92f12827c381623fc79a4f791033ec0f3fdbf3e6bd
       text_file: evidence/private/carried/snow-clearing/2026-10-02/YF-EV-0299.txt
     completeness_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
       missed_items: []
+      note: selection rule v6; 37 items, 2 carried, 2 relevant; checker's reasons transcribed from carried/checks/completeness-v6.yaml
     download_provenance:
       downloaded_by: the site evidence fetcher
       downloaded_on: 2026-10-02
@@ -3452,8 +3470,8 @@ documents:
       sha256: null
       reason: a meeting page is generated HTML that differs on every fetch, so bytes cannot be compared; the live item index is compared instead (page_check)
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0300
     title: City Council, 2025-11-24 (continued 2025-11-25), post-meeting minutes
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=8321e64d-6394-469b-8653-65641562497c&lang=English
@@ -3492,28 +3510,28 @@ documents:
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.1"
         title: Call to Order and Land Acknowledgement
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.2"
         title: Roll Call
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.3"
         title: Declaration of Pecuniary or Conflict of Interest
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.4"
         title: Adoption of Agenda
         matched: true
@@ -3521,105 +3539,105 @@ documents:
           - Operating Budget Adjustment
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Adoption of the 2025-11-24 agenda with the additions of items 7.1 and 7.2; agenda chronology for qualification 4.
       - number: "1.5"
         title: Approval of Minutes
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.6"
         title: Protocol Items
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Protocol item; no snow and ice proposal, cost or motion.
       - number: "2."
         title: Items for Discussion and Related Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.1"
         title: Select Items for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.2"
         title: Vote on Reports not Selected for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.3"
         title: Requests to Speak
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.4"
         title: Requests for Specific Time on Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.5"
         title: Vote on Bylaws not Selected for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "3."
         title: Councillor Inquiries
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "4."
         title: Reports to be Dealt with at a Different Meeting
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "5."
         title: Requests to Reschedule Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "6."
         title: Unfinished Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "6.1"
         title: Intergovernmental Update
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "7."
         title: Public Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7.1"
         title: Fall 2025 Supplemental Capital Budget Adjustment - 2023-2026 Capital Budget
         matched: true
@@ -3629,7 +3647,7 @@ documents:
           - FCS03159
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Council dealt with the capital and operating adjustments together and postponed them to the 2025-12-01 budget meeting; qualifications 3 and 4.
       - number: "7.2"
         title: Fall 2025 Supplemental Operating Budget Adjustment - 2023-2026 Operating Budget
         matched: true
@@ -3638,119 +3656,119 @@ documents:
           - Operating Budget Adjustment
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: "The operating adjustment item: the presentation and the postponement to 2025-12-01; qualifications 3 and 4."
       - number: "7.3"
         title: Fall 2025 Carbon Budget Update - 2023-2026 Carbon Budget
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "7.4"
         title: Blatchford Renewable Energy Utility 2026 Rate Filing and Fall 2025 Supplemental Budget Adjustment
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "7.5"
         title: Waste Services 2026 Rate Filing
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "7.6"
         title: GEF Seniors Housing Annual Report - 2024 Financial Reporting and 2026 Operating and Capital Budgets
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "8."
         title: Bylaws
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "8.1"
         title: Bylaw 21367 - To Amend Bylaw 17943 Blatchford Renewable Energy Utility, Amendment No. 7
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "8.2"
         title: Bylaw 21349 - Waste Services Bylaw 20363, Amendment No. 3
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "9."
         title: Private Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "9.1"
         title: Edmonton Regional Airports Authority - Candidate Shortlisting
         matched: false
         matched_terms: []
         carried: false
         withheld: 2
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "9.2"
         title: Edmonton Police Commission - Candidate Shortlisting
         matched: false
         matched_terms: []
         carried: false
         withheld: 3
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "9.3"
         title: Strong Cities Network Sixth Global Summit - Toronto Declaration
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "10."
         title: Motions Pending
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "10.1"
         title: Elizabeth Fry Shelter - Station Pointe (A. Paquette)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "10.2"
         title: "Fireworks Management: Communications, Regulatory Options, and 2026 Diwali Pilot (K. Tang)"
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "11."
         title: Notices of Motion and Motions without Customary Notice
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "12."
         title: Adjournment
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
     extraction:
       tool: scripts/panel/minutes-items.ts
       version: selection rule v6
@@ -3758,10 +3776,11 @@ documents:
       text_sha256: 5589417ac148efb600e89f559fa8a840f3989d9b40ea6920b51f9db6c0c7edda
       text_file: evidence/private/carried/snow-clearing/2026-10-02/YF-EV-0300.txt
     completeness_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
       missed_items: []
+      note: selection rule v6; 37 items, 3 carried, 3 relevant; checker's reasons transcribed from carried/checks/completeness-v6.yaml
     download_provenance:
       downloaded_by: the site evidence fetcher
       downloaded_on: 2026-10-02
@@ -3778,8 +3797,8 @@ documents:
       sha256: null
       reason: a meeting page is generated HTML that differs on every fetch, so bytes cannot be compared; the live item index is compared instead (page_check)
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0301
     title: City Council - Budget, 2025-12-01 (continued to 2025-12-04), agenda (attachment list with DocumentIds)
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=2925a7f5-32a8-49a6-be15-fc1cf157c764&lang=English
@@ -3818,140 +3837,140 @@ documents:
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.1"
         title: Call to Order and Land Acknowledgement
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.2"
         title: Roll Call
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.3"
         title: Declaration of Pecuniary or Conflict of Interest
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.4"
         title: Adoption of Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.5"
         title: Protocol Items
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Protocol item; no snow and ice proposal, cost or motion.
       - number: 1.5.1
         title: World AIDS Day (A. Knack)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Protocol item; no snow and ice proposal, cost or motion.
       - number: 1.5.2
         title: Richard Secord School (A. Knack)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Protocol item; no snow and ice proposal, cost or motion.
       - number: 1.5.3
         title: St. Martin School (A. Knack)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Protocol item; no snow and ice proposal, cost or motion.
       - number: 1.5.4
         title: Soraya Hafez School (A. Knack)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Protocol item; no snow and ice proposal, cost or motion.
       - number: 1.5.5
         title: Newcomers Centre (A. Knack)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Protocol item; no snow and ice proposal, cost or motion.
       - number: "2."
         title: Items for Discussion and Related Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.1"
         title: Select Items for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.2"
         title: Vote on Reports not Selected for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.3"
         title: Requests to Speak
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.4"
         title: Requests for Specific Time on Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.5"
         title: Vote on Bylaws not Selected for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "3."
         title: Councillor Inquiries
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "4."
         title: Questions of Boards and Authorities
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "5."
         title: Public Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "5.1"
         title: Fall 2025 Supplemental Capital Budget Adjustment - 2023-2026 Capital Budget
         matched: true
@@ -3959,28 +3978,28 @@ documents:
           - FCS03159
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: The 2025-12-01 capital adjustment item, re-listing the FCS03159 files under new DocumentIds plus the revised Attachment 4 and Attachment 10; agenda dates and DocumentIds for qualification 4. Carried under v6 by the term FCS03159.
       - number: 5.1.1
         title: Capital Budget Amendments
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Empty agenda heading with no text, attachment or motion.
       - number: 5.1.2
         title: Vote on Capital Budget Amendments
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Empty agenda heading with no text, attachment or motion.
       - number: 5.1.3
         title: Vote on Fall 2025 Supplemental Capital Budget Adjustment and Other Related Motions
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Empty agenda heading with no text, attachment or motion.
       - number: "5.2"
         title: Fall 2025 Supplemental Operating Budget Adjustment - 2023-2026 Operating Budget
         matched: true
@@ -3989,21 +4008,21 @@ documents:
           - Operating Budget Adjustment
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: The 2025-12-01 operating adjustment item, re-listing FCS03158 and Attachment 2 (DocumentId 280346) and the replacement page 53 (YF-EV-0305); qualifications 3 and 4.
       - number: 5.2.1
         title: Operating Budget Amendments
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Empty agenda heading with no text, attachment or motion.
       - number: 5.2.2
         title: Vote on Operating Budget Amendments
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Empty agenda heading with no text, attachment or motion.
       - number: 5.2.3
         title: Vote on Fall 2025 Supplemental Operating Budget Adjustment and Other Related Motions
         matched: true
@@ -4011,119 +4030,119 @@ documents:
           - Operating Budget Adjustment
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Heading for the vote on the operating adjustment; carried with item 5.2 for the agenda record (qualification 4).
       - number: "5.3"
         title: Fall 2025 Carbon Budget Update - 2023-2026 Carbon Budget
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "5.4"
         title: Blatchford Renewable Energy Utility 2026 Rate Filing and Fall 2025 Supplemental Budget Adjustment
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "5.5"
         title: Waste Services 2026 Rate Filing
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "5.6"
         title: GEF Seniors Housing Annual Report - 2024 Financial Reporting and 2026 Operating & Capital Budgets
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "5.7"
         title: Municipal Traffic Safety Expansion Opportunities - Reinvesting to Address Critical Safety Concerns
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "5.8"
         title: Options for City-Owned Parking Machines
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "6."
         title: Private Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7."
         title: Bylaws
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7.1"
         title: Bylaw 21367 - To Amend Bylaw 17943 Blatchford Renewable Energy Utility, Amendment No. 7
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "7.2"
         title: Bylaw 21349 - Waste Services Bylaw 20363, Amendment No. 3
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "8."
         title: Subsequent Motions
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Empty agenda heading with no text, attachment or motion.
       - number: "9."
         title: Notices of Motion and Motions without Customary Notice
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "9.1"
         title: City Connect Partnerships
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "9.2"
         title: Measuring Edmonton’s Tax Policy Competitiveness
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "9.3"
         title: Permanent Enhanced Cleaning - Evaluation
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "10."
         title: Adjournment
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
     extraction:
       tool: scripts/panel/minutes-items.ts
       version: selection rule v6
@@ -4131,10 +4150,11 @@ documents:
       text_sha256: 0314658f93a844f547594f4940d820189518f2bcaf4ced4ffaf2a09b0018071f
       text_file: evidence/private/carried/snow-clearing/2026-10-02/YF-EV-0301.txt
     completeness_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
       missed_items: []
+      note: selection rule v6; 44 items, 3 carried, 3 relevant; checker's reasons transcribed from carried/checks/completeness-v6.yaml
     download_provenance:
       downloaded_by: the site evidence fetcher
       downloaded_on: 2026-10-02
@@ -4151,8 +4171,8 @@ documents:
       sha256: null
       reason: a meeting page is generated HTML that differs on every fetch, so bytes cannot be compared; the live item index is compared instead (page_check)
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0302
     title: City Council - Budget, 2025-12-01 (continued to 2025-12-04), post-meeting minutes
     url: https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=2925a7f5-32a8-49a6-be15-fc1cf157c764&lang=English
@@ -4191,28 +4211,28 @@ documents:
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.1"
         title: Call to Order and Land Acknowledgement
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.2"
         title: Roll Call
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.3"
         title: Declaration of Pecuniary or Conflict of Interest
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "1.4"
         title: Adoption of Agenda
         matched: true
@@ -4221,112 +4241,112 @@ documents:
           - FCS03159
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Adoption of the 2025-12-01 agenda with the replacement FCS03159 report, the replacement attachments and page 53 of Attachment 2; agenda chronology for qualification 4.
       - number: "1.5"
         title: Protocol Items
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Protocol item; no snow and ice proposal, cost or motion.
       - number: 1.5.1
         title: World AIDS Day (A. Knack)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Protocol item; no snow and ice proposal, cost or motion.
       - number: 1.5.2
         title: Richard Secord School (A. Knack)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Protocol item; no snow and ice proposal, cost or motion.
       - number: 1.5.3
         title: St. Martin School (A. Knack)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Protocol item; no snow and ice proposal, cost or motion.
       - number: 1.5.4
         title: Soraya Hafez School (A. Knack)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Protocol item; no snow and ice proposal, cost or motion.
       - number: 1.5.5
         title: Newcomer Centre (A. Knack)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Protocol item; no snow and ice proposal, cost or motion.
       - number: "2."
         title: Items for Discussion and Related Business
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.1"
         title: Select Items for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.2"
         title: Vote on Reports not Selected for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.3"
         title: Requests to Speak
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.4"
         title: Requests for Specific Time on Agenda
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "2.5"
         title: Vote on Bylaws not Selected for Debate
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "3."
         title: Councillor Inquiries
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "4."
         title: Questions of Boards and Authorities
         matched: false
         matched_terms: []
         carried: false
         withheld: 9
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "5."
         title: Public Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "5.1"
         title: Fall 2025 Supplemental Capital Budget Adjustment - 2023-2026 Capital Budget
         matched: true
@@ -4334,7 +4354,7 @@ documents:
           - FCS03159
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: "The capital adjustment item: the FCS03159 file list and the motion moved on the Fall 2025 capital budget. The active pathway package carries $2.11M one-time capital, so what Council did on the capital side bears on qualification 3. Carried under v6 by the term FCS03159."
       - number: 5.1.1
         title: Capital Budget Amendments
         matched: true
@@ -4343,7 +4363,7 @@ documents:
           - FCS03159
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Capital budget amendments moved; none concerns snow, which shows what Council did and did not fund (qualification 3).
       - number: 5.1.2
         title: Vote on Capital Budget Amendments
         matched: true
@@ -4352,7 +4372,7 @@ documents:
           - FCS03159
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Votes on the capital budget amendments (qualification 3).
       - number: 5.1.3
         title: Vote on Fall 2025 Supplemental Capital Budget Adjustment and Other Related Motions
         matched: true
@@ -4360,7 +4380,7 @@ documents:
           - FCS03159
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: The vote approving the Fall 2025 capital adjustment and related motions, 11 to 2; Council's disposition of the capital side (qualification 3). Carried under v6 by the term FCS03159.
       - number: "5.2"
         title: Fall 2025 Supplemental Operating Budget Adjustment - 2023-2026 Operating Budget
         matched: true
@@ -4369,7 +4389,7 @@ documents:
           - Operating Budget Adjustment
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: The operating adjustment item and motion (qualification 3).
       - number: 5.2.1
         title: Operating Budget Amendments
         matched: true
@@ -4378,7 +4398,7 @@ documents:
           - Operating Budget Adjustment
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: "Operating budget amendments: none funded the active pathway or parking ban packages; Amendment 20 (Winter/Summer, $1,777k) was withdrawn (qualification 3)."
       - number: 5.2.2
         title: Vote on Operating Budget Amendments
         matched: true
@@ -4386,7 +4406,7 @@ documents:
           - FCS03158
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Votes on the operating budget amendments (qualification 3).
       - number: 5.2.3
         title: Vote on Fall 2025 Supplemental Operating Budget Adjustment and Other Related Motions
         matched: true
@@ -4395,77 +4415,77 @@ documents:
           - Operating Budget Adjustment
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: The vote approving the Fall 2025 operating adjustment (qualification 3 and the approved budget).
       - number: "5.3"
         title: Fall 2025 Carbon Budget Update - 2023-2026 Carbon Budget
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "5.4"
         title: Blatchford Renewable Energy Utility 2026 Rate Filing and Fall 2025 Supplemental Budget Adjustment
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "5.5"
         title: Waste Services 2026 Rate Filing
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "5.6"
         title: GEF Seniors Housing Annual Report - 2024 Financial Reporting and 2026 Operating & Capital Budgets
         matched: false
         matched_terms: []
         carried: false
         withheld: 4
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "5.7"
         title: Municipal Traffic Safety Expansion Opportunities - Reinvesting to Address Critical Safety Concerns
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "5.8"
         title: Options for City-Owned Parking Machines
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "6."
         title: Private Reports
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7."
         title: Bylaws
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "7.1"
         title: Bylaw 21367 - To Amend Bylaw 17943 Blatchford Renewable Energy Utility, Amendment No. 7
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "7.2"
         title: Bylaw 21349 - Waste Services Bylaw 20363, Amendment No. 3
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "8."
         title: Subsequent Motions
         matched: true
@@ -4473,14 +4493,14 @@ documents:
           - Operating Budget Adjustment
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Subsequent motions, including Subsequent Motion 3 asking for an unfunded package in 2027-2030 for the Winter/Summer positions (qualification 3).
       - number: "9."
         title: Notices of Motion and Motions without Customary Notice
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
       - number: "9.1"
         title: City Connect Partnerships (R. Clarke)
         matched: true
@@ -4488,14 +4508,14 @@ documents:
           - snow
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Notice of motion on City Connect partnerships; mentions snow removal sponsorship in passing but is not a snow and ice proposal, cost or vote. Carried by a term match; harmless.
       - number: "9.2"
         title: Measuring Edmonton’s Tax Policy Competitiveness (R. Clarke)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "9.3"
         title: Permanent Enhanced Cleaning - Evaluation (J. Morgan)
         matched: true
@@ -4504,28 +4524,28 @@ documents:
           - Operating Budget Adjustment
         carried: true
         withheld: 0
-        checker_reason: null
+        checker_reason: Notice of motion on evaluating Permanent Enhanced Cleaning (pages 41-42 of Attachment 2); not a snow item. Carried by a term match; harmless.
       - number: "9.4"
         title: One-time Multi-year Funding Programs (A. Stevenson)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "9.5"
         title: Integrated Call Evaluation and Dispatch Initiative Update (A. Stevenson)
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Different subject; no snow and ice proposal, cost, motion or vote.
       - number: "10."
         title: Adjournment
         matched: false
         matched_terms: []
         carried: false
         withheld: 0
-        checker_reason: null
+        checker_reason: Procedural or heading; no snow and ice proposal, cost or motion.
     extraction:
       tool: scripts/panel/minutes-items.ts
       version: selection rule v6
@@ -4533,10 +4553,11 @@ documents:
       text_sha256: 319d21b60cc9839b15da5c29388422895ea31d8909d9ddde7cc3d6a936c3028d
       text_file: evidence/private/carried/snow-clearing/2026-10-02/YF-EV-0302.txt
     completeness_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
       missed_items: []
+      note: selection rule v6; 46 items, 12 carried, 10 relevant; checker's reasons transcribed from carried/checks/completeness-v6.yaml
     download_provenance:
       downloaded_by: the site evidence fetcher
       downloaded_on: 2026-10-02
@@ -4553,8 +4574,8 @@ documents:
       sha256: null
       reason: a meeting page is generated HTML that differs on every fetch, so bytes cannot be compared; the live item index is compared instead (page_check)
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
   - registry_id: YF-EV-0304
     title: "Attachment 2 to FCS03158: Operating Budget - Fall 2025 Supplemental Operating Budget Adjustment (City Council, 2025-11-24; re-listed as DocumentId 280346 on the 2025-12-01 addendum)"
     url: https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=278877
@@ -4598,7 +4619,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Cover, contents and introduction; no snow and ice item.
       - number: 2
         title: Corporate Summary
         kind: part
@@ -4607,7 +4628,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Divider page; the title is an image.
       - number: 3
         title: Impact on a Typical Homeowner
         kind: part
@@ -4616,7 +4637,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Tax impact on a typical homeowner; corporate totals only, no snow and ice line.
       - number: 4
         title: Corporate Summary Budget Tables
         kind: part
@@ -4625,7 +4646,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Corporate and branch budget tables; branch totals only (Parks and Roads 2026 net $256,236k), no snow and ice line or package.
       - number: 5
         title: Service Packages
         kind: part
@@ -4634,7 +4655,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Divider page; the title is an image.
       - number: 6
         title: Summary of Funded Service Packages
         kind: part
@@ -4643,7 +4664,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Summary of the funded packages (Body Worn Video only); no snow and ice package.
       - number: 7
         title: Detailed Funded Service Packages
         kind: part
@@ -4652,7 +4673,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Divider page; the title is an image.
       - number: 8
         title: Integrated Service Package - Body Worn Video and Digital Evidence Management Systems Implementation
         kind: service package
@@ -4661,7 +4682,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Funded Body Worn Video package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
       - number: 9
         title: Summary of Unfunded Service Packages
         kind: part
@@ -4673,7 +4694,7 @@ documents:
           - parking ban
         matched: true
         carried: true
-        checker_reason: null
+        checker_reason: "Carried and complete: the unfunded package summary from heading to Total Unfunded $60,524k; lists the Active Pathway Snow Removal, Parking Ban Enforcement and Winter/Summer packages with their figures (qualification 1)."
       - number: 10
         title: Detailed Unfunded Service Packages
         kind: part
@@ -4682,7 +4703,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Divider page; the title is an image.
       - number: 11
         title: Standalone Service Package - Transit Rider Support at Stations
         kind: service package
@@ -4691,7 +4712,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Transit Rider Support at Stations package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
       - number: 12
         title: Standalone Service Package - Traffic Signals Program
         kind: service package
@@ -4700,7 +4721,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Traffic Signals Program package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
       - number: 13
         title: Standalone Service Package - Parking Ban Enforcement Strategies and Resource Allocation
         kind: service package
@@ -4711,7 +4732,7 @@ documents:
           - parking ban
         matched: true
         carried: true
-        checker_reason: null
+        checker_reason: "Carried and complete: Parking Ban Enforcement package, title, description, cost table to Total ($100k) and notes (qualification 1)."
       - number: 14
         title: Standalone Service Package - Expansion of Derelict Residential Tax Subclass
         kind: service package
@@ -4720,7 +4741,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Expansion of Derelict Residential Tax Subclass package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
       - number: 15
         title: Standalone Service Package - Enoch Cree Nation Whitemud Drive Upgrades
         kind: service package
@@ -4729,7 +4750,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Enoch Cree Nation Whitemud Drive Upgrades package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
       - number: 16
         title: Standalone Service Package - Commercial Redevelopment Grant
         kind: service package
@@ -4738,7 +4759,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Commercial Redevelopment Grant package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
       - number: 17
         title: Standalone Service Package - Commercial Vacancy Reduction Grant
         kind: service package
@@ -4747,7 +4768,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Commercial Vacancy Reduction Grant package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
       - number: 18
         title: Integrated Service Package - Bus Service Growth Operating Impacts of Capital
         kind: service package
@@ -4756,7 +4777,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Bus Service Growth Operating Impacts of Capital package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
       - number: 19
         title: Integrated Service Package - Permanent Enhanced Cleaning
         kind: service package
@@ -4765,7 +4786,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Permanent Enhanced Cleaning package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
       - number: 20
         title: Integrated Service Package - Improved Accessibility - Active Pathway Snow Removal and Sidewalk Repair
         kind: service package
@@ -4777,7 +4798,7 @@ documents:
           - SNIC
         matched: true
         carried: true
-        checker_reason: null
+        checker_reason: "Carried and complete: Active Pathway Snow Removal and Sidewalk Repair package, title, description, cost table to Total ($9,938k, 35.2 FTE; Community Services $1,640k, Parks and Roads Services $8,298k; Fleet 1.0 FTE) and notes, including the $2.11M one-time capital (qualification 1)."
       - number: 21
         title: Integrated Service Package - Winter/Summer Temporary Assignment to Permanent Positions - Analysis and Options
         kind: service package
@@ -4787,7 +4808,7 @@ documents:
           - snow
         matched: true
         carried: true
-        checker_reason: null
+        checker_reason: "Carried and complete: Winter/Summer Temporary Assignment package, title, description, cost table to Total ($1,777k; Parks and Roads $1,734k, CRC $43k) and notes (qualifications 1 and 3)."
       - number: 22
         title: Integrated Service Package - Community Standards Peace Officers Contingent
         kind: service package
@@ -4796,7 +4817,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Community Standards Peace Officers Contingent package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
       - number: 23
         title: Integrated Service Package - Transit Peace Officers Optimal Deployment Plan
         kind: service package
@@ -4805,7 +4826,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Transit Peace Officers Optimal Deployment Plan package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
       - number: 24
         title: Integrated Service Package - Infill Liaison Team
         kind: service package
@@ -4814,7 +4835,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Infill Liaison Team package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
       - number: 25
         title: Integrated Service Package - River Valley Trail Strategy
         kind: service package
@@ -4823,7 +4844,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: River Valley Trail Strategy package (the page 53 replaced by YF-EV-0305); trails, not winter maintenance. no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
       - number: 26
         title: Standalone Service Package - Explore Edmonton - Operational Support
         kind: service package
@@ -4832,7 +4853,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Explore Edmonton - Operational Support package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
       - number: 27
         title: Standalone Service Package - 2026 Funding Increase for GEF Seniors Housing Capital Expenses
         kind: service package
@@ -4841,7 +4862,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: 2026 Funding Increase for GEF Seniors Housing Capital Expenses package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
       - number: 28
         title: Standalone Service Package - DATS Service Level
         kind: service package
@@ -4850,7 +4871,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: DATS Service Level package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
       - number: 29
         title: Integrated Service Package - Bus Cleaning Service Delivery Model
         kind: service package
@@ -4859,7 +4880,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Bus Cleaning Service Delivery Model package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
       - number: 30
         title: Integrated Service Package - Custodial Living Wage Impacts
         kind: service package
@@ -4868,7 +4889,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Custodial Living Wage Impacts package; no snow, SNIC, active pathway or parking ban term, and no snow and ice cost; read in full.
       - number: 31
         title: Supplementary Schedules
         kind: part
@@ -4877,7 +4898,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Divider page; the title is an image.
       - number: 32
         title: Previously Approved User Fees, Permits and Licensing Fees Schedules
         kind: part
@@ -4886,7 +4907,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Previously approved fee schedules; the only winter hits are Winter Ice Rental, sidewalk occupancy permits and the U-Pass Winter Semester fee, none a snow and ice proposal or cost.
       - number: 33
         title: Updates to User Fees, Permits and Licensing Fee Schedules
         kind: part
@@ -4895,7 +4916,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Fee schedule updates; same winter hits as section 32 (ice rental, U-Pass), none a snow and ice proposal or cost.
       - number: 34
         title: Reserves Schedule
         kind: part
@@ -4904,7 +4925,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Reserves schedule; no snow and ice reserve or line.
       - number: 35
         title: Debt Schedule
         kind: part
@@ -4913,7 +4934,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Debt schedule; no snow and ice line.
       - number: 36
         title: Amortization Schedule
         kind: part
@@ -4922,7 +4943,7 @@ documents:
         matched_terms: []
         matched: false
         carried: false
-        checker_reason: null
+        checker_reason: Amortization schedule; no snow and ice line.
     extraction:
       tool: pdftotext -layout -enc UTF-8, scripts/panel/pdf-sections.ts
       version: pdftotext version 26.08.0
@@ -4942,24 +4963,26 @@ documents:
       reason: null
       note: the founder opened and downloaded the file in an ordinary browser, unauthenticated, at about 17:09Z on 2026-10-02
     extraction_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
+      note: All 144 pages read against the renders. A fresh full-text run matches document_text sha256 6c83939954d16379401d3a28f30379e4e981d2dbaf223844471d8d776d585d2a, and the regenerated sections text (sections 9, 13, 20, 21) is byte-identical to the carried text. Section titles on the divider pages (4, 18, 19, 21, 24, 31, 62, 63, 103, 130, 141, 143) are images, which loses no content.
     second_download:
-      result: pending
+      result: not made
       sha256: null
-      reason: null
+      reason: only the founder has downloaded these files; the portal answers automated tools with a browser check, so no other copy can be made
     personal_information_screen:
-      result: pending
-      reviewer: null
+      result: clear
+      reviewer: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
     completeness_check:
-      result: pending
-      checker: null
-      role: null
+      result: pass
+      checker: independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)
+      role: independent checker
       missed_sections: []
       context_check:
-        result: pending
+        result: pass
         findings: []
+      note: Section rule v2 carries every section bearing on the claim. No uncarried section holds a snow and ice package, cost or cross-reference to CO03079 or CS02945; "pathway" hits elsewhere are "Pathway 3 emissions" and "Pathways In and Out of Poverty". No section rule v3 is needed.
 exclusions:
   - label: YF-EV-0280 (Council Policy C409K, approved 2021-08-16)
     status: excluded
