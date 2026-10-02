@@ -51,11 +51,12 @@ const escapeXml = (value: string): string =>
 export async function GET(context: APIContext): Promise<Response> {
   const site = context.site ?? new URL(SITE.url);
 
-  const [stories, posts, topics, evidence] = await Promise.all([
+  const [stories, posts, topics, evidence, audits] = await Promise.all([
     allPublicStories(),
     publicJournal(),
     orderedTopics(),
     getCollection('evidence'),
+    getCollection('audits'),
   ]);
 
   /** The article behind a question, keyed by the question's id, for `lastmod`. */
@@ -127,6 +128,10 @@ export async function GET(context: APIContext): Promise<Response> {
     { path: '/about' },
     { path: '/support' },
     { path: '/methodology' },
+    ...audits.map((audit) => ({
+      path: `/methodology/audits/${audit.id}`,
+      lastmod: audit.data.date,
+    })),
     {
       path: '/methodology/changes',
       lastmod: newest(methodologyChanges().map((change) => change.date)),

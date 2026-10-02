@@ -1,4 +1,10 @@
-import { SITE } from './site';
+/**
+ * The site page for an audit record, from its repo path
+ * (`methodology/audits/<slug>.md` is served at `/methodology/audits/<slug>`).
+ */
+export function auditHref(recordPath: string): string {
+  return `/methodology/audits/${recordPath.replace(/^methodology\/audits\//, '').replace(/\.md$/, '')}`;
+}
 
 /** The archive fields of an evidence registry entry that decide what the site may claim about it. */
 export interface ArchiveFields {
@@ -29,7 +35,7 @@ export function archiveStatus(archive: ArchiveFields): ArchiveStatus {
       lost: true,
       short: 'original archive lost',
       long: 'original archive lost; see the audit record',
-      recordHref: archive.loss_record ? `${SITE.repo}/blob/main/${archive.loss_record}` : undefined,
+      recordHref: archive.loss_record ? auditHref(archive.loss_record) : undefined,
     };
   }
   return archive.visibility === 'public'

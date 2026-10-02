@@ -911,7 +911,17 @@ const Content = rendered?.Content;
                         {entry.date}
                       </time>
                       <span class="font-semibold text-forest">{entry.type}</span>
-                      <span class="basis-full text-ink sm:basis-auto">{entry.note}</span>
+                      <span class="basis-full text-ink sm:basis-auto">
+                        {entry.note}
+                        {entry.href && (
+                          <>
+                            {' '}
+                            <a href={entry.href} class="link">
+                              Read the record
+                            </a>
+                          </>
+                        )}
+                      </span>
                     </li>
                   ))}
               </ul>

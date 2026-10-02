@@ -1,6 +1,10 @@
-# Correction: fifteen archived sources can no longer be checked against their hashes
+---
+title: "Correction: fifteen archived sources can no longer be checked against their hashes"
+date: "2026-10-02"
+summary: "We lost the archived copies of fifteen sources, so their published hashes can no longer be checked against anything we hold. No finding changed."
+---
 
-2026-10-02. An audit record and a correction notice.
+An audit record and a correction notice.
 
 ## The correction
 
@@ -18,7 +22,8 @@ published. What was lost is the second, independent check: matching the bytes
 the panel read against the hash.
 
 The evidence pages for these fifteen entries now say "original archive lost"
-and link here.
+and link here, and [the question page](/questions/cycling-volumes) carries a
+dated correction.
 
 ## What was lost
 
@@ -53,20 +58,20 @@ all archived on 2026-09-04 (YF-EV-0078 on 2026-09-01); the loss was found on
 ## What still supports each finding
 
 The panel's committed answers for this run are in
-[`reviews/cycling-volumes/2026-09-03/`](../../reviews/cycling-volumes/2026-09-03/):
+[`reviews/cycling-volumes/2026-09-03/`](https://github.com/civicfacts/yegfacts/tree/main/reviews/cycling-volumes/2026-09-03):
 `round1/`, `round2/` and `combined-evidence.json`. Every lost source cited by a
 claim was read successfully by the panel (its fetch status is `ok`), and the
 reviewers wrote down the figures they took from it.
 
 | Finding | Lost sources it cites | What still supports it |
 | --- | --- | --- |
-| [Do 87 percent of Edmontonians commute by car?](https://yegfacts.ca/claims/cv-commute-by-car) Supported | 0158 | The 2021 figures rest on restored sources 0155 to 0157. The 2016 comparison (367,225 of 466,230 by car, 78.76 percent) is written out in `round1/claude.json` and `combined-evidence.json`. |
-| [Do fewer than 1 percent of Edmonton commuters cycle to work?](https://yegfacts.ca/claims/cv-commuters-cycle) Supported | 0158, 0159 | 2021 figures on restored sources. The 2016 figure (5,575 of 466,230) and the 2012 municipal census figure (2,568 of 380,640, 0.67 percent) are written out in `combined-evidence.json` and the round 1 files. |
-| [Did the counters record nearly 1.3 million trips in the first seven months of 2026?](https://yegfacts.ca/claims/cv-counter-total-2026) Partially supported | 0141, 0143, 0144, 0148, 0160 | Every source it cites is lost, and none was restored. Each figure is in the committed text: the 1,291,714 total, the 2025 and 2024 totals, the last record on 2026-09-02, the City's warning that the data is raw, the API's last-update date and the CBC sentence. This finding is now checkable from the panel's text only. |
-| [Do the bike lanes the City meters carry little or no traffic?](https://yegfacts.ca/claims/cv-lanes-look-empty) Contradicted | 0143, 0144, 0145, 0146, 0147, 0162 | The counter medians rest on restored 0142 and the historic counts on restored 0161. The one fact citing only lost sources, 21 counters on-street and 21 off-street, is written out in `round1/claude.json`. |
-| [Do only about 1 to 2 percent of Edmontonians ride a bicycle?](https://yegfacts.ca/claims/cv-population-rides) Not established | 0149, 0150, 0153 | The Statistics Canada table list, the 2014 survey's recruitment counts and its answers, and the status of the 2025 travel survey are in `combined-evidence.json`. The survey answers are given as percentages of 816 (40.1 percent never ride); the published 327 and 489 follow from them. |
-| [Are about 2 percent of trips made by bicycle?](https://yegfacts.ca/claims/cv-trips-by-bike) Supported | 0153 | The figures rest on restored 0152 and 0154. The lost source supports only the statement that the 2025 survey had published no results by 2026-09-03, which is in `combined-evidence.json`. |
-| [Do only 1 percent of Edmontonians ride year-round?](https://yegfacts.ca/claims/cv-year-round-riders) Not established | 0141, 0149, 0150 | The 2025 counter totals (2,856,631; 139,245 in winter, 4.87 percent) and the table list are written out. The 2014 winter answers are given as percentages of 816 (87.6 percent never; daily 1.0, four or more a week 1.6). The published counts of 715, 101 and 21 follow by arithmetic but are not written out as counts anywhere committed. This is the weakest point found. |
+| [Do 87 percent of Edmontonians commute by car?](/claims/cv-commute-by-car) Supported | 0158 | The 2021 figures rest on restored sources 0155 to 0157. The 2016 comparison (367,225 of 466,230 by car, 78.76 percent) is written out in `round1/claude.json` and `combined-evidence.json`. |
+| [Do fewer than 1 percent of Edmonton commuters cycle to work?](/claims/cv-commuters-cycle) Supported | 0158, 0159 | 2021 figures on restored sources. The 2016 figure (5,575 of 466,230) and the 2012 municipal census figure (2,568 of 380,640, 0.67 percent) are written out in `combined-evidence.json` and the round 1 files. |
+| [Did the counters record nearly 1.3 million trips in the first seven months of 2026?](/claims/cv-counter-total-2026) Partially supported | 0141, 0143, 0144, 0148, 0160 | Every source it cites is lost, and none was restored. Each figure is in the committed text: the 1,291,714 total, the 2025 and 2024 totals, the last record on 2026-09-02, the City's warning that the data is raw, the API's last-update date and the CBC sentence. This finding is now checkable from the panel's text only. |
+| [Do the bike lanes the City meters carry little or no traffic?](/claims/cv-lanes-look-empty) Contradicted | 0143, 0144, 0145, 0146, 0147, 0162 | The counter medians rest on restored 0142 and the historic counts on restored 0161. The one fact citing only lost sources, 21 counters on-street and 21 off-street, is written out in `round1/claude.json`. |
+| [Do only about 1 to 2 percent of Edmontonians ride a bicycle?](/claims/cv-population-rides) Not established | 0149, 0150, 0153 | The Statistics Canada table list, the 2014 survey's recruitment counts and its answers, and the status of the 2025 travel survey are in `combined-evidence.json`. The survey answers are given as percentages of 816 (40.1 percent never ride); the published 327 and 489 follow from them. |
+| [Are about 2 percent of trips made by bicycle?](/claims/cv-trips-by-bike) Supported | 0153 | The figures rest on restored 0152 and 0154. The lost source supports only the statement that the 2025 survey had published no results by 2026-09-03, which is in `combined-evidence.json`. |
+| [Do only 1 percent of Edmontonians ride year-round?](/claims/cv-year-round-riders) Not established | 0141, 0149, 0150 | The 2025 counter totals (2,856,631; 139,245 in winter, 4.87 percent) and the table list are written out. The 2014 winter answers are given as percentages of 816 (87.6 percent never; daily 1.0, four or more a week 1.6). The published counts of 715, 101 and 21 follow by arithmetic but are not written out as counts anywhere committed. This is the weakest point found. |
 
 ## Where the registry now stands
 

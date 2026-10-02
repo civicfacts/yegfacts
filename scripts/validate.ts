@@ -714,8 +714,14 @@ function checkEvidence(): void {
       checkIsoDate(file, 'archive.lost_on', archive.lost_on);
       if (archive.visibility !== 'private') fail(file, 'archive.lost_on applies only to a private archive');
       const record = archive.loss_record;
-      if (typeof record !== 'string' || !existsSync(repoPath(record))) {
-        fail(file, `archive.loss_record "${String(record)}" must name an existing audit record`);
+      // Only top-level audit records are rendered on the site, so the evidence
+      // page's link resolves only for those.
+      if (
+        typeof record !== 'string' ||
+        !/^methodology\/audits\/[^/]+\.md$/.test(record) ||
+        !existsSync(repoPath(record))
+      ) {
+        fail(file, `archive.loss_record "${String(record)}" must name an existing methodology/audits/*.md record`);
       }
       if (typeof archive.note !== 'string' || archive.note.trim() === '') {
         fail(file, 'archive.note must explain a lost archive');
