@@ -36,7 +36,7 @@ describe('the three counts', () => {
     expect(figures.presentedWithOrganization).toBe(12);
     expect(claimText).toContain('Fifteen of the entries give an organization');
     expect(claimText).toContain('Twelve of those entries give an organization');
-    expect(story).toContain("15 gave a group's name");
+    expect(story).toContain("show 15 that gave a group's name");
     expect(story).toContain('Fifteen entries on the list of approved speakers named a group');
   });
 
@@ -56,7 +56,7 @@ describe('the groups behind the call to register', () => {
     expect(figures.n.count - figures.approvedUnderCallGroups).toBe(55);
     expect(story).toContain('nine of those gave one of these three groups');
     expect(story).toContain('any of the other 55 answered it');
-    expect(story).toContain('Nine of 64 entries named groups that urged people to speak');
+    expect(story).toContain('Nine of 64 entries named groups tied to the call to speak');
     expect(story).toContain('nine entries on the list gave its name or a group working with it');
   });
 });

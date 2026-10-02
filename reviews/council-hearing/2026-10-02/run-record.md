@@ -697,9 +697,10 @@ the nine.
 **The editor's decision on the second park.** It stays parked at framing.
 The panel never tested it, and the nine entries show whose name each was
 registered under, not that anyone was recruited or paid. Its reopen condition
-is restated to what is still missing: a record that a speaker was paid to
-attend, or that speakers who gave no group's name were recruited by an
-organizer. The story says the same.
+is restated to what is still missing. After the gate's confirmation it reads:
+"It reopens if a record shows a speaker was paid to attend, or that other
+speakers on the list were recruited by an organizer." The story says the
+same.
 
 **Follow-up for a later batch.** Brief the organizing question as a claim of
 its own: whether, and how far, the groups behind the call organized the
@@ -713,3 +714,61 @@ carried label now says the reviewers' tools "failed to read" the document,
 with no semicolon.
 
 **Not yet done.** The gate's and the critique's confirmation passes.
+
+## 2026-10-02: confirmations; corrected and published
+
+**The gate's and the critique's confirmations each found the last points to
+correct, all were corrected in the editor's wording, and the page was
+published on 2026-10-02.** No finding changed at any stage:
+`speaking-time-cut-to-three-minutes` (`ch-speaking-time-cut`) is Supported,
+Unanimous, and the two claims parked at framing stay parked.
+
+The gate's confirmation (`gate/confirmation.md`) confirmed B1 resolved and
+recounted the nine and the seven. It found two new blocking points: the
+standfirst was no longer bounded and called all three groups "groups that
+urged people to speak", and a sentence the shared parked-claim code added said
+the other claims under a question "went ahead" when some had also been set
+aside. The critique's confirmation (`critique-1-confirmation.md`) found the
+same sentence. The editor's corrections:
+- the standfirst is "The minutes don't say which side the bike-lane speakers
+  took. Nine of 64 entries named groups tied to the call to speak, and no
+  record shows anyone was paid.", 157 characters, so the share text carries
+  it whole;
+- the shared sentence is "Its question went ahead, and this claim was set
+  aside before the panel ran.", checked on the five pages it renders;
+- the parked line names "the bike group that urged people to speak and
+  groups working with it";
+- the second park's reopen condition is "It reopens if a record shows a
+  speaker was paid to attend, or that other speakers on the list were
+  recruited by an organizer.", in the register and the story;
+- the paragraph with the nine links the minutes and says the count is the
+  site's own.
+
+The organization names in `scripts/calcs/council-hearing.ts` are noted, not
+changed (gate A3): they are organizations, not people, and the redaction rule
+keeps them. No third pass of either check was run on these corrections.
+
+**The phone tests (D-0048 rule 7, the first story under the two-round
+ground).** Each at 375 by 812 in headless Chromium, with the pending-review
+banner removed so the page appears as it will at publication:
+1. Critique 1, the question page's first screen: a cold reader could say
+   what was not answered, but not what was (fixed by R1 and R2).
+2. Critique 1, the bylaw's two-round label: read as the reviewers' tools
+   failing, never as the bylaw being unavailable.
+3. Critique 1 and its confirmation, the second parked claim's page and the
+   question page's first screen again: after the fixes, the first screen
+   answers both halves of the question asked.
+The screenshots are kept outside the repository.
+
+**Publishing.** The run's `combined-evidence.json` now carries each source's
+fetch status (`scripts/annotate-evidence.ts`), from fresh fetches on
+2026-10-02: 4 fetched, none failed. The live minutes page answered with
+different bytes from the archived copy, as a meeting page does between
+fetches; the archive the reviewers' carried text came from is unchanged.
+The register question is `gate-complete` and `published`.
+
+**Also on this run.** The two round-2 self-corrections are entered in the
+quality ledger in PR #120 (`ledger-exempt`), with the ledger's exemption from
+the version rule, so this branch does not touch methodology/. Briefing the
+organizing question as a claim of its own remains a follow-up for a later
+batch.
