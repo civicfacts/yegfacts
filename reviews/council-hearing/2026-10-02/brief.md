@@ -1,8 +1,9 @@
 # Review brief: Did the committee cut speaking time at the bike-lane meeting, and how many people were approved to speak?
 
-Status: **DRAFT, not frozen. Revised 2026-10-02 after framing check 1
-(`framing/check-1.md`, REVISE; every finding adopted, `framing/response-1.md`)
-and sent to check 2.**
+Status: **DRAFT, not frozen. Revised 2026-10-02 after framing checks 1 and
+2 (`framing/check-1.md` and `check-2.md`, both REVISE; every finding
+adopted, `framing/response-1.md` and `response-2.md`, the latter being the
+editor's written resolution under methodology v1.12) and sent to check 3.**
 Drafted 2026-10-02 by Stew from the register entries for `council-hearing`
 and from archived copies of the Infrastructure Committee's agenda and
 post-meeting minutes of 2026-08-26, the City's Council Procedures Bylaw,
@@ -361,9 +362,12 @@ source stops a run rather than becoming a finding.
 **Verdict ladder.** The magnitude rule is the primary band fixed above,
 60 to 80 entries on item 7.6.
 
-Apply Not established first when an essential source cannot be read or the
-available minutes do not establish the disposition of a recorded
-speaking-time motion. Supported requires a five-minute standing limit, a
+An inaccessible essential source stops the run and yields no reviewer
+verdict. With both essential sources readable, apply Not established when
+the standing limit cannot be determined, when the disposition of a recorded
+speaking-time motion is unknown, or when the minutes are too incomplete to
+establish either that a reduction was carried or that none was carried.
+Supported requires a five-minute standing limit, a
 carried motion setting a three-minute maximum for every approved speaker
 at this meeting, and a primary count inside the chosen magnitude rule.
 Partially supported applies when a shorter per-speaker limit is
