@@ -23,7 +23,7 @@ describe('the three counts', () => {
     expect(presentedPanels.map((p) => p.entries).join(', ')).toBe('16, 16, 18, 2');
     expect(claimText).toContain('five panels of 15, 15, 15, 15 and 4');
     expect(claimText).toContain('four panels of 16, 16, 18 and 2');
-    expect(claimText).toContain('64 entries on its list to speak');
+    expect(claimText).toContain('64 entries were listed to speak');
     expect(claimText).toContain('the 52 recorded as speaking');
     expect(claimText).toContain('hold 79 entries');
     expect(story).toContain('for the bike-lane item has 64 entries');
@@ -46,6 +46,18 @@ describe('the three counts', () => {
     expect(figures.nSpoke).toMatchObject({ inPrimary: false, inAlternative: true });
     expect(figures.definitionSensitive).toBe(true);
     expect(claimText).toContain('The 52 recorded as speaking is below 60');
+  });
+});
+
+describe('the groups behind the call to register', () => {
+  it('nine approved entries gave one of the three groups, seven of them among those who spoke', () => {
+    expect(figures.approvedUnderCallGroups).toBe(9);
+    expect(figures.presentedUnderCallGroups).toBe(7);
+    expect(figures.n.count - figures.approvedUnderCallGroups).toBe(55);
+    expect(story).toContain('nine of those gave one of these three groups');
+    expect(story).toContain('any of the other 55 answered it');
+    expect(story).toContain('Nine entries on the list named groups that had urged people to speak');
+    expect(story).toContain('nine entries on the list gave its name or a group working with it');
   });
 });
 

@@ -671,3 +671,43 @@ uncarried source carries one.
 **Not yet done.** The publication gate and the critique of the rendered page,
 which run as separate sessions. This is the first story under the two-round
 ground, so the critique includes the cold-reader phone test (D-0048 rule 7).
+
+## 2026-10-02: gate and critique, first pass; one blocking finding corrected
+
+**The publication gate found one blocking statement and the critique three
+required changes; all are corrected, no finding changed, and both parks
+stand.** Reports, each with the editor's dispositions at its top:
+`gate/source-verification.md` (1 blocking, 3 advisory),
+`gate/release-check.md` (0 blocking, 2 advisory, no change needed) and
+`critique-1.md` (3 required, 6 suggested, with the phone test at 375 by 812,
+D-0048 rule 7). The phone screenshots are kept outside the repository.
+
+**The blocking finding.** The draft said no record ties anyone on the speaker
+list to the groups that urged people to speak. The carried minutes and the
+coalition's own post (YF-EV-0209, YF-EV-0315) do: nine of the 64 approved
+entries gave the coalition's name, the name of the group it said would prepare
+speakers, or the name of the group it calls its ambassadors, and seven of
+those are recorded as speaking. The page, the standfirst, two TL;DR bullets,
+the parked line and the register reason now say so, in the gate's wording.
+The calculation transcribes each organization on the lists and the test pins
+the nine.
+
+**The editor's decision on the second park.** It stays parked at framing.
+The panel never tested it, and the nine entries show whose name each was
+registered under, not that anyone was recruited or paid. Its reopen condition
+is restated to what is still missing: a record that a speaker was paid to
+attend, or that speakers who gave no group's name were recruited by an
+organizer. The story says the same.
+
+**Follow-up for a later batch.** Brief the organizing question as a claim of
+its own: whether, and how far, the groups behind the call organized the
+people who spoke. It is not part of this run, whose brief is frozen.
+
+**Shared code.** A claim parked at framing now leads its own page and share
+card with the story's plain parked line, as a vote-gate park already did, and
+drops "No finding yet", the question's "Going ahead" badge and the method
+sentence; the register's full reason follows one layer down. The two-round
+carried label now says the reviewers' tools "failed to read" the document,
+with no semicolon.
+
+**Not yet done.** The gate's and the critique's confirmation passes.

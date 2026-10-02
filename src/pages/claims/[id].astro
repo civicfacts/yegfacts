@@ -70,12 +70,12 @@ export async function getStaticPaths() {
   /**
    * A plain line for a register claim its question's story set aside (a
    * framing park, or a park at a run's vote gate, which `scripts/validate.ts`
-   * checks). It replaces "waiting" on the claim's page and its share card.
+   * checks). It opens the claim's page and is its share card, in place of
+   * "waiting" or the register's own reason, which stays on the page one layer
+   * down.
    */
-  const setAsideLine = (claim: RegisterClaim): string | null => {
-    if (claim.parked_at === 'framing') return null;
-    return stories.get(claim.question)?.data.parked[claim.id] ?? null;
-  };
+  const setAsideLine = (claim: RegisterClaim): string | null =>
+    stories.get(claim.question)?.data.parked[claim.id] ?? null;
 
   const registered = claimsWithPages().map((claim) => ({
     params: { id: claim.id },

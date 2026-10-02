@@ -532,7 +532,7 @@ describe('v1.43 labels', () => {
     expect(carriedLabelText({ kind: 'document', reason: 'portal' })).toBe(`${CARRIED_LABEL}. ${CARRIED_SAME_COPY}`);
     const twoRound = carriedLabelText({ kind: 'document', reason: 'two-round' });
     expect(twoRound).toBe(
-      `The AI reviewers read our archived copy because their research tools failed to retrieve it in two rounds in a row. ${CARRIED_TWO_ROUND_NOTE} ${CARRIED_NOT_INDEPENDENT}`,
+      `The AI reviewers read our archived copy because their research tools failed to read it in two rounds in a row. ${CARRIED_TWO_ROUND_NOTE} ${CARRIED_NOT_INDEPENDENT}`,
     );
     expect(twoRound).not.toMatch(/(?<!does not mean the document )is unavailable|not available/);
     const sections = carriedLabelText({ kind: 'sections', reason: 'portal' });
@@ -580,7 +580,8 @@ describe('v1.43 labels', () => {
     const html = await container.renderToString(CarriedLabel, { props: { source } });
     expect(html).toContain('data-carried-reason="two-round"');
     expect(html).toContain('data-pagefind-ignore');
-    expect(html).toContain('failed to retrieve it in two rounds in a row');
+    expect(html).toContain('failed to read it in two rounds in a row');
+    expect(html).toContain('That was their tools failing. It does not mean');
     expect(html).toContain('>Original<');
   });
 });

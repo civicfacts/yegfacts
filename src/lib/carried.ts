@@ -21,7 +21,7 @@ import { repoFile } from './site';
 
 const PORTAL_REASON = 'because the City’s portal blocked automated access';
 const TOOLS_REASON = 'because the publisher’s site refused the AI reviewers’ web tools';
-const TWO_ROUND_REASON = 'because their research tools failed to retrieve it in two rounds in a row';
+const TWO_ROUND_REASON = 'because their research tools failed to read it in two rounds in a row';
 const DOCUMENT_WHAT = 'The AI reviewers read our archived copy';
 const ITEMS_WHAT = 'The AI reviewers saw only the items on this City meeting page that our published rule picked, from our archived copy,';
 const SECTIONS_WHAT = 'The AI reviewers saw only the sections of this document that our published rule picked, from our archived copy,';
@@ -39,7 +39,7 @@ export const SECTION_RULE_HREF = repoFile('scripts/panel/section-selection-rules
 export const CARRIED_SECTIONS_REST = 'The rest of the document was not given to them.';
 export const CARRIED_SECTIONS_UNPUBLISHABLE =
   'We have found no permission to republish our copy, so check the sections against the full document.';
-export const CARRIED_TWO_ROUND_NOTE = 'That was their tools failing; it does not mean the document is unavailable to you.';
+export const CARRIED_TWO_ROUND_NOTE = 'That was their tools failing. It does not mean the document is unavailable to you.';
 export const CARRIED_OPEN_UNCONFIRMED =
   'No one outside the site could confirm that the link opens this same version, so check it against our hash.';
 export const CARRIED_NOT_INDEPENDENT =

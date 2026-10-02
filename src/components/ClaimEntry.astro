@@ -40,10 +40,11 @@ interface Props {
    */
   checkedAs?: CollectionEntry<'claims'> | null;
   /**
-   * The story's plain line for a claim its question's run set aside before the
-   * panel answered it (a park at the run's vote gate, D-0047 rule 5). When set,
+   * The story's plain line for a claim its question set aside: a park at the
+   * run's vote gate (D-0047 rule 5) or at framing (v1.35). For a vote-gate park
    * the page says the claim was set aside on that run, and why, instead of
-   * saying it is waiting.
+   * saying it is waiting. For a framing park the line opens the page in place
+   * of the method sentence, and the register's full reason follows it.
    */
   setAside?: string | null;
 }
@@ -92,6 +93,10 @@ const ruledApart = declinedApart || parkedApart;
 const turnedDown = !ruledApart && claim.prior_triage?.outcome === 'no';
 /** Set aside on its question's run: not waiting, and the registration expectation is not the reason. */
 const setAsideOnRun = !ruledApart && !turnedDown && setAside !== null;
+/** Parked at framing, with the story's plain line to lead with. */
+const framingLine = parkedApart && claim.parked_at === 'framing' && setAside !== null;
+/** No finding is coming for this claim on this question, so the page does not say "yet". */
+const noFinding = setAsideOnRun || framingLine;
 ---
 
 <article>
@@ -159,7 +164,12 @@ const setAsideOnRun = !ruledApart && !turnedDown && setAside !== null;
   </section>
   ) : (
   <section id="finding" class="mt-10 scroll-mt-6">
-    <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">{setAsideOnRun ? 'No finding' : 'No finding yet'}</h2>
+    <h2 class="text-xl font-bold tracking-[-0.015em] text-forest">{noFinding ? 'No finding' : 'No finding yet'}</h2>
+    {framingLine ? (
+      <p class="mt-3.5 max-w-prose border-l-2 border-gold pl-3.5 text-[1.0625rem] leading-relaxed text-pretty">
+        {setAside}
+      </p>
+    ) : (
     <p class="mt-3.5 max-w-prose text-[1.0625rem] leading-relaxed text-pretty">
       {
         declinedApart
@@ -177,12 +187,13 @@ const setAsideOnRun = !ruledApart && !turnedDown && setAside !== null;
               : 'This claim has not been checked. It is waiting on the question below, which is what a brief, a body of evidence and a panel run are spent on.'
       }
     </p>
+    )}
 
     <p class="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-2">
       <span class={label}>{ruledApart ? 'This claim' : 'Its question'}</span>
       <StateBadge state={ruledApart ? claim.triage! : question.triage} />
       {
-        ruledApart && (
+        ruledApart && !framingLine && (
           <>
             <span class={label}>The question around it</span>
             <StateBadge state={question.triage} />
@@ -197,6 +208,11 @@ const setAsideOnRun = !ruledApart && !turnedDown && setAside !== null;
           What we expected when the question was registered,{' '}
           <time datetime={question.recorded}>{question.recorded}</time>
         </p>
+      )
+    }
+    {
+      framingLine && claim.reason && (
+        <p class={`mt-3.5 ${label}`}>The full reason, as recorded when it was set aside</p>
       )
     }
     {
@@ -267,11 +283,13 @@ const setAsideOnRun = !ruledApart && !turnedDown && setAside !== null;
     </p>
 
     <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
-      {triageHeading(question.triage)}.{' '}
+      {!framingLine && `${triageHeading(question.triage)}. `}
       {
         question.triage === 'go'
           ? setAsideOnRun
             ? 'One brief covered every claim under that question, and this one was set aside on that run.'
+            : framingLine
+            ? 'The other claims under that question went ahead, and this one was set aside before they were checked.'
             : 'One brief covers every claim under that question, and each claim still gets its own finding.'
           : 'No panel checks the claims under it unless it reopens.'
       }{' '}

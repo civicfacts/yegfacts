@@ -32,13 +32,30 @@ export const timeLimitVote = {
 /** Committee members listed as present in the minutes' header (YF-EV-0209). */
 export const membersPresent = 6;
 
-/** Item 2.3 Requests to Speak, item 7.6: entries per panel, and entries with an organization. */
+/**
+ * Item 2.3 Requests to Speak, item 7.6: entries per panel, and the organization
+ * each entry gave, as the minutes print it. Entries with no organization are
+ * only counted.
+ */
 export const approvedPanels = [
-  { panel: 1, entries: 15, withOrganization: 2 },
-  { panel: 2, entries: 15, withOrganization: 8 },
-  { panel: 3, entries: 15, withOrganization: 3 },
-  { panel: 4, entries: 15, withOrganization: 2 },
-  { panel: 5, entries: 4, withOrganization: 0 },
+  { panel: 1, entries: 15, groups: ['Edmonton Bike Coalition', 'YEG Bike Coalition'] },
+  {
+    panel: 2,
+    entries: 15,
+    groups: [
+      'Bike Bus Alberta',
+      'Holyrood Voice',
+      'Holyrood Community 79 St Action Group',
+      'YEG Bike Coalition',
+      'Paths for People',
+      'Ward Métis Bikes',
+      'Ward Métis Bikes',
+      'Ward Métis Bikes',
+    ],
+  },
+  { panel: 3, entries: 15, groups: ["Let's Bike There YEG", 'Bike Edmonton', 'YEG Bike Coalition'] },
+  { panel: 4, entries: 15, groups: ['Paths for People', 'YEG Bike Coalition'] },
+  { panel: 5, entries: 4, groups: [] },
 ] as const;
 
 /**
@@ -47,13 +64,28 @@ export const approvedPanels = [
  */
 export const approvedOtherItems = { '7.1': 5, '7.3': 1, '7.4': 8 + 1 } as const;
 
-/** Item 7.6, public speakers recorded as presenting: entries per panel. */
+/** Item 7.6, public speakers recorded as presenting: entries per panel, and each organization given. */
 export const presentedPanels = [
-  { panel: 1, entries: 16, withOrganization: 5 },
-  { panel: 2, entries: 16, withOrganization: 6 },
-  { panel: 3, entries: 18, withOrganization: 1 },
-  { panel: 4, entries: 2, withOrganization: 0 },
+  {
+    panel: 1,
+    entries: 16,
+    groups: ['YEG Bike Coalition', 'Holyrood Voice', 'Holyrood Community 79 St Action Group', 'Paths for People', 'YEG Bike Coalition'],
+  },
+  {
+    panel: 2,
+    entries: 16,
+    groups: ['Bike Bus Alberta', 'Ward Métis Bikes', 'Ward Métis Bikes', "Let's Bike There YEG", 'Bike Edmonton', 'Paths for People'],
+  },
+  { panel: 3, entries: 18, groups: ['YEG Bike Coalition'] },
+  { panel: 4, entries: 2, groups: [] },
 ] as const;
+
+/**
+ * The groups behind the call to register (YF-EV-0315): the coalition that made
+ * it, the group it said would prepare speakers, and the group it calls its
+ * local ambassadors.
+ */
+export const callGroups = ['YEG Bike Coalition', 'Paths for People', 'Ward Métis Bikes'] as const;
 
 /** The brief's bands for "about seventy", fixed before the research. */
 export const bands = {
@@ -69,6 +101,8 @@ function figuresFor(count: number) {
 }
 
 const n = sum(approvedPanels.map((p) => p.entries));
+const named = (panels: readonly { groups: readonly string[] }[], among?: readonly string[]): number =>
+  panels.flatMap((p) => p.groups).filter((g) => among === undefined || among.includes(g)).length;
 const nAll = n + sum(Object.values(approvedOtherItems));
 const nSpoke = sum(presentedPanels.map((p) => p.entries));
 
@@ -76,8 +110,12 @@ export const figures = {
   n: figuresFor(n),
   nAll: figuresFor(nAll),
   nSpoke: figuresFor(nSpoke),
-  approvedWithOrganization: sum(approvedPanels.map((p) => p.withOrganization)),
-  presentedWithOrganization: sum(presentedPanels.map((p) => p.withOrganization)),
+  approvedWithOrganization: named(approvedPanels),
+  presentedWithOrganization: named(presentedPanels),
+  /** Approved entries giving one of the groups behind the call to register. */
+  approvedUnderCallGroups: named(approvedPanels, callGroups),
+  /** Of those, entries giving one of those groups among the people recorded as presenting. */
+  presentedUnderCallGroups: named(presentedPanels, callGroups),
   vote: `${timeLimitVote.inFavour.length} to ${timeLimitVote.opposed.length}`,
   /** Section 2(2)(m): two-thirds of all members of the committee. */
   specialResolutionNeeds: Math.ceil((2 * membersPresent) / 3),
