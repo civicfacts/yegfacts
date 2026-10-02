@@ -78,7 +78,10 @@
  * Packaging refuses without an editor_session, and refuses any check whose
  * checker is that session or whose name or role is the editor's. A
  * public-open check may be `unable`, with a reason, only for a document outside
- * the portal whose fresh publisher fetch matched; the label then says so.
+ * the portal whose fresh publisher fetch matched; the label then says so. For
+ * a minutes-items meeting page only, as under v1.42, the public-open check may
+ * instead be the site fetcher's own HTTP 200 on the live page (role "site
+ * fetcher", `http_status: 200`), and the row's build-time probe must be that 200.
  *
  * Package budget (v1.43). Every build and every package estimates a round-1
  * package (brief, reviewer prompt, schema and the carried section) against the
@@ -197,6 +200,9 @@ type RegistryEntry = {
 /** Who may make a human check (D-0048 rule 2 and 3): never the editor. */
 export const CHECKER_ROLES = ['independent checker', 'person (not the editor)'] as const;
 
+/** The public-open role a minutes-items meeting page may use instead of a person (v1.42 practice). */
+export const SITE_FETCHER_ROLE = 'site fetcher';
+
 /** A human check: its result, who made it and in what role. Human-filled. */
 type Check = { result: 'pending' | 'pass' | 'fail'; checker: string | null; role: string | null; note?: string };
 
@@ -211,6 +217,8 @@ export type PublicOpenCheck = {
   role: string | null;
   checked_on: string | null;
   reason: string | null;
+  /** Role "site fetcher" only: the HTTP status the fetcher got from the live page. */
+  http_status?: number | null;
 };
 
 /** One agenda item of a carried meeting page, as the manifest indexes it. */
@@ -1309,7 +1317,14 @@ export function packageRefusals(manifest: CarryManifest, context: PackageContext
       refusals.push(`${id}: download provenance must name who downloaded it, when, and via: ${allowed.join(' or ')}`);
     }
     const open = doc.public_open_check;
-    if (open?.result === 'unable') {
+    if (open?.role === SITE_FETCHER_ROLE) {
+      if (!minutes) refusals.push(`${id}: a site-fetcher public-open check is allowed only for a meeting page carried as items; a person opens this document`);
+      else if (open.result !== 'confirmed' || open.http_status !== 200 || doc.probe?.http_status !== 200 || !pastDate(open.checked_on, now)) {
+        refusals.push(`${id}: a site-fetcher public-open check must record the fetcher's HTTP 200 on the live page, when, and a build-time probe of HTTP 200`);
+      } else if (now.getTime() - Date.parse(open.checked_on!) > PUBLIC_OPEN_MAX_AGE_HOURS * 3_600_000) {
+        refusals.push(`${id}: public-open check of ${open.checked_on} is more than ${PUBLIC_OPEN_MAX_AGE_HOURS} hours old; rebuild and record the fetcher's check again`);
+      }
+    } else if (open?.result === 'unable') {
       if (typeof open.reason !== 'string' || !open.reason.trim()) refusals.push(`${id}: a public-open check that could not be made needs its reason`);
       if (!publisher || publisherRefusals(doc).length > 0) {
         refusals.push(`${id}: a public-open check may be "unable" only for a document outside the portal whose fresh publisher fetch matched the archive`);
