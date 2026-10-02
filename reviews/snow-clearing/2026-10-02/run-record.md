@@ -677,3 +677,49 @@ The founder's browser downloads of 0303 to 0309 (2026-10-02, about
 the founder as "person (not the editor)"; the public-open checks of 0294
 to 0296, recorded under v1.42, are restated in the v1.43 form. Every
 other check is pending.
+
+## 2026-10-02: the revised brief corrected to name the agenda pages; selection rule v5; over the budget
+
+**The v1.2 revision is corrected the same day, before any seat read it,
+so that the three Fall 2025 agenda pages can be carried.** The brief gave
+the minutes address in full but the agenda address only as
+"`Agenda=Agenda` (agenda)", which does not name a page by the carry rule,
+so the build refused the agendas of 2025-08-11, 2025-11-24 and
+2025-12-01 (YF-EV-0297, 0299, 0301). The agenda template is now written
+out in full beside the minutes template,
+`https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=<meeting id>&lang=English`,
+and the brief already gives each meeting id. The 2026-08-31 agenda
+(YF-EV-0287) was already named by its exact address. The status note
+gains one clause saying so. Nothing else changed. No seat has read the
+revision, so this is part of the same revision, not a new one. The
+brief's sha256 was
+`afd75d059c5eff67c197f6587c256df242ca7bb4027f27c981ff234a27efc320` and
+is now `a9b8fa0ef241235c02336509784a4166e45dfd33ab6313bc7b7edb41294c37f5`.
+
+**Selection rule v5** is v4 plus "FCS03158", "CO03079" and "Operating
+Budget Adjustment". The revised brief names the Fall 2025 operating budget
+adjustment and the 2025-08-11 committee report, and v4 had no term for
+either, so it selected no item on report FCS03158. What v5 selects on the
+2025 pages:
+
+| Page | Items carried | Items |
+|---|---|---|
+| YF-EV-0297, committee agenda 2025-08-11 | 1 of 26 | 7.3 (CO03079) |
+| YF-EV-0298, committee minutes 2025-08-11 | 2 of 26 | 2.3, 7.3 |
+| YF-EV-0299, Council agenda 2025-11-24 | 1 of 37 | 7.2 (FCS03158) |
+| YF-EV-0300, Council minutes 2025-11-24 | 3 of 37 | 1.4, 7.1, 7.2 |
+| YF-EV-0301, Budget agenda 2025-12-01 | 2 of 44 | 5.2, 5.2.3 |
+| YF-EV-0302, Budget minutes 2025-12-01 | 10 of 46 | 1.4, 5.1.1, 5.1.2, 5.2, 5.2.1, 5.2.2, 5.2.3, 8, 9.1, 9.3 |
+
+The 2026 pages select the same items as under v4.
+
+**The rebuilt package is over the seat budget, so the run stops here.**
+Every document the brief needs now qualifies and is carried, but the
+estimated round-1 package is 423,656 bytes against the 400,000-byte
+ceiling, with a carried section of 353,188 bytes. Most of the growth is
+the 2025-12-01 budget minutes, now 92,103 bytes, because items 5.2.1 and
+5.2.3 hold the operating budget amendments and their votes. Under v1.43
+nothing is trimmed to fit. Narrowing the rule by a new version or
+revising the brief is the editor's decision. The manifest is committed as
+built, with its budget recorded as over. Every check is pending except
+the founder's download and browser checks on the files he downloaded.

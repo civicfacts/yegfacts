@@ -23,8 +23,9 @@ now reads "put to" as placed before Council or a committee of Council on
 a published agenda by the comment date; the earlier reading, considered
 by a body by that date, is a required alternative reported beside it; and
 the Fall 2025 operating budget adjustment's documents, with the committee
-report of 2025-08-11 that preceded them, are named so they can be carried.
-Nothing else changed. Drafted 2026-10-02 by Stew from the register entries for `snow-clearing`
+report of 2025-08-11 that preceded them, are named so they can be carried;
+corrected the same day before any seat read it, to name the agenda pages so
+they can be carried. Nothing else changed. Drafted 2026-10-02 by Stew from the register entries for `snow-clearing`
 and from archived copies of the City's snow and ice control policy and
 procedure, its winter service pages, and the agendas and minutes of the
 Council and committee meetings named below; no fact in it comes from
@@ -179,7 +180,9 @@ eScribe portal, `https://pub-edmonton.escribemeetings.com`. Minutes record
 motions, movers, votes and results and who presented and spoke; they do
 not record debate. Meeting pages load at
 `https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=<meeting id>&lang=English`
-(minutes) and `Agenda=Agenda` (agenda). The agendas are the controlling
+(minutes) and
+`https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=<meeting id>&lang=English`
+(agenda). The agendas are the controlling
 source for which files were placed before a body, by what date, and their
 DocumentIds, which the primary timing rule turns on; the minutes are the
 controlling source for whether and when a body dealt with a proposal,
