@@ -1,0 +1,7 @@
+<!-- Eligibility read under methodology v1.39 on the brief edited 2026-10-02 after framing check 3. Reader: a separate read-only session that is not the editor, OpenAI gpt-6-sol at high via `codex --search exec -m gpt-6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check`, codex-cli 0.159.3, prompt on stdin, run from an empty scratch directory with no repository access. Package: the v1.39 rule (methodology/changelog.yaml entry and the prompts/framing-check.md passage), the test to apply, framing/check-3.md, framing/wording-edits.md and the unified diff between the brief check 3 read (sha256 c6f81692df5b85013ef88109a105bb56304efb2bb0cd3ec4bedc11b8cd41a48d) and the edited brief (sha256 3ff9e7279ecb8e2576d4c74d9cf87128349985f3f103877a3b47bdca34405863), labelled brief.md.check3 and brief.md.edited with no local paths (package sha256 5a739e68701184d183ce317bff97531d38455040a804a8aa8d21909aee80dc75). Run by Stew, 2026-10-02 08:34 UTC. Verdict: ELIGIBLE. The opening sentence about output.md refers to the reader's own sandbox; the report was captured through the command's output file. Report is verbatim; nothing below this line was edited. -->
+
+I could not write `output.md`: the sandbox rejected the file creation because it is read-only. The intended file contents are:
+
+Check 9 — ELIGIBLE: The checker supplied a copy-ready first line, and the diff applies it byte for byte.
+Anything else changed: No; the diff changes only the first line, leaving the status block untouched.
+Verdict: ELIGIBLE
