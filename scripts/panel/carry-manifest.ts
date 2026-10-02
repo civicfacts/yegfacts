@@ -72,6 +72,14 @@
  * 3: qualifications, contrary evidence, cross-references and context in the
  * sections not carried.
  *
+ * Human checks (v1.43). Every human check records its `checker` and `role`
+ * ("independent checker" or "person (not the editor)"), and the manifest
+ * names the editor's own session (`editor_session`, kept on rebuild).
+ * Packaging refuses without an editor_session, and refuses any check whose
+ * checker is that session or whose name or role is the editor's. A
+ * public-open check may be `unable`, with a reason, only for a document outside
+ * the portal whose fresh publisher fetch matched; the label then says so.
+ *
  * Package budget (v1.43). Every build and every package estimates a round-1
  * package (brief, reviewer prompt, schema and the carried section) against the
  * 400000-byte seat ceiling; over it, the build exits 1 and packaging refuses.
@@ -186,7 +194,24 @@ type RegistryEntry = {
   rights?: { note?: string };
 };
 
-type Check = { result: 'pending' | 'pass' | 'fail'; reviewer: string | null; note?: string };
+/** Who may make a human check (D-0048 rule 2 and 3): never the editor. */
+export const CHECKER_ROLES = ['independent checker', 'person (not the editor)'] as const;
+
+/** A human check: its result, who made it and in what role. Human-filled. */
+type Check = { result: 'pending' | 'pass' | 'fail'; checker: string | null; role: string | null; note?: string };
+
+/**
+ * Whether a person can open the public URL in an ordinary browser. `unable`,
+ * with a reason, is allowed only for a document outside the portal whose
+ * fresh publisher fetch matched, and the label then says so. Human-filled.
+ */
+export type PublicOpenCheck = {
+  result: 'pending' | 'confirmed' | 'unable';
+  checker: string | null;
+  role: string | null;
+  checked_on: string | null;
+  reason: string | null;
+};
 
 /** One agenda item of a carried meeting page, as the manifest indexes it. */
 export type ItemIndexEntry = {
@@ -230,7 +255,8 @@ export type PublisherCheck = {
 /** A pdf-sections document's completeness check (D-0048 rule 3). Human-filled. */
 export type SectionsCompleteness = {
   result: 'pending' | 'pass' | 'fail';
-  reviewer: string | null;
+  checker: string | null;
+  role: string | null;
   /** Relevant sections the rule did not carry. */
   missed_sections: string[];
   /** The context duty: qualifications, contrary evidence, cross-references and context in sections not carried. */
@@ -286,7 +312,7 @@ export type CarriedDocument = {
   /** minutes-items: every item on the page, carried or not. */
   items?: ItemIndexEntry[];
   /** minutes-items: a reader who is not the editor checks every item against D-0047 rule 2. Human-filled. */
-  completeness_check?: { result: 'pending' | 'pass' | 'fail'; reviewer: string | null; missed_items?: string[] } & Partial<SectionsCompleteness>;
+  completeness_check?: { result: 'pending' | 'pass' | 'fail'; checker: string | null; role: string | null; missed_items?: string[] } & Partial<SectionsCompleteness>;
   /** A document outside the meeting portal: the publisher identity check (v1.43). */
   publisher_check?: PublisherCheck;
   /** pdf-sections: the section rule version the sections were selected under. */
@@ -298,7 +324,7 @@ export type CarriedDocument = {
   /** Who obtained the archived bytes, when, and how (browser, or the site fetcher for a meeting page). Human-filled. */
   download_provenance?: { downloaded_by: string | null; downloaded_on: string | null; via: string | null };
   /** Who confirmed a person can open the public URL in a browser, and when. Human-filled. */
-  public_open_check?: { checked_by: string | null; checked_on: string | null };
+  public_open_check?: PublicOpenCheck;
   extraction_check?: Check;
   second_download?: { result: 'pending' | 'match' | 'not made'; sha256: string | null; reason: string | null };
   personal_information_screen?: { result: 'pending' | 'clear' | 'found'; reviewer: string | null };
@@ -326,6 +352,8 @@ export type Gate = {
 export type CarryManifest = {
   run: string;
   generated_at: string;
+  /** The editor's session for this run, as the editor names it; no human check may be made by it. Human-filled, kept on rebuild. */
+  editor_session?: string | null;
   rule: string;
   /** The selection rule in force for every minutes-items page. */
   selection_rule?: { version: number; terms: string[]; match: string };
@@ -804,9 +832,9 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
       };
       row.status = 'carried';
       row.reason = `named in the frozen brief (${naming}); ${entry.url} ${ground}; ${row.items.filter((i) => i.carried).length} of ${row.items.length} items selected by rule v${rule!.version}`;
-      row.completeness_check = { result: 'pending', reviewer: null, missed_items: [] };
+      row.completeness_check = { result: 'pending', checker: null, role: null, missed_items: [] };
       row.download_provenance = { downloaded_by: null, downloaded_on: null, via: null };
-      row.public_open_check = { checked_by: null, checked_on: null };
+      row.public_open_check = { result: 'pending', checker: null, role: null, checked_on: null, reason: null };
       row.second_download = {
         result: 'not made',
         sha256: null,
@@ -936,8 +964,8 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
     row.status = 'carried';
     row.reason = `named in the frozen brief (${naming}); ${entry.url} ${ground}${publisher ? `; the site's fresh fetch matches the archive by ${row.publisher_check!.identity}` : ''}${sectionsNote}`;
     row.download_provenance = { downloaded_by: null, downloaded_on: null, via: null };
-    row.public_open_check = { checked_by: null, checked_on: null };
-    row.extraction_check = { result: 'pending', reviewer: null };
+    row.public_open_check = { result: 'pending', checker: null, role: null, checked_on: null, reason: null };
+    row.extraction_check = { result: 'pending', checker: null, role: null };
     row.second_download = publisher
       ? row.publisher_check!.identity === 'bytes'
         ? { result: 'match', sha256: row.publisher_check!.fresh_fetch.sha256, reason: "the site's fresh fetch of the publisher's URL (publisher_check)" }
@@ -945,7 +973,7 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
       : { result: 'pending', sha256: null, reason: null };
     row.personal_information_screen = { result: 'pending', reviewer: null };
     if (kind === 'pdf-sections') {
-      row.completeness_check = { result: 'pending', reviewer: null, missed_sections: [], context_check: { result: 'pending', findings: [] } };
+      row.completeness_check = { result: 'pending', checker: null, role: null, missed_sections: [], context_check: { result: 'pending', findings: [] } };
     }
     keepHumanChecks(row, previousDocs.get(id));
   }
@@ -975,6 +1003,7 @@ export async function buildCarryManifest(options: BuildOptions): Promise<CarryMa
   const manifest: CarryManifest = {
     run: runRel,
     generated_at: isoSeconds(now()),
+    editor_session: previous?.editor_session ?? null,
     rule: v143
       ? 'methodology v1.43 (D-0046, D-0047, D-0048): carried documents, minutes items, the two-round ground, non-portal documents and sections'
       : minutes.length > 0
@@ -1180,8 +1209,26 @@ type PackageContext = {
   extractor?: Extractor;
 };
 
-/** A name that is the editor's: the D-0048 public-open check must be made by someone else. */
+/** A name that is the editor's, kept as a backstop to editor_session. */
 const EDITOR = /\bstew\b|\beditor\b/i;
+
+/**
+ * Why a human check cannot count: no checker named, a role other than the
+ * two CHECKER_ROLES, or a checker who is the editor, by the manifest's
+ * editor_session or by name.
+ */
+function checkerProblems(id: string, label: string, check: { checker?: string | null; role?: string | null } | undefined, editorSession: string | null | undefined): string[] {
+  const checker = check?.checker?.trim();
+  if (!checker) return [`${id}: ${label} names no checker`];
+  const problems: string[] = [];
+  if (!(CHECKER_ROLES as readonly string[]).includes(check?.role ?? '')) {
+    problems.push(`${id}: ${label} role is "${check?.role ?? ''}"; it must be ${CHECKER_ROLES.map((r) => `"${r}"`).join(' or ')}`);
+  }
+  if ((editorSession && checker.toLowerCase() === editorSession.trim().toLowerCase()) || EDITOR.test(checker)) {
+    problems.push(`${id}: ${label} was made by the editor (${checker}); someone else makes it`);
+  }
+  return problems;
+}
 
 /** Why a manifest cannot go into a package, one line per reason; empty when it can. */
 export function packageRefusals(manifest: CarryManifest, context: PackageContext): string[] {
@@ -1224,6 +1271,9 @@ export function packageRefusals(manifest: CarryManifest, context: PackageContext
 
   const carried = manifest.documents.filter((doc) => doc.status === 'carried');
   if (carried.length === 0) refusals.push('the manifest carries no document');
+  else if (typeof manifest.editor_session !== 'string' || !manifest.editor_session.trim()) {
+    refusals.push('the manifest names no editor_session; the editor names their session so no human check can be theirs');
+  }
   for (const doc of manifest.documents.filter((d) => d.status === 'failed')) {
     refusals.push(`${doc.registry_id} failed: ${doc.reason}`);
   }
@@ -1253,13 +1303,19 @@ export function packageRefusals(manifest: CarryManifest, context: PackageContext
       refusals.push(`${id}: download provenance must name who downloaded it, when, and via: ${allowed.join(' or ')}`);
     }
     const open = doc.public_open_check;
-    if (!open?.checked_by || !pastDate(open.checked_on, now)) {
+    if (open?.result === 'unable') {
+      if (typeof open.reason !== 'string' || !open.reason.trim()) refusals.push(`${id}: a public-open check that could not be made needs its reason`);
+      if (!publisher || publisherRefusals(doc).length > 0) {
+        refusals.push(`${id}: a public-open check may be "unable" only for a document outside the portal whose fresh publisher fetch matched the archive`);
+      }
+      if (open.checker) refusals.push(...checkerProblems(id, 'the public-open check', open, manifest.editor_session));
+    } else if (open?.result !== 'confirmed' || !pastDate(open.checked_on, now)) {
       refusals.push(`${id}: public-open check must record who confirmed a person can open the URL in a browser, and when`);
-    } else if (now.getTime() - Date.parse(open.checked_on!) > PUBLIC_OPEN_MAX_AGE_HOURS * 3_600_000) {
-      refusals.push(`${id}: public-open check of ${open.checked_on} is more than ${PUBLIC_OPEN_MAX_AGE_HOURS} hours old; re-confirm that a person can still open it`);
-    }
-    if (publisher && open?.checked_by && EDITOR.test(open.checked_by)) {
-      refusals.push(`${id}: the public-open check of a document outside the portal is made by a person who is not the editor (D-0048 rule 2), not ${open.checked_by}`);
+    } else {
+      if (now.getTime() - Date.parse(open.checked_on!) > PUBLIC_OPEN_MAX_AGE_HOURS * 3_600_000) {
+        refusals.push(`${id}: public-open check of ${open.checked_on} is more than ${PUBLIC_OPEN_MAX_AGE_HOURS} hours old; re-confirm that a person can still open it`);
+      }
+      refusals.push(...checkerProblems(id, 'the public-open check', open, manifest.editor_session));
     }
 
     const screen = doc.personal_information_screen;
@@ -1269,7 +1325,7 @@ export function packageRefusals(manifest: CarryManifest, context: PackageContext
       const check = doc.completeness_check;
       if (!check || check.result === 'pending') refusals.push(`${id}: completeness check not done`);
       else if (check.result !== 'pass') refusals.push(`${id}: completeness check ${check.result}`);
-      else if (!check.reviewer) refusals.push(`${id}: completeness check names no reviewer`);
+      else refusals.push(...checkerProblems(id, 'the completeness check', check, manifest.editor_session));
       if ((check?.missed_items ?? []).length > 0) {
         refusals.push(`${id}: the completeness check lists missed items (${check!.missed_items!.join(', ')}); publish a new rule version and rebuild`);
       }
@@ -1295,7 +1351,7 @@ export function packageRefusals(manifest: CarryManifest, context: PackageContext
       const check = doc.extraction_check;
       if (!check || check.result === 'pending') refusals.push(`${id}: extraction check not done`);
       else if (check.result !== 'pass') refusals.push(`${id}: extraction check ${check.result}`);
-      else if (!check.reviewer) refusals.push(`${id}: extraction check names no reviewer`);
+      else refusals.push(...checkerProblems(id, 'the extraction check', check, manifest.editor_session));
 
       const second = doc.second_download;
       if (!second || second.result === 'pending') refusals.push(`${id}: second download not recorded`);
@@ -1381,7 +1437,7 @@ function sectionRefusals(doc: CarriedDocument, manifest: CarryManifest, context:
   const check = doc.completeness_check;
   if (!check || check.result === 'pending') refusals.push(`${id}: completeness check not done`);
   else if (check.result !== 'pass') refusals.push(`${id}: completeness check ${check.result}`);
-  else if (!check.reviewer) refusals.push(`${id}: completeness check names no reviewer`);
+  else refusals.push(...checkerProblems(id, 'the completeness and context check', check, manifest.editor_session));
   if ((check?.missed_sections ?? []).length > 0) {
     refusals.push(`${id}: the completeness check lists missed sections (${check!.missed_sections!.join(', ')}); publish a new section rule version and rebuild`);
   }

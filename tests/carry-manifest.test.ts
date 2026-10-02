@@ -151,8 +151,8 @@ describe('carry-manifest build', () => {
     expect(doc.meeting_page?.result).toBe('pass');
     expect(doc.extraction).toMatchObject({ pages: 1, text_sha256: sha256(TEXT), version: 'pdftotext version 0.0.0-stub' });
     expect(doc.download_provenance).toEqual({ downloaded_by: null, downloaded_on: null, via: null });
-    expect(doc.public_open_check).toEqual({ checked_by: null, checked_on: null });
-    expect(doc.extraction_check).toEqual({ result: 'pending', reviewer: null });
+    expect(doc.public_open_check).toEqual({ result: 'pending', checker: null, role: null, checked_on: null, reason: null });
+    expect(doc.extraction_check).toEqual({ result: 'pending', checker: null, role: null });
     expect(doc.second_download?.result).toBe('pending');
     expect(manifest.exclusions).toEqual([{ label: 'Attachment 3', status: 'excluded', reason: 'no archive held' }]);
     expect(privateTexts(repo)).toEqual(['YF-EV-0001.txt']);
@@ -367,8 +367,8 @@ describe('run-reviewer --carried', { timeout: 180_000 }, () => {
         result: 'pass',
       },
       download_provenance: { downloaded_by: 'the editor', downloaded_on: '2026-09-02', via: 'browser' },
-      public_open_check: { checked_by: 'a separate session', checked_on: hoursAgo(2) },
-      extraction_check: { result: 'pass', reviewer: 'a separate session' },
+      public_open_check: { result: 'confirmed', checker: 'a separate session', role: 'person (not the editor)', checked_on: hoursAgo(2), reason: null },
+      extraction_check: { result: 'pass', checker: 'a separate session', role: 'independent checker' },
       second_download: { result: 'not made', sha256: null, reason: 'stub' },
       personal_information_screen: { result: 'clear', reviewer: 'a separate session' },
     };
@@ -384,7 +384,7 @@ describe('run-reviewer --carried', { timeout: 180_000 }, () => {
       documents.push(second);
     }
     const file = path.join(repo, RUN, 'carried', 'manifest.yaml');
-    writeFileSync(file, YAML.stringify({ run: RUN, documents, exclusions: [] }));
+    writeFileSync(file, YAML.stringify({ run: RUN, editor_session: 'editor session stub', documents, exclusions: [] }));
     return file;
   }
 
@@ -562,7 +562,7 @@ describe('run-reviewer --carried', { timeout: 180_000 }, () => {
     const missing = dryRun(repo, 'claude', writeManifest(repo, (doc) => delete doc.extraction_check));
     expect(missing.ok).toBe(false);
     expect(missing.stderr).toMatch(/extraction check not done/);
-    const failed = dryRun(repo, 'claude', writeManifest(repo, (doc) => (doc.extraction_check = { result: 'fail', reviewer: 'x' })));
+    const failed = dryRun(repo, 'claude', writeManifest(repo, (doc) => (doc.extraction_check = { result: 'fail', checker: 'x', role: 'independent checker' })));
     expect(failed.ok).toBe(false);
     expect(failed.stderr).toMatch(/extraction check fail/);
   });
@@ -578,14 +578,14 @@ describe('run-reviewer --carried', { timeout: 180_000 }, () => {
     expect(provenance.ok).toBe(false);
     expect(provenance.stderr).toMatch(/download provenance must name who downloaded it, when, and via: browser/);
 
-    const open = dryRun(repo, 'claude', writeManifest(repo, (doc) => (doc.public_open_check = { checked_by: null, checked_on: null })));
+    const open = dryRun(repo, 'claude', writeManifest(repo, (doc) => (doc.public_open_check = { result: 'pending', checker: null, role: null, checked_on: null, reason: null })));
     expect(open.ok).toBe(false);
     expect(open.stderr).toMatch(/public-open check must record who confirmed/);
 
     const stale = dryRun(
       repo,
       'claude',
-      writeManifest(repo, (doc) => (doc.public_open_check = { checked_by: 'a separate session', checked_on: hoursAgo(80) })),
+      writeManifest(repo, (doc) => (doc.public_open_check = { result: 'confirmed', checker: 'a separate session', role: 'person (not the editor)', checked_on: hoursAgo(80), reason: null })),
     );
     expect(stale.ok).toBe(false);
     expect(stale.stderr).toMatch(/more than 72 hours old; re-confirm that a person can still open it/);

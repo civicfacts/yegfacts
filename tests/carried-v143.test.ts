@@ -11,7 +11,7 @@
  */
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
@@ -26,11 +26,12 @@ import {
   type Extractor,
   type Fetcher,
 } from '../scripts/panel/carry-manifest.ts';
-import { carrySections, packageHeading, parseSections, tilingProblems } from '../scripts/panel/pdf-sections.ts';
+import { carrySections, packageHeading, parseSections, tableOfContents, tilingProblems } from '../scripts/panel/pdf-sections.ts';
 import { failureMarker, readSeatAnswer, twoRoundGround } from '../scripts/panel/two-round.ts';
 import {
   CARRIED_LABEL,
   CARRIED_NOT_INDEPENDENT,
+  CARRIED_OPEN_UNCONFIRMED,
   CARRIED_SAME_COPY,
   CARRIED_SECTIONS_REST,
   CARRIED_TWO_ROUND_NOTE,
@@ -96,6 +97,13 @@ function writeRounds(runDir: string, rounds: Array<{ dir: string; started: strin
   }
 }
 
+/** An empty run directory whose path names the story and date, as the reader checks. */
+const runDirFor = () => {
+  const dir = path.join(mkdtempSync(path.join(root, 'two-round-')), STORY, RUN_DATE);
+  mkdirSync(dir, { recursive: true });
+  return dir;
+};
+
 const twoFailedRounds = [
   { dir: 'superseded-2031-01-01', started: '2031-01-01T08:00:00Z', answers: FAILED },
   { dir: '.', started: '2031-01-01T10:00:00Z', answers: FAILED },
@@ -115,7 +123,7 @@ describe('the two-round seat-failure ground', () => {
   });
 
   it('is accepted when every seat recorded a failure in two consecutive committed rounds, superseded ones included', () => {
-    const runDir = mkdtempSync(path.join(root, 'two-round-'));
+    const runDir = runDirFor();
     writeRounds(runDir, twoFailedRounds);
     const result = twoRoundGround(runDir, BYLAW_URL, ['bylaw'], BRIEF);
     expect(result.ok).toBe(true);
@@ -129,13 +137,15 @@ describe('the two-round seat-failure ground', () => {
     expect(result.ground.rounds[1]!.seats[0]).toMatchObject({
       file: 'round1/claude.json',
       where: 'claims[0].limitations[0]',
-      words: `The bylaw at ${BYLAW_URL} was fetched once. It could not decompress the text, and retries returned HTTP 502.`,
+      words: 'It could not decompress the text, and retries returned HTTP 502.',
+      antecedent: `The bylaw at ${BYLAW_URL} was fetched once.`,
+      http_status: 502,
       started_at: '2031-01-01T10:00:00Z',
     });
   });
 
   it('is refused with only one failing round', () => {
-    const runDir = mkdtempSync(path.join(root, 'two-round-'));
+    const runDir = runDirFor();
     writeRounds(runDir, [twoFailedRounds[1]!]);
     const result = twoRoundGround(runDir, BYLAW_URL, ['bylaw'], BRIEF);
     expect(result).toMatchObject({ ok: false });
@@ -143,13 +153,13 @@ describe('the two-round seat-failure ground', () => {
   });
 
   it('is refused when one seat recorded no failure in one of the rounds', () => {
-    const runDir = mkdtempSync(path.join(root, 'two-round-'));
+    const runDir = runDirFor();
     writeRounds(runDir, [twoFailedRounds[0]!, { ...twoFailedRounds[1]!, answers: { ...FAILED, gpt: answer(['Nothing to report.']) } }]);
     expect(twoRoundGround(runDir, BYLAW_URL, ['bylaw'], BRIEF).ok).toBe(false);
   });
 
   it('is refused when any seat read it directly, even in a later round', () => {
-    const runDir = mkdtempSync(path.join(root, 'two-round-'));
+    const runDir = runDirFor();
     writeRounds(runDir, [
       ...twoFailedRounds,
       { dir: 'round1-rerun', started: '2031-01-01T12:00:00Z', answers: { ...FAILED, gpt: answer([`I read it directly from ${BYLAW_URL}.`]) } },
@@ -160,7 +170,7 @@ describe('the two-round seat-failure ground', () => {
   });
 
   it('is refused when a declared name is not in the frozen brief', () => {
-    const runDir = mkdtempSync(path.join(root, 'two-round-'));
+    const runDir = runDirFor();
     writeRounds(runDir, twoFailedRounds);
     expect(twoRoundGround(runDir, BYLAW_URL, ['ordinance'], BRIEF)).toMatchObject({ ok: false });
   });
@@ -208,14 +218,15 @@ const buildPublisher = (repo: string, fetcher: Fetcher, extractor = extractorFor
 /** Every human check filled in as passing. */
 function complete(manifest: CarryManifest): CarryManifest {
   const copy = structuredClone(manifest);
+  copy.editor_session = 'editor session 2031-01-02';
   for (const doc of copy.documents.filter((d) => d.status === 'carried')) {
     doc.download_provenance = { downloaded_by: 'the site fetcher', downloaded_on: '2031-01-01', via: doc.publisher_check ? 'site fetcher' : 'browser' };
-    doc.public_open_check = { checked_by: 'a resident volunteer', checked_on: hoursBefore(2) };
+    doc.public_open_check = { result: 'confirmed', checker: 'a resident volunteer', role: 'person (not the editor)', checked_on: hoursBefore(2), reason: null };
     doc.personal_information_screen = { result: 'clear', reviewer: 'a separate session' };
-    doc.extraction_check = { result: 'pass', reviewer: 'a separate session' };
+    doc.extraction_check = { result: 'pass', checker: 'a separate session', role: 'independent checker' };
     if (doc.second_download?.result === 'pending') doc.second_download = { result: 'match', sha256: doc.archive!.sha256, reason: null };
     if (doc.kind === 'pdf-sections') {
-      doc.completeness_check = { result: 'pass', reviewer: 'a separate session', missed_sections: [], context_check: { result: 'pass', findings: [] } };
+      doc.completeness_check = { result: 'pass', checker: 'a separate session', role: 'independent checker', missed_sections: [], context_check: { result: 'pass', findings: [] } };
       for (const s of doc.sections ?? []) s.checker_reason = s.carried ? 'a snow service package' : 'no bearing on the claim';
     }
   }
@@ -292,8 +303,8 @@ describe('a document outside the meeting portal', () => {
   it('refuses a public-open check made by the editor', async () => {
     const repo = publisherRepo();
     const completed = complete(await buildPublisher(repo, publisherFetcher(BYLAW_PDF)));
-    completed.documents[0]!.public_open_check = { checked_by: 'Stew', checked_on: hoursBefore(1) };
-    expect(refusalsFor(repo, completed)).toEqual([expect.stringMatching(/made by a person who is not the editor/)]);
+    completed.documents[0]!.public_open_check = { result: 'confirmed', checker: 'Stew', role: 'person (not the editor)', checked_on: hoursBefore(1), reason: null };
+    expect(refusalsFor(repo, completed)).toEqual([expect.stringMatching(/the public-open check was made by the editor \(Stew\)/)]);
   });
 
   it('refuses at package time when a round the ground rests on changed after the build', async () => {
@@ -328,9 +339,9 @@ function budgetText(filler = ''): string {
     'Table of Contents\n\nSummary Part                                   3\n  Things Overview                              3\nService Packages                               4\n  Detailed Unfunded Service Packages           4\nSchedules                                      8\n',
     'Things Overview\nAll proposals at a glance   12   40\n',
     '',
-    'Standalone Service Package - Lantern Repair for\nEvening Walkways\nBranch - Lights                                   Council Directed\nDescription\nLanterns on gravel walkways are repaired.\n\nTotal              -        -        12\n',
+    'Standalone Service Package - Lantern Repair for\nEvening Walkways\nBranch - Lights                                   Council Directed\nDescription\nLanterns on gravel walkways are repaired.\n\n($000)             2030     2031\nNew Budget         -        12\nTotal              -        -        12\n',
     'Integrated Service Package - Pond Skating Rink Flooding and\nMaintenance Program\nLead Branch - Parks                        Council Directed\nDescription\nFlooding of pond rinks during the frost months.\n',
-    `Integrated Service Package - Pond Skating Rink Flooding and Maintenance\nProgram\n\nTotal\nincremental        2030       2031\nNew Budget          -          $40\nTotal               -          $40\n${filler}`,
+    `Integrated Service Package - Pond Skating Rink Flooding and Maintenance\nProgram\n\nTotal\nincremental        2030       2031\n($000)             Exp        Net\nNew Budget          -          $40\nTotal               -          $40\n${filler}`,
     'Fee Schedules\nBoat launch permit                                $5.00\n',
   ];
   return pages.map((body, index) => `${HEADER}${body}${footer(index + 1)}\f`).join('');
@@ -357,7 +368,7 @@ describe('sections of a long document', () => {
   });
 
   it('stops on a package with no Total row, or no contents page', () => {
-    expect(() => parseSections(budgetText().replace(/Total {14}- {8}- {8}12/, 'Sum 12'))).toThrow(/Lantern Repair .* has no "Total" row/);
+    expect(() => parseSections(budgetText().replace(/Total {14}- {8}- {8}12/, 'Sum 12'))).toThrow(/Lantern Repair .* is not whole: its last cost table has no "Total" row/);
     expect(() => parseSections(budgetText().replace('Table of Contents', 'Contents'))).toThrow(/no "Table of Contents" page/);
   });
 
@@ -384,49 +395,53 @@ describe('sections of a long document', () => {
   });
 });
 
+const SECTIONS_URL = 'https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=900001';
+const MEETING_URL = 'https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=stub&lang=English';
+const SECTIONS_PDF = Buffer.from('%PDF-1.7 invented budget attachment\n');
+const meetingHtml = `<html><body><a href="filestream.ashx?DocumentId=900001" data-original-title='Attachment 9 - Budget.pdf'>A</a></body></html>`;
+
+function sectionsRepoFor(rules: unknown[] = [RULE]): { repo: string; rulesFile: string } {
+  const repo = mkdtempSync(path.join(root, 'sections-'));
+  mkdirSync(path.join(repo, 'evidence', 'registry'), { recursive: true });
+  mkdirSync(path.join(repo, 'evidence', 'private'), { recursive: true });
+  mkdirSync(path.join(repo, RUN), { recursive: true });
+  writeFileSync(path.join(repo, RUN, 'brief.md'), `# Brief\n\nAttachment 9 at ${SECTIONS_URL}.\n`);
+  writeFileSync(path.join(repo, 'evidence', 'private', 'YF-EV-0901.pdf'), SECTIONS_PDF);
+  writeFileSync(path.join(repo, 'evidence', 'private', 'YF-EV-0902.html'), meetingHtml);
+  writeFileSync(
+    path.join(repo, 'evidence', 'registry', 'YF-EV-0901.yaml'),
+    YAML.stringify({ id: 'YF-EV-0901', title: 'Attachment 9', url: SECTIONS_URL, archive: { sha256: sha256(SECTIONS_PDF), path: 'evidence/private/YF-EV-0901.pdf' } }),
+  );
+  writeFileSync(
+    path.join(repo, 'evidence', 'registry', 'YF-EV-0902.yaml'),
+    YAML.stringify({ id: 'YF-EV-0902', title: 'Meeting', url: MEETING_URL, archive: { sha256: sha256(meetingHtml), path: 'evidence/private/YF-EV-0902.html' } }),
+  );
+  const rulesFile = path.join(repo, 'section-rules.yaml');
+  writeFileSync(rulesFile, YAML.stringify({ versions: rules }));
+  return { repo, rulesFile };
+}
+
+const sectionsFetcher: Fetcher = async (url) =>
+  url === SECTIONS_URL
+    ? { status: 403, contentType: 'text/html', headers: { 'cf-mitigated': 'challenge' } as Record<string, string>, body: '' }
+    : { status: 200, contentType: 'text/html', headers: {} as Record<string, string>, body: meetingHtml };
+
+const buildSections = (repo: string, rulesFile: string, text = budgetText()) =>
+  buildCarryManifest({
+    repoRoot: repo,
+    runDir: RUN,
+    sections: [{ id: 'YF-EV-0901', meetingPage: 'YF-EV-0902' }],
+    sectionRulesFile: rulesFile,
+    fetcher: sectionsFetcher,
+    extractor: () => ({ version: 'pdftotext version 0.0.0-stub', text }),
+    seatProbes: [],
+    now: () => NOW,
+  });
+
+
 describe('a pdf-sections document, built and packaged', () => {
-  const DOC_URL = 'https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=900001';
-  const MEETING_URL = 'https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=stub&lang=English';
-  const PDF = Buffer.from('%PDF-1.7 invented budget attachment\n');
-  const meetingHtml = `<html><body><a href="filestream.ashx?DocumentId=900001" data-original-title='Attachment 9 - Budget.pdf'>A</a></body></html>`;
-
-  function sectionsRepo(rules: unknown[] = [RULE]): { repo: string; rulesFile: string } {
-    const repo = mkdtempSync(path.join(root, 'sections-'));
-    mkdirSync(path.join(repo, 'evidence', 'registry'), { recursive: true });
-    mkdirSync(path.join(repo, 'evidence', 'private'), { recursive: true });
-    mkdirSync(path.join(repo, RUN), { recursive: true });
-    writeFileSync(path.join(repo, RUN, 'brief.md'), `# Brief\n\nAttachment 9 at ${DOC_URL}.\n`);
-    writeFileSync(path.join(repo, 'evidence', 'private', 'YF-EV-0901.pdf'), PDF);
-    writeFileSync(path.join(repo, 'evidence', 'private', 'YF-EV-0902.html'), meetingHtml);
-    writeFileSync(
-      path.join(repo, 'evidence', 'registry', 'YF-EV-0901.yaml'),
-      YAML.stringify({ id: 'YF-EV-0901', title: 'Attachment 9', url: DOC_URL, archive: { sha256: sha256(PDF), path: 'evidence/private/YF-EV-0901.pdf' } }),
-    );
-    writeFileSync(
-      path.join(repo, 'evidence', 'registry', 'YF-EV-0902.yaml'),
-      YAML.stringify({ id: 'YF-EV-0902', title: 'Meeting', url: MEETING_URL, archive: { sha256: sha256(meetingHtml), path: 'evidence/private/YF-EV-0902.html' } }),
-    );
-    const rulesFile = path.join(repo, 'section-rules.yaml');
-    writeFileSync(rulesFile, YAML.stringify({ versions: rules }));
-    return { repo, rulesFile };
-  }
-
-  const fetcher: Fetcher = async (url) =>
-    url === DOC_URL
-      ? { status: 403, contentType: 'text/html', headers: { 'cf-mitigated': 'challenge' } as Record<string, string>, body: '' }
-      : { status: 200, contentType: 'text/html', headers: {} as Record<string, string>, body: meetingHtml };
-
-  const build = (repo: string, rulesFile: string, text = budgetText()) =>
-    buildCarryManifest({
-      repoRoot: repo,
-      runDir: RUN,
-      sections: [{ id: 'YF-EV-0901', meetingPage: 'YF-EV-0902' }],
-      sectionRulesFile: rulesFile,
-      fetcher,
-      extractor: () => ({ version: 'pdftotext version 0.0.0-stub', text }),
-      seatProbes: [],
-      now: () => NOW,
-    });
+  const sectionsRepo = sectionsRepoFor;
+  const build = buildSections;
 
   const refusals = (repo: string, rulesFile: string, manifest: CarryManifest, text = budgetText()) =>
     refusalsFor(repo, manifest, { sectionRulesFile: rulesFile, extractor: () => ({ version: 'stub', text }) });
@@ -441,7 +456,7 @@ describe('a pdf-sections document, built and packaged', () => {
     expect(doc.document_text).toEqual({ pages: 8, bytes: Buffer.byteLength(budgetText()), sha256: sha256(budgetText()) });
     expect(manifest.section_rule).toMatchObject({ version: 1, terms: ['skating', 'frost'] });
     expect(manifest.package_budget?.result).toBe('within');
-    expect(doc.completeness_check).toEqual({ result: 'pending', reviewer: null, missed_sections: [], context_check: { result: 'pending', findings: [] } });
+    expect(doc.completeness_check).toEqual({ result: 'pending', checker: null, role: null, missed_sections: [], context_check: { result: 'pending', findings: [] } });
     const written = YAML.stringify(manifest);
     expect(written).toContain('Lantern Repair for Evening Walkways');
     expect(written).not.toContain('Flooding of pond rinks');
@@ -529,7 +544,7 @@ describe('v1.43 labels', () => {
   it('reads a two-round document and a sectioned document from the manifest', () => {
     const dir = labelRoot([
       row({ kind: 'pdf', eligibility: { ground: 'two-round seat failure' } }),
-      row({ registry_id: 'YF-EV-9102', kind: 'pdf-sections', section_rule_version: 2, url: 'https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=9' }),
+      row({ registry_id: 'YF-EV-9102', kind: 'pdf-sections', section_rule_version: 2, eligibility: { ground: 'fetcher challenge' }, url: 'https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=9' }),
     ]);
     const carried = carriedSources([RUN_LABELS], dir);
     expect(carried.get('YF-EV-9101')).toMatchObject({ kind: 'document', reason: 'two-round' });
@@ -545,7 +560,7 @@ describe('v1.43 labels', () => {
   });
 
   it('renders the sections label with the full document, the rule and the inventory, kept out of search', async () => {
-    const dir = labelRoot([row({ kind: 'pdf-sections', section_rule_version: 1 })]);
+    const dir = labelRoot([row({ kind: 'pdf-sections', section_rule_version: 1, eligibility: { ground: 'fetcher challenge' } })]);
     const source = carriedSources([RUN_LABELS], dir).get('YF-EV-9101')!;
     const container = await AstroContainer.create();
     const html = await container.renderToString(CarriedLabel, { props: { source } });
@@ -567,5 +582,153 @@ describe('v1.43 labels', () => {
     expect(html).toContain('data-pagefind-ignore');
     expect(html).toContain('failed to retrieve it in two rounds in a row');
     expect(html).toContain('>Original<');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Review findings on PR #117
+// ---------------------------------------------------------------------------
+
+describe('review findings: the two-round reader', () => {
+  it('1. a direct read overrides a failure in the same sentence and anywhere else in that answer', () => {
+    const same = `I read it directly from ${BYLAW_URL} after the first request returned HTTP 502.`;
+    expect(readSeatAnswer(answer([same]), BYLAW_URL, ['bylaw'])).toEqual({ status: 'read', where: 'claims[0].limitations[0]', words: same });
+    expect(readSeatAnswer(answer(['The bylaw PDF returned HTTP 502.', `Later I read it directly from ${BYLAW_URL}.`]), BYLAW_URL, ['bylaw']).status).toBe('read');
+    const runDir = runDirFor();
+    const readBoth = answer(['The bylaw PDF returned HTTP 502.', `Later I read it directly from ${BYLAW_URL}.`]);
+    writeRounds(runDir, [twoFailedRounds[0]!, { ...twoFailedRounds[1]!, answers: { ...FAILED, gpt: readBoth } }]);
+    const result = twoRoundGround(runDir, BYLAW_URL, ['bylaw'], BRIEF);
+    // No pair of rounds has every seat failing: in round1 the gpt seat's answer is a direct read.
+    expect(!result.ok && result.reason).toMatch(/round1: claude failed, gpt read, gpt-luna failed/);
+  });
+
+  it('2. counts a failure only when the sentence ties it to this document', () => {
+    for (const sentence of [
+      'The bylaw relies on Attachment 4, which returned HTTP 502.',
+      'HTTP 502 came back for Attachment 4 and the bylaw.',
+      'Bylaw 20226 returned HTTP 403.',
+      'The meeting portal returned 403 Forbidden for the bylaw page.',
+    ]) {
+      expect(readSeatAnswer(answer([sentence]), BYLAW_URL, ['bylaw']), sentence).toEqual({ status: 'no record' });
+    }
+    const exact = 'The meeting portal returned 403 Forbidden, and the bylaw PDF returned 502 Bad Gateway.';
+    expect(readSeatAnswer(answer([exact]), BYLAW_URL, ['bylaw'])).toEqual({ status: 'failed', where: 'claims[0].limitations[0]', words: exact, http_status: 502, error: null });
+    // A declared numbered name is this document, not another one.
+    expect(readSeatAnswer(answer(['Bylaw 42 returned HTTP 502.']), BYLAW_URL, ['Bylaw 42']).status).toBe('failed');
+  });
+
+  it('3. flat --into answers count only for a single-round run.yaml', () => {
+    const write = (rounds: number[]) => {
+      const runDir = runDirFor();
+      const dir = path.join(runDir, 'round1-rerun');
+      mkdirSync(dir, { recursive: true });
+      const runs = rounds.flatMap((round, i) =>
+        SEATS.map((seat) => ({ provider: seat.provider, round, model_id: seat.model, started_at: `2031-01-01T0${8 + i}:00:00Z`, status: 'ok' })),
+      );
+      writeFileSync(path.join(dir, 'run.yaml'), YAML.stringify({ story: STORY, date: RUN_DATE, runs }));
+      for (const seat of SEATS) writeFileSync(path.join(dir, `${seat.file}.json`), JSON.stringify(FAILED[seat.file as keyof typeof FAILED]));
+      writeRounds(runDir, [{ dir: '.', started: '2031-01-01T10:00:00Z', answers: FAILED }]);
+      return runDir;
+    };
+    // Two round numbers over one flat set of answers: not two rounds, so only the root round counts.
+    expect(twoRoundGround(write([1, 2]), BYLAW_URL, ['bylaw'], BRIEF)).toMatchObject({ ok: false });
+    expect(twoRoundGround(write([1]), BYLAW_URL, ['bylaw'], BRIEF).ok).toBe(true);
+  });
+
+  it('4. refuses a nested run.yaml from another run', () => {
+    const runDir = runDirFor();
+    writeRounds(runDir, twoFailedRounds);
+    const nested = path.join(runDir, 'superseded-2031-01-01', 'run.yaml');
+    const parsed = YAML.parse(readFileSync(nested, 'utf8'));
+    writeFileSync(nested, YAML.stringify({ ...parsed, story: 'other-story' }));
+    const result = twoRoundGround(runDir, BYLAW_URL, ['bylaw'], BRIEF);
+    expect(!result.ok && result.reason).toMatch(/superseded-2031-01-01\/run.yaml describes story "other-story"/);
+  });
+});
+
+describe('review findings: section boundaries and contents', () => {
+  it('5. stops on a package that starts mid-page or is not whole, and a repeated heading continues', () => {
+    expect(() => parseSections(budgetText().replace('Standalone Service Package - Lantern', 'A note set above the package\nStandalone Service Package - Lantern'))).toThrow(
+      /page 5: service package "Standalone Service Package - Lantern Repair for Evening Walkways" starts mid-page/,
+    );
+    expect(() => parseSections(budgetText().replace('Description\nLanterns', 'Lanterns'))).toThrow(/Lantern Repair .* is not whole: no description/);
+    expect(() => parseSections(budgetText().replace('Total               -          $40\n', 'Total               -          $40\nNew Budget          -          $5\n'))).toThrow(
+      /Pond Skating .* is not whole: its last cost table does not end in its "Total" row/,
+    );
+    expect(parseSections(budgetText()).find((s) => s.title.includes('Pond'))).toMatchObject({ first_page: 6, last_page: 7 });
+  });
+
+  const page = (body: string) => `${HEADER}${body}`;
+
+  it('6. reads contents continued onto the next page, wrapped entries, and stops on a line it cannot read', () => {
+    const marked = [page('Cover'), page('Table of Contents\nPart A                 4\n'), page('Table of Contents (continued)\nPart B                 5\n'), page('A'), page('B')];
+    expect(tableOfContents(marked)).toEqual([{ title: 'Part A', page: 4 }, { title: 'Part B', page: 5 }]);
+    const unmarked = [page('Cover'), page('Table of Contents\nPart A                 4\n'), page('Part B                 5\n'), page('A'), page('B')];
+    expect(tableOfContents(unmarked)).toEqual([{ title: 'Part A', page: 4 }, { title: 'Part B', page: 5 }]);
+    const wrapped = [page('Table of Contents\nA very long part title that\n   wraps onto here           2\n'), page('A')];
+    expect(tableOfContents(wrapped)).toEqual([{ title: 'A very long part title that wraps onto here', page: 2 }]);
+    const odd = [page('Table of Contents\nPart A                 2\nSee the appendix for more\n\nPart B      x\n'), page('A')];
+    expect(() => tableOfContents(odd)).toThrow(/contents page 1: cannot read the line "Part B      x"/);
+  });
+});
+
+describe('review findings: who makes the human checks', () => {
+  it('7. refuses without an editor_session, a check by the editor session, a check with another role, and a context check by the editor', async () => {
+    const repo = publisherRepo();
+    const ready = complete(await buildPublisher(repo, publisherFetcher(BYLAW_PDF)));
+    expect(refusalsFor(repo, ready)).toEqual([]);
+    expect(refusalsFor(repo, { ...ready, editor_session: null })).toEqual([expect.stringMatching(/names no editor_session/)]);
+    const bySession = structuredClone(ready);
+    bySession.documents[0]!.extraction_check = { result: 'pass', checker: 'Editor Session 2031-01-02', role: 'independent checker' };
+    expect(refusalsFor(repo, bySession)).toEqual([expect.stringMatching(/the extraction check was made by the editor/)]);
+    const role = structuredClone(ready);
+    role.documents[0]!.public_open_check!.role = 'editor';
+    expect(refusalsFor(repo, role)).toEqual([expect.stringMatching(/the public-open check role is "editor"/)]);
+
+    const { repo: sRepo, rulesFile } = sectionsRepoFor();
+    const sections = complete(await buildSections(sRepo, rulesFile));
+    sections.documents[0]!.completeness_check!.checker = sections.editor_session!;
+    expect(refusalsFor(sRepo, sections, { sectionRulesFile: rulesFile, extractor: () => ({ version: 'stub', text: budgetText() }) })).toEqual([
+      expect.stringMatching(/the completeness and context check was made by the editor/),
+    ]);
+  });
+
+  it('8. allows "unable" with a reason only beside a matched publisher fetch, and the label says so', async () => {
+    const repo = publisherRepo();
+    const ready = complete(await buildPublisher(repo, publisherFetcher(BYLAW_PDF)));
+    ready.documents[0]!.public_open_check = { result: 'unable', checker: null, role: null, checked_on: null, reason: 'no one outside the site was available before the run' };
+    expect(refusalsFor(repo, ready)).toEqual([]);
+    ready.documents[0]!.public_open_check!.reason = null;
+    expect(refusalsFor(repo, ready)).toEqual([expect.stringMatching(/could not be made needs its reason/)]);
+
+    const { repo: sRepo, rulesFile } = sectionsRepoFor();
+    const portal = complete(await buildSections(sRepo, rulesFile));
+    portal.documents[0]!.public_open_check = { result: 'unable', checker: null, role: null, checked_on: null, reason: 'none available' };
+    expect(refusalsFor(sRepo, portal, { sectionRulesFile: rulesFile, extractor: () => ({ version: 'stub', text: budgetText() }) })).toEqual([
+      expect.stringMatching(/may be "unable" only for a document outside the portal/),
+    ]);
+
+    const dir = mkdtempSync(path.join(root, 'labels-'));
+    mkdirSync(path.join(dir, 'reviews/fixture-story/2026-01-03/carried'), { recursive: true });
+    writeFileSync(
+      path.join(dir, 'reviews/fixture-story/2026-01-03/carried/manifest.yaml'),
+      YAML.stringify({ documents: [{ registry_id: 'YF-EV-9201', status: 'carried', kind: 'pdf', url: BYLAW_URL, archive: { sha256: 'c'.repeat(64) }, eligibility: { ground: 'two-round seat failure' }, public_open_check: { result: 'unable' } }] }),
+    );
+    const source = carriedSources(['reviews/fixture-story/2026-01-03'], dir).get('YF-EV-9201')!;
+    expect(source.openUnconfirmed).toBe(true);
+    expect(carriedLabelText(source)).toContain(CARRIED_OPEN_UNCONFIRMED);
+  });
+
+  it('9. fails the build on a v1.43 row with no eligibility ground, and lets a legacy portal row omit it', () => {
+    const write = (doc: Record<string, unknown>) => {
+      const dir = mkdtempSync(path.join(root, 'labels-'));
+      mkdirSync(path.join(dir, 'reviews/fixture-story/2026-01-04/carried'), { recursive: true });
+      writeFileSync(path.join(dir, 'reviews/fixture-story/2026-01-04/carried/manifest.yaml'), YAML.stringify({ documents: [doc] }));
+      return () => carriedSources(['reviews/fixture-story/2026-01-04'], dir);
+    };
+    const base = { registry_id: 'YF-EV-9301', status: 'carried', archive: { sha256: 'd'.repeat(64) } };
+    expect(write({ ...base, kind: 'pdf', url: BYLAW_URL })).toThrow(/missing or invalid eligibility ground "undefined"/);
+    expect(write({ ...base, kind: 'html', url: BYLAW_URL })).toThrow(/eligibility ground/);
+    expect(write({ ...base, kind: 'pdf', url: 'https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=1' })().get('YF-EV-9301')).toMatchObject({ reason: 'portal' });
   });
 });

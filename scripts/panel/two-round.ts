@@ -15,25 +15,36 @@
  * next to each other in that order. Each of the three pinned seats
  * (seat-probe.ts, SEAT_MODELS) must have an ok row and an answer in both.
  *
+ * Every run.yaml must name this run's story and date (its directory path);
+ * one copied from another run stops the ground. Each seat and round needs its
+ * own answer file.
+ *
  * What counts as a recorded failure, read mechanically from each seat's answer:
  * a sentence in one of its statements (a claim's limitations, unknowns,
  * interpretation notes or missing-evidence descriptions, or an evidence
- * entry's finding and quote) that carries a failure marker, in a statement
- * that names the document. The markers are an HTTP status of 400 or above
- * (written "HTTP 502", "returned 403", or "502 Bad Gateway" and the like) or a
- * failure phrase ("could not read", "unable to open", "fetch error" ...). A
- * statement names the document when it contains its URL or the URL's file
- * name, or, in the same sentence as the marker, one of the names the run
- * declares for it, each of which must appear in the frozen brief. An evidence
- * entry names the document only when its source_url is the document's URL
- * (query string ignored); an entry citing another source never counts, even
- * if it mentions this document's name.
+ * entry's finding and quote) that carries a failure marker tied to the
+ * document. The markers are an HTTP status of 400 or above (written "HTTP
+ * 502", "returned 403", or "502 Bad Gateway" and the like) or a failure phrase
+ * ("could not read", "unable to open", "fetch error" ...). A marker is tied to
+ * the document when the nearest document mentioned before it in the sentence is
+ * this one: its URL, the URL's file name, or a name the run declares for it,
+ * each of which must appear in the frozen brief. With no mention before the
+ * marker, the sentence must mention this document and no other. A sentence that
+ * mentions no document counts only inside an evidence entry whose source_url
+ * is this document's URL (query string ignored), or when it opens "It", "This"
+ * or "The PDF" right after a sentence that names this document and no other.
+ * Other documents are any other URL or file name, a numbered reference such as
+ * "Attachment 4" or "Bylaw 20226" that is not itself a declared name, and a
+ * portal, meeting page, (meeting) minutes, agenda, index or FAQ. So "the bylaw relies on
+ * Attachment 4, which returned HTTP 502" does not count, and when the sentence
+ * cannot say which document failed, it does not count either.
  *
  * A seat that read the document directly says so, and the carried-documents
- * section asks it to write "read directly from <URL>". A statement naming the
- * document with "read directly" or "read it directly" and no failure marker is
- * a direct read. A direct read by any seat, in either of the two rounds or any
- * later round of the run, refuses the ground.
+ * section asks it to write "read directly from <URL>". A sentence tied to the
+ * document the same way that says "read directly" or "read it directly" is a
+ * direct read, and it overrides every failure that seat recorded in that
+ * round, the same sentence included. A direct read by any seat, in either of
+ * the two rounds or any later round of the run, refuses the ground.
  *
  * The ground is recorded per seat per round: the answer file, where in it, the
  * seat's own words, the status or error, the seat's model and tool, and the
@@ -56,8 +67,10 @@ export type SeatFailure = {
   finished_at: string;
   /** Where in the answer, e.g. claims[0].limitations[1]. */
   where: string;
-  /** The seat's own words: the sentence naming the document and the sentence with the failure. */
+  /** The seat's own words: the exact sentence that ties the failure to the document. */
   words: string;
+  /** The sentence before it, when that sentence names the document and this one refers back ("It ..."). */
+  antecedent?: string;
   http_status: number | null;
   error: string | null;
 };
@@ -112,16 +125,32 @@ export function runManifests(runDir: string): string[] {
   return files;
 }
 
-/** The run's rounds that have answers on disk, oldest first. */
+/**
+ * The run's rounds that have answers on disk, oldest first.
+ *
+ * @throws when a nested run.yaml names another story or date than the run
+ *   (its directory path, and its own run.yaml when there is one), or when one
+ *   answer file would stand for two rounds. Answers sit in <dir>/round<N>/;
+ *   flat <dir>/<seat>.json files (an --into directory) count only for a
+ *   run.yaml that records a single round number.
+ */
 export function committedRounds(runDir: string): CommittedRound[] {
   const rounds: CommittedRound[] = [];
+  const identity = { story: path.basename(path.dirname(runDir)), date: path.basename(runDir) };
+  const used = new Map<string, string>();
   for (const manifest of runManifests(runDir)) {
     const dir = path.dirname(manifest);
-    const rows = ((YAML.parse(readFileSync(manifest, 'utf8')) as { runs?: RunRow[] } | null)?.runs ?? []).filter(
-      (row) => row.status === 'ok' && Number.isInteger(row.round),
-    );
-    for (const number of [...new Set(rows.map((row) => row.round!))].sort()) {
-      const answers = [path.join(dir, `round${number}`), dir].find((candidate) =>
+    const parsed = (YAML.parse(readFileSync(manifest, 'utf8')) ?? {}) as { story?: unknown; date?: unknown; runs?: RunRow[] };
+    if (String(parsed.story) !== identity.story || String(parsed.date) !== identity.date) {
+      throw new Error(
+        `${path.relative(runDir, manifest)} describes story "${String(parsed.story)}", date "${String(parsed.date)}", not this run (${identity.story} ${identity.date}); a round from another run never counts`,
+      );
+    }
+    const rows = (parsed.runs ?? []).filter((row) => row.status === 'ok' && Number.isInteger(row.round));
+    const numbers = [...new Set(rows.map((row) => row.round!))].sort();
+    for (const number of numbers) {
+      const candidates = [path.join(dir, `round${number}`), ...(numbers.length === 1 && dir !== runDir ? [dir] : [])];
+      const answers = candidates.find((candidate) =>
         rows.some((row) => row.round === number && existsSync(path.join(candidate, `${seatForModel(row.model_id)}.json`))),
       );
       if (!answers) continue;
@@ -134,6 +163,12 @@ export function committedRounds(runDir: string): CommittedRound[] {
           return [{ seat, model: row.model_id!, file: path.relative(runDir, file), startedAt: row.started_at ?? '', finishedAt: row.finished_at ?? '' }];
         });
       if (seats.length === 0) continue;
+      const label = `${path.relative(runDir, manifest)} round ${number}`;
+      for (const seat of seats) {
+        const before = used.get(seat.file);
+        if (before) throw new Error(`${seat.file} would stand for both ${before} and ${label}; each seat and round needs its own answer file`);
+        used.set(seat.file, label);
+      }
       rounds.push({
         rel: path.relative(runDir, answers) || '.',
         manifest: path.relative(runDir, manifest),
@@ -153,7 +188,7 @@ const STATUS_PATTERNS = [
 ];
 const FAILURE_PHRASE =
   /\b(fetch error|could not (?:read|open|retrieve|fetch|extract|decompress|access|load)|unable to (?:read|open|retrieve|fetch|access|load)|failed to (?:read|open|retrieve|fetch|load)|timed out)\b/i;
-const DIRECT_READ = /\bread (?:it )?directly\b/i;
+const DIRECT_READ = /\bread (?:it |the (?:pdf|document|file|page) )?directly\b/i;
 
 /** The failure a sentence records: an HTTP status of 400 or above, or a failure phrase. */
 export function failureMarker(sentence: string): { http_status: number | null; error: string | null } | undefined {
@@ -216,51 +251,114 @@ function statements(answer: unknown): Statement[] {
 }
 
 export type SeatReading =
-  | { status: 'failed'; where: string; words: string; http_status: number | null; error: string | null }
+  | { status: 'failed'; where: string; words: string; antecedent?: string; http_status: number | null; error: string | null }
   | { status: 'read'; where: string; words: string }
   | { status: 'no record' };
 
+const NUMBERED_REFERENCE = /\b(?:Attachment|Bylaw|Report|Schedule|Appendix|Item|Motion)\s+[A-Z]*\d(?:[\w.-]*\w)?/gi;
+const OTHER_GENERIC = /\b(?:meeting )?portal\b|\bmeeting pages?\b|\b(?:the|meeting|post-meeting|council|committee)\s+minutes\b|\bagenda\b|\bindex\b|\bFAQ\b/gi;
+const ANY_URL = /https?:\/\/[^\s)>\]"'`]+/gi;
+const ANY_FILE = /\b[\w-]+(?:\.[\w-]+)*\.(?:pdf|aspx|html?|docx?|xlsx?)\b/gi;
+const ANAPHOR = /^(?:It|This|That|The (?:file|PDF|document|page))\b/;
+
+type Mention = { at: number; end: number; ours: boolean };
+
 /**
- * What one seat's answer records about `url`: a failure, a direct read, or
- * nothing. A failure with an HTTP status is preferred over one with a phrase.
+ * Every document a sentence mentions, ours or another, in order. Ours: the
+ * URL, its file name, or a declared name. Another: any other URL or file
+ * name, a numbered reference ("Attachment 4", "Bylaw 20226") that is not
+ * itself a declared name, or a portal, meeting page, meeting minutes,
+ * agenda, index or FAQ. A declared name inside another document's numbered reference is
+ * that other document.
+ */
+function mentionsIn(sentence: string, doc: { bare: string; fileName: string; names: readonly string[] }): Mention[] {
+  const spans = (pattern: RegExp, ours: boolean) => [...sentence.matchAll(pattern)].map((m) => ({ at: m.index!, end: m.index! + m[0].length, ours, text: m[0] }));
+  const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const declared = (text: string) => doc.names.some((name) => name.toLowerCase() === text.toLowerCase());
+  const ours = [
+    ...spans(new RegExp(escape(doc.bare), 'g'), true),
+    ...(doc.fileName.length > 4 ? spans(new RegExp(`\\b${escape(doc.fileName)}\\b`, 'gi'), true) : []),
+    ...doc.names.flatMap((name) => spans(new RegExp(`\\b${escape(name)}\\b`, 'gi'), true)),
+  ];
+  const others = [
+    ...spans(ANY_URL, false).filter((m) => !m.text.startsWith(doc.bare)),
+    ...spans(ANY_FILE, false).filter((m) => m.text.toLowerCase() !== doc.fileName.toLowerCase()),
+    ...spans(NUMBERED_REFERENCE, false).filter((m) => !declared(m.text)),
+    ...spans(OTHER_GENERIC, false),
+  ];
+  const overlaps = (a: { at: number; end: number }, b: { at: number; end: number }) => a.at < b.end && b.at < a.end;
+  // A numbered reference to another document swallows a declared name inside it ("Bylaw" in "Bylaw 20226").
+  const keptOurs = ours.filter((o) => !others.some((x) => overlaps(o, x) && x.end - x.at > o.end - o.at));
+  // Another URL or file name inside our own URL is ours.
+  const keptOthers = others.filter((x) => !keptOurs.some((o) => overlaps(o, x) && o.end - o.at >= x.end - x.at));
+  return [...keptOurs, ...keptOthers].sort((a, b) => a.at - b.at).map(({ at, end, ours: isOurs }) => ({ at, end, ours: isOurs }));
+}
+
+/** Every failure marker in a sentence, with where it starts. */
+function markersIn(sentence: string): Array<{ at: number; http_status: number | null; error: string | null }> {
+  const found: Array<{ at: number; http_status: number | null; error: string | null }> = [];
+  for (const pattern of STATUS_PATTERNS) {
+    for (const m of sentence.matchAll(new RegExp(pattern.source, 'gi'))) found.push({ at: m.index!, http_status: Number(m[1]), error: null });
+  }
+  for (const m of sentence.matchAll(new RegExp(FAILURE_PHRASE.source, 'gi'))) found.push({ at: m.index!, http_status: null, error: m[1]!.toLowerCase() });
+  return found.sort((a, b) => a.at - b.at);
+}
+
+/**
+ * Whether the thing at `at` in a sentence is tied to our document: the
+ * nearest document mentioned before it is ours; or, with nothing mentioned
+ * before it, the sentence mentions ours and no other document; or the
+ * sentence mentions no document at all and its context names ours alone (an
+ * evidence entry citing our URL, or a sentence opening "It" or "The PDF"
+ * right after one that names ours and nothing else). Anything else, including
+ * a sentence where another document is the nearest, does not count.
+ */
+function tiedToOurs(mentions: Mention[], at: number, context: boolean): boolean {
+  const before = mentions.filter((m) => m.end <= at).at(-1);
+  if (before) return before.ours;
+  if (mentions.length > 0) return mentions.every((m) => m.ours);
+  return context;
+}
+
+/**
+ * What one seat's answer records about `url`: a direct read, a failure, or
+ * nothing. A direct read anywhere in the answer overrides every failure in it.
+ * A failure with an HTTP status is preferred over one with a phrase. The
+ * record keeps the exact sentence, and the sentence before it when the
+ * failure sentence refers back ("It returned HTTP 502").
  */
 export function readSeatAnswer(answer: unknown, url: string, names: readonly string[]): SeatReading {
-  const fileName = decodeURIComponent(withoutQuery(url).split('/').pop() ?? '');
   const bare = withoutQuery(url);
-  const namePatterns = names.map((name) => new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i'));
-  const nameIn = (text: string) => namePatterns.some((pattern) => pattern.test(text));
-  const urlIn = (text: string) => text.includes(bare) || (fileName.length > 4 && text.toLowerCase().includes(fileName.toLowerCase()));
-  /** Where the sentence first names the document, so the failure read is the one after it; 0 when it does not. */
-  const namedAt = (sentence: string) => {
-    const lower = sentence.toLowerCase();
-    const at = [
-      sentence.indexOf(bare),
-      fileName.length > 4 ? lower.indexOf(fileName.toLowerCase()) : -1,
-      ...namePatterns.map((pattern) => pattern.exec(sentence)?.index ?? -1),
-    ].filter((i) => i >= 0);
-    return at.length > 0 ? Math.min(...at) : 0;
-  };
+  const doc = { bare, fileName: decodeURIComponent(bare.split('/').pop() ?? ''), names };
   let failure: Extract<SeatReading, { status: 'failed' }> | undefined;
-  let read: Extract<SeatReading, { status: 'read' }> | undefined;
   for (const statement of statements(answer)) {
     if (statement.evidenceFor !== undefined && withoutQuery(statement.evidenceFor) !== bare) continue;
-    const wholeNames = statement.evidenceFor !== undefined || urlIn(statement.text);
     const parts = sentences(statement.text);
-    const naming = parts.find((s) => urlIn(s) || nameIn(s));
-    for (const sentence of parts) {
-      const named = wholeNames || urlIn(sentence) || nameIn(sentence);
-      if (!named) continue;
-      const marker = failureMarker(sentence.slice(namedAt(sentence))) ?? failureMarker(sentence);
-      if (marker) {
-        const words = naming && naming !== sentence && wholeNames ? `${naming} ${sentence}` : sentence;
-        const candidate = { status: 'failed' as const, where: statement.where, words, ...marker };
-        if (!failure || (failure.http_status === null && marker.http_status !== null)) failure = candidate;
-      } else if (DIRECT_READ.test(sentence) && !read) {
-        read = { status: 'read', where: statement.where, words: sentence };
+    for (const [index, sentence] of parts.entries()) {
+      const mentions = mentionsIn(sentence, doc);
+      const previous = index > 0 ? mentionsIn(parts[index - 1]!, doc) : [];
+      const anaphora = ANAPHOR.test(sentence) && previous.length > 0 && previous.every((m) => m.ours);
+      const context = statement.evidenceFor !== undefined || anaphora;
+      const read = DIRECT_READ.exec(sentence);
+      if (read) {
+        const after = mentions.find((m) => m.at >= read.index);
+        if (after ? after.ours : tiedToOurs(mentions, read.index, context)) return { status: 'read', where: statement.where, words: sentence };
       }
+      const tied = markersIn(sentence).filter((m) => tiedToOurs(mentions, m.at, context));
+      const marker = tied.find((m) => m.http_status !== null) ?? tied[0];
+      if (!marker) continue;
+      const candidate: Extract<SeatReading, { status: 'failed' }> = {
+        status: 'failed',
+        where: statement.where,
+        words: sentence,
+        ...(mentions.length === 0 && anaphora ? { antecedent: parts[index - 1]! } : {}),
+        http_status: marker.http_status,
+        error: marker.error,
+      };
+      if (!failure || (failure.http_status === null && marker.http_status !== null)) failure = candidate;
     }
   }
-  return read ?? failure ?? { status: 'no record' };
+  return failure ?? { status: 'no record' };
 }
 
 export type TwoRoundResult =
@@ -278,7 +376,12 @@ export type TwoRoundResult =
 export function twoRoundGround(runDir: string, url: string, names: readonly string[], brief: string): TwoRoundResult {
   const missing = names.filter((name) => !brief.toLowerCase().includes(name.toLowerCase()));
   if (missing.length > 0) return { ok: false, reason: `declared name(s) ${missing.map((n) => `"${n}"`).join(', ')} do not appear in the frozen brief` };
-  const rounds = committedRounds(runDir);
+  let rounds: CommittedRound[];
+  try {
+    rounds = committedRounds(runDir);
+  } catch (error) {
+    return { ok: false, reason: (error as Error).message };
+  }
   const pinned = Object.keys(SEAT_MODELS) as SeatName[];
   const readings = rounds.map((round) =>
     pinned.map((seat) => {
@@ -317,6 +420,7 @@ export function twoRoundGround(runDir: string, url: string, names: readonly stri
               finished_at: row!.finishedAt,
               where: failed.where,
               words: failed.words,
+              ...(failed.antecedent ? { antecedent: failed.antecedent } : {}),
               http_status: failed.http_status,
               error: failed.error,
             };

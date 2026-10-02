@@ -40,6 +40,8 @@ export const CARRIED_SECTIONS_REST = 'The rest of the document was not given to 
 export const CARRIED_SECTIONS_UNPUBLISHABLE =
   'We have found no permission to republish our copy, so check the sections against the full document.';
 export const CARRIED_TWO_ROUND_NOTE = 'That was their tools failing; it does not mean the document is unavailable to you.';
+export const CARRIED_OPEN_UNCONFIRMED =
+  'No one outside the site could confirm that the link opens this same version, so check it against our hash.';
 export const CARRIED_NOT_INDEPENDENT =
   'All the AI reviewers read the same text we supplied, so their agreement on it is not independent retrieval.';
 
@@ -57,7 +59,18 @@ export type CarriedSource = {
   itemIndexHref: string;
   /** The rule version the items or sections were chosen under, for `items` and `sections`. */
   ruleVersion?: number;
+  /** v1.43: a person could not confirm that the publisher's link opens this same version. */
+  openUnconfirmed?: boolean;
 };
+
+/** True for an address on the City's meeting portal; false for anything else, a malformed address included. */
+function portalUrl(url: unknown): boolean {
+  try {
+    return typeof url === 'string' && /(^|\.)escribemeetings\.com$/i.test(new URL(url).hostname);
+  } catch {
+    return false;
+  }
+}
 
 const KINDS = new Set([undefined, 'pdf', 'html', 'minutes-items', 'pdf-sections']);
 const GROUNDS = new Set([undefined, 'fetcher challenge', 'seat refusal', 'two-round seat failure']);
@@ -67,7 +80,7 @@ const GROUNDS = new Set([undefined, 'fetcher challenge', 'seat refusal', 'two-ro
  * words: what the reviewers saw, why, and what their agreement does not show.
  * A v1.41 or v1.42 source reads exactly as it did.
  */
-export function carriedLabelText(source: Pick<CarriedSource, 'kind' | 'reason'>): string {
+export function carriedLabelText(source: Pick<CarriedSource, 'kind' | 'reason' | 'openUnconfirmed'>): string {
   const what = source.kind === 'items' ? ITEMS_WHAT : source.kind === 'sections' ? SECTIONS_WHAT : DOCUMENT_WHAT;
   const why = source.reason === 'two-round' ? TWO_ROUND_REASON : source.reason === 'tools' ? TOOLS_REASON : PORTAL_REASON;
   const v143 = source.kind === 'sections' || source.reason !== 'portal';
@@ -77,6 +90,7 @@ export function carriedLabelText(source: Pick<CarriedSource, 'kind' | 'reason'>)
     source.kind === 'sections' ? CARRIED_SECTIONS_REST : '',
     v143 ? CARRIED_NOT_INDEPENDENT : CARRIED_SAME_COPY,
     source.kind === 'items' ? CARRIED_ITEMS_UNPUBLISHABLE : source.kind === 'sections' ? CARRIED_SECTIONS_UNPUBLISHABLE : '',
+    source.openUnconfirmed ? CARRIED_OPEN_UNCONFIRMED : '',
   ]
     .filter(Boolean)
     .join(' ');
@@ -91,6 +105,7 @@ type ManifestDocument = {
   section_rule_version?: number;
   archive?: { sha256?: string };
   eligibility?: { ground?: string };
+  public_open_check?: { result?: string };
 };
 
 /**
@@ -104,8 +119,11 @@ type ManifestDocument = {
  *   minutes-items row lacks its rule version, or a pdf-sections row its
  *   section rule version, or a row has a kind other than pdf, html,
  *   minutes-items or pdf-sections, or an eligibility ground the method does
- *   not define, so a broken row fails the build rather than silently dropping
- *   or misstating the label. An absent manifest means nothing was carried.
+ *   not define, or a v1.43 row (html, pdf-sections, or a document outside the
+ *   portal) with no eligibility ground at all, so a broken row fails the build
+ *   rather than silently dropping or misstating the label. Only a v1.41 or
+ *   v1.42 portal row may omit its ground. An absent manifest means nothing was
+ *   carried.
  */
 export function carriedSources(runDirs: readonly string[], root: string = process.cwd()): Map<string, CarriedSource> {
   const carried = new Map<string, CarriedSource>();
@@ -115,6 +133,8 @@ export function carriedSources(runDirs: readonly string[], root: string = proces
     const manifest = YAML.parse(readFileSync(file, 'utf8')) as { documents?: ManifestDocument[] };
     for (const [index, doc] of (manifest?.documents ?? []).entries()) {
       if (doc.status !== 'carried') continue;
+      const portal = portalUrl(doc.url);
+      const v143 = doc.kind === 'html' || doc.kind === 'pdf-sections' || !portal;
       const problems = [
         typeof doc.registry_id === 'string' && doc.registry_id ? '' : 'registry_id',
         typeof doc.url === 'string' && /^https:\/\/\S+$/.test(doc.url) ? '' : 'url',
@@ -123,12 +143,11 @@ export function carriedSources(runDirs: readonly string[], root: string = proces
         KINDS.has(doc.kind) ? '' : `kind "${String(doc.kind)}"`,
         doc.kind !== 'minutes-items' || (Number.isInteger(doc.rule_version) && doc.rule_version! > 0) ? '' : 'rule_version',
         doc.kind !== 'pdf-sections' || (Number.isInteger(doc.section_rule_version) && doc.section_rule_version! > 0) ? '' : 'section_rule_version',
-        GROUNDS.has(doc.eligibility?.ground) ? '' : `eligibility ground "${String(doc.eligibility?.ground)}"`,
+        GROUNDS.has(doc.eligibility?.ground) && !(v143 && doc.eligibility?.ground === undefined) ? '' : `eligibility ground "${String(doc.eligibility?.ground)}"`,
       ].filter(Boolean);
       if (problems.length > 0) {
         throw new Error(`${path.join(run, 'carried', 'manifest.yaml')}: documents[${index}] is carried but has a missing or invalid ${problems.join(', ')}`);
       }
-      const portal = /(^|\.)escribemeetings\.com$/i.test(new URL(doc.url!).hostname);
       carried.set(doc.registry_id!, {
         registryId: doc.registry_id!,
         cityUrl: doc.url!,
@@ -138,6 +157,7 @@ export function carriedSources(runDirs: readonly string[], root: string = proces
         itemIndexHref: repoFile(path.posix.join(run, 'carried', 'manifest.yaml')),
         ...(doc.kind === 'minutes-items' ? { ruleVersion: doc.rule_version } : {}),
         ...(doc.kind === 'pdf-sections' ? { ruleVersion: doc.section_rule_version } : {}),
+        ...(doc.public_open_check?.result === 'unable' ? { openUnconfirmed: true } : {}),
       });
     }
   }
