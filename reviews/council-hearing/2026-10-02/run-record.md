@@ -374,3 +374,30 @@ whether a transient failure needs a methodology answer, is the editor's
 decision. The round 1 answers stay in `round1/` as returned, with their
 rows in `run.yaml`. A restart moves them under a superseded directory, as
 earlier runs did.
+
+## 2026-10-02: the stopped round 1 superseded; round 1 runs again as it stands
+
+**The editor ruled the bylaw failure a transient outage at edmonton.ca,
+not an automated-access block, so the stopped round 1 is superseded and
+round 1 runs again with nothing changed.** The bylaw opened for both the
+Claude seat's WebFetch (HTTP 200 at 08:06Z) and the site's fetcher (HTTP
+200 at 08:09Z) before the round, and for both again after it (the Claude
+seat at 08:25Z, the fetcher at 08:26Z). Every seat got HTTP 502 from the
+same URL only between 08:16Z and 08:24Z. An outage on the City's side
+that lifts within minutes is not a reason to carry the bylaw or change the
+carry rule, and the rule stays as it is.
+
+The stopped round's answers (`round1/`), its rows in `run.yaml` and a
+copy of the carry manifest it ran on (committed at 9cdd025, sha256
+`1ed94e171da6243977f8c10d9329d4555247f4f9d457868314bf6ff53cb33be8`) move
+unchanged to `superseded-2026-10-02/`, as `round1/`, `run.yaml` and
+`carried-manifest.yaml`. They are kept for the record only and are not an
+input to the rerun: no seat sees them, and the merge and synthesis read
+only the new rounds. `run.yaml` starts again with no rows. The brief is
+unchanged and still frozen at
+`292e2d7d1a214fdd29985d483dc2c95e15da217311716ef86057be8a00ec5c0f`.
+
+Immediately before the rerun the bylaw URL is probed with the Claude
+seat's tool and with the site's fetcher, and round 1 launches only if
+both get HTTP 200. If a seat again reports the bylaw unreadable during
+the round, the run stops again.
