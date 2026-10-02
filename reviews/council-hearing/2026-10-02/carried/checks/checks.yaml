@@ -1,0 +1,69 @@
+# council-hearing rerun, stage B independent checks (methodology v1.43). Worktree hearing-r2, commit 4580a25.
+documents:
+  - registry_id: YF-EV-0251
+    extraction_check:
+      result: pass
+      checker: "independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)"
+      role: "independent checker"
+      note: >-
+        Archive SHA-256 762a9177…c6bcc519 matches the manifest. A fresh pdftotext -layout -enc UTF-8 (26.08.0) run is
+        byte-identical to evidence/private/carried/council-hearing/2026-10-02/YF-EV-0251.txt (SHA-256 b8bd4a16…0718ea,
+        52071 bytes, as the manifest records). All 23 pages were rendered and compared. Every section 1 to 58 with its
+        margin headings, every amendment note, page numbers 2 to 23 and Schedule A (deleted) are present. Section 38(1)
+        to (6) reads as on page 16-17: (1) "Each approved speaker may speak for a maximum of 5 minutes", (6) "up to 5
+        minutes" with note S.15, Bylaw 20226, July 4, 2022. The amendment list on page 22 is complete: ten entries from
+        Bylaw 18549 (October 9, 2018) to Bylaw 21365 (October 29, 2025), with "passed by Council August 29, 2018".
+        Sections 1, 2(2)(m), 3(c) and 4 are complete. Only loss: the City crest on the cover is an image (its motto
+        words are not extracted) and the italics of "Municipal Government Act" in the consolidation note; nothing material.
+    personal_information_screen:
+      result: clear
+      checker: "independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)"
+      role: "independent checker"
+      note: A procedures bylaw; it names no person, and holds no email, phone number or address.
+    two_round_confirmation:
+      result: confirmed
+      checker: "independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)"
+      role: "independent checker"
+      note: >-
+        Each of the six quoted sentences was found verbatim at the stated place in the round file, and each ties an
+        HTTP 502 to the bylaw PDF: superseded-2026-10-02/round1 claude.json claims[0].limitations[0] ("The Bylaw 18155
+        PDF (…C18155.pdf) returned HTTP 502 on four direct fetches"), gpt.json limitations[1] ("A direct request for the
+        bylaw PDF returned HTTP 502"), gpt-luna.json limitations[1] ("Direct retrieval of the City bylaw PDF returned
+        502 Bad Gateway"); superseded-2026-10-02b/round1 claude.json limitations[0], gpt.json limitations[1] ("The bylaw
+        PDF returned HTTP 502 to the web tool") and gpt-luna.json limitations[0] ("…the City bylaw PDF returned 502 Bad
+        Gateway"). Both run.yaml files give the stated round start times (08:16:27Z and 08:29:11Z). Qualification on
+        the second-round Claude record: that seat's tool first retrieved the PDF (about 413 KB) but could not decompress
+        its text streams, and only later retries returned 502. The manifest discloses this in the antecedent field. The
+        seat still did not read the bylaw's text, so the failure stands; the record is a partial fetch, not a clean refusal.
+  - registry_id: YF-EV-0209
+    extraction_check:
+      result: pass
+      checker: "independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)"
+      role: "independent checker"
+      note: Archive SHA-256 5d933515… and regenerated carried text (rule v2, redaction v4) SHA-256 d57c0219… both match the manifest; carried items 1.4, 2.3, 2.4, 7.6, 11.1, 11.2 as before.
+    completeness_check:
+      result: pass
+      checker: "independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)"
+      role: "independent checker"
+      note: Unchanged from the earlier council-hearing stage B check (stage-b-hearing/completeness.yaml); hashes and rule v2 unchanged.
+    personal_information_screen:
+      result: clear
+      checker: "independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)"
+      role: "independent checker"
+      note: Unchanged from stage-b-hearing/pi.yaml; 136 entries withheld, no name token survives.
+  - registry_id: YF-EV-0210
+    extraction_check:
+      result: pass
+      checker: "independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)"
+      role: "independent checker"
+      note: Archive SHA-256 b739fd31… and regenerated carried text SHA-256 52b169f6… both match the manifest; carried item 7.6.
+    completeness_check:
+      result: pass
+      checker: "independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)"
+      role: "independent checker"
+      note: Unchanged from stage-b-hearing/completeness.yaml.
+    personal_information_screen:
+      result: clear
+      checker: "independent read-only Claude Opus 5.5 checker session (stage B, 2026-10-02)"
+      role: "independent checker"
+      note: Unchanged from stage-b-hearing/pi.yaml.
