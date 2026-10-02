@@ -455,3 +455,34 @@ and round 2 to settle and is not resolved here.
 
 The round 1 answers stay in `round1/` as returned, with their rows in
 `run.yaml`.
+
+## 2026-10-02: the stopped rerun superseded; round 1 to run again under methodology v1.43
+
+**The stopped rerun of round 1 moves aside, and round 1 runs again with
+the bylaw carried on the two-round ground of methodology v1.43 (D-0048).**
+Every seat recorded a failure to read the bylaw PDF in both committed
+rounds of this run, the first in `superseded-2026-10-02/` and the rerun
+in `superseded-2026-10-02b/`, while every quick probe of the same address
+opened it. Under v1.43 that qualifies the bylaw to be carried, and since
+it sits on edmonton.ca rather than the meeting portal, it is carried as a
+document outside the portal, checked against a fresh fetch by the site.
+
+The rerun's answers (`round1/`), its rows in `run.yaml` and a copy of the
+carry manifest it ran on (sha256
+`1ed94e171da6243977f8c10d9329d4555247f4f9d457868314bf6ff53cb33be8`, the
+same file as the first round's) move unchanged to
+`superseded-2026-10-02b/`, as `round1/`, `run.yaml` and
+`carried-manifest.yaml`. Both superseded rounds stay on the record as the
+evidence for the two-round ground and are not an input to the new round:
+no seat sees them, and the merge and synthesis read only the new rounds.
+`run.yaml` starts again with no rows. The brief is unchanged and still
+frozen at
+`292e2d7d1a214fdd29985d483dc2c95e15da217311716ef86057be8a00ec5c0f`.
+
+**Fresh probes.** Every URL the brief names was probed again through all
+three seats on 2026-10-02 from 18:22:01Z to 18:24:58Z
+(`carried/seat-probes.yaml`). The Claude seat's WebFetch was refused with
+HTTP 403 at both meeting pages and at the portal root, and opened the
+bylaw, the Lobbyists Act, the open data dataset page and the Yahoo News
+page with HTTP 200. Both GPT-6 seats' probes were unclear at every
+address, as v1.42 expects.
