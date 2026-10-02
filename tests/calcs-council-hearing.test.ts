@@ -23,12 +23,12 @@ describe('the three counts', () => {
     expect(presentedPanels.map((p) => p.entries).join(', ')).toBe('16, 16, 18, 2');
     expect(claimText).toContain('five panels of 15, 15, 15, 15 and 4');
     expect(claimText).toContain('four panels of 16, 16, 18 and 2');
-    expect(claimText).toContain('64 approved to speak');
-    expect(claimText).toContain('only 52 are recorded as speaking');
+    expect(claimText).toContain('64 on its list to speak');
+    expect(claimText).toContain('the 52 recorded as speaking');
     expect(claimText).toContain('hold 79 entries');
-    expect(story).toContain('The minutes list 64 people approved to speak');
-    expect(story).toContain('the lists hold 79');
-    expect(story).toContain('They record 52 as having spoken');
+    expect(story).toContain('for the bike-lane item has 64 entries');
+    expect(story).toContain('on the list there are 79');
+    expect(story).toContain('The minutes record 52 entries as having spoken');
   });
 
   it('organizations: 15 of the approved entries and 12 of those recorded as speaking', () => {
@@ -36,7 +36,8 @@ describe('the three counts', () => {
     expect(figures.presentedWithOrganization).toBe(12);
     expect(claimText).toContain('Fifteen of the entries give an organization');
     expect(claimText).toContain('Twelve of those entries give an organization');
-    expect(story).toContain('15 gave an organization');
+    expect(story).toContain("15 gave a group's name");
+    expect(story).toContain("Fifteen of the 64 approved to speak gave a group's name");
   });
 
   it('only the count of those who spoke falls outside 60 to 80, so the finding depends on the count', () => {
@@ -56,7 +57,7 @@ describe('the time-limit motion', () => {
     expect(figures.specialResolutionMet).toBe(true);
     expect(claimText).toContain('The motion carried 6 to 0');
     expect(claimText).toContain('Two-thirds of six is four');
-    expect(story).toContain('The committee voted 6 to 0');
+    expect(story).toContain('All six committee members present voted for it');
     expect(story).toContain('the four votes two-thirds of six requires');
   });
 });
