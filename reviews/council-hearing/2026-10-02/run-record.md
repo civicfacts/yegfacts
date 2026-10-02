@@ -277,3 +277,181 @@ reopen them. The brief froze on FRAME OK after two defect corrections
 pasted from the checker and one park alternative the checker allowed; the
 reports and the hashes are here for anyone who wants to check that nothing
 else moved after check 3.
+
+## 2026-10-02: round 1 with the minutes carried, stopped on an inaccessible essential source
+
+**Round 1 ran on all three seats, and the run stops there.** Every seat
+reported that a direct request for the bylaw, Bylaw 18155 at
+`https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/C18155.pdf`,
+returned HTTP 502. Each seat read sections 1, 2, 4 and 38 only through
+search-engine extracts and could not read the consolidation's list of
+amendments, which the brief requires. The brief makes the bylaw an
+essential source, and an inaccessible essential source stops a run rather
+than becoming a finding. No merge, round 2 or synthesis was run, and no
+verdict below is a finding of this site.
+
+**The carried pages and their checks.** Under methodology v1.42 the
+package carried the committee's post-meeting minutes (YF-EV-0209) and
+agenda page (YF-EV-0210) of 2026-08-26 as the items selection rule v2
+picks: minutes items 1.4, 2.3, 2.4, 7.6, 11.1 and 11.2, and agenda item
+7.6. Both pages qualify because the Claude seat's WebFetch was refused
+there with HTTP 403 (`carried/seat-probes.yaml`); the GPT-6 seats' probes
+were unclear, as v1.42 expects. The other sources the brief names were
+probed through all three seats on 2026-10-02 from 08:05Z: the bylaw, the
+Lobbyists Act, the open data dataset page and the Yahoo News page each
+answered the Claude seat's WebFetch and the site's fetcher with HTTP 200,
+so none qualifies, and the reasons are in the manifest's exclusions. The
+portal root refused the Claude seat (HTTP 403), but the brief names the
+earlier meetings for qualification 9 only by template, so the carry rule
+cannot reach them. `carried/gates.yaml` lists no claim, because the one
+claim under review turns on one motion, one list and one bylaw section,
+not on every recorded vote.
+
+An independent read-only Claude Opus 5.5 session, not the editor, read
+every item of both pages against this brief (`carried/checks/`). It found
+no relevant item uncarried under rule v2, including minutes items 7.1,
+7.3 and 7.4, which list presenters on other items and hold no
+speaking-time motion. It found the carried text clear of personal
+information: 136 entries read "[member of the public]", and no name from
+the unredacted lists survives. Download provenance is the site's evidence
+fetcher on the registry's retrieval date. The public-open check is the
+fetcher's HTTP 200 on the live page at build time; no person opened
+either page in a browser.
+
+**The package.** Before launch both carried pages were probed again; the
+Claude seat's WebFetch was refused with HTTP 403 at 08:14:50Z and
+08:15:22Z. The rebuilt manifest differs from the checked one only in its
+probe times, and was committed at 9cdd025 with sha256
+`1ed94e171da6243977f8c10d9329d4555247f4f9d457868314bf6ff53cb33be8`. The
+carried section's sha256 was
+`33fba2c8d690be9e888be40e599e9abee598a8ab2b89a1e38964f25f6e39b7c7` and
+the package's
+`dcbb16d09c8398e12a5c338672fec98d169a856cac472c087ccd42870ad90109`,
+71,010 bytes, the same for every seat. The earliest probe the package
+rests on was 2026-10-02T08:14:50Z. All three seats launched from 9cdd025
+at 08:16:27Z. The runner refused nothing.
+
+| Seat | Attempt | Outcome |
+|---|---|---|
+| Claude Opus 5.5 (`claude-opus-5-5`), high, Claude Code 2.1.287 | `83f35b7860b60fd3`, 08:16Z to 08:20Z | admitted on one attempt under claude-safe-web-candidate-2.1.287 |
+| GPT-6 Sol (`gpt-6-sol`), high, codex-cli 0.159.3 | `184fd7d4b8ec578f`, 08:16Z to 08:24Z | admitted on one attempt under codex-captured-read-only-0.159.3 |
+| GPT-6 Luna (`gpt-6-luna`), high, codex-cli 0.159.3 | `e62a801f94af77d4`, 08:16Z to 08:23Z | admitted on one attempt under codex-captured-read-only-0.159.3 |
+
+What each seat returned, kept for the record only:
+
+| Claim | Claude | GPT-6 Sol | GPT-6 Luna |
+|---|---|---|---|
+| `speaking-time-cut-to-three-minutes` | Supported, moderate | Supported, moderate | Supported, high |
+
+No seat raised a MATERIAL FRAMING CONCERN.
+
+**Why the run stops.** All three seats cite the carried minutes, so the
+carried text reached them. The bylaw did not. The Claude seat reports
+HTTP 502 on four direct fetches, and the edmonton.ca bylaw index and the
+Clerk's FAQ returned 502 too; it writes that if a source read only through
+search extracts counts as inaccessible, the stop rule applies. GPT-6 Sol
+and GPT-6 Luna each report HTTP 502 on a direct request and say they could
+not read the full amendment history. The brief requires reviewers to
+confirm from the consolidation's own list of amendments that nothing after
+2025-10-29 bears on section 38, so that check was not made from the
+source. The bylaw was not carried because it qualified on neither ground:
+at 08:06Z the Claude seat's WebFetch and at 08:09Z the site's fetcher both
+got HTTP 200. After the round, at 08:25Z and 08:26Z, both got HTTP 200
+again, so the failure appears to have been during the round only. The
+carry tool also cannot carry it as it stands, since it carries only
+eScribe documents.
+
+The Claude seat also notes that item 7.6 lists two presenters under
+Panel 4 and none under Panel 5, though item 2.3 approved entries in both,
+and asks whether carrying truncated the list. The archived page holds the
+same two entries under Panel 4 and no Panel 5 list, so the carried text
+matches the record.
+
+**What reopens the run.** Round 1 again, once the seats can read the
+bylaw: either the page answers them during the round, or a way is found to
+carry a non-eScribe document a seat cannot reach. Which of those, and
+whether a transient failure needs a methodology answer, is the editor's
+decision. The round 1 answers stay in `round1/` as returned, with their
+rows in `run.yaml`. A restart moves them under a superseded directory, as
+earlier runs did.
+
+## 2026-10-02: the stopped round 1 superseded; round 1 runs again as it stands
+
+**The editor ruled the bylaw failure a transient outage at edmonton.ca,
+not an automated-access block, so the stopped round 1 is superseded and
+round 1 runs again with nothing changed.** The bylaw opened for both the
+Claude seat's WebFetch (HTTP 200 at 08:06Z) and the site's fetcher (HTTP
+200 at 08:09Z) before the round, and for both again after it (the Claude
+seat at 08:25Z, the fetcher at 08:26Z). Every seat got HTTP 502 from the
+same URL only between 08:16Z and 08:24Z. An outage on the City's side
+that lifts within minutes is not a reason to carry the bylaw or change the
+carry rule, and the rule stays as it is.
+
+The stopped round's answers (`round1/`), its rows in `run.yaml` and a
+copy of the carry manifest it ran on (committed at 9cdd025, sha256
+`1ed94e171da6243977f8c10d9329d4555247f4f9d457868314bf6ff53cb33be8`) move
+unchanged to `superseded-2026-10-02/`, as `round1/`, `run.yaml` and
+`carried-manifest.yaml`. They are kept for the record only and are not an
+input to the rerun: no seat sees them, and the merge and synthesis read
+only the new rounds. `run.yaml` starts again with no rows. The brief is
+unchanged and still frozen at
+`292e2d7d1a214fdd29985d483dc2c95e15da217311716ef86057be8a00ec5c0f`.
+
+Immediately before the rerun the bylaw URL is probed with the Claude
+seat's tool and with the site's fetcher, and round 1 launches only if
+both get HTTP 200. If a seat again reports the bylaw unreadable during
+the round, the run stops again.
+
+## 2026-10-02: round 1 rerun, stopped again on the bylaw
+
+**Round 1 ran again on all three seats, and the run stops again for the
+same reason: every seat reports that the bylaw PDF answered its web tool
+with HTTP 502 during the round.** As the editor directed, a second report
+of the bylaw unreadable stops the run rather than starting another rerun.
+No merge, round 2 or synthesis was run, and no verdict below is a finding
+of this site.
+
+**Before launch.** At 08:28:52Z the Claude seat's WebFetch got HTTP 200
+from the bylaw URL (`carried/seat-probes.yaml`), and at 08:29:01Z the
+site's fetcher got HTTP 200. The carried pages' probes, from 08:14:50Z,
+were inside their 6-hour window, so the manifest was not rebuilt and the
+package was the same as the stopped round's: carried section sha256
+`33fba2c8d690be9e888be40e599e9abee598a8ab2b89a1e38964f25f6e39b7c7`,
+package sha256
+`dcbb16d09c8398e12a5c338672fec98d169a856cac472c087ccd42870ad90109`,
+earliest probe 08:14:50Z. All three seats launched from 3b0be90 at
+08:29:11Z. The runner refused nothing.
+
+| Seat | Attempt | Outcome |
+|---|---|---|
+| Claude Opus 5.5 (`claude-opus-5-5`), high, Claude Code 2.1.287 | `90bde1173878e906`, 08:29Z to 08:32Z | admitted on one attempt |
+| GPT-6 Sol (`gpt-6-sol`), high, codex-cli 0.159.3 | `cde57e2b2da41a6b`, 08:29Z to 08:38Z | admitted on one attempt |
+| GPT-6 Luna (`gpt-6-luna`), high, codex-cli 0.159.3 | `0eebf162cbc42460`, 08:29Z to 08:35Z | admitted on one attempt |
+
+What each seat returned, kept for the record only:
+
+| Claim | Claude | GPT-6 Sol | GPT-6 Luna |
+|---|---|---|---|
+| `speaking-time-cut-to-three-minutes` | Supported, moderate | Supported, moderate | Supported, high |
+
+No seat raised a MATERIAL FRAMING CONCERN.
+
+**Why the run stops.** The Claude seat's WebFetch retrieved the PDF once
+but could not extract its text, and later attempts got HTTP 502. GPT-6 Sol
+and GPT-6 Luna each got HTTP 502. All three read sections 38, 2 and 4
+from search-engine extracts, and none read the consolidation's list of
+amendments from the document itself. At 08:38Z, just after the round, the
+site's fetcher got HTTP 200 and the full 423,231 bytes again. The bylaw
+has now answered the probes four times out of four and the seats' research
+runs not once in two rounds, so this no longer looks like a passing
+outage. The cause is not established here: it may be how the City's
+server answers the seats' tools under a research run's request pattern,
+or a size or format limit in the tools. The decision on how the seats are
+to read the bylaw belongs to the editor.
+
+The seats' counts of entries on item 7.6 disagree: Claude and Luna count
+64, Sol counts 65 (15, 15, 16, 15 and 4 by panel). That is for the merge
+and round 2 to settle and is not resolved here.
+
+The round 1 answers stay in `round1/` as returned, with their rows in
+`run.yaml`.
