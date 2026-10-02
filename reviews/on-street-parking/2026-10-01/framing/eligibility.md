@@ -1,0 +1,9 @@
+<!-- Eligibility read under methodology v1.39 on the brief edited 2026-10-01 after framing check 3. Reader: a separate read-only session that is not the editor, OpenAI gpt-6-sol at high via `codex --search exec -m gpt-6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check`, codex-cli 0.159.3, prompt on stdin, run from an empty scratch directory with no repository access. Package: the v1.39 rule (methodology/changelog.yaml entry and prompts/framing-check.md passage), the test to apply, framing/check-3.md, framing/wording-edits.md and the unified diff between the brief check 3 read (sha256 ba2a027e728ba6fc1b588983355c6ec2b02826e2a21e3e6f0659deb845798da0) and the edited brief (sha256 b4849964c97345acc00cb0991e7e048b7343dc081663f941d6b1a9a8a44a373f). The diff header carried the scratch-directory paths of the two files compared, which name the repository in mangled form; that is a disclosed lapse in the package rule and is recorded in the run record. Run by Stew, 2026-10-02 06:13 UTC (the evening of 2026-10-01 in Edmonton). Verdict: INELIGIBLE. Under v1.39 an ineligible brief stays parked under the v1.12 cap. Report is verbatim; nothing below this line was edited. -->
+
+Check 4 — **ELIGIBLE.** The “Count the unknown” instruction is the checker’s copy-ready text, applied verbatim.
+
+Check 9 — **INELIGIBLE.** The editor changed text beyond the checker’s replacements: the second passage drops “and” and capitalizes “this,” while the third changes the supplied full stop to a semicolon.
+
+Status block — **Not allowed.** Calling it a state change does not exempt it from the rule that nothing else in the brief may change.
+
+Verdict: INELIGIBLE
