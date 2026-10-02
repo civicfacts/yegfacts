@@ -32,7 +32,7 @@ const { claim, story, question, pageUrl } = Astro.props;
 const panel = panelForClaim(claim);
 /**
  * Sources this claim's panel read from our archived copies (methodology v1.41,
- * v1.42). Each citation of one gets a short tag linking the method, so a reader
+ * v1.42, v1.43). Each citation of one gets a short tag linking the method, so a reader
  * who lands here first sees it beside the source; the full label is on the
  * source's own page.
  */
@@ -138,7 +138,7 @@ const heading = 'section-heading mt-14';
                     <span class="text-muted">
                       {' ('}
                       <a href={CARRIED_METHOD_HREF} class="link">
-                        {carried.get(id)!.kind === 'items' ? 'selected items' : 'archived copy'}
+                        {carried.get(id)!.kind === 'items' ? 'selected items' : carried.get(id)!.kind === 'sections' ? 'selected sections' : 'archived copy'}
                       </a>
                       {')'}
                     </span>

@@ -1,23 +1,25 @@
 ---
 import {
-  CARRIED_ITEMS_LABEL,
-  CARRIED_ITEMS_UNPUBLISHABLE,
-  CARRIED_LABEL,
   CARRIED_METHOD_HREF,
-  CARRIED_SAME_COPY,
+  SECTION_RULE_HREF,
   SELECTION_RULE_HREF,
+  carriedLabelText,
   type CarriedSource,
 } from '../lib/carried';
 
 /**
  * The disclosure beside a source whose text reached the reviewers as our
- * archived copy. A whole document (methodology v1.41): why, a link to the
- * City's original and to the method, that every reviewer read the same copy,
- * and the byte hash a reader can compare with their own download. Selected
- * items of a meeting page (v1.42): that the site chose them under a published
- * rule and the rest of the page was not shown, with links to the City's page,
- * the rule and the item index, and a plain statement that our archived copies
- * cannot be published.
+ * archived copy, in the source list under the answer, never above it. A whole
+ * document (methodology v1.41): why, a link to the original and to the method,
+ * what all reviewers reading the same copy means, and the byte hash a reader
+ * can compare with their own download. Selected items of a meeting page
+ * (v1.42) or selected sections of a long document (v1.43): that the site chose
+ * them under a published rule and the rest was not shown, with links to the
+ * original, the rule and the item index or section inventory, and a plain
+ * statement that our archived copies cannot be published. Where every
+ * reviewer's tools failed to retrieve it in two rounds (v1.43), the label says
+ * the tools failed, not that the document is unavailable. The sentences come
+ * from carriedLabelText.
  *
  * The same sentence stands beside every carried source in a list, which is
  * the disclosure working, not the page repeating itself; `data-pagefind-ignore`
@@ -28,22 +30,32 @@ interface Props {
 }
 
 const { source } = Astro.props;
+const text = carriedLabelText(source);
 ---
 
 {
   source.kind === 'items' ? (
     <p class="mt-1.5 text-xs leading-relaxed text-muted" data-carried={source.registryId} data-carried-kind="items" data-pagefind-ignore>
-      {CARRIED_ITEMS_LABEL}. {CARRIED_SAME_COPY} {CARRIED_ITEMS_UNPUBLISHABLE}{' '}
+      {text}{' '}
       <a href={source.cityUrl} rel="noopener" class="link">City page</a> ·{' '}
       <a href={SELECTION_RULE_HREF} rel="noopener" class="link">The rule (v{source.ruleVersion})</a> ·{' '}
       <a href={source.itemIndexHref} rel="noopener" class="link">Item index</a> ·{' '}
       <a href={CARRIED_METHOD_HREF} class="link">How we handle this</a> · page SHA-256{' '}
       <code class="break-all">{source.archiveSha256}</code>
     </p>
+  ) : source.kind === 'sections' ? (
+    <p class="mt-1.5 text-xs leading-relaxed text-muted" data-carried={source.registryId} data-carried-kind="sections" data-pagefind-ignore>
+      {text}{' '}
+      <a href={source.cityUrl} rel="noopener" class="link">Full document</a> ·{' '}
+      <a href={SECTION_RULE_HREF} rel="noopener" class="link">The rule (v{source.ruleVersion})</a> ·{' '}
+      <a href={source.itemIndexHref} rel="noopener" class="link">Section inventory</a> ·{' '}
+      <a href={CARRIED_METHOD_HREF} class="link">How we handle this</a> · SHA-256{' '}
+      <code class="break-all">{source.archiveSha256}</code>
+    </p>
   ) : (
-    <p class="mt-1.5 text-xs leading-relaxed text-muted" data-carried={source.registryId} data-pagefind-ignore>
-      {CARRIED_LABEL}. {CARRIED_SAME_COPY}{' '}
-      <a href={source.cityUrl} rel="noopener" class="link">City original</a> ·{' '}
+    <p class="mt-1.5 text-xs leading-relaxed text-muted" data-carried={source.registryId} data-carried-reason={source.reason} data-pagefind-ignore>
+      {text}{' '}
+      <a href={source.cityUrl} rel="noopener" class="link">{source.reason === 'portal' ? 'City original' : 'Original'}</a> ·{' '}
       <a href={CARRIED_METHOD_HREF} class="link">How we handle this</a> · SHA-256{' '}
       <code class="break-all">{source.archiveSha256}</code>
     </p>
