@@ -30,6 +30,7 @@ import {
   briefNaming,
   buildCarryManifest,
   challengeSignature,
+  SEAT_PACKAGE_CEILINGS,
   titlesForDocument,
   type CarryManifest,
   type Extractor,
@@ -430,7 +431,8 @@ describe('run-reviewer --carried', { timeout: 180_000 }, () => {
 
     expect(claude.stdout).toMatch(/package files: .*carried-documents\.md/);
     expect(claude.stdout).toContain(`manifest sha256 ${sha256(readFileSync(manifest))}`);
-    expect(claude.stdout).toMatch(/\(budget 400000\)/);
+    expect(claude.stdout).toMatch(/\(budget 1203500\)/);
+    expect(codex.stdout).toMatch(/\(budget 521838\)/);
   });
 
   // Finding 1: path confinement.
@@ -613,9 +615,39 @@ describe('run-reviewer --carried', { timeout: 180_000 }, () => {
     const over = dryRun(repo, 'claude', manifest, ['--max-package-bytes', '1000']);
     expect(over.ok).toBe(false);
     expect(over.stderr).toMatch(/over the 1000-byte budget/);
-    const raised = dryRun(repo, 'claude', manifest, ['--max-package-bytes', '400001']);
+    const raised = dryRun(repo, 'claude', manifest, ['--max-package-bytes', '1203501']);
     expect(raised.ok).toBe(false);
-    expect(raised.stderr).toMatch(/over the claude seat's ceiling of 400000; it can only lower it/);
+    expect(raised.stderr).toMatch(/over the claude seat's ceiling of 1203500; it can only lower it/);
+    const raisedLuna = dryRun(repo, 'luna', manifest, ['--max-package-bytes', '521839']);
+    expect(raisedLuna.ok).toBe(false);
+    expect(raisedLuna.stderr).toMatch(/over the gpt-luna seat's ceiling of 521838; it can only lower it/);
+  });
+
+  // D-0049: each seat's own ceiling, at the byte. A round-2 package carries the
+  // merged evidence, which the build's round-1 estimate does not, so the
+  // launcher's own check is the one that decides here.
+  it('holds each seat to its own ceiling: one byte over refuses, the ceiling itself passes', () => {
+    const repo = runnerRepo();
+    const manifest = writeManifest(repo);
+    const evidence = path.join(repo, RUN, 'combined-evidence.json');
+    const sized = (bytes: number) => writeFileSync(evidence, `{"pad": "${'x'.repeat(bytes - 12)}"}\n`);
+    const packageBytes = (stdout: string) => Number(/package bytes: (\d+)/.exec(stdout)?.[1]);
+    sized(100);
+    const base = dryRun(repo, 'codex', manifest, [], '2');
+    expect(base.ok, base.stderr).toBe(true);
+    const overhead = packageBytes(base.stdout) - 100;
+
+    for (const [seat, slot] of [['codex', 'gpt'], ['luna', 'gpt-luna'], ['claude', 'claude']] as const) {
+      const ceiling = SEAT_PACKAGE_CEILINGS[slot];
+      sized(ceiling - overhead + 1);
+      const over = dryRun(repo, seat, manifest, [], '2');
+      expect(over.ok, seat).toBe(false);
+      expect(over.stderr).toContain(`package is ${ceiling + 1} bytes, over the ${ceiling}-byte budget; nothing was sent`);
+      sized(ceiling - overhead);
+      const at = dryRun(repo, seat, manifest, [], '2');
+      expect(at.ok, at.stderr).toBe(true);
+      expect(at.stdout).toContain(`package bytes: ${ceiling} (budget ${ceiling})`);
+    }
   });
 
   /**

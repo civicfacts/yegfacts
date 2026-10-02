@@ -498,11 +498,12 @@ describe('a pdf-sections document, built and packaged', () => {
 
   it('stops over the seat budget, and trims nothing', async () => {
     const { repo, rulesFile } = sectionsRepo();
-    const long = budgetText(`${'frost line '.repeat(40_000)}\n`);
+    const long = budgetText(`${'frost line '.repeat(50_000)}\n`);
     const manifest = await build(repo, rulesFile, long);
     expect(manifest.package_budget?.result).toBe('over');
-    expect(manifest.documents[0]!.extraction!.text_bytes).toBeGreaterThan(400_000);
-    expect(refusals(repo, rulesFile, complete(manifest), long)).toEqual([expect.stringMatching(/over the 400000-byte seat budget; the run stops, nothing is trimmed/)]);
+    expect(manifest.package_budget?.limit).toBe(521_838);
+    expect(manifest.documents[0]!.extraction!.text_bytes).toBeGreaterThan(521_838);
+    expect(refusals(repo, rulesFile, complete(manifest), long)).toEqual([expect.stringMatching(/over the 521838-byte seat budget; the run stops, nothing is trimmed/)]);
   });
 
   it('refuses a rule version that is not published', async () => {
