@@ -11,6 +11,7 @@ import {
 } from '../../lib/content';
 import { carriedSources, type CarriedSource } from '../../lib/carried';
 import { SITE } from '../../lib/site';
+import { archiveStatus } from '../../lib/archive';
 
 /**
  * One page per evidence object. "Used by" is generated here at build time and
@@ -62,6 +63,7 @@ const usedRows: Array<{ claim: Claim; story: Story | undefined; carried: Carried
  * trusting us (methodology v1.2).
  */
 const isPrivate = entry.data.archive.visibility === 'private';
+const archive = archiveStatus(entry.data.archive);
 
 const rows = [
   { label: 'Publisher', value: entry.data.publisher },
@@ -69,13 +71,6 @@ const rows = [
   { label: 'Published', value: entry.data.published_on ?? 'not stated' },
   { label: 'Retrieved', value: entry.data.retrieved_on },
   { label: 'Redistribution', value: entry.data.rights.redistribution },
-  {
-    label: 'Archive',
-    value:
-      entry.data.archive.visibility === 'public'
-        ? 'mirrored in this repo'
-        : 'retained privately; hash published',
-  },
 ];
 ---
 
@@ -114,9 +109,29 @@ const rows = [
           </>
         ))
       }
+      <dt class="text-muted">Archive</dt>
+      <dd data-archive-status>
+        {
+          archive.recordHref ? (
+            <>
+              original archive lost; see{' '}
+              <a href={archive.recordHref} rel="noopener" class="link">
+                the audit record
+              </a>
+            </>
+          ) : (
+            archive.long
+          )
+        }
+      </dd>
       <dt class="text-muted">SHA-256</dt>
       <dd class="font-mono text-xs break-all">{entry.data.archive.sha256}</dd>
     </dl>
+    {
+      entry.data.archive.note && (
+        <p class="mt-3 text-sm text-muted">{entry.data.archive.note}</p>
+      )
+    }
     {
       entry.data.rights.note && (
         <p class="mt-3 text-sm text-muted">{entry.data.rights.note}</p>
@@ -161,14 +176,26 @@ const rows = [
             the original
           </a>{' '}
           and hash it: if the bytes still match the SHA-256 above, you have the same document we
-          read. If the page has changed since{' '}
-          <time datetime={entry.data.retrieved_on}>{entry.data.retrieved_on}</time> or the link has
-          died, email{' '}
-          <a href={`mailto:${SITE.researchEmail}`} class="link">
-            {SITE.researchEmail}
-          </a>{' '}
-          and we will arrange verification against the archived copy. Rights terms stop us
-          republishing this file; they do not stop us proving which file it was.
+          read.{' '}
+          {archive.lost ? (
+            <>
+              We no longer hold the copy we read on{' '}
+              <time datetime={entry.data.retrieved_on}>{entry.data.retrieved_on}</time>, so we
+              cannot verify against it if the page has changed. The audit record says what still
+              supports each finding that cites this source.
+            </>
+          ) : (
+            <>
+              If the page has changed since{' '}
+              <time datetime={entry.data.retrieved_on}>{entry.data.retrieved_on}</time> or the link
+              has died, email{' '}
+              <a href={`mailto:${SITE.researchEmail}`} class="link">
+                {SITE.researchEmail}
+              </a>{' '}
+              and we will arrange verification against the archived copy. Rights terms stop us
+              republishing this file; they do not stop us proving which file it was.
+            </>
+          )}
         </p>
       </section>
     )

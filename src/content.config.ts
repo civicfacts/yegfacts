@@ -433,6 +433,14 @@ const evidence = defineCollection({
       sha256: z.string().regex(/^[0-9a-f]{64}$/, 'must be a lowercase sha256 hex digest'),
       visibility: z.enum(['public', 'private']),
       path: z.string().optional(),
+      /**
+       * Set when the archived bytes this hash identifies were lost. The hash
+       * stays as recorded; the page then says the archive is lost and links
+       * `loss_record`, the repo path of the audit that explains the loss.
+       */
+      lost_on: isoDate.optional(),
+      loss_record: z.string().optional(),
+      note: z.string().optional(),
     }),
     rights: z.object({
       redistribution: z.enum(['allowed', 'restricted', 'unclear']),

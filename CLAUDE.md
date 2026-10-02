@@ -15,6 +15,9 @@ main: create it with the harness's worktree tool (or `git worktree add
 .claude/worktrees/<name> -b <name>`), open the PR with `gh pr create`,
 and read the preview link Cloudflare posts on it. Several Stew sessions
 run at once; the worktree is what keeps them out of each other's files.
+Remove a worktree only with `scripts/worktree-remove-safe.sh <path>`: it
+copies the worktree's gitignored evidence/private/ bytes to the main
+checkout first, so archived sources are not lost with the worktree.
 
 Stew advises and challenges; the founder decides. Decisions and state
 changes get written back to the board repo (private) or this repo's

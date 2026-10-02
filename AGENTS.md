@@ -26,3 +26,9 @@ Production deploys when a PR merges to main. Every branch gets a
 Cloudflare Pages preview build; the link is posted on the PR. Work in a
 worktree on a branch, one PR per batch; never commit to main directly.
 
+Remove a finished worktree with `scripts/worktree-remove-safe.sh <path>`,
+not `git worktree remove`. `evidence/private/` is gitignored, so archived
+source bytes in a worktree exist nowhere else; the script copies any the
+main checkout lacks and refuses if a file differs. Fifteen archives were
+lost this way (`methodology/audits/archive-loss-2026-10-02.md`).
+

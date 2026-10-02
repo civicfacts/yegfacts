@@ -21,7 +21,7 @@ let problems = 0;
 for (const file of readdirSync(registryDir).filter((f) => f.endsWith('.yaml'))) {
   const entry = parse(readFileSync(path.join(registryDir, file), 'utf8')) as {
     id?: string;
-    archive?: { sha256?: string; visibility?: string; path?: string };
+    archive?: { sha256?: string; visibility?: string; path?: string; lost_on?: unknown; loss_record?: string };
   };
   const archive = entry.archive;
   if (!archive || archive.visibility !== 'private') continue;
@@ -33,6 +33,11 @@ for (const file of readdirSync(registryDir).filter((f) => f.endsWith('.yaml'))) 
     continue;
   }
   const abs = path.join(root, rel);
+  if (archive.lost_on !== undefined && !existsSync(abs)) {
+    // A recorded loss is not a new problem; it stays listed so it is never silent.
+    console.warn(`- ${entry.id}: archive recorded as lost, see ${archive.loss_record}`);
+    continue;
+  }
   if (!existsSync(abs)) {
     console.error(`✗ ${entry.id}: missing archive file ${rel}`);
     problems += 1;
