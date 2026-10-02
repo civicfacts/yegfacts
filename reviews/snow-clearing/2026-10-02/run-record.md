@@ -723,3 +723,31 @@ nothing is trimmed to fit. Narrowing the rule by a new version or
 revising the brief is the editor's decision. The manifest is committed as
 built, with its budget recorded as over. Every check is pending except
 the founder's download and browser checks on the files he downloaded.
+
+## 2026-10-02: rebased onto the per-seat ceilings (D-0049); fresh probes; within the budget
+
+**Under D-0049 the same package fits.** D-0049 sets each seat's package
+ceiling from its measured context: 521,838 bytes for the two GPT-6 seats
+and 1,203,500 for Claude. The build holds the round-1 estimate to the
+smallest, so the 423,656-byte estimate that was over the old 400,000-byte
+ceiling is now within it, with the same carried section of 353,188 bytes.
+Nothing in the brief, the rules or the selection changed.
+
+**Fresh probes.** The same 34 addresses were probed through all three
+seats from 22:22:34Z to 22:28:12Z (`carried/seat-probes.yaml`, appended).
+The results match the earlier probe: the Claude seat's WebFetch was
+refused with HTTP 403 at every eScribe address, with HTTP 502 at every
+edmonton.ca address, and with no status at both web.archive.org
+addresses; both GPT-6 seats were unclear everywhere.
+
+**The manifest, rebuilt** (minutes rule v5, section rule v2). Every
+document carried before is still carried, with the same texts and items.
+The site's fetcher now gets HTTP 200 from the filestream files of report
+CO03513 and its Attachment 9 (YF-EV-0294, 0295), so those two rest on
+the Claude seat's refusal there instead of the fetcher's challenge. The
+founder's download provenance and public-open checks are kept. Each
+meeting page's public-open check is now the site fetcher's own HTTP 200
+on the live page at build time, as #118 allows for pages carried by item,
+and its download provenance names the site fetcher. Every extraction,
+completeness, section and personal-information check, and every
+checker's reason, is pending for the independent checker.
