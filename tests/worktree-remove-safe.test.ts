@@ -84,6 +84,31 @@ describe('worktree-remove-safe.sh', () => {
     expect(existsSync(wt)).toBe(true);
   });
 
+  it("refuses when a directory in the main checkout's destination path is a symlink", () => {
+    const { wt, mainPrivate, wtPrivate } = setup();
+    const outside = mkdtempSync(path.join(tmpdir(), 'wt-safe-outside-'));
+    cleanups.push(() => rmSync(outside, { recursive: true, force: true }));
+    symlinkSync(outside, path.join(mainPrivate, 'sub'));
+    mkdirSync(path.join(wtPrivate, 'sub'));
+    writeFileSync(path.join(wtPrivate, 'sub', 'a'), 'x');
+    const result = run(wt);
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain('evidence/private/sub in the main checkout is a symlink');
+    expect(existsSync(path.join(outside, 'a'))).toBe(false);
+    expect(existsSync(wt)).toBe(true);
+  });
+
+  it("refuses when the main checkout's copy is itself a symlink", () => {
+    const { main, wt, mainPrivate, wtPrivate } = setup();
+    writeFileSync(path.join(main, 'elsewhere'), 'x');
+    symlinkSync(path.join(main, 'elsewhere'), path.join(mainPrivate, 'a'));
+    writeFileSync(path.join(wtPrivate, 'a'), 'x');
+    const result = run(wt);
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain('evidence/private/a in the main checkout is a symlink');
+    expect(existsSync(wt)).toBe(true);
+  });
+
   it.skipIf(asRoot)('refuses when a file cannot be hashed', () => {
     const { wt, mainPrivate, wtPrivate } = setup();
     writeFileSync(path.join(mainPrivate, 'a'), 'x');

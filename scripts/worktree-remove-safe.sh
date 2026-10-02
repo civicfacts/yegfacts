@@ -12,7 +12,9 @@
 #   - a file whose bytes differ between the two is listed, and nothing is removed;
 #   - a dangling symlink, a symlink to a directory, an unreadable file, a hash
 #     that fails or comes back empty, or a failed directory scan stops the
-#     script without removing anything.
+#     script without removing anything;
+#   - so does a destination in the main checkout that is a symlink or passes
+#     through one, so every copy lands inside its real evidence/private.
 # The removal is a plain `git worktree remove`, which itself refuses a
 # worktree with uncommitted changes. Exits non-zero on any refusal.
 set -euo pipefail
@@ -48,6 +50,31 @@ sha() {
   printf '%s' "$out"
 }
 
+# Refuses unless the destination for a relative path stays inside the main
+# checkout's real evidence/private: no symlink at evidence, evidence/private,
+# any directory below it on the way, or the destination file itself.
+check_dest() {
+  local rel="$1" path="$main" comp real
+  local -a comps
+  IFS=/ read -r -a comps <<<"evidence/private/$rel"
+  for comp in "${comps[@]}"; do
+    path="$path/$comp"
+    if [ -L "$path" ]; then
+      echo "refusing: ${path#"$main"/} in the main checkout is a symlink" >&2
+      exit 1
+    fi
+  done
+  mkdir -p "$(dirname "$dst/$rel")"
+  real=$(cd "$(dirname "$dst/$rel")" && pwd -P)
+  case "$real/" in
+    "$dst/"*) ;;
+    *)
+      echo "refusing: the destination for $rel resolves outside $dst" >&2
+      exit 1
+      ;;
+  esac
+}
+
 copied=0
 differs=""
 if [ -d "$src" ]; then
@@ -68,13 +95,13 @@ if [ -d "$src" ]; then
       exit 1
     fi
     if ! here=$(sha "$file"); then exit 1; fi
+    check_dest "$rel"
     if [ -e "$dst/$rel" ]; then
       if ! there=$(sha "$dst/$rel"); then exit 1; fi
       if [ "$here" != "$there" ]; then
         differs="$differs  $rel"$'\n'
       fi
     else
-      mkdir -p "$(dirname "$dst/$rel")"
       cp -pL "$file" "$dst/$rel"
       if ! there=$(sha "$dst/$rel"); then exit 1; fi
       if [ "$here" != "$there" ]; then

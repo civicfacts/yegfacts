@@ -11,8 +11,8 @@ An audit record and a correction notice.
 Every evidence page on this site says that we archived the source and that its
 SHA-256 hash identifies the exact bytes we read. For fifteen sources that is no
 longer true. We lost the archived files. The hashes are still published, but we
-hold nothing they can be checked against, and the sources have changed or now
-refuse our requests, so a reader fetching them today gets different bytes.
+hold nothing they can be checked against. A fresh copy of each either differs
+from the recorded hash or could not be fetched at all.
 
 Fourteen of the fifteen are cited by the seven published cycling-volumes
 findings. None of those findings changes. The review panel's committed
@@ -36,12 +36,30 @@ with the site fetcher's user agent.
 | Outcome | Entries |
 | --- | --- |
 | Restored: the new bytes match the recorded hash, so nothing was lost | YF-EV-0142, 0151, 0152, 0154, 0155, 0156, 0157, 0161 |
-| Lost: the source has changed, so the new bytes do not match | YF-EV-0078, 0141, 0143, 0144, 0145, 0146, 0147, 0148, 0149, 0150, 0153, 0159, 0160, 0162 |
+| Lost: the fresh copy's bytes differ from the recorded hash | YF-EV-0078, 0141, 0143, 0144, 0145, 0146, 0147, 0148, 0149, 0150, 0153, 0159, 0160, 0162 |
 | Lost: no copy could be made | YF-EV-0158 |
 
 YF-EV-0158 is the Statistics Canada 2016 Census Profile for Edmonton. Its URL
 now answers HTTP 403 with a Cloudflare challenge page. That page was discarded
 rather than registered, because it is not the source.
+
+### Did the content change?
+
+A different hash does not by itself show that the source changed. The source
+may have changed since it was read, or the publisher may serve different bytes
+on each request, for example a web page with per-request tokens. For three
+data queries the content itself has changed, compared with what the panel
+recorded:
+
+- YF-EV-0141 (monthly counter totals): the fresh copy includes a month,
+  2026-10, after the panel read the data.
+- YF-EV-0143 (first and last record per counter): the fresh copy shows records
+  up to 2026-10-01; the panel's answers record the data as ending on
+  2026-09-02 at 23:45.
+- YF-EV-0162 (Bike Routes segments): the fresh copy has 10,418 segments; the
+  entry recorded 10,417.
+
+For the other eleven, this audit did not establish whether the content changed.
 
 YF-EV-0078, a Wikipedia article on Glenora, is cited by no published claim,
 so no finding depends on it.
