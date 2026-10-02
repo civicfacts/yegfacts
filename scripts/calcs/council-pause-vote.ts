@@ -221,9 +221,9 @@ export const people = {
   administrationRecommended: authors('administration-recommended-freezing-14-routes').size,
   motions: authors('motions-to-cut-budget-to-50-million-failed').size,
   sameSeven: authors('same-seven-councillors-vote-together').size,
-  /** Claims under the question whose wordings include Councillor Jennifer Rice's. */
-  claimsWithTheCouncillor: underQuestion.filter((c) =>
-    (c.variations ?? []).some((v) => v.author_name === 'Councillor Jennifer Rice'),
+  /** Claims under the question whose wordings include Amber Owl J.'s single comment. */
+  claimsWithOneComment: underQuestion.filter((c) =>
+    (c.variations ?? []).some((v) => v.author_name === 'Amber Owl J.'),
   ).length,
 } as const;
 

@@ -131,7 +131,11 @@ const effort = panelTypes.has('three-seat AI panel, two vendors') &&
     ) : (
       <>
         {/* Layer 1 — ONE matrix: claims down, seats across, panel finding last. */}
-        <div class="mt-5 overflow-x-auto">
+        <p class="mt-5 text-xs text-muted">
+          Each reviewer's verdict and confidence are from round one, the round in which the
+          reviewers worked independently.
+        </p>
+        <div class="mt-2 overflow-x-auto">
           <table class="w-full border-collapse text-sm">
             <thead>
               <tr class="border-b border-rule-strong text-left">

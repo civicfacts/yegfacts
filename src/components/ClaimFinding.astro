@@ -7,6 +7,7 @@ import { claimTopics, type Claim, type Story } from '../lib/content';
 import { saidIn, sourceRegister, wordingsForClaim, type Question } from '../lib/intake';
 import { panelForClaim, requireTerm as gloss } from '../lib/glossary';
 import { findingGlossTerm } from '../lib/findings';
+import { CARRIED_METHOD_HREF, carriedSources } from '../lib/carried';
 
 /**
  * One checked claim, answering on its own.
@@ -29,6 +30,13 @@ interface Props {
 
 const { claim, story, question, pageUrl } = Astro.props;
 const panel = panelForClaim(claim);
+/**
+ * Sources this claim's panel read from our archived copies (methodology v1.41,
+ * v1.42). Each citation of one gets a short tag linking the method, so a reader
+ * who lands here first sees it beside the source; the full label is on the
+ * source's own page.
+ */
+const carried = carriedSources([claim.data.review_run]);
 
 const sources = new Map(sourceRegister().map((source) => [source.id, source]));
 
@@ -126,6 +134,15 @@ const heading = 'section-heading mt-14';
                   <a href={`/evidence/${id}`} class="link">
                     {id}
                   </a>
+                  {carried.has(id) && (
+                    <span class="text-muted">
+                      {' ('}
+                      <a href={CARRIED_METHOD_HREF} class="link">
+                        {carried.get(id)!.kind === 'items' ? 'selected items' : 'archived copy'}
+                      </a>
+                      {')'}
+                    </span>
+                  )}
                 </>
               ))}
             </li>

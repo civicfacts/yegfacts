@@ -9,6 +9,17 @@ comments". The browser displayed 669 comments; the extraction returned 621
 records. The difference is unresolved, and completeness is not established.
 See the [trace audit](../../who-pays-for-roads/2026-09-03/verification/audit-2026-09-09.md).
 
+**Correction, October 2, 2026:** one commenter, a former city councillor,
+kept her real name in the capture as a sitting office-holder. She had left
+Council at the October 2025 election, so she commented as a private person,
+and the office-holder rule did not apply. The capture
+(`intake/captures/yegscoop-2026-08-26/comments.jsonl`, comment 449 and four
+replies that addressed her) and the register now carry the pseudonym the
+capture's own hash rule gives her, Amber Owl J., with every other label left
+as it was. The extraction, merge and triage files in this directory are the
+record of what those runs read and are left unchanged. Found by the
+council-pause-vote release check, reviews/council-pause-vote/2026-09-25/gate/release-check.md.
+
 ## What came out
 
 | | |

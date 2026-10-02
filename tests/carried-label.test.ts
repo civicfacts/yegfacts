@@ -19,6 +19,7 @@ import {
   CARRIED_METHOD_HREF,
   SELECTION_RULE_HREF,
   carriedSources,
+  gateParkedClaims,
 } from '../src/lib/carried';
 
 const FIXTURE_ROOT = fileURLToPath(new URL('./fixtures/carried', import.meta.url));
@@ -82,5 +83,11 @@ describe('carried-document label', () => {
     expect(html).toContain('href="https://github.com/civicfacts/yegfacts/blob/main/reviews/fixture-story/2026-01-01/carried/manifest.yaml"');
     expect(html).toContain(`href="${CARRIED_METHOD_HREF}"`);
     expect(html).not.toContain(CARRIED_LABEL);
+  });
+
+  it('reads the claims a run parked at its vote gate, and none from a run without a manifest', () => {
+    const parked = gateParkedClaims(['reviews/council-pause-vote/2026-09-25', 'reviews/no-such-run/2026-01-01']);
+    expect([...parked]).toEqual(['same-seven-councillors-vote-together']);
+    expect(gateParkedClaims(['reviews/no-such-run/2026-01-01']).size).toBe(0);
   });
 });

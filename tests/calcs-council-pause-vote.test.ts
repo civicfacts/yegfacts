@@ -29,7 +29,7 @@ describe('the two reduction motions', () => {
     expect(figures.motions[2024].vote).toBe('4 to 7');
     const text = claimText('cpv-motions-to-cut-to-50-million');
     expect(text).toContain('defeated 4 to 8');
-    expect(text).toContain('defeated 4 to 7');
+    expect(text).toContain('defeated it 4 to 7');
     expect(story).toContain('Council defeated it 4 to 8');
     expect(story).toContain('Council defeated it 4 to 7');
   });
@@ -86,7 +86,7 @@ describe('the route lists', () => {
 });
 
 describe('the people', () => {
-  it('six people, five on the first claim, one each on the others, the councillor on three', () => {
+  it('six people, five on the first claim, one each on the others, one comment on three', () => {
     expect(figures.people).toEqual({
       question: 6,
       distinct: 6,
@@ -94,10 +94,10 @@ describe('the people', () => {
       administrationRecommended: 1,
       motions: 1,
       sameSeven: 1,
-      claimsWithTheCouncillor: 3,
+      claimsWithOneComment: 3,
     });
     expect(story).toContain('six people');
-    expect(story).toContain('Five of them');
+    expect(story).toContain('Five of the six');
     expect(story).toContain('three of the four claims');
   });
 });

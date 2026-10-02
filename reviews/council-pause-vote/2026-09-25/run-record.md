@@ -788,3 +788,28 @@ votes whose relevance is unresolved; depending on those, the verdict
 ranges from Not established to Contradicted (`carried/checks/gate.md`).
 The editor accepted the park. The seats were told so and did not answer
 it. `run.yaml` scopes synthesis to claims 1 to 3.
+
+## 2026-10-02: drafted, checked and gated; a commenter was misdescribed as a sitting councillor
+
+**The page went through two faithfulness checks, a freshness audit, a
+plain-speech read, the publication gate and a critique of the rendered page;
+no finding changed.** Each report is committed with the editor's
+dispositions: `faithfulness/gpt-1.md`, `faithfulness/gpt-luna-1.md`,
+`gate/freshness-audit.md`, `plain-speech/gpt-1.md`,
+`gate/source-verification.md`, `gate/release-check.md` and `critique-1.md`.
+The freshness audit led to five more City minutes pages read after the panel
+ran, YF-EV-0228 to 0232. They changed no finding.
+
+**The error.** The intake record (`intake.md`, "a sitting councillor writing
+under her own name") and the frozen brief ("a sitting councillor writing under
+her own name keeps it") treated the author of comment 449, Jennifer Rice, as a
+sitting office-holder, and the capture kept her name on that ground. The
+archived 2026 Council minutes show she was not one: she sat on Council until
+the October 2025 election (source verification B1). As a commenter she was a
+private person, and the site names office-holders only for what they did in
+office. The editor's decision: her comment is shown under the pseudonym the
+capture's own hash rule gives her, Amber Owl J., in the capture, the register
+and every page that quotes it. Her name stays where the page reports her 2022,
+2023 and 2024 votes and motions, which she cast and moved in office. The brief
+and `intake.md` are frozen and are not edited; this entry is the correction.
+The intake run's README records the capture change.

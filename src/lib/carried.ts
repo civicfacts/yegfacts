@@ -20,9 +20,9 @@ export const CARRIED_LABEL =
 export const CARRIED_SAME_COPY = 'All reviewers read the same copy.';
 export const CARRIED_METHOD_HREF = '/methodology#carried-documents';
 export const CARRIED_ITEMS_LABEL =
-  'Reviewers read selected items from the City’s minutes, chosen by the site under a published rule; the rest of each page was not shown to them';
+  'The AI reviewers saw only the items on this City meeting page that our published rule picked, from our archived copy, because the City’s portal blocked automated access';
 export const CARRIED_ITEMS_UNPUBLISHABLE =
-  'Our archived copies of these pages cannot be published, so check the selection against the City’s own page.';
+  'Our copy carries no grant to republish it, so check the items against the City’s own page.';
 /** The published selection rule, every version. */
 export const SELECTION_RULE_HREF = repoFile('scripts/panel/minutes-selection-rules.yaml');
 
@@ -92,4 +92,26 @@ export function carriedSources(runDirs: readonly string[], root: string = proces
     }
   }
   return carried;
+}
+
+/**
+ * Claims a run set aside at its vote gate (D-0047 rule 5): the `claim:<id>`
+ * gates in each run's `carried/manifest.yaml` whose result is `parked`. Such a
+ * claim was in the brief and was never answered on that run, which is a
+ * different statement from a claim still waiting for its question's run.
+ *
+ * @param runDirs repo-relative run directories, e.g. `reviews/<story>/<date>`.
+ * @param root the repository root the run directories resolve against.
+ */
+export function gateParkedClaims(runDirs: readonly string[], root: string = process.cwd()): Set<string> {
+  const parked = new Set<string>();
+  for (const run of new Set(runDirs)) {
+    const file = path.join(root, run, 'carried', 'manifest.yaml');
+    if (!existsSync(file)) continue;
+    const manifest = YAML.parse(readFileSync(file, 'utf8')) as { gates?: Record<string, { result?: string }> };
+    for (const [key, gate] of Object.entries(manifest?.gates ?? {})) {
+      if (key.startsWith('claim:') && gate?.result === 'parked') parked.add(key.slice('claim:'.length));
+    }
+  }
+  return parked;
 }

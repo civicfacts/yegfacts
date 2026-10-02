@@ -67,6 +67,16 @@ export async function getStaticPaths() {
    * `register_claims` was checked under that claim's wording, so its page says
    * so and links to the finding rather than saying it is still waiting.
    */
+  /**
+   * A plain line for a register claim its question's story set aside (a
+   * framing park, or a park at a run's vote gate, which `scripts/validate.ts`
+   * checks). It replaces "waiting" on the claim's page and its share card.
+   */
+  const setAsideLine = (claim: RegisterClaim): string | null => {
+    if (claim.parked_at === 'framing') return null;
+    return stories.get(claim.question)?.data.parked[claim.id] ?? null;
+  };
+
   const registered = claimsWithPages().map((claim) => ({
     params: { id: claim.id },
     props: {
@@ -76,6 +86,7 @@ export async function getStaticPaths() {
       supports: null,
       registered: claim,
       source: claim.source ? (sources.get(claim.source) ?? null) : null,
+      setAside: setAsideLine(claim),
       checkedAs:
         findings.find(({ props }) => props.claim.data.register_claims.includes(claim.id))?.props
           .claim ?? null,
@@ -96,9 +107,11 @@ interface Props {
   source: Source | null;
   /** On a register entry's page: the published claim it was checked as, if any. */
   checkedAs?: PublishedClaim | null;
+  /** On a register entry's page: the story's line for a claim set aside on its run. */
+  setAside?: string | null;
 }
 
-const { claim, story, question, supports, registered, source, checkedAs = null } = Astro.props;
+const { claim, story, question, supports, registered, source, checkedAs = null, setAside = null } = Astro.props;
 
 const checked = claim !== null && story !== null && question !== null;
 const pageUrl = new URL(
@@ -173,7 +186,9 @@ const description = checked
   ? claim.data.answer
   : checkedAs
     ? checkedAs.data.answer
-    : (registered!.reason ??
+    : setAside
+      ? setAside
+      : (registered!.reason ??
       question?.reason ??
       'A claim YEGFacts has registered and not yet checked.');
 ---
@@ -259,7 +274,7 @@ const description = checked
         <ClaimFinding claim={claim} story={story} question={question} pageUrl={pageUrl} />
       </>
     ) : (
-      <ClaimEntry claim={registered!} question={question!} source={source} checkedAs={checkedAs} />
+      <ClaimEntry claim={registered!} question={question!} source={source} checkedAs={checkedAs} setAside={setAside} />
     )
   }
 </Base>
