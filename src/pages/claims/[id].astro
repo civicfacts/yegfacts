@@ -141,7 +141,7 @@ const sections = checked
       { id: 'question', label: 'The question it answers' },
     ])
   : toc([
-      { id: 'finding', label: checkedAs ? 'Checked as' : 'No finding yet' },
+      { id: 'finding', label: checkedAs ? 'Checked as' : setAside ? 'No finding' : 'No finding yet' },
       { id: 'question', label: 'The question' },
       source && { id: 'source', label: 'Where it came from' },
       (registered!.variations ?? []).length > 0 && { id: 'said', label: 'How it was said' },

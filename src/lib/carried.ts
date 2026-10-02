@@ -16,13 +16,13 @@ import YAML from 'yaml';
 import { repoFile } from './site';
 
 export const CARRIED_LABEL =
-  'Reviewers read our archived copy because the City’s portal blocked automated access';
-export const CARRIED_SAME_COPY = 'All reviewers read the same copy.';
+  'The AI reviewers read our archived copy because the City’s portal blocked automated access';
+export const CARRIED_SAME_COPY = 'All the AI reviewers read the same copy.';
 export const CARRIED_METHOD_HREF = '/methodology#carried-documents';
 export const CARRIED_ITEMS_LABEL =
   'The AI reviewers saw only the items on this City meeting page that our published rule picked, from our archived copy, because the City’s portal blocked automated access';
 export const CARRIED_ITEMS_UNPUBLISHABLE =
-  'Our copy carries no grant to republish it, so check the items against the City’s own page.';
+  'We do not have permission to republish our copy, so check the items against the City’s own page.';
 /** The published selection rule, every version. */
 export const SELECTION_RULE_HREF = repoFile('scripts/panel/minutes-selection-rules.yaml');
 

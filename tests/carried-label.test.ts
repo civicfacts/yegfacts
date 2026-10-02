@@ -17,6 +17,7 @@ import {
   CARRIED_ITEMS_UNPUBLISHABLE,
   CARRIED_LABEL,
   CARRIED_METHOD_HREF,
+  CARRIED_SAME_COPY,
   SELECTION_RULE_HREF,
   carriedSources,
   gateParkedClaims,
@@ -64,7 +65,7 @@ describe('carried-document label', () => {
     const container = await AstroContainer.create();
     const html = await container.renderToString(CarriedLabel, { props: { source } });
     expect(html).toContain(CARRIED_LABEL);
-    expect(html).toContain('All reviewers read the same copy.');
+    expect(html).toContain(CARRIED_SAME_COPY);
     expect(html).toContain('href="https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=1"');
     expect(html).toContain(`href="${CARRIED_METHOD_HREF}"`);
     expect(html).toContain('1111111111111111111111111111111111111111111111111111111111111111');

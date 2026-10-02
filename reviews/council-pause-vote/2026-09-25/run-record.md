@@ -800,16 +800,16 @@ dispositions: `faithfulness/gpt-1.md`, `faithfulness/gpt-luna-1.md`,
 The freshness audit led to five more City minutes pages read after the panel
 ran, YF-EV-0228 to 0232. They changed no finding.
 
-**The error.** The intake record (`intake.md`, "a sitting councillor writing
-under her own name") and the frozen brief ("a sitting councillor writing under
-her own name keeps it") treated the author of comment 449, Jennifer Rice, as a
-sitting office-holder, and the capture kept her name on that ground. The
-archived 2026 Council minutes show she was not one: she sat on Council until
-the October 2025 election (source verification B1). As a commenter she was a
-private person, and the site names office-holders only for what they did in
-office. The editor's decision: her comment is shown under the pseudonym the
-capture's own hash rule gives her, Amber Owl J., in the capture, the register
-and every page that quotes it. Her name stays where the page reports her 2022,
-2023 and 2024 votes and motions, which she cast and moved in office. The brief
-and `intake.md` are frozen and are not edited; this entry is the correction.
-The intake run's README records the capture change.
+**The error.** The intake record (`intake.md`) and the frozen brief treated the
+author of comment 449 as a sitting office-holder writing under her own name,
+and the capture kept her real name on that ground. The archived 2026 Council
+minutes show she had left Council at the October 2025 election (source
+verification B1), so as a commenter she was a private person, and the site
+names office-holders only for what they did in office. The editor's decision:
+a former office-holder's comment carried her real name; it now carries a
+pseudonym, given by the capture's own hash rule, in the capture, the register
+and every page that quotes it. Where the page reports votes and motions in
+office, names stay. The brief and `intake.md` are frozen and are not edited;
+this entry is the correction. The intake run's README records the capture
+change, including that earlier commits in the repository's history carry her
+real name as the commenter.
