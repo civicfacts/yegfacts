@@ -590,3 +590,185 @@ across the meeting; 52 recorded as presenting on item 7.6, which is below
 the primary band and inside the alternative. The round-1 count split of
 the stopped reruns (64 against 65) did not recur. No record states a
 reason for the motion.
+
+## 2026-10-02: drafted and checked, before the gate
+
+**The page was drafted from the round files, the synthesis, the carry
+manifest, the register and the archived sources, then read by two
+faithfulness checks, a freshness audit and a plain-speech read; no finding
+changed and both parks stand.** The question page leads with the two claims
+parked at framing, as lanes-and-congestion does, and its standfirst answers
+the question people asked: nobody can tell from the City's minutes which side
+the speakers took, or who, if anyone, organized them. The one finding,
+`ch-speaking-time-cut` (register `speaking-time-cut-to-three-minutes`), is
+Supported, Unanimous, and its answer carries the definition sensitivity
+beside the verdict: 64 entries on the list of approved speakers, the 52
+recorded as speaking short of about seventy. Members of the public appear
+only as counts; office-holders are named for the motion and the vote. Counts
+and the two-thirds threshold are in `scripts/calcs/council-hearing.ts`, with
+a test pinning them to the prose. The status is `pending-review`.
+
+Each report is committed with the editor's dispositions at its top:
+`faithfulness/gpt-1.md` (GPT-6 Sol, 24 items, 22 adopted),
+`faithfulness/gpt-luna-1.md` (GPT-6 Luna, 17 items, 15 adopted, 2 in part),
+`gate/freshness-audit.md` (GPT-6 Sol, 6 items) and `plain-speech/gpt-1.md`
+(GPT-6 Sol, 9 rewrites, 2 as written and 7 modified). The faithfulness
+package carried the carried text of the minutes, agenda and bylaw whole,
+privately; nothing carried is committed.
+
+**Sources added after the panel ran**, from the freshness audit, all private:
+YF-EV-0315, the YEG Bike Coalition's newsletter post of 2026-08-19 urging
+readers to register to speak on item 7.6, with a Paths for People session to
+help them prepare; YF-EV-0316 and YF-EV-0317, the City Council minutes of
+2026-01-27 and 2026-02-17, at which Council adjusted its own members' section
+38 limits and set none for public speakers. Their ids start above the highest
+on any remote branch (YF-EV-0309). The 2025-12-04 and 2026-03-17 minutes the
+audit also named are filestream files, which answered the site's fetcher with
+HTTP 403, and are not relied on. The City video and an unreviewed machine
+transcript of it, which the audit says may record a reason for the motion,
+are not archived or relied on; the page says the video was not watched.
+
+**For the editor: the organizing strand of the second park.** The park's
+reason says no record links the supporters to an organizer, and its reopen
+condition is a registry covering City Council or a record of payment. The
+coalition's public call is a record that groups encouraged supporters to
+register, though not that any listed speaker answered it. The page reports
+it and keeps the park. Whether the reason and the reopen condition still
+describe that strand, or the claim should be split or re-examined, is the
+editor's call.
+
+**The editor's decision.** The claim stays parked at framing, and the frozen
+brief is unchanged. Its register reason is revised to say that a cycling
+coalition urged supporters to register but no record links that call to
+anyone on the list, and it now reopens on a record that a speaker was paid, or
+a record linking named speakers on the list to an organizer. A dated comment
+above the register entry says so. The page's parked line is the story's own
+and still matches.
+
+**Quality ledger (D-0048 rule 7).** The recorded failure modes in
+`methodology/quality-ledger.yaml` were checked against the draft:
+
+| Recorded failure mode | Earlier case | Result here |
+|---|---|---|
+| Fabricated citation, or a figure attributed to a source that lacks it | electric-buses, winter-cycling, infill-prices | Every count was recounted from the carried minutes into the calculation; 64, 79, 52, 15 and 12 and the 6 to 0 vote match the text every seat read. |
+| A seat's miscount carried into the draft | (new in this run's round 2) | The draft uses the cross-review counts: GPT-6 Sol's round-one 50 is 52, GPT-6 Luna's round-one 14 is 15; the review notes say so. |
+| A stated rule presented as an outcome | winter-cycling (service standard as achieved) | The motion is reported as a maximum; the page says the minutes do not record how long anyone spoke. |
+| A funded or proposed figure presented as approved or achieved | climate-targets; D-0048 rule 6 | No budget document is cited. |
+| A media report treated as the document behind it | climate-targets | The CBC report is cited only for what it said about the room, with no count, and never as a source of a classification. |
+| A source misclassified | fifteen-minute-districts | The minutes are `legal-audited` from the registry, not a seat's label. |
+| Committee action described as Council's | active-transportation (gate) | The page names the Infrastructure Committee and says it is not Council. |
+| Categorical wording beyond the instrument | fifteen-minute-districts | Absences are bounded to what we found and what the reviewers read; the faithfulness checks' bounding items were adopted. |
+
+Nothing in the ledger's recorded modes is present in the draft as committed.
+The two seat miscounts above are round-two catches this run's records
+corroborate. The editor had them entered in the ledger as self-corrections, in a
+separate PR (branch `ledger-exempt`) that also exempts the ledger from the
+version rule, so this branch does not touch methodology/.
+
+**Labels.** On the built question page every carried source cited carries
+its v1.43 label: YF-EV-0209 and YF-EV-0210 the selected-items label, and
+YF-EV-0251 the two-round label. The claim page tags the same three. No
+uncarried source carries one.
+
+**Not yet done.** The publication gate and the critique of the rendered page,
+which run as separate sessions. This is the first story under the two-round
+ground, so the critique includes the cold-reader phone test (D-0048 rule 7).
+
+## 2026-10-02: gate and critique, first pass; one blocking finding corrected
+
+**The publication gate found one blocking statement and the critique three
+required changes; all are corrected, no finding changed, and both parks
+stand.** Reports, each with the editor's dispositions at its top:
+`gate/source-verification.md` (1 blocking, 3 advisory),
+`gate/release-check.md` (0 blocking, 2 advisory, no change needed) and
+`critique-1.md` (3 required, 6 suggested, with the phone test at 375 by 812,
+D-0048 rule 7). The phone screenshots are kept outside the repository.
+
+**The blocking finding.** The draft said no record ties anyone on the speaker
+list to the groups that urged people to speak. The carried minutes and the
+coalition's own post (YF-EV-0209, YF-EV-0315) do: nine of the 64 approved
+entries gave the coalition's name, the name of the group it said would prepare
+speakers, or the name of the group it calls its ambassadors, and seven of
+those are recorded as speaking. The page, the standfirst, two TL;DR bullets,
+the parked line and the register reason now say so, in the gate's wording.
+The calculation transcribes each organization on the lists and the test pins
+the nine.
+
+**The editor's decision on the second park.** It stays parked at framing.
+The panel never tested it, and the nine entries show whose name each was
+registered under, not that anyone was recruited or paid. Its reopen condition
+is restated to what is still missing. After the gate's confirmation it reads:
+"It reopens if a record shows a speaker was paid to attend, or that other
+speakers on the list were recruited by an organizer." The story says the
+same.
+
+**Follow-up for a later batch.** Brief the organizing question as a claim of
+its own: whether, and how far, the groups behind the call organized the
+people who spoke. It is not part of this run, whose brief is frozen.
+
+**Shared code.** A claim parked at framing now leads its own page and share
+card with the story's plain parked line, as a vote-gate park already did, and
+drops "No finding yet", the question's "Going ahead" badge and the method
+sentence; the register's full reason follows one layer down. The two-round
+carried label now says the reviewers' tools "failed to read" the document,
+with no semicolon.
+
+**Not yet done.** The gate's and the critique's confirmation passes.
+
+## 2026-10-02: confirmations; corrected and published
+
+**The gate's and the critique's confirmations each found the last points to
+correct, all were corrected in the editor's wording, and the page was
+published on 2026-10-02.** No finding changed at any stage:
+`speaking-time-cut-to-three-minutes` (`ch-speaking-time-cut`) is Supported,
+Unanimous, and the two claims parked at framing stay parked.
+
+The gate's confirmation (`gate/confirmation.md`) confirmed B1 resolved and
+recounted the nine and the seven. It found two new blocking points: the
+standfirst was no longer bounded and called all three groups "groups that
+urged people to speak", and a sentence the shared parked-claim code added said
+the other claims under a question "went ahead" when some had also been set
+aside. The critique's confirmation (`critique-1-confirmation.md`) found the
+same sentence. The editor's corrections:
+- the standfirst is "The minutes don't say which side the bike-lane speakers
+  took. Nine of 64 entries named groups tied to the call to speak, and no
+  record shows anyone was paid.", 157 characters, so the share text carries
+  it whole;
+- the shared sentence is "Its question went ahead, and this claim was set
+  aside before the panel ran.", checked on the five pages it renders;
+- the parked line names "the bike group that urged people to speak and
+  groups working with it";
+- the second park's reopen condition is "It reopens if a record shows a
+  speaker was paid to attend, or that other speakers on the list were
+  recruited by an organizer.", in the register and the story;
+- the paragraph with the nine links the minutes and says the count is the
+  site's own.
+
+The organization names in `scripts/calcs/council-hearing.ts` are noted, not
+changed (gate A3): they are organizations, not people, and the redaction rule
+keeps them. No third pass of either check was run on these corrections.
+
+**The phone tests (D-0048 rule 7, the first story under the two-round
+ground).** Each at 375 by 812 in headless Chromium, with the pending-review
+banner removed so the page appears as it will at publication:
+1. Critique 1, the question page's first screen: a cold reader could say
+   what was not answered, but not what was (fixed by R1 and R2).
+2. Critique 1, the bylaw's two-round label: read as the reviewers' tools
+   failing, never as the bylaw being unavailable.
+3. Critique 1 and its confirmation, the second parked claim's page and the
+   question page's first screen again: after the fixes, the first screen
+   answers both halves of the question asked.
+The screenshots are kept outside the repository.
+
+**Publishing.** The run's `combined-evidence.json` now carries each source's
+fetch status (`scripts/annotate-evidence.ts`), from fresh fetches on
+2026-10-02: 4 fetched, none failed. The live minutes page answered with
+different bytes from the archived copy, as a meeting page does between
+fetches; the archive the reviewers' carried text came from is unchanged.
+The register question is `gate-complete` and `published`.
+
+**Also on this run.** The two round-2 self-corrections are entered in the
+quality ledger in PR #120 (`ledger-exempt`), with the ledger's exemption from
+the version rule, so this branch does not touch methodology/. Briefing the
+organizing question as a claim of its own remains a follow-up for a later
+batch.
