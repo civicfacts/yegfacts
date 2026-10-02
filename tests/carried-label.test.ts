@@ -77,6 +77,8 @@ describe('carried-document label', () => {
     const html = await container.renderToString(CarriedLabel, { props: { source } });
     expect(html).toContain(CARRIED_ITEMS_LABEL);
     expect(html).toContain(CARRIED_ITEMS_UNPUBLISHABLE);
+    // A rights status of `unclear` means no grant was found, not that one was refused.
+    expect(CARRIED_ITEMS_UNPUBLISHABLE).toMatch(/^We have found no permission to republish our copy/);
     expect(html).toContain('data-carried-kind="items"');
     expect(html).toContain('Meeting.aspx?Agenda=PostMinutes&amp;Id=00000000-0000-0000-0000-000000000000');
     expect(html).toContain(`href="${SELECTION_RULE_HREF}"`);

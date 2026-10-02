@@ -813,3 +813,35 @@ office, names stay. The brief and `intake.md` are frozen and are not edited;
 this entry is the correction. The intake run's README records the capture
 change, including that earlier commits in the repository's history carry her
 real name as the commenter.
+
+## 2026-10-02: gate and critique passed; published
+
+**The publication gate passed after its final one-sentence fix, the
+critique passed, and the page was published on 2026-10-02.** No finding
+changed at any stage.
+
+The gate ran three times: source verification and the release check
+(`gate/source-verification.md`, `gate/release-check.md`), a confirmation
+that found three new points (`gate/confirmation.md`), and a final
+confirmation (`gate/final.md`). The final one found a single miscount in the
+story's sentence about which reviewers cited or failed to open the
+September 2024 capital update, which came from the gate's own earlier
+wording. With that sentence changed as it wrote, the gate passes.
+
+The critique of the rendered page ran three times, each with a phone test at
+375 by 812 (D-0046 rule 8, the first story whose panel read carried City
+documents): the first critique (`critique-1.md`), its confirmation
+(`critique-1-confirmation.md`) and the final read (`critique-1-final.md`),
+which passed. Its two last suggestions, bounding the standfirst's Council
+absence to the records read and naming claim 2's middle version, were
+adopted. The phone screenshots are kept outside the repository.
+
+
+Publishing requires the run's `combined-evidence.json` to carry each
+source's fetch status (`scripts/annotate-evidence.ts`). The staging manifest
+the 2026-09-29 merge was fetched into was not retained, so every source was
+fetched again on 2026-10-02 and the file annotated from that: 12 fetched, 10
+not, every one of the 10 a portal file download or a citation that joins two
+portal URLs. `fetch-report.md` keeps the 2026-09-29 result (10 and 12); the
+difference is two meeting pages that now answer the fetcher. Nothing in the
+file but the annotation changed.

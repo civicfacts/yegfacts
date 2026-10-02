@@ -22,7 +22,7 @@ export const CARRIED_METHOD_HREF = '/methodology#carried-documents';
 export const CARRIED_ITEMS_LABEL =
   'The AI reviewers saw only the items on this City meeting page that our published rule picked, from our archived copy, because the City’s portal blocked automated access';
 export const CARRIED_ITEMS_UNPUBLISHABLE =
-  'We do not have permission to republish our copy, so check the items against the City’s own page.';
+  'We have found no permission to republish our copy, so check the items against the City’s own page.';
 /** The published selection rule, every version. */
 export const SELECTION_RULE_HREF = repoFile('scripts/panel/minutes-selection-rules.yaml');
 

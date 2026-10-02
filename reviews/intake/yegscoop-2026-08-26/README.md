@@ -19,7 +19,7 @@ capture's own hash rule gives her, with every other label left as it was.
 The extraction, merge and triage files in this directory are the record of
 what those runs read and are left unchanged. Earlier commits in the
 repository's history carry her real name as the commenter, and so do some
-frozen run records; no current file pairs her name with her pseudonym. Found
+frozen run records; no current file states which pseudonym is hers. Found
 by the council-pause-vote release check,
 reviews/council-pause-vote/2026-09-25/gate/release-check.md.
 
