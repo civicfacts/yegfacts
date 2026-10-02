@@ -635,7 +635,15 @@ coalition's public call is a record that groups encouraged supporters to
 register, though not that any listed speaker answered it. The page reports
 it and keeps the park. Whether the reason and the reopen condition still
 describe that strand, or the claim should be split or re-examined, is the
-editor's call and is not decided here.
+editor's call.
+
+**The editor's decision.** The claim stays parked at framing, and the frozen
+brief is unchanged. Its register reason is revised to say that a cycling
+coalition urged supporters to register but no record links that call to
+anyone on the list, and it now reopens on a record that a speaker was paid, or
+a record linking named speakers on the list to an organizer. A dated comment
+above the register entry says so. The page's parked line is the story's own
+and still matches.
 
 **Quality ledger (D-0048 rule 7).** The recorded failure modes in
 `methodology/quality-ledger.yaml` were checked against the draft:
@@ -653,7 +661,7 @@ editor's call and is not decided here.
 
 Nothing in the ledger's recorded modes is present in the draft as committed.
 The two seat miscounts above are round-two catches this run's records
-corroborate; whether they are entered in the ledger is the editor's call.
+corroborate. The editor had them entered in the ledger as self-corrections.
 
 **Labels.** On the built question page every carried source cited carries
 its v1.43 label: YF-EV-0209 and YF-EV-0210 the selected-items label, and

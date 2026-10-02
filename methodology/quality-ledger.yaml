@@ -673,3 +673,44 @@ events:
       round1-rerun-2/claude.json; run-record.md stages 8 and 9, including the
       observation that on this brief the panel was a better framing check than
       the framing check; errata.md item 7.
+
+  # --- council hearing, run 2026-10-02 ------------------------------------
+  - date: "2026-10-02"
+    story: council-hearing
+    run: reviews/council-hearing/2026-10-02
+    stage: round2
+    seat: GPT-6 Sol
+    event: self-correction
+    materiality: minor
+    disposition: >
+      Round one counted the entries recorded as presenting on item 7.6 as 50
+      (panels 16, 16, 16 and 2); the carried minutes give 18 in panel 3, so the
+      count is 52. The Claude and Luna seats each flagged it in cross-review and
+      the seat corrected it in its own round-2 notes. The rows did not change
+      (below 60 to 80, inside 50 to 90), but at 50 the count sat exactly on the
+      alternative band's lower edge. The published page and the calculation
+      use 52.
+    notes: >
+      round1/gpt.json challenging_evidence and calculations_needed;
+      round2/gpt.json round2_notes.evidence_i_missed[0]; round2/claude.json and
+      round2/gpt-luna.json round2_notes.errors_in_other_reviews[0];
+      run-record.md, rounds 1 and 2 under v1.43; scripts/calcs/council-hearing.ts.
+  - date: "2026-10-02"
+    story: council-hearing
+    run: reviews/council-hearing/2026-10-02
+    stage: round2
+    seat: GPT-6 Luna
+    event: self-correction
+    materiality: minor
+    disposition: >
+      Round one counted the approved entries on item 7.6 that give an
+      organization as 14 (panel 2 at 7); panel 2 has 8, so the count is 15. The
+      Claude and Sol seats each flagged it in cross-review, and the seat named
+      its own error in its round-2 notes. The count is a qualification and does
+      not touch the verdict; the published page and the calculation use 15.
+    notes: >
+      round1/gpt-luna.json supporting_evidence and calculations_needed;
+      round2/gpt-luna.json round2_notes.errors_in_other_reviews[1];
+      round2/claude.json round2_notes.errors_in_other_reviews[1];
+      round2/gpt.json round2_notes.errors_in_other_reviews[0];
+      run-record.md, rounds 1 and 2 under v1.43; scripts/calcs/council-hearing.ts.
