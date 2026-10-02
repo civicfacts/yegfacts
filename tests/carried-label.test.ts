@@ -17,8 +17,10 @@ import {
   CARRIED_ITEMS_UNPUBLISHABLE,
   CARRIED_LABEL,
   CARRIED_METHOD_HREF,
+  CARRIED_SAME_COPY,
   SELECTION_RULE_HREF,
   carriedSources,
+  gateParkedClaims,
 } from '../src/lib/carried';
 
 const FIXTURE_ROOT = fileURLToPath(new URL('./fixtures/carried', import.meta.url));
@@ -63,7 +65,7 @@ describe('carried-document label', () => {
     const container = await AstroContainer.create();
     const html = await container.renderToString(CarriedLabel, { props: { source } });
     expect(html).toContain(CARRIED_LABEL);
-    expect(html).toContain('All reviewers read the same copy.');
+    expect(html).toContain(CARRIED_SAME_COPY);
     expect(html).toContain('href="https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=1"');
     expect(html).toContain(`href="${CARRIED_METHOD_HREF}"`);
     expect(html).toContain('1111111111111111111111111111111111111111111111111111111111111111');
@@ -75,6 +77,8 @@ describe('carried-document label', () => {
     const html = await container.renderToString(CarriedLabel, { props: { source } });
     expect(html).toContain(CARRIED_ITEMS_LABEL);
     expect(html).toContain(CARRIED_ITEMS_UNPUBLISHABLE);
+    // A rights status of `unclear` means no grant was found, not that one was refused.
+    expect(CARRIED_ITEMS_UNPUBLISHABLE).toMatch(/^We have found no permission to republish our copy/);
     expect(html).toContain('data-carried-kind="items"');
     expect(html).toContain('Meeting.aspx?Agenda=PostMinutes&amp;Id=00000000-0000-0000-0000-000000000000');
     expect(html).toContain(`href="${SELECTION_RULE_HREF}"`);
@@ -82,5 +86,11 @@ describe('carried-document label', () => {
     expect(html).toContain('href="https://github.com/civicfacts/yegfacts/blob/main/reviews/fixture-story/2026-01-01/carried/manifest.yaml"');
     expect(html).toContain(`href="${CARRIED_METHOD_HREF}"`);
     expect(html).not.toContain(CARRIED_LABEL);
+  });
+
+  it('reads the claims a run parked at its vote gate, and none from a run without a manifest', () => {
+    const parked = gateParkedClaims(['reviews/council-pause-vote/2026-09-25', 'reviews/no-such-run/2026-01-01']);
+    expect([...parked]).toEqual(['same-seven-councillors-vote-together']);
+    expect(gateParkedClaims(['reviews/no-such-run/2026-01-01']).size).toBe(0);
   });
 });

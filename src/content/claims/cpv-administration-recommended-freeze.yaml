@@ -1,0 +1,74 @@
+id: cpv-administration-recommended-freeze
+question: Did Edmonton's administration recommend freezing 14 future bike routes to reassess them?
+story: council-pause-vote
+finding: Partially supported
+answer: >-
+  Partly. Administration's original plan would have taken 14 bike routes out of the program for 2026 and 2027, but its latest only set them aside without saying they would wait. Its middle version held them back too.
+evidence_basis: Direct Edmonton evidence
+panel_agreement: Unanimous
+methodology_version: "1.42"
+review_run: reviews/council-pause-vote/2026-09-25
+plain_speech_read: reviews/council-pause-vote/2026-09-25/plain-speech/gpt-1.md
+topics: [transportation, bike-lanes, city-hall]
+evidence: [YF-EV-0118, YF-EV-0140, YF-EV-0222, YF-EV-0223, YF-EV-0225, YF-EV-0226, YF-EV-0209, YF-EV-0210, YF-EV-0227]
+key_facts:
+  - text: "Report IS03688, to the Infrastructure Committee on August 26, 2026, recommended that the committee ask City Council to approve the updated approach for the remaining routes set out in its Attachment 5."
+    sources: [YF-EV-0118]
+  - text: "Attachment 5 exists in three versions, each listed on the committee's agenda: the original, a replacement marked Version 1 and a replacement marked Version 2. All three name the same 13 projects that would continue as planned and the same 14 set apart. Counting each bulleted entry once gives 14. Three entries each name two or three separate stretches of street, and counting those stretches separately gives 18."
+    sources: [YF-EV-0210, YF-EV-0222, YF-EV-0223, YF-EV-0140]
+  - text: "The original version says that if Council approves the change, the 14 \"would be removed from the scope of the Active Transportation Network Expansion Program for 2026 and 2027\", and may be revisited later."
+    sources: [YF-EV-0222]
+  - text: "Version 1 drops that sentence. It keeps a rule that routes not yet built \"would be evaluated to determine if they should proceed\", with routes that affect travel lanes or parking removed from the program, and says the 14 may be revisited using other designs or future initiatives."
+    sources: [YF-EV-0223]
+  - text: "Version 2 says routes whose plans do not affect travel lanes or parking will continue as planned, and \"The remaining routes will be evaluated for trade-offs, alternative design treatments and budget implications.\" In the first quarter of 2027 administration would bring a report for Council direction and approval. It says the 14 \"may be re-evaluated using alternate design approaches\"."
+    sources: [YF-EV-0140]
+  - text: "The report says that because of the weather, for routes where construction has not yet started, \"construction is best postponed to 2027\". That sentence covers every route not yet started, including routes continuing as planned."
+    sources: [YF-EV-0118]
+  - text: "The City's route status table, accurate as of August 10, 2026, records three of the 14 as having a contract awarded and construction not yet started. Six were scheduled for 2026, but installing them in 2026 was \"no longer viable\". Five had no delivery plan or schedule, and the table gives no construction status for them in so many words."
+    sources: [YF-EV-0226, YF-EV-0225]
+  - text: "The same table says the three tendered routes \"may be delayed (in whole or in part) to 2027 or removed\" pending the Council report, and that next steps for the six \"will depend on Council's direction\"."
+    sources: [YF-EV-0226]
+  - text: "The report says that approving the recommendation would not change the program's capital budget or its borrowing bylaws."
+    sources: [YF-EV-0118]
+aliases:
+  - administration-recommended-freezing-14-bike-routes
+  - edmonton-14-bike-routes-freeze
+register_claims: [administration-recommended-freezing-14-routes]
+limitations:
+  - "The finding depends on the version. The committee's minutes add Version 1 and Version 2 as replacements without saying which was before members, so this check reads Version 2, the latest. Read on its own words, Version 2 does not say the 14 routes wait for the evaluation or the 2027 report, so it does not meet the test of a freeze. The original version, which took the 14 out of the program for 2026 and 2027, would meet it. In cross-review all three reviewers said Version 1 would meet it too, because under it proceeding waits on the evaluation."
+  - "On Version 1 the reviewers first disagreed. Claude Opus 5.5 read its rule, that routes not yet built would be evaluated to decide whether they should proceed, as a freeze from the start. GPT-6 Sol and GPT-6 Luna first read it as falling short, and in cross-review both agreed it met the test. GPT-6 Luna still would not call the claim Supported under Version 1, because the construction status of five routes is unresolved."
+  - "\"Freeze\" was fixed before the research as a plan that says, in its own text, that the routes wait for a further evaluation, report or decision. The report's weather sentence, the status table's footnotes and Version 2 together suggest the routes would wait for Council. No passage says so, and an inference is not enough under that test. Claude Opus 5.5 called it a close call."
+  - "Councillor A. Salvador's notice of motion, given at the meeting, names a heading found only in the original and Version 1. That shows at least one member worked from an earlier version. It does not show which version the committee considered."
+  - "The status table is dated August 10, 2026, sixteen days before the meeting. No reviewer found a dated City record of each route's status on August 26."
+  - "GPT-6 Luna said in cross-review that \"no delivery plan or schedule\" does not show construction had not started on five routes. The other two seats counted all 14 as unbuilt. Under Version 2 the finding is the same either way."
+  - "Whether freezing, re-evaluating or building the routes is the right choice is not tested."
+unknowns:
+  - "Which version of Attachment 5 the committee had before it when it dealt with the item."
+  - "What administration told the committee in its presentation, which no reviewer could read."
+missing_evidence:
+  - "A clerk's record or the meeting video showing which version of Attachment 5 was before the committee, and administration's presentation on the item (City of Edmonton, Office of the City Clerk and Infrastructure Services)."
+review:
+  agreement: Unanimous
+  reviewers:
+    - model: Claude Opus 5.5
+      verdict: Partially supported
+      confidence: Moderate
+      key_findings:
+        - "All three versions set apart the same 14 routes, none of them started as of August 10, 2026."
+        - "The original and Version 1 held the routes back pending evaluation. Version 2 proposed re-evaluation and a report without saying the routes would wait."
+        - "The minutes do not say which version the committee considered."
+      changed_between_rounds: "No change. In cross-review it pointed out that the councillor's notice of motion names a heading found only in the earlier versions."
+    - model: GPT-6 Sol
+      verdict: Partially supported
+      confidence: Moderate
+      key_findings:
+        - "Version 2 lists 13 continuing and 14 set-apart entries and does not say all 14 must wait."
+        - "The original says the 14 would be removed from the program for 2026 and 2027, which meets the test."
+      changed_between_rounds: "No change in verdict. In cross-review it accepted that Version 1's rule that routes would be evaluated to decide whether they proceed also meets the test."
+    - model: GPT-6 Luna
+      verdict: Partially supported
+      confidence: Moderate
+      key_findings:
+        - "Version 2 says the 14 may be re-evaluated and does not expressly defer them."
+        - "Only the original states removal from the program for a stated period."
+      changed_between_rounds: "Raised its confidence to High without changing its verdict. It said in cross-review that the status of five routes with no delivery plan is unresolved, so under the earlier versions it would not have reached a yes."

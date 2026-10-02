@@ -9,6 +9,20 @@ comments". The browser displayed 669 comments; the extraction returned 621
 records. The difference is unresolved, and completeness is not established.
 See the [trace audit](../../who-pays-for-roads/2026-09-03/verification/audit-2026-09-09.md).
 
+**Correction, October 2, 2026:** one commenter, a former office-holder, kept
+her real name in the capture on the ground that she was a sitting
+office-holder. She had left Council at the October 2025 election, so she
+commented as a private person and the office-holder rule did not apply. The
+capture (`intake/captures/yegscoop-2026-08-26/comments.jsonl`, her comment and
+the replies that addressed her) and the register now carry the pseudonym the
+capture's own hash rule gives her, with every other label left as it was.
+The extraction, merge and triage files in this directory are the record of
+what those runs read and are left unchanged. Earlier commits in the
+repository's history carry her real name as the commenter, and so do some
+frozen run records; no current file states which pseudonym is hers. Found
+by the council-pause-vote release check,
+reviews/council-pause-vote/2026-09-25/gate/release-check.md.
+
 ## What came out
 
 | | |

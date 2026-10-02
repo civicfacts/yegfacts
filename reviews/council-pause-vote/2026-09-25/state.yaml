@@ -1,12 +1,12 @@
 story: council-pause-vote
 run: "2026-09-25"
 methodology_version: "1.42"
-stage: drafting
+stage: published
 stages:
   framing: {status: complete, at: "2026-09-25", frozen_sha256: "fb0f29b1bc15ee5408b0204d8a396dcaa45c468f2f16227aa7a325df4ba4443d", note: "Frozen under methodology v1.20 after three framing checks and a defect confirmation (framing/check-4.md), sha256 c0f504b3d6a7. Revised 2026-09-29 under methodology v1.2 after a panel framing concern on claim 2: the expressly-defers test is read against the whole report. See run-record.md."}
   round1: {status: complete, at: "2026-09-29", note: "Revised brief fb0f29b1bc15. Three seats, each admitted on one attempt; claims 1 to 3 Partially supported on every seat; claim 4 parked under its vote gate. See run-record.md."}
   merge: {status: complete, at: "2026-09-29", note: "22 distinct sources, no contested claim; staging archived 10 of 22 (fetch-report.md)."}
   round2: {status: complete, at: "2026-09-29", note: "Three seats, each admitted on one attempt, on fresh probes; no framing concern."}
   synthesis: {status: complete, at: "2026-09-29", note: "Claims 1 to 3 Partially supported, Unanimous; claim 4 parked for this run (synthesis.json, run.yaml synthesis_scope)."}
-  drafting: {status: pending}
-  human_gate: {status: pending}
+  drafting: {status: complete, at: "2026-10-02", note: "Faithfulness (Sol, Luna), freshness and plain-speech reads dispositioned; see run-record.md."}
+  human_gate: {status: complete, at: "2026-10-02", note: "Gate passed after gate/final.md's one-sentence fix; critique passed (critique-1-final.md). Published 2026-10-02."}

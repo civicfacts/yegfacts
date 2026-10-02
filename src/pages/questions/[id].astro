@@ -670,6 +670,17 @@ const Content = rendered?.Content;
                       waiting on anything; say so rather than list it as if it
                       were.
                     */}
+                    {/*
+                      A claim the run set aside at its vote gate (D-0047 rule
+                      5) was in the brief and was never answered: say so, with
+                      the story's plain line, rather than leave it reading as
+                      though it were simply next in line.
+                    */}
+                    {story?.data.parked[claim.id] && (
+                      <p class="mt-1.5 max-w-prose text-sm leading-relaxed text-muted">
+                        {story.data.parked[claim.id]}
+                      </p>
+                    )}
                     {claim.prior_triage?.outcome === 'no' && (
                       <p class="mt-1.5 max-w-prose text-sm leading-relaxed text-muted">
                         Turned down at triage, so it will not be checked.{' '}

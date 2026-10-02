@@ -12,7 +12,7 @@ OpenAI Codex, GPT-5 (exact serving build not exposed)
 "Is Edmonton's $100-million active-transportation expansion spread over four years, and is it only about 1% of what the City budgets to expand roads?" That is a real resident question about the scale of competing transportation investments.
 
 2. **How it circulates, and where the wording came from.**  
-The exact sentence appears once in the supplied Facebook capture, in a supporter's reply to Councillor Jennifer Rice. The post dates from August 27 to September 2, 2026. Its URL is missing and some threads were not expanded, so the register correctly calls the origin "supplied." The wording is still captured reader demand, not an editor's hypothesis.
+The exact sentence appears once in the supplied Facebook capture, in a supporter's reply to another commenter. The post dates from August 27 to September 2, 2026. Its URL is missing and some threads were not expanded, so the register correctly calls the origin "supplied." The wording is still captured reader demand, not an editor's hypothesis.
 
 The searches found no second indexed copy of the exact claim. Related percentage comparisons have circulated since at least December 2022, but with different periods and denominators. Bike Edmonton compared earlier active-transportation funding with a roads budget, while Andrew Knack compared the $100 million with all City investment over a longer period. Those are evidence of the argument's circulation, not repetitions of this claim. [Bike Edmonton](https://bikeedmonton.ca/news/2022/edmonton-approves-100-million-over-four-years-to-build-a-mobility-network), [Andrew Knack](https://andrewknack.ca/blog/2j4ncais1x9f6340owh8ypnserlh5d).
 

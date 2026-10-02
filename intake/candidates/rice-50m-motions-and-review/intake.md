@@ -14,8 +14,8 @@ Recorded 2026-09-02 by Stew.
   post URL the same day: https://www.facebook.com/yegscoop/posts/pfbid02aKkokbtnxq3dsDhfWgbGsEamfiNRUncwnff4ES8N11qVZBg5W4aDxZaPF3frYymVl
   The register lists the origin as captured. The redacted capture is `intake/captures/2026-09-02-yegscoop-bike-lanes.md`; the
   wording above is verbatim from it.
-- Who said it: Councillor Jennifer Rice, in a comment on the same Yegscoop post; a sitting councillor speaking in that capacity, so attributed.
+- Who said it: Amber Owl J., in a comment on the same Yegscoop post. (Corrected October 2, 2026: this line named the commenter as a sitting councillor. She had left Council at the October 2025 election, so she commented as a private person and carries the capture's pseudonym.)
 
 ## Context
 
-A councillor's account of the council record on the program: two motions, twice, to cut the $100 million to $50 million and redirect the rest; administration's 2026-08-26 recommendation to freeze 14 routes for reassessment, not supported by council. Council and committee minutes and votes are published on the City's meeting portal, so each element (the motions, who moved them, when, the votes; what administration recommended in IS03688 and what the committee decided) is checkable against the record. Also checkable: whether the committee "did not support" the review or referred it.
+A commenter's account of the council record on the program: two motions, twice, to cut the $100 million to $50 million and redirect the rest; administration's 2026-08-26 recommendation to freeze 14 routes for reassessment, not supported by council. Council and committee minutes and votes are published on the City's meeting portal, so each element (the motions, who moved them, when, the votes; what administration recommended in IS03688 and what the committee decided) is checkable against the record. Also checkable: whether the committee "did not support" the review or referred it.

@@ -1,0 +1,72 @@
+id: cpv-motions-to-cut-to-50-million
+question: Did Councillors Karen Principe and Jennifer Rice twice try to cut Edmonton's bike-lane budget to $50 million, and did council vote them down?
+story: council-pause-vote
+finding: Partially supported
+answer: >-
+  Partly. Councillors Karen Principe and Jennifer Rice brought two cuts to Edmonton's bike-lane budget and council voted both down, but only one would have left about $50 million.
+evidence_basis: Direct Edmonton evidence
+panel_agreement: Unanimous
+methodology_version: "1.42"
+review_run: reviews/council-pause-vote/2026-09-25
+plain_speech_read: reviews/council-pause-vote/2026-09-25/plain-speech/gpt-1.md
+topics: [transportation, bike-lanes, city-hall]
+evidence: [YF-EV-0204, YF-EV-0211, YF-EV-0212, YF-EV-0213, YF-EV-0118, YF-EV-0230, YF-EV-0231, YF-EV-0232]
+key_facts:
+  - text: "In December 2022 City Council approved the bike-lane program, capital profile CM-20-0330, at $100,000,000 for 2023 to 2026, funded by tax-supported debt. The vote was 9 to 4, and Rice and Principe were among the four against."
+    sources: [YF-EV-0204]
+  - text: "At its November 2023 budget meeting, Council voted on an amendment moved by Principe and seconded by Rice to reduce the program by $50,000,000 ($16,350,000 in 2024, $16,825,000 in 2025 and $16,825,000 in 2026) \"with a funding reduction from tax-supported debt\". As first moved, it would have sent the $50 million \"towards the tax levy\". Principe re-stated it before the vote."
+    sources: [YF-EV-0211]
+  - text: "It was defeated 4 to 8, with Principe and Rice among the four in favour. One councillor is not recorded on the vote. The minutes list every name."
+    sources: [YF-EV-0211]
+  - text: "On a $100,000,000 base, the 2023 cut would have left $50,000,000, a calculation made here."
+    sources: [YF-EV-0204, YF-EV-0211]
+  - text: "A year later, in December 2024, Principe moved and Rice seconded another amendment, to decrease the program by $33,650,000 in 2025 and $33,650,000 in 2026 \"with funding from tax-supported debt, to defund planning, design and delivery\" of the program."
+    sources: [YF-EV-0212]
+  - text: "Council defeated it 4 to 7. Principe and Rice voted for it with two others, one councillor was absent and another is not recorded, and the minutes list every name."
+    sources: [YF-EV-0212]
+  - text: "The 2024 cut adds up to $67,300,000. On a $100,000,000 base it would have left $32,700,000, about a third. Both figures are calculations made here."
+    sources: [YF-EV-0204, YF-EV-0212]
+  - text: "In August 2026 administration still described the program as $100 million approved in the 2023-2026 capital budget."
+    sources: [YF-EV-0118]
+  - text: "The minutes of the spring budget-adjustment meetings of June 2023, June 2024 and June 2025 hold no motion naming the program. In June 2024 Principe moved and Rice seconded an amendment on new capital profiles requesting funding, which does not name the program, and it was defeated 2 to 10."
+    sources: [YF-EV-0230, YF-EV-0231, YF-EV-0232]
+aliases:
+  - principe-rice-motions-cut-bike-budget
+  - motions-to-cut-bike-lanes-to-50-million
+register_claims: [motions-to-cut-budget-to-50-million-failed]
+limitations:
+  - "The part that holds is two cuts, each moved by Principe and seconded by Rice, on separate occasions, both put to Council and both defeated. The part that does not is the amount. The 2024 cut would have left far less than $50 million, outside the band of $45 million to $55 million fixed before the research."
+  - "The 2023 text says where the money goes, a reduction in borrowing. The 2024 text names the borrowing that funds the program but does not say where the money taken out would go. Neither motion's text uses the words \"core priorities\", and this page does not judge whether a destination was one."
+  - "On a looser reading, a cut of at least half, both motions qualify on size. The 2024 motion would still lack a stated destination, so the finding stays the same. GPT-6 Luna first said that reading gave a yes, and in cross-review agreed the 2024 text names no destination."
+  - "This site could not open or archive the budget sheet for the program as it stood at either motion, so both cuts are measured against the $100,000,000 approved in December 2022. The 2024 cut would have left about $50 million only if the budget had risen to between $112.3 million and $122.3 million by then. No reviewer found a change that large, and the 2026 report still gives $100 million as the approved amount."
+  - "Other recorded motions by the two councillors that bear on the program were not budget cuts that came to a vote. In November 2023 Rice moved, and Principe seconded, a $26,808,000 cut to the 2024 capital budget that did not name the program, and Rice withdrew it. In September 2025 Principe seconded T. Cartmell's motion to stop construction on bike lanes not yet started, pending a review of every project, and Council defeated it 4 to 9."
+  - "The reviewers read the Council budget meetings of December 2022, November 2023 and December 2024 and several other Council meetings. They could not search the spring budget-adjustment meetings of 2023 to 2025. This site read those minutes after the panel ran and found no motion naming the program. Other Council meetings in the period were not searched, so another motion could exist."
+unknowns:
+  - "The program's approved budget as it stood on the days of the 2023 and 2024 motions."
+  - "Whether either councillor brought another reduction motion at a Council meeting that was not searched."
+missing_evidence:
+  - "The program's capital budget sheet as approved at the fall 2023 and fall 2024 budget adjustments (City of Edmonton, Financial and Corporate Services)."
+review:
+  agreement: Unanimous
+  reviewers:
+    - model: Claude Opus 5.5
+      verdict: Partially supported
+      confidence: Moderate
+      key_findings:
+        - "Both amendments were moved by Principe and seconded by Rice, and both were defeated, 4 to 8 in 2023 and 4 to 7 in 2024."
+        - "The 2023 cut would have left $50 million. The 2024 cut would have left about $32.7 million."
+      changed_between_rounds: "No change in verdict, confidence raised to High. In cross-review it agreed the 2024 text names no clear destination for the money."
+    - model: GPT-6 Sol
+      verdict: Partially supported
+      confidence: High
+      key_findings:
+        - "The 2023 amendment expressly reduced borrowing and would have left $50 million."
+        - "The 2024 amendment would have left $32.7 million and names a funding source rather than a destination."
+      changed_between_rounds: "No change in verdict, confidence lowered to Moderate because the budget at each motion date rests on the 2022 approval."
+    - model: GPT-6 Luna
+      verdict: Partially supported
+      confidence: High
+      key_findings:
+        - "Two jointly brought cuts, on separate occasions, both defeated."
+        - "On the $100 million base only the first falls in the $45 million to $55 million band."
+      changed_between_rounds: "No change in verdict. It corrected its round-one note, which named Rice as mover of the 2024 amendment, to Principe as the minutes record, and agreed the 2024 text names no destination."

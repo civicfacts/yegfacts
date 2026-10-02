@@ -59,6 +59,7 @@ import {
 import { redirectProblems, type RedirectRow } from './lib/redirect-checks.ts';
 import { allRedirects, redirectFileText } from './lib/redirect-file.ts';
 import { methodVocabularyIn } from '../src/lib/plain-speech.ts';
+import { gateParkedClaims } from '../src/lib/carried.ts';
 import {
   CANONICAL_FINDINGS,
   CHANGELOG_TYPES,
@@ -950,9 +951,11 @@ function checkRegister(): void {
 }
 
 /**
- * A story's `parked` lines must each name a claim parked at framing under the
- * story's own question, so a plain reason cannot sit beside a claim it does not
- * describe or outlive the park it explains.
+ * A story's `parked` lines must each name a claim under the story's own
+ * question that was set aside: parked at framing in the register (v1.35), or
+ * parked at the vote gate of a run one of the story's claims came from (D-0047
+ * rule 5, read from that run's carry manifest). So a plain reason cannot sit
+ * beside a claim it does not describe or outlive the park it explains.
  */
 function checkParkedLines(registerClaims: Record_[]): void {
   for (const story of stories) {
@@ -962,15 +965,15 @@ function checkParkedLines(registerClaims: Record_[]): void {
       fail(story.file, 'parked must map register claim ids to one plain line each');
       continue;
     }
+    const runs = claims
+      .filter(({ data }) => data.story === story.slug && typeof data.review_run === 'string')
+      .map(({ data }) => data.review_run as string);
+    const gateParked = gateParkedClaims(runs, repoPath());
     for (const id of Object.keys(parked as Record_)) {
       const claim = registerClaims.find((entry) => entry.id === id);
-      if (
-        claim === undefined ||
-        claim.question !== story.slug ||
-        claim.triage !== 'park' ||
-        claim.parked_at !== 'framing'
-      ) {
-        fail(story.file, `parked: "${id}" is not a claim parked at framing under ${story.slug}`);
+      const framing = claim?.triage === 'park' && claim.parked_at === 'framing';
+      if (claim === undefined || claim.question !== story.slug || !(framing || gateParked.has(id))) {
+        fail(story.file, `parked: "${id}" is not a claim parked at framing or at a run's vote gate under ${story.slug}`);
       }
     }
   }

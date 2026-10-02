@@ -9,10 +9,14 @@ so it dates from 2026-08-27 or later. Not every comment thread was
 expanded.
 
 Private individuals are not named here; each is a numbered commenter,
-consistently labelled. A sitting councillor is named, as a public
-official speaking in that capacity. The founder's own comment is
+consistently labelled. The founder's own comment is
 omitted. The complete text as pasted, with names, is held in the
 private board repository.
+
+**Correction, October 2, 2026:** this capture named one commenter as a
+sitting councillor speaking in that capacity. She had left Council at the
+October 2025 election, so she commented as a private person. Her comment is
+now labelled with the pseudonym the whole-source capture gives her.
 
 ## The post, verbatim
 
@@ -27,7 +31,7 @@ private board repository.
 
 ## Comments carrying a checkable claim, verbatim
 
-**Councillor Jennifer Rice** (Ward tastawiyiniwak):
+**Amber Owl J.**:
 
 > We have limited fiscal tools. We have to fix the basics first before
 > we rush major bike lane expansions. Proper infrastructure, not rushed

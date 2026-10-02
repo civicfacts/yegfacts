@@ -788,3 +788,60 @@ votes whose relevance is unresolved; depending on those, the verdict
 ranges from Not established to Contradicted (`carried/checks/gate.md`).
 The editor accepted the park. The seats were told so and did not answer
 it. `run.yaml` scopes synthesis to claims 1 to 3.
+
+## 2026-10-02: drafted, checked and gated; a commenter was misdescribed as a sitting councillor
+
+**The page went through two faithfulness checks, a freshness audit, a
+plain-speech read, the publication gate and a critique of the rendered page;
+no finding changed.** Each report is committed with the editor's
+dispositions: `faithfulness/gpt-1.md`, `faithfulness/gpt-luna-1.md`,
+`gate/freshness-audit.md`, `plain-speech/gpt-1.md`,
+`gate/source-verification.md`, `gate/release-check.md` and `critique-1.md`.
+The freshness audit led to five more City minutes pages read after the panel
+ran, YF-EV-0228 to 0232. They changed no finding.
+
+**The error.** The intake record (`intake.md`) and the frozen brief treated the
+author of comment 449 as a sitting office-holder writing under her own name,
+and the capture kept her real name on that ground. The archived 2026 Council
+minutes show she had left Council at the October 2025 election (source
+verification B1), so as a commenter she was a private person, and the site
+names office-holders only for what they did in office. The editor's decision:
+a former office-holder's comment carried her real name; it now carries a
+pseudonym, given by the capture's own hash rule, in the capture, the register
+and every page that quotes it. Where the page reports votes and motions in
+office, names stay. The brief and `intake.md` are frozen and are not edited;
+this entry is the correction. The intake run's README records the capture
+change, including that earlier commits in the repository's history carry her
+real name as the commenter.
+
+## 2026-10-02: gate and critique passed; published
+
+**The publication gate passed after its final one-sentence fix, the
+critique passed, and the page was published on 2026-10-02.** No finding
+changed at any stage.
+
+The gate ran three times: source verification and the release check
+(`gate/source-verification.md`, `gate/release-check.md`), a confirmation
+that found three new points (`gate/confirmation.md`), and a final
+confirmation (`gate/final.md`). The final one found a single miscount in the
+story's sentence about which reviewers cited or failed to open the
+September 2024 capital update, which came from the gate's own earlier
+wording. With that sentence changed as it wrote, the gate passes.
+
+The critique of the rendered page ran three times, each with a phone test at
+375 by 812 (D-0046 rule 8, the first story whose panel read carried City
+documents): the first critique (`critique-1.md`), its confirmation
+(`critique-1-confirmation.md`) and the final read (`critique-1-final.md`),
+which passed. Its two last suggestions, bounding the standfirst's Council
+absence to the records read and naming claim 2's middle version, were
+adopted. The phone screenshots are kept outside the repository.
+
+
+Publishing requires the run's `combined-evidence.json` to carry each
+source's fetch status (`scripts/annotate-evidence.ts`). The staging manifest
+the 2026-09-29 merge was fetched into was not retained, so every source was
+fetched again on 2026-10-02 and the file annotated from that: 12 fetched, 10
+not, every one of the 10 a portal file download or a citation that joins two
+portal URLs. `fetch-report.md` keeps the 2026-09-29 result (10 and 12); the
+difference is two meeting pages that now answer the fetcher. Nothing in the
+file but the annotation changed.

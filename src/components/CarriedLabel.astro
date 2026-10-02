@@ -18,6 +18,10 @@ import {
  * rule and the rest of the page was not shown, with links to the City's page,
  * the rule and the item index, and a plain statement that our archived copies
  * cannot be published.
+ *
+ * The same sentence stands beside every carried source in a list, which is
+ * the disclosure working, not the page repeating itself; `data-pagefind-ignore`
+ * keeps it out of the search index and the repetition audit as list chrome.
  */
 interface Props {
   source: CarriedSource;
@@ -28,7 +32,7 @@ const { source } = Astro.props;
 
 {
   source.kind === 'items' ? (
-    <p class="mt-1.5 text-xs leading-relaxed text-muted" data-carried={source.registryId} data-carried-kind="items">
+    <p class="mt-1.5 text-xs leading-relaxed text-muted" data-carried={source.registryId} data-carried-kind="items" data-pagefind-ignore>
       {CARRIED_ITEMS_LABEL}. {CARRIED_SAME_COPY} {CARRIED_ITEMS_UNPUBLISHABLE}{' '}
       <a href={source.cityUrl} rel="noopener" class="link">City page</a> ·{' '}
       <a href={SELECTION_RULE_HREF} rel="noopener" class="link">The rule (v{source.ruleVersion})</a> ·{' '}
@@ -37,7 +41,7 @@ const { source } = Astro.props;
       <code class="break-all">{source.archiveSha256}</code>
     </p>
   ) : (
-    <p class="mt-1.5 text-xs leading-relaxed text-muted" data-carried={source.registryId}>
+    <p class="mt-1.5 text-xs leading-relaxed text-muted" data-carried={source.registryId} data-pagefind-ignore>
       {CARRIED_LABEL}. {CARRIED_SAME_COPY}{' '}
       <a href={source.cityUrl} rel="noopener" class="link">City original</a> ·{' '}
       <a href={CARRIED_METHOD_HREF} class="link">How we handle this</a> · SHA-256{' '}
