@@ -174,6 +174,13 @@ document is essential to this brief.
   `023e63c673f3a4d754d1fd5c771c4d8b1cf4c0417a1894ccb978a37d3a4f63a6`;
   check 2 package
   `6a1aeb162ec409e0ae1541f39f28e2e9dbb276977e88f64dda9c8dfa1be12c5c`
+- `brief.md` as sent to check 3:
+  `2b4e4926adfb4c8aeddfe9945e05d851e55ae09bcd00c3993c418b692b8f5205`;
+  check 3 package
+  `37f9bd4c8491655cbb01bf37e6695fdb96e08a0d6e0212e3e5d5557c2a011727`
+- `brief.md` as frozen: the check 3 text with only the status block
+  changed,
+  `292e2d7d1a214fdd29985d483dc2c95e15da217311716ef86057be8a00ec5c0f`
 
 ## Stage 1, framing
 
@@ -211,3 +218,62 @@ title is the checker's and the two unanswered questions open the brief;
 the stakes said Supported would establish a cut for every speaker when the
 ladder did not require it, now the stakes are the checker's. Response:
 `framing/response-1.md`.
+
+**Check 2** (07:47 to 07:50 UTC): REVISE. Every check 1 finding RESOLVED
+except the ladder defect, marked WEAKENED: the checker's own block from
+check 1 still left readable but incomplete minutes without a row, and its
+first sentence contradicted the brief's rule that an inaccessible essential
+source stops the run. One defect, corrected in the checker's wording: the
+ladder's first sentence is replaced with two of the checker's, so an
+inaccessible source stops the run with no verdict, and with both sources
+readable Not established covers an undeterminable standing limit, an
+unknown disposition and minutes too incomplete to establish either that a
+reduction was carried or that none was. The editor diffed the applied
+passage against the report and they are identical. No framing finding.
+Under v1.12 this response is the editor's written resolution: the one
+finding adopted, none disputed. Response: `framing/response-2.md`.
+
+**Check 3** (07:51 to 07:53 UTC), the third and last report under the
+cap: FRAME OK. Every earlier finding RESOLVED, every check OK, no finding
+raised. The checker said again that it could not open the City's meeting
+pages through its web access and that this is not evidence they are absent.
+
+## Final state
+
+**FROZEN 2026-10-02 on FRAME OK at framing check 3.** The brief's text is
+the text check 3 read, with only the status block changed. No v1.20, v1.35
+or v1.39 route was needed or used. The next step, when the founder
+schedules it, is round 1 on the frozen brief under the current pins
+(v1.37: Opus 5.5, GPT-6 Sol, GPT-6 Luna at high), with the minutes and
+agenda pages carried under v1.42 if the seats are refused there, as the
+checker was.
+
+| Claim | Proposition, in short | Disposition |
+|---|---|---|
+| `speaking-time-cut-to-three-minutes` | At its meeting of 2026-08-26 the Infrastructure Committee carried a motion reducing each approved public speaker's time from the bylaw's five minutes to a maximum of three for that meeting, at a meeting for which about seventy people, 60 to 80 entries on its list, had been approved to speak on the bike-lane item | to the panel |
+| `more-speakers-in-favour-at-hearing` | More people spoke in favour of the bike lanes at the hearing than against them | parked at framing before any check: the minutes list who spoke and not which way, and no record the panel can read gives each speaker's position; reopens on such a record |
+| `hearing-supporters-and-lobby-groups` | The pro bike lane people at the meeting were paid or organized by special interest groups and lobbyists | parked at framing before any check: no public record states who paid any speaker, and no lobbyist registry in force covers lobbying of City Council; reopens on such a registry entry or a payment record |
+
+The checker raised no objection to either park across three reports and
+marked checkability and scope OK on the final report.
+
+**Register.** `council-hearing` moves to lifecycle `briefed`, triage `go`
+unchanged, with a note pointing at this brief. The two parked claims carry
+`triage: park`, `ground: no-instrument`, `parked_at: framing` and their
+reasons on their own entries, as methodology v1.35 records a park decided
+at framing. The tested claim carries no state of its own.
+
+**What is weak about this, said now.** The question people asked, who
+showed up and who sent them, is the part this brief does not answer; what
+goes to the panel is the one checkable aside from a single commenter, and
+the page that results must lead with the parks so no reader takes a verdict
+on speaking time for an answer about the room. The brief's title was
+changed by the checker to say so, and the register keeps the grouped
+question's wording as the record of what the thread asked. The parks rest
+on the editor's search for a record of positions and a registry in force;
+both searches are bounded by what the fetcher could reach on 2026-10-02 and
+are stated with their reopen conditions so anyone with the record can
+reopen them. The brief froze on FRAME OK after two defect corrections
+pasted from the checker and one park alternative the checker allowed; the
+reports and the hashes are here for anyone who wants to check that nothing
+else moved after check 3.

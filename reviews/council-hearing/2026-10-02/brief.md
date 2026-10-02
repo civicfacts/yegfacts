@@ -1,9 +1,17 @@
 # Review brief: Did the committee cut speaking time at the bike-lane meeting, and how many people were approved to speak?
 
-Status: **DRAFT, not frozen. Revised 2026-10-02 after framing checks 1 and
-2 (`framing/check-1.md` and `check-2.md`, both REVISE; every finding
-adopted, `framing/response-1.md` and `response-2.md`, the latter being the
-editor's written resolution under methodology v1.12) and sent to check 3.**
+Status: **FROZEN 2026-10-02 on FRAME OK at framing check 3
+(`framing/check-3.md`).** Checks 1 and 2 (`framing/check-1.md`,
+`check-2.md`), both from the OpenAI seat, each returned REVISE; every
+finding was adopted and none disputed (`framing/response-1.md`,
+`response-2.md`, the latter being the editor's written resolution under
+methodology v1.12), and the two defects were corrected in the checker's
+exact wording as methodology v1.20 requires. Check 3, the third and last
+report under the v1.12 cap, marked every earlier finding RESOLVED and
+raised none, so the brief freezes with the editor's resolution beside it.
+One claim goes to the panel; two are parked at framing under methodology
+v1.24, as set out below. Nothing but this status block changed after
+check 3 read the brief.
 Drafted 2026-10-02 by Stew from the register entries for `council-hearing`
 and from archived copies of the Infrastructure Committee's agenda and
 post-meeting minutes of 2026-08-26, the City's Council Procedures Bylaw,
