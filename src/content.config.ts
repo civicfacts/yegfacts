@@ -75,6 +75,8 @@ const changelogEntry = z.object({
   date: isoDate,
   type: z.enum(CHANGELOG_TYPES),
   note: z.string().min(1),
+  /** A site path or URL for the record behind the entry, linked after the note. */
+  href: z.string().min(1).optional(),
 });
 
 /**
@@ -433,6 +435,14 @@ const evidence = defineCollection({
       sha256: z.string().regex(/^[0-9a-f]{64}$/, 'must be a lowercase sha256 hex digest'),
       visibility: z.enum(['public', 'private']),
       path: z.string().optional(),
+      /**
+       * Set when the archived bytes this hash identifies were lost. The hash
+       * stays as recorded; the page then says the archive is lost and links
+       * `loss_record`, the repo path of the audit that explains the loss.
+       */
+      lost_on: isoDate.optional(),
+      loss_record: z.string().optional(),
+      note: z.string().optional(),
     }),
     rights: z.object({
       redistribution: z.enum(['allowed', 'restricted', 'unclear']),
@@ -498,7 +508,24 @@ const candidateReports = defineCollection({
   }),
 });
 
+/**
+ * Audit records written for readers, served at `/methodology/audits/<file>`.
+ * Only files directly in methodology/audits/ are published on the site; the
+ * subfolders are working records (exposure dispositions, intake triage) that
+ * discuss withheld intake claims and stay on GitHub only.
+ */
+const audits = defineCollection({
+  loader: glob({ base: './methodology/audits', pattern: '*.md' }),
+  schema: z.object({
+    title: z.string().min(1),
+    date: isoDate,
+    /** One or two sentences: the page description and the standfirst. */
+    summary: z.string().min(1),
+  }),
+});
+
 export const collections = {
+  audits,
   stories,
   claims,
   commitments,

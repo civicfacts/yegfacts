@@ -1,0 +1,17 @@
+id: YF-EV-0319
+title: "Re-archive of YF-EV-0141, the source as it stood on 2026-10-02"
+publisher: City of Edmonton
+url: https://data.edmonton.ca/resource/tq23-qn4m.json?%24select=date_trunc_ym%28log_timestamp%29+AS+month%2C+sum%28total_cyclist_count%29+AS+bicycle_count%2C+count%28%2A%29+AS+records&%24group=month&%24order=month&%24limit=500
+published_on: 2025-04-25
+retrieved_on: 2026-10-02
+kind: observed-data
+establishes: "The source as it stood on 2026-10-02, re-archived after the original archive of YF-EV-0141 was lost. It is not the copy the review panel read: its bytes differ from the hash recorded on YF-EV-0141. The source may have changed since 2026-09-04, or the publisher may serve different bytes on each request. The audit found the content itself changed: this copy includes a month, 2026-10, after the panel read the data. It establishes what the source says now and nothing about what it said when it was read."
+archive:
+  required: true
+  sha256: 3a7880761149863a09cb943062750c76183f3e7231700736e11c2723aaf1041d
+  visibility: private
+  path: evidence/private/YF-EV-0319-tq23-qn4m.json
+rights:
+  redistribution: unclear
+  note: "Same source and terms as YF-EV-0141. No redistribution grant stated. Fails closed to private."
+excerpts: []

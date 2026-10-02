@@ -1,0 +1,59 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../lib/site';
+
+/**
+ * `/methodology/audits/<slug>`: an audit record from `methodology/audits/`,
+ * rendered from the same Markdown file that is tracked on GitHub.
+ */
+export async function getStaticPaths() {
+  const audits = await getCollection('audits');
+  return audits.map((audit) => ({ params: { slug: audit.id }, props: { audit } }));
+}
+
+interface Props {
+  audit: CollectionEntry<'audits'>;
+}
+
+const { audit } = Astro.props;
+const { Content } = await render(audit);
+---
+
+<Base title={audit.data.title} description={audit.data.summary}>
+  <article>
+    <header class="border-b border-rule pb-6">
+      <p class="text-xs font-semibold tracking-[0.09em] text-muted uppercase">
+        <a href="/methodology" class="link">Methodology</a> · audit record ·{' '}
+        <time datetime={audit.data.date} class="tabular">{audit.data.date}</time>
+      </p>
+      <h1
+        class="mt-2 text-[1.75rem] leading-[1.15] font-bold tracking-[-0.022em] text-balance sm:text-display"
+      >
+        {audit.data.title}
+      </h1>
+      <p class="mt-3 max-w-prose text-base leading-relaxed text-muted">{audit.data.summary}</p>
+    </header>
+
+    <div class="prose mt-8 max-w-prose">
+      <Content />
+    </div>
+
+    <section class="mt-12 border-t border-rule pt-5">
+      <h2 class="font-sans text-xs font-semibold tracking-[0.09em] text-muted uppercase">Related</h2>
+      <ul class="mt-2.5 space-y-1.5 text-[0.9375rem]">
+        <li><a href="/methodology/changes" class="link">Methodology changes</a></li>
+        <li><a href="/evidence" class="link">Evidence registry</a></li>
+        <li>
+          <a
+            href={`${SITE.repo}/commits/main/methodology/audits/${audit.id}.md`}
+            rel="noopener"
+            class="link"
+          >
+            This record's history on GitHub
+          </a>
+        </li>
+      </ul>
+    </section>
+  </article>
+</Base>
