@@ -1,0 +1,62 @@
+import { readFileSync } from 'node:fs';
+import { describe, expect, it } from 'vitest';
+import { approvedPanels, figures, presentedPanels, timeLimitVote } from '../scripts/calcs/council-hearing';
+import { loadYaml, repoPath } from '../scripts/lib/repo.ts';
+
+/**
+ * The council-hearing counts are transcribed from private City minutes and
+ * recomputed here, so these tests pin the arithmetic to the prose and fail if
+ * the page and the transcription drift apart.
+ */
+type Claim = { answer: string; key_facts: { text: string }[]; limitations: string[] };
+
+const claim = loadYaml<Claim>(repoPath('src', 'content', 'claims', 'ch-speaking-time-cut.yaml'));
+const claimText = [claim.answer, ...claim.key_facts.map((f) => f.text), ...claim.limitations].join(' ');
+const story = readFileSync(repoPath('src', 'content', 'stories', 'council-hearing.mdx'), 'utf8').replace(/\s+/g, ' ');
+
+describe('the three counts', () => {
+  it('64 approved on the bike-lane item, 79 across the meeting, 52 recorded as speaking', () => {
+    expect(figures.n.count).toBe(64);
+    expect(figures.nAll.count).toBe(79);
+    expect(figures.nSpoke.count).toBe(52);
+    expect(approvedPanels.map((p) => p.entries).join(', ')).toBe('15, 15, 15, 15, 4');
+    expect(presentedPanels.map((p) => p.entries).join(', ')).toBe('16, 16, 18, 2');
+    expect(claimText).toContain('five panels of 15, 15, 15, 15 and 4');
+    expect(claimText).toContain('four panels of 16, 16, 18 and 2');
+    expect(claimText).toContain('64 approved to speak');
+    expect(claimText).toContain('only 52 are recorded as speaking');
+    expect(claimText).toContain('hold 79 entries');
+    expect(story).toContain('The minutes list 64 people approved to speak');
+    expect(story).toContain('the lists hold 79');
+    expect(story).toContain('They record 52 as having spoken');
+  });
+
+  it('organizations: 15 of the approved entries and 12 of those recorded as speaking', () => {
+    expect(figures.approvedWithOrganization).toBe(15);
+    expect(figures.presentedWithOrganization).toBe(12);
+    expect(claimText).toContain('Fifteen of the entries give an organization');
+    expect(claimText).toContain('Twelve of those entries give an organization');
+    expect(story).toContain('15 gave an organization');
+  });
+
+  it('only the count of those who spoke falls outside 60 to 80, so the finding depends on the count', () => {
+    expect(figures.n).toMatchObject({ inPrimary: true, inAlternative: true });
+    expect(figures.nAll).toMatchObject({ inPrimary: true, inAlternative: true });
+    expect(figures.nSpoke).toMatchObject({ inPrimary: false, inAlternative: true });
+    expect(figures.definitionSensitive).toBe(true);
+    expect(claimText).toContain('The 52 recorded as speaking is below 60');
+  });
+});
+
+describe('the time-limit motion', () => {
+  it('carried 6 to 0, above the four votes two-thirds of six requires', () => {
+    expect(timeLimitVote.movedBy).toBe('M. Janz');
+    expect(figures.vote).toBe('6 to 0');
+    expect(figures.specialResolutionNeeds).toBe(4);
+    expect(figures.specialResolutionMet).toBe(true);
+    expect(claimText).toContain('The motion carried 6 to 0');
+    expect(claimText).toContain('Two-thirds of six is four');
+    expect(story).toContain('The committee voted 6 to 0');
+    expect(story).toContain('the four votes two-thirds of six requires');
+  });
+});
