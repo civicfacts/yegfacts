@@ -620,3 +620,27 @@ synthesis read only the new rounds. They move under a superseded
 directory when the rerun is set up. The rerun waits on the carry: the
 Fall 2025 Attachment 2 runs to 144 pages, longer than any file carried
 so far, and the tooling for it (v1.43) is being decided separately.
+
+## 2026-10-02: the stopped round 1 superseded; fresh probes for the rerun under v1.43
+
+**Round 1 of 2026-10-02, run on the brief as first frozen, moves aside,
+and round 1 runs again on the v1.2-revised brief** (sha256
+`afd75d059c5eff67c197f6587c256df242ca7bb4027f27c981ff234a27efc320`)
+under methodology v1.43, with FCS03158 Attachment 2 carried by section.
+The stopped round's answers (`round1/`), its rows in `run.yaml` and a
+copy of the carry manifest it ran on (sha256
+`1d58f40816c6a049000c2e89ab462a6848da0e6ee9335fdd350dc68402d9f203`, the
+hash its rows record) move unchanged to `superseded-2026-10-02/`, as
+`round1/`, `run.yaml` and `carried-manifest.yaml`. They answer a brief
+that has since changed, are kept for the record only, and are not an
+input to the rerun: no seat sees them, and the merge and synthesis read
+only the new rounds. `run.yaml` starts again with no rows.
+
+**Fresh probes.** Every URL the brief names, exactly or by the portal's
+template with a meeting id or DocumentId, was probed through all three
+seats on 2026-10-02 from 18:23:41Z to 18:29:18Z, 34 addresses
+(`carried/seat-probes.yaml`, appended). The Claude seat's WebFetch was
+refused with HTTP 403 at every eScribe meeting page and filestream file
+and at the portal root, with HTTP 502 at every edmonton.ca address, and
+failed with no status at both web.archive.org addresses. Both GPT-6
+seats' probes were unclear at every address, as v1.42 expects.
