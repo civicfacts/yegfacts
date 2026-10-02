@@ -644,3 +644,36 @@ refused with HTTP 403 at every eScribe meeting page and filestream file
 and at the portal root, with HTTP 502 at every edmonton.ca address, and
 failed with no status at both web.archive.org addresses. Both GPT-6
 seats' probes were unclear at every address, as v1.42 expects.
+
+**The manifest, rebuilt under v1.43** (`carried/manifest.yaml`, minutes
+rule v4, section rule v2). Carried whole, each on the fetcher's
+challenge-signed HTTP 403: report CO03513 with Attachments 9 and 10
+(YF-EV-0294 to 0296), report FCS03158 (0303), the replacement page 53
+(0305), Attachments 7 and 8 to FCS03159 (0306, 0307), and report CO03079
+with its Attachment 5 (0308, 0309). Carried by section: FCS03158
+Attachment 2 (0304), 144 pages and 453,562 bytes of text, split into 36
+sections, of which rule v2 carries 4 (pages 24-30, 34, 43-44 and 45-46;
+41,515 bytes). Carried by item on fresh Claude-seat refusals: the six
+2026 meeting pages, unchanged, and the minutes pages of 2025-08-11 (2 of
+26 items), 2025-11-24 (0 of 37) and 2025-12-01 (3 of 46).
+
+**What refused or needs the editor.**
+- The three 2025 agenda pages (YF-EV-0297, 0299, 0301) fail: the brief
+  writes out only the minutes template and says "`Agenda=Agenda`
+  (agenda)", so it names none of them by the tool's naming rule. They are
+  listed as failed, which refuses the package; the brief is not changed
+  here. Their archived copies still serve the filestream title checks.
+- Rule v4 selects no item about FCS03158 on the 2025-11-24 minutes (item
+  7.2 is not carried) and none of items 5.2 to 5.2.3 on the 2025-12-01
+  minutes. No v5 is written here.
+- The estimated round-1 package is 330,283 of 400,000 bytes (carried
+  section 259,995). Round 2 swaps the reviewer prompt for the shorter
+  cross-review prompt and adds the merged evidence and the other seats'
+  round-1 answers; on the first round's answer sizes that is about 380 to
+  430 KB, at or over the ceiling.
+
+The founder's browser downloads of 0303 to 0309 (2026-10-02, about
+17:09Z) are recorded as download provenance and public-open checks, with
+the founder as "person (not the editor)"; the public-open checks of 0294
+to 0296, recorded under v1.42, are restated in the v1.43 form. Every
+other check is pending.
