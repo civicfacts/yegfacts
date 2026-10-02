@@ -1,4 +1,4 @@
-# Review brief: How does Edmonton clear snow from its streets and bike lanes?
+# Review brief: Had City administration already put two snow-clearing proposals that need more spending before council?
 
 Status: **DRAFT, revised 2026-10-02 after framing check 2 with the
 editor's written resolution under methodology v1.12, before check 3.**
