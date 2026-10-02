@@ -824,3 +824,37 @@ budget. Under that stricter cost reading the result is Not established
 (Luna). No seat wrote that an essential source it could not read is
 missing. The seats' tools were refused at the portal, and every seat read
 the carried texts.
+
+## 2026-10-02: the brief revised again under v1.2; the stopped round 1 superseded
+
+**The editor upheld GPT-6 Luna's framing concern and revised the brief
+under v1.2. The stopped round 1 is superseded into
+`superseded-2026-10-02b/` and is not an input to the rerun.** The
+concern, quoted from Luna's interpretation notes:
+
+> MATERIAL FRAMING CONCERN: The primary rule treats an item published on
+> a future meeting agenda as already put to a body. That makes the count
+> two and the verdict Supported; requiring a body to have dealt with the
+> item by 2026-08-27 leaves one and changes the verdict to Partially
+> supported. The reader-facing phrase "already asked council" should
+> carry that timing qualification.
+
+The editor's reason: the brief's existing sensitivity rule (lines 532-534
+of the earlier text) already requires the qualification. Where any
+alternative changes the rung, the finding is definition-sensitive, the
+story says so beside the verdict, and neither side can fairly cite the
+verdict without it. The method still asks for a revision when a framing
+concern is raised against a claim being published. So the revision
+(bdb8423) makes the rule explicit for timing. Wherever the verdict
+differs between the primary timing rule (placed on a published agenda)
+and the alternative (considered by a body), every reader-facing use of
+"already asked" or "already put" names its timing rule in the same
+sentence. The status note says so. Nothing else changed. The brief's
+sha256 was
+`a9b8fa0ef241235c02336509784a4166e45dfd33ab6313bc7b7edb41294c37f5` and
+is now `5dfd40e4afb6a4559052f42bbfd6948b1ad465645609b75d5a9dd79b3df7d79a`.
+
+The superseded directory holds the three round-1 answers, the run.yaml
+rows and a copy of the manifest they ran on. No seat in the rerun sees
+them, and the merge and synthesis read only the new rounds. `run.yaml`
+starts again with no rows.
