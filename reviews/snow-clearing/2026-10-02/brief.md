@@ -25,7 +25,10 @@ by a body by that date, is a required alternative reported beside it; and
 the Fall 2025 operating budget adjustment's documents, with the committee
 report of 2025-08-11 that preceded them, are named so they can be carried;
 corrected the same day before any seat read it, to name the agenda pages so
-they can be carried. Nothing else changed. Drafted 2026-10-02 by Stew from the register entries for `snow-clearing`
+they can be carried. Revised a second time the same day under v1.2,
+after a seat's framing concern, to say that a verdict depending on the
+timing rule names that rule wherever the reader-facing phrase is used.
+Nothing else changed. Drafted 2026-10-02 by Stew from the register entries for `snow-clearing`
 and from archived copies of the City's snow and ice control policy and
 procedure, its winter service pages, and the agendas and minutes of the
 Council and committee meetings named below; no fact in it comes from
@@ -531,7 +534,11 @@ identified approved budget); and the alternative count rule (exactly two,
 under which three or more is Partially supported and the qualifications
 say why). Where any alternative changes the rung, the finding is
 definition-sensitive, the story says so beside the verdict, and neither
-side can fairly cite the verdict without that qualification.
+side can fairly cite the verdict without that qualification. In
+particular, where the verdict differs between the primary timing rule
+(placed on a published agenda) and the alternative (considered by a
+body), every reader-facing use of "already asked" or "already put" names
+the timing rule it rests on, in the same sentence.
 
 **Qualifications reported, never carrying the verdict:**
 
