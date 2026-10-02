@@ -373,6 +373,23 @@ describe('carrying a meeting page as items', { timeout: 60_000 }, () => {
     stale.documents[0]!.public_open_check!.checked_on = hoursBefore(73);
     expect(refusals(repo, stale)).toEqual([expect.stringMatching(/^YF-EV-0001: public-open check of .* is more than 72 hours old/)]);
 
+    const noChecker = structuredClone(ready);
+    noChecker.documents[0]!.public_open_check!.checker = null;
+    expect(refusals(repo, noChecker)).toEqual(['YF-EV-0001: the public-open check names no checker']);
+
+    const editor = structuredClone(ready);
+    editor.documents[0]!.public_open_check!.checker = 'editor session stub';
+    expect(refusals(repo, editor)).toEqual([
+      'YF-EV-0001: the public-open check was made by the editor (editor session stub); someone else makes it',
+      'YF-EV-0001: a site-fetcher public-open check must name "the site evidence fetcher" as its checker, not "editor session stub"',
+    ]);
+
+    const someoneElse = structuredClone(ready);
+    someoneElse.documents[0]!.public_open_check!.checker = 'a separate session';
+    expect(refusals(repo, someoneElse)).toEqual([
+      'YF-EV-0001: a site-fetcher public-open check must name "the site evidence fetcher" as its checker, not "a separate session"',
+    ]);
+
     const asPdf = structuredClone(ready);
     asPdf.documents[0]!.kind = 'pdf';
     expect(refusals(repo, asPdf)).toContain('YF-EV-0001: a site-fetcher public-open check is allowed only for a meeting page carried as items; a person opens this document');
