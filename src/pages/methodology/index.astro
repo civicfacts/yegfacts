@@ -112,7 +112,7 @@ const stages = [
   },
   {
     name: 'Blind research round',
-    body: 'The three seats, one Anthropic and two OpenAI, receive the identical package: the brief, the public reviewer prompt, and a required JSON output schema. Since v1.41 it can also carry the full text of a City file the brief names that the City portal refuses to serve to automated tools, described under carried documents below; every seat gets the same text and finds everything else itself. The two GPT seats share a vendor, so their agreeing is one company agreeing with itself. New runs must pass an execution check intended to keep host instructions and private files out of the review. A separate working directory alone did not provide that protection. The execution profiles and their limits are set out below. Each seat returns a per-claim verdict, its confidence, the evidence supporting and challenging it, its limitations, what it could not find, and comparison cities with a judgement about whether those cases transfer to Edmonton.',
+    body: 'The three seats, one Anthropic and two OpenAI, receive the identical package: the brief, the public reviewer prompt, and a required JSON output schema. Since v1.41 it can also carry the text of a public document the brief names that the seats cannot read themselves, described under carried documents below; every seat gets the same text and finds everything else itself. The two GPT seats share a vendor, so their agreeing is one company agreeing with itself. New runs must pass an execution check intended to keep host instructions and private files out of the review. A separate working directory alone did not provide that protection. The execution profiles and their limits are set out below. Each seat returns a per-claim verdict, its confidence, the evidence supporting and challenging it, its limitations, what it could not find, and comparison cities with a judgement about whether those cases transfer to Edmonton.',
   },
   {
     name: 'Evidence staging and deterministic merge',
@@ -699,6 +699,26 @@ const sections = toc([
       archived copies of these pages cannot be published, so the label beside such a source links
       the City's page, the rule and the item index, and the selection can be checked against the
       City's own page.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.9375rem] leading-relaxed">
+      Since v1.43 a document also qualifies when every reviewer recorded a failure to read it in two
+      rounds in a row of the same run, even if a quick check later opens it. We read that from the
+      reviewers' own committed answers, record each one's words, and keep the later successful checks
+      beside them. The reviewers are still told to read the document directly if they can. Such a
+      document can come from outside the City's meeting portal: we download it again from the
+      publisher and carry it only if the bytes match our copy, and a person other than the editor
+      opens the publisher's link in an ordinary browser first; if no one can, the label says so.
+      No check in the record may be made by the editor's own session. The label says the reviewers' tools
+      failed, never that the document is unavailable. A document too long for a reviewer's package
+      is carried as whole sections, such as whole service packages in a budget, picked by a second
+      published rule. Every section, carried or not, is listed in public with its pages and a
+      reason before the run, and someone other than the editor reads the whole document for
+      anything left out that qualifies, contradicts or explains what was carried. A gap is fixed by
+      a new version of the rule and a rerun, never by hand and never by cutting a section, and if
+      everything relevant does not fit, the run stops. The label beside such a source says the site
+      chose the sections, the rest was not given to the reviewers, and their agreement on the same
+      supplied text is not independent retrieval. Where a carried budget is cited, we keep what
+      Administration proposed apart from what Council approved.
     </p>
   </section>
 

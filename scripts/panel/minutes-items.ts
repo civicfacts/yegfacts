@@ -339,7 +339,12 @@ function termPattern(term: string): RegExp {
 
 /** The rule's terms an item matches, in the rule's order; empty when it matches none. */
 export function matchedTerms(item: MinutesItem, rule: SelectionRule): string[] {
-  return rule.terms.filter((term) => termPattern(term).test(item.text));
+  return matchedTermsIn(item.text, rule);
+}
+
+/** The rule's terms `text` contains under SELECTION_MATCH, in the rule's order. */
+export function matchedTermsIn(text: string, rule: Pick<SelectionRule, 'terms'>): string[] {
+  return rule.terms.filter((term) => termPattern(term).test(text));
 }
 
 /**

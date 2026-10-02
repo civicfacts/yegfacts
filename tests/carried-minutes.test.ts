@@ -248,11 +248,12 @@ describe('carrying a meeting page as items', { timeout: 60_000 }, () => {
   /** Every human check filled in as passing, so one missing piece at a time can be tested. */
   function completeChecks(manifest: CarryManifest, gate: 'parked' | 'pending' = 'parked'): CarryManifest {
     const copy = structuredClone(manifest);
+    copy.editor_session = 'editor session stub';
     for (const doc of copy.documents.filter((d) => d.status === 'carried')) {
       doc.download_provenance = { downloaded_by: 'the site fetcher', downloaded_on: '2026-09-25', via: 'site fetcher' };
-      doc.public_open_check = { checked_by: 'a separate session', checked_on: hoursBefore(2) };
+      doc.public_open_check = { result: 'confirmed', checker: 'a separate session', role: 'person (not the editor)', checked_on: hoursBefore(2), reason: null };
       doc.personal_information_screen = { result: 'clear', reviewer: 'a separate session' };
-      doc.completeness_check = { result: 'pass', reviewer: 'a separate session', missed_items: [] };
+      doc.completeness_check = { result: 'pass', checker: 'a separate session', role: 'independent checker', missed_items: [] };
       for (const item of doc.items ?? []) item.checker_reason = item.carried ? 'a vote on the program' : 'not about the program';
     }
     copy.gates![`claim:${CLAIM}`] = { result: gate, reviewer: gate === 'pending' ? null : 'a separate session', reconciliation_file: null };
@@ -362,7 +363,7 @@ describe('carrying a meeting page as items', { timeout: 60_000 }, () => {
     expect(refusals(repo, unexplained)).toEqual([expect.stringMatching(/1 item\(s\) have no checker_reason \(3\.4\)/)]);
 
     const missed = structuredClone(ready);
-    missed.documents[0]!.completeness_check = { result: 'pass', reviewer: 'a separate session', missed_items: ['3.5'] };
+    missed.documents[0]!.completeness_check = { result: 'pass', checker: 'a separate session', role: 'independent checker', missed_items: ['3.5'] };
     expect(refusals(repo, missed)).toEqual([expect.stringMatching(/lists missed items \(3\.5\); publish a new rule version and rebuild/)]);
 
     const byHand = structuredClone(ready);

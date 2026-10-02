@@ -1,0 +1,32 @@
+# The published rule that selects sections of long documents carried by
+# section (methodology v1.43, D-0048 rules 3 and 4). Append a version; never
+# edit one.
+#
+# A section (for a budget attachment, one whole service package, or one part
+# of the document as its table of contents divides it) is selected when its
+# title or whole text contains a term, case-insensitively; a term made only of
+# digits must not touch another digit. Each selected section is carried whole.
+# The rule selects mechanically and is never a completeness finding: a checker
+# who is not the editor reads every section, and a relevant section the rule
+# missed, or a section not carried that qualifies, contradicts or gives context
+# to a carried one, is fixed by adding a version here and rebuilding
+# (`carry-manifest.ts build --section-rule-version <n>`), never by hand and
+# never by cutting a section. If what the rule selects does not fit the seat
+# budget, the run stops.
+versions:
+  - version: 1
+    reason: "D-0048 rule 3: the snow-clearing run's snow and ice service terms, for the Fall 2025 Supplemental Operating Budget Adjustment, Attachment 2"
+    terms:
+      - snow
+      - sidewalk
+      - active pathway
+      - parking ban
+      - SNIC
+      - winter
+  - version: 2
+    reason: "Editor's revision before any run used v1: v1 carried the two user-fee schedules (pages 63-129 of FCS03158 Attachment 2, about 193 KB) only because fee lines contain \"winter\" and \"sidewalk\", which left no room in the seat budget; v2 drops those two terms. The independent checker reads the whole document, and a relevant section v2 drops is fixed by v3"
+    terms:
+      - snow
+      - active pathway
+      - parking ban
+      - SNIC
