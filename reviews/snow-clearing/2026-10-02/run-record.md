@@ -751,3 +751,23 @@ on the live page at build time, as #118 allows for pages carried by item,
 and its download provenance names the site fetcher. Every extraction,
 completeness, section and personal-information check, and every
 checker's reason, is pending for the independent checker.
+
+## 2026-10-02: completeness check fails under v5; selection rule v6
+
+**The independent checker's completeness check failed under rule v5,
+and the editor adopted the checker's rule v6.** v5 missed four relevant
+items: YF-EV-0299 item 7.1, YF-EV-0301 item 5.1, and YF-EV-0302 items
+5.1 and 5.1.3. These are the Fall 2025 Supplemental Capital Budget
+Adjustment items. Their report, FCS03159, is the one whose Attachments 7
+and 8 the brief names, and qualifications 3 and 4 ask what Council did
+with the Fall 2025 proposals and on which agenda. v6 is v5 plus
+"FCS03159". "Supplemental Capital Budget Adjustment" was rejected
+because it would also select the Blatchford utility items, which are not
+relevant.
+
+**Rebuilt on fresh probes** (22:45:15Z to 22:50:46Z, the same 34
+addresses with the same results). v6 selects v5's items plus exactly
+those four, and nothing else changed. The three pages' carried texts
+grow by 6,074 bytes, and the carried section by 6,108. The estimated
+round-1 package is 429,764 bytes, within the 521,838-byte ceiling. The
+checker rechecks the four new items before any check is recorded.
