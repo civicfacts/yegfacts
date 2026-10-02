@@ -1,0 +1,57 @@
+<!-- Framing check 2 on the brief revised 2026-10-02 after check 1 (prompts/framing-check.md, methodology v1.42). Checker: OpenAI gpt-6-sol at high via `codex --search exec -m gpt-6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check`, codex-cli 0.159.3, prompt on stdin, run from an empty scratch directory with no repository access, live web search enabled. Package: the framing prompt, intake.md (sha256 f6447772b45356731584060a266b688448ab80a15c00637318b05269e576dc04), the revised brief.md (sha256 c4f45578ae8f676367c6fc1e9cb5322f181ed12b80c2f29b6f7ade5c4f2c3e38), the verdict vocabulary from docs/DESIGN.md section 3, prompts/review-schema.json, check-1.md, response-1.md and an appendix of text extracted from the archived sources the checker could not open, with no local paths (package sha256 a30fe4b9e5aa0ceea9778c471b808dff30fedd2491efedf3f8a4a1a49fbc0d50). Run by Stew, 2026-10-02 08:16 to 08:21 UTC. Verdict: REVISE, with one defect finding and framing findings on checks 2, 3, 4, 6, 7, 8 and 9; the checker asks for the bike-lane order claim and the calcium chloride forecast to be parked. The closing note about saving the report refers to the checker's own sandbox; the report was captured through the command's output file. Report is verbatim; nothing below this line was edited. -->
+
+Verdict: REVISE
+
+## 1. Provenance
+
+OK. The brief now distinguishes the one comment that asserts a plowing order from the two that mention clearing without asserting an order. Its quotations represent the accessible capture, not Edmonton discussion generally. The intake also records the unresolved gap between the platform’s displayed count and the accessible capture.
+
+## 2. Does the proposition test what the post asserts?
+
+[framing] Claim 1 asks, “Does the City clear the bike lanes before it clears the streets?” but grades whether lanes have shorter *published completion times*. A deadline does not establish which facility crews plow first, even when both deadlines are met. Replace the graded claim with: “Park the assertion that the City routinely plows bike lanes before streets until a published, snowfall-by-snowfall record permits a comparison of actual clearing order. Report the City’s priority classes and completion deadlines as background, without presenting them as a verdict on what crews do.” The [City’s procedure](https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/Snow-Ice-Control-Procedure_C409K.pdf) and [service-level page](https://www.edmonton.ca/transportation/on_your_streets/neighbourhood-roads-winter) describe standards, not a history of completed work.
+
+[framing] Claim 3 adds a condition absent from “Council will be debating soon”: the report had to be “on a published agenda” by August 27. A later discussion would not become false merely because its agenda had not yet been published when the comment was written. Replace the graded claim with: “Park the forecast of a future debate. Report what was scheduled by August 27 and what later meeting records show as context, without a verdict on the forecast.”
+
+## 3. Strongest fair reading
+
+[framing] Claim 1’s **Supported** rung requires *all* on-street bike lanes to have a shorter completion time than *every* roadway class. Yet the brief itself assigns painted lanes outside the winter network the completion time of the road they occupy. Those lanes cannot be strictly sooner than their own roadway class. Supported is therefore impossible under the brief’s primary definitions, whatever the evidence says. The **Contradicted** rung has the converse problem: “the network is not sooner than residential streets” does not establish its stated conclusion, “so no part of the bike lanes is”; a painted lane on another road class could have an earlier deadline. Replace the claim and ladder with the park wording in check 2. Do not preserve this ladder by silently reverting to the network-only scope that check 1 rejected. The [procedure’s painted-lane rule](https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/Snow-Ice-Control-Procedure_C409K.pdf) is the relevant instrument.
+
+## 4. Operationalization and alternatives
+
+[framing] The brief says, “Identify the operative procedure on 2026-10-02 before classification.” That leaves the controlling instrument undecided in a brief about to be frozen. The supplied C409L excerpt shows an approval date of “TBD”, while the supplied Council-minutes excerpt records Council’s approval; neither establishes whether a successor procedure took effect. Replace with: “The editor identifies and cites the procedure operative on 2026-10-02 before the brief is frozen, or makes the August 27 procedure primary and treats any later procedure as the stated alternative.” I could verify the cited [C409K policy](https://www.edmonton.ca/sites/default/files/public-files/Snow-Ice-Control-Policy_C409K.pdf), [2025 procedure](https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/Snow-Ice-Control-Procedure_C409K.pdf), [public service-level page](https://www.edmonton.ca/transportation/on_your_streets/neighbourhood-roads-winter), [mailer](https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/Snow-and-Ice-Service-Levels-Mailer.pdf), [Winter Cycling page](https://www.edmonton.ca/transportation/cycling_walking/winter-bike-riding), [Winter Travel page](https://www.edmonton.ca/transportation/on_your_streets/snow-ice), and [route project page](https://www.edmonton.ca/projects_plans/roads/active-transportation-network-improvements-project). I could not independently retrieve C409L or the eScribe pages and files. The appendix supplies excerpts and hashes, not readable copies of those instruments; I do not infer that they are absent.
+
+[framing] Claim 2 says two proposals are distinct when they are “separate service packages or separate decisions sought.” One package containing two decisions could be counted once or twice. That ambiguity can decide an exact-two claim. Replace with: “For the primary count, count each separately presented service package once. A decision or attachment within that package does not add a proposal. Under the required alternative, count separately costed options.” The cited agendas and proposal texts are plausible sources for either count. The other declared alternatives for claim 2’s date, body, cost reading and exact count are sufficient; no alternative to those alternatives is needed.
+
+[defect] Claim 3 defines set A by what a report or attachment *says*, but its **Contradicted** rung applies when “A is empty.” Its **Not established** rung covers an unread report only “if A is not empty.” An unread report can thus be excluded from A and allow a false empty-set verdict. Replace the **Not established** bullet exactly with: “**Not established** if an agenda for the window cannot be read; if a report or attachment listed under a snow and ice control item in the window cannot be read, so membership in A cannot be determined; if a required meeting record cannot be read and its contents could change the rung; or if the readable record fits none of the other three rungs.” This correction is needed if claim 3 remains under review; parking it removes the ladder.
+
+## 5. Expected-finding leaks
+
+OK. The earlier statements forecasting a main-road comparison and supplying the calcium-chloride determination have been removed. I found no replacement sentence directing reviewers toward a result.
+
+## 6. Checkability
+
+[framing] The brief says, “The forecast of debate is not itself graded as a prediction,” yet its proposition requires the later meeting record to show resumption raised and assigns a verdict to that outcome. The captured sentence is a prediction; it contains no separate assertion that an agenda was already published. Replace with the claim 3 park wording in check 2. The agendas and minutes may still explain what subsequently happened.
+
+## 7. Scope traps
+
+[framing] Claim 1 excludes “how crews performed on any particular day or street.” Excluding one anecdote is sound, but excluding actual clearing order altogether removes the conduct asserted in the circulating claim. Replace the claim 1 scope sentence with: “The published standard describes deadlines and priorities, not whether the City routinely plows bike lanes before streets. The latter claim is parked pending comparable records of actual clearing.” The Whyte Avenue and windrow parks now keep their asserted consequences separate from the general rules offered as background.
+
+## 8. Stakes
+
+[framing] Claim 1’s stakes say **Supported** would establish that “every on-street bike lane” is cleared before “every class of street.” Under the brief’s own painted-lane rule, that verdict cannot occur. **Contradicted** would address network deadlines, not disprove the holder’s account of actual order. Replace the claim 1 stakes with: “No verdict on actual clearing order is assigned from completion standards. A future check using comparable clearing records would change the holder’s position if lanes routinely preceded streets, and the opponent’s position if they did not.” Claim 2’s Supported and Contradicted stakes are consequential under its declared counting rules. Claim 3’s stakes fall away if its forecast is parked.
+
+## 9. Who asks this?
+
+[framing] The brief correctly records the resident’s question, “Does the City really do the bike lanes first?”, but the proposed verdict answers a different question about deadlines. Replace the claim 1 portion of “Who asks this” with: “Residents ask whether bike lanes are plowed before streets in practice. The identified record cannot answer that question. It can show which facilities have earlier published completion deadlines, which this brief reports as background without a verdict on actual order.” If claim 3 is parked, retitle the remaining graded question so a brief about Administration’s snow-service proposals does not promise a verdict about clearing streets and bike lanes.
+
+A holder would recognize the captured wording and the two parks, but would still object to a deadline verdict presented as an answer about plowing order. An opponent could accept that deadline finding without conceding what crews do. The proposal claim remains a useful factual check once its primary counting unit is fixed.
+
+## Check 1 findings
+
+- **RESOLVED:** provenance wording; “already considered” timing; the requirement that the calcium-chloride topic itself be raised; the Whyte Avenue wording; parking the windrow claim and removing its ladder; both expected-finding leaks; and the windrow scope, stakes and resident-question findings.
+- **RESOLVED, with new issues above:** the operative-procedure instruction, proposal alternatives, claim 1’s earlier collector arithmetic, and claim 3’s earlier unclassified case were changed as requested. Their replacement text does not resolve the new instrument, primary-scope and coverage problems identified here.
+- **WEAKENED:** the all-bike-lanes correction is in the definition but not in a reachable Supported rung. The policy-level limitation and the prediction limitation are stated, but the verdicts still grade those substitutes.
+- **OPEN:** check 1’s request for readable as-of copies of C409L and the inaccessible eScribe instruments. The supplied extracts help identify them but are not the requested copies.
+
+I could not save this report as `framing-check-2.md`: the supplied workspace is read-only. This is the complete Markdown report for the output file.
+
