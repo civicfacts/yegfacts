@@ -525,3 +525,98 @@ becoming a finding, and a framing concern stops a run for the editor.
 - The round 1 answers stay in `round1/` as returned, with their rows in
   `run.yaml`. A restart moves them under a superseded directory, as
   earlier runs did.
+
+## 2026-10-02: the brief revised after the framing concerns; round 1 to run again
+
+**The editor found the round-1 framing concern real, revised the brief
+under methodology v1.2, and round 1 runs again on the revised brief once
+the new files can be carried.** Methodology v1.2 answers a framing concern
+from the panel by revising the brief and rerunning round 1, as the
+council-pause-vote run did on 2026-09-29. This is not a framing check, and
+the framing-check cap does not apply. No framing check, panel or seat ran
+for this revision.
+
+**The concern.** The frozen brief read "already put ... to council" as
+considered by a body by the comment date, with a proposal merely on a
+published agenda for a later meeting as the alternative timing rule. Two
+seats said that in ordinary usage putting a proposal to council means
+submitting it; that report CO03513 and its attachments were on the
+committee's published agenda from 2026-08-22, before the comment was
+written; and that the brief's two timing rules reach different rungs, so
+the primary rule decided the verdict. All three seats also found a
+snow-clearing service package in the Fall 2025 Supplemental Operating
+Budget Adjustment, inside the reference period, which the brief did not
+name, the site held no copy of, and no seat could read.
+
+**The editor's reason.** The holder's words are "put ... to council".
+Administration puts a proposal to a body when it submits it, and the
+body's published agenda is the public record of that submission; whether
+the body has yet dealt with it is a second question, which the minutes
+answer. The frozen brief made the second question carry the verdict and
+put the first in the alternative, so the verdict turned on when a meeting
+fell against the comment date rather than on what Administration had
+asked for by then. The revision swaps them: placed before Council or a
+committee of Council on a published agenda by the comment date is the
+primary rule, and considered by a body by that date is the required
+alternative, reported beside it. On the Fall 2025 package, the brief's
+instrument already reached every meeting in the period, but the files
+that would hold such a proposal sit behind the portal's browser check and
+the site held none, so the brief now names them and their meetings so
+they can be carried under v1.41 and v1.42; what they say is for the
+panel.
+
+**The revision.** The timing rule changed everywhere it shaped the brief:
+the claim's description in the opening section, the who-asks text, the
+controlling-source sentence under "What is measured", the reference
+period's alternatives, the definition (now "Put to the body", with
+"considered by the body" as the required alternative), the normalized
+proposition, the "Why this reading" paragraph, the "what this verdict
+establishes" sentence, the instrument, the order of classification, the
+ladder's Partially supported and Contradicted rungs, the
+required-alternatives list, qualifications 1 to 3, the stakes, the
+documents list and the first reviewer instruction. Every place the word
+"considered" remains is now explicitly the alternative. The Fall 2025
+documents were added: the three meetings' ids and page hashes under "What
+is measured", a paragraph naming each file by the filestream template and
+DocumentId, items 7 to 10 of the documents list, and the essential-source
+sentence extended to report FCS03158 with its Attachment 2 and report
+CO03079 with its Attachment 5. The reference period gained one sentence
+saying a proposal is inside it when the meeting whose agenda lists it
+falls on or after 2025-11-18 and the agenda was published by the comment
+date. A status note at the head records the revision. The reference
+period, body, unit, cost and count rules, the parks and everything else
+are unchanged. The brief's sha256 was
+`5ceff84da92a0c504880a2c57b873de36e37823bd880dc4ae423d8ac550fa103` and is
+now `afd75d059c5eff67c197f6587c256df242ca7bb4027f27c981ff234a27efc320`.
+Nothing from any seat's answer went into the brief: no count, cost,
+verdict or reading of any file. The rerun stays blind.
+
+**The documents registered.** The meeting pages were archived and
+registered at 200252f as YF-EV-0297 to 0302: the Community and Public
+Services Committee's agenda and minutes of 2025-08-11, City Council's
+agenda and minutes of 2025-11-24 and the City Council - Budget agenda and
+minutes of 2025-12-01. The founder downloaded eight portal files in a
+browser on 2026-10-02 at about 17:09Z; they are registered here, private,
+rights unclear, in the form of YF-EV-0294 to 0296. DocumentIds 278877 and
+280346 have identical bytes, so one entry covers both.
+
+| ID | DocumentId | File |
+|---|---|---|
+| YF-EV-0303 | 278875 | Report FCS03158, Fall 2025 Supplemental Operating Budget Adjustment - 2023-2026 Operating Budget (19 pages) |
+| YF-EV-0304 | 278877, re-listed as 280346 | Attachment 2 to FCS03158, Operating Budget - Fall 2025 Supplemental Operating Budget Adjustment (144 pages) |
+| YF-EV-0305 | 280345 | Replacement Page 53 of Attachment 2 to FCS03158 (1 page) |
+| YF-EV-0306 | 278865 | Attachment 7 to FCS03159, Emerging Items - Fall 2025 (Unfunded) (2 pages) |
+| YF-EV-0307 | 278866 | Attachment 8 to FCS03159, Unfunded Capital Profiles or Projects (2 pages) |
+| YF-EV-0308 | 268207 | Report CO03079, Improved Accessibility - Active Pathway Snow Removal and Sidewalk Repair (10 pages) |
+| YF-EV-0309 | 268212 | Attachment 5 to CO03079, Options and Costs to Increase Service Levels (4 pages) |
+
+The site has read none of them; each entry records identity and
+provenance only.
+
+**The stopped answers.** Round 1 of 2026-10-02 stays in `round1/` with its
+rows in `run.yaml`, as returned. Its answers are to the earlier brief and
+are not an input to the rerun: no seat sees them, and the merge and
+synthesis read only the new rounds. They move under a superseded
+directory when the rerun is set up. The rerun waits on the carry: the
+Fall 2025 Attachment 2 runs to 144 pages, longer than any file carried
+so far, and the tooling for it (v1.43) is being decided separately.
