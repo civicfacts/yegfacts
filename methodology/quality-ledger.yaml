@@ -714,3 +714,90 @@ events:
       round2/claude.json round2_notes.errors_in_other_reviews[1];
       round2/gpt.json round2_notes.errors_in_other_reviews[0];
       run-record.md, rounds 1 and 2 under v1.43; scripts/calcs/council-hearing.ts.
+  # --- snow clearing, run 2026-10-02 --------------------------------------
+  - date: "2026-10-02"
+    story: snow-clearing
+    run: reviews/snow-clearing/2026-10-02
+    stage: round2
+    seat: GPT-6 Luna
+    event: self-correction
+    materiality: minor
+    disposition: >
+      Round one counted two proposals and left out the Parking Ban Enforcement
+      Strategies and Resource Allocation package in FCS03158 Attachment 2, which
+      was carried and was on the same Council agenda. Without it the seat's
+      considered-by-a-body and Council-alone alternatives came out Partially
+      supported and its exactly-two alternative Supported. The Claude and Sol
+      seats each flagged the omission in cross-review, and the seat named it in
+      its own round-2 notes and counted three. The primary verdict did not
+      change; the published page reports the round-one count of two as the
+      seat's own and explains the towing package's role.
+    notes: >
+      round1/gpt-luna.json interpretation_notes; round2/gpt-luna.json
+      round2_notes.evidence_i_missed[0]; round2/claude.json
+      round2_notes.errors_in_other_reviews[0]; round2/gpt.json
+      round2_notes.errors_in_other_reviews[1]; run-record.md, rounds 1 and 2
+      on the revised brief; scripts/calcs/snow-clearing.ts.
+  - date: "2026-10-02"
+    story: snow-clearing
+    run: reviews/snow-clearing/2026-10-02
+    stage: round2
+    seat: GPT-6 Luna
+    event: self-correction
+    materiality: minor
+    disposition: >
+      Round one counted the active-pathway package as meeting the stricter cost
+      reading because it is labelled unfunded, giving C=1 and Partially
+      supported. The brief requires the text to state the approved figure and
+      the increase against it, and forbids inferring a baseline. The Claude and
+      Sol seats each flagged it in cross-review; the seat's round-2 answer gives
+      C=0 and Contradicted without naming the change in its notes. An
+      alternative reading only; the published page reports Contradicted.
+    notes: >
+      round1/gpt-luna.json interpretation_notes; round2/gpt-luna.json
+      interpretation_notes; round2/claude.json
+      round2_notes.errors_in_other_reviews[2]; round2/gpt.json
+      round2_notes.errors_in_other_reviews[2]; run-record.md, rounds 1 and 2
+      on the revised brief.
+  - date: "2026-10-02"
+    story: snow-clearing
+    run: reviews/snow-clearing/2026-10-02
+    stage: round2
+    seat: Claude Opus 5.5
+    event: self-correction
+    materiality: minor
+    disposition: >
+      Round one counted four proposals, treating the 24 optional enhancements in
+      CO03513 Attachment 10 as a proposal of their own, against the brief's
+      primary unit of one separately presented service package. The Sol and
+      Luna seats each flagged it in cross-review, and the seat's round-2 answer
+      counts three and places the enhancements under the alternative unit. The
+      verdict did not change; the published page reports the round-one count of
+      four as the seat's own.
+    notes: >
+      round1/claude.json interpretation_notes; round2/claude.json
+      interpretation_notes; round2/gpt.json
+      round2_notes.errors_in_other_reviews[0]; round2/gpt-luna.json
+      round2_notes.errors_in_other_reviews[0]; run-record.md, rounds 1 and 2
+      on the revised brief.
+  - date: "2026-10-02"
+    story: snow-clearing
+    run: reviews/snow-clearing/2026-10-02
+    stage: round2
+    seat: Claude Opus 5.5
+    event: self-correction
+    materiality: minor
+    disposition: >
+      Round one put the active-pathway package's $9,938K table total and its
+      $2.11 million one-time capital side by side, which reads as additive. The
+      Sol seat raised the figures' internal mismatch in round one; in round 2
+      the seat named its own presentation as an error and showed that the
+      described components plus the one-time capital come to about the table
+      total. The published page reports the figures as printed, says the text
+      does not reconcile them, and labels the sum a calculation.
+    notes: >
+      round1/claude.json supporting_evidence[0] and limitations;
+      round1/gpt.json limitations; round2/claude.json
+      round2_notes.evidence_i_missed[0] and errors_in_other_reviews[4];
+      run-record.md, rounds 1 and 2 on the revised brief;
+      scripts/calcs/snow-clearing.ts.

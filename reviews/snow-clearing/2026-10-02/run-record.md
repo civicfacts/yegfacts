@@ -931,3 +931,219 @@ body" it stays Supported only if the parking ban package counts. Every
 seat says a reader-facing "already put" or "already asked" must name the
 agenda-placement rule. The amounts are proposals, not approvals or
 spending. The Well Maintained City figures cover more than snow.
+
+## 2026-10-02: drafted and checked, before the gate
+
+**The page was drafted from the round files, the synthesis, the carry
+manifest, the register and the archived sources, then read by two
+faithfulness checks, a freshness audit and a plain-speech read; no finding
+changed and the four parks stand.** The question page leads with the four
+claims parked at framing, as lanes-and-congestion and council-hearing do,
+and its standfirst answers the question people asked: nobody can tell from
+the City records we found whether Edmonton plows bike lanes before streets.
+The one finding, `sc-two-costed-snow-proposals` (register
+`two-snow-removal-proposals-need-more-money`), is Supported, Unanimous. Its
+question and answer name the timing rule, placement on a published council
+or committee agenda, in the same sentence, and the answer carries the two
+readings that change the result beside the verdict: no proposal states the
+snow budget it would add to (Contradicted on the stricter cost reading), and
+three were found where the comment said two (Partially supported on exactly
+two). The body sets out every required alternative under "When the answer
+changes", including that on the considered-by-a-body rule two still count
+only with the parking-ban towing package. What administration proposed is
+kept apart from what Council did: the minutes of the December 2025 budget
+meeting record approval of the fall operating changes, 11 to 2, and no
+operating budget amendment naming either snow package; the September 8,
+2026 minutes record approval of policy C409L, not a funding decision.
+Office-holders are named only for motions and votes; members of the public
+do not appear. Counts under each reading are in
+`scripts/calcs/snow-clearing.ts`, with a test pinning them to the prose.
+The status is `pending-review`. winter-cycling and active-transportation
+link to the page.
+
+**The count.** Reported as the rounds support it: in round 1 the seats
+counted two (GPT-6 Luna, which missed the towing package), three (GPT-6
+Sol) and four (Claude Opus 5.5, which counted Attachment 10's optional
+enhancements as a proposal of their own); in round 2 all three counted
+three. The page calls the towing package the one contested classification
+among the three identified, says the answer under the agenda rule does not
+depend on it, and says the total could be higher because no seat could
+search the whole meeting calendar.
+
+Each report is committed with the editor's dispositions at its top:
+`faithfulness/gpt-1.md` (GPT-6 Sol, 31 items, 29 adopted, 1 in part, 1
+refused), `faithfulness/gpt-luna-1.md` (GPT-6 Luna, 15 items, all adopted),
+`gate/freshness-audit.md` (GPT-6 Sol, 6 items, none changing the finding or
+a park; no source added) and `plain-speech/gpt-1.md` (GPT-6 Sol, 11
+rewrites, 2 as written and 9 modified). The faithfulness package carried the
+carried texts whole except three long ones given as stated excerpts (the
+budget minutes YF-EV-0302, report FCS03158 YF-EV-0303 and report CO03079
+YF-EV-0308), to stay inside the GPT-6 seats' measured ceiling (D-0049); it
+was 485,163 bytes. Nothing carried is committed.
+
+**For the editor.**
+- The claim's question, given as "Had City administration already put two
+  snow-clearing proposals that need more spending before council?", now ends
+  "on a published council or committee agenda?", because the brief's second
+  revision requires every reader-facing "already put" to name its timing
+  rule in the same sentence (faithfulness Sol 22).
+- The freshness audit names the City's 2027-2030 budget timetable
+  (proposed budget November 2026, deliberations December 2026) and two
+  leads for the bike-lane park (the live clearing maps and the route-status
+  dataset). None is archived or relied on. Whether the gate should archive
+  the budget page and name the window, and whether the bike-lane park's
+  reopen condition should name the dataset, are the editor's calls.
+
+**Quality ledger (D-0048 rule 7).** The recorded failure modes in
+`methodology/quality-ledger.yaml` were checked against the draft:
+
+| Recorded failure mode | Earlier case | Result here |
+|---|---|---|
+| Fabricated citation, or a figure attributed to a source that lacks it | electric-buses, winter-cycling, infill-prices | Every figure was read from the carried texts into the calculation; the $9.94 million is labelled a calculation and the text's own figures are reported as printed. |
+| A seat's miscount carried into the draft | council-hearing round 2 | The draft uses the round-2 count of three and reports the round-1 counts of two and four as the seats' own, with the reasons the round files give. |
+| A stated rule presented as an outcome | winter-cycling | The procedure's deadlines are reported as deadlines, never as the order crews cleared; the bike-lane claim stays parked. |
+| A funded or proposed figure presented as approved or achieved | climate-targets; D-0048 rule 6 | Every package figure is called proposed; Council's actions are limited to what its minutes record, and no amendment is said to have funded or refused a package beyond "none names either". |
+| A media report treated as the document behind it | climate-targets | No media report is cited. |
+| A source misclassified | fifteen-minute-districts | Labels come from the carry manifest; the uncarried Internet Archive copy carries none and the page says the reviewers did not read it. |
+| Committee action described as Council's | active-transportation (gate) | The page names the Community and Public Services Committee for August 31 and City Council for November 25, December 1 to 4 and September 8, and reports the Council-alone reading separately. |
+| Categorical wording beyond the instrument | fifteen-minute-districts | Absences are bounded to the records we found and the meetings searched; the count is "identified" and could be higher (faithfulness Luna 4, 5, 10). |
+
+Nothing in the ledger's recorded modes is present in the draft as committed.
+Four entries from this run's rounds are in the ledger as round-2
+self-corrections (see the editor's decisions below): GPT-6 Luna's round-1
+omission of the towing package and its reading of "unfunded" as a stated
+increase; Claude Opus 5.5's round-1 count of the optional enhancements as a
+fourth proposal and its side-by-side presentation of the active-pathway
+figures.
+
+**Labels.** On the built question page every carried source cited carries
+its v1.43 label: YF-EV-0304 the sections label; YF-EV-0287, 0289, 0290,
+0291, 0293, 0298, 0299, 0300 and 0302 the selected-items label; YF-EV-0294,
+0295, 0296, 0303 and 0308 the document label. The claim page tags the same
+sources. The uncarried sources (YF-EV-0241, 0281, 0288) carry none.
+
+**Not yet done.** The publication gate and the critique of the rendered
+page, which run as separate sessions.
+
+## 2026-10-02: the editor's decisions on the drafting questions
+
+- **The claim's question** ends "on a published council or committee
+  agenda?". Accepted: the brief's second revision requires every
+  reader-facing "already put" to name its timing rule in the same sentence.
+- **The faithfulness package's excerpts** of YF-EV-0302, 0303 and 0308 are
+  accepted as disclosed in the reports' headers.
+- **The 2027-2030 budget timetable** from the freshness audit (proposed
+  budget November 2026, deliberations December 2026) is not archived and not
+  added: nothing on the page depends on those dates, which says only what
+  report CO03513 says, that administration will bring the package to the
+  2027-2030 budget deliberations.
+- **The bike-lane park's reopen condition** stays as it is. The audit's
+  route-status dataset and live maps have not been checked for
+  snowfall-by-snowfall completion times, so naming them would describe a
+  record nobody has read.
+- **Quality ledger.** The four round-2 self-corrections above are entered in
+  `methodology/quality-ledger.yaml` on this branch, which the ledger's
+  exemption from the version rule (#120) allows.
+
+## 2026-10-02: gate and critique, first pass; corrected
+
+**The publication gate found nothing blocking and the critique three
+required changes; all are corrected, no finding changed, and the four parks
+stand.** Reports, each with the editor's dispositions at its top:
+`gate/source-verification.md` (0 blocking, 4 advisory, all adopted),
+`gate/release-check.md` (0 blocking, 1 advisory, adopted) and
+`critique-1.md` (3 required, 5 suggested; phone test at 375 by 812). The
+phone screenshots are kept outside the repository.
+
+**What changed on the page.**
+- The standfirst answers the question asked from the City's own procedure
+  (YF-EV-0281) and keeps the bound: "Main bike lanes and some main roads
+  have 24-hour targets, residential streets 10 days once plowing starts,
+  but no record shows which crews actually clear first." The residential
+  figure runs from the start of a blading cycle, not from the snowfall, as
+  the procedure says.
+- The TL;DR states the finding first: at least three proposals on council
+  and committee agendas by August 27, 2026, what the December budget
+  amendments did not name, the larger package that administration says it
+  will bring to the 2027-2030 budget (CO03513), and that the match to "two"
+  depends on how you count.
+- The answer opens with the agenda rule and keeps the strict-budget and
+  exactly-two readings in its next sentence. The claim page's share card is
+  truncated by the site at about 160 characters, so the caveats are not on
+  that card.
+- The opening maps the five claims to the five people (gate A1), the CO03513
+  wording is quoted rather than paraphrased as a quotation (A2), the August
+  22 capture date is sourced to the archive address in `fetch-report.md`
+  (A3, also on YF-EV-0288's archive note), and the active-transportation
+  pointer names the agenda rule (A4). The 42-word quotation of FCS03158
+  Attachment 2 is cut to 16 words in the claim and to the site's own words
+  in the story (release A1). "The brief" is gone from reader text.
+
+**Shared code.** The sections label reads the carried and total section
+counts from the run's manifest: YF-EV-0304's label now says the reviewers
+"saw only 4 of this document's 36 sections". A test covers it.
+
+**Registry.** "The founder" is replaced with "a person" in the rights notes
+of YF-EV-0294, 0295, 0296, 0303, 0304, 0305, 0306, 0307, 0308 and 0309, and
+in YF-EV-0304's establishes text. The "site has not read its contents"
+sentence is replaced in YF-EV-0294, 0295, 0296, 0303, 0304 and 0308, which
+the page quotes. YF-EV-0288 gains an archive note on where its date comes
+from. The carry manifests and this record keep the founder as the
+downloader, since they are not rendered.
+
+**Not changed, for the editor.** Other rendered pages still name the
+founder: the changelogs of several published stories, the two source
+capture pages, the earth-flat question and the methodology pages. They are
+outside the registry and label scope of this pass.
+
+**Not yet done.** The gate's and the critique's confirmations.
+
+## 2026-10-02: confirmations; corrected and published
+
+**The critique's confirmation passed; the gate's confirmation found one
+clause to bound, which was corrected in the gate's wording, and the page was
+published on 2026-10-02.** No finding changed at any stage:
+`two-snow-removal-proposals-need-more-money` (`sc-two-costed-snow-proposals`)
+is Supported, Unanimous, and the four claims parked at framing stay parked.
+
+The gate's confirmation (`gate/confirmation.md`) confirmed all five earlier
+advisories resolved. It found the new standfirst's last clause, "no record
+shows which crews actually clear first", stronger than the search, since the
+page names the City's annual snow report as unread. The standfirst is now
+"Main bike lanes and some main roads have 24-hour targets, residential
+streets 10 days once plowing starts, but we found no record of which crews
+clear first.", 157 characters, so the share text carries it whole. Its
+advisory was adopted: YF-EV-0296's establishes says the page reports
+figures from it. No third pass of the gate was run on this correction.
+
+The critique's confirmation (`critique-1-confirmation.md`) passed. Two of
+its notes were adopted: the answer's second sentence names the stricter
+reading where it first appears, and TL;DR 4 says "a commenter's claim of
+two proposals". The claim page's share card, cut by the site at about 160
+characters, is noted as site-wide.
+
+**The phone tests (D-0048 rules 7 and 8, the first story under the sections
+label).** Each at 375 by 812 in headless Chromium, with the pending-review
+banner removed so the page appears as it will at publication:
+1. Critique 1, the question page's first screen: the standfirst answered a
+   parked claim rather than the question asked, so a cold reader left
+   thinking the City's snow clearing was unknowable (fixed by R1); the
+   TL;DR gave the exceptions without the finding (R2).
+2. Critique 1, the YF-EV-0304 sections label: read as the reviewers being
+   given part of the document under a rule, and understood.
+3. The critique's confirmation, the first screen and the TL;DR again: the
+   title, question and whole standfirst fit the first screen, and a cold
+   reader could state the answer within ten seconds.
+The screenshots are kept outside the repository.
+
+**Publishing.** The run's `combined-evidence.json` now carries each
+source's fetch status (`scripts/annotate-evidence.ts`), from fresh fetches
+on 2026-10-02: 10 fetched, 5 failed. The five failures are the eScribe
+filestream files, which answer scripts with HTTP 403; each is carried and
+archived. The register question is `gate-complete` and `published`, and
+`state.yaml` records the human gate complete.
+
+**Also on this run.** The four round-2 self-corrections are in the quality
+ledger on this branch. Rendered pages outside the registry and label scope
+that still name the founder are listed in the gate-and-critique entry
+above, for the editor.

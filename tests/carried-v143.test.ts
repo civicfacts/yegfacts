@@ -552,6 +552,23 @@ describe('v1.43 labels', () => {
     expect(carried.get('YF-EV-9102')).toMatchObject({ kind: 'sections', reason: 'portal', ruleVersion: 2 });
   });
 
+  it('counts the carried sections from the manifest and says so in the label', () => {
+    const dir = labelRoot([
+      row({
+        kind: 'pdf-sections',
+        section_rule_version: 2,
+        eligibility: { ground: 'fetcher challenge' },
+        url: 'https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=9',
+        sections: [{ carried: true }, { carried: false }, { carried: true }, { carried: false }, { carried: false }],
+      }),
+    ]);
+    const source = carriedSources([RUN_LABELS], dir).get('YF-EV-9101')!;
+    expect(source.sectionCounts).toEqual({ carried: 2, total: 5 });
+    const text = carriedLabelText(source);
+    expect(text).toMatch(/^The AI reviewers saw only 2 of this document’s 5 sections, picked by our published rule/);
+    expect(text).toContain(CARRIED_SECTIONS_REST);
+  });
+
   it.each([
     ['a pdf-sections row with no section rule version', { kind: 'pdf-sections' }],
     ['an unknown eligibility ground', { eligibility: { ground: 'source unavailable' } }],
