@@ -21,7 +21,7 @@ describe('the count under the reading fixed before the research', () => {
     expect(figures.primary).toEqual({ count: 3, rung: 'Supported' });
     expect(figures.primaryWithoutParkingBan).toEqual({ count: 2, rung: 'Supported' });
     expect(claim.answer).toContain('at least two costed snow proposals on published council and committee agendas by August 27, 2026');
-    expect(story).toContain('The reviewers found three such proposals on published agendas by August 27, 2026');
+    expect(story).toContain('the reviewers identified three such proposals on published agendas by August 27, 2026');
     expect(story).toContain('all three counted three');
     expect(story).toContain('Without it, two proposals remain');
   });
@@ -61,7 +61,7 @@ describe('the figures each package states', () => {
 
   it('towing $100,000 a year, Well Maintained City $23.6 million a year and $11.5 million one-time', () => {
     expect(statedCosts.parkingBan.ongoing).toBe(0.1);
-    expect(story).toContain('$100,000 a year to hire tow trucks');
+    expect(story).toContain('$100,000 a year for contracted towing');
     expect(statedCosts.wellMaintainedCity).toEqual({ ongoing: 23.6, oneTimeCapital: 11.5 });
     expect(story).toContain('$23.6 million a year plus $11.5 million one-time');
     expect(statedCosts.optionalEnhancements).toBe(24);
