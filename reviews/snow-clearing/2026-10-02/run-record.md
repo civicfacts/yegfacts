@@ -1009,12 +1009,12 @@ was 485,163 bytes. Nothing carried is committed.
 | Categorical wording beyond the instrument | fifteen-minute-districts | Absences are bounded to the records we found and the meetings searched; the count is "identified" and could be higher (faithfulness Luna 4, 5, 10). |
 
 Nothing in the ledger's recorded modes is present in the draft as committed.
-Candidate entries from this run's rounds, not entered here: GPT-6 Luna's
-round-1 omission of the towing package and its reading of "unfunded" as a
-stated increase, both corrected in round 2 after the other seats' catches;
-Claude Opus 5.5's round-1 count of the optional enhancements as a fourth
-proposal and its side-by-side presentation of the active-pathway figures,
-both self-corrected in round 2. Entering them is the editor's call.
+Four entries from this run's rounds are in the ledger as round-2
+self-corrections (see the editor's decisions below): GPT-6 Luna's round-1
+omission of the towing package and its reading of "unfunded" as a stated
+increase; Claude Opus 5.5's round-1 count of the optional enhancements as a
+fourth proposal and its side-by-side presentation of the active-pathway
+figures.
 
 **Labels.** On the built question page every carried source cited carries
 its v1.43 label: YF-EV-0304 the sections label; YF-EV-0287, 0289, 0290,
@@ -1024,3 +1024,23 @@ sources. The uncarried sources (YF-EV-0241, 0281, 0288) carry none.
 
 **Not yet done.** The publication gate and the critique of the rendered
 page, which run as separate sessions.
+
+## 2026-10-02: the editor's decisions on the drafting questions
+
+- **The claim's question** ends "on a published council or committee
+  agenda?". Accepted: the brief's second revision requires every
+  reader-facing "already put" to name its timing rule in the same sentence.
+- **The faithfulness package's excerpts** of YF-EV-0302, 0303 and 0308 are
+  accepted as disclosed in the reports' headers.
+- **The 2027-2030 budget timetable** from the freshness audit (proposed
+  budget November 2026, deliberations December 2026) is not archived and not
+  added: nothing on the page depends on those dates, which says only what
+  report CO03513 says, that administration will bring the package to the
+  2027-2030 budget deliberations.
+- **The bike-lane park's reopen condition** stays as it is. The audit's
+  route-status dataset and live maps have not been checked for
+  snowfall-by-snowfall completion times, so naming them would describe a
+  record nobody has read.
+- **Quality ledger.** The four round-2 self-corrections above are entered in
+  `methodology/quality-ledger.yaml` on this branch, which the ledger's
+  exemption from the version rule (#120) allows.
