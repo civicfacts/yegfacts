@@ -1044,3 +1044,56 @@ page, which run as separate sessions.
 - **Quality ledger.** The four round-2 self-corrections above are entered in
   `methodology/quality-ledger.yaml` on this branch, which the ledger's
   exemption from the version rule (#120) allows.
+
+## 2026-10-02: gate and critique, first pass; corrected
+
+**The publication gate found nothing blocking and the critique three
+required changes; all are corrected, no finding changed, and the four parks
+stand.** Reports, each with the editor's dispositions at its top:
+`gate/source-verification.md` (0 blocking, 4 advisory, all adopted),
+`gate/release-check.md` (0 blocking, 1 advisory, adopted) and
+`critique-1.md` (3 required, 5 suggested; phone test at 375 by 812). The
+phone screenshots are kept outside the repository.
+
+**What changed on the page.**
+- The standfirst answers the question asked from the City's own procedure
+  (YF-EV-0281) and keeps the bound: "Main bike lanes and some main roads
+  have 24-hour targets, residential streets 10 days once plowing starts,
+  but no record shows which crews actually clear first." The residential
+  figure runs from the start of a blading cycle, not from the snowfall, as
+  the procedure says.
+- The TL;DR states the finding first: at least three proposals on council
+  and committee agendas by August 27, 2026, what the December budget
+  amendments did not name, the larger package that administration says it
+  will bring to the 2027-2030 budget (CO03513), and that the match to "two"
+  depends on how you count.
+- The answer opens with the agenda rule and keeps the strict-budget and
+  exactly-two readings in its next sentence. The claim page's share card is
+  truncated by the site at about 160 characters, so the caveats are not on
+  that card.
+- The opening maps the five claims to the five people (gate A1), the CO03513
+  wording is quoted rather than paraphrased as a quotation (A2), the August
+  22 capture date is sourced to the archive address in `fetch-report.md`
+  (A3, also on YF-EV-0288's archive note), and the active-transportation
+  pointer names the agenda rule (A4). The 42-word quotation of FCS03158
+  Attachment 2 is cut to 16 words in the claim and to the site's own words
+  in the story (release A1). "The brief" is gone from reader text.
+
+**Shared code.** The sections label reads the carried and total section
+counts from the run's manifest: YF-EV-0304's label now says the reviewers
+"saw only 4 of this document's 36 sections". A test covers it.
+
+**Registry.** "The founder" is replaced with "a person" in the rights notes
+of YF-EV-0294, 0295, 0296, 0303, 0304, 0305, 0306, 0307, 0308 and 0309, and
+in YF-EV-0304's establishes text. The "site has not read its contents"
+sentence is replaced in YF-EV-0294, 0295, 0296, 0303, 0304 and 0308, which
+the page quotes. YF-EV-0288 gains an archive note on where its date comes
+from. The carry manifests and this record keep the founder as the
+downloader, since they are not rendered.
+
+**Not changed, for the editor.** Other rendered pages still name the
+founder: the changelogs of several published stories, the two source
+capture pages, the earth-flat question and the methodology pages. They are
+outside the registry and label scope of this pass.
+
+**Not yet done.** The gate's and the critique's confirmations.

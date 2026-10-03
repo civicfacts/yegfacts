@@ -20,7 +20,7 @@ describe('the count under the reading fixed before the research', () => {
     expect(packages).toHaveLength(3);
     expect(figures.primary).toEqual({ count: 3, rung: 'Supported' });
     expect(figures.primaryWithoutParkingBan).toEqual({ count: 2, rung: 'Supported' });
-    expect(claim.answer).toContain('published council and committee agendas listed at least two snow proposals');
+    expect(claim.answer).toContain('Counting a proposal once it is on a published agenda, administration had at least two snow proposals');
     expect(story).toContain('the reviewers identified three such proposals on published agendas by August 27, 2026');
     expect(story).toContain('all three counted three');
     expect(story).toContain('Without it, two proposals remain');
@@ -52,7 +52,7 @@ describe('the readings that change the answer', () => {
 describe('the figures each package states', () => {
   it('active-pathway package: three components that add to $7.83 million, a $9.938 million table', () => {
     expect(figures.activePathwayDescribedSum).toBe(statedCosts.activePathway.describedOngoingTotal);
-    expect(story).toContain('$2.11 million one-time capital investment');
+    expect(story).toContain('$2.11 million in one-time capital');
     expect(story).toContain('$1.60 million a year');
     expect(story).toContain('$1.64 million for enforcement and $4.59 million for sidewalk repair');
     expect(story).toContain('2026 total at $9.938 million');

@@ -7,7 +7,8 @@
  * (a report or attachment) gets one label; a meeting page carried as selected
  * items gets another, which says the site chose the items under a published
  * rule and the rest of the page was not shown; a long document carried as
- * selected sections gets a third, which says the same of its sections. Where a
+ * selected sections gets a third, which says the same of its sections and,
+ * where the manifest lists them, how many of how many were given. Where a
  * document was carried because every reviewer's research tools failed to
  * retrieve it in two rounds, the label says the tools failed, never that the
  * document is unavailable. Which documents were carried, and on which ground,
@@ -61,6 +62,8 @@ export type CarriedSource = {
   ruleVersion?: number;
   /** v1.43: a person could not confirm that the publisher's link opens this same version. */
   openUnconfirmed?: boolean;
+  /** For `sections`: how many of the document's sections were carried, out of how many, read from the manifest's section inventory. */
+  sectionCounts?: { carried: number; total: number };
 };
 
 /** True for an address on the City's meeting portal; false for anything else, a malformed address included. */
@@ -87,8 +90,12 @@ const GROUNDS = new Set([undefined, 'fetcher challenge', 'seat refusal', 'two-ro
  * words: what the reviewers saw, why, and what their agreement does not show.
  * A v1.41 or v1.42 source reads exactly as it did.
  */
-export function carriedLabelText(source: Pick<CarriedSource, 'kind' | 'reason' | 'openUnconfirmed'>): string {
-  const what = source.kind === 'items' ? ITEMS_WHAT : source.kind === 'sections' ? SECTIONS_WHAT : DOCUMENT_WHAT;
+export function carriedLabelText(source: Pick<CarriedSource, 'kind' | 'reason' | 'openUnconfirmed' | 'sectionCounts'>): string {
+  const counts = source.kind === 'sections' ? source.sectionCounts : undefined;
+  const sectionsWhat = counts
+    ? `The AI reviewers saw only ${counts.carried} of this document’s ${counts.total} sections, picked by our published rule, from our archived copy,`
+    : SECTIONS_WHAT;
+  const what = source.kind === 'items' ? ITEMS_WHAT : source.kind === 'sections' ? sectionsWhat : DOCUMENT_WHAT;
   const why = source.reason === 'two-round' ? TWO_ROUND_REASON : source.reason === 'tools' ? TOOLS_REASON : PORTAL_REASON;
   const v143 = source.kind === 'sections' || source.reason !== 'portal';
   return [
@@ -113,6 +120,7 @@ type ManifestDocument = {
   archive?: { sha256?: string };
   eligibility?: { ground?: string };
   public_open_check?: { result?: string };
+  sections?: { carried?: boolean }[];
 };
 
 /**
@@ -168,6 +176,9 @@ export function carriedSources(runDirs: readonly string[], root: string = proces
         ...(doc.kind === 'minutes-items' ? { ruleVersion: doc.rule_version } : {}),
         ...(doc.kind === 'pdf-sections' ? { ruleVersion: doc.section_rule_version } : {}),
         ...(doc.public_open_check?.result === 'unable' ? { openUnconfirmed: true } : {}),
+        ...(doc.kind === 'pdf-sections' && Array.isArray(doc.sections) && doc.sections.length > 0
+          ? { sectionCounts: { carried: doc.sections.filter((section) => section?.carried === true).length, total: doc.sections.length } }
+          : {}),
       });
     }
   }
