@@ -1,0 +1,150 @@
+{
+  "reviewer": {
+    "provider": "openai",
+    "model_self_reported": "GPT-6",
+    "runner_model": "gpt-6-sol",
+    "runner_seat": "GPT-6 Sol",
+    "runner_effort": "high"
+  },
+  "story": "snow-clearing",
+  "round": 1,
+  "claims": [
+    {
+      "id": "two-snow-removal-proposals-need-more-money",
+      "proposition_evaluated": "Between 2025-11-18 and 2026-08-27, Administration placed on a published City Council or Council committee agenda at least two distinct proposals to change snow and ice control service, each stating new spending to deliver it.",
+      "interpretation_notes": "I count a separately presented service package once, even when it contains several changes. Three qualifying packages are identifiable: two in the Fall 2025 budget adjustment and the Well Maintained City package on the 2026-08-31 committee agenda. The 24 optional enhancements in CO03513 Attachment 10 are separately costed options under the alternative unit, but the report says Council would need to direct Administration to bring forward service packages for them. The Winter/Summer Temporary Assignment package, DocumentId 278877, pages 45–46, names snow and ice among several affected services but proposes an employment conversion without identifying a change to snow and ice control operations or service levels; I exclude it. Primary identified count: P=3, C=3, U=0, Supported. Required alternatives, each changing only the named rule: considered by 2026-08-27, P=2/C=2/U=0, Supported; window through 2026-10-02, P=3/C=3/U=0, Supported; start at 2025-01-01, P=4/C=4/U=0, Supported, adding the CO03079 suite of costed service options; City Council alone, P=2/C=2/U=0, Supported; separately costed options, P=27/C=27/U=0, Supported, counting the 24 Attachment 10 options separately; cost must be shown against a numerical identified approved budget, P=3/C=0/U=0, Contradicted under that documentary test; exactly two, P=3/C=3/U=0, Partially supported because the exact-two part fails: three qualifying packages are identified. The strict cost and exact-count alternatives change the rung. None of these counts establishes approval or expenditure.",
+      "verdict": "Supported",
+      "confidence": "Moderate",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "The 2025-11-24 Council agenda, item 7.2, listed FCS03158 and Attachment 2, DocumentIds 278875 and 278877. The meeting occurred within the primary period, fixing 2025-11-24 as the latest possible publication date.",
+          "source_title": "City Council agenda, 2025-11-24, item 7.2",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=8321e64d-6394-469b-8653-65641562497c&lang=English",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025-11-24",
+          "source_type": "legal-audited",
+          "establishes": "The two budget packages in Attachment 2 were placed before City Council by the comment date.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The Parking Ban Enforcement Strategies and Resource Allocation package, DocumentId 278877, page 34, proposes ongoing tow service during snow clearing and $100,000 in new annual operating budget for 2026.",
+          "source_title": "FCS03158 Attachment 2, Parking Ban Enforcement Strategies and Resource Allocation",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=278877",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025-11-24",
+          "source_type": "analytical-report",
+          "establishes": "One distinct snow and ice control operations package states incremental spending.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The Improved Accessibility package, DocumentId 278877, pages 43–44, proposes higher priority snow clearing for vulnerable areas. It states $2.11 million one-time capital and an annual $1.60 million snow and ice control operating increase, plus sidewalk maintenance and enforcement increases. Its 2026 table shows $9.938 million in total new budget.",
+          "source_title": "FCS03158 Attachment 2, Improved Accessibility – Active Pathway Snow Removal and Sidewalk Repair",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=278877",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025-11-24",
+          "source_type": "analytical-report",
+          "establishes": "A second distinct service package states incremental snow clearing spending.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The 2026-08-31 committee agenda, item 7.1, listed report CO03513 and the Well Maintained City summary, DocumentIds 304803 and 304812. The supplied archive metadata dates a capture of the agenda to 2026-08-22, before the comment.",
+          "source_title": "Community and Public Services Committee agenda, 2026-08-31, item 7.1",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=e2eee963-953d-4bbd-834c-419a4545cbcf&lang=English",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-08-31",
+          "source_type": "legal-audited",
+          "establishes": "The Well Maintained City package appeared on a committee agenda; the pre-comment publication date depends on the archive metadata supplied with the brief.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "CO03513 calls Well Maintained City a proposed service package, describing more frequent residential blading and a dedicated priority-one pathway crew. It states approximately $23.6 million annually in ongoing operating and $11.5 million in one-time capital funding for the package.",
+          "source_title": "CO03513, Snow and Ice Control Policy and Program Review",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304803",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-08-31",
+          "source_type": "analytical-report",
+          "establishes": "A third separately presented package proposes snow and ice service changes and states new spending.",
+          "strength": "strong"
+        },
+        {
+          "finding": "CO03079, listed for the 2025-08-11 committee meeting under item 7.3 as DocumentId 268207 with cost options in DocumentId 268212, presented three costed snow clearing enhancement options. Its report says the 2025 and 2026 budgets contain no funding for enhancements.",
+          "source_title": "CO03079, Improved Accessibility – Active Pathway Snow Removal and Sidewalk Repair",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=268207",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025-08-11",
+          "source_type": "analytical-report",
+          "establishes": "The pre-election alternative adds an earlier costed options suite; it falls outside the primary window.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The 2025 budget packages were labelled unfunded. On 2025-11-25 Council postponed the budget items; on 2025-12-04 it approved revised budget adjustments without a separate amendment funding either identified snow package. A proposal had been put to Council, but funding had not thereby been approved.",
+          "source_title": "City Council budget minutes, meeting begun 2025-12-01, items 5.2–5.2.3",
+          "source_url": "https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=2925a7f5-32a8-49a6-be15-fc1cf157c764&lang=English",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2025-12-04",
+          "source_type": "legal-audited",
+          "establishes": "The evidence supports proposals, not approved funding; the 2025 packages were considered by Council by the comment date.",
+          "strength": "strong"
+        },
+        {
+          "finding": "CO03513 says the Well Maintained City package was provided ahead of formal presentation during 2027–2030 budget deliberations, and that its implementation depends on funding approval. The 2026-08-31 committee did not consider it until after the comment date.",
+          "source_title": "CO03513 Attachment 9, Well Maintained City Package Summary",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304812",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-08-31",
+          "source_type": "analytical-report",
+          "establishes": "The third package qualifies under the brief’s agenda timing rule, but was not yet heard or formally submitted for a budget decision on 2026-08-27.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The CO03513 report says approval of policy C409L itself requires no additional budget. Its optional enhancements require further direction before a service package is brought to budget deliberations.",
+          "source_title": "CO03513, Budget/Financial Implications",
+          "source_url": "https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=304803",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-08-31",
+          "source_type": "analytical-report",
+          "establishes": "The policy recommendation is not a separate costed proposal, and the optional enhancements should not inflate the primary package count.",
+          "strength": "strong"
+        }
+      ],
+      "limitations": [
+        "The portal returned a browser check or 403 to my web tool. I used the public document text carried in the review package; the web tool did not independently retrieve those files.",
+        "The 2026-08-22 Internet Archive capture also failed in my web tool. Its timestamp and listed files are reported from the brief, so the exact first-publication date for CO03513 is not independently verified here.",
+        "The carried 144-page FCS03158 Attachment 2 includes four selected sections and an inventory, rather than all pages. The selection captures the snow-related service packages. I cannot rule out an additional relevant package elsewhere without the whole document and a complete portal-calendar audit; the verified minimum of three is enough for the primary at-least-two verdict.",
+        "The improved-accessibility package has inconsistent cost presentations: its narrative component increases total $7.83 million annually, while its 2026 table lists $9.938 million in new budget. Both are positive; the discrepancy matters to an article stating a package total.",
+        "The 2026 report and 2025 budget documents do not state a numerical approved snow and ice control budget alongside each package’s proposed increase in the form required by the strict cost alternative.",
+        "I could not compare the content of the CO03513 files posted under the archive, live-agenda and minutes DocumentIds. The carried agenda titles match the report and attachments relevant here."
+      ],
+      "unknowns": [
+        "The exact date the November 2025 budget agenda first appeared online, before its 2025-11-24 meeting.",
+        "Whether any additional qualifying package appears in Council or committee agendas not supplied or independently accessible here.",
+        "Whether the City later funded or delivered the 2026 proposed package; those outcomes are outside this proposition."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A complete, searchable archive of every Council and committee agenda in both windows, with original publication timestamps and full attachments.",
+          "likely_holder": "City of Edmonton Office of the City Clerk",
+          "importance": "high"
+        },
+        {
+          "description": "The complete 144-page FCS03158 Attachment 2 and all versions of CO03513 files, to confirm the exact count and compare reposted content.",
+          "likely_holder": "City of Edmonton Financial and Corporate Services and Office of the City Clerk",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [
+        "For the 2025 accessibility package, reconcile the stated $7.83 million annual component sum ($1.60 million + $1.64 million + $4.59 million) with the $9.938 million shown as 2026 new budget; do not publish one as the undisputed total.",
+        "Keep one-time capital and annual operating figures separate; do not add them into an unqualified single-year cost."
+      ],
+      "what_would_change_my_verdict": [
+        "A dated agenda archive showing that CO03513 was first published after 2026-08-27 would reduce the identified primary count from three to two, while leaving the Supported rung intact.",
+        "Evidence that either of the two Fall 2025 packages was not on the published agenda by 2026-08-27, or that its carried text was materially different and did not propose incremental snow and ice spending, could change the rung.",
+        "A complete calendar and attachments showing additional qualifying packages would change the exact count and alternative counts, though not the primary at-least-two verdict."
+      ],
+      "suggested_one_line": "Supported: by August 27, Administration had put at least two costed snow and ice service packages on Council agendas; a third was on a committee agenda for August 31, but had not yet been heard."
+    }
+  ]
+}

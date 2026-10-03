@@ -525,3 +525,409 @@ becoming a finding, and a framing concern stops a run for the editor.
 - The round 1 answers stay in `round1/` as returned, with their rows in
   `run.yaml`. A restart moves them under a superseded directory, as
   earlier runs did.
+
+## 2026-10-02: the brief revised after the framing concerns; round 1 to run again
+
+**The editor found the round-1 framing concern real, revised the brief
+under methodology v1.2, and round 1 runs again on the revised brief once
+the new files can be carried.** Methodology v1.2 answers a framing concern
+from the panel by revising the brief and rerunning round 1, as the
+council-pause-vote run did on 2026-09-29. This is not a framing check, and
+the framing-check cap does not apply. No framing check, panel or seat ran
+for this revision.
+
+**The concern.** The frozen brief read "already put ... to council" as
+considered by a body by the comment date, with a proposal merely on a
+published agenda for a later meeting as the alternative timing rule. Two
+seats said that in ordinary usage putting a proposal to council means
+submitting it; that report CO03513 and its attachments were on the
+committee's published agenda from 2026-08-22, before the comment was
+written; and that the brief's two timing rules reach different rungs, so
+the primary rule decided the verdict. All three seats also found a
+snow-clearing service package in the Fall 2025 Supplemental Operating
+Budget Adjustment, inside the reference period, which the brief did not
+name, the site held no copy of, and no seat could read.
+
+**The editor's reason.** The holder's words are "put ... to council".
+Administration puts a proposal to a body when it submits it, and the
+body's published agenda is the public record of that submission; whether
+the body has yet dealt with it is a second question, which the minutes
+answer. The frozen brief made the second question carry the verdict and
+put the first in the alternative, so the verdict turned on when a meeting
+fell against the comment date rather than on what Administration had
+asked for by then. The revision swaps them: placed before Council or a
+committee of Council on a published agenda by the comment date is the
+primary rule, and considered by a body by that date is the required
+alternative, reported beside it. On the Fall 2025 package, the brief's
+instrument already reached every meeting in the period, but the files
+that would hold such a proposal sit behind the portal's browser check and
+the site held none, so the brief now names them and their meetings so
+they can be carried under v1.41 and v1.42; what they say is for the
+panel.
+
+**The revision.** The timing rule changed everywhere it shaped the brief:
+the claim's description in the opening section, the who-asks text, the
+controlling-source sentence under "What is measured", the reference
+period's alternatives, the definition (now "Put to the body", with
+"considered by the body" as the required alternative), the normalized
+proposition, the "Why this reading" paragraph, the "what this verdict
+establishes" sentence, the instrument, the order of classification, the
+ladder's Partially supported and Contradicted rungs, the
+required-alternatives list, qualifications 1 to 3, the stakes, the
+documents list and the first reviewer instruction. Every place the word
+"considered" remains is now explicitly the alternative. The Fall 2025
+documents were added: the three meetings' ids and page hashes under "What
+is measured", a paragraph naming each file by the filestream template and
+DocumentId, items 7 to 10 of the documents list, and the essential-source
+sentence extended to report FCS03158 with its Attachment 2 and report
+CO03079 with its Attachment 5. The reference period gained one sentence
+saying a proposal is inside it when the meeting whose agenda lists it
+falls on or after 2025-11-18 and the agenda was published by the comment
+date. A status note at the head records the revision. The reference
+period, body, unit, cost and count rules, the parks and everything else
+are unchanged. The brief's sha256 was
+`5ceff84da92a0c504880a2c57b873de36e37823bd880dc4ae423d8ac550fa103` and is
+now `afd75d059c5eff67c197f6587c256df242ca7bb4027f27c981ff234a27efc320`.
+Nothing from any seat's answer went into the brief: no count, cost,
+verdict or reading of any file. The rerun stays blind.
+
+**The documents registered.** The meeting pages were archived and
+registered at 200252f as YF-EV-0297 to 0302: the Community and Public
+Services Committee's agenda and minutes of 2025-08-11, City Council's
+agenda and minutes of 2025-11-24 and the City Council - Budget agenda and
+minutes of 2025-12-01. The founder downloaded eight portal files in a
+browser on 2026-10-02 at about 17:09Z; they are registered here, private,
+rights unclear, in the form of YF-EV-0294 to 0296. DocumentIds 278877 and
+280346 have identical bytes, so one entry covers both.
+
+| ID | DocumentId | File |
+|---|---|---|
+| YF-EV-0303 | 278875 | Report FCS03158, Fall 2025 Supplemental Operating Budget Adjustment - 2023-2026 Operating Budget (19 pages) |
+| YF-EV-0304 | 278877, re-listed as 280346 | Attachment 2 to FCS03158, Operating Budget - Fall 2025 Supplemental Operating Budget Adjustment (144 pages) |
+| YF-EV-0305 | 280345 | Replacement Page 53 of Attachment 2 to FCS03158 (1 page) |
+| YF-EV-0306 | 278865 | Attachment 7 to FCS03159, Emerging Items - Fall 2025 (Unfunded) (2 pages) |
+| YF-EV-0307 | 278866 | Attachment 8 to FCS03159, Unfunded Capital Profiles or Projects (2 pages) |
+| YF-EV-0308 | 268207 | Report CO03079, Improved Accessibility - Active Pathway Snow Removal and Sidewalk Repair (10 pages) |
+| YF-EV-0309 | 268212 | Attachment 5 to CO03079, Options and Costs to Increase Service Levels (4 pages) |
+
+The site has read none of them; each entry records identity and
+provenance only.
+
+**The stopped answers.** Round 1 of 2026-10-02 stays in `round1/` with its
+rows in `run.yaml`, as returned. Its answers are to the earlier brief and
+are not an input to the rerun: no seat sees them, and the merge and
+synthesis read only the new rounds. They move under a superseded
+directory when the rerun is set up. The rerun waits on the carry: the
+Fall 2025 Attachment 2 runs to 144 pages, longer than any file carried
+so far, and the tooling for it (v1.43) is being decided separately.
+
+## 2026-10-02: the stopped round 1 superseded; fresh probes for the rerun under v1.43
+
+**Round 1 of 2026-10-02, run on the brief as first frozen, moves aside,
+and round 1 runs again on the v1.2-revised brief** (sha256
+`afd75d059c5eff67c197f6587c256df242ca7bb4027f27c981ff234a27efc320`)
+under methodology v1.43, with FCS03158 Attachment 2 carried by section.
+The stopped round's answers (`round1/`), its rows in `run.yaml` and a
+copy of the carry manifest it ran on (sha256
+`1d58f40816c6a049000c2e89ab462a6848da0e6ee9335fdd350dc68402d9f203`, the
+hash its rows record) move unchanged to `superseded-2026-10-02/`, as
+`round1/`, `run.yaml` and `carried-manifest.yaml`. They answer a brief
+that has since changed, are kept for the record only, and are not an
+input to the rerun: no seat sees them, and the merge and synthesis read
+only the new rounds. `run.yaml` starts again with no rows.
+
+**Fresh probes.** Every URL the brief names, exactly or by the portal's
+template with a meeting id or DocumentId, was probed through all three
+seats on 2026-10-02 from 18:23:41Z to 18:29:18Z, 34 addresses
+(`carried/seat-probes.yaml`, appended). The Claude seat's WebFetch was
+refused with HTTP 403 at every eScribe meeting page and filestream file
+and at the portal root, with HTTP 502 at every edmonton.ca address, and
+failed with no status at both web.archive.org addresses. Both GPT-6
+seats' probes were unclear at every address, as v1.42 expects.
+
+**The manifest, rebuilt under v1.43** (`carried/manifest.yaml`, minutes
+rule v4, section rule v2). Carried whole, each on the fetcher's
+challenge-signed HTTP 403: report CO03513 with Attachments 9 and 10
+(YF-EV-0294 to 0296), report FCS03158 (0303), the replacement page 53
+(0305), Attachments 7 and 8 to FCS03159 (0306, 0307), and report CO03079
+with its Attachment 5 (0308, 0309). Carried by section: FCS03158
+Attachment 2 (0304), 144 pages and 453,562 bytes of text, split into 36
+sections, of which rule v2 carries 4 (pages 24-30, 34, 43-44 and 45-46;
+41,515 bytes). Carried by item on fresh Claude-seat refusals: the six
+2026 meeting pages, unchanged, and the minutes pages of 2025-08-11 (2 of
+26 items), 2025-11-24 (0 of 37) and 2025-12-01 (3 of 46).
+
+**What refused or needs the editor.**
+- The three 2025 agenda pages (YF-EV-0297, 0299, 0301) fail: the brief
+  writes out only the minutes template and says "`Agenda=Agenda`
+  (agenda)", so it names none of them by the tool's naming rule. They are
+  listed as failed, which refuses the package; the brief is not changed
+  here. Their archived copies still serve the filestream title checks.
+- Rule v4 selects no item about FCS03158 on the 2025-11-24 minutes (item
+  7.2 is not carried) and none of items 5.2 to 5.2.3 on the 2025-12-01
+  minutes. No v5 is written here.
+- The estimated round-1 package is 330,283 of 400,000 bytes (carried
+  section 259,995). Round 2 swaps the reviewer prompt for the shorter
+  cross-review prompt and adds the merged evidence and the other seats'
+  round-1 answers; on the first round's answer sizes that is about 380 to
+  430 KB, at or over the ceiling.
+
+The founder's browser downloads of 0303 to 0309 (2026-10-02, about
+17:09Z) are recorded as download provenance and public-open checks, with
+the founder as "person (not the editor)"; the public-open checks of 0294
+to 0296, recorded under v1.42, are restated in the v1.43 form. Every
+other check is pending.
+
+## 2026-10-02: the revised brief corrected to name the agenda pages; selection rule v5; over the budget
+
+**The v1.2 revision is corrected the same day, before any seat read it,
+so that the three Fall 2025 agenda pages can be carried.** The brief gave
+the minutes address in full but the agenda address only as
+"`Agenda=Agenda` (agenda)", which does not name a page by the carry rule,
+so the build refused the agendas of 2025-08-11, 2025-11-24 and
+2025-12-01 (YF-EV-0297, 0299, 0301). The agenda template is now written
+out in full beside the minutes template,
+`https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=<meeting id>&lang=English`,
+and the brief already gives each meeting id. The 2026-08-31 agenda
+(YF-EV-0287) was already named by its exact address. The status note
+gains one clause saying so. Nothing else changed. No seat has read the
+revision, so this is part of the same revision, not a new one. The
+brief's sha256 was
+`afd75d059c5eff67c197f6587c256df242ca7bb4027f27c981ff234a27efc320` and
+is now `a9b8fa0ef241235c02336509784a4166e45dfd33ab6313bc7b7edb41294c37f5`.
+
+**Selection rule v5** is v4 plus "FCS03158", "CO03079" and "Operating
+Budget Adjustment". The revised brief names the Fall 2025 operating budget
+adjustment and the 2025-08-11 committee report, and v4 had no term for
+either, so it selected no item on report FCS03158. What v5 selects on the
+2025 pages:
+
+| Page | Items carried | Items |
+|---|---|---|
+| YF-EV-0297, committee agenda 2025-08-11 | 1 of 26 | 7.3 (CO03079) |
+| YF-EV-0298, committee minutes 2025-08-11 | 2 of 26 | 2.3, 7.3 |
+| YF-EV-0299, Council agenda 2025-11-24 | 1 of 37 | 7.2 (FCS03158) |
+| YF-EV-0300, Council minutes 2025-11-24 | 3 of 37 | 1.4, 7.1, 7.2 |
+| YF-EV-0301, Budget agenda 2025-12-01 | 2 of 44 | 5.2, 5.2.3 |
+| YF-EV-0302, Budget minutes 2025-12-01 | 10 of 46 | 1.4, 5.1.1, 5.1.2, 5.2, 5.2.1, 5.2.2, 5.2.3, 8, 9.1, 9.3 |
+
+The 2026 pages select the same items as under v4.
+
+**The rebuilt package is over the seat budget, so the run stops here.**
+Every document the brief needs now qualifies and is carried, but the
+estimated round-1 package is 423,656 bytes against the 400,000-byte
+ceiling, with a carried section of 353,188 bytes. Most of the growth is
+the 2025-12-01 budget minutes, now 92,103 bytes, because items 5.2.1 and
+5.2.3 hold the operating budget amendments and their votes. Under v1.43
+nothing is trimmed to fit. Narrowing the rule by a new version or
+revising the brief is the editor's decision. The manifest is committed as
+built, with its budget recorded as over. Every check is pending except
+the founder's download and browser checks on the files he downloaded.
+
+## 2026-10-02: rebased onto the per-seat ceilings (D-0049); fresh probes; within the budget
+
+**Under D-0049 the same package fits.** D-0049 sets each seat's package
+ceiling from its measured context: 521,838 bytes for the two GPT-6 seats
+and 1,203,500 for Claude. The build holds the round-1 estimate to the
+smallest, so the 423,656-byte estimate that was over the old 400,000-byte
+ceiling is now within it, with the same carried section of 353,188 bytes.
+Nothing in the brief, the rules or the selection changed.
+
+**Fresh probes.** The same 34 addresses were probed through all three
+seats from 22:22:34Z to 22:28:12Z (`carried/seat-probes.yaml`, appended).
+The results match the earlier probe: the Claude seat's WebFetch was
+refused with HTTP 403 at every eScribe address, with HTTP 502 at every
+edmonton.ca address, and with no status at both web.archive.org
+addresses; both GPT-6 seats were unclear everywhere.
+
+**The manifest, rebuilt** (minutes rule v5, section rule v2). Every
+document carried before is still carried, with the same texts and items.
+The site's fetcher now gets HTTP 200 from the filestream files of report
+CO03513 and its Attachment 9 (YF-EV-0294, 0295), so those two rest on
+the Claude seat's refusal there instead of the fetcher's challenge. The
+founder's download provenance and public-open checks are kept. Each
+meeting page's public-open check is now the site fetcher's own HTTP 200
+on the live page at build time, as #118 allows for pages carried by item,
+and its download provenance names the site fetcher. Every extraction,
+completeness, section and personal-information check, and every
+checker's reason, is pending for the independent checker.
+
+## 2026-10-02: completeness check fails under v5; selection rule v6
+
+**The independent checker's completeness check failed under rule v5,
+and the editor adopted the checker's rule v6.** v5 missed four relevant
+items: YF-EV-0299 item 7.1, YF-EV-0301 item 5.1, and YF-EV-0302 items
+5.1 and 5.1.3. These are the Fall 2025 Supplemental Capital Budget
+Adjustment items. Their report, FCS03159, is the one whose Attachments 7
+and 8 the brief names, and qualifications 3 and 4 ask what Council did
+with the Fall 2025 proposals and on which agenda. v6 is v5 plus
+"FCS03159". "Supplemental Capital Budget Adjustment" was rejected
+because it would also select the Blatchford utility items, which are not
+relevant.
+
+**Rebuilt on fresh probes** (22:45:15Z to 22:50:46Z, the same 34
+addresses with the same results). v6 selects v5's items plus exactly
+those four, and nothing else changed. The three pages' carried texts
+grow by 6,074 bytes, and the carried section by 6,108. The estimated
+round-1 package is 429,764 bytes, within the 521,838-byte ceiling. The
+checker rechecks the four new items before any check is recorded.
+
+## 2026-10-02: round 1 under rule v6, stopped on a framing concern
+
+**Round 1 ran on all three seats and stopped because GPT-6 Luna raised a
+MATERIAL FRAMING CONCERN.** All three seats answer Supported. Luna's
+concern is the brief's timing rule. Under the primary rule, an item
+listed on a published agenda counts as put to a body, which gives two
+proposals and Supported. Requiring a body to have dealt with the item by
+2026-08-27 gives one proposal and Partially supported. Luna asks that the
+reader-facing phrase "already asked council" carry that qualification.
+Synthesis halts on any such flag, so the merge, round 2 and synthesis
+were not run. Whether this concern needs a brief revision or an editor's
+response is the editor's call.
+
+**The checks.** The independent checker's stage B was transcribed into
+the manifest at 767da34, mechanically. Before each entry was copied, its
+index, number, title and carried flag were matched against the manifest
+(`carried/checks/`). Extraction passed on every pdf, and so did the
+sections and context check on YF-EV-0304. Every personal-information
+screen is clear. Completeness passed under rule v6 after the v5 failure,
+and its record is kept as `carried/checks/completeness-v5.yaml`. The
+seven second downloads are recorded as not made: only the founder has
+downloaded these files, and the portal answers automated tools with a
+browser check, so no other copy can be made. `package` passed.
+
+**Round 1.** The manifest's sha256 was
+`585251cfc9ca7c6b93496b9838d4a7284ffdcaa22cea91acf275ce7832a08c4b`, the
+carried section's
+`a3ca8843a458fedde167ca0fb1176c2e436860ba1e4b3426c351248710e3303c` and
+the package's
+`94a4ada0539341c3d29c1785b85e5ccfef3426af841eaa84ebc224f3a6c29e5f`, the
+same for every seat. The package was 428,299 bytes, against ceilings of
+521,838 for the GPT-6 seats and 1,203,500 for Claude. The earliest probe
+it rests on was 22:45:15Z. Each seat was admitted on one attempt.
+
+| Seat | Attempt | Time | Verdict |
+|---|---|---|---|
+| Claude Opus 5.5, high, Claude Code 2.1.288 | `d4113f6aa51f8afd` | 22:56Z to 22:59Z | Supported, high |
+| GPT-6 Sol, high, codex-cli 0.160.0 | `65666047a7c61ad6` | 22:56Z to 23:03Z | Supported, moderate |
+| GPT-6 Luna, high, codex-cli 0.160.0 | `27ae178162d916d1` | 22:56Z to 23:09Z | Supported, moderate; MATERIAL FRAMING CONCERN |
+
+**What the seats counted.** Claude and Sol count three proposals:
+- the Fall 2025 active pathway snow removal and sidewalk repair package;
+- the parking ban enforcement package, from FCS03158 Attachment 2;
+- the Well Maintained City package in CO03513.
+
+Luna counts two, leaving out the parking ban package. Every seat reports
+that no proposal states its cost against an identified approved snow
+budget. Under that stricter cost reading the result is Not established
+(Claude), Contradicted (Sol) or not established on the strict test
+(Luna). No seat wrote that an essential source it could not read is
+missing. The seats' tools were refused at the portal, and every seat read
+the carried texts.
+
+## 2026-10-02: the brief revised again under v1.2; the stopped round 1 superseded
+
+**The editor upheld GPT-6 Luna's framing concern and revised the brief
+under v1.2. The stopped round 1 is superseded into
+`superseded-2026-10-02b/` and is not an input to the rerun.** The
+concern, quoted from Luna's interpretation notes:
+
+> MATERIAL FRAMING CONCERN: The primary rule treats an item published on
+> a future meeting agenda as already put to a body. That makes the count
+> two and the verdict Supported; requiring a body to have dealt with the
+> item by 2026-08-27 leaves one and changes the verdict to Partially
+> supported. The reader-facing phrase "already asked council" should
+> carry that timing qualification.
+
+The editor's reason: the brief's existing sensitivity rule (lines 532-534
+of the earlier text) already requires the qualification. Where any
+alternative changes the rung, the finding is definition-sensitive, the
+story says so beside the verdict, and neither side can fairly cite the
+verdict without it. The method still asks for a revision when a framing
+concern is raised against a claim being published. So the revision
+(bdb8423) makes the rule explicit for timing. Wherever the verdict
+differs between the primary timing rule (placed on a published agenda)
+and the alternative (considered by a body), every reader-facing use of
+"already asked" or "already put" names its timing rule in the same
+sentence. The status note says so. Nothing else changed. The brief's
+sha256 was
+`a9b8fa0ef241235c02336509784a4166e45dfd33ab6313bc7b7edb41294c37f5` and
+is now `5dfd40e4afb6a4559052f42bbfd6948b1ad465645609b75d5a9dd79b3df7d79a`.
+
+The superseded directory holds the three round-1 answers, the run.yaml
+rows and a copy of the manifest they ran on. No seat in the rerun sees
+them, and the merge and synthesis read only the new rounds. `run.yaml`
+starts again with no rows.
+
+## 2026-10-02: rounds 1 and 2 on the revised brief, synthesized
+
+**The panel answered the claim under review Supported, and all three
+seats agreed in both rounds.** Synthesis is taken from round 1, as the
+method fixes, and gives `two-snow-removal-proposals-need-more-money`
+Supported, Unanimous. No seat raised a MATERIAL FRAMING CONCERN, and no
+seat wrote that an essential source it could not read was missing. Every
+seat's web tool was refused at the eScribe portal, and every seat read
+the carried texts. The four parked claims stay parked. This is the
+panel's result, not yet a published finding. Drafting and the human gate
+come next.
+
+**Round 1.** The manifest at fa08a43 (sha256
+`6f976ce395ae005cba1a6093933d2b50ba7c9ce147dd3defdba4363b70c5c584`) was
+rebuilt on probes from 23:13:31Z, and every check carried over. `package`
+passed on it. The carried section's sha256 was
+`a3ca8843a458fedde167ca0fb1176c2e436860ba1e4b3426c351248710e3303c`,
+unchanged by the brief revision. The package's sha256 was
+`7124a828867b26ddf102edc0708e89a7587eb68a618e37a923e63f0c44ec2e50`, and
+it was 428,753 bytes, the same for every seat. GPT-6 Luna's first
+attempt failed schema validation, because its output had none of the
+review's top-level fields. The runner's one retry sends the same package
+plus the validator's errors, and the second attempt was admitted. No
+runner refused anything.
+
+**Merge.** The round-1 merge found 15 distinct sources and no contested
+claim (`combined-evidence.json`, `disagreements.json`). Evidence staging
+fetched ten. The five eScribe filestream files failed with HTTP 403, and
+each of them is carried (`fetch-report.md`).
+
+**Round 2.** After round 1 finished, all 34 addresses were probed again
+through all three seats from 23:38:22Z, with the same results as before.
+The manifest rebuilt on those probes (sha256
+`8f89d3456ddb2d7a394a3ce48d368cb66ca02a89ec045690bd84d23a7e3dee35`)
+differs only in probe and check times, and its carried section is
+unchanged. The round-2 packages were 491,853 bytes for Claude (ceiling
+1,203,500), 498,968 for GPT-6 Sol and 501,063 for GPT-6 Luna (ceiling
+521,838). Luna's first attempt again failed schema validation, and its
+retry was admitted.
+
+| Seat | Round 1 attempt | Round 2 attempt |
+|---|---|---|
+| Claude Opus 5.5 (`claude-opus-5-5`), high, Claude Code 2.1.288 | `b86e6aacd11ceaf9`, 23:19Z to 23:24Z | `4c959c56aa2920be`, 23:44Z to 23:49Z |
+| GPT-6 Sol (`gpt-6-sol`), high, codex-cli 0.160.0 | `7d2863155a4389ae`, 23:19Z to 23:29Z | `44770c3c90762708`, 23:44Z to 23:51Z |
+| GPT-6 Luna (`gpt-6-luna`), high, codex-cli 0.160.0 | `cf8b77abdf7d5806` (retry of `813b92d23fedc722`), 23:19Z to 23:37Z | `5f91f7b40e38340e` (retry of `0fccd64c0c9308ad`), 23:44Z to 23:57Z |
+
+| Claim | Claude, round 1 / 2 | GPT-6 Sol, round 1 / 2 | GPT-6 Luna, round 1 / 2 | Synthesis |
+|---|---|---|---|---|
+| `two-snow-removal-proposals-need-more-money` | Supported, high / high | Supported, high / moderate | Supported, moderate / moderate | Supported, Unanimous |
+
+**What the seats found, in brief.** Under the primary readings, three
+Administration proposals with stated new spending were on a published
+agenda by 2026-08-27:
+- the Fall 2025 active pathway snow removal and sidewalk repair package
+  (FCS03158 Attachment 2, Council 2025-11-24, item 7.2);
+- the parking ban enforcement package, from the same attachment and
+  item;
+- the Well Maintained City package (CO03513, on the 2026-08-31 committee
+  agenda captured 2026-08-22).
+
+In round 1 the seats counted differently: Claude counted four, with the
+Attachment 10 enhancements once; Sol counted three; Luna counted two,
+leaving out the parking ban package. In round 2 all three count three.
+
+The result is definition-sensitive. Under the stricter cost reading,
+which needs an identified approved budget and the increase against it,
+the result is Contradicted, because no counted text states a baseline.
+Under "exactly two" it is Partially supported. Under "considered by a
+body" it stays Supported only if the parking ban package counts. Every
+seat says a reader-facing "already put" or "already asked" must name the
+agenda-placement rule. The amounts are proposals, not approvals or
+spending. The Well Maintained City figures cover more than snow.
