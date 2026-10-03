@@ -20,7 +20,7 @@ describe('the count under the reading fixed before the research', () => {
     expect(packages).toHaveLength(3);
     expect(figures.primary).toEqual({ count: 3, rung: 'Supported' });
     expect(figures.primaryWithoutParkingBan).toEqual({ count: 2, rung: 'Supported' });
-    expect(claim.answer).toContain('at least two costed snow proposals on published council and committee agendas by August 27, 2026');
+    expect(claim.answer).toContain('published council and committee agendas listed at least two snow proposals');
     expect(story).toContain('the reviewers identified three such proposals on published agendas by August 27, 2026');
     expect(story).toContain('all three counted three');
     expect(story).toContain('Without it, two proposals remain');
