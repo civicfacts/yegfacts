@@ -1097,3 +1097,53 @@ capture pages, the earth-flat question and the methodology pages. They are
 outside the registry and label scope of this pass.
 
 **Not yet done.** The gate's and the critique's confirmations.
+
+## 2026-10-02: confirmations; corrected and published
+
+**The critique's confirmation passed; the gate's confirmation found one
+clause to bound, which was corrected in the gate's wording, and the page was
+published on 2026-10-02.** No finding changed at any stage:
+`two-snow-removal-proposals-need-more-money` (`sc-two-costed-snow-proposals`)
+is Supported, Unanimous, and the four claims parked at framing stay parked.
+
+The gate's confirmation (`gate/confirmation.md`) confirmed all five earlier
+advisories resolved. It found the new standfirst's last clause, "no record
+shows which crews actually clear first", stronger than the search, since the
+page names the City's annual snow report as unread. The standfirst is now
+"Main bike lanes and some main roads have 24-hour targets, residential
+streets 10 days once plowing starts, but we found no record of which crews
+clear first.", 157 characters, so the share text carries it whole. Its
+advisory was adopted: YF-EV-0296's establishes says the page reports
+figures from it. No third pass of the gate was run on this correction.
+
+The critique's confirmation (`critique-1-confirmation.md`) passed. Two of
+its notes were adopted: the answer's second sentence names the stricter
+reading where it first appears, and TL;DR 4 says "a commenter's claim of
+two proposals". The claim page's share card, cut by the site at about 160
+characters, is noted as site-wide.
+
+**The phone tests (D-0048 rules 7 and 8, the first story under the sections
+label).** Each at 375 by 812 in headless Chromium, with the pending-review
+banner removed so the page appears as it will at publication:
+1. Critique 1, the question page's first screen: the standfirst answered a
+   parked claim rather than the question asked, so a cold reader left
+   thinking the City's snow clearing was unknowable (fixed by R1); the
+   TL;DR gave the exceptions without the finding (R2).
+2. Critique 1, the YF-EV-0304 sections label: read as the reviewers being
+   given part of the document under a rule, and understood.
+3. The critique's confirmation, the first screen and the TL;DR again: the
+   title, question and whole standfirst fit the first screen, and a cold
+   reader could state the answer within ten seconds.
+The screenshots are kept outside the repository.
+
+**Publishing.** The run's `combined-evidence.json` now carries each
+source's fetch status (`scripts/annotate-evidence.ts`), from fresh fetches
+on 2026-10-02: 10 fetched, 5 failed. The five failures are the eScribe
+filestream files, which answer scripts with HTTP 403; each is carried and
+archived. The register question is `gate-complete` and `published`, and
+`state.yaml` records the human gate complete.
+
+**Also on this run.** The four round-2 self-corrections are in the quality
+ledger on this branch. Rendered pages outside the registry and label scope
+that still name the founder are listed in the gate-and-critique entry
+above, for the editor.
