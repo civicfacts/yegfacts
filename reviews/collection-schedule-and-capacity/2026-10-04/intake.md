@@ -1,7 +1,16 @@
 # Intake record: Are Edmonton's garbage, green-bin and recycling collection schedules adequate for households?
 
 Recorded 2026-10-04 by Stew. Question id `collection-schedule-and-capacity`.
-Status: **DRAFT.** No framing check has read this record or the brief
+
+**Historical intake snapshot.** This record was written on 2026-10-04,
+before any framing check ran. Its status line below and its closing
+"Selection before framing" section describe that moment: a draft no
+checker had read, and a GO question with no brief. They are not the
+question's current status, which is shown above when this record is
+viewed on the question page, and is also recorded in `state.yaml` and
+`run-record.md` beside this file.
+
+Status when this snapshot was written: **DRAFT.** No framing check has read this record or the brief
 beside it, the brief is not frozen, and no panel has run.
 
 This question came out of whole-source intake (methodology v1.15) and the
@@ -557,7 +566,7 @@ above; the brief's reasoning is in the brief.
   picked up every week" in [68], "It’s crazy to me" in [10], "This city
   makes no sense" in [68], "Such a waste of manpower" in [96].
 
-## Selection
+## Selection before framing
 
 Nobody chose these wordings. They are every wording the merge carried
 onto the 11 claims the grouping placed under this question. Of the 20

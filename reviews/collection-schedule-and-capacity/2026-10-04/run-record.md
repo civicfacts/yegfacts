@@ -1129,7 +1129,7 @@ claim rows with their 28 wordings are unchanged.
 | `framing/author-response-3.md` (unchanged) | `2a2df5a02f6222aa9baaae1a26abb0b1f04d3a65ff3e4dffd674cf9ed8f35c2e` |
 | `framing/check-3.md` | `6562c43e361956d1eea5a34a16d380d0aef91acb86997eb51fef36dda307a341` |
 | check 3 package | `a88ef4eecc8f2ed9e07b20c7cfbb655bc939bdd86992d3febc606ffba14748c5` |
-| `intake.md` (unchanged) | `079d41bed1f7a7fc6bb308c70ff06adb7f81eaa50df778f73560e8d5b024efc5` |
+| `intake.md`, as submitted as the framing input (original) | `079d41bed1f7a7fc6bb308c70ff06adb7f81eaa50df778f73560e8d5b024efc5` |
 
 **Closeout copy note.** The public register reason written with the
 final outcome was corrected the same day, without changing the outcome.
@@ -1161,6 +1161,26 @@ current hash to `47e09167…4037`; its body is still byte-for-byte the
 sealed submitted version (`a0107d17…43a4`), and `state.yaml` holds the
 current hash. The hash tables in earlier sections are historical and are
 left as written.
+
+A third copy correction followed a critique of the rendered question
+page in the PR preview. The intake record shown there still said
+"Status: **DRAFT.** No framing check has read this record" and ended
+with a question that "is a GO with no brief", both true only before
+framing. The intake now opens with a short paragraph marking it as a
+historical intake snapshot written on 2026-10-04, before any framing
+check, and saying the current status is shown above on the question
+page and in `state.yaml` and this record. The status line is labelled
+"Status when this snapshot was written:" with its original sentences
+kept word for word, and the heading "Selection" became "Selection before
+framing" with its text unchanged. No quotation, count, provenance or
+other intake text changed. The intake submitted as the framing input,
+which all three framing packages contain, is SHA-256 `079d41be…efc5` and
+is preserved at
+`evidence/private/editorial-waste-resume-2026-10-04/framing-packages/check-3/intake-as-submitted.md`;
+the published file is SHA-256 `aa649265…c72d`. `state.yaml` records both.
+The final outcome's hash table labels the `079d41be…` row as the
+submitted framing input. This does not reopen framing or change the
+park.
 
 ## Who wrote this
 
