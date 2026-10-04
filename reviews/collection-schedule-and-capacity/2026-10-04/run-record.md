@@ -6,11 +6,15 @@ schedules adequate for households?" Register id
 `edmonton-rant-and-rave-2026-09-10`, 11 claims, 17 accounts, 7 for and 10
 against. Methodology v1.43.
 
-Status: **DRAFT.** This record covers the first part of stage 1 only: the
-intake record and the first draft of the brief, written on 2026-10-04. No
-framing check has run. The brief is not frozen. No panel seat has been
-launched. Nothing here is a finding, and no story, claim file or
-calculation exists for this question.
+Status: **EXECUTION BLOCKED BEFORE FRAMING, 2026-10-04; resumable.** The
+intake record and the draft brief are complete and committed at checkpoint
+`bf8d58c884c32fde205650c495aae028d8cd4a54`. The brief is not frozen. Every
+launch of the framing checker failed before the package was sent, so no
+checker or panel has read the brief, there is no finding, and none of the
+seven proposed parks is adopted. This is a failure to run the check, not
+an editorial rejection or a park. Whether the schedule is adequate for
+households is unanswered. Attempts and resume steps are under "Framing
+check: execution blocked" below.
 
 ## What was done, in order
 
@@ -234,14 +238,14 @@ themselves. The parks name them as the first place to look.
 
 ## Register entries proposed, not applied
 
-`intake/register.yaml` was not changed in this stage. Writing a park onto
+No claim row in `intake/register.yaml` has changed. Writing a park onto
 the public register before the independent framing check has seen it
-would present a proposal as a decision. If the brief freezes as drafted,
-the changes are:
+would present a proposal as a decision. The question row changed once, at
+the execution block (see below). If the brief freezes as drafted, the
+remaining changes are:
 
-- Question row: `lifecycle: briefed`, and a `note` naming this run, the
-  two claims sent to the panel, the two carried without a verdict and the
-  seven parks.
+- Question row: a `reason` and `note` that describe the frozen brief in
+  place of the paused review.
 - Each of the seven parked claims: `triage: park`, `ground:
   no-instrument`, `parked_at: framing`, and a `reason` taken from the
   brief's numbered park for that claim, with its reopening condition.
@@ -384,22 +388,113 @@ not assert it. The request named the `implementer` agent; this session
 has no tool for dispatching an agent, so the correction was made
 directly by the editorial session and no subagent was used.
 
-## Framing check
+## Framing check: execution blocked
 
-Not run. The package for it is this directory's `intake.md` and
-`brief.md`, with `prompts/framing-check.md`, the verdict vocabulary from
-`docs/DESIGN.md` section 3 and `prompts/review-schema.json`. The
-orchestrating session submits it through
-`scripts/panel/audit-package.sh --provider openai`. Draft hashes, so a
-report can be tied to its exact inputs:
+**Inputs, fixed at the checkpoint.** Commit
+`bf8d58c884c32fde205650c495aae028d8cd4a54`, based on main at `5a1bec3`
+and not yet merged, holds
+this directory's corrected draft and the eleven registry entries
+YF-EV-0332 to YF-EV-0342. `brief.md` SHA-256
+`3a8883d1e76804d06da6cd8c6d233c45a23a38e1ea2747acfa9076bbbbaff6ba`;
+`intake.md` SHA-256
+`079d41bed1f7a7fc6bb308c70ff06adb7f81eaa50df778f73560e8d5b024efc5`; both
+unchanged since. The orchestrating session assembled the framing package
+from them with `prompts/framing-check.md`, the verdict vocabulary and
+`prompts/review-schema.json`. The package is retained privately at
+`evidence/private/editorial-waste-2026-10-04/framing-packages/check-1/package.txt`,
+SHA-256 `20d7209534f358233173ac822fde422a84d6c0489a6ae5aa7b5b05b3a91b7014`.
+No copy of the brief is kept under `framing/`, as in earlier runs; the
+checkpoint commit and the hashes identify the exact inputs.
 
-- `brief.md`: SHA-256 recorded in `state.yaml` as `draft_sha256`.
-- `intake.md`: SHA-256 recorded in `state.yaml` as `intake_sha256`.
+**What ran.** Every launch used the unchanged launcher, OpenAI seat
+`gpt-6-sol` at high, profile `codex-captured-read-only-0.160.0`, Codex CLI
+0.160.0, and the package above. No setting, config, login or gate changed
+between them. The three research launches were
+`scripts/panel/audit-package.sh --provider openai`. The diagnostic was
+one call to `scripts/panel/invoke-reviewer.sh --purpose diagnostic`, which
+by design runs only the canary, never sends the package and cannot admit
+research; its only change was the calling process (a Claude Code shell
+instead of the earlier caller). Times are UTC on 2026-10-04.
 
-No copy of the initial brief is kept under `framing/`. Earlier runs keep
-checks and responses there and rely on the commit history for the brief
-each check read; this run follows that, and adds the two hashes because
-the draft is not yet committed.
+| Attempt id | Kind | Label | Started | Finished | Result |
+|---|---|---|---|---|---|
+| `6a62c3ab1d23fcb0` | research launch | waste-collection-framing-check-1 | 15:26:36 | 15:26:55 | failed at canary |
+| `c188bd5a6cf72050` | research launch, unchanged retry | waste-collection-framing-check-1-retry-transport | 15:29:51 | 15:30:11 | failed at canary |
+| `0df02ab5f6c6bbe0` | research launch, unchanged retry after diagnosis | waste-collection-framing-check-1-retry-after-diagnosis | 15:45:36 | 15:45:55 | failed at canary |
+| `06772015a3df5a6e` | diagnostic, caller changed | waste-collection-caller-claude-bash | 15:49:12 | 15:49:38 | failed at canary |
+
+All four metadata files say: `status: failed`, `admitted_for_research:
+false`, `canary_context_proof: fail`, `canary_request_count: 0`,
+`canary_package_seen: 0`, and the reason "the canary invocation exited 1;
+its output is retained and the package was never sent". Each canary's
+captured-request folder holds only the upstream address. The CLI's own
+output in each says "failed to refresh available models: Connection
+failed: error sending request", then WebSocket reconnects, a fallback to
+HTTPS, more reconnects and "workspace routing discovery failed". No
+`framing/check-1.md` was written. None of the four is a framing report,
+because the checker never received the brief, so the v1.12 cap of three
+reports is untouched.
+
+**The register row.** Only this question's row changed: `lifecycle:
+briefed` (a complete draft exists), `triage: go` and `publication:
+unpublished` unchanged, a `reason` that says the review is paused, a
+rewritten `grouping_note`, an `intake` pointer to this directory's
+`intake.md` beside the original `run`, and a `note`. The triage reason
+it replaces read: "The City's collection calendars and program history
+show how often each stream is picked up and whether garbage went from
+weekly to every two weeks, and its waste audits show how full carts get;
+one household's dump runs and one family's diaper volume can't be
+checked and will be dropped." The audit clause was unsupported: the City
+describes those audits as measuring what collected waste is made of. The
+old grouping note named waste audits on the same assumption. Counts,
+topics and all eleven claim rows are unchanged.
+
+**The diagnosis, and its limits.** Between the second and third launches
+a bounded technical review (Claude Opus 5.5, Claude Code 2.1.289, about
+six minutes, read-only apart from scratch files outside the repository)
+read the attempt records. Its conclusion is retained at
+`evidence/private/editorial-waste-2026-10-04/transport-diagnosis-conclusion-1/final-message.txt`,
+with working files in `transport-diagnosis-1/`. What the capture directly
+shows: the launcher's local recording proxy captured zero completed
+requests in every attempt, and no vendor or account response was
+captured or observed. It does not show what happened to the connection
+before a request would have completed. The
+review found one difference from the last passing launch, the calling
+process, and proposed testing it. The diagnostic launch in the table
+changed only that and failed the same way. So changing the caller alone
+did not restore the canary. That does not show the caller is irrelevant,
+and it does not establish an environment, login, certificate or network
+cause. The cause is unresolved. The raw output of the diagnostic launch
+is retained at
+`evidence/private/editorial-waste-2026-10-04/caller-claude-bash-diagnostic-1/`.
+The launcher keeps each attempt's full record in its private archive
+outside the repository, by attempt id.
+
+**How to resume.**
+
+1. Restoring a passing canary is a separate tooling task, outside this
+   editorial run. Nothing in this run changes the launcher.
+2. Then run `scripts/panel/audit-package.sh --provider openai` unchanged,
+   on the package with SHA-256 `20d72095…7014`, built from checkpoint
+   `bf8d58c` with the brief and intake hashes above.
+3. Install the response as `framing/check-1.md` only if the attempt's
+   metadata says `admitted_for_research: true`. A launch that is not
+   admitted produces no report and does not count.
+4. If the brief or intake is substantively redrafted first, assemble a new
+   package, record its hash here and in `state.yaml`, and treat this
+   package as superseded. The next admitted report is still check 1.
+5. The full three-report allowance and the v1.35 and v1.39 confirmation
+   routes apply as for any brief.
+
+**Checks.** Reported by the coordinator for the checkpoint commit, not run
+by the editor: `npm run validate` (12 stories, 26 claims, 280 evidence
+entries); `npm test` (41 files, 672 passed, 1 skipped); `astro check` (0
+errors, 0 warnings, one existing unused-props hint); build (671 pages);
+exposure audit (0 fail-class findings, 91 PII warnings, 0 long quotes, the
+same as main at `5a1bec3`); duplication audit (0 fail-class findings, 72
+cross-page warnings); sitemap audit (581 URLs for 581 indexable pages).
+Run by the editor for the closeout: none. The coordinator runs the final
+checks on these edits.
 
 ## Who wrote this
 
@@ -414,3 +509,14 @@ that describes itself as an OpenAI model. The orchestrator wrote no part
 of the brief, the intake record or the editorial decisions above, and it
 retains this session's transcript. No reviewer seat, framing checker or
 subagent was used in either part of this stage.
+
+The execution-block entries (the status above, "Framing check: execution
+blocked", the register row and `state.yaml`) were written later on
+2026-10-04 in the same conversation, requested as the `implementer` agent
+on `claude-opus-5-5` at high. The runtime reports Claude Opus 5.5
+(`claude-opus-5-5`); the agent and the effort setting are not observable
+from inside the session, and the coordinator verifies them. An earlier
+closeout session was paused by the coordinator after about eight seconds,
+before it edited anything. These entries record process only. The
+editor launched no reviewer, canary or diagnostic and sought no source
+for them.
