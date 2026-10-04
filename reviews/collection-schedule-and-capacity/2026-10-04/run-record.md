@@ -391,9 +391,8 @@ directly by the editorial session and no subagent was used.
 ## Framing check: execution blocked
 
 **Inputs, fixed at the checkpoint.** Commit
-`bf8d58c884c32fde205650c495aae028d8cd4a54`, based on main at `5a1bec3`
-and not yet merged, holds
-this directory's corrected draft and the eleven registry entries
+`bf8d58c884c32fde205650c495aae028d8cd4a54`, based on main at `5a1bec3`,
+holds this directory's corrected draft and the eleven registry entries
 YF-EV-0332 to YF-EV-0342. `brief.md` SHA-256
 `3a8883d1e76804d06da6cd8c6d233c45a23a38e1ea2747acfa9076bbbbaff6ba`;
 `intake.md` SHA-256
