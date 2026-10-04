@@ -830,17 +830,9 @@ const Content = rendered?.Content;
               ))}
             </dl>
 
-            {/*
-              The reason and grouping note are what triage expected when the
-              question was registered, kept as the record of that decision.
-              Dated and labelled as such, because the work that followed can
-              find the expected record does not exist, and an undated sentence
-              in the present tense would then contradict the page above it.
-            */}
             {question.reason && (
               <p class={`mt-5 ${label}`}>
-                What we expected when it was registered,{' '}
-                <time datetime={question.recorded}>{question.recorded}</time>
+                The reason recorded for this question
               </p>
             )}
             {question.reason && (
