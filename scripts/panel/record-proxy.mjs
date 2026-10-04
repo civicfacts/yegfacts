@@ -133,7 +133,8 @@ function decodeBody(buffer, encoding) {
  * Returns the PEM key and certificate. The certificate stays at
  * `<dir>/cert.pem`; the key file is removed before this returns, so the key
  * lives only in this process. Not a CA: rustls rejects a CA certificate
- * presented as the server's own.
+ * presented as the server's own. The curve must be named by OID because
+ * rustls rejects explicit EC parameters.
  */
 export function makeLoopbackCertificate(dir) {
   fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
@@ -142,7 +143,8 @@ export function makeLoopbackCertificate(dir) {
   execFileSync(
     'openssl',
     [
-      'req', '-x509', '-newkey', 'ec', '-pkeyopt', 'ec_paramgen_curve:prime256v1', '-nodes',
+      'req', '-x509', '-newkey', 'ec', '-pkeyopt', 'ec_paramgen_curve:prime256v1',
+      '-pkeyopt', 'ec_param_enc:named_curve', '-nodes',
       '-keyout', keyFile, '-out', certFile, '-days', '1', '-subj', '/CN=127.0.0.1',
       '-addext', 'subjectAltName=IP:127.0.0.1',
       '-addext', 'basicConstraints=critical,CA:FALSE',

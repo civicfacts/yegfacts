@@ -10,6 +10,7 @@
  * subscription token.
  */
 import { spawn } from 'node:child_process';
+import { X509Certificate } from 'node:crypto';
 import { existsSync, mkdtempSync, readFileSync, readdirSync } from 'node:fs';
 import http from 'node:http';
 import { tmpdir } from 'node:os';
@@ -17,7 +18,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import zlib from 'node:zlib';
 import { afterAll, describe, expect, it } from 'vitest';
-import { PROVIDER_UPSTREAMS, resolveUpstream } from '../scripts/panel/record-proxy.mjs';
+import { PROVIDER_UPSTREAMS, makeLoopbackCertificate, resolveUpstream } from '../scripts/panel/record-proxy.mjs';
 
 const PROXY = path.join(fileURLToPath(new URL('..', import.meta.url)), 'scripts', 'panel', 'record-proxy.mjs');
 const root = mkdtempSync(path.join(tmpdir(), 'yegfacts-proxy-'));
@@ -145,6 +146,35 @@ describe('the upstream rule', () => {
     expect(await proxy.exited).toBe(2);
     expect(proxy.stderr()).toMatch(/must be a loopback URL/);
     expect(existsSync(path.join(root, 'refused', 'port'))).toBe(false);
+  });
+});
+
+/** Named P-256 parameters keep the certificate compatible with rustls. */
+describe('the loopback certificate', () => {
+  const NAMED_P256_SPKI_ALGORITHM = Buffer.from('301306072a8648ce3d020106082a8648ce3d030107', 'hex');
+  const builds = [
+    '/usr/bin',
+    '/opt/homebrew/opt/openssl@3/bin',
+    '/usr/local/opt/openssl@3/bin',
+  ].filter((dir) => existsSync(path.join(dir, 'openssl')));
+
+  it('finds at least one openssl to test', () => {
+    expect(builds.length).toBeGreaterThan(0);
+  });
+
+  it.each(builds)('names the P-256 curve when %s/openssl makes it', (dir) => {
+    const saved = process.env.PATH;
+    process.env.PATH = `${dir}:${saved ?? ''}`;
+    let cert: Buffer;
+    const tlsDir = mkdtempSync(path.join(root, 'tls-'));
+    try {
+      cert = makeLoopbackCertificate(tlsDir).cert;
+    } finally {
+      process.env.PATH = saved;
+    }
+    expect(existsSync(path.join(tlsDir, 'key.pem'))).toBe(false);
+    const der = new X509Certificate(cert).raw;
+    expect(der.includes(NAMED_P256_SPKI_ALGORITHM)).toBe(true);
   });
 });
 
