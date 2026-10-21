@@ -2,8 +2,8 @@
 
 OpenAI coordination and factual preflight, 2026-10-21. This is not a
 formal framing report or an approval to freeze, run the panel or publish.
-The Anthropic author records a definite draft ready for framing in
-[the run record](run-record.md#readiness). The coordinator has verified the
+The Anthropic author records a revised draft ready for framing check 2 in
+[the response to check 1](framing/author-response-1.md). The coordinator has verified the
 source and consistency corrections described below; the framing reviewer
 may reject any proposed disposition.
 
@@ -75,9 +75,9 @@ Spaces Bylaw consolidation, four Vision Zero annual reports from 2016 to
 in the source note. Fifty-five retained files have verified copies outside
 this worktree. These are source and reading files, not 55 studies.
 
-The Anthropic author proposes two panel claims: the legal right to ride on
-the roadway, and what the City's Street Labs evaluations report about
-safety effects. Six claims are proposed for parking under five parks. The
+After framing check 1, the Anthropic author proposes one panel claim: the
+legal right to ride on the roadway. Seven claims are proposed for parking
+under six parks, including Street Labs. The
 fault-share claim now has a definite proposed park after a bounded search;
 the search did not establish that the missing instrument does not exist.
 
@@ -104,5 +104,21 @@ Every objection is labelled framing; there are no defect findings. The
 reviewer challenges the Street Labs proposition's ability to answer the
 pedestrian-safety claim, its traffic-effect disposition and question scope,
 and asks for clearer legal classification and stakes. Anthropic Opus 5.5
-is handling the author response under D-0041. This coordinator record does
+completed the author response under D-0041. This coordinator record does
 not accept or reject any editorial objection.
+
+## Verified author response to check 1
+
+Opus 5.5 high, runtime `claude-opus-5-5`, accepted findings 2 through 9 and
+preserved a reasoned disagreement about speed as a safety measure. The
+Street Labs consequence is proposed for parking; the legal classification
+and stakes are revised. No new source search or claim registration occurred.
+
+The first response invocation reached its configured tool-turn limit with
+no usable edits. The same saved conversation then completed under a larger
+bounded limit. Twelve replacements, 18,927 characters, and the complete
+author response were applied after exact base-hash, line-range and overlap
+checks. Only missing terminal newlines were normalized. The capture and
+source checks still pass; the original submitted draft and report remain
+preserved. The second package includes the complete first report and author
+response, with their disagreement intact.

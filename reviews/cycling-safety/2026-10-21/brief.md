@@ -1,23 +1,25 @@
 # Review brief: Do bike lanes make cycling safer in Edmonton, and where do cyclists actually ride?
 
-Status: **DRAFT, 2026-10-21, REVISED TWICE THE SAME DAY. NOT FROZEN. NO
-FRAMING REPORT. NO PANEL. NO FINDING.** This is the editor's draft,
-revised after a second and a third source pass and before any framing
-check. It has not been submitted to the admitted framing checker. Its
-two earlier blockers are disposed of in this revision: the Public Spaces
-Bylaw is archived and read in the City's consolidation of 2026-05-19,
-with the chronology limit stated, and the bounded search for a City
-publication stating fault by party for bicycle collisions is complete
-and located none, so that claim is proposed for parking. Nothing in this
-brief is adopted. Every park below is a proposal; every claim row on the
-register is unchanged; the question remains Registered, GO and
-unpublished. Drafted by Stew from the register entries for
-`cycling-safety`, the capture, the intake run, and the sources named
-under "What is measured", each marked read or unread; `source-note.md`
-beside this brief records every address, hash and retrieval outcome.
-Methodology v1.43. Question id: `cycling-safety`. Source:
-`yegscoop-2026-08-26`. Provenance of every wording is in `intake.md` in
-this directory, which reviewers do not receive.
+Status: **DRAFT, 2026-10-21, REVISED AFTER FRAMING CHECK 1. NOT FROZEN.
+NO PANEL. NO FINDING.** This is the editor's draft. The first framing
+report (`framing/check-1.md`, REVISE) asked for changes; the editor's
+answer to each finding is `framing/author-response-1.md`. In this
+revision the Street Labs claim, both its traffic and its
+pedestrian-safety assertions, is proposed for parking (park 6), the risk
+park covers shared paths as well as bike lanes, and claim 1's elements
+and stakes are narrowed. Earlier, after a second and a third source pass,
+the Public Spaces Bylaw was archived and read in the City's consolidation
+of 2026-05-19 with its chronology limit stated, and the fault claim was
+proposed for parking on a bounded search. Nothing in this brief is
+adopted. Every park below is a proposal; every claim row on the register
+is unchanged; the question remains Registered, GO and unpublished.
+Drafted by Stew from the register entries for `cycling-safety`, the
+capture, the intake run, and the sources named under "What is measured",
+each marked read or unread; `source-note.md` beside this brief records
+every address, hash and retrieval outcome. Methodology v1.43. Question
+id: `cycling-safety`. Source: `yegscoop-2026-08-26`. Provenance of every
+wording is in `intake.md` in this directory, which reviewers do not
+receive.
 
 ## The question
 
@@ -53,8 +55,7 @@ not a count. Both halves are proposed for parking, with the instrument
 that would reopen each and the bounds of the search stated.
 
 What the record can answer is narrower and still argued about in the
-thread: what the law says about where a cyclist may ride, and what the
-City's own evaluations of its Street Labs measured. Two claims are
+thread: what the law says about where a cyclist may ride. One claim is
 proposed for the panel:
 
 - `cyclists-have-right-to-the-road`: whether, under the provincial law and
@@ -64,32 +65,31 @@ proposed for the panel:
   driver. All four essential texts are archived and read, the Public
   Spaces Bylaw in the City's consolidation of 2026-05-19; the chronology
   limit on that consolidation is stated under "What is measured".
-- `street-labs-no-safety-value`: whether the City's own published
-  evaluations of its Street Labs, taken together, report no measured
-  safety effect. The instrument exists and has been read: the 24
-  evaluation and assessment documents linked from the City's Street Labs
-  page on 2026-10-21, described under "What is measured".
 
-Six claims are proposed for parking at framing on the no-instrument
-ground, each with its reopening condition: `lanes-keep-riders-out-of-
-traffic` and `bike-lanes-dont-improve-safety` (the risk comparison from
-each side), `cyclists-ride-on-sidewalks`, `downtown-network-safe-family-
-route` (its safety judgement; its route-continuity component belongs to
-`network-connections`), `cyclists-harassed-on-roads-without-lanes`, which
-both per-claim triage readers had already declined and which the
-register carries with that prior ruling preserved, and
-`bike-collision-fault-share`, whose instrument, a City publication
-stating which party was recorded at fault in reported bicycle
-collisions, was not located in the bounded search described under park 5
-and in `source-note.md`. That park does not assert the publication does
-not exist; the claim's ladder is held in the claim 2 section so it can
-run without redrafting if the instrument is located.
+Seven claims are proposed for parking at framing on the no-instrument
+ground, under six parks, each with its reopening condition:
+`lanes-keep-riders-out-of-traffic` and `bike-lanes-dont-improve-safety`
+(the risk comparison from each side), `cyclists-ride-on-sidewalks`,
+`downtown-network-safe-family-route` (its safety judgement; its
+route-continuity component belongs to `network-connections`),
+`cyclists-harassed-on-roads-without-lanes`, which both per-claim triage
+readers had already declined and which the register carries with that
+prior ruling preserved, `bike-collision-fault-share`, whose instrument, a
+City publication stating which party was recorded at fault in reported
+bicycle collisions, was not located in the bounded search described under
+park 5 (the park does not assert it does not exist, and the claim's
+ladder is held under claim 2), and `street-labs-no-safety-value`. That
+last claim makes two assertions, that the labs hinder traffic and that
+they have no pedestrian safety value; park 6 disposes of each with its
+own reopening instrument. Street Labs are neighbourhood traffic calming,
+not cycling facilities, so a Street Labs finding would not answer this
+question in any case.
 
 Under D-0040 a question whose main claims are parked at framing does not
 count as answered because a remaining claim has a finding. If this brief
 freezes and runs, the question's page leads with the parks, and the
 registered question stays unanswered whatever the panel finds on the
-claims that remain.
+claim that remains.
 
 Topics: transportation, bike-lanes.
 
@@ -158,8 +158,8 @@ pseudonyms.
   (park 5); its ladder is held under claim 2.
 - **Street Labs have no safety value for pedestrians.** One person:
   ""vision zero - Street Labs " that hinder normal street traffic and
-  have no safety value for pedestrians what so ever." Proposed for the
-  panel.
+  have no safety value for pedestrians what so ever." Proposed park
+  (park 6), both halves.
 - **Riders are safer in lanes than on the road.** Three people: "where the
   riders will be more likely to get injured"; "He’s not going into
   traffic"; "a family wants a safe place to ride." Proposed park.
@@ -181,13 +181,14 @@ pseudonyms.
 
 ## Who asks this
 
-A resident asks two plain questions. Are cyclists allowed on the road in
+A resident asks a plain question. Are cyclists allowed on the road in
 Edmonton, and do they have to use the bike lane, or the sidewalk, when
 there is one? The statute, the regulation and the bylaws in force answer
-that, and the first claim under review is stated at that level. And did
-the City's Street Labs do anything measurable? The City's own evaluation
-and assessment summaries, one per lab where published, are the record,
-and the second claim under review is stated at that level.
+that, and the claim under review is stated at that level. Residents ask
+whether Street Labs made walking safer. The identified evaluations answer
+which traffic measures they recorded; this brief cannot answer the
+pedestrian-safety question from those measures alone and proposes
+parking that claim (park 6).
 
 Residents also ask, when a cyclist is hit, whose fault the City's record
 says it usually was. The City's collision publications answer that only
@@ -434,12 +435,12 @@ prints, not publication dates. One is a survey notice, not an evaluation;
 two are project updates stating findings without figures; several report
 resident feedback only, with the City's generic description of each
 measure's purpose; the rest report resident feedback together with
-measured before-and-after vehicle speed, speed-limit compliance or
-traffic volume on named streets. None reports a pedestrian collision
-count before and after installation. The page as retrieved is not the
-page as it stood on 2026-08-27, and which labs had a published evaluation
-by that date is not established by this retrieval. These documents are
-the instrument for the third claim.
+before-and-after vehicle speed, speed-limit compliance or traffic volume
+on named streets. A survey or report date inside a document does not
+show when the City published it, and the page as retrieved is not the
+page as it stood on 2026-08-27, so which evaluations were available by
+that date is not established. These documents are context for park 6,
+not the instrument of a claim under review.
 
 **The Downtown Bike Network.** *One Year In: The Downtown Bike Network
 Interim Report*, November 2018, at
@@ -526,19 +527,9 @@ community-led before 2023 and City-led with public engagement since.
 **Published evaluation.** An evaluation summary, assessment summary,
 evaluation report or project update for a named lab that the City links
 from its Street Labs page. A survey notice or an engagement report is not
-an evaluation.
-
-**Measured safety outcome.** A before-and-after figure the evaluation
-itself reports for vehicle speed (average or 85th percentile),
-speed-limit compliance, or pedestrian collisions, on the lab's streets.
-The City's evaluations treat lower speed and higher compliance as the
-mechanism by which the measures protect people on foot, and the primary
-reading takes them at that word; pedestrian collisions are the direct
-measure and the required alternative. A finding stated in words without
-a figure, a post-only figure, a traffic volume figure and resident
-feedback are each reported but are not a measured safety outcome under
-this definition. The brief does not invent a measure the evaluations do
-not report.
+an evaluation. An evaluation counts as available by a date only when a
+publication record establishes it; a survey or report date inside the
+document does not. The term is used only in park 6.
 
 ## Claims under review
 
@@ -597,30 +588,31 @@ from the City's web page or from a later consolidation.
 **Order of classification.** Apply the Not established condition first.
 Then determine, from the texts, element E1: whether a person operating a
 bicycle on a highway is permitted to ride on the roadway with the rights
-and duties of a person driving a motor vehicle, quoting the provision.
-Then E2: whether any provincial or City rule in force on the as-of date
-requires a cyclist to use a bike lane, pathway or sidewalk where one
-exists, or prohibits cyclists from the roadway generally or from a class
-of road wider than particular designated highways, quoting any such
-provision. Then E3: every provision that prohibits or restricts bicycles
-on a particular highway or class of highway, listed with its source,
+and duties of a person driving a motor vehicle, quoting the provision. A
+general prohibition on roadway cycling makes E1 fail. Then E2: whether
+any provincial or City rule in force on the as-of date generally requires
+a cyclist to use a bike lane, or to leave the roadway for a pathway or
+sidewalk, wherever one exists, quoting any such provision. A rule that
+applies only on specified roads or road classes is not an E2 rule. Then
+E3: every provision that prohibits or restricts bicycles on a specified
+highway, portion of highway or class of highway, listed with its source,
 including section 84 of Bylaw 5590 and any designation under its section
 107(cc) the reviewer can identify, saying where the existence of a
-designation could not be checked.
+designation could not be checked. E3 provisions are qualifications,
+whatever the breadth of the class.
 
 **Verdict ladder.**
 
-- **Supported** if E1 holds and no rule under E2 is found. Prohibitions
+- **Supported** if E1 holds and no rule under E2 is found. Restrictions
   under E3 are reported as qualifications and do not move the rung,
   because the holder's "the road" is the ordinary street.
 - **Partially supported** if E1 holds but a rule under E2 is found: the
   cyclist may use the roadway but must use a bike lane, pathway or
-  sidewalk where one is provided, or is excluded from a class of road
-  wider than signed highways, so "with or without a bike lane" fails
-  where lanes exist.
-- **Contradicted** if E1 fails: the texts in force require a cyclist to
-  ride off the roadway where a sidewalk or path exists, or do not permit
-  bicycles on roadways generally.
+  sidewalk wherever one is provided, so "with or without a bike lane"
+  fails where lanes exist.
+- **Contradicted** if E1 fails: the texts in force prohibit cycling on
+  roadways generally, or do not give a person riding a bicycle on the
+  roadway the rights and duties of a driver.
 - **Not established** if any essential text cannot be retrieved as in
   force on the as-of date, or if the texts conflict in a way the reviewer
   cannot resolve from their own terms.
@@ -766,127 +758,16 @@ same sentence.
 grounds it and its reopening condition are stated as park 5 under
 "Proposed for parking at framing".
 
-### Claim 3, id: `street-labs-no-safety-value`
-
-**What the record holds.** The 24 evaluation and assessment documents
-linked from the City's Street Labs page on 2026-10-21 are archived and
-read (`source-note.md` lists each). Several report before-and-after
-vehicle speed or speed-limit compliance figures; some report resident
-feedback only; two are project updates stating findings without figures;
-one is a survey notice; none reports pedestrian collisions before and
-after. Which of them were published by 2026-08-27 is not established from
-the page as retrieved, so the window rule below fixes it from the
-documents' own dates and has the reviewer report the rest beside the
-primary count.
-
-**Normalized proposition:** The City of Edmonton's published evaluations
-of its Vision Zero Street Labs available by 2026-08-27, taken together,
-report no measured before-and-after reduction in vehicle speed, no
-measured increase in speed-limit compliance, and no measured reduction in
-pedestrian collisions on the streets where the labs' measures were
-installed.
-
-**Reader-facing question:** Did the City's Street Labs measurably slow
-traffic or make crossings safer, according to the City's own checks?
-
-**Why this reading.** The holder says the labs "hinder normal street
-traffic and have no safety value for pedestrians what so ever". That
-traffic calming slows or diverts traffic is its stated purpose and not
-disputed; it is reported as context. The claim's point is the second
-half, and its force is in "no ... what so ever": not a small effect but
-none. The fair test is the City's own measurements, because the holder's
-complaint is about a City programme and the City publishes an evaluation
-for many of its labs. "Safety value for pedestrians" is read as a
-measured safety outcome under the terms fixed above: the City's
-evaluations treat lower speed and higher compliance as the way the
-measures protect people on foot, and the Safe Mobility Strategy states
-the speed-and-injury relationship that reading rests on. A measured
-reduction in either contradicts "no value whatsoever"; the threshold for
-"measured" is the evaluation's own before-and-after figure, and the brief
-sets no magnitude the evaluations do not use. Because a holder may say a
-speed change is not safety value for pedestrians, the required
-alternative is the direct measure alone, pedestrian collisions before and
-after, and both are reported.
-
-**What this verdict establishes, stated beside it.** This proposition
-checks what the City's own evaluations report. It does not establish
-whether the labs were worth their cost, whether residents liked them,
-whether the City's measurements are sound, or what the measures' effect
-would be if made permanent.
-
-**The instrument.** The City's Street Labs page and every evaluation
-summary, assessment summary, evaluation report or project update it
-links, each read whole; the Vision Zero annual reports for 2020 and 2021
-for the programme's description and first-year counts; the Safe Mobility
-Strategy 2027-2030 for the programme's place in the 2021-2025 strategy.
-The evaluations are essential. The page as the reviewer retrieves it may
-link more or fewer documents than the 24 archived; the reviewer lists
-every one it finds with the dates it carries.
-
-**Window.** Primary: every published evaluation whose own survey window,
-report date or stated evaluation period falls on or before 2026-08-27. An
-evaluation whose only date is a 2026 index label that is a season or a
-month, or whose document dates fall after 2026-08-27, is excluded from the
-primary count and reported under the alternative window. Alternative:
-every published evaluation the reviewer finds by the evidence cut-off,
-2026-10-21, reported beside the primary with each document's dates.
-
-**Order of classification.** Apply the Not established conditions first.
-Then, for each published evaluation in the window, record L, the lab; T,
-the document's dates; M, each before-and-after figure it reports for
-speed, compliance or pedestrian collisions, with its values; and F, any
-finding it states in words without a figure. Count N, the evaluations in
-the window; R, those reporting at least one before-and-after figure
-showing lower speed, higher compliance or fewer pedestrian collisions;
-and Z, those reporting no such figure, whether because they report
-feedback only, post-only figures, volume only, or a stated finding
-without a figure.
-
-**Verdict ladder.**
-
-- **Supported** if N is one or more and R is zero: no evaluation in the
-  window reports a measured reduction.
-- **Partially supported** if R is one or more and Z is one or more: some
-  evaluations report a measured reduction and others report none.
-- **Contradicted** if R is one or more and Z is zero.
-- **Not established** if N is zero, or the evaluations cannot be
-  retrieved, or the reviewer cannot date enough of them to form the
-  primary window.
-
-**Required alternatives, each reported with its result while every other
-choice stays primary:** the direct measure alone (pedestrian collisions
-before and after; where no evaluation in the window reports one, Not
-established under this alternative, reported beside the primary); the
-alternative window above; and the count rule under which an evaluation
-stating a reduction in words without a figure joins R, reported so a
-reader sees whether the City's stated findings and its figures point the
-same way. Where an alternative changes the rung the finding is
-definition-sensitive and the story says so beside the verdict.
-
-**Qualifications reported, never carrying the verdict:**
-
-1. Each evaluation in either window, its lab, its dates, its measures,
-   and each before-and-after figure quoted with its location; evaluations
-   that report feedback only, named.
-2. Traffic volume changes the evaluations report, and measures the City
-   removed or converted to permanent and why, as the context for "hinder
-   normal street traffic", without a verdict on that half.
-3. The number of labs the City says were installed and the number with a
-   published evaluation, from the annual reports and the Street Labs
-   page, with the page's own note that labs before 2023 did not follow
-   the current documentation.
-4. Whether any evaluation in either window reports a pedestrian
-   collision count before and after, stated either way.
-
 ## Proposed for parking at framing
 
-Five parks cover the six claims proposed for parking on the no-instrument
-ground, each with the condition that would reopen it; park 1 holds the
-two risk claims together. They are the editor's proposals. None is
+Six parks cover the seven claims proposed for parking on the
+no-instrument ground, each with the condition that would reopen it; park
+1 holds the two risk claims together, and park 6 holds both assertions
+of the Street Labs claim. They are the editor's proposals. None is
 adopted and none carries park fields on the register; the closing
-section sets out what could adopt them. Three of the six fall on the side
-that supports the lanes and three on the side that opposes them. Nothing
-about any is deleted; the register keeps every wording and its
+section sets out what could adopt them. Three of the seven fall on the
+side that supports the lanes and four on the side that opposes them.
+Nothing about any is deleted; the register keeps every wording and its
 provenance.
 
 For each, the brief names the weaker statement the record could have
@@ -898,10 +779,16 @@ precise than the claim as made, never weaker.
    together because they are one question from two sides. "where the
    riders will be more likely to get injured"; "it is a myth that bike
    lanes make it safer". The holders on each side assert a comparison of
-   injury risk for a person cycling with a lane and without one. Testing
-   it needs collisions and riders counted on the same facilities, so that
-   a rate can be compared, or a before-and-after comparison on named
-   streets with the change in riders accounted for. Edmonton's published
+   injury risk for a person cycling with a lane and without one. The
+   comment carrying the first wording sets riding "back on the road"
+   against riding with "bike lanes or shared paths", so this park covers
+   riding with a bike lane or shared path against riding on roads with
+   neither, the two facilities reported separately wherever a study
+   permits, and its reopening instrument below is read the same way.
+   Testing it needs collisions and riders counted on the same
+   facilities, so that a rate can be compared, or a before-and-after
+   comparison on named streets with the change in riders accounted for.
+   Edmonton's published
    record holds the first half only. The City's Crash and Equity report
    gives the share of severe cycling crashes by facility type for 2015 to
    2019 and says in the same paragraph that the implication is not
@@ -1046,12 +933,53 @@ precise than the claim as made, never weaker.
    request; the held ladder under claim 2 then applies, with the editor
    recording why the years it covers can fairly test the claim.
 
+6. `street-labs-no-safety-value` (one person, against). ""vision zero -
+   Street Labs " that hinder normal street traffic and have no safety
+   value for pedestrians what so ever." The comment makes two assertions,
+   and both are parked here. Neither is about bike lanes or where
+   cyclists ride; the commenter offers Street Labs as an analogy, so a
+   finding on either would not answer this question.
+
+   *Pedestrian safety.* The City's evaluations linked from its Street
+   Labs page, 24 archived and read (`source-note.md`), describe the
+   measures installed and, for many labs, before-and-after vehicle speed,
+   speed-limit compliance or traffic volume on named streets. Those
+   figures do not settle the consequence the holder asserts: an
+   evaluation silent on pedestrian outcomes would not show the labs had
+   no value, and a recorded speed change would not by itself show a
+   meaningful pedestrian benefit. In the editor's reading none of the 24
+   connects a pedestrian collision or injury outcome to an installed lab;
+   that reading is the ground for the park, not a finding. Which
+   evaluations were published by 2026-08-27 is also not established. The
+   weaker statement the record could answer, whether the evaluations
+   report a speed or compliance change, is not tested because it grades
+   what the documents contain rather than what the holder claims; the
+   reported measures may be given to a reader as context without a
+   verdict. It reopens on a City or peer-reviewed publication, shown by a
+   publication record to have been available by the date the brief then
+   fixes, that connects pedestrian collision or injury outcomes on lab
+   streets to the installed measures with exposure accounted for, or that
+   justifies a speed or conflict measure as a pedestrian safety outcome,
+   with a change threshold fixed before any review.
+
+   *Traffic effect.* The holder also asserts the labs "hinder normal
+   street traffic". The evaluations report volumes on some streets and
+   measures removed or changed for some labs; a change in volume on a
+   calmed street can reflect diversion and does not by itself show
+   hindrance. No record read for this draft defines or reports a
+   traffic-operations measure such as travel time or delay on lab streets
+   and the routes traffic moved to. This assertion is parked with the
+   pedestrian half and is not registered as a separate claim. It reopens
+   on a City publication reporting before-and-after travel time or delay
+   for named lab streets and their alternative routes, against a
+   threshold fixed before any review.
+
 ## Stakes
 
 What each verdict would change, for the person making the claim and for
 the person arguing against it. Stated without any view of which way it
 comes out, and no wider than the rules above establish. Stakes are stated
-for the claims proposed for the panel; for the parked claims the record
+for the claim proposed for the panel; for the parked claims the record
 cannot reach both directions, and no verdict on another claim settles
 them.
 
@@ -1062,12 +990,12 @@ expects removing a lane to take cyclists off the road, would learn that
 the law does the opposite, and the holder's warning follows from the
 rules as a matter of position, with the position rules reported beside
 it. Partially supported would establish the right with a condition the
-holder denies: where a lane or path is provided the cyclist must use it,
-or a class of road is closed, so "with or without a bike lane" fails
-where it matters most. Contradicted would establish that the rider in
-[70] was not "riding lawfully" on a road without a lane, and that
-"Remove bike lanes and they will be cycling right down the middle of your
-lane" describes an offence rather than a right. Not established would
+holder denies: wherever a lane or path is provided the cyclist must use
+it, so "with or without a bike lane" fails where it matters most.
+Contradicted would establish that the claimed driver-equivalent roadway
+entitlement is absent; the finding states separately what roadway riding
+and lane position the texts permit, and this verdict alone does not
+decide whether the rider in [70] rode unlawfully. Not established would
 mean an essential text could not be read. Under the strict reading of
 "the same", reported beside the verdict, a difference the texts make
 between drivers and cyclists is weighed, and the finding names it.
@@ -1081,19 +1009,10 @@ the cyclist; Partially supported, most but not nearly all; Contradicted,
 half or more to the other party; and every statement of a finding names
 the years it covers.
 
-**Street Labs and pedestrian safety.** Supported would establish that
-none of the City's own evaluations available by the as-of date reports a
-measured speed, compliance or collision improvement, which is what the
-holder asserts and the opposite of what the City's description of the
-programme implies. Contradicted would establish that every evaluation
-with a before-and-after figure reports an improvement, and the holder's
-"what so ever" fails on the City's own numbers. Partially supported would
-mean the evaluations divide, some measuring an improvement and others
-reporting none. Not established would mean the evaluations could not be
-retrieved or dated. Under the direct-measure alternative, reported beside
-the verdict, whether any evaluation reports a pedestrian collision figure
-is stated, so a holder who means collisions and not speed can see
-whether the City's evaluations measure what they mean.
+**Street Labs.** No stakes are stated for this run: the claim is
+proposed for parking (park 6), and no verdict on what the evaluations
+report would settle whether the labs had pedestrian safety value or
+hindered traffic.
 
 **Definition sensitivity.** Each verdict applies under the primary
 readings fixed above. Where a required alternative produces a different
@@ -1110,17 +1029,19 @@ applies in Edmonton.
 2026-10-21.
 
 **What the verdicts would cover.** What the law provides about where a
-cyclist may ride, and what the City's evaluations of its Street Labs
-measured. The brief does not promise a verdict on whether lanes make
-cycling safer, on where cyclists actually ride, or on who is at fault
-when a cyclist is hit, and the question's page leads with the parks.
+cyclist may ride. The brief does not promise a verdict on whether lanes
+make cycling safer, on where cyclists actually ride, on who is at fault
+when a cyclist is hit, or on Street Labs, and the question's page leads
+with the parks.
 
 **Out of scope**, each of these being a separate registered question, a
 claim proposed for parking above, or a matter the site does not test:
 
-- whether riding in a lane is safer than riding without one (proposed
-  park);
+- whether riding with a bike lane or shared path is safer than riding
+  without either (proposed park);
 - whether cyclists ride on sidewalks instead of lanes (proposed park);
+- whether Street Labs hinder traffic or have pedestrian safety value
+  (proposed park; a Street Labs finding would not answer this question);
 - whether a family can ride safely from 104 Street to 124 Street, and
   whether a continuous route exists between them (`network-connections`);
 - whether cyclists are harassed on roads without lanes (proposed park,
@@ -1186,13 +1107,10 @@ evaluation result.
    Strategy 2027-2030** and **One Year In: The Downtown Bike Network
    Interim Report**, at the addresses named above. Answers: context for
    the parks, without a verdict.
-10. **The Street Labs page and every evaluation summary, assessment
-    summary, evaluation report or project update it links**, and the
-    **Vision Zero annual reports for 2020 and 2021**. The 24 documents
-    archived on 2026-10-21 are listed in `source-note.md` by address and
-    hash; the reviewer reports any the page links that are not among
-    them. Answers: claim 3's L, T, M, F, N, R and Z, and its
-    qualifications. Essential for claim 3.
+10. **The Street Labs page and the evaluations it links**, and the
+    **Vision Zero annual reports for 2020 and 2021**, at the addresses in
+    `source-note.md`. Context for park 6 only; the panel does not grade
+    the Street Labs claim in this run.
 
 Quote operative provisions from the statute, the regulation and the
 bylaws and name the section; quote figures from the City's reports and
@@ -1201,15 +1119,12 @@ source of a classification.
 
 ## Required calculations
 
-- Claim 3: N, R and Z, and each lab's before-and-after differences as the
-  summary reports them.
+- Claim 1: none beyond quoting and dating each text.
 - Claim 2, only if park 5 reopens: each year's share S as the City states
   it; where the City gives counts and not a share, the share computed and
   shown; the pooled share across the window where counts allow; the
   cyclist-error floor for each year 2018 to 2023 as a ratio of the two
   datasets' counts, shown and labelled a floor.
-- Claim 3: N, R and Z, and each lab's before-and-after differences as the
-  summary reports them.
 
 All figures reported to the precision the source publishes, never
 further. Where a reviewer computes a figure the source does not publish,
@@ -1257,8 +1172,9 @@ happens to the park proposals, and who has authority to carry out either.
   without that route, by practice. This brief does not claim that
   authority, and the register is changed only when the question's run
   reaches a state the existing rules give a disposition for.
-- **Remaining authority.** Nothing here decides in advance what the first
-  report will say. This revision is the brief the editor proposes for
-  submission; the hash of the submitted text is recorded by the
-  coordinator in `run-record.md` and `state.yaml` when the package is
-  assembled, and the brief is not submitted on any other text.
+- **Remaining authority.** Nothing here decides in advance what the next
+  report will say. This revision answers the first framing report and is
+  the brief the editor proposes for the second check; the hash of the
+  submitted text is recorded by the coordinator in `run-record.md` and
+  `state.yaml` when the package is assembled, and the brief is not
+  submitted on any other text.
