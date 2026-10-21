@@ -2,10 +2,10 @@
 
 OpenAI coordination and factual preflight, 2026-10-21. This is not a
 formal framing report or an approval to freeze, run the panel or publish.
-The Anthropic author records a revised draft ready for the third ordinary confirmation in
+The Anthropic author records the revision submitted to the third ordinary confirmation in
 [the response to check 2](framing/author-response-2.md). The coordinator has verified the
 source and consistency corrections described below; the framing reviewer
-may reject any proposed disposition.
+returned FRAME OK as recorded below.
 
 ## Authorship and application
 
@@ -149,3 +149,16 @@ Neither coordinator nor author fetched or read it. The brief preserves that
 limit and separates legal entitlement from the mid-lane behavioural prediction.
 The third package preserves both reports, both responses and the earlier
 reasoned disagreement. No claim park is adopted or register row changed.
+
+## Final framing outcome
+
+The third ordinary report, attempt `bb675afd21539428`, is admitted and says
+FRAME OK. Every earlier finding is resolved and no new finding or defect is
+raised. Exact input pins, installed report identity, canary, structure and
+both context proofs verify under GPT-6 Sol high and the unchanged captured
+profile. The report is preserved verbatim with public-safe provenance.
+
+The framing protocol freezes the exact submitted brief. Its pre-confirmation
+status text is retained to preserve those bytes. `state.yaml` records the
+frozen hash and terminal result. The register is unchanged and no proposed
+claim park is adopted. This batch ends before the full evidence panel.

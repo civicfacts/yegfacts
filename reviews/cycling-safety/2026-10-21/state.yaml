@@ -4,10 +4,17 @@ methodology_version: "1.43"
 stage: framing
 stages:
   framing:
-    status: pending
-    formal_reports: 2
-    last_verdict: "REVISE"
-    report_attempts: ["85fdedc5754594d4", "6539ad15d0c1b88d"]
+    status: complete
+    at: "2026-10-21"
+    frozen_sha256: "80d4b7bb599cb9ca164ffbe6ed7989f8c5ca5bd4d0b0106d5cf8c848e5822dae"
+    formal_reports: 3
+    last_verdict: "FRAME OK"
+    report_attempts: ["85fdedc5754594d4", "6539ad15d0c1b88d", "bb675afd21539428"]
+    check3_report_sha256: "14c3408e4d7b62e62cf7bee74291858bfb82b59ec044e3c9486a59d3c9f4e4bc"
+    check3_admitted: true
+    check3_model: "gpt-6-sol"
+    check3_effort: high
+    check3_profile: "codex-captured-read-only-0.163.0"
     check2_report_sha256: "8e24f832a48abd916397ee4135b573ad3e7a34c6540bd37990a7f1bcd33d1945"
     check2_admitted: true
     check2_model: "gpt-6-sol"
@@ -27,8 +34,8 @@ stages:
     check2_package_sha256: "aabd181a7e251a81d2355b50380375bdc50bc906c0cf70d24ac8ab3ac22c2064"
     intake_sha256: "dedbbffa586feb42fd2d58b8b59316db404b5227257afc635f6dc41340d157f9"
     check1_package_sha256: "356bb4550375af5c964e763432e7b3f35828c04dbf5d1012c590b3a45d36da36"
-    reports: ["framing/check-1.md", "framing/check-2.md"]
-    note: "Two admitted reports are REVISE. Check 2 resolves every earlier finding and raises two new framing findings. Opus accepted both new findings and resolved them in writing. Third ordinary confirmation prepared. No freeze, adopted park, panel or finding."
+    reports: ["framing/check-1.md", "framing/check-2.md", "framing/check-3.md"]
+    note: "The third ordinary report is admitted and says FRAME OK, with all earlier findings resolved and no new finding or defect. The exact submitted brief is frozen under the framing protocol. Its draft status text records the authoring state before confirmation; its bytes were not changed after review. One panel claim and seven claim parks remain the editor proposal; no park is adopted or register row changed. No full panel, factual verdict, story or publication occurred. This approved batch ends at framing."
   round1: {status: pending}
   merge: {status: pending}
   round2: {status: pending}

@@ -445,3 +445,28 @@ Both earlier reports and responses remain in the confirmation package.
 
 This is the third ordinary confirmation. Admission and the terminal outcome
 are recorded separately in `state.yaml`. These pins do not freeze the brief.
+
+## Coordinator record of the terminal framing outcome
+
+The third ordinary report is admitted and says FRAME OK. It resolved every
+earlier finding and raised no new framing finding or defect. This exhausts
+the ordinary sequence successfully; no exception or fourth report was used.
+Under the framing protocol the exact submitted brief is frozen. Its draft
+status text above records the authoring state before this confirmation; no
+brief bytes were changed afterward.
+
+- Frozen brief SHA-256: `80d4b7bb599cb9ca164ffbe6ed7989f8c5ca5bd4d0b0106d5cf8c848e5822dae`.
+- Full report SHA-256: `14c3408e4d7b62e62cf7bee74291858bfb82b59ec044e3c9486a59d3c9f4e4bc`.
+- Report: [framing/check-3.md](framing/check-3.md).
+- Public-safe provenance: [framing/check-3-attempt.json](framing/check-3-attempt.json).
+- Attempt `bb675afd21539428`, GPT-6 Sol high,
+  `codex-captured-read-only-0.163.0`, completed 2026-10-21 19:52:39 UTC.
+
+Canary, structural and both context checks passed. The submitted package
+and every input hash match. The installed report is byte-identical to the
+retained final response; no credential residue was found. Full private
+attempt and author records have separate retention manifests.
+
+This records the framing gate only. The proposed claim parks are not adopted
+and the register is unchanged. No full evidence panel, factual finding,
+story or publication followed. The current authorized batch stops here.
