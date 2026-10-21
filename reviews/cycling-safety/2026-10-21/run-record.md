@@ -5,17 +5,16 @@ cyclists actually ride?" Register id `cycling-safety`, source
 `yegscoop-2026-08-26`, 8 claims, 10 accounts, 4 for and 6 against.
 Methodology v1.43.
 
-Status: **DRAFT, REVISED 2026-10-21. NOT READY FOR THE FRAMING CHECK.**
-The brief, the intake record and a source note exist in this directory
-and were corrected once after a second source pass the same day. No
-framing package has been assembled, no framing report exists, the brief
-is not frozen, no panel has run, there is no finding, and no published
-story or answer. No claim row or question row on the register has
-changed. The brief proposes two claims for the panel (one of them blocked
-on an essential text), one claim for the panel only if its instrument is
-located, and five claims for parking at framing; every one of those is a
-proposal. What must happen before the draft can be submitted is under
-"Readiness".
+Status: **DRAFT, REVISED TWICE ON 2026-10-21. DEFINITE; PROPOSED FOR
+THE FRAMING CHECK.** The brief, the intake record and a source note
+exist in this directory and were corrected after a second and a third
+source pass the same day. No framing package has been assembled, no
+framing report exists, the brief is not frozen, no panel has run, there
+is no finding, and no published story or answer. No claim row or
+question row on the register has changed. The brief proposes two claims
+for the panel and six claims for parking at framing; every one of those
+is a proposal. The earlier blockers are disposed of under "Readiness";
+what remains before check 1 is the coordinator's mechanical work.
 
 ## What was done, in order
 
@@ -49,7 +48,10 @@ proposal. What must happen before the draft can be submitted is under
    No observation in the packet was adopted without reading the source.
 
 4. **Established what the public record holds before drafting, and
-   completed the read after a second retrieval pass.** The triage reason
+   completed the read after a second retrieval pass.** This step is the
+   record as it stood after the second pass; step 8 records the third
+   pass and the disposition of the B1, B2 and P1 items named here, and
+   "Readiness" states where each stands now. The triage reason
    assumed two records, the traffic bylaw and the collision records.
    Every address, hash and retrieval outcome is in `source-note.md`.
    - *The law.* The Traffic Safety Act, the Use of Highway and Rules of
@@ -135,14 +137,38 @@ proposal. What must happen before the draft can be submitted is under
    claim, which cannot be submitted until blocker B1 is met, and the
    Street Labs claim, whose instrument is now read), one claim for the
    panel only if its instrument is located (the fault claim, prerequisite
-   P1, with its fallback park), and the same five parks. The reasoning is
-   below.
+   P1, with its fallback park), and the same five parks. After the third
+   pass (step 8) the fault claim became a proposed park of its own, so
+   the brief now proposes two panel claims and six parked claims under
+   five parks. The reasoning is below.
 
-7. **Validated: not run.** This session had no shell. `npm run validate`,
-   `npm test`, the build and the audits were not run by the editor and are
-   the coordinator's to run on these files. The files add no registry
-   entry, no register change and no site content, so the expected effect
-   on validation is none; that expectation is not a result.
+7. **Validated: not run by the editor.** This session had no shell.
+   `npm run validate`, `npm test`, the build and the audits are the
+   coordinator's to run; the first draft and the first correction batch
+   passed them (see "Checks" below).
+
+8. **Third source pass and dispositions.** After the second revision the
+   coordinator ran one bounded official-source pass (18:45 to 18:51 UTC)
+   with no retry of any denied address; every request, outcome and hash
+   is in `source-note.md` under "Third pass". The editor read: Bylaw
+   20700 in the City's consolidation of 2026-05-19, linked from the
+   City's own explainer page (Part I definitions, Part XIV sections 77 to
+   82, Part XVI sections 95 to 97, the amendment list); the King's
+   Printer's regulations index subsisting 2026-09-30 for the AR 304/2002
+   entry; the City's bylaw index data for the 5590 and 20700 entries; the
+   2026-01-19 committee minutes for Bylaw 21283; the 2026-10-06 Council
+   agenda listing for Bylaw 21502; the explainer page; the Vision Zero
+   2019 annual report in full and the 2016 to 2018 reports in their
+   cyclist passages. The catalogue queries, the Safe Streets map
+   configurations, the enforcement pages and the 2025 enforcement report
+   were screened by the coordinator and are recorded as screened, not
+   read. The old enforcement dashboard redirected to a login page and was
+   not read; the signed Bylaw 21502 and its report answered HTTP 403 and
+   were not retried. Dispositions: B1 resolved with a stated chronology
+   limit; P4 resolved with stated limits; B2 resolved by converting the
+   fault claim to a proposed park on the bounded search, with its ladder
+   held. The revised brief states each disposition and its limit in the
+   editor's own words.
 
 ## Editorial decisions in the draft, and why
 
@@ -161,36 +187,37 @@ bounded, and the page, if one is ever published, leads with the parks.
 Under D-0040 the question stays unanswered whatever the panel finds on
 the remaining claims.
 
-**One claim goes to the panel once its last essential text is read.**
-`cyclists-have-right-to-the-road` names instruments that exist and are
-dated: the statute, the regulation and the two bylaws. Both verdict
-directions are reachable on the texts (a rule requiring lane or sidewalk
-use would reach Partially supported or Contradicted), and the thread
-argues both sides of where a cyclist belongs, so a verdict tells both
-camps something. The strict reading of "the same legal right" is the
-required alternative. The one source-existence problem, the deleted bylaw
-sections and their unread replacement, Bylaw 20700 as in force on
-2026-08-27, is stated in the brief as an essential source and is blocker
-B1; the claim is proposed but not submittable until B1 is met.
-
-**One claim goes to the panel on an instrument now read.**
+**Two claims go to the panel.** `cyclists-have-right-to-the-road` names
+instruments that exist and are dated: the statute, the regulation and
+the two bylaws, all archived and read. Both verdict directions are
+reachable on the texts (a rule requiring lane or sidewalk use would reach
+Partially supported or Contradicted), and the thread argues both sides of
+where a cyclist belongs, so a verdict tells both camps something. The
+strict reading of "the same legal right" is the required alternative.
+The Public Spaces Bylaw is read in a consolidation dated 2026-05-19;
+whether anything took effect between that date and 2026-08-27 is not
+established, and the brief says so and has the reviewer check the index.
 `street-labs-no-safety-value`: the 24 evaluation and assessment documents
 linked from the City's Street Labs page are archived and read, and the
 brief fixes a window from the documents' own dates because the page as
-retrieved does not establish what was published by 2026-08-27. The claim
+retrieved does not establish what was published by 2026-08-27; the claim
 is checkable in both directions on what the documents report, with the
 direct measure (pedestrian collisions) as the required alternative.
 
-**One claim goes to the panel only if its instrument is located.**
-`bike-collision-fault-share`: no document read states fault by party for
-bicycle collisions, and every address found for the reports that search
-extracts say did is dead or blocked. The brief carries a full ladder for
-the case where a publication is located and a fallback park for the case
-where the search named under P1 is completed and finds none. That
-judgement is deliberately not made yet: a 404 is not a search.
+**The fault claim is proposed for parking, not declared absent.**
+`bike-collision-fault-share`: the search named under the earlier P1 was
+completed within stated bounds and located no City publication stating
+fault by party for bicycle collisions. The editor does not treat that as
+proof none exists: the 2015 to 2018 Motor Vehicle Collisions reports that
+search extracts say contain the share are unread at dead addresses, and
+the old enforcement dashboard is behind a login. So the claim is proposed
+as park 5 with the search's bounds and a reopening condition, and its
+full ladder is held in the brief for that case. All-mode fault shares in
+the City's analyses are named as background only and not substituted for
+the bicycle denominator.
 
-**Five claims are proposed for parking, three for the lanes and two
-against.**
+**The other five claims are proposed for parking under four parks, three
+for the lanes and two against.**
 
 - `lanes-keep-riders-out-of-traffic` and `bike-lanes-dont-improve-safety`
   are one question from two sides and are parked together on the
@@ -223,7 +250,8 @@ No row in `intake/register.yaml` has changed. If the brief freezes as
 drafted after the prerequisites are met, the changes would be:
 
 - Question row: `lifecycle: briefed`, with a `reason` and `note` describing
-  the frozen brief, its one to three panel claims and its parks.
+  the frozen brief, its two panel claims and its five parks covering six
+  claims.
 - Each parked claim: `triage: park`, `ground: no-instrument`, `parked_at:
   framing`, and a `reason` taken from the brief's numbered park with its
   reopening condition. `cyclists-harassed-on-roads-without-lanes` keeps
@@ -234,76 +262,65 @@ drafted after the prerequisites are met, the changes would be:
 Writing any of this before the framing check has seen the brief would
 present a proposal as a decision, so none is written.
 
-## Readiness: what must happen before this draft can be submitted
+## Readiness
 
-The draft is internally consistent with the sources read and is not
-ready for the admitted framing checker. Two blockers, two checks and the
-closing step:
+The draft is definite and internally consistent with the sources read:
+every claim is proposed for the panel or for parking, and no essential
+source for a panel claim remains unarchived or unread. The earlier
+blockers stand disposed of as follows.
 
-- **B1, Public Spaces Bylaw 20700 as in force on 2026-08-27.** Essential
-  to claim 1. The only copy identified is a 43-page consolidation dated
-  2026-10-06 at the City's bylaw index, which answered HTTP 403 to
-  download and was not retried. Needed: a copy of the bylaw whose text
-  can be fixed as of 2026-08-27 (the consolidation in force on that date,
-  or the 2026-10-06 consolidation together with the dates of the amending
-  bylaws so the as-of text can be derived), archived with its hash and
-  read. The ordinary route for a file a fetcher cannot retrieve is a
-  person's browser download, as the carried-document rules already use
-  for council files; no route that bypasses a refusal is to be used. The
-  editor then records every provision on riding a bicycle, e-bike or
-  e-scooter on a sidewalk, pathway, bike lane or roadway, restates claim
-  1's element E2 if the bylaw holds a lane-use or path-use rule, and
-  otherwise leaves E2 as written.
-- **B2, the fault-share instrument (prerequisite P1).** Needed: a bounded
-  search, recorded here, of (a) the City's current publications pages and
-  open data catalogue for any annual collision or Vision Zero report from
-  2015 to 2025 under a current address, (b) the 2019 Vision Zero annual
-  report on the meeting portal (DocumentId 73451) by the ordinary route
-  for portal files, and (c) the Safe Streets map and the automated
-  enforcement dashboard the Vision Zero reports name, for any statement
-  of fault by party for bicycle collisions and the years it covers. Any
-  publication found is archived and read. The editor then decides claim 2
-  one way, panel on the ladder or the fallback park with the search's
-  bounds stated, and rewrites the claim's section without conditional
-  language.
-- **P4, amendment checks.** For AR 304/2002 Division 4 and Bylaw 5590,
-  check the King's Printer's amendment record and the City's bylaw index
-  for any amendment or consolidation between each consolidation date and
-  2026-08-27, and record what was found. Unresolved in this draft.
-- **P6, mechanical checks after the final author edit.** Quotation match
-  against `comments.jsonl`; document quotations against the archived
-  bytes; `npm run validate`, `npm test`, the build and the exposure and
-  duplication audits; a scan for private paths, credentials or board
-  material in this directory.
-- **P7, a definite brief.** After B1, B2 and P4 the editor rewrites the
-  status block and claim 2's section so that every claim is either sent
-  to the panel or parked, records the hash of the submitted brief and
-  intake here and in `state.yaml`, and the coordinator assembles the
-  package and submits check 1 through
-  `scripts/panel/audit-package.sh --provider openai`. A report is
-  installed only if its attempt is admitted. Nothing in this record
-  authorises a freeze, a panel or a register change.
+- **B1, resolved with a stated limit.** Public Spaces Bylaw 20700 is
+  archived and read in the City's consolidation of 2026-05-19, before the
+  as-of date. The bylaw index entry is dated 2026-05-19 but links a file
+  whose cover a tool read as consolidated 2026-10-06 (download refused,
+  not retried); the next amendment identified, Bylaw 21502, was before
+  Council on 2026-10-06, after the as-of date, and its text is unread.
+  Whether any amendment took effect between 2026-05-19 and 2026-08-27 is
+  not established; the brief states that and has the reviewer check the
+  index's amendment listing.
+- **B2, resolved by a bounded search and a proposed park.** The search
+  covered the data catalogue, the Vision Zero annual reports for 2016 to
+  2021, the two City analyses, the current traffic safety and enforcement
+  pages and report, and the Safe Streets map configuration; the
+  dashboard was not readable; the 2015 to 2018 reports stayed at dead
+  addresses. No bicycle fault-by-party publication was located. The claim
+  is proposed as park 5; nothing asserts absence.
+- **P4, resolved with stated limits.** AR 304/2002: the official
+  regulations index to 2026-09-30 ends its amendments at 167/2025. Bylaw
+  5590: the bylaw index dates it 2025-05-12 and the 2026-01-19 minutes
+  show proposed Bylaw 21283 received for information; not a complete
+  Council search and not a check of sign designations.
 
-Resolved by the second source pass and no longer prerequisites: the
-Street Lab evaluations (24 documents read), the Downtown Bike Network
-interim report (read), and the archiving of the three King's Printer
-texts, Bylaw 5590 and the two Vision Zero reports.
+What remains is mechanical and the coordinator's: the P6 checks
+(quotation match against `comments.jsonl`, document quotations against
+archived bytes, `npm run validate`, `npm test`, the build, the exposure
+and duplication audits, a private-path scan of this directory);
+recording the hash of the brief and intake in this record and
+`state.yaml`; assembling the package and submitting check 1 through
+`scripts/panel/audit-package.sh --provider openai`, installing a report
+only if its attempt is admitted. Nothing in this record authorises a
+freeze, a panel, a register change or an adopted park; a framing report
+may reject any disposition above.
 
 ## Sources read and sources only identified
 
 `source-note.md` lists every source by title, address, archive and hash,
-whether it was read, and what it is for, with the retrieval outcome where
-a fetch failed. In summary: six of the packet's ten archived files are
-read and cited; three King's Printer consolidations, Bylaw 5590, the two
-Vision Zero annual reports and the Downtown Bike Network interim report
-are archived and read; the Street Labs page and its 24 evaluation and
-assessment PDFs are archived and read; four open data requests are
-archived and read; and the documents still unread are Bylaw 20700, the
+whether it was read or only screened, and what it is for, with the
+retrieval outcome where a fetch failed. In summary: six of the packet's
+ten archived files are read and cited; three King's Printer
+consolidations, Bylaws 5590 and 20700, the Vision Zero annual reports
+for 2016 to 2021 and the Downtown Bike Network interim report are
+archived and read; the Street Labs page and its 24 evaluation and
+assessment PDFs are archived and read; the open data requests, the
+regulations index, the bylaw index data, two meeting pages and the
+explainer page are archived and read for the entries used; the
+catalogue queries, map configurations and enforcement report are
+archived and screened only; and the documents still unread are the
 2015 to 2018 collision reports and the Vulnerable Road User document
-(dead addresses), the 2019 Vision Zero report (portal browser check), the
-City-hosted Traffic Safety Act copy and the small-vehicle booklet (not
-fetched), and the 2019 Downtown Bike Network review and report (not
-found).
+(dead addresses), the signed Bylaw 21502 and its report (HTTP 403), the
+enforcement dashboard (login page), the City-hosted Traffic Safety Act
+copy and the small-vehicle booklet (not fetched), and the 2019 Downtown
+Bike Network review and report (not found).
 
 ## Runtime and how the draft was made
 
@@ -343,10 +360,24 @@ record was written.
 ## What was not done, and why
 
 - No framing package, no launcher run, no reviewer: this stage ends at a
-  verified draft with named blockers, by instruction.
-- No evidence registry entries: ingest follows B1 and B2, when the
-  instruments are settled.
+  definite draft proposed for the framing check, by instruction. The
+  package, check 1 and any report are the coordinator's next steps and
+  had not happened when this record was written; nothing is submitted,
+  frozen or adopted.
+- No evidence registry entries: ingest follows the framing check, on the
+  instruments the brief names for the two proposed panel claims.
 - No `state.yaml`: written when the brief is submitted.
 - No change to the register, the methodology, prompts, scripts or any
   other file outside this directory. The register's `prior_triage` note
   on the harassment claim is unchanged.
+
+## Coordinator submission pins
+
+Mechanical record added by the OpenAI coordinator after the final Anthropic
+consistency correction, before framing check 1. No editorial text above
+was rewritten for these pins.
+
+- Brief SHA-256: `8280ccd5cfcd86ddc8dddc53cfe0a59c8749aa528859e94ade9805ddc9b66622`.
+- Intake SHA-256: `dedbbffa586feb42fd2d58b8b59316db404b5227257afc635f6dc41340d157f9`.
+- These are the exact inputs prepared for check 1; submission and admission
+  are recorded separately in `state.yaml`.

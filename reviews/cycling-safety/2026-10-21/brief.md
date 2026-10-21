@@ -1,21 +1,23 @@
 # Review brief: Do bike lanes make cycling safer in Edmonton, and where do cyclists actually ride?
 
-Status: **DRAFT, 2026-10-21, REVISED THE SAME DAY. NOT FROZEN. NO
+Status: **DRAFT, 2026-10-21, REVISED TWICE THE SAME DAY. NOT FROZEN. NO
 FRAMING REPORT. NO PANEL. NO FINDING.** This is the editor's draft,
-revised once after a second source pass and before any framing check. It
-has not been submitted to the admitted framing checker and cannot be
-until two records are resolved (`run-record.md`, "Readiness"): the text
-of Public Spaces Bylaw 20700 in force on 2026-08-27, which claim 1 needs,
-and a City publication stating fault by party for bicycle collisions,
-which claim 2 needs. Nothing in this brief is adopted. Every park below is
-a proposal; every claim row on the register is unchanged; the question
-remains Registered, GO and unpublished. Drafted by Stew from the register
-entries for `cycling-safety`, the capture, the intake run, and the
-sources named under "What is measured", each marked read or unread;
-`source-note.md` beside this brief records every address, hash and
-retrieval outcome. Methodology v1.43. Question id: `cycling-safety`.
-Source: `yegscoop-2026-08-26`. Provenance of every wording is in
-`intake.md` in this directory, which reviewers do not receive.
+revised after a second and a third source pass and before any framing
+check. It has not been submitted to the admitted framing checker. Its
+two earlier blockers are disposed of in this revision: the Public Spaces
+Bylaw is archived and read in the City's consolidation of 2026-05-19,
+with the chronology limit stated, and the bounded search for a City
+publication stating fault by party for bicycle collisions is complete
+and located none, so that claim is proposed for parking. Nothing in this
+brief is adopted. Every park below is a proposal; every claim row on the
+register is unchanged; the question remains Registered, GO and
+unpublished. Drafted by Stew from the register entries for
+`cycling-safety`, the capture, the intake run, and the sources named
+under "What is measured", each marked read or unread; `source-note.md`
+beside this brief records every address, hash and retrieval outcome.
+Methodology v1.43. Question id: `cycling-safety`. Source:
+`yegscoop-2026-08-26`. Provenance of every wording is in `intake.md` in
+this directory, which reviewers do not receive.
 
 ## The question
 
@@ -51,47 +53,37 @@ not a count. Both halves are proposed for parking, with the instrument
 that would reopen each and the bounds of the search stated.
 
 What the record can answer is narrower and still argued about in the
-thread: what the law says about where a cyclist may ride, what the City's
-own evaluations of its Street Labs measured, and, if the City has
-published it, who its collision records say was at fault when a bicycle
-was hit. Two claims are proposed for the panel:
+thread: what the law says about where a cyclist may ride, and what the
+City's own evaluations of its Street Labs measured. Two claims are
+proposed for the panel:
 
 - `cyclists-have-right-to-the-road`: whether, under the provincial law and
   City bylaws in force on 2026-08-27, a person riding a bicycle in
   Edmonton may ride on the roadway of a public road, with or without a
   bike lane, with the rights and duties the rules of the road give a
-  driver. Three of its four essential texts are archived and read. The
-  fourth, Public Spaces Bylaw 20700 as in force on 2026-08-27, is not:
-  the only copy identified is a later consolidation whose download was
-  refused. The claim is not submitted until that text is archived and
-  read.
+  driver. All four essential texts are archived and read, the Public
+  Spaces Bylaw in the City's consolidation of 2026-05-19; the chronology
+  limit on that consolidation is stated under "What is measured".
 - `street-labs-no-safety-value`: whether the City's own published
   evaluations of its Street Labs, taken together, report no measured
   safety effect. The instrument exists and has been read: the 24
   evaluation and assessment documents linked from the City's Street Labs
   page on 2026-10-21, described under "What is measured".
 
-One claim is proposed for the panel only if its instrument is located,
-with a fallback park written out:
-
-- `bike-collision-fault-share`: whether the City's published collision
-  records attribute about ninety percent of reported bicycle collisions
-  to the cyclist. No document read for this draft states fault by party
-  for bicycle collisions. The City's annual collision reports for 2015 to
-  2018, which search extracts say state a cyclist not-at-fault share, no
-  longer serve at the addresses found, and the 2019 Vision Zero report
-  sits behind the meeting portal's browser check. Prerequisite P1 in
-  `run-record.md` names the search that remains before the editor decides
-  the claim one way.
-
-Five claims are proposed for parking at framing on the no-instrument
+Six claims are proposed for parking at framing on the no-instrument
 ground, each with its reopening condition: `lanes-keep-riders-out-of-
 traffic` and `bike-lanes-dont-improve-safety` (the risk comparison from
 each side), `cyclists-ride-on-sidewalks`, `downtown-network-safe-family-
 route` (its safety judgement; its route-continuity component belongs to
-`network-connections`), and `cyclists-harassed-on-roads-without-lanes`,
-which both per-claim triage readers had already declined and which the
-register carries with that prior ruling preserved.
+`network-connections`), `cyclists-harassed-on-roads-without-lanes`, which
+both per-claim triage readers had already declined and which the
+register carries with that prior ruling preserved, and
+`bike-collision-fault-share`, whose instrument, a City publication
+stating which party was recorded at fault in reported bicycle
+collisions, was not located in the bounded search described under park 5
+and in `source-note.md`. That park does not assert the publication does
+not exist; the claim's ladder is held in the claim 2 section so it can
+run without redrafting if the instrument is located.
 
 Under D-0040 a question whose main claims are parked at framing does not
 count as answered because a remaining claim has a finding. If this brief
@@ -134,19 +126,20 @@ the City and the Province publish.
 The triage reason assumed two records. The traffic bylaw exists, and it
 has changed: sections 49 to 52 of Traffic Bylaw 5590 (headed Bicycles,
 Bicycle Conduct, Other Vehicles and Other Vehicle Conduct) are marked
-Deleted in the consolidation of 2025-05-12, with a note citing section
-96(1)(b) of Bylaw 20700, the Public Spaces Bylaw. The City's own Bike
-Routes page, as archived on 2026-10-21, still links "Traffic Bylaw 5590 -
-Part III Sidewalks and Boulevards - Section 50" for the bell rule and
-gives two different sidewalk rules in two places (one by wheel size, one
-by age). So the instrument for where a cyclist may ride on a sidewalk is
-Bylaw 20700. The only copy identified, at the City's bylaw index, is a
-consolidation dated 2026-10-06, after the as-of date, and its download
-was refused; no version of it has been read. The collision records exist
-as annual totals by mode and by main cause, and as the City's two
-published analyses; none of those read links a collision to a facility
-together with a rider count, which is why the risk claims are proposed
-for parking.
+Deleted in the consolidation of 2025-05-12, by section 96(1)(b) of Bylaw
+20700, the Public Spaces Bylaw, in force from 2025-05-12 under its
+section 95. The City's own Bike Routes page, as archived on 2026-10-21,
+still links "Traffic Bylaw 5590 - Part III Sidewalks and Boulevards -
+Section 50" for the bell rule and gives two different sidewalk rules in
+two places (one by wheel size, one by age). The instrument for where a
+cyclist may ride on a sidewalk is therefore Part XIV of Bylaw 20700,
+archived and read in the City's consolidation of 2026-05-19. The
+collision records exist as annual totals by mode and by main cause, and
+as the City's published analyses and annual reports; none of those read
+links a collision to a facility together with a rider count, which is why
+the risk claims are proposed for parking, and none of those read states
+fault by party for bicycle collisions, which is why the fault claim is
+proposed for parking.
 
 ## Circulating forms
 
@@ -161,9 +154,8 @@ pseudonyms.
   panel.
 - **Ninety percent the cyclist's fault.** One person: "They had on the
   news how many accident's there has been with bike's and I can bet that
-  90 percent are because the biker's were in the wrong." Proposed for the
-  panel if its instrument is located; otherwise the fallback park under
-  claim 2.
+  90 percent are because the biker's were in the wrong." Proposed park
+  (park 5); its ladder is held under claim 2.
 - **Street Labs have no safety value for pedestrians.** One person:
   ""vision zero - Street Labs " that hinder normal street traffic and
   have no safety value for pedestrians what so ever." Proposed for the
@@ -200,11 +192,12 @@ and the second claim under review is stated at that level.
 Residents also ask, when a cyclist is hit, whose fault the City's record
 says it usually was. The City's collision publications answer that only
 if one states fault by party for bicycle collisions; none read for this
-draft does, and the claim waits on prerequisite P1. Residents ask whether
-the lanes have made cycling safer. The records read cannot answer that at
-the level people ask it, for the reason the City itself gives: it counts
-crashes by facility but not riders. The brief parks that question on
-both sides and names the record that would reopen it. Residents ask
+draft does, the search is bounded under park 5, and the claim is
+proposed for parking until such a publication is located. Residents ask
+whether the lanes have made cycling safer. The records read cannot answer
+that at the level people ask it, for the reason the City itself gives: it
+counts crashes by facility but not riders. The brief parks that question
+on both sides and names the record that would reopen it. Residents ask
 whether cyclists really ride on the sidewalk anyway. The record read
 answers what the rule is, not what people do; the rule is reported under
 the first claim and the behaviour is parked.
@@ -216,9 +209,9 @@ copy of the document in this draft) or **unread** (identified by address
 or search extract only, not read). An unread source carries nothing in
 this brief beyond its existence and title.
 
-**The law on where a cyclist may ride.** Three King's Printer texts and
-the City's Traffic Bylaw are archived and read in part; the Public Spaces
-Bylaw is neither. Hashes and retrieval details are in `source-note.md`.
+**The law on where a cyclist may ride.** Three King's Printer texts, the
+City's Traffic Bylaw and the City's Public Spaces Bylaw are archived and
+read in part. Hashes and retrieval details are in `source-note.md`.
 
 - *Traffic Safety Act*, RSA 2000, chapter T-6, King's Printer office
   consolidation current as of 2026-07-02, at
@@ -236,13 +229,12 @@ Bylaw is neither. Hashes and retrieval details are in `source-note.md`.
   current as of 2025-08-08, at
   `https://kings-printer.alberta.ca/documents/Regs/2002_304.pdf`.
   **Archived; read** in part: section 1(1) definitions ("bicycle"); Part 2
-  Division 4, Cycles, sections 75 to 79 (rights and duties of a person
-  operating a cycle on a highway, mopeds, operation and position rules,
-  single file, exhibitions); sections 83 and 85; Part 3 sections 90 to 93.
-  The consolidation predates the as-of date by about a year. Whether any
-  amendment to Division 4 came into force between 2025-08-08 and
-  2026-08-27 has not been checked and is unresolved; the reviewer checks
-  the King's Printer's amendment record.
+  Division 4, Cycles, sections 75 to 79; sections 83 and 85; Part 3
+  sections 90 to 93. Amendment check: the King's Printer's index of
+  regulations subsisting on 2026-09-30 (archived) lists AR 304/2002's
+  amendments and ends the list at AR 167/2025, so that official index
+  records no amendment to the regulation between the consolidation date
+  and the as-of date. The reviewer confirms against the same index.
 - *Vehicle Equipment Regulation*, Alberta Regulation 122/2009,
   consolidation with amendments up to AR 129/2025, current as of
   2025-06-11, at
@@ -254,32 +246,63 @@ Bylaw is neither. Hashes and retrieval details are in `source-note.md`.
   **Archived; read** in part: the preamble; Part I section 2 definitions
   ("bicycle", "boulevard", "e-bike", "e-scooter", "highway" including a
   sidewalk, "mobility aid", "roadway", "sidewalk", "vehicle"); Part II
-  section 4(2) (the ban on parking on a sidewalk does not apply to
-  bicycles); Part III, where sections 49 and 49.1 (Bicycles), 50 (Bicycle
-  Conduct), 51 and 52 each read "Deleted", followed by the note "(S.96 (1)
-  (b), Bylaw 20700, May 12, 2025)"; Part V section 84 (a highway or
-  portion designated as restricted to a class of vehicle, bicycles among
-  the classes named); and Part VIII section 107(cc) and (dd) (the City
-  Manager may designate portions of any highway where the use of bicycles
-  is prohibited, or for the use of bicycles only). The rest of Parts IV
-  to VIII was not read line by line; the reviewer reads them for any
-  further bicycle provision. Whether the City consolidated the bylaw
-  again between 2025-05-12 and 2026-08-27 has not been checked and is
-  unresolved.
-- *Public Spaces Bylaw 20700*. **Not archived; unread.** The City's bylaw
-  page, `https://www.edmonton.ca/city_government/bylaws/public-spaces-bylaw`,
-  answered HTTP 502 to the editor's fetch tool. The copy at the City's
-  bylaw index,
-  `https://webdocs.edmonton.ca/bylaws/20700-Public-Spaces-Bylaw-C-20260519.pdf`,
-  was read by the coordinator's web tool as a 43-page PDF whose cover
-  says consolidated on October 06, 2026, with October 6 amendment
-  annotations; its download then answered HTTP 403 and was not retried.
-  So the bylaw's existence, its address and a consolidation later than
-  the as-of date are verified; its text in force on 2026-08-27 is not. It
-  is essential for the first claim: it is the text that holds, or does not
-  hold, any City rule on cyclists using sidewalks, pathways, bike lanes or
-  roadways. A reviewer that cannot retrieve it as in force on the as-of
-  date says so, and the run stops.
+  section 4(2); Part III, where sections 49 and 49.1 (Bicycles), 50
+  (Bicycle Conduct), 51 and 52 each read "Deleted", followed by the note
+  "(S.96 (1) (b), Bylaw 20700, May 12, 2025)"; Part V section 84 (a
+  highway or portion designated as restricted to a class of vehicle,
+  bicycles among the classes named); and Part VIII section 107(cc) and
+  (dd) (the City Manager may designate portions of any highway where the
+  use of bicycles is prohibited, or for the use of bicycles only). The
+  rest of Parts IV to VIII was not read line by line; the reviewer reads
+  them for any further bicycle provision. Amendment check: the City's
+  bylaw index data as retrieved on 2026-10-21 (archived) lists 5590 with
+  its 2025-05-12 consolidation file, and the Community and Public
+  Services Committee minutes of 2026-01-19 (archived) record report
+  CS03123 on a proposed Bylaw 21283, Amendments to the Traffic Bylaw, as
+  received for information, which is not a passage. That check covers
+  the index and one meeting, not every Council meeting or any designation
+  made by sign under section 107; the reviewer checks the index's listing
+  again on its own date and reports it.
+- *Public Spaces Bylaw 20700*, City of Edmonton, consolidated on May 19,
+  2026, 40 pages, at
+  `https://www.edmonton.ca/sites/default/files/public-files/C20700.pdf?cb=1779154039`,
+  the copy the City's own Public Spaces Bylaw page links. **Archived;
+  read** in part: Part I section 2 definitions ("highway" as in the
+  Traffic Safety Act; "roadway"; "shared pathway"; "sidewalk"); Part XIV,
+  Vehicles: section 77 definitions ("bicycle", "e-bicycle", "e-scooter",
+  "vehicle" as in the Traffic Safety Act), section 78 ("(1) A person must
+  not ride a bicycle, e-bicycle, e-scooter, on a sidewalk. (2) Subsection
+  (1) does not apply to a shared pathway or persons aged 16 years and
+  under."), sections 79 to 82 (transit spaces, indoor public spaces,
+  parks, conduct when riding); Part XVI section 95 (in force May 12,
+  2025) and section 96(1) (the Bylaw 5590 deletions); and the amendment
+  list (Bylaws 21122 of 2025-05-21, 21371 of 2026-02-17, 21424 of
+  2026-03-17 and 21244 of 2026-05-19). Chronology limit: this
+  consolidation predates the as-of date by about three months. The City's
+  bylaw index entry for 20700, as retrieved on 2026-10-21, carries the
+  date 2026-05-19 but links a file at
+  `https://webdocs.edmonton.ca/bylaws/20700-Public-Spaces-Bylaw-C-20260519.pdf`
+  whose cover the coordinator's tool read as consolidated 2026-10-06 and
+  whose download answered HTTP 403, not retried. The next amendment
+  identified, Bylaw 21502 (the bylaw's one-year review), was before
+  Council on 2026-10-06 with a signed copy the agenda labels published
+  2026-10-07, after the as-of date; its text and the review report
+  (DocumentIds 309335 and 309330) answered HTTP 403 and are **unread**.
+  Whether any amendment took effect between 2026-05-19 and 2026-08-27 is
+  not established by these records; the reviewer checks the index's
+  amendment listing and reports it. Part XIV is essential: a reviewer
+  that cannot retrieve it as in force on the as-of date says so, and the
+  run stops.
+- *The City's Bike Routes page*,
+  `https://www.edmonton.ca/transportation/cycling_walking/bike-routes-how-to`,
+  archived 2026-10-21 (SHA-256
+  `b73410eb95a421d313217c1ac79ad381aac96b7e3cc445b8b496ad40ab6b2127`).
+  **Read.** The City's plain-language restatement of the rules, not the
+  rule; it states who may ride on sidewalks in two inconsistent ways,
+  cites the deleted section 50 of Bylaw 5590, names a Charter Bylaw
+  setting minimum passing distances in effect from 2021-09-30, and links
+  the Province's small-vehicle booklet (unread). Background for the
+  qualifications and never the source of a classification.
 - *The City's Bike Routes page*,
   `https://www.edmonton.ca/transportation/cycling_walking/bike-routes-how-to`,
   archived 2026-10-21 (SHA-256
@@ -322,32 +345,29 @@ none holds.
   *Vulnerable Road User Collisions in Edmonton*. **Unread; not located.**
   Search extracts say the 2016 and 2018 reports state, for cyclist injury
   collisions in the year, the share in which the cyclist was deemed not
-  at fault; the editor has not seen the statement or its basis. The
-  addresses the extracts led to (under
-  `https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/`
-  and `.../assets/RoadsTraffic/`, and
-  `https://www.edmonton.ca/transportation/PDF/Vulnerable-Road-User-Collisions-In-Edmonton.pdf`)
-  answered HTTP 404, or resolved to the City's page-not-found page, on
-  2026-10-21; none was retried, and no current address was identified. A
-  dead address is not evidence that the City never published the share or
-  does not publish it now. These are the candidate instrument for the
-  second claim and the subject of prerequisite P1.
-- *Vision Zero Edmonton annual reports* for 2020 and 2021, at
-  `https://www.edmonton.ca/sites/default/files/public-files/assets/Vision_Zero_Annual_Report_2020.pdf`
-  and
-  `https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/Vision_Zero_Annual_Report_2021.pdf`.
-  **Archived; read** in full (the 2021 report has 19 physical PDF pages).
-  Each gives cyclist serious injuries and fatalities by year (2015 to 2020
-  in the first, 2015 against 2021 in the second) and the City's top crash
-  causes for all modes. The 2020 report describes the Street Labs
-  programme as about to start; the 2021 report gives its first-year
-  counts (eighteen community groups planning, five labs installed, labs
-  in Oliver and Westmount) and describes the Safe Passing Bylaw. Neither
-  states fault by party for bicycle collisions. The 2019 report sits on
-  the meeting portal at
-  `https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=73451`,
-  behind the browser check, **unread**. No annual report for 2022 to 2025
-  was found by the web searches run for this draft; whether one exists is
+  at fault; the editor has not seen the statement or its basis. Every
+  address identified answered HTTP 404 or the City's page-not-found page
+  on 2026-10-21; none was retried, and no current address was found in
+  the City's publication pages or data catalogue in the searches recorded
+  in `source-note.md`. A dead address is not evidence that the City never
+  published the share or does not publish it now. These are the candidate
+  instrument for the fault claim, proposed for parking (park 5).
+- *Vision Zero Edmonton annual reports* for 2016 to 2021. The 2016 to
+  2019 reports are published by the City's engagement site at
+  `https://engaged.edmonton.ca/safestreets` and were archived from its
+  download links on 2026-10-21; the 2020 and 2021 reports from the
+  `edmonton.ca` addresses in `source-note.md`. **Archived; read** (2019,
+  2020 and 2021 in full; 2016 to 2018 in every passage that mentions
+  cyclists or bicycles, with the whole text screened for the word
+  "fault"). The 2019 report gives bicycle collision counts for 2015 to
+  2019 and says crash causes are identified by analysing Edmonton Police
+  Service collision reports; the 2018 report gives cyclist injury and
+  fatality counts for 2015 and 2018; the 2017 report says the City
+  reviews every vulnerable road user fatality and serious injury; the
+  2016 report gives the bicycle commute mode share; the 2020 and 2021
+  reports give cyclist serious injuries and fatalities by year. None of
+  the six states fault by party for bicycle collisions. No annual report
+  for 2022 to 2025 was found by the searches run; whether one exists is
   unresolved.
 - *Crash and Equity Analyses Technical Report*, Safe Mobility Strategy
   2021-2025, at
@@ -560,21 +580,19 @@ should be on arterial roads, or what cyclists do.
 
 **The instrument.** The Traffic Safety Act as consolidated to 2026-07-02;
 the Use of Highway and Rules of the Road Regulation as consolidated to
-2025-08-08 with the King's Printer's amendment record to 2026-08-27, in
-particular Part 2 Division 4 (sections 75 to 79); Traffic Bylaw 5590 as
-consolidated 2025-05-12 with the City's bylaw index checked for a later
-consolidation, in particular Part III, section 84 (restricted highways),
-section 107(cc) and (dd) (designated portions where bicycles are
-prohibited or bicycles only), and any other provision in Parts IV to VIII
-that prohibits or restricts bicycles; and Public Spaces Bylaw 20700 as in
-force on 2026-08-27, in particular any provision on riding a bicycle on a
-sidewalk, pathway, bike lane or roadway. All four are essential: a
-reviewer that cannot retrieve any of them as in force on the as-of date
-says so, and the run stops on it rather than guessing from the City's web
-page or from a later consolidation. The only copy of Bylaw 20700
-identified for this draft is consolidated 2026-10-06; the brief is not
-submitted until a copy whose text can be fixed as of 2026-08-27 is
-archived and read.
+2025-08-08, with the King's Printer's regulations index to 2026-09-30
+confirming no later amendment, in particular Part 2 Division 4 (sections
+75 to 79); Traffic Bylaw 5590 as consolidated 2025-05-12 with the City's
+bylaw index checked for a later consolidation, in particular Part III,
+section 84 (restricted highways), section 107(cc) and (dd) (designated
+portions where bicycles are prohibited or bicycles only), and any other
+provision in Parts IV to VIII that prohibits or restricts bicycles; and
+Public Spaces Bylaw 20700 as consolidated 2026-05-19, Part XIV sections
+77 to 82, with the City's bylaw index checked for any amendment in force
+between 2026-05-19 and 2026-08-27 and the result reported. All four are
+essential: a reviewer that cannot retrieve any of them as in force on
+the as-of date says so, and the run stops on it rather than guessing
+from the City's web page or from a later consolidation.
 
 **Order of classification.** Apply the Not established condition first.
 Then determine, from the texts, element E1: whether a person operating a
@@ -627,11 +645,13 @@ reader knows whether the law changed between the comment and the check.
    do.
 2. Every highway or class of highway on which bicycles are prohibited by
    bylaw, regulation or sign, as the texts list them.
-3. The rule on sidewalks for bicycles, e-bikes and e-scooters as Bylaw
-   20700 states it, including any age or wheel-size exception, and what
-   the City's Bike Routes page says in its two places; and the fact that
-   the bicycle sections of Bylaw 5590 are marked Deleted by Bylaw 20700
-   from 2025-05-12 while that page still cites section 50.
+3. The rule on sidewalks for bicycles, e-bicycles and e-scooters as
+   Bylaw 20700 section 78 states it, quoted, with its exception for
+   shared pathways and persons aged 16 years and under, and what the
+   City's Bike Routes page says in its two places (one by wheel size, one
+   by age); the deletion of Bylaw 5590's bicycle sections by Bylaw 20700
+   section 96(1)(b) while that page still cites section 50; and the
+   result of the chronology check named under "What is measured".
 4. The minimum passing distances the City's Charter Bylaw sets for
    drivers passing cyclists, with the bylaw's number and effective date
    as the reviewer finds them; the City's page gives 2021-09-30.
@@ -644,22 +664,17 @@ reader knows whether the law changed between the comment and the check.
 whether drivers give the passing distance, whether riding on arterial
 roads is safe or wise, and whether lanes should be removed.
 
-### Claim 2, id: `bike-collision-fault-share` (proposed subject to prerequisite P1)
+### Claim 2, id: `bike-collision-fault-share` (proposed for parking; ladder held)
 
-**Prerequisite P1, stated plainly.** The instrument is the City's
-published fault attribution for reported bicycle collisions. No document
-read for this draft states it. Search extracts say the City's annual
-collision reports for 2016 and 2018 did, but the addresses they led to
-answered HTTP 404 or page-not-found on 2026-10-21, the 2019 Vision Zero
-report is behind the meeting portal's browser check, and no later annual
-report was found by search. That bounded result is not evidence that the
-share was never published or is not published now. Before this brief is
-submitted, the search named in `run-record.md` under P1 must be completed
-and recorded, and the editor then decides claim 2 one way: the panel on
-the ladder below if a publication stating the share for any year is
-archived and read, or the fallback park below if the completed search
-finds none, with the search's bounds stated. The ladder is written for
-the case where the record exists.
+**Disposition.** This claim is proposed for parking at framing as park 5,
+because the bounded search described there and in `source-note.md`
+located no City publication stating which party was recorded at fault in
+reported bicycle collisions. The park does not assert that no such
+publication exists. The proposition, ladder, alternatives and
+qualifications below are held unchanged so that, if park 5 reopens on a
+located publication, the claim can run without redrafting; none of them
+carries a verdict now, and the panel does not grade this claim in this
+run.
 
 **Normalized proposition:** In the most recent years for which the City of
 Edmonton has published, by 2026-08-27, which party it recorded at fault in
@@ -747,18 +762,9 @@ same sentence.
 4. The database's reporting limits, in the City's words: no motor vehicle,
    no record; and the September 2022 reporting change.
 
-**Fallback park, if the P1 search finds no City publication stating fault
-by party for bicycle collisions, or finds one only for years the editor
-judges cannot fairly test a claim made in 2026.** Park on the
-no-instrument ground, stating the search's bounds: which City addresses,
-catalogues and reports were checked and when, that the City's current
-open data codes a main cause per collision without a fault share, and
-that no publication available on 2026-08-27 stating the share was
-located. It reopens when the City publishes fault by party for bicycle
-collisions for any year from 2019 on, when such a publication for an
-earlier year is located and the editor records why it can fairly test
-the claim, or when a City or police record released under an
-existing-records request states it.
+**Park and reopening.** The park proposal, the bounds of the search that
+grounds it and its reopening condition are stated as park 5 under
+"Proposed for parking at framing".
 
 ### Claim 3, id: `street-labs-no-safety-value`
 
@@ -874,12 +880,14 @@ definition-sensitive and the story says so beside the verdict.
 
 ## Proposed for parking at framing
 
-Five claims are proposed for parking on the no-instrument ground, each
-with the condition that would reopen it. They are the editor's proposals.
-None is adopted and none carries park fields on the register; the closing
-section sets out what could adopt them. Three fall on the side that
-supports the lanes and two on the side that opposes them. Nothing about
-any is deleted; the register keeps every wording and its provenance.
+Five parks cover the six claims proposed for parking on the no-instrument
+ground, each with the condition that would reopen it; park 1 holds the
+two risk claims together. They are the editor's proposals. None is
+adopted and none carries park fields on the register; the closing
+section sets out what could adopt them. Three of the six fall on the side
+that supports the lanes and three on the side that opposes them. Nothing
+about any is deleted; the register keeps every wording and its
+provenance.
 
 For each, the brief names the weaker statement the record could have
 answered and says why it is not tested: a proposition may be made more
@@ -1004,6 +1012,40 @@ precise than the claim as made, never weaker.
    and would reopen only the narrower claim that such incidents are
    recorded.
 
+5. `bike-collision-fault-share` (one person, against). "They had on the
+   news how many accident's there has been with bike's and I can bet
+   that 90 percent are because the biker's were in the wrong." The
+   claim is a share of a City-recorded quantity, and its instrument is a
+   City publication stating which party was recorded at fault in
+   reported bicycle collisions. The search for one is bounded as follows,
+   with every address, hash and outcome in `source-note.md`: the City's
+   open data catalogue (queries for "collision", "fault" and "vision
+   zero", every result's column metadata screened) holds the Collision
+   Severity and Collision Cause tables, neither of which classifies
+   bicycle involvement and fault by party together; the Vision Zero
+   annual reports for 2016 to 2021, archived and read as described
+   under "What is measured", state cyclist collision and injury counts
+   but no fault share; the Crash and Equity report and the Safe Mobility
+   Strategy 2027-2030 state fault shares across all collision types or
+   for fatal and serious crashes by mode, which are not the bicycle
+   denominator the claim needs and are not substituted for it; the City's
+   current traffic safety and automated enforcement pages, its 2025
+   automated enforcement report and the published configuration of its
+   Safe Streets map were screened and expose no bicycle fault field; the
+   older automated enforcement dashboard redirected to a login page and
+   was not read; and the 2015 to 2018 Motor Vehicle Collisions reports,
+   which search extracts say state a cyclist not-at-fault share, answered
+   HTTP 404 at every address identified and were not read. The weaker
+   statement the record could answer is a floor on collisions coded to
+   cyclist error in the Collision Cause table, which is a cause code and
+   not a fault share, and is reported as background only. It reopens
+   when a City or Edmonton Police Service publication stating fault by
+   party for bicycle collisions for any year is located and archived
+   (a current address for the 2015 to 2018 reports among the first places
+   to look), or when such a record is released under an existing-records
+   request; the held ladder under claim 2 then applies, with the editor
+   recording why the years it covers can fairly test the claim.
+
 ## Stakes
 
 What each verdict would change, for the person making the claim and for
@@ -1030,16 +1072,14 @@ mean an essential text could not be read. Under the strict reading of
 "the same", reported beside the verdict, a difference the texts make
 between drivers and cyclists is weighed, and the finding names it.
 
-**Ninety percent the cyclist's fault.** Supported would establish that
-the City's own record attributes nearly all bicycle collisions to the
-cyclist, which is what the holder bets and what an opponent who says
-drivers are the danger denies. Partially supported would establish that
-cyclists are recorded at fault in most but not nearly all. Contradicted
-would establish that the City's record attributes half or more to the
-other party, the reverse of the bet; the holder would have to point to a
-record outside the City's. Not established would mean the City has not
-published fault by party for bicycle collisions in the window. Where the
-window ends before 2019, every statement of the finding names its years.
+**Ninety percent the cyclist's fault.** No stakes are stated for this
+run: the claim is proposed for parking (park 5) and no verdict is
+reachable in either direction on the records located. If the park
+reopens, the held ladder's stakes are these: Supported would establish
+that the City's own record attributes nearly all bicycle collisions to
+the cyclist; Partially supported, most but not nearly all; Contradicted,
+half or more to the other party; and every statement of a finding names
+the years it covers.
 
 **Street Labs and pedestrian safety.** Supported would establish that
 none of the City's own evaluations available by the as-of date reports a
@@ -1066,14 +1106,14 @@ qualification.
 **Geography:** the City of Edmonton, and for the law, Alberta as it
 applies in Edmonton.
 
-**Time:** the as-of date of 2026-08-27; for the fault claim, the window
-fixed under that claim; nothing published after 2026-10-21.
+**Time:** the as-of date of 2026-08-27; nothing published after
+2026-10-21.
 
 **What the verdicts would cover.** What the law provides about where a
-cyclist may ride; what the City's reports attribute as fault; what the
-City's evaluations measured. The brief does not promise a verdict on
-whether lanes make cycling safer or on where cyclists actually ride, and
-the question's page leads with the parks.
+cyclist may ride, and what the City's evaluations of its Street Labs
+measured. The brief does not promise a verdict on whether lanes make
+cycling safer, on where cyclists actually ride, or on who is at fault
+when a cyclist is hit, and the question's page leads with the parks.
 
 **Out of scope**, each of these being a separate registered question, a
 claim proposed for parking above, or a matter the site does not test:
@@ -1135,16 +1175,17 @@ evaluation result.
    passing distances. Answers: qualifications 3 and 4 as the City states
    them; never a classification.
 7. **Any City publication stating fault by party for reported bicycle
-   collisions**, for any year, located under prerequisite P1 and named in
-   the submitted brief by address and hash. Answers: claim 2's Y, S and
-   U. Essential for claim 2; until located, the claim is not submitted.
+   collisions.** None was located; the claim is proposed for parking
+   (park 5) and the panel does not grade it in this run. If the park
+   reopens, the publication is named here by address and hash.
 8. **Annual Collision Report: Collision Severity** (`77sf-j5rj`) and
    **Collision Cause** (`5p44-if3k`), at `https://data.edmonton.ca`.
-   Answers: claim 2 qualification 2 and the yearly totals.
+   Answers: the yearly totals and the cyclist-error floor reported as
+   background under park 5.
 9. **Crash and Equity Analyses Technical Report**, **Safe Mobility
    Strategy 2027-2030** and **One Year In: The Downtown Bike Network
-   Interim Report**, at the addresses named above. Answers: claim 2
-   qualifications 3 and 4; context for the parks, without a verdict.
+   Interim Report**, at the addresses named above. Answers: context for
+   the parks, without a verdict.
 10. **The Street Labs page and every evaluation summary, assessment
     summary, evaluation report or project update it links**, and the
     **Vision Zero annual reports for 2020 and 2021**. The 24 documents
@@ -1160,11 +1201,13 @@ source of a classification.
 
 ## Required calculations
 
-- Claim 2: each year's share S as the City states it; where the City
-  gives counts and not a share, the share computed and shown; the pooled
-  share across the window where counts allow; the cyclist-error floor for
-  each year 2018 to 2023 as a ratio of the two datasets' counts, shown and
-  labelled a floor.
+- Claim 3: N, R and Z, and each lab's before-and-after differences as the
+  summary reports them.
+- Claim 2, only if park 5 reopens: each year's share S as the City states
+  it; where the City gives counts and not a share, the share computed and
+  shown; the pooled share across the window where counts allow; the
+  cyclist-error floor for each year 2018 to 2023 as a ratio of the two
+  datasets' counts, shown and labelled a floor.
 - Claim 3: N, R and Z, and each lab's before-and-after differences as the
   summary reports them.
 
@@ -1215,9 +1258,7 @@ happens to the park proposals, and who has authority to carry out either.
   authority, and the register is changed only when the question's run
   reaches a state the existing rules give a disposition for.
 - **Remaining authority.** Nothing here decides in advance what the first
-  report will say. This draft is not the brief that will be submitted
-  until the two blockers in `run-record.md` are cleared: Bylaw 20700 as
-  in force on 2026-08-27 archived and read, and the P1 search completed
-  with claim 2 resolved one way. The editor will record both resolutions,
-  and the hash of the brief then submitted, before any package is
-  assembled.
+  report will say. This revision is the brief the editor proposes for
+  submission; the hash of the submitted text is recorded by the
+  coordinator in `run-record.md` and `state.yaml` when the package is
+  assembled, and the brief is not submitted on any other text.

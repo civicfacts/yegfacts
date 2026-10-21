@@ -2,8 +2,10 @@
 
 OpenAI coordination and factual preflight, 2026-10-21. This is not a
 formal framing report or an approval to freeze, run the panel or publish.
-The Anthropic author records the draft as blocked before framing in
-[the run record](run-record.md#readiness-what-must-happen-before-this-draft-can-be-submitted).
+The Anthropic author records a definite draft ready for framing in
+[the run record](run-record.md#readiness). The coordinator has verified the
+source and consistency corrections described below; the framing reviewer
+may reject any proposed disposition.
 
 ## Authorship and application
 
@@ -17,7 +19,10 @@ A correction invocation twice reached its output limit without returning
 usable edits. It was interrupted, then resumed in smaller batches in the
 same conversation. The coordinator checked each returned file hash,
 inclusive line range and absence of overlap before applying the author's
-replacement text. Only missing terminal newlines were normalized. Original
+replacement text. Missing terminal newlines were normalized. In the final
+consistency batch, one returned start line preceded its replacement clause
+by one line. The coordinator retained that unchanged Anthropic-authored
+line, recorded the range alignment, and changed no replacement wording. Original
 drafts, exact responses, application records and hashes are retained
 privately. No failed or partial response was installed.
 
@@ -29,7 +34,7 @@ privately. No failed or partial response was installed.
   match the capture after whitespace and Markdown-escape normalization.
   The three additional excerpts are identified as excerpts. All thirteen
   registered wordings match their captured authors and appear in the intake.
-- All 42 cited source hashes match the retrieval manifests. Every one of
+- All 64 cited source hashes match the retrieval manifests. Every one of
   the 24 Street Labs table addresses matches its corresponding manifest
   entry and hash.
 - The Street Labs assessment quotation matches the archived HTML. The
@@ -39,6 +44,10 @@ privately. No failed or partial response was installed.
   stated retrieval scope were checked against archived originals. The
   source note preserves uncertainty where a seasonal label cannot establish
   publication relative to the claim date.
+- The new Public Spaces Bylaw section 78 quotations match the archived
+  consolidation. Its Vehicles heading is Part XIV; a coordinator handoff
+  typo was corrected in the private board record, preserving the original
+  archived handoff and its hash.
 - Source originals and their manifests have verified stable private
   copies outside this worktree. They are not in this change. A failed
   retrieval is recorded as a retrieval outcome, not proof of absence.
@@ -58,15 +67,26 @@ warnings. Neither warning set identifies the new cycling directory. The
 sitemap audit matched 586 sitemap URLs to 586 indexable pages. These checks
 do not verify the unavailable source texts or approve the framing.
 
-## Remaining prerequisites
+## Source disposition and remaining limits
 
-The author's B1 requires Public Spaces Bylaw 20700 as applicable on
-2026-08-27. The identified October 6 consolidation is later, and its direct
-download returned 403. B2 requires the recorded search for a City bicycle
-fault-attribution publication; identified historical report URLs returned
-404 and the 2019 report remains behind a portal browser check. P4 requires
-the specified amendment-history checks. No refusal was bypassed.
+The bounded third source pass recovered the City's May 19, 2026 Public
+Spaces Bylaw consolidation, four Vision Zero annual reports from 2016 to
+2019, the official regulation amendment index and the other records named
+in the source note. Fifty-five retained files have verified copies outside
+this worktree. These are source and reading files, not 55 studies.
 
-Formal framing review was not launched because these prerequisites remain
-open. No framing allowance was consumed. No claim park is adopted, no
-register row changed and no finding or story was produced.
+The Anthropic author proposes two panel claims: the legal right to ride on
+the roadway, and what the City's Street Labs evaluations report about
+safety effects. Six claims are proposed for parking under five parks. The
+fault-share claim now has a definite proposed park after a bounded search;
+the search did not establish that the missing instrument does not exist.
+
+The amendment history between the bylaw consolidation and the claim date
+is not exhaustive. Two Council attachments returned 403 and an older
+dashboard redirected to login; their contents remain unread. The brief
+states these limits. No refused target was bypassed or retried.
+
+The prior source prerequisites are disposed of by the author with these
+limits. Independent framing remains the next gate. No framing allowance
+has yet been consumed, no claim park is adopted, no register row changed,
+and no finding or story was produced.

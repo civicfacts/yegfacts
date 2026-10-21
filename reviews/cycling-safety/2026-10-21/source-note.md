@@ -1,10 +1,10 @@
 # Source note: cycling-safety draft of 2026-10-21
 
 What the editor read, what is archived, and what remains unread or
-unresolved. Updated 2026-10-21 after the coordinator's second retrieval
-pass. Two private, gitignored archives in the main checkout hold the
-bytes, each with a JSON manifest recording URL, retrieval time, status,
-byte length and SHA-256:
+unresolved. Updated 2026-10-21 after the coordinator's second and third
+retrieval passes. Three private, gitignored archives in the main checkout
+hold the bytes, each with a JSON manifest recording URL, retrieval time,
+status, byte length and SHA-256:
 
 - **Packet archive**, `evidence/private/source-prep-2026-10-21/`: the ten
   files the coordinator retrieved before drafting began.
@@ -15,13 +15,23 @@ byte length and SHA-256:
   each. Everything else in it is a separately dated coordinator
   retrieval of the same public address, not a copy of the editor's
   session response.
+- **Prerequisite-pass archive**,
+  `evidence/private/cycling-prerequisite-pass-2026-10-21/`: 55 retained
+  files from the third pass, listed in its own section below. The pass
+  made 29 HTTP attempts and saved 27 records, one of them the login page
+  that the enforcement dashboard redirected to, archived and not read;
+  the other 2 attempts, both Council meeting attachments, were refused
+  with HTTP 403 and nothing was saved. The rest of the 55 are derived
+  reading copies (extracted text of archived PDFs) and the pass's
+  coordination records, not further retrievals.
 
-Status words: **Archived** (bytes in one of the two archives, hash
+Status words: **Archived** (bytes in one of the three archives, hash
 shown); **Read** (the editor read the document, from the archive or from
-the same bytes before they were archived); **Unread**; and the retrieval
-outcome where a fetch failed. A failed fetch is a fact about one address
-on one day. It is not evidence that the document does not exist or was
-never published.
+the same bytes before they were archived); **Screened** (the coordinator
+inspected it mechanically and the editor relied on the recorded result);
+**Unread**; and the retrieval outcome where a fetch failed. A failed
+fetch is a fact about one address on one day. It is not evidence that
+the document does not exist or was never published.
 
 ## Law
 
@@ -29,10 +39,10 @@ never published.
 |---|---|---|---|
 | Traffic Safety Act, RSA 2000 c T-6, King's Printer office consolidation current as of 2026-07-02 | `https://kings-printer.alberta.ca/documents/Acts/T06.pdf` | Archived (editor archive, copy of the editor's fetch), 1,017,567 bytes, SHA-256 `65525763bd857b2c11278b3dfe58e5317ef3686af029671a2995288edad0b644`; read in part (s. 1 definitions and subsections, s. 1(11); the s. 13 bylaw powers as recited in Bylaw 5590's preamble) | Claim 1 instrument; terms |
 | Traffic Safety Act, City-hosted copy linked from the Bike Routes page | `https://www.edmonton.ca/sites/default/files/public-files/documents/t06-trafficsafetyact.pdf` | Unread; not fetched | Reviewer compares consolidation dates |
-| Use of Highway and Rules of the Road Regulation, AR 304/2002, consolidated to AR 167/2025, current as of 2025-08-08 | `https://kings-printer.alberta.ca/documents/Regs/2002_304.pdf` | Archived (editor archive, copy of the editor's fetch), 642,152 bytes, SHA-256 `3fb1e9a8e5b5981f5968599181a64dce8f5d38410ea0028642ff3db41cea51d4`; the coordinator's direct download of the same address answered HTTP 403 and was not retried; read in part (s. 1(1); Part 2 Division 4 ss. 75 to 79; ss. 83, 85; Part 3 ss. 90 to 93; table of contents) | Claim 1 instrument, essential |
+| Use of Highway and Rules of the Road Regulation, AR 304/2002, consolidated to AR 167/2025, current as of 2025-08-08 | `https://kings-printer.alberta.ca/documents/Regs/2002_304.pdf` | Archived (editor archive, copy of the editor's fetch), 642,152 bytes, SHA-256 `3fb1e9a8e5b5981f5968599181a64dce8f5d38410ea0028642ff3db41cea51d4`; the coordinator's direct download of the same address answered HTTP 403 and was not retried; read in part (s. 1(1); Part 2 Division 4 ss. 75 to 79; ss. 83, 85; Part 3 ss. 90 to 93; table of contents). Amendment check: the King's Printer's index of regulations subsisting on 2026-09-30 (third-pass archive, below) ends this regulation's amendment list at 167/2025 | Claim 1 instrument, essential |
 | Vehicle Equipment Regulation, AR 122/2009, consolidated to AR 129/2025, current as of 2025-06-11 | `https://kings-printer.alberta.ca/documents/Regs/2009_122.pdf` | Archived (editor archive, copy of the editor's fetch), 694,361 bytes, SHA-256 `852c9db46c6a2c8f3c9290655542516e72672bbb71fea63bb9d45d578dc0af9c`; the coordinator's direct download answered HTTP 403 and was not retried; read in part (Part 6 Division 5 ss. 111 to 113; table of contents) | Claim 1 qualification 5 |
-| Traffic Bylaw 5590, City of Edmonton, consolidated on May 12, 2025 | `https://www.edmonton.ca/sites/default/files/public-files/documents/Bylaws/C5590.pdf` | Archived (editor archive): the coordinator's direct retrieval at 17:12 UTC (HTTP 200, 514,776 bytes) and the copy of the editor's fetch carry the same SHA-256 `27d722283496655327c3f558b113fb8eef42b0c1ba7c60cc25f9ea86e0629312`; read in the preamble, Part I s. 2 definitions, Part II s. 4(2), Part III pp. 28 to 30 (ss. 49 to 52 marked Deleted by Bylaw 20700, May 12, 2025), Part V s. 84 (restricted highway, with bicycles among the classes a highway may be restricted to) and Part VIII s. 107(cc) and (dd) (the City Manager may designate portions of any highway where the use of bicycles is prohibited, or for the use of bicycles only). The rest of Parts IV to VIII not read line by line | Claim 1 instrument, essential; E2 and E3 |
-| Public Spaces Bylaw 20700, City of Edmonton | City page `https://www.edmonton.ca/city_government/bylaws/public-spaces-bylaw` (HTTP 502 to the editor's fetch tool); bylaw index address `https://webdocs.edmonton.ca/bylaws/20700-Public-Spaces-Bylaw-C-20260519.pdf` | Not archived; unread by the editor. The coordinator's web tool read the index address before a download was tried and reports a 43-page PDF whose cover says consolidated on October 06, 2026, with October 6 amendment annotations, despite the May 19 date in the file name; the direct download then answered HTTP 403 and was not retried. So the address and a later consolidation are verified; the text in force on 2026-08-27 is not, and no copy of any version exists in either archive | Claim 1 instrument, essential; unresolved |
+| Traffic Bylaw 5590, City of Edmonton, consolidated on May 12, 2025 | `https://www.edmonton.ca/sites/default/files/public-files/documents/Bylaws/C5590.pdf` | Archived (editor archive): the coordinator's direct retrieval at 17:12 UTC (HTTP 200, 514,776 bytes) and the copy of the editor's fetch carry the same SHA-256 `27d722283496655327c3f558b113fb8eef42b0c1ba7c60cc25f9ea86e0629312`; read in the preamble, Part I s. 2 definitions, Part II s. 4(2), Part III pp. 28 to 30, Part V s. 84 and Part VIII s. 107(cc) and (dd); the rest of Parts IV to VIII not read line by line. Amendment check: the City's bylaw index data and the 2026-01-19 committee minutes (third-pass archive, below) list the 2025-05-12 consolidation and record proposed Bylaw 21283 as received for information; not a complete search of Council meetings or sign designations | Claim 1 instrument, essential; E2 and E3 |
+| Public Spaces Bylaw 20700, City of Edmonton, consolidated on May 19, 2026, 40 pages | `https://www.edmonton.ca/sites/default/files/public-files/C20700.pdf?cb=1779154039`, linked from the City's Public Spaces Bylaw page; the bylaw index address `https://webdocs.edmonton.ca/bylaws/20700-Public-Spaces-Bylaw-C-20260519.pdf` answered HTTP 403 (cover read by the coordinator's tool as consolidated 2026-10-06), not retried | Archived (third-pass archive), 1,096,442 bytes, SHA-256 `5698f1489c710ee9a73b900a91fa2d9a7c8aa4ecca6e067e92261faf20318476`; read in Part I s. 2 definitions, Part XIV ss. 77 to 82, Part XVI ss. 95 to 97 and the amendment list (21122 of 2025-05-21, 21371 of 2026-02-17, 21424 of 2026-03-17, 21244 of 2026-05-19). Chronology: consolidation predates the as-of date; whether any amendment took effect 2026-05-19 to 2026-08-27 is not established; the next identified, Bylaw 21502, was before Council 2026-10-06 (signed copy labelled published 2026-10-07; DocumentIds 309335 and 309330 answered HTTP 403, unread) | Claim 1 instrument, essential; E2 and qualification 3 |
 | Charter Bylaw setting minimum passing distances (number not identified), in effect 2021-09-30 per the City's page | Not identified | Unread | Claim 1 qualification 4; reviewer identifies it |
 | Bike Routes: How To (City page) | `https://www.edmonton.ca/transportation/cycling_walking/bike-routes-how-to` | Archived (packet archive), SHA-256 `b73410eb95a421d313217c1ac79ad381aac96b7e3cc445b8b496ad40ab6b2127`; read | City's restatement of the rules; its two sidewalk statements; its citation of deleted s. 50 |
 | Rules and Regulations Applying to Small Vehicles (Province booklet, linked from the Bike Routes page) | `https://www.edmonton.ca/sites/default/files/public-files/documents/small-vehicle-booklet-final.pdf` | Unread; not fetched | Background only |
@@ -45,12 +55,12 @@ never published.
 | Collision Severity, bicycle columns by year | `https://data.edmonton.ca/resource/77sf-j5rj.json?$select=year,bicycle_collisions,fatality_bicyclist,serious_injuries_bicyclist,minor_injuries_bicyclist,total_collisions&$order=year` | Read by the editor via the API (14 rows, 2010 to 2023); coordinator retrieval at 17:22 UTC archived, 2,279 bytes, SHA-256 `bdac280ac89ae43301f9992cdb7acd2a53fae7eb2bee976282766e9288a9eaad` | Claim 2 totals; qualification 2 |
 | Annual Collision Report: Collision Cause (dataset `5p44-if3k`), metadata | `https://data.edmonton.ca/api/views/5p44-if3k.json` | Archived (packet archive), SHA-256 `4aa9e40b76a150b66fbf0d0b3079401358c04f038276bcd23838a87f96108ef6`; read | Claim 2 qualification 2 (the cyclist-error column note) |
 | Collision Cause, cyclist columns by year | `https://data.edmonton.ca/resource/5p44-if3k.json?$select=year,cyclist_error_violation,failed_to_yield_to_cyclist,opened_door_into_traffic&$order=year` | Read by the editor via the API (6 rows, 2018 to 2023); coordinator retrieval at 17:22 UTC archived, 685 bytes, SHA-256 `a9e2b12829bec98eae0c2bc7521fd014ceb6269c11f5b9f4fc5cd04d079c4e7c` | Claim 2 qualification 2 (floor) |
-| Motor Vehicle Collisions annual report, 2018 | `https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/2018MVC_AnnualReport.pdf` | Unread; HTTP 502 to the editor's fetch tool, HTTP 404 to the coordinator's retrieval at 17:30 UTC; not retried. The address came from a search extract; no other address for the document was identified | Claim 2 candidate instrument; unresolved |
-| Motor Vehicle Collisions annual report, 2017 | `https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/2017MVC_AnnualReport.pdf` | Unread; HTTP 502 to the editor's fetch tool, HTTP 404 to the coordinator's retrieval at 17:38 UTC; not retried | Claim 2 candidate instrument; unresolved |
-| Motor Vehicle Collisions annual report, 2016 | `https://www.edmonton.ca/sites/default/files/public-files/assets/RoadsTraffic/2016MVCAnnualReportsm.pdf` | Unread; HTTP 404 to the coordinator's retrieval at 17:38 UTC; not retried | Claim 2 candidate instrument; unresolved |
-| Motor Vehicle Collisions annual report, 2015 | `https://www.edmonton.ca/sites/default/files/public-files/assets/RoadsTraffic/OTS_2015_MVC_AnnualReport.pdf` | Unread; HTTP 404 to the coordinator's retrieval at 17:38 UTC; not retried | Claim 2 candidate instrument; unresolved |
-| Vulnerable Road User Collisions in Edmonton | `https://www.edmonton.ca/transportation/PDF/Vulnerable-Road-User-Collisions-In-Edmonton.pdf` | Unread; HTTP 502 to the editor's fetch tool; the coordinator's retrieval at 17:12 UTC resolved to the City's page-not-found HTML (`https://www.edmonton.ca/page-not-found`), not PDF bytes; not retried | Claim 2 candidate instrument; unresolved |
-| Vision Zero Edmonton 2019 annual report | `https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=73451` | Unread; behind the meeting portal's browser check; not attempted by the coordinator | Claim 2 candidate; Street Labs context |
+| Motor Vehicle Collisions annual report, 2018 | `https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/2018MVC_AnnualReport.pdf` | Unread; HTTP 502 to the editor's fetch tool, HTTP 404 to the coordinator's retrieval at 17:30 UTC; not retried. The address came from a search extract; no other address was identified in the third-pass catalogue and page checks | Park 5 candidate instrument; not located |
+| Motor Vehicle Collisions annual report, 2017 | `https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/2017MVC_AnnualReport.pdf` | Unread; HTTP 502 to the editor's fetch tool, HTTP 404 to the coordinator's retrieval at 17:38 UTC; not retried | Park 5 candidate instrument; not located |
+| Motor Vehicle Collisions annual report, 2016 | `https://www.edmonton.ca/sites/default/files/public-files/assets/RoadsTraffic/2016MVCAnnualReportsm.pdf` | Unread; HTTP 404 to the coordinator's retrieval at 17:38 UTC; not retried | Park 5 candidate instrument; not located |
+| Motor Vehicle Collisions annual report, 2015 | `https://www.edmonton.ca/sites/default/files/public-files/assets/RoadsTraffic/OTS_2015_MVC_AnnualReport.pdf` | Unread; HTTP 404 to the coordinator's retrieval at 17:38 UTC; not retried | Park 5 candidate instrument; not located |
+| Vulnerable Road User Collisions in Edmonton | `https://www.edmonton.ca/transportation/PDF/Vulnerable-Road-User-Collisions-In-Edmonton.pdf` | Unread; HTTP 502 to the editor's fetch tool; the coordinator's retrievals at 17:12 and 18:45 UTC resolved to the City's page-not-found HTML, not PDF bytes; not retried | Park 5 candidate instrument; not located |
+| Vision Zero Edmonton 2019 annual report | Meeting portal `https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=73451` (behind the browser check; not attempted); the same report published by the City's engagement site, see the third-pass table below | Archived from the engagement site; read in full (15 pages). Page 5 gives bicycle collision counts 2015 to 2019 and the data method; no fault share | Park 5 search; Street Labs context |
 | Vision Zero Edmonton 2020 annual report | `https://www.edmonton.ca/sites/default/files/public-files/assets/Vision_Zero_Annual_Report_2020.pdf` | Archived (editor archive, copy of the editor's fetch), 2,748,311 bytes, SHA-256 `8b01fc5a5d29867d00408595110a4b3b074df8ac8c51e4dcca0a482d50f49b6b`; read in full (18 pages) | Cyclist serious injury and fatality counts 2015 to 2020; programme description |
 | Vision Zero Edmonton 2021 annual report | `https://www.edmonton.ca/sites/default/files/public-files/assets/PDF/Vision_Zero_Annual_Report_2021.pdf` | Archived (editor archive, copy of the editor's fetch), 2,720,601 bytes, SHA-256 `93d91e42aed28d75e2307fe5211827a59ad658f9c752970bbc4d1790c2aac4c1`; read in full: 19 physical PDF pages (a cover, a contents page, then pages carrying printed footers 3 to 19) | Cyclist counts 2015 against 2021; Street Labs first-year counts; Safe Passing Bylaw |
 | Crash and Equity Analyses Technical Report, Safe Mobility Strategy 2021-2025 | `https://www.edmonton.ca/sites/default/files/public-files/assets/SMS_Crash-Equity-Technical-Analysis.pdf` | Archived (packet archive), SHA-256 `6ec99fdd994389d455c8fb0e18ccee1ce3ff2f6b95c36ab47efb084cd00470eb`; read in full | Risk parks (facility-type share with the City's caveat; limitations); claim 2 qualification 3 |
@@ -59,11 +69,15 @@ never published.
 
 No document read for this draft states, for any year, the share of
 reported bicycle collisions in which the cyclist was recorded at fault.
-The search extracts that said the 2016 and 2018 annual reports state a
-cyclist not-at-fault share have not been verified against any bytes, and
-the addresses they led to no longer serve the documents. Whether the
-City published such a share, for which years, and where it is now
-served, is unresolved.
+That now includes the Vision Zero annual reports for 2016 to 2021, the
+two City analyses, the catalogue tables and the pages and configurations
+listed in the third-pass table below. The search extracts that said the
+2016 and 2018 Motor Vehicle Collisions reports state a cyclist
+not-at-fault share remain unverified against any bytes, and the
+addresses they led to no longer serve the documents. Whether the City
+published such a share, for which years, and where it is now served, is
+unresolved; the brief proposes the claim for parking on that bounded
+result, not on a claim of absence.
 
 ## Exposure
 
@@ -159,6 +173,36 @@ under way with results to be shared in 2019 and that a 2019
 comprehensive report would include collision and safety information.
 Neither was found.
 
+## Third pass: prerequisite sources, 2026-10-21
+
+One bounded official-source pass by the coordinator between 18:45 and
+18:51 UTC, after the second revision, held in a third private archive
+whose `retrieval-manifest.json` records every request, outcome, byte
+length and hash. No denied address was retried and no browser check was
+bypassed. "Read" below means the editor read it; "screened" means the
+coordinator inspected it mechanically and the editor relied on the
+recorded result without reading the document.
+
+| Source | Address | Status | Used for |
+|---|---|---|---|
+| Public Spaces Bylaw page (City explainer) | `https://www.edmonton.ca/city_government/bylaws/public-spaces-bylaw` | Archived, HTTP 200, SHA-256 `ad8e08c7a2044f6c2f3d816c8e6128e27fdcc3c54cccc8d5245da44bf156a940`; read. Says Council approved the bylaw 2025-02-25 and that it continues to permit children under 16 to ride on sidewalks; links the May 19, 2026 consolidation | Route to the archived bylaw; background |
+| City bylaw index data (the endpoint the Bylaw Lookup page uses) | `https://www.edmonton.ca/open-data/10406?queryParams=$select=*` | Archived, SHA-256 `e648820e24b850815d4790e355edf8bb6a80abaa007b5bcca5e2c1af5ba4b192`; read for the 5590 and 20700 entries | Amendment checks |
+| Bylaw Lookup page | `https://www.edmonton.ca/city_government/bylaws/bylaw-lookup` | Archived, SHA-256 `6e26dd603f59ad560a218c9539c769c0be7c5f9fecdf10af4b62e48d3e087720`; screened | Amendment checks |
+| Community and Public Services Committee minutes, 2026-01-19 | `https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=PostMinutes&Id=9b2fc4da-a9fb-4d8a-85e4-b89c25f6c352&lang=English` | Archived, SHA-256 `c1aa83e0afa0bd8b4a96c292e30604f45428a053fe48a7501b89a93e2172ff16`; read for item 7.1 (report CS03123, Bylaw 21283, received for information) | Bylaw 5590 amendment check |
+| City Council agenda attachments, 2026-10-06, item 8.2 (Bylaw 21502, one-year review of Bylaw 20700) | `https://pub-edmonton.escribemeetings.com/Meeting.aspx?Agenda=Agenda&Id=e5f69000-1fd3-482a-ad11-a5b80584865e&Item=21&Tab=attachments&lang=English` | Archived, SHA-256 `12ce9892035d8863a173ca8fb0050317ec4367b6880e35eeaf6439a7c6f99a8f`; read for the item's file list, which includes "Signed Bylaw 21502 - Published October 7, 2026" | Bylaw 20700 chronology |
+| Signed Bylaw 21502 and report OCM02976 | `https://pub-edmonton.escribemeetings.com/filestream.ashx?DocumentId=309335` and `...DocumentId=309330` | HTTP 403 on one attempt each; not retried; unread | Chronology limit |
+| Alberta regulations index, subsisting 2026-09-30 (King's Printer, Gazette) | `https://kings-printer.alberta.ca/documents/gazette/2026/pdf/Regindex.pdf` | Archived, 381,472 bytes, SHA-256 `2f411d073fc8fc06bd8e484aab4e19b5831d92639dbaf4d3a3fe7da9ca79f716`; read for the AR 304/2002 entry, whose amendment list ends at 167/2025 | AR 304/2002 amendment check |
+| Open Alberta record and King's Printer product page for AR 304/2002; Gazette pages | `https://open.alberta.ca/publications/2002_304`; `https://kings-printer.alberta.ca/570.cfm?frm_isbn=9780779856923&search_by=link`; `https://kings-printer.alberta.ca/alberta_gazette.cfm?page=gazette_2026_pt2.cfm` | Archived (hashes in the manifest); screened: current to 167/2025 | Amendment check corroboration |
+| Safe Mobility engagement page listing historical annual reports | `https://engaged.edmonton.ca/safestreets` | Archived, SHA-256 `61458e7e7c89180d60d1dbc1748aa4daeb3b3c1b5ed59f71deb7ec77349e7a6b`; screened | Route to the four reports below |
+| Vision Zero Edmonton annual report 2016 (46 pages) | `https://engaged.edmonton.ca/download_file/19/486` | Archived, SHA-256 `72d278d21c001882b40dc00ddec6acbefda182593847ddedaff0a798a2d26ec0`; cyclist passages read, whole text screened for "fault" (none) | Park 5 search |
+| Vision Zero Edmonton annual report 2017 (28 pages) | `https://engaged.edmonton.ca/download_file/20/486` | Archived, SHA-256 `f23887876f843cdd70f67f080e8fb63231d731bd360e4f5c4cad3578c7319bed`; cyclist passages read, screened (none) | Park 5 search |
+| Vision Zero Edmonton annual report 2018 (40 pages) | `https://engaged.edmonton.ca/download_file/16/486` | Archived, SHA-256 `9e1a179ea457cc63640bdf797907fd90b13b761009f9cf646966280f09dbb768`; cyclist passages read, screened (none); gives cyclist injury and fatality counts for 2015 and 2018 | Park 5 search |
+| Vision Zero Edmonton annual report 2019 (15 pages) | `https://engaged.edmonton.ca/download_file/17/486` | Archived, 1,974,364 bytes, SHA-256 `0cf097437cac3b5d1ccfc1aaef4effcc444f4b2c43f0d706d6b75c80c18869e7`; read in full | Park 5 search; the 2019 row above |
+| Crash and Equity Analyses Technical Report, re-fetched | as in the collision table | Same bytes as the packet archive (SHA-256 matches); its fault discussion is by mode for fatal and serious crashes, not a bicycle denominator | Park 5 search |
+| Data catalogue queries: "collision" (14 results), "fault" (1), "vision zero" (5) | `https://api.us.socrata.com/api/catalog/v1?domains=data.edmonton.ca&search_context=data.edmonton.ca&q=<term>&limit=100` | Archived, SHA-256 `2fc1695f8823c495afddb7d5e8d6e8a10bfc220897030e2b11c8af7a78fdf052`, `f7bce8042aea9eabfa4f8d6887111b6d0dc03a82fe2ee97547e36e9cf9e87633`, `9eb768c824bb7c9bfc37f5c6dda9cab89cdae4d965a7e9bc204053b7a75d9c62`; screened: no dataset's column metadata classifies bicycle involvement and fault by party together | Park 5 search |
+| Traffic safety and automated enforcement pages; 2025 Automated Traffic Enforcement report (121 pages) | `https://www.edmonton.ca/transportation/traffic-safety`; `https://www.edmonton.ca/transportation/traffic_safety/automated-enforcement`; `https://www.edmonton.ca/sites/default/files/public-files/documents/2025-automated-traffic-enforcement-report.pdf?cb=1777649466` | Archived (SHA-256 `7baf85aad2d3a6ba5e0f4cd7dcbf112ca652f94cddc3652513aaacbca29a172b`, `a701368e02d57075e2ea4531e47f4574ecec9b35aeb28318c0d3f176df99ae7b`, `216bb59fd9c12a48193a80cbce349c5e258fda41cd181ebdc912ee99a3bfa0e4`); screened: no "fault" match in the report; unread by the editor | Park 5 search |
+| Safe Streets map and its published app and web map configurations | `https://gis.edmonton.ca/SafeStreetsMap`; `https://gis.edmonton.ca/portal/sharing/rest/content/items/9b34e2f2a4e441e283fab3ff5c2dadc4/data?f=json`; `.../items/d091650477df44e8a2777f4a9567c1b2/data?f=json` | Archived (SHA-256 `25773b71ec8587182cba3aa8d5bdc86342309f4009be14da2a5349acaec9099d`, `f2e7b194fa40ee4a155efe9160972c55d2168680782769ef081baf5085264620`, `aa9ccca58356b22010a0b69d9dd2358ea4145a66d0d881c3e7938e31ff1006f5`); screened: 13 operational layers, no fault-attribution popup field; the underlying services and earlier versions were not inspected | Park 5 search |
+| Automated Traffic Enforcement dashboard (data portal story) | `https://data.edmonton.ca/stories/s/Automated-Traffic-Enforcement/8afu-5d24/` | Redirected to a login page; only that page was archived (SHA-256 `4d32963a392bc635fb86a7d862b0c7d75e7a2252e3b9895c42de6e354c53dfea`); no login; content unverified | Park 5 search limit |
 ## Archived files not used
 
 Four of the ten files in the packet archive do not bear on this question
@@ -167,10 +211,15 @@ and are not cited: `waste-collection.html`, `access-and-privacy.html`,
 
 ## Retrieval limits observed on 2026-10-21
 
-The editor's fetch tool could not reach `web.archive.org`, and most
-`www.edmonton.ca` document and page addresses answered it HTTP 502 while
-a few downloaded. The coordinator attempted only the addresses whose
-manifest rows say so. It reached the Traffic Bylaw, the Downtown Bike
+This paragraph records the first two passes as they stood before the
+third. The third pass's own outcomes are in its table above; in
+particular, the 2019 Vision Zero report that the meeting portal kept
+behind its browser check was later retrieved from the City's engagement
+site and read in full. The editor's fetch tool could not reach
+`web.archive.org`, and most `www.edmonton.ca` document and page
+addresses answered it HTTP 502 while a few downloaded. The coordinator
+attempted only the addresses whose manifest rows say so. It reached the
+Traffic Bylaw, the Downtown Bike
 Network interim report, the Street Labs page, all 24 index PDFs and the
 four data portal requests; the four historical collision report
 addresses answered HTTP 404; the Vulnerable Road User address resolved
@@ -181,7 +230,10 @@ copy, the small-vehicle booklet) and the meeting portal were not
 attempted. No refused or missing address was retried. None of this shows
 that any document does not exist.
 
-Still unresolved after this pass: the text of Bylaw 20700 in force on
-2026-08-27; any City publication stating fault by party for bicycle
-collisions, for any year; the 2019 Vision Zero annual report; and the
-2019 Downtown Bike Network comprehensive report.
+Still unresolved after the third pass: whether any amendment to Bylaw
+20700 took effect between 2026-05-19 and 2026-08-27 (the brief states
+this limit and has the reviewer check the index); any City publication
+stating fault by party for bicycle collisions, for any year, which the
+bounded search did not locate and the brief does not declare absent; a
+Vision Zero or Safe Mobility annual report for 2015 or 2022 to 2025; and
+the 2019 Downtown Bike Network comprehensive report.
