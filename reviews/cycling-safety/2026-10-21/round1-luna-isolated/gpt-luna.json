@@ -1,0 +1,125 @@
+{
+  "reviewer": {
+    "provider": "openai",
+    "model_self_reported": "OpenAI GPT-6",
+    "runner_model": "gpt-6-luna",
+    "runner_seat": "GPT-6 Luna",
+    "runner_effort": "high"
+  },
+  "story": "cycling-safety",
+  "round": 1,
+  "claims": [
+    {
+      "id": "cyclists-have-right-to-the-road",
+      "proposition_evaluated": "Under the provincial law and City of Edmonton bylaws in force on 2026-08-27, a person riding a bicycle may ride on the roadway of a public road in Edmonton, whether or not it has a bike lane, with the rights and duties the rules of the road give a person driving a motor vehicle, subject to prohibitions on particular highways or classes made by sign, bylaw or regulation.",
+      "interpretation_notes": "Supported under the brief’s primary reading. Alberta Regulation 304/2002, s. 75 gives a person operating a cycle on a highway the rights and duties of a motor-vehicle driver under specified parts of the Act and regulation. No general rule requiring cyclists to leave the roadway for a bike lane or pathway wherever one exists was identified. Particular-road restrictions remain qualifications; the March 2020 traffic listing and available designation records do not establish a complete inventory for 2026-08-27. Under the required strict alternative—every right a driver has must also belong to a cyclist—the texts do not establish equivalence: cyclists have cycle-specific position and operating rules, and bicycles are excluded from the Act’s definition of motor vehicle. The claim that a rider would ride “right down the middle” is a prediction, not a legal consequence established here; s. 77(2) generally requires a cycle to be operated as near as practicable to the right curb or edge, except when making a left turn. For the alternative as-of date 2026-10-21, the City’s later consolidation identifies Bylaw 21502, passed after the primary as-of date; it does not alter the primary finding about the law on 2026-08-27.",
+      "verdict": "Supported",
+      "confidence": "Moderate",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "Section 75 says a person operating a cycle on a highway has the rights and duties of a motor-vehicle driver under specified parts of the Act and regulation. Section 77(2) supplies a cycle-specific roadway-position rule. The regulation was consolidated 2025-08-08; the King's Printer amendment index checked in the brief lists no later amendment through 2026-09-30.",
+          "source_title": "Use of Highway and Rules of the Road Regulation, Alta Reg 304/2002",
+          "source_url": "https://kings-printer.alberta.ca/documents/Regs/2002_304.pdf",
+          "source_publisher": "Alberta King's Printer",
+          "source_date": "Consolidated to 2025-08-08; amendment index through 2026-09-30",
+          "source_type": "legal-audited",
+          "establishes": "The rule granting cycle operators rights and duties on highways and the cycle-specific position rule; no general bike-lane-use requirement appears in the cited provisions.",
+          "quote": "A person who is operating a cycle on a highway has all the rights and is subject to all the duties of a person driving a motor vehicle under Part 1 and this Part and Division 2 of Part 5 of the Act.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The Act defines roadway as the part of a highway intended for vehicular traffic, and excludes a bicycle from the definition of motor vehicle. Its current-to date, 2026-07-02, precedes the 2026-08-27 as-of date.",
+          "source_title": "Traffic Safety Act, RSA 2000, c T-6",
+          "source_url": "https://kings-printer.alberta.ca/documents/Acts/T06.pdf",
+          "source_publisher": "Alberta King's Printer",
+          "source_date": "Consolidated to 2026-07-02",
+          "source_type": "legal-audited",
+          "establishes": "The relevant roadway and motor-vehicle definitions; the latter is a distinction for the strict alternative, not a bar to roadway cycling.",
+          "quote": "“roadway” means that part of a highway intended for use by vehicular traffic; “motor vehicle” ... does not include a bicycle",
+          "strength": "strong"
+        },
+        {
+          "finding": "Traffic Bylaw 5590, consolidated 2025-05-12, contains s. 84 on restricted highways and ss. 107(cc)–(dd), authorizing designation of highway portions where bicycle use is prohibited or bicycle-only. Its bicycle provisions in ss. 49–52 are marked deleted under Bylaw 20700, s. 96(1)(b).",
+          "source_title": "Traffic Bylaw 5590",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/documents/Bylaws/C5590.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "Consolidated 2025-05-12",
+          "source_type": "legal-audited",
+          "establishes": "The City has authority for particular-highway restrictions, but the cited provisions do not create a general requirement to use a bike lane or leave the roadway.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City’s May 19, 2026 consolidation of Bylaw 20700, Part XIV, s. 78, prohibits bicycle riding on sidewalks, with exceptions for shared pathways and persons aged 16 and under. The City index and later consolidation identify Bylaw 21502 as a later amendment after the claim’s as-of date; no intervening amendment before 2026-08-27 was identified in the checked record.",
+          "source_title": "Public Spaces Bylaw 20700",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/C20700.pdf?cb=1779154039",
+          "source_publisher": "City of Edmonton",
+          "source_date": "Consolidated 2026-05-19; later Bylaw 21502 passed 2026-10-06",
+          "source_type": "legal-audited",
+          "establishes": "The sidewalk rule does not require use of a bike lane or require a cyclist to leave the roadway when a lane exists.",
+          "quote": "A person must not ride a bicycle, e-bicycle, e-scooter, on a sidewalk.",
+          "strength": "strong"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "The Regulation generally gives cycle operators driver rights and duties, but imposes a specific roadway-position rule: operate as near as practicable to the right curb or edge, subject to the left-turn exception. This challenges any implication that a cyclist may ordinarily take the middle of a lane without regard to position rules.",
+          "source_title": "Use of Highway and Rules of the Road Regulation, Alta Reg 304/2002",
+          "source_url": "https://kings-printer.alberta.ca/documents/Regs/2002_304.pdf",
+          "source_publisher": "Alberta King's Printer",
+          "source_date": "Consolidated to 2025-08-08",
+          "source_type": "legal-audited",
+          "establishes": "The right to use a roadway is subject to cycle-specific duties and does not establish that riding down the middle is generally permitted.",
+          "quote": "shall operate the cycle as near as practicable to the right curb or edge of the roadway",
+          "strength": "strong"
+        },
+        {
+          "finding": "Bylaw 20700, s. 78 restricts bicycle riding on sidewalks, subject to its exceptions. Bylaw 5590, s. 84 and s. 107 permit particular-highway restrictions and designations. These are qualifications, not a general bike-lane rule.",
+          "source_title": "Public Spaces Bylaw 20700 and Traffic Bylaw 5590",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/C20700.pdf?cb=1779154039",
+          "source_publisher": "City of Edmonton",
+          "source_date": "Public Spaces Bylaw consolidated 2026-05-19; Traffic Bylaw consolidated 2025-05-12",
+          "source_type": "legal-audited",
+          "establishes": "Cyclists’ roadway access is not unconditional on every highway, and most adults cannot substitute an ordinary sidewalk for roadway riding.",
+          "strength": "strong"
+        },
+        {
+          "finding": "The City’s Restricted Highways listing is dated March 2020 and lists designated shared pathways and other restricted highways. It is not a current complete inventory of signs or designations as of 2026-08-27.",
+          "source_title": "Traffic Listings — Restricted Highways",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/Traffic_Listing_Restricted_Highways.pdf?cb=1776273651",
+          "source_publisher": "City of Edmonton",
+          "source_date": "March 2020",
+          "source_type": "legal-audited",
+          "establishes": "Some particular highways or portions have designations affecting bicycle use; the listing’s date and scope do not prove a complete current list.",
+          "quote": "Pursuant to Traffic Bylaw 5590, the following are designated as restricted highways.",
+          "strength": "moderate"
+        }
+      ],
+      "limitations": [
+        "The City’s Bike Routes webpage, read in the carried archive, gives inconsistent sidewalk guidance and still cites deleted Traffic Bylaw 5590, s. 50; the bylaws control. Its archived URL is https://www.edmonton.ca/transportation/cycling_walking/bike-routes-how-to.",
+        "The March 2020 Restricted Highways listing is not a complete inventory of road signs or later designations. The finding does not claim every road on which bicycle use is restricted has been identified.",
+        "The May 19, 2026 Public Spaces Bylaw consolidation predates the as-of date. The checked City index/later consolidation identified Bylaw 21502 as a post-as-of amendment; no amendment in force between May 19 and August 27 was identified in the available record.",
+        "The City’s page states passing-distance rules and cites a Charter Bylaw effective 2021-09-30, but the Charter Bylaw itself was not separately retrieved for this review."
+      ],
+      "unknowns": [
+        "A complete inventory of bicycle-prohibited highways and signs in force on 2026-08-27.",
+        "Whether every holder would accept the normalized, scoped meaning of “same legal right” rather than the strict reading that cyclists possess every right drivers possess.",
+        "What a cyclist would do after a bike lane is removed; the legal texts do not establish that behaviour."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A dated, complete inventory of bicycle restrictions and designations on Edmonton highways as of 2026-08-27, including posted signs and designations made under Traffic Bylaw 5590.",
+          "likely_holder": "City of Edmonton Transportation and Infrastructure; Office of the City Clerk",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [],
+      "what_would_change_my_verdict": [
+        "A provincial or City rule in force on 2026-08-27 that generally required cyclists to use an available bike lane, path or sidewalk would move the finding to Partially supported.",
+        "Evidence that the essential bylaws could not be established as in force on 2026-08-27 would make the claim Not established under the brief’s ladder.",
+        "The strict alternative would require reframing the proposition around driver-equivalent rights generally; the current text does not support an unqualified claim of identical rights and duties."
+      ],
+      "suggested_one_line": "In Edmonton, cyclists generally may ride on the roadway whether or not there is a bike lane, subject to ordinary road rules and specific restrictions; the law does not generally require them to use a bike lane where one exists."
+    }
+  ]
+}

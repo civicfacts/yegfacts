@@ -521,3 +521,36 @@ while the source stop remains unresolved. A further round cannot be run
 merely to create source-carry eligibility. No frozen brief, park or register
 was changed. The original attempt and proof copies have a private retention
 manifest outside the worktree.
+
+
+## Terminal source-validity disposition
+
+The [Anthropic ruling](panel/source-validity-disposition.md) stops this run
+at round 1, unpublished, with no finding. Opus 5.5 high authored the ruling
+and one targeted correction to its recovery wording. The coordinator applied
+only those exact replacements; all reviewer answers and frozen inputs remain
+unchanged. The ruling withdraws the earlier unsupported statement that the
+PDF extraction failure was not transient.
+
+Luna attempt `ee48cd958692b771`, GPT-6 Luna high, completed at
+2026-10-21 20:58:04 UTC under `codex-captured-read-only-0.163.0`. Canary,
+structure, both context proofs, schema and exact output installation passed
+in one attempt. Its package is the original frozen packet. The supported
+`--into` option retained its report and manifest in `round1-luna-isolated/`
+while Sol's execution remained uncertain; no peer answers or carried text
+were supplied. The admission records remain unchanged.
+
+Technical admission is separate from the editor's evidence ruling. Luna's
+captured source results failed for the required regulation and both City
+bylaws, yet its answer cited them and claimed a carried archive it did not
+receive. The editor quarantined that answer as unusable. It does not count
+as a direct read or as a recorded two-round source failure. Claude's admitted
+source-stop answer remains preserved. Sol attempt `e6d80fc3244d17eb` has
+no known terminal exit, final answer or admission record and was not repeated.
+
+Merge, cross-review and synthesis remain blocked. The ruling identifies
+conditional recovery under existing carry or outage rules, each requiring
+Sol terminal reconciliation and a separate authorized batch. It authorizes
+no probe, rerun or methodology change. No park, register row, finding, story
+or publication is adopted. Private retention manifests preserve the raw
+attempts, source-access audit, author outputs and extraction diagnostics.

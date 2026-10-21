@@ -36,9 +36,18 @@ stages:
     check1_package_sha256: "356bb4550375af5c964e763432e7b3f35828c04dbf5d1012c590b3a45d36da36"
     reports: ["framing/check-1.md", "framing/check-2.md", "framing/check-3.md"]
     note: "The third ordinary report is admitted and says FRAME OK, with all earlier findings resolved and no new finding or defect. The exact submitted brief is frozen under the framing protocol. Its draft status text records the authoring state before confirmation; its bytes were not changed after review. One panel claim and seven claim parks remain the editor proposal; no park is adopted or register row changed. No full panel, factual verdict, story or publication occurred. This approved batch ends at framing."
-  round1: {status: pending, note: "Claude is admitted but records an essential-source failure. Anthropic permits remaining identical blind packets to complete this round; merge, cross-review and synthesis are blocked pending source-stop resolution. No completed finding."}
-  merge: {status: pending}
-  round2: {status: pending}
-  synthesis: {status: pending}
+  round1:
+    status: stopped
+    outcome: stopped_unpublished_no_finding
+    disposition: panel/source-validity-disposition.md
+    disposition_author: claude-opus-5-5
+    disposition_effort: high
+    claude: {attempt: "558562cc7b9607fe", execution_admitted: true, evidence_status: source_stop}
+    luna: {attempt: "ee48cd958692b771", execution_admitted: true, evidence_status: quarantined_unusable, report: round1-luna-isolated/gpt-luna.json}
+    sol: {attempt: "e6d80fc3244d17eb", execution_admitted: false, execution_status: uncertain, terminal_exit_known: false}
+    note: "Anthropic ruled the run complete as stopped, unpublished, with no finding. Raw reports and frozen brief are unchanged. No duplicate Sol launch. Any recovery needs terminal reconciliation and a separate authorized batch under existing rules; no eligibility-manufacturing rounds."
+  merge: {status: blocked, note: "Source-validity disposition prohibits this stage."}
+  round2: {status: blocked, note: "Source-validity disposition prohibits this stage."}
+  synthesis: {status: blocked, note: "Source-validity disposition prohibits this stage."}
   drafting: {status: pending}
   human_gate: {status: pending}
