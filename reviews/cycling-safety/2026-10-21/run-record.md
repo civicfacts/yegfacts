@@ -5,16 +5,17 @@ cyclists actually ride?" Register id `cycling-safety`, source
 `yegscoop-2026-08-26`, 8 claims, 10 accounts, 4 for and 6 against.
 Methodology v1.43.
 
-Status: **DRAFT, REVISED AFTER FRAMING CHECK 1 ON 2026-10-21. NOT
-FROZEN.** Framing check 1 returned REVISE (`framing/check-1.md`); the
-editor's answer to each finding is `framing/author-response-1.md`. The
-brief now proposes one claim for the panel and seven claims for parking
-under six parks; every one of those is a proposal. No panel has run,
-there is no finding, and no published story or answer. No claim row or
-question row on the register has changed. The sections from "What was
-done, in order" to "What was not done, and why" record the draft as it
-stood before check 1 and are left as written; where they count panel
-claims or parks, the next section supersedes them.
+Status: **DRAFT, REVISED AFTER FRAMING CHECK 2 ON 2026-10-21. NOT
+FROZEN.** Framing check 2 returned REVISE (`framing/check-2.md`) with
+every check 1 finding resolved and two new findings; the editor's answer
+is `framing/author-response-2.md`. The brief still proposes one claim for
+the panel and seven claims for parking under six parks; every one of
+those is a proposal. No panel has run, there is no finding, and no
+published story or answer. No claim row or question row on the register
+has changed. The sections from "What was done, in order" to "What was
+not done, and why" record the draft as it stood before check 1 and are
+left as written; where they count panel claims or parks, the two framing
+sections that follow supersede them.
 
 ## Framing check 1 and the revision that answers it
 
@@ -39,6 +40,20 @@ rode unlawfully. If the brief freezes, the register changes proposed
 below would describe one panel claim and six parks covering seven
 claims, the Street Labs claim taking the same park fields.
 
+## Framing check 2 and the revision that answers it
+
+Check 2 (GPT-6 Sol at high, attempt `6539ad15d0c1b88d`, verdict REVISE)
+answered the revised brief at the check 2 pins below and marked every
+check 1 finding resolved. The author response was written by Stew as
+Claude Opus 5.5 (`claude-opus-5-5`), effort high, in the same editorial
+conversation, with read and search tools only; it retrieved no source.
+The editor accepted both new findings. Claim 1's qualification 2 and E3
+now ask for a dated, bounded account of particular-road restrictions and
+name the City's Restricted Highways listing, described by the reviewer
+as dated March 2020 and not fetched, as a candidate source. Claim 1's
+stakes now separate the legal entitlement from the holder's prediction
+about lane position. The claim and park proposals are unchanged. One
+ordinary framing report remains.
 ## What was done, in order
 
 1. **Read the register, the capture and the intake run.** The question
@@ -417,3 +432,16 @@ The earlier submission pins remain the inputs to check 1.
 
 The second report and its admission are recorded in `state.yaml`; these
 pins do not claim that a report has run or that the brief is frozen.
+
+## Coordinator pins for framing check 3
+
+Mechanical record after the second Opus 5.5 response and verified application.
+Both earlier reports and responses remain in the confirmation package.
+
+- Revised brief SHA-256: `80d4b7bb599cb9ca164ffbe6ed7989f8c5ca5bd4d0b0106d5cf8c848e5822dae`.
+- Intake SHA-256: `dedbbffa586feb42fd2d58b8b59316db404b5227257afc635f6dc41340d157f9`.
+- Author response SHA-256: `5df33108d2a6275af3ee69493288f74f395bd42332ff7117beb1ae9cb6b27645`.
+- Check 3 package SHA-256: `80e029d90a6e91d705e65b6a9254f17c37116f011ba804399a4a8ecaa650fc20`.
+
+This is the third ordinary confirmation. Admission and the terminal outcome
+are recorded separately in `state.yaml`. These pins do not freeze the brief.

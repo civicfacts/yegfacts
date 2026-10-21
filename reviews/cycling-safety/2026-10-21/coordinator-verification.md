@@ -2,8 +2,8 @@
 
 OpenAI coordination and factual preflight, 2026-10-21. This is not a
 formal framing report or an approval to freeze, run the panel or publish.
-The Anthropic author records a revised draft ready for framing check 2 in
-[the response to check 1](framing/author-response-1.md). The coordinator has verified the
+The Anthropic author records a revised draft ready for the third ordinary confirmation in
+[the response to check 2](framing/author-response-2.md). The coordinator has verified the
 source and consistency corrections described below; the framing reviewer
 may reject any proposed disposition.
 
@@ -132,6 +132,20 @@ under GPT-6 Sol high, profile `codex-captured-read-only-0.163.0`.
 
 Every earlier finding is resolved. Two new framing findings ask for a bounded
 particular-road restriction search and stakes that do not infer future
-cycling behaviour from legal entitlement. Opus 5.5 is handling their written
+cycling behaviour from legal entitlement. Opus 5.5 completed their written
 resolution before the third ordinary confirmation. No defect exception or
 additional ordinary report is invoked here.
+
+## Verified author response to check 2
+
+Opus 5.5 high, runtime `claude-opus-5-5`, accepted both new findings.
+Seven replacements, 6,122 characters, and the complete author response were
+applied after exact base-hash, line-range and overlap checks. Only missing
+terminal newlines were normalized. This invocation completed in ten turns
+without an output-limit retry. Intake and the source note are unchanged.
+
+The restriction listing identified by check 2 is a candidate source only.
+Neither coordinator nor author fetched or read it. The brief preserves that
+limit and separates legal entitlement from the mid-lane behavioural prediction.
+The third package preserves both reports, both responses and the earlier
+reasoned disagreement. No claim park is adopted or register row changed.

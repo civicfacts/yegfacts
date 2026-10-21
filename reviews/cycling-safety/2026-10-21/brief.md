@@ -1,13 +1,18 @@
 # Review brief: Do bike lanes make cycling safer in Edmonton, and where do cyclists actually ride?
 
-Status: **DRAFT, 2026-10-21, REVISED AFTER FRAMING CHECK 1. NOT FROZEN.
-NO PANEL. NO FINDING.** This is the editor's draft. The first framing
-report (`framing/check-1.md`, REVISE) asked for changes; the editor's
-answer to each finding is `framing/author-response-1.md`. In this
-revision the Street Labs claim, both its traffic and its
-pedestrian-safety assertions, is proposed for parking (park 6), the risk
-park covers shared paths as well as bike lanes, and claim 1's elements
-and stakes are narrowed. Earlier, after a second and a third source pass,
+Status: **DRAFT, 2026-10-21, REVISED AFTER FRAMING CHECKS 1 AND 2. NOT
+FROZEN. NO PANEL. NO FINDING.** This is the editor's draft. The second
+framing report (`framing/check-2.md`, REVISE) marked every finding of the
+first resolved and raised two new ones; the editor's answer is
+`framing/author-response-2.md`. In this revision claim 1 reports
+particular-road restrictions as a dated, bounded account rather than a
+complete list, and its stakes separate the legal entitlement from the
+holder's prediction about lane position. History: the first report
+(`framing/check-1.md`, REVISE) was answered in
+`framing/author-response-1.md`, which proposed the Street Labs claim,
+both its traffic and its pedestrian-safety assertions, for parking (park
+6), extended the risk park to shared paths and narrowed claim 1's
+elements and stakes. Earlier, after a second and a third source pass,
 the Public Spaces Bylaw was archived and read in the City's consolidation
 of 2026-05-19 with its chronology limit stated, and the fault claim was
 proposed for parking on a bounded search. Nothing in this brief is
@@ -596,10 +601,13 @@ sidewalk, wherever one exists, quoting any such provision. A rule that
 applies only on specified roads or road classes is not an E2 rule. Then
 E3: every provision that prohibits or restricts bicycles on a specified
 highway, portion of highway or class of highway, listed with its source,
-including section 84 of Bylaw 5590 and any designation under its section
-107(cc) the reviewer can identify, saying where the existence of a
-designation could not be checked. E3 provisions are qualifications,
-whatever the breadth of the class.
+including section 84 of Bylaw 5590. For designations of particular roads
+under section 84 or 107(cc), the reviewer searches the City's dated
+traffic listings and any identifiable designation records, names each
+source and its date, and states where a complete inventory as of
+2026-08-27 could not be established; it does not claim to have listed
+every prohibited road. E3 provisions are qualifications, whatever the
+breadth of the class.
 
 **Verdict ladder.**
 
@@ -635,8 +643,12 @@ reader knows whether the law changed between the comment and the check.
    file), quoted, in plain words, as the answer to "right down the middle
    of your lane": what the rules permit and require, not what cyclists
    do.
-2. Every highway or class of highway on which bicycles are prohibited by
-   bylaw, regulation or sign, as the texts list them.
+2. Prohibitions on road classes in the statute, the regulation and the
+   bylaws, quoted. Particular-road restrictions found in the City's dated
+   traffic listings and any identifiable designation records, each with
+   its source and date. If a complete inventory of signs and designations
+   as of 2026-08-27 cannot be established, that limit is stated; the
+   finding does not claim to list every prohibited road.
 3. The rule on sidewalks for bicycles, e-bicycles and e-scooters as
    Bylaw 20700 section 78 states it, quoted, with its exception for
    shared pathways and persons aged 16 years and under, and what the
@@ -983,22 +995,27 @@ for the claim proposed for the panel; for the parked claims the record
 cannot reach both directions, and no verdict on another claim settles
 them.
 
-**The same legal right to the road.** Supported would establish that the
-law puts a cyclist on the roadway on a driver's terms whether or not a
-lane exists; a commenter who wants cyclists on the sidewalk, or who
-expects removing a lane to take cyclists off the road, would learn that
-the law does the opposite, and the holder's warning follows from the
-rules as a matter of position, with the position rules reported beside
-it. Partially supported would establish the right with a condition the
-holder denies: wherever a lane or path is provided the cyclist must use
-it, so "with or without a bike lane" fails where it matters most.
-Contradicted would establish that the claimed driver-equivalent roadway
-entitlement is absent; the finding states separately what roadway riding
-and lane position the texts permit, and this verdict alone does not
-decide whether the rider in [70] rode unlawfully. Not established would
-mean an essential text could not be read. Under the strict reading of
-"the same", reported beside the verdict, a difference the texts make
-between drivers and cyclists is weighed, and the finding names it.
+**The same legal right to the road.** Supported would tell the holder
+that the texts grant a general right to use an ordinary roadway with the
+rights and duties they extend to a driver, even where a bike lane exists.
+It would tell an opponent who expects cyclists to be required into a
+lane or onto a sidewalk that there is no such general requirement. It
+would not establish that cyclists will ride in the middle of a lane after
+a lane is removed, or that the position rules permit that on every road;
+those rules are reported separately under qualification 1. Partially
+supported would tell the holder that the asserted "with or without a
+bike lane" right has a general condition requiring use of a lane, path
+or sidewalk where provided; it would tell an opponent that this
+condition exists while roadway use remains lawful where it does not
+apply. Contradicted would tell the holder that the claimed
+driver-equivalent roadway entitlement is absent; it would tell an
+opponent that this legal objection succeeds, while the finding states
+separately what roadway riding remains permitted and does not decide
+whether the rider in [70] rode unlawfully. Not established would leave
+both sides without an answer because an essential text or its as-of-date
+status could not be determined. Specified-road exceptions, and the
+differences weighed under the strict reading of "the same", are reported
+beside the primary verdict.
 
 **Ninety percent the cyclist's fault.** No stakes are stated for this
 run: the claim is proposed for parking (park 5) and no verdict is
@@ -1111,6 +1128,14 @@ evaluation result.
     **Vision Zero annual reports for 2020 and 2021**, at the addresses in
     `source-note.md`. Context for park 6 only; the panel does not grade
     the Street Labs claim in this run.
+11. **Traffic Listings: Restricted Highways**, City of Edmonton, at
+    `https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/Traffic_Listing_Restricted_Highways.pdf?cb=1776273651`.
+    Identified by the second framing report, which describes it as dated
+    March 2020; not fetched, read or archived by the editor or the
+    coordinator. A candidate source, with any other dated listing or
+    designation record the reviewer can identify, for particular-road
+    restrictions under E3 and qualification 2. It is not a complete
+    inventory of signs on 2026-08-27; the reviewer reports its date.
 
 Quote operative provisions from the statute, the regulation and the
 bylaws and name the section; quote figures from the City's reports and
