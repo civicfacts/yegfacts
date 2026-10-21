@@ -87,6 +87,22 @@ dashboard redirected to login; their contents remain unread. The brief
 states these limits. No refused target was bypassed or retried.
 
 The prior source prerequisites are disposed of by the author with these
-limits. Independent framing remains the next gate. No framing allowance
-has yet been consumed, no claim park is adopted, no register row changed,
-and no finding or story was produced.
+limits. The first independent framing report is admitted and says REVISE. One of
+the ordinary three reports is consumed. No claim park is adopted, no
+register row changed, and no finding or story was produced.
+
+## First framing report
+
+GPT-6 Sol at high returned REVISE in attempt `85fdedc5754594d4`, profile
+`codex-captured-read-only-0.163.0`. The canary and research checks passed,
+including context proof against the production upstream. The package hash
+matches the pinned five-input package, and the installed report is
+byte-identical to the retained final response. The public-safe attempt
+record is beside [the report](framing/check-1.md).
+
+Every objection is labelled framing; there are no defect findings. The
+reviewer challenges the Street Labs proposition's ability to answer the
+pedestrian-safety claim, its traffic-effect disposition and question scope,
+and asks for clearer legal classification and stakes. Anthropic Opus 5.5
+is handling the author response under D-0041. This coordinator record does
+not accept or reject any editorial objection.
