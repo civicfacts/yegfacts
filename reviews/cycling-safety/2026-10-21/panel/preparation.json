@@ -1,0 +1,40 @@
+{
+  "stage": "blind round 1",
+  "scope_claim_ids": [
+    "cyclists-have-right-to-the-road"
+  ],
+  "brief_sha256": "80d4b7bb599cb9ca164ffbe6ed7989f8c5ca5bd4d0b0106d5cf8c848e5822dae",
+  "package_sha256": "80c31cd810b4690b99610f4e60b0782b2d18c61058ec2a91c97300f32f77b364",
+  "package_bytes": 85885,
+  "all_seat_packages_identical": true,
+  "inputs": {
+    "reviews/cycling-safety/2026-10-21/brief.md": "80d4b7bb599cb9ca164ffbe6ed7989f8c5ca5bd4d0b0106d5cf8c848e5822dae",
+    "prompts/reviewer.md": "77a1ba5a13717309451da2659fb9f49bbd0e87a7a6784e385eff7b535492d701",
+    "prompts/review-schema.json": "6c844e675a17c8ebdacc57a950a27bcba0ab612c7a28d57a34d80cdabac23661"
+  },
+  "carried_sources": false,
+  "seats": [
+    {
+      "slot": "claude",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5",
+      "effort": "high"
+    },
+    {
+      "slot": "gpt",
+      "provider": "openai",
+      "model": "gpt-6-sol",
+      "effort": "high"
+    },
+    {
+      "slot": "gpt-luna",
+      "provider": "openai",
+      "model": "gpt-6-luna",
+      "effort": "high"
+    }
+  ],
+  "editor_disposition": "panel/editor-disposition.md",
+  "editor_disposition_sha256": "689ff88b2fba5bbb817078acc6806ae1cb4b3bc17408f0d5c48109ee33847834",
+  "independence_limit": "Three seats from two vendors. The two OpenAI seats are not independent confirmations.",
+  "validation_rule": "Each result must pass per-attempt admission and schema checks; essential-source or material framing failures stop the run."
+}
