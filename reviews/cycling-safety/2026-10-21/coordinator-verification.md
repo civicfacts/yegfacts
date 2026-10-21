@@ -87,8 +87,8 @@ dashboard redirected to login; their contents remain unread. The brief
 states these limits. No refused target was bypassed or retried.
 
 The prior source prerequisites are disposed of by the author with these
-limits. The first independent framing report is admitted and says REVISE. One of
-the ordinary three reports is consumed. No claim park is adopted, no
+limits. The first independent framing report is admitted and says REVISE. Two of
+the ordinary three reports are consumed. No claim park is adopted, no
 register row changed, and no finding or story was produced.
 
 ## First framing report
@@ -122,3 +122,16 @@ checks. Only missing terminal newlines were normalized. The capture and
 source checks still pass; the original submitted draft and report remain
 preserved. The second package includes the complete first report and author
 response, with their disagreement intact.
+
+## Second framing report
+
+Check 2, attempt `6539ad15d0c1b88d`, is admitted and says REVISE. Its pinned
+package and every submitted input match; the installed report is identical
+to the retained response. Canary, structure and both context proofs pass
+under GPT-6 Sol high, profile `codex-captured-read-only-0.163.0`.
+
+Every earlier finding is resolved. Two new framing findings ask for a bounded
+particular-road restriction search and stakes that do not infer future
+cycling behaviour from legal entitlement. Opus 5.5 is handling their written
+resolution before the third ordinary confirmation. No defect exception or
+additional ordinary report is invoked here.

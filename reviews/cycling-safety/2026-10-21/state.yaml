@@ -5,9 +5,14 @@ stage: framing
 stages:
   framing:
     status: pending
-    formal_reports: 1
+    formal_reports: 2
     last_verdict: "REVISE"
-    report_attempts: ["85fdedc5754594d4"]
+    report_attempts: ["85fdedc5754594d4", "6539ad15d0c1b88d"]
+    check2_report_sha256: "8e24f832a48abd916397ee4135b573ad3e7a34c6540bd37990a7f1bcd33d1945"
+    check2_admitted: true
+    check2_model: "gpt-6-sol"
+    check2_effort: high
+    check2_profile: "codex-captured-read-only-0.163.0"
     check1_report_sha256: "609b1ec19ce28b6fba72455aa1be706381fdb80c757730561c86ea44fe3774d7"
     check1_model: "gpt-6-sol"
     check1_effort: high
@@ -20,8 +25,8 @@ stages:
     check2_package_sha256: "aabd181a7e251a81d2355b50380375bdc50bc906c0cf70d24ac8ab3ac22c2064"
     intake_sha256: "dedbbffa586feb42fd2d58b8b59316db404b5227257afc635f6dc41340d157f9"
     check1_package_sha256: "356bb4550375af5c964e763432e7b3f35828c04dbf5d1012c590b3a45d36da36"
-    reports: ["framing/check-1.md"]
-    note: "First admitted report is REVISE. Opus 5.5 author response applied; second package prepared. One panel claim and seven parked claims remain proposals. No freeze, adopted park, panel or finding."
+    reports: ["framing/check-1.md", "framing/check-2.md"]
+    note: "Two admitted reports are REVISE. Check 2 resolves every earlier finding and raises two new framing findings. Opus author disposition pending before the third ordinary confirmation. No freeze, adopted park, panel or finding."
   round1: {status: pending}
   merge: {status: pending}
   round2: {status: pending}
