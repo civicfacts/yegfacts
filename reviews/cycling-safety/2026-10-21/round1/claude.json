@@ -1,0 +1,132 @@
+{
+  "reviewer": {
+    "provider": "anthropic",
+    "model_self_reported": "claude-opus-5-5",
+    "runner_model": "claude-opus-5-5",
+    "runner_seat": "Claude Opus 5.5",
+    "runner_effort": "high"
+  },
+  "story": "cycling-safety",
+  "round": 1,
+  "claims": [
+    {
+      "id": "cyclists-have-right-to-the-road",
+      "proposition_evaluated": "Under the provincial law and the City of Edmonton bylaws in force on 2026-08-27, a person riding a bicycle may ride on the roadway of a public road in Edmonton, whether or not the road has a bike lane, with the rights and duties the rules of the road give a person driving a motor vehicle. The only exceptions are prohibitions on particular highways or classes of highway made by sign, bylaw or regulation.",
+      "interpretation_notes": "VERDICT BASIS: I applied the brief's Not established condition first, and it is met. Two of the four essential texts are Traffic Bylaw 5590 (consolidated 2025-05-12) and Public Spaces Bylaw 20700 (consolidated 2026-05-19). I fetched both official PDFs, but my retrieval tool returned only compressed binary and could not extract the text. edmonton.ca HTML pages, including the bylaw index and the Bike Routes page, returned HTTP 502 on 2026-10-21. I therefore could not read Bylaw 5590's Parts III to VIII myself. For Bylaw 20700, I could not check the City's bylaw index for amendments between 2026-05-19 and 2026-08-27. The brief says the run stops in that case rather than guessing, so I report Not established and I say so here.\n\nWHAT THE TEXTS I DID READ INDICATE (not a verdict):\n- E1 holds on the provincial text, which I read directly. AR 304/2002 (current as of 2025-08-08, consolidated up to 167/2025), s.75: a person operating a cycle on a highway 'has all the rights and is subject to all the duties of a person driving a motor vehicle', unless the context otherwise requires.\n- E2: AR 304/2002 Division 4 (ss.75 to 79) contains no rule requiring a cyclist to use a bike lane, path or sidewalk.\n- Search-index text of the official Bylaw 20700 s.78 prohibits riding on a sidewalk. It does not require it.\n- The Traffic Safety Act (current as of 2026-07-02), s.16, bars a council from passing a bylaw that 'excludes pedestrians or vehicles generally from using highways', unless specifically permitted.\n- If Bylaw 5590 and the amendment check confirm what the brief and the search extracts describe (the bicycle sections deleted, no general mandatory-lane rule), the indicated rung is Supported.\n- One partial exception: AR 304/2002 s.77(4) requires a cyclist on a highway with paved shoulders to 'operate the cycle on the right shoulder'. That is a rule tied to a road feature, not a bike-lane rule, so I treat it as an E3/position qualification. A reader should still know it exists.\n\nSTRICT READING of 'the same legal right':\n- Differences in the cyclist's duties: keep as near as practicable to the right curb or edge (s.77(2)); either curb on one-way urban highways (s.77(3)); the right paved shoulder where one exists (s.77(4)); single file (s.78); hands and feet rules (s.77(1)); helmet under 18 (Vehicle Equipment Regulation s.111, per secondary sources).\n- Differences in the driver's duties: the motor-vehicle driver must centre in the lane (s.15(5) exempts cycles); TSA s.1(2) excludes bicycles from 'vehicle' in ss.11, 69 to 72 and 169(2)(f).\n- Cyclists are not 'motor vehicle' drivers (TSA s.1(1)(x)), so motor-vehicle licensing does not attach. I did not read the licensing or registration sections themselves.\n- Under the strict reading, a fair holder would probably accept 'same right to be on the road' but not 'cycling right down the middle of your lane': s.77(2) generally requires riding near the right edge.\n- So under the strict reading the indicated rung would be Partially supported, against Supported under the primary reading. The finding is definition-sensitive.\n\nALTERNATIVE AS-OF DATE 2026-10-21: Council considered the Bylaw 20700 one-year review in late September and October 2026. The media coverage I read (Taproot, 2026-09-30) describes changes on transit-space loitering, fines and the definition of privately owned public space, and says nothing about bicycles or sidewalks. I did not read the amending bylaw text (21502), so I cannot say whether s.78 changed. The TSA consolidation (2026-07-02) predates the as-of date.\n\nQualification 4: Charter Bylaw 19642, Safe Passing Distance, in effect 2021-09-30 according to the City and CBC search extracts. It requires 1 m at speed limits of 60 km/h or less and 1.5 m above 60 km/h. I did not open the bylaw itself.\n\nQualification 5: Vehicle Equipment Regulation ss.111 to 113 (secondary sources only): helmet required under 18; lamps and a rear reflector required at night.\n\nQualification 6: TSA s.13(1)(k) lets a council pass bylaws 'governing the licensing of bicycles'. In the texts I read I found no Edmonton bicycle licensing requirement.",
+      "verdict": "Not established",
+      "confidence": "Moderate",
+      "evidence_basis": "direct-edmonton",
+      "supporting_evidence": [
+        {
+          "finding": "A person operating a cycle on a highway has the rights and duties of a person driving a motor vehicle. No provision in the Cycles division requires use of a bike lane, path or sidewalk.",
+          "source_title": "Use of Highway and Rules of the Road Regulation, Alta Reg 304/2002 (King's Printer HTML)",
+          "source_url": "https://kings-printer.alberta.ca/1266.cfm?display=html&isbncln=9780779844494&leg_type=Regs&page=2002_304.cfm",
+          "source_publisher": "Alberta King's Printer",
+          "source_date": "Current as of 2025-08-08 (consolidated up to 167/2025)",
+          "source_type": "legal-audited",
+          "establishes": "E1 at the provincial level: the rights and duties of a driver, unless the context otherwise requires. Division 4 (ss.75 to 79) contains no E2 rule.",
+          "quote": "has all the rights and is subject to all the duties of a person driving a motor vehicle",
+          "strength": "strong"
+        },
+        {
+          "finding": "A bicycle is a 'cycle' and a 'vehicle' but not a 'motor vehicle'. 'Roadway' is the part of a highway intended for vehicular traffic. Councils may not pass bylaws that exclude vehicles generally from highways unless specifically permitted.",
+          "source_title": "Traffic Safety Act, RSA 2000 c T-6 (King's Printer HTML)",
+          "source_url": "https://kings-printer.alberta.ca/1266.cfm?page=T06.cfm&leg_type=Acts&isbncln=9780779855841&display=html",
+          "source_publisher": "Alberta King's Printer",
+          "source_date": "Current as of 2026-07-02",
+          "source_type": "legal-audited",
+          "establishes": "The definitions behind E1. The s.16 limit on municipal bylaws that would generally exclude vehicles from highways. s.13(1)(k) bicycle licensing power.",
+          "quote": "“roadway” means that part of a highway intended for use by vehicular traffic",
+          "strength": "strong"
+        },
+        {
+          "finding": "Search-index text of the official consolidation: s.78(1) prohibits riding a bicycle, e-bicycle or e-scooter on a sidewalk. s.78(2) exempts shared pathways and persons aged 16 and under. The section restricts sidewalk use; it does not require it. My fetch of the PDF returned unreadable binary, so this text comes from the search engine's index of the same file.",
+          "source_title": "City of Edmonton Bylaw 20700, Public Spaces Bylaw (consolidated May 19, 2026)",
+          "source_url": "https://www.edmonton.ca/sites/default/files/public-files/C20700.pdf",
+          "source_publisher": "City of Edmonton",
+          "source_date": "2026-05-19 consolidation",
+          "source_type": "legal-audited",
+          "establishes": "Qualification 3. No City sidewalk-use requirement under E2. The text was not read by me directly.",
+          "quote": "A person must not ride a bicycle, e-bicycle, e-scooter, on a sidewalk.",
+          "strength": "moderate"
+        },
+        {
+          "finding": "A cycling advocacy group's summary of Bylaw 5590 states that bicycles are allowed on all highways in Edmonton. The page is undated and quotes the pre-2025 sidewalk rule, so it is out of date.",
+          "source_title": "Bylaw 5590: Traffic Bylaw — Bike Edmonton",
+          "source_url": "https://bikeedmonton.ca/laws/bylaw-5590-traffic-bylaw",
+          "source_publisher": "Bike Edmonton",
+          "source_type": "advocacy",
+          "establishes": "Only the advocate's position. A lead, not evidence of the bylaw text.",
+          "quote": "Bicycles are allowed on all highways in Edmonton.",
+          "strength": "weak"
+        }
+      ],
+      "challenging_evidence": [
+        {
+          "finding": "Position rules: a cyclist must ride as near as practicable to the right curb or edge, except when turning left. On one-way urban highways the cyclist may ride near either curb. Where paved shoulders exist, the cyclist 'shall operate the cycle on the right shoulder'. Cyclists must ride single file except when passing. Separately, s.15(5) requires lane-centring for vehicles 'other than a cycle'.",
+          "source_title": "Use of Highway and Rules of the Road Regulation, Alta Reg 304/2002 (King's Printer HTML)",
+          "source_url": "https://kings-printer.alberta.ca/1266.cfm?display=html&isbncln=9780779844494&leg_type=Regs&page=2002_304.cfm",
+          "source_publisher": "Alberta King's Printer",
+          "source_date": "Current as of 2025-08-08",
+          "source_type": "legal-audited",
+          "establishes": "Differences under the strict reading, and qualification 1. The rules do not generally permit riding 'right down the middle of your lane'. The paved-shoulder rule requires leaving the travel lane where a paved shoulder exists.",
+          "quote": "as near as practicable to the right curb or edge of the roadway",
+          "strength": "strong"
+        },
+        {
+          "finding": "Section 84 of Bylaw 5590 lets a highway or portion be designated as restricted to a particular class of vehicle, with buses and bicycles among the listed classes. On a highway restricted to another class, a bicycle may not be operated. I saw this text only as a search extract of an older, undated copy hosted by a school, not the 2025-05-12 consolidation.",
+          "source_title": "The City of Edmonton Bylaw 5590 Traffic Bylaw (older copy)",
+          "source_url": "https://gracemartin.epsb.ca/media/elementaryjuniorhighschools/gracemartin/TrafficBylaw5590.pdf",
+          "source_publisher": "City of Edmonton (copy hosted by Edmonton Public Schools)",
+          "source_type": "legal-audited",
+          "establishes": "That the E3 mechanism exists. It does not establish the text in force on 2026-08-27 or which roads are designated.",
+          "quote": "a person shall not operate a vehicle of a class other than the particular class permitted on the highway or portion thereof",
+          "strength": "weak"
+        }
+      ],
+      "limitations": [
+        "Essential text not read: Traffic Bylaw 5590 (C5590.pdf, consolidated 2025-05-12). The fetch returned compressed PDF binary that my tool could not extract. The Bylaw 5590 copy on escribemeetings returned HTTP 403. I did not read Parts III to VIII line by line, so I cannot confirm that sections 49 to 52 are deleted or that no other provision in Parts IV to VIII restricts bicycles. This failure triggers the brief's Not established condition and run-stop.",
+        "Essential check not performed: Bylaw 20700 as in force on 2026-08-27. I could not extract the PDF text. The City bylaw index and the Public Spaces Bylaw page returned HTTP 502 on 2026-10-21. I could not check whether any amendment took effect between 2026-05-19 and 2026-08-27. The s.78 text comes from the search engine's index of the official PDF.",
+        "I did not perform the King's Printer regulations index check (AR 304/2002 amendments after 167/2025, up to 2026-09-30).",
+        "The Traffic Listings: Restricted Highways PDF (March 2020) returned HTTP 502 at both addresses. Search extracts show it designates bicycle-only facilities (shared pathways, painted and protected bike lanes) under Bylaw 5590. I saw no bicycle prohibition entries in the extracts, but that is not a reading of the document. A complete inventory of particular-road bicycle prohibitions as of 2026-08-27 (by sign, s.84 or s.107(cc) designation, or provincial order for highways such as Anthony Henday Drive) was not established.",
+        "I could not retrieve the City's Bike Routes page (HTTP 502), so I cannot compare its two sidewalk statements with Bylaw 20700 s.78 myself.",
+        "My sources for Vehicle Equipment Regulation ss.111 to 113 and Charter Bylaw 19642 were search extracts and secondary sources only."
+      ],
+      "unknowns": [
+        "Whether the 2025-05-12 consolidation of Bylaw 5590 contains any provision in Parts IV to VIII that generally requires cyclists to use bike lanes or paths. The brief and the search extracts suggest it does not, but I did not verify this.",
+        "Whether any Bylaw 20700 amendment took effect between 2026-05-19 and 2026-08-27, and whether Bylaw 21502 (October 2026) changed s.78.",
+        "Which particular Edmonton roads, if any, prohibit bicycles by sign or designation, including provincial freeway segments within city limits."
+      ],
+      "missing_evidence": [
+        {
+          "description": "A readable text of Traffic Bylaw 5590 as consolidated 2025-05-12 (Parts III to VIII, s.84, s.107(cc) and (dd)).",
+          "likely_holder": "City of Edmonton Office of the City Clerk",
+          "importance": "critical"
+        },
+        {
+          "description": "The City bylaw index amendment listing for Bylaw 20700 covering 2026-05-19 to 2026-08-27, and the text of Bylaw 21502.",
+          "likely_holder": "City of Edmonton Office of the City Clerk",
+          "importance": "critical"
+        },
+        {
+          "description": "A current inventory of highways or portions where bicycles are prohibited, including s.107(cc) designations and provincial prohibitions on ring-road and freeway segments.",
+          "likely_holder": "City of Edmonton Traffic Operations; Alberta Transportation and Economic Corridors",
+          "importance": "moderate"
+        }
+      ],
+      "calculations_needed": [],
+      "what_would_change_my_verdict": [
+        "Readable texts of Bylaw 5590 (2025-05-12) and Bylaw 20700 as in force on 2026-08-27 showing no general rule requiring cyclists to use a bike lane, path or sidewalk would move the verdict to Supported (High), with the position rules and the paved-shoulder rule as qualifications. Under the strict reading it would be Partially supported.",
+        "A provision in either bylaw that generally requires cyclists to use a bike lane or path where one exists would move the verdict to Partially supported."
+      ],
+      "suggested_one_line": "Not established in this review: Alberta's rules give a cyclist on a highway the rights and duties of a driver, but the City bylaw texts could not be read as in force on 2026-08-27.",
+      "suggested_short_answer": "Alberta's Rules of the Road (AR 304/2002, s.75) give a person riding a bicycle on a highway the rights and duties of a driver. The provincial rules contain no requirement to use a bike lane. They do require riding near the right edge, using a paved shoulder where there is one, and riding single file. Edmonton's Public Spaces Bylaw bans sidewalk riding for anyone over 16 except on shared pathways; it does not require it. This reviewer could not read the City's Traffic Bylaw text or confirm the Public Spaces Bylaw as in force on 2026-08-27, so under the brief's rules the claim is not established in this review.",
+      "suggested_tldr": [
+        "Provincial rule (AR 304/2002, s.75): a cyclist on a highway has the rights and duties of a driver.",
+        "No provincial rule makes cyclists use a bike lane. They must keep near the right edge, use a paved shoulder where one exists, and ride single file.",
+        "Edmonton bans sidewalk riding for anyone over 16, except on shared pathways (Bylaw 20700, s.78).",
+        "The City Traffic Bylaw text and the as-of-date status of the Public Spaces Bylaw could not be verified in this review."
+      ]
+    }
+  ]
+}

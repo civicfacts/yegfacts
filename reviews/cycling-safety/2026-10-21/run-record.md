@@ -498,3 +498,26 @@ Admission and output are pending. Both OpenAI seats are prepared and queued.
 A failed essential text or historical-applicability check stops the run; a
 reviewer's Not established entry then records failure, not a valid completed
 finding. No panel output has been accepted and no park adopted.
+
+## First blind seat and essential-source stop
+
+Claude round 1 completed at 20:07:31 UTC and is admitted, schema-valid and
+limited to the one authorized claim. Exact frozen inputs, original packet,
+retained response and runner-stamped installation verify. The response is
+preserved unchanged apart from the launcher's identity fields in
+`round1/claude.json`; `run.yaml` holds its public-safe attempt provenance.
+
+The seat reports Not established because it could not read the essential
+City bylaws and confirm their historical applicability. This is a recorded
+source failure, not a completed site finding. Retained tool metadata shows
+HTTP 200 without an error for both official PDFs, but the reviewer reports
+unread compressed text. The two bylaw HTML pages returned 502. No denied
+endpoint was retried by the coordinator.
+
+The [Anthropic source-stop disposition](panel/source-stop-disposition.md)
+allows the two remaining blind seats to complete this already-authorized
+round on the identical packet. It prohibits merge, round 2 and synthesis
+while the source stop remains unresolved. A further round cannot be run
+merely to create source-carry eligibility. No frozen brief, park or register
+was changed. The original attempt and proof copies have a private retention
+manifest outside the worktree.
