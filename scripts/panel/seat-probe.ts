@@ -49,7 +49,7 @@ export type SeatName = 'claude' | 'gpt' | 'gpt-luna';
 /** The pinned models, as scripts/panel/run-reviewer.sh sets them. */
 export const SEAT_MODELS: Record<SeatName, { cli: 'claude' | 'codex'; model: string; tool: string }> = {
   claude: { cli: 'claude', model: 'claude-opus-5-5', tool: 'WebFetch' },
-  gpt: { cli: 'codex', model: 'gpt-6-sol', tool: 'web_search open_page' },
+  gpt: { cli: 'codex', model: 'gpt-6.1-sol', tool: 'web_search open_page' },
   'gpt-luna': { cli: 'codex', model: 'gpt-6-luna', tool: 'web_search open_page' },
 };
 

@@ -16,6 +16,34 @@
 # The sentence above used to describe a check that did not exist: the rule sat
 # as a TODO in scripts/validate.ts, and a change under methodology/ shipped
 # clean. It runs now.
+- version: "1.44"
+  date: "2026-11-17"
+  scope: reviewer-model-refresh
+  summary: >
+    The OpenAI panel seat moves from GPT-6 Sol to GPT-6.1 Sol at the same
+    pinned effort. The framing check and the audits that run on the launcher's
+    OpenAI default move with it. The Claude seat stays on Opus 5.5 and the
+    third seat on GPT-6 Luna. No published finding changes and no run is
+    re-done. One limit is stated here and not fixed: on the day of this entry
+    the Claude seat does not run on the current Claude Code release, so no
+    panel round can be completed until that is resolved.
+  highlights:
+    - "What changes. New review runs pin the OpenAI seat as gpt-6.1-sol at high. The Claude seat stays claude-opus-5-5 and the third seat gpt-6-luna, both at high. The launcher's OpenAI default is the same model, so every framing check and audit sent through it uses GPT-6.1 Sol. The stages that no script pins follow, as they did in v1.34: triage, the intake merge and grouping, the faithfulness and plain-speech reads, the publication gate audit and the freshness audit use GPT-6.1 Sol where they used GPT-6 Sol. Runs already published keep the model their manifests record."
+    - "Why. The founder directed it on 2026-11-17, after six weeks in which no run was made, as v1.34 moved the same seat from GPT-5.6 Sol to GPT-6 Sol. This site has not compared the two models on its own work, and this entry does not say the new one reviews better."
+    - "The superseded model stays pinned. GPT-6 Sol remains on the launcher's list, never as the default, beside GPT-5.6 Sol. v1.35 has a park confirmation run on the same pinned model as the report it confirms, and every framing check from v1.34 to v1.43 ran on GPT-6 Sol."
+    - "The package ceiling does not move. GPT-6.1 Sol reports a larger context than GPT-6 Sol, but no package has been measured on it, so the seat keeps the 521,838-byte ceiling v1.41 measured for GPT-6 Sol. Every seat receives the same package, so the GPT-6 Luna ceiling would bind in any case."
+    - "What was checked. On 2026-11-17 the launcher's diagnostic, which runs the canary alone and never sends a package, passed on gpt-6.1-sol under codex-cli 0.169.0: the structural check and the context proof both passed."
+    - "What does not work. The same diagnostic failed on the Claude seat under Claude Code 2.1.326. The launcher captures that seat's requests by pointing the CLI at a local recording proxy. Given that address, this release sent no subscription login and the vendor answered 401; release 2.1.323 did the same. Two startup checks also failed: the stream opened with a system/ui_invalidate event before system/init, and the inventory listed an agent named claude-code-guide. The last admitted Claude run was on release 2.1.306 on 2026-10-21. Nothing in the launcher is relaxed to get past this. How the seat is captured from here is an open decision."
+    - "What this entry does not do. It does not change the number of seats, the two-vendor label, the round rules, the effort pin, the capture or admission checks, or any vendor exclusion. It does not decide which Sol model a rerun of a run frozen before this version takes; the runner holds one pin, so that needs deciding before the stopped cycling-safety run is resumed."
+  links:
+    - label: "How a finding is produced"
+      href: "/methodology#stages"
+    - label: "The current pins (docs/DESIGN.md section 4)"
+      href: "https://github.com/civicfacts/yegfacts/blob/main/docs/DESIGN.md"
+  note: >
+    A seat that passed its check and a seat that cannot start both belong in
+    the entry for the day they were found. The first is why the model moved.
+    The second is why no round runs yet.
 - version: "1.43"
   date: "2026-10-02"
   scope: carried-two-round-and-sections

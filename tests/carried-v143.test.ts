@@ -62,7 +62,7 @@ const BYLAW_TEXT = 'PROCEDURES BYLAW 42\nSection 9: each speaker may speak for 4
 const BRIEF = `# Brief\n\nThe procedures bylaw, Bylaw 42, at \`${BYLAW_URL}\`, is essential.\n`;
 const SEATS = [
   { file: 'claude', model: 'claude-opus-5-5', provider: 'anthropic' },
-  { file: 'gpt', model: 'gpt-6-sol', provider: 'openai' },
+  { file: 'gpt', model: 'gpt-6.1-sol', provider: 'openai' },
   { file: 'gpt-luna', model: 'gpt-6-luna', provider: 'openai' },
 ];
 

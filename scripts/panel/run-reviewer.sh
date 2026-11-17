@@ -160,11 +160,12 @@ case "$PROVIDER_ARG" in
     PROVIDER_CANONICAL="anthropic"; SEAT="Claude Opus 5.5"
     ;;
   codex|gpt|openai)
-    # v1.34 (2026-09-23): GPT-5.6 Sol to GPT-6 Sol, released the same day as
-    # Opus 5.5 at half the price of the seat it replaces. Same kind of
-    # decision as above; runs published under GPT-5.6 Sol keep their model.
-    SLOT="gpt"; CLI="codex"; MODEL_ID="gpt-6-sol"
-    PROVIDER_CANONICAL="openai"; SEAT="GPT-6 Sol"
+    # v1.44 (2026-11-17): GPT-6 Sol to GPT-6.1 Sol, the founder's direction
+    # after six weeks without a run. v1.34 moved GPT-5.6 Sol to GPT-6 Sol the
+    # same way. Nothing here compares the two models on this site's work. Runs
+    # published under an earlier Sol keep the model their manifests record.
+    SLOT="gpt"; CLI="codex"; MODEL_ID="gpt-6.1-sol"
+    PROVIDER_CANONICAL="openai"; SEAT="GPT-6.1 Sol"
     ;;
   luna)
     # v1.37 (2026-09-23): the third counted seat. It was v1.34's uncounted
@@ -213,6 +214,12 @@ esac
 #             = 521838 bytes. 4.039 is the lowest of 41 attempts: package bytes
 #             over the tokens the API's usage attribution assigns to the
 #             package message alone.
+#
+#             gpt-6.1-sol (v1.44) reports a 500,000-token window. Its ceiling
+#             stays at the gpt-6-sol figure: no package has been measured on
+#             it, the smaller number leaves more than half its context free at
+#             any ratio seen so far, and every seat gets the same package, so
+#             gpt-6-luna's ceiling binds anyway.
 #
 # Measured 2026-10-02 on council-pause-vote, council-hearing, snow-clearing,
 # lanes-and-congestion and infrastructure-deficit. carry-manifest.ts
