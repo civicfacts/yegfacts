@@ -80,11 +80,15 @@ const FAILED = {
 };
 
 /** A run directory holding committed rounds: `rounds` oldest first, each seat's answer by file name. */
-function writeRounds(runDir: string, rounds: Array<{ dir: string; started: string; answers: Record<string, unknown> }>): void {
+function writeRounds(
+  runDir: string,
+  rounds: Array<{ dir: string; started: string; answers: Record<string, unknown> }>,
+  seats: typeof SEATS = SEATS,
+): void {
   for (const round of rounds) {
     const base = round.dir === '.' ? runDir : path.join(runDir, round.dir);
     mkdirSync(path.join(base, 'round1'), { recursive: true });
-    const runs = SEATS.filter((seat) => round.answers[seat.file] !== undefined).map((seat) => ({
+    const runs = seats.filter((seat) => round.answers[seat.file] !== undefined).map((seat) => ({
       provider: seat.provider,
       round: 1,
       model_id: seat.model,
@@ -142,6 +146,20 @@ describe('the two-round seat-failure ground', () => {
       http_status: 502,
       started_at: '2031-01-01T10:00:00Z',
     });
+  });
+
+  it('reads a round recorded under a seat\'s earlier pin as that seat\'s', () => {
+    const runDir = runDirFor();
+    const earlier = SEATS.map((seat) => (seat.file === 'gpt' ? { ...seat, model: 'gpt-6-sol' } : seat));
+    writeRounds(runDir, twoFailedRounds, earlier);
+    const result = twoRoundGround(runDir, BYLAW_URL, ['bylaw'], BRIEF);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.ground.rounds[0]!.seats.map((s) => [s.seat, s.model])).toEqual([
+      ['claude', 'claude-opus-5-5'],
+      ['gpt', 'gpt-6-sol'],
+      ['gpt-luna', 'gpt-6-luna'],
+    ]);
   });
 
   it('is refused with only one failing round', () => {

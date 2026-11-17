@@ -173,7 +173,7 @@ import {
   type SelectionRule,
 } from './minutes-items.ts';
 import { SECTION_MATCH, SECTION_RULES_PATH, carrySections, sectionRules, tilingProblems, type SectionIndexEntry } from './pdf-sections.ts';
-import { SEAT_MODELS, isSeatModel, loadSeatProbes, seatProbesPath, type SeatProbe } from './seat-probe.ts';
+import { SEAT_MODELS, loadSeatProbes, seatProbesPath, type SeatProbe } from './seat-probe.ts';
 import { groundFiles, quickProbes, twoRoundGround, type QuickProbe, type TwoRoundGround } from './two-round.ts';
 
 const USER_AGENT = 'YEGFacts evidence archiver (+https://yegfacts.ca)';
@@ -452,11 +452,9 @@ export function seatRefusalFor(probes: readonly SeatProbe[], url: string, now: D
     .filter((probe) => {
       if (probe.url !== url || probe.outcome !== 'refused') return false;
       // The tool's own request must be this page, by the pinned seat, model and tool.
-      // A model the seat was pinned to earlier counts, so a committed row made
-      // before a pin moved still verifies; seat-probe.ts starts none on it.
       if (normaliseToolUrl(probe.tool_url) !== url) return false;
       const pinned = SEAT_MODELS[probe.seat];
-      if (!pinned || !isSeatModel(probe.seat, probe.model) || probe.tool !== pinned.tool) return false;
+      if (!pinned || probe.model !== pinned.model || probe.tool !== pinned.tool) return false;
       if (probe.http_status == null && !(typeof probe.raw_error === 'string' && probe.raw_error.trim())) return false;
       const at = Date.parse(probe.probed_at);
       return !Number.isNaN(at) && at <= now.getTime() && now.getTime() - at <= MAX_PROBE_AGE_HOURS * 3_600_000;

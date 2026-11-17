@@ -48,10 +48,10 @@ export type SeatName = 'claude' | 'gpt' | 'gpt-luna';
 
 /**
  * The pinned models, as scripts/panel/run-reviewer.sh sets them. `model` is the
- * pin every new probe and run uses. `superseded` lists the models the same seat
- * was pinned to when carried documents already existed (v1.41 on), so that a
- * committed probe row or round made under an earlier pin still reads as that
- * seat's. A probe is never started on a superseded model.
+ * pin every new probe and run uses, and the only model a seat-refusal ground
+ * accepts. `superseded` lists the models the same seat was pinned to when
+ * carried documents already existed (v1.41 on), so that a committed round made
+ * under an earlier pin still reads as that seat's.
  */
 export const SEAT_MODELS: Record<
   SeatName,
