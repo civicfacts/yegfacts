@@ -562,8 +562,8 @@ case "$PROVIDER" in
     # check (v1.44); gpt-6-luna is the third counted seat (v1.37) under the
     # same profile. gpt-6-sol and gpt-5.6-sol are superseded and stay pinned,
     # never default, because v1.35 makes a park confirmation run on the same
-    # pinned model as the report it confirms: framing checks from v1.34 to
-    # v1.43 ran on gpt-6-sol, and every one before v1.34 on gpt-5.6-sol.
+    # pinned model as the report it confirms: framing checks between v1.34
+    # and v1.43 ran on gpt-6-sol, and those before v1.34 on gpt-5.6-sol.
     # Remove each when no brief parked on its checks can still be confirmed.
     PINNED_MODELS="gpt-6.1-sol,gpt-6-luna,gpt-6-sol,gpt-5.6-sol"
     DEFAULT_MODEL="gpt-6.1-sol"
