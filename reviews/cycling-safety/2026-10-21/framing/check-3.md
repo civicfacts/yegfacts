@@ -1,0 +1,27 @@
+Verdict: FRAME OK
+
+**Third ordinary framing report.** The two findings left by check 2 are RESOLVED. I found no further framing finding or `[defect]`.
+
+1. **Provenance — OK.** The intake traces each circulating form to a captured comment, with its date and context. The forms represent the accessible thread on both sides; the brief discloses the capture gap and makes no claim that the thread represents Edmonton generally.
+
+2. **What the posts assert — OK.** The risk park retains the comparison involving bike lanes and shared paths. The Street Labs park disposes of both the traffic and pedestrian-safety assertions. The sidewalk examples remain evidence offered for a general pattern, rather than three isolated claims.
+
+3. **Strongest fair reading — OK.** The brief does not turn injury risk into a crash count, sidewalk use into a legal rule, or pedestrian safety into whether an evaluation contains a figure. It proposes parking those claims and sends the legal-roadway claim to the panel at the level its holders assert it.
+
+4. **Operationalization and alternatives — OK.** The as-of date, legal reading, roadway and bike-lane definitions, and boundary between a general rule and particular-road restrictions are explicit. The alternative date and stricter reading could change the legal finding and must be reported beside its single primary verdict. The held fault claim states alternative thresholds, windows and collision units; it receives no verdict in this run. Qualification 2 now calls for dated listings and records and requires the reviewer to disclose any incomplete inventory. The [City’s restricted-highways listing](https://www.edmonton.ca/sites/default/files/public-files/assets/Bylaws/Traffic_Listing_Restricted_Highways.pdf?cb=1757131957) is a real, dated candidate source, not a promised complete 2026 inventory.
+
+   The source check identifies the [Traffic Safety Act consolidation](https://kings-printer.alberta.ca/documents/Acts/T06.pdf), the [regulation in its amendment listing](https://kings-printer.alberta.ca/documents/Acts/T06.pdf), the [Traffic Bylaw’s deleted bicycle provisions](https://www.edmonton.ca/sites/default/files/public-files/documents/Bylaws/C5590.pdf), and [Public Spaces Bylaw 20700](https://www.edmonton.ca/sites/default/files/public-files/C20700.pdf?cb=1757119261) as the legal instruments the brief describes. The [collision-severity dataset](https://data.edmonton.ca/dataset/Annual-Collision-Report-Collision-Severity/77sf-j5rj/data_preview), [bike-count view](https://data.edmonton.ca/Monitoring-and-Data-Collection/Daily-Pedestrian-and-Bike-Counts/sw7k-ptx8/about_data), [Crash and Equity report](https://www.edmonton.ca/sites/default/files/public-files/assets/SMS_Crash-Equity-Technical-Analysis.pdf), and [Street Labs programme](https://www.edmonton.ca/transportation/traffic_safety/vision-zero-street-labs) also exist as identified. The brief preserves the unresolved Public Spaces Bylaw amendment gap and stops the legal run if an essential text cannot be established as in force on 2026-08-27.
+
+5. **Expected finding — OK.** The instructions do not tell the panel which legal classification to reach. Reasons for the proposed parks are labelled as the editor’s reading and do not direct a verdict on a parked claim.
+
+6. **Checkability — OK.** The legal proposition is checkable against dated texts. The brief isolates it from predictions about rider behaviour, personal encounters, family safety and policy opinions.
+
+7. **Scope — OK.** The parks remain prominent. Neither Street Labs nor route continuity is allowed to stand in for an answer about cycling safety or where riders actually ride.
+
+8. **Stakes — OK.** The revised paragraph says what **Supported**, **Partially supported**, **Contradicted** and **Not established** would change for the holder and an opponent. In particular, Supported establishes a legal entitlement under the primary reading; it does not establish that cyclists *will* ride mid-lane or may do so in every circumstance. Contradicted does not decide whether the rider in [70] rode unlawfully. The opposed outcomes are reachable under the stated ladder and would change the legal point of dispute.
+
+9. **Who asks this — OK.** “Are cyclists allowed to ride on the road in Edmonton, and do they have to use the bike lane or the sidewalk when there is one?” is a question a resident could ask, and the proposition answers it at that level. The brief plainly says the registered questions about safety and actual riding behaviour remain unanswered.
+
+**Earlier findings.** Check 1 findings 2–9: **RESOLVED**; its provenance check remains OK. Check 2 finding 4: **RESOLVED** by the dated, bounded account of particular-road restrictions. Check 2 finding 8: **RESOLVED** by stakes that distinguish permission and position rules from predicted behaviour. No earlier finding is WEAKENED or OPEN.
+
+A holder of the road-rights view should recognize the legal proposition while seeing that a favourable finding would not prove the mid-lane prediction. An opponent would receive an answer about the legal requirement to use a lane or sidewalk, with road-specific limits stated, while remaining free to dispute safety and behaviour.

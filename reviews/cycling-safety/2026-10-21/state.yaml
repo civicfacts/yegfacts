@@ -1,0 +1,53 @@
+story: cycling-safety
+run: "2026-10-21"
+methodology_version: "1.43"
+stage: round1
+stages:
+  framing:
+    status: complete
+    at: "2026-10-21"
+    frozen_sha256: "80d4b7bb599cb9ca164ffbe6ed7989f8c5ca5bd4d0b0106d5cf8c848e5822dae"
+    formal_reports: 3
+    last_verdict: "FRAME OK"
+    report_attempts: ["85fdedc5754594d4", "6539ad15d0c1b88d", "bb675afd21539428"]
+    check3_report_sha256: "14c3408e4d7b62e62cf7bee74291858bfb82b59ec044e3c9486a59d3c9f4e4bc"
+    check3_admitted: true
+    check3_model: "gpt-6-sol"
+    check3_effort: high
+    check3_profile: "codex-captured-read-only-0.163.0"
+    check2_report_sha256: "8e24f832a48abd916397ee4135b573ad3e7a34c6540bd37990a7f1bcd33d1945"
+    check2_admitted: true
+    check2_model: "gpt-6-sol"
+    check2_effort: high
+    check2_profile: "codex-captured-read-only-0.163.0"
+    check1_report_sha256: "609b1ec19ce28b6fba72455aa1be706381fdb80c757730561c86ea44fe3774d7"
+    check1_model: "gpt-6-sol"
+    check1_effort: high
+    check1_profile: "codex-captured-read-only-0.163.0"
+    check1_admitted: true
+    check1_brief_sha256: "8280ccd5cfcd86ddc8dddc53cfe0a59c8749aa528859e94ade9805ddc9b66622"
+    draft_sha256: "80d4b7bb599cb9ca164ffbe6ed7989f8c5ca5bd4d0b0106d5cf8c848e5822dae"
+    response2_sha256: "5df33108d2a6275af3ee69493288f74f395bd42332ff7117beb1ae9cb6b27645"
+    check3_package_sha256: "80e029d90a6e91d705e65b6a9254f17c37116f011ba804399a4a8ecaa650fc20"
+    response1_sha256: "6ac3f519d06e6a6b730bc7b5bc8c83c27201de917646e8fb347633dceba2ec77"
+    responses: ["framing/author-response-1.md", "framing/author-response-2.md"]
+    check2_package_sha256: "aabd181a7e251a81d2355b50380375bdc50bc906c0cf70d24ac8ab3ac22c2064"
+    intake_sha256: "dedbbffa586feb42fd2d58b8b59316db404b5227257afc635f6dc41340d157f9"
+    check1_package_sha256: "356bb4550375af5c964e763432e7b3f35828c04dbf5d1012c590b3a45d36da36"
+    reports: ["framing/check-1.md", "framing/check-2.md", "framing/check-3.md"]
+    note: "The third ordinary report is admitted and says FRAME OK, with all earlier findings resolved and no new finding or defect. The exact submitted brief is frozen under the framing protocol. Its draft status text records the authoring state before confirmation; its bytes were not changed after review. One panel claim and seven claim parks remain the editor proposal; no park is adopted or register row changed. No full panel, factual verdict, story or publication occurred. This approved batch ends at framing."
+  round1:
+    status: stopped
+    outcome: stopped_unpublished_no_finding
+    disposition: panel/source-validity-disposition.md
+    disposition_author: claude-opus-5-5
+    disposition_effort: high
+    claude: {attempt: "558562cc7b9607fe", execution_admitted: true, evidence_status: source_stop}
+    luna: {attempt: "ee48cd958692b771", execution_admitted: true, evidence_status: quarantined_unusable, report: round1-luna-isolated/gpt-luna.json}
+    sol: {attempt: "e6d80fc3244d17eb", execution_admitted: false, execution_status: uncertain, terminal_exit_known: false}
+    note: "Anthropic ruled the run complete as stopped, unpublished, with no finding. Raw reports and frozen brief are unchanged. No duplicate Sol launch. Any recovery needs terminal reconciliation and a separate authorized batch under existing rules; no eligibility-manufacturing rounds."
+  merge: {status: blocked, note: "Source-validity disposition prohibits this stage."}
+  round2: {status: blocked, note: "Source-validity disposition prohibits this stage."}
+  synthesis: {status: blocked, note: "Source-validity disposition prohibits this stage."}
+  drafting: {status: pending}
+  human_gate: {status: pending}
