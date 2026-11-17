@@ -625,7 +625,11 @@ describe('seat refusal evidence', () => {
     expect(seatRefusalFor([probe({ model: 'claude-other' })], PAGE_URL, NOW)).toBeUndefined();
     expect(seatRefusalFor([probe({ tool: 'WebSearch' })], PAGE_URL, NOW)).toBeUndefined();
     expect(seatRefusalFor([probe({ seat: 'gpt' })], PAGE_URL, NOW)).toBeUndefined();
+    expect(seatRefusalFor([probe({ seat: 'gpt', model: 'gpt-6.1-sol', tool: 'web_search open_page' })], PAGE_URL, NOW)).toBeDefined();
+    // A row committed under the seat's earlier pin still verifies; another seat's model does not.
     expect(seatRefusalFor([probe({ seat: 'gpt', model: 'gpt-6-sol', tool: 'web_search open_page' })], PAGE_URL, NOW)).toBeDefined();
+    expect(seatRefusalFor([probe({ seat: 'gpt', model: 'gpt-6-luna', tool: 'web_search open_page' })], PAGE_URL, NOW)).toBeUndefined();
+    expect(seatRefusalFor([probe({ seat: 'gpt', model: 'gpt-5.6-sol', tool: 'web_search open_page' })], PAGE_URL, NOW)).toBeUndefined();
   });
 
   it('does not count a refusal with neither a status nor an error message, or an unclear outcome', () => {
