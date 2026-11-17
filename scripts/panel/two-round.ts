@@ -57,7 +57,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 import YAML from 'yaml';
-import { SEAT_MODELS, type SeatName, type SeatProbe } from './seat-probe.ts';
+import { SEAT_MODELS, isSeatModel, type SeatName, type SeatProbe } from './seat-probe.ts';
 
 export type SeatFailure = {
   seat: SeatName;
@@ -115,7 +115,7 @@ type CommittedRound = {
 };
 
 const seatForModel = (model: string | undefined): SeatName | undefined =>
-  (Object.keys(SEAT_MODELS) as SeatName[]).find((seat) => SEAT_MODELS[seat].model === model);
+  (Object.keys(SEAT_MODELS) as SeatName[]).find((seat) => isSeatModel(seat, model));
 
 /** Every run.yaml of a run: its own, and one level down (superseded and --into directories). */
 export function runManifests(runDir: string): string[] {

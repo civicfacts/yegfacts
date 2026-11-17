@@ -496,7 +496,7 @@ describe('research admission', { timeout: 60_000 }, () => {
   });
 
   it.each([
-    ['openai', 'gpt-6-sol', /no codex credential at \$HOME\/\.codex\/auth\.json/],
+    ['openai', 'gpt-6.1-sol', /no codex credential at \$HOME\/\.codex\/auth\.json/],
     ['google', 'gemini-3.8-flash-high', /retired for runs frozen after 2026-09-23 \(methodology v1\.37\)/],
   ])('records %s with its own seat and its own reason when no model is named', (provider, model, expected) => {
     const stub = stubClaude();

@@ -46,12 +46,26 @@ import YAML from 'yaml';
 
 export type SeatName = 'claude' | 'gpt' | 'gpt-luna';
 
-/** The pinned models, as scripts/panel/run-reviewer.sh sets them. */
-export const SEAT_MODELS: Record<SeatName, { cli: 'claude' | 'codex'; model: string; tool: string }> = {
-  claude: { cli: 'claude', model: 'claude-opus-5-5', tool: 'WebFetch' },
-  gpt: { cli: 'codex', model: 'gpt-6-sol', tool: 'web_search open_page' },
-  'gpt-luna': { cli: 'codex', model: 'gpt-6-luna', tool: 'web_search open_page' },
+/**
+ * The pinned models, as scripts/panel/run-reviewer.sh sets them. `model` is the
+ * pin every new probe and run uses, and the only model a seat-refusal ground
+ * accepts. `superseded` lists the models the same seat was pinned to when
+ * carried documents already existed (v1.41 on), so that a committed round made
+ * under an earlier pin still reads as that seat's.
+ */
+export const SEAT_MODELS: Record<
+  SeatName,
+  { cli: 'claude' | 'codex'; model: string; tool: string; superseded: readonly string[] }
+> = {
+  claude: { cli: 'claude', model: 'claude-opus-5-5', tool: 'WebFetch', superseded: [] },
+  // v1.44 (2026-11-17) moved this seat from gpt-6-sol.
+  gpt: { cli: 'codex', model: 'gpt-6.1-sol', tool: 'web_search open_page', superseded: ['gpt-6-sol'] },
+  'gpt-luna': { cli: 'codex', model: 'gpt-6-luna', tool: 'web_search open_page', superseded: [] },
 };
+
+/** Whether `model` is this seat's pin, or was while carried documents existed. */
+export const isSeatModel = (seat: SeatName, model: string | undefined): boolean =>
+  model !== undefined && (SEAT_MODELS[seat].model === model || SEAT_MODELS[seat].superseded.includes(model));
 
 export type Outcome = 'refused' | 'fetched' | 'unclear' | 'no-tool-call' | 'cli-failed';
 

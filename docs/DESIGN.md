@@ -202,7 +202,7 @@ published at `/considered`.
    the guarantee the arrangement exists to provide.
 5. **Triage.** `prompts/intake-triage-batch.md` goes to two readers, both from
    a different vendor than the editor, neither seeing the other. From v1.37 both
-   are OpenAI models (GPT-6 Sol and GPT-6 Luna), one vendor, and the register
+   are OpenAI models (GPT-6.1 Sol from v1.44, GPT-6 Sol before it, and GPT-6 Luna), one vendor, and the register
    says so; a proposition both decline or park is re-decided by an Anthropic
    audit reader before the register records it, so one vendor cannot quietly
    remove a claim. Each rules on
@@ -355,10 +355,12 @@ record earlier execution, **not commands approved for new runs**:
 | GPT-5.6 Sol | `codex exec -m gpt-5.6-sol -c model_reasoning_effort=high -s read-only --skip-git-repo-check` |
 | Gemini 3.8 Flash | `agy --model gemini-3.8-flash-high --effort high --sandbox --dangerously-skip-permissions --print-timeout 45m -p` (v1.26; Gemini 3.1 Pro before that, and v1.14 added the permissions flag, without which the headless seat returned nothing on PDF-heavy briefs). The founder retired 3.1 Pro from every seat on this site after the intake extraction run, where 3.8 Flash at high turned the weakest extractor seat into the cleanest; no panel-round comparison of the two exists. Runs already published under 3.1 Pro keep the model their manifests record. |
 
-**Current pins (v1.37).** The commands approved for new runs are the ones
+**Current pins (v1.44).** The commands approved for new runs are the ones
 `scripts/panel/run-reviewer.sh` assembles and `scripts/panel/invoke-reviewer.sh`
-admits; nothing else runs a seat. From v1.37 the seats are `claude-opus-5-5`,
-`gpt-6-sol` and `gpt-6-luna`, every seat at `high`. Opus 5.5 defaults to medium
+admits; nothing else runs a seat. From v1.44 the seats are `claude-opus-5-5`,
+`gpt-6.1-sol` and `gpt-6-luna`, every seat at `high`. v1.37 set the same three
+seats with `gpt-6-sol` in the second; v1.44 moved that seat, and every framing
+check and audit that runs on the launcher's OpenAI default, to `gpt-6.1-sol`. Opus 5.5 defaults to medium
 effort, so the pin is what keeps the seat at the level v1.6 chose. The Google
 seat (`gemini-3.8-flash-high`) is retired from every run: the
 founder's Google usage ran out twice in a week and he will not buy more. v1.37
