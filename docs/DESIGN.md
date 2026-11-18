@@ -360,9 +360,8 @@ record earlier execution, **not commands approved for new runs**:
 admits; nothing else runs a seat. From v1.45 the seats are `claude-opus-5-5`,
 `gpt-6.2-sol` and `gpt-6-luna`, every seat at `high`. v1.37 set the same three
 seats with `gpt-6-sol` in the second. v1.44 moved that seat, and every framing
-check and audit that runs on the launcher's OpenAI default, to `gpt-6.1-sol`;
-v1.45 moved both to `gpt-6.2-sol` later the same day, before any run was made
-on 6.1. Opus 5.5 defaults to medium
+check and audit that runs on the launcher's OpenAI default, to `gpt-6.1-sol`,
+and v1.45 to `gpt-6.2-sol`. Opus 5.5 defaults to medium
 effort, so the pin is what keeps the seat at the level v1.6 chose. The Google
 seat (`gemini-3.8-flash-high`) is retired from every run: the
 founder's Google usage ran out twice in a week and he will not buy more. v1.37

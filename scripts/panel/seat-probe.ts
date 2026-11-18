@@ -58,8 +58,7 @@ export const SEAT_MODELS: Record<
   { cli: 'claude' | 'codex'; model: string; tool: string; superseded: readonly string[] }
 > = {
   claude: { cli: 'claude', model: 'claude-opus-5-5', tool: 'WebFetch', superseded: [] },
-  // v1.45 (2026-11-17). gpt-6-sol held the seat until v1.43 and recorded
-  // rounds carry it. gpt-6.1-sol held it for hours and recorded none.
+  // Recorded rounds up to v1.43 carry gpt-6-sol.
   gpt: { cli: 'codex', model: 'gpt-6.2-sol', tool: 'web_search open_page', superseded: ['gpt-6-sol'] },
   'gpt-luna': { cli: 'codex', model: 'gpt-6-luna', tool: 'web_search open_page', superseded: [] },
 };

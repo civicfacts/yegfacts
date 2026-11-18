@@ -565,8 +565,6 @@ case "$PROVIDER" in
     # pinned model as the report it confirms: framing checks between v1.34
     # and v1.43 ran on gpt-6-sol, and those before v1.34 on gpt-5.6-sol.
     # Remove each when no brief parked on its checks can still be confirmed.
-    # gpt-6.1-sol was the pin for part of 2026-11-17 (v1.44) and wrote no
-    # report, so there is nothing to confirm on it and it is not listed.
     PINNED_MODELS="gpt-6.2-sol,gpt-6-luna,gpt-6-sol,gpt-5.6-sol"
     DEFAULT_MODEL="gpt-6.2-sol"
     BIN_HOOK="YEGFACTS_REVIEW_CODEX_BIN"
