@@ -161,8 +161,8 @@ case "$PROVIDER_ARG" in
     ;;
   codex|gpt|openai)
     # v1.44 (2026-11-17): GPT-6 Sol to GPT-6.1 Sol, the founder's direction
-    # after six weeks without a run. v1.34 moved GPT-5.6 Sol to GPT-6 Sol the
-    # same way. Nothing here compares the two models on this site's work. Runs
+    # six weeks after the last published finding. v1.34 moved GPT-5.6 Sol to
+    # GPT-6 Sol the same way. Nothing here compares the two models on this site's work. Runs
     # published under an earlier Sol keep the model their manifests record.
     SLOT="gpt"; CLI="codex"; MODEL_ID="gpt-6.1-sol"
     PROVIDER_CANONICAL="openai"; SEAT="GPT-6.1 Sol"
