@@ -160,12 +160,13 @@ case "$PROVIDER_ARG" in
     PROVIDER_CANONICAL="anthropic"; SEAT="Claude Opus 5.5"
     ;;
   codex|gpt|openai)
-    # v1.44 (2026-11-17): GPT-6 Sol to GPT-6.1 Sol, the founder's direction
-    # six weeks after the last published finding. v1.34 moved GPT-5.6 Sol to
-    # GPT-6 Sol the same way. Nothing here compares the two models on this site's work. Runs
-    # published under an earlier Sol keep the model their manifests record.
-    SLOT="gpt"; CLI="codex"; MODEL_ID="gpt-6.1-sol"
-    PROVIDER_CANONICAL="openai"; SEAT="GPT-6.1 Sol"
+    # v1.45 (2026-11-17): GPT-6.2 Sol, the founder's direction. v1.44 had
+    # pinned GPT-6.1 Sol earlier the same day and no run was made on it;
+    # v1.34 moved GPT-5.6 Sol to GPT-6 Sol the same way. Nothing here compares
+    # these models on this site's work. Runs published under an earlier Sol
+    # keep the model their manifests record.
+    SLOT="gpt"; CLI="codex"; MODEL_ID="gpt-6.2-sol"
+    PROVIDER_CANONICAL="openai"; SEAT="GPT-6.2 Sol"
     ;;
   luna)
     # v1.37 (2026-09-23): the third counted seat. It was v1.34's uncounted
@@ -215,7 +216,7 @@ esac
 #             over the tokens the API's usage attribution assigns to the
 #             package message alone.
 #
-#             gpt-6.1-sol (v1.44) reports a 500,000-token window. Its ceiling
+#             gpt-6.2-sol (v1.45) reports a 500,000-token window. Its ceiling
 #             stays at the gpt-6-sol figure: no package has been measured on
 #             it, the smaller number leaves more than half its context free at
 #             any ratio seen so far, and every seat gets the same package, so

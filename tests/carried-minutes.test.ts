@@ -625,7 +625,7 @@ describe('seat refusal evidence', () => {
     expect(seatRefusalFor([probe({ model: 'claude-other' })], PAGE_URL, NOW)).toBeUndefined();
     expect(seatRefusalFor([probe({ tool: 'WebSearch' })], PAGE_URL, NOW)).toBeUndefined();
     expect(seatRefusalFor([probe({ seat: 'gpt' })], PAGE_URL, NOW)).toBeUndefined();
-    expect(seatRefusalFor([probe({ seat: 'gpt', model: 'gpt-6.1-sol', tool: 'web_search open_page' })], PAGE_URL, NOW)).toBeDefined();
+    expect(seatRefusalFor([probe({ seat: 'gpt', model: 'gpt-6.2-sol', tool: 'web_search open_page' })], PAGE_URL, NOW)).toBeDefined();
     // A refusal on the seat's earlier pin is not a ground for a new carry.
     expect(seatRefusalFor([probe({ seat: 'gpt', model: 'gpt-6-sol', tool: 'web_search open_page' })], PAGE_URL, NOW)).toBeUndefined();
   });

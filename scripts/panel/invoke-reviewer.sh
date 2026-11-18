@@ -558,15 +558,17 @@ case "$PROVIDER" in
     # codex does not report a tool inventory in its stream, so there is no list
     # to compare one against. What settles this seat is the captured request.
     ALLOWED_TOOLS=""
-    # gpt-6.1-sol is the seat and the default for every audit and framing
-    # check (v1.44); gpt-6-luna is the third counted seat (v1.37) under the
+    # gpt-6.2-sol is the seat and the default for every audit and framing
+    # check (v1.45); gpt-6-luna is the third counted seat (v1.37) under the
     # same profile. gpt-6-sol and gpt-5.6-sol are superseded and stay pinned,
     # never default, because v1.35 makes a park confirmation run on the same
     # pinned model as the report it confirms: framing checks between v1.34
     # and v1.43 ran on gpt-6-sol, and those before v1.34 on gpt-5.6-sol.
     # Remove each when no brief parked on its checks can still be confirmed.
-    PINNED_MODELS="gpt-6.1-sol,gpt-6-luna,gpt-6-sol,gpt-5.6-sol"
-    DEFAULT_MODEL="gpt-6.1-sol"
+    # gpt-6.1-sol was the pin for part of 2026-11-17 (v1.44) and wrote no
+    # report, so there is nothing to confirm on it and it is not listed.
+    PINNED_MODELS="gpt-6.2-sol,gpt-6-luna,gpt-6-sol,gpt-5.6-sol"
+    DEFAULT_MODEL="gpt-6.2-sol"
     BIN_HOOK="YEGFACTS_REVIEW_CODEX_BIN"
     REAL_BIN="$HOME/.bun/install/global/node_modules/@openai/codex-darwin-arm64/vendor/aarch64-apple-darwin/bin/codex"
     ;;
