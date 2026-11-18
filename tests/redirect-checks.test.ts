@@ -19,6 +19,7 @@ import {
   type RedirectRow,
   type RedirectWorld,
 } from '../scripts/lib/redirect-checks.ts';
+import { redirectFileText } from '../scripts/lib/redirect-file.ts';
 
 const world: RedirectWorld = {
   questionIds: new Set(['cycling-volumes']),
@@ -140,6 +141,35 @@ describe('redirectProblems', () => {
         '/considered/bike-lanes-nobody-rides: marked pending, but "/questions/cycling-volumes" is in the register now — drop the flag',
       ]);
     });
+  });
+});
+
+describe('redirectFileText', () => {
+  const rules = (rows: RedirectRow[]): string[] =>
+    redirectFileText(rows)
+      .split('\n')
+      .filter((line) => line !== '' && !line.startsWith('#'));
+
+  /**
+   * Cloudflare Pages matches a rule's path exactly: `/stories` does not cover
+   * `/stories/`, and with no rule the request falls through to a 404.
+   */
+  it('redirects each address with and without a trailing slash', () => {
+    expect(rules([row({ from: '/stories', to: '/questions' })])).toEqual([
+      '/stories /questions 301',
+      '/stories/ /questions 301',
+    ]);
+  });
+
+  it('keeps the rows in order, the bare path before its slashed twin', () => {
+    expect(
+      rules([row({ from: '/a', to: '/questions/x' }), row({ from: '/b', to: '/claims/y' })]),
+    ).toEqual([
+      '/a /questions/x 301',
+      '/a/ /questions/x 301',
+      '/b /claims/y 301',
+      '/b/ /claims/y 301',
+    ]);
   });
 });
 

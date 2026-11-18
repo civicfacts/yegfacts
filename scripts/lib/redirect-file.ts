@@ -83,7 +83,8 @@ const HEADER = `# Cloudflare Pages redirects. GENERATED — do not edit by hand.
 #
 # Served before static files, so no rule here may cover /questions/* or
 # /claims/* as a wildcard: it would swallow the real pages. Every rule below
-# matches one exact path.
+# matches one exact path, so each address is listed twice, with and without a
+# trailing slash. Pages allows 2,000 rules in this file.
 #
 # A fragment never reaches the server — a request for /facts/x#claim-1 arrives
 # as /facts/x — and the browser re-applies it to the target when the target
@@ -92,8 +93,16 @@ const HEADER = `# Cloudflare Pages redirects. GENERATED — do not edit by hand.
 # anchor per claim.
 `;
 
-/** The file's exact bytes, header included, ending in one newline. */
+/**
+ * The file's exact bytes, header included, ending in one newline.
+ *
+ * Each row becomes two rules. Pages matches a rule's path exactly, so
+ * `/stories` alone leaves `/stories/` to fall through to a 404.
+ */
 export function redirectFileText(rows: RedirectRow[]): string {
-  const lines = rows.map((row) => `${row.from} ${row.to} 301`);
+  const lines = rows.flatMap((row) => [
+    `${row.from} ${row.to} 301`,
+    `${row.from}/ ${row.to} 301`,
+  ]);
   return `${HEADER}\n${lines.join('\n')}\n`;
 }
