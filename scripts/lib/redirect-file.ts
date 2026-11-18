@@ -77,7 +77,7 @@ export function allRedirects(
 
 const HEADER = `# Cloudflare Pages redirects. GENERATED — do not edit by hand.
 #
-# Source of truth: redirects.yaml, plus one rule per register id derived from
+# Source of truth: redirects.yaml, plus one address per register id derived from
 # intake/register.yaml. Regenerate with \`npm run redirects\`; \`npm run validate\`
 # fails if this file and those two disagree.
 #
@@ -92,6 +92,9 @@ const HEADER = `# Cloudflare Pages redirects. GENERATED — do not edit by hand.
 # /questions/<slug> with the claim's anchor intact, and that page carries an
 # anchor per claim.
 `;
+
+/** How many rules Cloudflare Pages accepts in one `_redirects` file. */
+export const PAGES_RULE_LIMIT = 2000;
 
 /**
  * The file's exact bytes, header included, ending in one newline.

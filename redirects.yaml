@@ -44,7 +44,8 @@
 #
 # Cloudflare Pages serves `public/_redirects` before static files, and no rule
 # in it may be a wildcard covering `/questions/*` or `/claims/*`: it would
-# swallow the real pages. Every generated rule matches one exact path.
+# swallow the real pages. Every generated rule matches one exact path, so each
+# address below becomes two rules: the path, and the path with a trailing slash.
 #
 # `src/pages/[alias].astro` is the other half, and is not generated from here:
 # it turns each published article's and each published claim's `aliases` — the
