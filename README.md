@@ -55,7 +55,7 @@ If something is wrong, [open an issue](https://github.com/civicfacts/yegfacts/is
 
 ## Running it locally
 
-Node 22.12 or newer.
+Node 22.23.4 or newer (pinned in `.node-version`).
 
 ```
 npm ci
