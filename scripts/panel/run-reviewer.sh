@@ -160,11 +160,11 @@ case "$PROVIDER_ARG" in
     PROVIDER_CANONICAL="anthropic"; SEAT="Claude Opus 5.5"
     ;;
   codex|gpt|openai)
-    # v1.45 (2026-11-17): GPT-6.2 Sol, the founder's direction. v1.44 had
-    # pinned GPT-6.1 Sol earlier the same day and no run was made on it;
-    # v1.34 moved GPT-5.6 Sol to GPT-6 Sol the same way. Nothing here compares
-    # these models on this site's work. Runs published under an earlier Sol
-    # keep the model their manifests record.
+    # v1.45 (2026-11-17): GPT-6.2 Sol, the founder's direction, as v1.34
+    # moved GPT-5.6 Sol to GPT-6 Sol. v1.44 had pinned GPT-6.1 Sol earlier
+    # the same day and no run was made on it. Nothing here compares these
+    # models on this site's work. Runs published under an earlier Sol keep
+    # the model their manifests record.
     SLOT="gpt"; CLI="codex"; MODEL_ID="gpt-6.2-sol"
     PROVIDER_CANONICAL="openai"; SEAT="GPT-6.2 Sol"
     ;;
