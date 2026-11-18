@@ -57,7 +57,7 @@ import {
   type RegisterWorld,
 } from './lib/register-checks.ts';
 import { redirectProblems, type RedirectRow } from './lib/redirect-checks.ts';
-import { allRedirects, redirectFileText } from './lib/redirect-file.ts';
+import { allRedirects, PAGES_RULE_LIMIT, redirectFileText } from './lib/redirect-file.ts';
 import { methodVocabularyIn } from '../src/lib/plain-speech.ts';
 import { gateParkedClaims } from '../src/lib/carried.ts';
 import {
@@ -1068,7 +1068,12 @@ function checkRedirectFile(
   claimIds: ReadonlySet<string>,
 ): void {
   const file = repoPath('public', '_redirects');
-  const expected = redirectFileText(allRedirects(rows, [...questionIds], [...claimIds]));
+  const all = allRedirects(rows, [...questionIds], [...claimIds]);
+  const expected = redirectFileText(all);
+  // Two rules per address. What Pages does past its limit is undocumented.
+  if (all.length * 2 > PAGES_RULE_LIMIT) {
+    fail(file, `would hold ${all.length * 2} rules; Cloudflare Pages accepts ${PAGES_RULE_LIMIT}`);
+  }
   if (!existsSync(file)) {
     fail(file, 'is missing — run `npm run redirects`');
     return;
