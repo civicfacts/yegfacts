@@ -336,9 +336,14 @@ function stubClaude(
   writeFileSync(path.join(dir, 'research.jsonl'), options.research ?? researchRun('the package was sent'));
   writeFileSync(path.join(dir, 'research.exit'), String(options.researchExit ?? 0));
 
+  // The stub writes down the NAMES of the ANTHROPIC* and CLAUDE* variables it
+  // was started with, never their values, so a test can see what the launcher
+  // passed on. Only the base URL's value is kept, and only on a run, where the
+  // launcher has set it to its own proxy.
   const script = `#!/usr/bin/env bash
 set -u
-if [ "\${1:-}" = "--version" ]; then cat "${dir}/version"; exit 0; fi
+env_names() { compgen -e | grep -E '^(ANTHROPIC|CLAUDE)' | LC_ALL=C sort || true; }
+if [ "\${1:-}" = "--version" ]; then env_names > "${dir}/env-version.names"; cat "${dir}/version"; exit 0; fi
 
 model=""
 prev=""
@@ -349,6 +354,8 @@ done
 
 count=$(( $(cat "${dir}/calls" 2>/dev/null || echo 0) + 1 ))
 echo "$count" > "${dir}/calls"
+env_names > "${dir}/env-$count.names"
+printf '%s' "\${ANTHROPIC_BASE_URL:-}" > "${dir}/env-$count.base-url"
 stdin="${dir}/stdin-$count.txt"
 cat > "$stdin"
 
@@ -490,6 +497,8 @@ describe('research admission', { timeout: 60_000 }, () => {
     expect(metadata.provider).toBe(provider);
     expect(metadata.admitted_for_research).toBe(false);
     expect(metadata.context_proof).toBe('unavailable');
+    // Only the Claude seat removes inherited variables; every other row says none.
+    expect(metadata.inherited_env_removed).toEqual([]);
     expect(metadata.package_sha256).toMatch(/^[0-9a-f]{64}$/);
     expect(readFileSync(path.join(attempt, 'package.md'), 'utf8')).toBe(readFileSync(pkg, 'utf8'));
     expect(readFileSync(path.join(attempt, 'context-proof.txt'), 'utf8').trim()).toBe('unavailable');
@@ -710,6 +719,46 @@ describe('research run', { timeout: 120_000 }, () => {
       });
       expect(refused).toBe('ECONNREFUSED');
     }
+  });
+
+  /**
+   * A launcher started from inside an agent session inherits that session's
+   * ANTHROPIC* and CLAUDE* variables, credentials included. The seat's CLI must
+   * see none of them, on any start, except the base URL the launcher sets to
+   * its own proxy. The dummies are set here and the ambient ones are taken out
+   * first, so the test means the same thing in any shell.
+   */
+  it('starts the CLI without inherited ANTHROPIC* and CLAUDE* variables and records their names', () => {
+    const stub = stubClaude();
+    const env: NodeJS.ProcessEnv = Object.fromEntries(
+      Object.entries(stub.env).filter(([name]) => !/^(ANTHROPIC|CLAUDE)/.test(name)),
+    );
+    env.ANTHROPIC_AUTH_TOKEN = 'dummy-not-a-credential';
+    env.ANTHROPIC_BASE_URL = 'http://example.invalid';
+    env.CLAUDECODE = '1';
+    env.CLAUDE_CODE_ENTRYPOINT = 'test';
+    const attempt = path.join(stub.archive, 'research', 'inherited-env');
+    const result = run(
+      [INVOKE, '--purpose', 'research', '--provider', 'anthropic', '--package', writePackage('research-inherited-env.md'),
+        '--attempt-dir', attempt, '--model', 'claude-opus-5-5', '--effort', 'high'],
+      env,
+    );
+    expect(result.ok).toBe(true);
+
+    const names = (file: string) => readFileSync(path.join(stub.dir, file), 'utf8').split('\n').filter(Boolean);
+    // The version probe gets none of them, not even a base URL.
+    expect(names('env-version.names')).toEqual([]);
+    // The canary (call 1) and the research run (call 2) get only the launcher's
+    // own base URL, pointing at that run's loopback proxy.
+    for (const [call, dir] of [['1', path.join(attempt, 'canary')], ['2', attempt]] as const) {
+      expect(names(`env-${call}.names`)).toEqual(['ANTHROPIC_BASE_URL']);
+      const port = readFileSync(path.join(dir, 'proxy-port'), 'utf8').trim();
+      expect(readFileSync(path.join(stub.dir, `env-${call}.base-url`), 'utf8')).toBe(`http://127.0.0.1:${port}`);
+    }
+
+    expect(readJson(path.join(attempt, 'metadata.json')).inherited_env_removed).toEqual([
+      'ANTHROPIC_AUTH_TOKEN', 'ANTHROPIC_BASE_URL', 'CLAUDECODE', 'CLAUDE_CODE_ENTRYPOINT',
+    ]);
   });
 
   it('refuses when the canary capture carries the global CLAUDE.md, and never sends the package', () => {
@@ -942,7 +991,7 @@ describe('candidate diagnostic', { timeout: 60_000 }, () => {
 
   it.each([
     ['a duplicated init event', stream(initEvent(), initEvent(), resultEvent(canaryAnswer)), /exactly one system\/init event, saw 2/],
-    ['a reordered stream', stream(resultEvent(canaryAnswer), initEvent()), /opened with "result\/success", not system\/init/],
+    ['a reordered stream', stream(resultEvent(canaryAnswer), initEvent()), /ended with "system\/init", not a result event/],
     ['a truncated line', `${initEvent()}\n{"type":"resu\n`, /1 line\(s\) of the stream were not JSON/],
     [
       'a repeated tool_use id',

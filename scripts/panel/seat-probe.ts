@@ -150,8 +150,18 @@ export function classifyCodexStream(stdout: string): Classified {
 const PROMPT = (url: string) =>
   `Use your web tool exactly once to open this exact URL: ${url}\nDo not search, do not open any other page and do not use any other tool. Then reply with one short line saying what the tool returned.`;
 
+/**
+ * The environment a Claude seat's CLI starts with: the caller's, minus every
+ * ANTHROPIC* and CLAUDE* variable. A probe started inside an agent session
+ * otherwise answers with that session's credentials and endpoint, not the
+ * seat's own login.
+ */
+export function seatEnvironment(env: NodeJS.ProcessEnv = process.env): NodeJS.ProcessEnv {
+  return Object.fromEntries(Object.entries(env).filter(([name]) => !/^(ANTHROPIC|CLAUDE)/.test(name)));
+}
+
 function cliVersion(cli: string): string {
-  const result = spawnSync(cli, ['--version'], { encoding: 'utf8' });
+  const result = spawnSync(cli, ['--version'], { encoding: 'utf8', ...(cli === 'claude' ? { env: seatEnvironment() } : {}) });
   return (result.stdout ?? '').split('\n')[0]?.trim() || 'unknown';
 }
 
@@ -171,7 +181,7 @@ export function probeSeat(seat: SeatName, url: string, now = () => new Date()): 
           '--disable-slash-commands', '--no-session-persistence', '--permission-prompts', 'none',
           '--tools', 'WebFetch', '--allowedTools', 'WebFetch', '--output-format', 'stream-json', '--verbose',
         ],
-        { input: PROMPT(url), encoding: 'utf8', cwd: work, timeout: 600_000, maxBuffer: 64 * 1024 * 1024 },
+        { input: PROMPT(url), encoding: 'utf8', cwd: work, env: seatEnvironment(), timeout: 600_000, maxBuffer: 64 * 1024 * 1024 },
       );
     } else {
       const auth = path.join(homedir(), '.codex', 'auth.json');

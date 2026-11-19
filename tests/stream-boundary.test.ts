@@ -107,6 +107,21 @@ describe('structural checks', () => {
     expect(checkStructure(readStream(cleanStream), expectation)).toEqual({ ok: true, failures: [] });
   });
 
+  it('passes a stream that opens with system/ui_invalidate before system/init', () => {
+    // The event Claude Code 2.1.327 prints before init, in the shape it prints it.
+    const uiInvalidate = JSON.stringify({
+      type: 'system',
+      subtype: 'ui_invalidate',
+      event: 'ui.render',
+      uuid: '5f0c8a3e-1d2b-4c6f-9a7e-3b8d2e1f0a49',
+      session_id: 'stub-session',
+    });
+    const facts = readStream(`${uiInvalidate}\n${cleanStream}`);
+    expect(facts.event_types[0]).toBe('system/ui_invalidate');
+    expect(facts.event_types[1]).toBe('system/init');
+    expect(checkStructure(facts, expectation)).toEqual({ ok: true, failures: [] });
+  });
+
   /**
    * The version is recorded, not gated (methodology v1.30). A build nobody has
    * probed is the normal case now: the vendor ships several a week, and the

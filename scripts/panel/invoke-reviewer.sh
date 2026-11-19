@@ -316,6 +316,9 @@ BIN_OVERRIDE=""
 # both are empty on a run where nothing happened.
 LEFTOVER_PATHS=""
 CREDENTIAL_RESIDUE=""
+# The names, never the values, of the variables the Claude seat's CLI is started
+# without. Empty for every other seat and for a run refused before the CLI ran.
+INHERITED_ENV_REMOVED=""
 
 sha_of() { if [ -f "$1" ]; then shasum -a 256 "$1" | cut -d' ' -f1; else printf 'absent'; fi; }
 
@@ -331,6 +334,7 @@ write_metadata() {
     const values = {};
     for (let i = 0; i < rest.length; i += 2) values[rest[i]] = rest[i + 1];
     const number = (value) => (value === "" ? null : Number(value));
+    const list = (value) => (value === "" ? [] : String(value).split(","));
     // The capture facts are read back out of the report the check wrote rather
     // than shuttled through a dozen shell variables. A report that is missing,
     // truncated or from a run that never reached the check leaves every field
@@ -388,9 +392,9 @@ write_metadata() {
       // back as a regular file where this launcher made a symlink. The second
       // one is close to an alarm: it means a copy of a login exists somewhere
       // this launcher did not put one.
-      leftover_paths: values.leftover_paths === "" ? [] : String(values.leftover_paths).split(","),
-      credential_residue:
-        values.credential_residue === "" ? [] : String(values.credential_residue).split(","),
+      leftover_paths: list(values.leftover_paths),
+      credential_residue: list(values.credential_residue),
+      inherited_env_removed: list(values.inherited_env_removed),
       work_dir: values.work_dir,
       exit_code: number(values.exit_code),
       canary: values.canary,
@@ -422,6 +426,7 @@ write_metadata() {
     cli_bin_override "$BIN_OVERRIDE" \
     leftover_paths "$LEFTOVER_PATHS" \
     credential_residue "$CREDENTIAL_RESIDUE" \
+    inherited_env_removed "$INHERITED_ENV_REMOVED" \
     work_dir "$WORK_ROOT" \
     context_proof "$CONTEXT_PROOF" \
     canary_context_proof "$CANARY_CONTEXT_PROOF" \
@@ -719,11 +724,33 @@ CLI_EXECUTABLE="$CLI"
 CLI_EXECUTABLE_SHA="$(shasum -a 256 "$CLI" 2>/dev/null | cut -d' ' -f1)"
 [ -n "$CLI_EXECUTABLE_SHA" ] || CLI_EXECUTABLE_SHA="unreadable"
 
+# THE CLAUDE SEAT STARTS WITHOUT THE CALLER'S ANTHROPIC* AND CLAUDE* VARIABLES.
+# A launcher started from inside an agent session inherits that session's
+# credentials and settings in them. Every such name is removed on every start
+# of this seat's CLI, the version probe included, and the run is not refused
+# for carrying them. The sorted names, never the values, go in the metadata.
+CLI_UNSET=()
+if [ "$PROVIDER" = "anthropic" ]; then
+  while IFS= read -r name; do
+    case "$name" in
+      ANTHROPIC*|CLAUDE*)
+        CLI_UNSET+=(-u "$name")
+        INHERITED_ENV_REMOVED="${INHERITED_ENV_REMOVED:+$INHERITED_ENV_REMOVED,}$name"
+        ;;
+    esac
+  done < <(compgen -e | LC_ALL=C sort)
+fi
+
+# Every start of a seat's CLI goes through here. Arguments are `env`
+# assignments followed by the command, so an assignment the launcher makes
+# itself is applied after the removals.
+start_cli() { env ${CLI_UNSET[@]+"${CLI_UNSET[@]}"} "$@"; }
+
 # The first field that looks like a version, not the first field. The three
 # CLIs disagree about where they put it: `2.1.272 (Claude Code)`,
 # `codex-cli 0.154.0`, `1.2.4`. Taking field one turned the Codex seat's profile
 # into `codex-captured-read-only-codex-cli` on its first live run.
-CLI_VERSION="$("$CLI" --version 2>/dev/null | head -1 | tr -d '\r' \
+CLI_VERSION="$(start_cli "$CLI" --version 2>/dev/null | head -1 | tr -d '\r' \
   | awk '{ for (i = 1; i <= NF; i++) if ($i ~ /^v?[0-9]+\.[0-9]+/) { sub(/^v/, "", $i); print $i; exit } }')"
 [ -n "$CLI_VERSION" ] || CLI_VERSION="unknown"
 PROFILE="$PROFILE_NAME-$CLI_VERSION"
@@ -1162,10 +1189,10 @@ run_seat() {
   # from stdin; the other two read it from stdin and take no prompt argument.
   set +e
   if [ "$PROVIDER" = "google" ]; then
-    ( cd "$work" && env "${CLI_ENV[@]}" "${CMD[@]}" < /dev/null ) \
+    ( cd "$work" && start_cli "${CLI_ENV[@]}" "${CMD[@]}" < /dev/null ) \
       > "$dir/stdout.txt" 2> "$dir/stderr.txt"
   else
-    ( cd "$work" && env "${CLI_ENV[@]}" "${CMD[@]}" < "$prompt" ) \
+    ( cd "$work" && start_cli "${CLI_ENV[@]}" "${CMD[@]}" < "$prompt" ) \
       > "$dir/stdout.txt" 2> "$dir/stderr.txt"
   fi
   CLI_EXIT=$?
