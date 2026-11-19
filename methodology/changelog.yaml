@@ -16,6 +16,33 @@
 # The sentence above used to describe a check that did not exist: the rule sat
 # as a TODO in scripts/validate.ts, and a change under methodology/ shipped
 # clean. It runs now.
+- version: "1.46"
+  date: "2026-11-18"
+  scope: panel-seat-tooling
+  summary: >
+    The Claude seat's start-up check drops one rule: that the run's event
+    stream must begin with its setup report. The current Claude Code release
+    prints one event before it. The launcher also stops handing the reviewer
+    the caller's own Anthropic and Claude environment variables. The seat
+    passes its start-up check again. No published finding changes and no run
+    is re-done.
+  highlights:
+    - "What changes. The structural check on the Claude seat no longer requires system/init to be the first event of the run's stream. It still requires exactly one system/init event. It still checks the tools, MCP servers, slash commands, skills, plugins, agents and output style that event reports, every tool the run called, and that no subagent was spawned. It still requires the result to be the last event. The capture check, which searches every recorded request for private text from this machine, is unchanged."
+    - "Why. Claude Code 2.1.327 prints a system/ui_invalidate event before system/init. The event carries its name, ui.render, and two identifiers, and nothing else, and the vendor's documentation does not list it. On 2026-11-18 a run that passed every other check was refused on this rule alone (attempt 854a73424bfbc85a). The founder chose to drop the rule. The other choices were to accept that one event only, to pin an older release, or to wait."
+    - "What this gives up. Any event may now come before system/init. The rule only ever checked order: the same event in second place already passed. A tool call made before system/init is still checked against the two allowed tools. A start-up hook that printed an event before system/init would no longer be refused on that ground. The profile's flags are what keep hooks out, and the capture check would find private text from this machine that a hook added to a request. The order of every event is still written to each attempt's record."
+    - "The second change tightens the run. The launcher now starts the Claude seat's CLI with every inherited ANTHROPIC and CLAUDE environment variable removed, and records the names it removed, never the values. This closes the fault the correction in v1.44 describes, where a diagnostic started inside an agent session sent a credential that was not the seat's own login. The page probe starts the CLI the same way."
+    - "What was checked. After the change, on 2026-11-18 in Alberta time (the record says 2026-11-19 UTC), the canary-only diagnostic passed on the Claude seat on release 2.1.327, started from inside an agent session (attempt 7b08f36e410a4a34). The structural check and the context proof passed, the recorded requests show the subscription login, and the launcher removed 15 inherited variables. A diagnostic sends no package. No full review has run on this release, so how a long run behaves on it is not known."
+    - "What this replaces in earlier entries. v1.44 said nothing in the launcher was relaxed, and v1.44 and v1.45 said the seat was still refused. Both were true when written and both now carry a dated line pointing here."
+    - "Review. One independent reader checked the launcher change against the retained attempts before it merged. Two later edits in the same change, one function that every CLI start goes through and the page probe's removal, were covered by tests and by the live diagnostic but not by that reader. No board pass was run."
+  links:
+    - label: "How a finding is produced"
+      href: "/methodology#stages"
+    - label: "The launcher change (yegfacts#138)"
+      href: "https://github.com/civicfacts/yegfacts/pull/138"
+  note: >
+    The first account of this failure blamed the vendor's release and was
+    wrong. The correction is in v1.44. What remained after it was one event
+    with nothing in it.
 - version: "1.45"
   date: "2026-11-17"
   scope: reviewer-model-refresh
@@ -32,6 +59,7 @@
     - "The package ceiling stays at 521,838 bytes. GPT-6.2 Sol reports a 500,000-token window, as 6.1 did, and nothing has been measured on either."
     - "Not rechecked. Nothing was done about the Claude seat between the two entries, and its diagnostic was not run again. Its last result is the failure v1.44 records. A panel round needs all three seats, so none is expected to finish until that seat passes."
     - "Correction, 2026-11-18. The failure v1.44 records was misread, and that entry now carries a correction of the same date. On 2026-11-18 the Claude seat logged in on release 2.1.327 from a plain terminal. One start-up check still refuses it."
+    - "Later on 2026-11-18. v1.46 drops that start-up check's order rule, and the seat passed."
   links:
     - label: "How a finding is produced"
       href: "/methodology#stages"
@@ -61,6 +89,7 @@
     - "What does not work. The same diagnostic failed on the Claude seat under Claude Code 2.1.326. The launcher captures that seat's requests by pointing the CLI at a local recording proxy. Given that address, this release sent no subscription login and the vendor answered 401; release 2.1.323 did the same. Two startup checks also failed: the stream opened with a system/ui_invalidate event before system/init, and the inventory listed an agent named claude-code-guide. The last admitted Claude run was on release 2.1.306 on 2026-10-21. Nothing in the launcher is relaxed to get past this. How the seat is captured from here is an open decision."
     - "Correction, 2026-11-17. As first released this entry said the move came after six weeks in which no run was made. That was wrong: the cycling-safety run was made on 2026-10-21, and this entry cites it. Six weeks was the time since the last published finding. It also said GPT-6 Sol wrote the framing reports from v1.34 to v1.43, which claimed all of them; a park confirmation in that span ran on the older model of the report it confirmed."
     - "Correction, 2026-11-18. The paragraph on what does not work puts two failures on the Claude Code release and the proxy address. Both came from how the diagnostics were started. The diagnostics of 2026-11-17 were started from inside an agent session, with that session's own access token in their environment. The step meant to clear it cleared nothing, and Stew recorded the cause without checking that the step had worked. The recorded requests carry that session's client name and a credential that was not the subscription login, which the vendor refused with 401. The token is the likely source. On 2026-11-18 the diagnostic ran again from a plain terminal on release 2.1.327: the seat logged in through the recording proxy, the capture check passed, and the inventory listed the four expected agents, with no claude-code-guide. Releases 2.1.326 and 2.1.323 were not run again. The 2.1.326 requests have the same shape as the 2.1.327 ones that failed inside the session, and the 2.1.323 check was started the same way and left no retained attempt. One failure is real and remains. The stream opens with a system/ui_invalidate event before system/init, so the seat is still refused and no panel round can be completed yet. Nothing in the launcher was relaxed for that run."
+    - "Later on 2026-11-18. v1.46 drops the rule that refused the seat, which is a relaxation this entry said had not been made. The seat passed its start-up check that evening."
     - "Left as it was: the number of seats, the two-vendor label, the round rules, the effort pin, the capture and admission checks, and every vendor exclusion. Not decided: which Sol model a rerun of a run frozen before this version takes. The runner holds one pin, so that needs deciding before the stopped cycling-safety run is resumed."
   links:
     - label: "How a finding is produced"
