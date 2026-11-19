@@ -405,7 +405,8 @@ capture check, which passed on the attempt that first met them
 (2026-09-23, attempt `8b92f1e800aa48f7`, refused on the older rule and retained).
 From Claude Code 2.1.327 the stream opens with a `system/ui_invalidate` event
 before `system/init` (2026-11-18, attempt `854a73424bfbc85a`, refused on the
-older rule). The structural check no longer requires `system/init` first; it
+older rule). From v1.46 the structural check no longer requires `system/init`
+first; it
 still requires exactly one `system/init` and exactly one `result`, with the
 `result` last. The launcher starts this seat's CLI without the `ANTHROPIC_*`
 and `CLAUDE*` variables it inherited, so a run started inside an agent session
