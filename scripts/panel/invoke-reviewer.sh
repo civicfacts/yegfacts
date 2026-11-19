@@ -905,9 +905,10 @@ uses_proxy() { [ "$PROVIDER" != "google" ]; }
 # The command, assembled per seat once the proxy's port is known.
 #
 # CMD is the argument vector and CLI_ENV the environment assignments that go in
-# front of it, after the `env -u` removals in CLI_UNSET. Every assignment is made on the child alone: nothing is exported
-# into this shell and nothing is written to a configuration file, so nothing
-# outside the subprocess is redirected and nothing survives this run.
+# front of it, after the `env -u` removals in CLI_UNSET. Every assignment is
+# made on the child alone: nothing is exported into this shell and nothing is
+# written to a configuration file, so nothing outside the subprocess is
+# redirected and nothing survives this run.
 # ---------------------------------------------------------------------------
 CMD=()
 CLI_ENV=()

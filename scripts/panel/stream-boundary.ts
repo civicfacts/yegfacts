@@ -5,9 +5,10 @@
  * QUESTION ONE, which the stream answers: what was the run configured to do and
  * what did it do? `claude --output-format stream-json --verbose` carries one
  * `system/init` event (the first event until 2.1.327, which prints
- * `system/ui_invalidate` before it) naming the tool inventory, MCP servers, skills, plugins,
- * slash commands, agents and CLI version, carries a `tool_use` for every tool
- * call and a matching `tool_result` for every outcome, and closes with a
+ * `system/ui_invalidate` before it) naming the tool inventory, MCP servers,
+ * skills, plugins, slash commands, agents and CLI version, a `tool_use` for
+ * every tool call and a matching `tool_result` for every outcome, and closes
+ * with a
  * `result` event holding the complete final text, the permission denials and
  * the subagent counters. That is the host reporting on itself, and it is
  * checkable.
