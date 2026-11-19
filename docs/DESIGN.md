@@ -403,6 +403,14 @@ are the CLI rather than a customization of this machine; a plugin from anywhere
 else still refuses the run. What excludes their text from the request is the
 capture check, which passed on the attempt that first met them
 (2026-09-23, attempt `8b92f1e800aa48f7`, refused on the older rule and retained).
+From Claude Code 2.1.327 the stream opens with a `system/ui_invalidate` event
+before `system/init` (2026-11-18, attempt `854a73424bfbc85a`, refused on the
+older rule). The structural check no longer requires `system/init` first; it
+still requires exactly one `system/init` and exactly one `result`, with the
+`result` last. The launcher starts this seat's CLI without the `ANTHROPIC_*`
+and `CLAUDE*` variables it inherited, so a run started inside an agent session
+cannot pass that session's credentials on, and the attempt records the names
+it removed.
 
 One thing the capture check permits, from v1.38, and says so on every run row.
 When a fetch returns a binary such as a PDF, Claude Code saves it to disk under

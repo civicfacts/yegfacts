@@ -3,8 +3,9 @@
  * say plainly which of two very different questions the answer settles.
  *
  * QUESTION ONE, which the stream answers: what was the run configured to do and
- * what did it do? `claude --output-format stream-json --verbose` opens with a
- * `system/init` event naming the tool inventory, MCP servers, skills, plugins,
+ * what did it do? `claude --output-format stream-json --verbose` carries one
+ * `system/init` event (the first event until 2.1.327, which prints
+ * `system/ui_invalidate` before it) naming the tool inventory, MCP servers, skills, plugins,
  * slash commands, agents and CLI version, carries a `tool_use` for every tool
  * call and a matching `tool_result` for every outcome, and closes with a
  * `result` event holding the complete final text, the permission denials and
@@ -339,15 +340,15 @@ export type StructureExpectation = {
  */
 export function checkStructure(facts: StreamFacts, expected: StructureExpectation): Verdict {
   const failures: string[] = [];
-  const first = facts.event_types[0];
   const last = facts.event_types[facts.event_types.length - 1];
 
   if (facts.unparsed_lines > 0) {
     failures.push(`${facts.unparsed_lines} line(s) of the stream were not JSON`);
   }
+  // Exactly one init, anywhere in the stream. It need not be the first event:
+  // from 2.1.327 the CLI prints `system/ui_invalidate` before it.
   if (facts.init_count !== 1) failures.push(`expected exactly one system/init event, saw ${facts.init_count}`);
   if (facts.result_count !== 1) failures.push(`expected exactly one result event, saw ${facts.result_count}`);
-  if (facts.init_count > 0 && first !== 'system/init') failures.push(`the stream opened with "${first}", not system/init`);
   if (facts.result_count > 0 && last?.startsWith('result') !== true) {
     failures.push(`the stream ended with "${last}", not a result event`);
   }

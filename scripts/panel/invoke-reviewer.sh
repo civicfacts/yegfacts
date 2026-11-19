@@ -316,6 +316,9 @@ BIN_OVERRIDE=""
 # both are empty on a run where nothing happened.
 LEFTOVER_PATHS=""
 CREDENTIAL_RESIDUE=""
+# The names, never the values, of the variables the Claude seat's CLI is started
+# without. Empty for every other seat and for a run refused before the CLI ran.
+INHERITED_ENV_REMOVED=""
 
 sha_of() { if [ -f "$1" ]; then shasum -a 256 "$1" | cut -d' ' -f1; else printf 'absent'; fi; }
 
@@ -391,6 +394,10 @@ write_metadata() {
       leftover_paths: values.leftover_paths === "" ? [] : String(values.leftover_paths).split(","),
       credential_residue:
         values.credential_residue === "" ? [] : String(values.credential_residue).split(","),
+      // Private. The inherited ANTHROPIC* and CLAUDE* variable names the Claude
+      // seat was started without, sorted. Names only; empty for other seats.
+      inherited_env_removed:
+        values.inherited_env_removed === "" ? [] : String(values.inherited_env_removed).split(","),
       work_dir: values.work_dir,
       exit_code: number(values.exit_code),
       canary: values.canary,
@@ -422,6 +429,7 @@ write_metadata() {
     cli_bin_override "$BIN_OVERRIDE" \
     leftover_paths "$LEFTOVER_PATHS" \
     credential_residue "$CREDENTIAL_RESIDUE" \
+    inherited_env_removed "$INHERITED_ENV_REMOVED" \
     work_dir "$WORK_ROOT" \
     context_proof "$CONTEXT_PROOF" \
     canary_context_proof "$CANARY_CONTEXT_PROOF" \
@@ -719,11 +727,31 @@ CLI_EXECUTABLE="$CLI"
 CLI_EXECUTABLE_SHA="$(shasum -a 256 "$CLI" 2>/dev/null | cut -d' ' -f1)"
 [ -n "$CLI_EXECUTABLE_SHA" ] || CLI_EXECUTABLE_SHA="unreadable"
 
+# THE CLAUDE SEAT STARTS WITHOUT THE CALLER'S ANTHROPIC* AND CLAUDE* VARIABLES.
+# A launcher started from inside an agent session inherits that session's own
+# credentials and settings, and on 2026-11-17 a session's ANTHROPIC_AUTH_TOKEN
+# reached the reviewer and its login failed. So every such name in this shell's
+# environment is removed with `env -u` on every start of this seat's CLI, the
+# version probe included, and the launcher's own ANTHROPIC_BASE_URL is applied
+# after the removal. The sorted names, never the values, go in the metadata.
+# Finding names is not a refusal: removing them is what lets such a run work.
+CLI_UNSET=()
+if [ "$PROVIDER" = "anthropic" ]; then
+  while IFS= read -r name; do
+    case "$name" in
+      ANTHROPIC*|CLAUDE*)
+        CLI_UNSET+=(-u "$name")
+        INHERITED_ENV_REMOVED="${INHERITED_ENV_REMOVED:+$INHERITED_ENV_REMOVED,}$name"
+        ;;
+    esac
+  done < <(compgen -e | LC_ALL=C sort)
+fi
+
 # The first field that looks like a version, not the first field. The three
 # CLIs disagree about where they put it: `2.1.272 (Claude Code)`,
 # `codex-cli 0.154.0`, `1.2.4`. Taking field one turned the Codex seat's profile
 # into `codex-captured-read-only-codex-cli` on its first live run.
-CLI_VERSION="$("$CLI" --version 2>/dev/null | head -1 | tr -d '\r' \
+CLI_VERSION="$(env ${CLI_UNSET[@]+"${CLI_UNSET[@]}"} "$CLI" --version 2>/dev/null | head -1 | tr -d '\r' \
   | awk '{ for (i = 1; i <= NF; i++) if ($i ~ /^v?[0-9]+\.[0-9]+/) { sub(/^v/, "", $i); print $i; exit } }')"
 [ -n "$CLI_VERSION" ] || CLI_VERSION="unknown"
 PROFILE="$PROFILE_NAME-$CLI_VERSION"
@@ -877,7 +905,7 @@ uses_proxy() { [ "$PROVIDER" != "google" ]; }
 # The command, assembled per seat once the proxy's port is known.
 #
 # CMD is the argument vector and CLI_ENV the environment assignments that go in
-# front of it. Every assignment is made on the child alone: nothing is exported
+# front of it, after the `env -u` removals in CLI_UNSET. Every assignment is made on the child alone: nothing is exported
 # into this shell and nothing is written to a configuration file, so nothing
 # outside the subprocess is redirected and nothing survives this run.
 # ---------------------------------------------------------------------------
@@ -1165,7 +1193,7 @@ run_seat() {
     ( cd "$work" && env "${CLI_ENV[@]}" "${CMD[@]}" < /dev/null ) \
       > "$dir/stdout.txt" 2> "$dir/stderr.txt"
   else
-    ( cd "$work" && env "${CLI_ENV[@]}" "${CMD[@]}" < "$prompt" ) \
+    ( cd "$work" && env ${CLI_UNSET[@]+"${CLI_UNSET[@]}"} "${CLI_ENV[@]}" "${CMD[@]}" < "$prompt" ) \
       > "$dir/stdout.txt" 2> "$dir/stderr.txt"
   fi
   CLI_EXIT=$?
