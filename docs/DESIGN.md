@@ -410,7 +410,8 @@ still requires exactly one `system/init` and exactly one `result`, with the
 `result` last. The launcher starts this seat's CLI without the `ANTHROPIC_*`
 and `CLAUDE*` variables it inherited, so a run started inside an agent session
 does not hand the reviewer that session's credentials or settings through
-them. The attempt records the names it removed.
+them. The attempt records the names it removed. The seat's page probe
+(`seat-probe.ts`) starts the CLI the same way.
 
 One thing the capture check permits, from v1.38, and says so on every run row.
 When a fetch returns a binary such as a PDF, Claude Code saves it to disk under

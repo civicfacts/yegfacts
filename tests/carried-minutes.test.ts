@@ -27,7 +27,7 @@ import {
   type Fetcher,
 } from '../scripts/panel/carry-manifest.ts';
 import { REDACTION_RULE, WITHHELD, carriedPageText, matchedTerms, parseMeetingPage, selectionRules } from '../scripts/panel/minutes-items.ts';
-import { RAW_LIMIT, classifyClaudeStream, classifyCodexStream, type SeatProbe } from '../scripts/panel/seat-probe.ts';
+import { RAW_LIMIT, classifyClaudeStream, classifyCodexStream, seatEnvironment, type SeatProbe } from '../scripts/panel/seat-probe.ts';
 
 const FIXTURES = fileURLToPath(new URL('./fixtures/minutes', import.meta.url));
 const MINUTES = readFileSync(path.join(FIXTURES, 'postminutes.html'), 'utf8');
@@ -679,5 +679,12 @@ describe('seat refusal evidence', () => {
     expect(errored.raw_error!.length).toBe(RAW_LIMIT);
     expect(JSON.stringify(errored)).not.toContain('Internal Error');
     expect(classifyCodexStream(JSON.stringify({ type: 'item.completed', item: { type: 'agent_message', text: 'HTTP 403' } })).outcome).toBe('no-tool-call');
+  });
+});
+
+describe('seatEnvironment', () => {
+  it('drops every ANTHROPIC* and CLAUDE* variable and keeps the rest', () => {
+    const env = { ANTHROPIC_AUTH_TOKEN: 'dummy', ANTHROPIC_BASE_URL: 'http://example.invalid', CLAUDECODE: '1', CLAUDE_CODE_ENTRYPOINT: 'test', PATH: '/bin', HOME: '/tmp/home' };
+    expect(seatEnvironment(env)).toEqual({ PATH: '/bin', HOME: '/tmp/home' });
   });
 });
